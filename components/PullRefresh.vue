@@ -11,20 +11,38 @@
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
   >
-    <slot v-if="refreshing === false" name="refresh" :isPulling="isPulling">
-      <p class="pull_refresh-label">
-        {{ isPulling === true ? label : pullingLabel }}
-      </p>
-    </slot>
-    <slot v-else name="refreshing">
-      <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
-      <div class="pull_refresh-refreshing">
-        <div
-          class="pull_refresh-refreshing-loading_icon pull_refresh-refreshing-loading_icon_animation"
-        />
-        <p class="pull_refresh-refreshing-label">{{ refreshingLabel }}</p>
-      </div>
-    </slot>
+    <div class="pull_refresh-trigger">
+      <template v-if="iosType === true">
+        <slot
+          v-if="refreshing === false"
+          name="refresh"
+          :isPulling="isPulling"
+          :isPullStart="isPullStart"
+        >
+          <p class="pull_refresh-trigger-label">
+            {{ isPulling === true ? label : pullingLabel }}
+          </p>
+        </slot>
+        <slot v-else name="refreshing">
+          <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
+          <div class="pull_refresh-trigger-refreshing">
+            <div
+              class="pull_refresh-trigger-refreshing-loading_icon pull_refresh-trigger-loading_icon_animation"
+            />
+            <p class="pull_refresh-trigger-refreshing-label">
+              {{ refreshingLabel }}
+            </p>
+          </div>
+        </slot>
+      </template>
+      <div
+        v-else
+        :class="{
+          'pull_refresh-trigger-icon': true,
+          'pull_refresh-trigger-loading_icon_animation': isPullStart === false
+        }"
+      />
+    </div>
 
     <div class="pull_refresh-container">
       <slot />
@@ -38,28 +56,31 @@
         {{ infinityEndLbael }}
       </p>
     </slot>
+    <div ref="infinityTrigger" />
   </div>
 </template>
 
 <script setup>
 const props = defineProps({
-  label: { type: String, default: "下拉即可刷新..." },
-  pullingLabel: { type: String, default: "释放即可刷新..." },
-  refreshingLabel: { type: String, default: "加载中..." },
+  label: { type: String, default: '下拉即可刷新...' },
+  pullingLabel: { type: String, default: '释放即可刷新...' },
+  refreshingLabel: { type: String, default: '加载中...' },
   refresh: { type: Function, default: null },
-  infinityLabel: { type: String, default: "拉至底部可繼續加载" },
-  infinityEndLbael: { type: String, default: "沒有更多資料了" },
+  infinityLabel: { type: String, default: '拉至底部可繼續加载' },
+  infinityEndLbael: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
   infinityFetch: { type: Function, default: null },
-  iosType: { type: Boolean, default: true },
+  iosType: { type: Boolean, default: false }
 });
-const emit = defineEmits(["refresh", "infinityFetch"]);
+const emit = defineEmits(['refresh', 'infinityFetch']);
 
 const container = ref(null);
+const infinityTrigger = ref(null);
+const observer = ref(null);
 
-const mousedown = ref(false);
+const isPullStart = ref(false);
 
 const startY = ref(0);
 const moveDistance = ref(0);
@@ -70,10 +91,23 @@ const isPulling = ref(false);
 
 const loading = ref(false);
 
-const cssVariable = computed(() => ({
-  "--refresh_transition": `${duration.value}ms`,
-  "--refresh_transform": `translate3d(0, ${moveDistance.value}px, 0)`,
-}));
+const cssVariable = computed(() => {
+  const _cssVariable = {};
+
+  if (props.iosType === true) {
+    _cssVariable['--refresh_transition'] = `${duration.value}ms`;
+    _cssVariable[
+      '--refresh_transform'
+    ] = `translate3d(0, ${moveDistance.value}px, 0)`;
+  } else {
+    _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
+    _cssVariable[
+      '--refresh_icon_transform'
+    ] = `translate3d(0, ${moveDistance.value}px, 0)`;
+  }
+
+  return _cssVariable;
+});
 
 watch(
   () => refreshing.value,
@@ -86,10 +120,19 @@ watch(
 );
 
 onMounted(() => {
-  window.addEventListener("scroll", scrollEventListener);
+  // window.addEventListener('scroll', scrollEventListener);
+  observer.value = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      // console.log('元素已出現在畫面可視範圍內');
+      handleInfinityFetch();
+    }
+  });
+
+  observer.value.observe(infinityTrigger.value);
 });
 onUnmounted(() => {
-  window.removeEventListener("scroll", scrollEventListener);
+  // window.removeEventListener('scroll', scrollEventListener);
+  observer.value.unobserve(infinityTrigger.value);
 });
 function getCurrentDistance() {
   const rect = container.value.getBoundingClientRect();
@@ -111,24 +154,24 @@ function scrollEventListener(e) {
 }
 async function handleInfinityFetch() {
   loading.value = true;
-  if (typeof props.infinityFetch === "function") {
+  if (typeof props.infinityFetch === 'function') {
     await props.infinityFetch();
     loading.value = false;
   } else {
-    emit("infinityFetch", () => {
+    emit('infinityFetch', () => {
       loading.value = false;
     });
   }
 }
 
 function handlePullStart(e) {
-  mousedown.value = true;
+  isPullStart.value = true;
   duration.value = 0;
   moveDistance.value = 0;
   startY.value = e.targetTouches?.[0]?.clientY || e.clientY;
 }
 function handlePulling(e) {
-  if (mousedown.value !== true) return;
+  if (isPullStart.value !== true) return;
   const scrollTop =
     document.documentElement?.scrollTop || document.body?.scroll;
 
@@ -150,17 +193,17 @@ function handlePulling(e) {
   }
 }
 async function handlePullEnd(e) {
-  mousedown.value = false;
+  isPullStart.value = false;
   duration.value = 300;
   if (moveDistance.value > 50) {
     refreshing.value = true;
     isPulling.value = false;
     moveDistance.value = 50;
-    if (typeof props.refresh === "function") {
+    if (typeof props.refresh === 'function') {
       await props.refresh();
       refreshing.value = false;
     } else {
-      emit("refresh", () => {
+      emit('refresh', () => {
         refreshing.value = false;
       });
     }
@@ -175,64 +218,73 @@ async function handlePullEnd(e) {
   margin-top: -50px;
   transition: var(--refresh_transition);
   transform: var(--refresh_transform);
-  &-label {
-    font-size: 14px;
-    color: rgba(69, 90, 100, 0.6);
-    text-align: center;
+  &-trigger {
     margin-bottom: 20px;
-  }
-  &-refreshing {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    &-loading_icon {
-      width: 23px;
-      height: 23px;
-      border: 4px solid lightgray;
-      border-radius: 50%;
-      position: relative;
-      &::after {
-        box-sizing: border-box;
-        content: "";
-        width: 15px;
-        height: 15px;
-        position: absolute;
-        top: -4px;
-        right: -4px;
-        border-radius: 0 100% 0 0;
-        border: 4px solid blue;
-        border-color: blue blue transparent transparent;
-        transform-origin: 0 100%;
+    &-label {
+      font-size: 14px;
+      color: rgba(69, 90, 100, 0.6);
+      text-align: center;
+      // margin-bottom: 20px;
+    }
+    &-refreshing {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      &-loading_icon {
+        width: 23px;
+        height: 23px;
+        border: 4px solid lightgray;
+        border-radius: 50%;
+        position: relative;
+        &::after {
+          box-sizing: border-box;
+          content: '';
+          width: 15px;
+          height: 15px;
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          border-radius: 0 100% 0 0;
+          border: 4px solid blue;
+          border-color: blue blue transparent transparent;
+          transform-origin: 0 100%;
 
-        // animation-name: loading_animation;
-        // animation-duration: 1s;
-        // animation-iteration-count: infinite;
-        // animation-timing-function: linear;
+          // animation-name: loading_animation;
+          // animation-duration: 1s;
+          // animation-iteration-count: infinite;
+          // animation-timing-function: linear;
+        }
+      }
+      &-label {
+        @extend .pull_refresh-trigger-label;
+        margin-bottom: 0;
       }
     }
     &-loading_icon_animation {
       &::after {
-        content: "";
+        content: '';
         animation-name: loading_animation;
         animation-duration: 1s;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
       }
     }
-    &-label {
-      @extend .pull_refresh-label;
-      margin-bottom: 0;
+    &-icon {
+      @extend .pull_refresh-trigger-refreshing-loading_icon;
+      margin: auto;
+      transition: var(--refresh_icon_transition);
+      transform: var(--refresh_icon_transform);
     }
   }
   &-container {
   }
   &-infinity_label {
-    @extend .pull_refresh-label;
+    @extend .pull_refresh-trigger-label;
     margin: 0px;
   }
 }
