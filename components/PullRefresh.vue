@@ -18,8 +18,9 @@
           name="refresh"
           :isPulling="isPulling"
           :isPullStart="isPullStart"
+          :isShowRefreshIcon="isShowRefreshIcon"
         >
-          <p class="pull_refresh-trigger-label">
+          <p v-show="isShowRefreshIcon" class="pull_refresh-trigger-label">
             {{ isPulling === true ? label : pullingLabel }}
           </p>
         </slot>
@@ -37,6 +38,7 @@
       </template>
       <div
         v-else
+        v-show="isShowRefreshIcon"
         :class="{
           'pull_refresh-trigger-icon': true,
           'pull_refresh-trigger-loading_icon_animation': isPullStart === false
@@ -72,7 +74,7 @@ const props = defineProps({
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
   infinityFetch: { type: Function, default: null },
-  iosType: { type: Boolean, default: false }
+  iosType: { type: Boolean, default: true }
 });
 const emit = defineEmits(['refresh', 'infinityFetch']);
 
@@ -81,6 +83,7 @@ const infinityTrigger = ref(null);
 const observer = ref(null);
 
 const isPullStart = ref(false);
+const isShowRefreshIcon = ref(false);
 
 const startY = ref(0);
 const moveDistance = ref(0);
@@ -132,7 +135,12 @@ onMounted(() => {
 });
 onUnmounted(() => {
   // window.removeEventListener('scroll', scrollEventListener);
-  observer.value.unobserve(infinityTrigger.value);
+  if (
+    typeof infinityTrigger.value === 'object' &&
+    infinityTrigger.value !== null
+  ) {
+    observer.value.unobserve(infinityTrigger.value);
+  }
 });
 function getCurrentDistance() {
   const rect = container.value.getBoundingClientRect();
@@ -166,6 +174,7 @@ async function handleInfinityFetch() {
 
 function handlePullStart(e) {
   isPullStart.value = true;
+  isShowRefreshIcon.value = true;
   duration.value = 0;
   moveDistance.value = 0;
   startY.value = e.targetTouches?.[0]?.clientY || e.clientY;
@@ -181,15 +190,9 @@ function handlePulling(e) {
 
   if (move > 0) {
     const _moveDistance = Math.pow(move, 0.8);
-    let _isPulling = isPulling.value;
-    if (_moveDistance > 50) {
-      _isPulling = true;
-    } else {
-      _isPulling = false;
-    }
 
     moveDistance.value = _moveDistance;
-    isPulling.value = _isPulling;
+    isPulling.value = _moveDistance > 50;
   }
 }
 async function handlePullEnd(e) {
@@ -202,12 +205,20 @@ async function handlePullEnd(e) {
     if (typeof props.refresh === 'function') {
       await props.refresh();
       refreshing.value = false;
+      setTimeout(() => {
+        isShowRefreshIcon.value = false;
+      }, 100);
     } else {
       emit('refresh', () => {
         refreshing.value = false;
+        setTimeout(() => {
+          isShowRefreshIcon.value = false;
+        }, 100);
       });
     }
   } else {
+    isPullStart.value = false;
+    isShowRefreshIcon.value = false;
     moveDistance.value = 0;
   }
 }
@@ -219,11 +230,13 @@ async function handlePullEnd(e) {
   transition: var(--refresh_transition);
   transform: var(--refresh_transform);
   &-trigger {
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
+    min-height: 30px;
     &-label {
       font-size: 14px;
       color: rgba(69, 90, 100, 0.6);
       text-align: center;
+      margin: 0;
       // margin-bottom: 20px;
     }
     &-refreshing {
@@ -262,7 +275,6 @@ async function handlePullEnd(e) {
       }
       &-label {
         @extend .pull_refresh-trigger-label;
-        margin-bottom: 0;
       }
     }
     &-loading_icon_animation {
@@ -285,7 +297,6 @@ async function handlePullEnd(e) {
   }
   &-infinity_label {
     @extend .pull_refresh-trigger-label;
-    margin: 0px;
   }
 }
 @keyframes loading_animation {
