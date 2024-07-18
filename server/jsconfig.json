@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowJs": true,
+    "paths": {
+      "~": ["../"],
+      "~/*": ["../*"],
+      "@": ["../"],
+      "@/*": ["../*"],
+      "~~": ["../"],
+      "~~/*": ["../*"],
+      "@@": ["../"],
+      "@@/*": ["../*"],
+      "@/utils": ["../utils"],
+      "@/utils/*": ["../utils/*"],
+      "assets": ["../assets"],
+      "public": ["../public"],
+      "public/*": ["../public/*"],
+      "#app": ["../node_modules/nuxt/dist/app"],
+      "#app/*": ["../node_modules/nuxt/dist/app/*"],
+      "vue-demi": ["../node_modules/nuxt/dist/app/compat/vue-demi"],
+      "#vue-router": ["../.nuxt/vue-router"],
+      "#imports": ["../.nuxt/imports"],
+      "#build": ["../.nuxt"],
+      "#build/*": ["../.nuxt/*"],
+      "#components": ["../.nuxt/components"]
+    }
+  },
+  "include": ["./"]
+}
