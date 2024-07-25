@@ -60,6 +60,7 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/favicon.ico' }]
     }
   },
+  css: ['@/style/global.scss', '@/style/animation.scss'],
   imports: {
     dirs: [
       // Scan top-level modules

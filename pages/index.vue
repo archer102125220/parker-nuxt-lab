@@ -1,13 +1,19 @@
 <template>
-  <div>
+  <div class="index_page">
     <PullRefresh
       :infinityEnd="infinityEnd"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
     >
-      <div style="height: 100dvh">
-        <p>12343</p>
-        <WangEditor editorHeight="300px" />
+      <div class="index_page-content">
+        <p class="index_page-content-text">12343</p>
+        <WangEditor
+          class="index_page-content-wang_editor"
+          editorHeight="350px"
+        />
+        <div class="index_page-content-youtube">
+          <Youtube video-id="RTtmcqPXwuw" autoplay />
+        </div>
       </div>
     </PullRefresh>
   </div>
@@ -24,7 +30,7 @@ function handleRefresh(done) {
     nuxtApp.$successMessage('handleRefresh');
     nuxtApp.$store.system.setLoading(false);
     done();
-  }, 500);
+  }, 1000);
 }
 function handleInfinityFetch(done) {
   nuxtApp.$store.system.setLoading(true);
@@ -38,3 +44,21 @@ function handleInfinityFetch(done) {
   }, 1000);
 }
 </script>
+
+<style lang="scss" scoped>
+.index_page {
+  &-content {
+    min-height: 100dvh;
+    &-text {
+      height: 200px;
+    }
+    &-wang_editor {
+      // height: 350px;
+      margin-bottom: 8px;
+    }
+    &-youtube {
+      height: 80dvh;
+    }
+  }
+}
+</style>

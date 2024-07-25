@@ -19,6 +19,7 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.7.2",
     "dayjs": "^1.11.12",
+    "flag-icons": "^7.2.3",
     "google-auth-library": "^9.11.0",
     "google-libphonenumber": "^3.2.35",
     "jwt-decode": "^4.0.0",
