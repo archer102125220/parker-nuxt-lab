@@ -226,18 +226,19 @@ async function handlePullEnd(e) {
 
 <style lang="scss" scoped>
 .pull_refresh {
-  margin-top: -50px;
+  position: relative;
   transition: var(--refresh_transition);
   transform: var(--refresh_transform);
   &-trigger {
-    // margin-bottom: 20px;
+    position: absolute;
+    top: -34px;
     min-height: 30px;
+    width: 100%;
     &-label {
       font-size: 14px;
       color: rgba(69, 90, 100, 0.6);
       text-align: center;
       margin: 0;
-      // margin-bottom: 20px;
     }
     &-refreshing {
       display: flex;
@@ -252,39 +253,15 @@ async function handlePullEnd(e) {
         width: 23px;
         height: 23px;
         border: 4px solid lightgray;
+        border-top: 4px solid $primary;
         border-radius: 50%;
-        position: relative;
-        &::after {
-          box-sizing: border-box;
-          content: '';
-          width: 15px;
-          height: 15px;
-          position: absolute;
-          top: -4px;
-          right: -4px;
-          border-radius: 0 100% 0 0;
-          border: 4px solid blue;
-          border-color: blue blue transparent transparent;
-          transform-origin: 0 100%;
-
-          // animation-name: loading_animation;
-          // animation-duration: 1s;
-          // animation-iteration-count: infinite;
-          // animation-timing-function: linear;
-        }
       }
       &-label {
         @extend .pull_refresh-trigger-label;
       }
     }
     &-loading_icon_animation {
-      &::after {
-        content: '';
-        animation-name: loading_animation;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-      }
+      animation: loading_animation 1s linear infinite;
     }
     &-icon {
       @extend .pull_refresh-trigger-refreshing-loading_icon;
