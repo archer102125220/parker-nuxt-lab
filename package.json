@@ -8,10 +8,17 @@
     "dev-https": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 HTTPS=true nuxt dev --dotenv .env.development -p 3000 --host 0.0.0.0 --https --ssl-cert ./local-ssl/cert.pem --ssl-key ./local-ssl/key.pem",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "analyze": "npx nuxi analyze ",
+    "start": "node ./.output/server/index.mjs",
+    "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.7.2",
+    "dayjs": "^1.11.12",
     "google-auth-library": "^9.11.0",
     "google-libphonenumber": "^3.2.35",
     "jwt-decode": "^4.0.0",
@@ -24,7 +31,10 @@
     "qs": "^6.12.3",
     "read-excel-file": "^5.8.3",
     "swiper": "^11.1.4",
-    "vue": "latest"
+    "videojs": "^1.0.0",
+    "vue": "latest",
+    "vue-lazyload": "^3.0.0",
+    "vuetify": "^3.6.13"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
@@ -42,8 +52,11 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-vue": "^9.27.0",
+    "flat": "^6.0.1",
     "prettier": "^3.3.2",
     "sass": "^1.77.6",
-    "sass-loader": "^14.2.1"
+    "sass-loader": "^14.2.1",
+    "spreadsheet-to-json": "^2.0.0",
+    "vite-plugin-vuetify": "^2.0.3"
   }
 }

@@ -6,37 +6,34 @@
       @infinityFetch="handleInfinityFetch"
     >
       <div style="height: 100dvh">
-        <!-- <NuxtRouteAnnouncer />
-      <NuxtWelcome /> -->
-        <!-- <template #refresh="{ isPulling }">
-        <p>{{ isPulling }}</p>
-      </template>
-      <template #refreshing>
-        <p>wow</p>
-      </template>
-      <template #infinityLbael="{ loading }">
-        <p>{{ loading }}</p>
-      </template> -->
         <p>12343</p>
+        <WangEditor editorHeight="300px" />
       </div>
     </PullRefresh>
   </div>
 </template>
 
 <script setup>
+const nuxtApp = useNuxtApp();
 const infinityEnd = ref(false);
 function handleRefresh(done) {
-  console.log("handleRefresh");
+  nuxtApp.$store.system.setLoading(true);
+  console.log('handleRefresh');
   setTimeout(() => {
-    console.log("handleRefresh setTimeout");
+    console.log('handleRefresh setTimeout');
+    nuxtApp.$successMessage('handleRefresh');
+    nuxtApp.$store.system.setLoading(false);
     done();
   }, 500);
 }
 function handleInfinityFetch(done) {
-  console.log("handleInfinityFetch");
+  nuxtApp.$store.system.setLoading(true);
+  console.log('handleInfinityFetch');
   setTimeout(() => {
     // infinityEnd.value = true;
-    console.log("handleInfinityFetch setTimeout");
+    console.log('handleInfinityFetch setTimeout');
+    nuxtApp.$successMessage('handleInfinityFetch');
+    nuxtApp.$store.system.setLoading(false);
     done();
   }, 1000);
 }
