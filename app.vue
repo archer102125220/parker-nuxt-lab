@@ -28,7 +28,7 @@
 
 <script setup>
 const LAYOUT_SETTING = [];
-const NO_GO_TOP = ['index', 'login', 'staff-login'];
+const NO_GO_TOP = [];
 
 const nuxtApp = useNuxtApp();
 const { $i18n, $dayjs, $store } = nuxtApp;
