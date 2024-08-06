@@ -138,6 +138,7 @@ export const useSystemStore = defineStore('system', {
         isIos: false,
         isIphone: false,
         isIpad: false,
+        isStandalone: false,
         notBroswer: typeof window === 'undefined',
       };
       if (typeof window === 'undefined') {
@@ -150,6 +151,7 @@ export const useSystemStore = defineStore('system', {
       broswerInfo.isIphone = userAgent.includes('iPhone');
       broswerInfo.isIpad = userAgent.includes('iPad');
       broswerInfo.isIos = broswerInfo.isIphone || broswerInfo.isIpad;
+      broswerInfo.isStandalone = window.navigator?.standalone === true || window.matchMedia?.('(display-mode: standalone)')?.matches === true;
 
       if (userAgent.match(/edge\/([\d.]+)/)) {
         broswerInfo.type = 'Edge';
