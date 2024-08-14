@@ -3,6 +3,7 @@
     <div
       v-for="(tab, index) in tabList"
       :key="index"
+      v-ripple
       ref="tabListRef"
       class="tabs_bar-tab_item"
       @mouseenter="handleBottomeStyleTemp"
@@ -10,7 +11,7 @@
       @click="handleTabChange(index)"
     >
       <slot :tab="tab" :index="index">
-        <p>{{ tab?.label || tab }}</p>
+        <p>{{ tab?.[tabDisplayKey] || tab?.label || tab }}</p>
       </slot>
     </div>
   </div>
@@ -28,6 +29,10 @@ const props = defineProps({
   tabList: {
     type: Array,
     default: () => []
+  },
+  tabDisplayKey: {
+    type: [Number, String],
+    default: null
   },
   tabBottomLineColor: {
     type: String,
