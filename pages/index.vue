@@ -8,6 +8,9 @@
       <div class="index_page-content">
         <TabsBar
           v-model="tab"
+          tab-bottom-line-height="2px"
+          tab-bottom-line-width="30px"
+          tab-bottom-line-color="#27C5C3"
           :tabList="['a', 'bb', 'ccc', 'dddd', 'eeeee']"
         />
         <p class="index_page-content-text">12343</p>

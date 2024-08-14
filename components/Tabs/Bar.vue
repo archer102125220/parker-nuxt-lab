@@ -3,7 +3,7 @@
     <div
       v-for="(tab, index) in tabList"
       :key="index"
-      v-ripple
+      v-customize-ripple
       ref="tabListRef"
       class="tabs_bar-tab_item"
       @mouseenter="handleBottomeStyleTemp"
@@ -38,6 +38,10 @@ const props = defineProps({
     type: String,
     default: 'blue'
   },
+  tabBottomLineWidth: {
+    type: [Number, String],
+    default: null
+  },
   tabBottomLineHeight: {
     type: [Number, String],
     default: 3
@@ -61,6 +65,15 @@ const cssVariable = computed(() => {
     props.tabBottomLineHeight !== ''
   ) {
     _cssVariable['--tab_bottom_line_height'] = props.tabBottomLineHeight;
+  }
+
+  if (typeof props.tabBottomLineWidth === 'number') {
+    _cssVariable['--tab_bottom_line_width'] = `${props.tabBottomLineWidth}px`;
+  } else if (
+    typeof props.tabBottomLineWidth === 'string' &&
+    props.tabBottomLineWidth !== ''
+  ) {
+    _cssVariable['--tab_bottom_line_width'] = props.tabBottomLineWidth;
   }
 
   if (
@@ -107,8 +120,18 @@ function getBottomeStyle(tab) {
   const bottomeStyle = {};
 
   if (typeof tab === 'object' && tab !== null) {
-    bottomeStyle['--tab_bottom_line_left'] = `${tab.offsetLeft}px`;
-    bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
+    if (
+      (typeof props.tabBottomLineWidth !== 'number' &&
+        typeof props.tabBottomLineWidth !== 'string') ||
+      props.tabBottomLineWidth === ''
+    ) {
+      bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
+      bottomeStyle['--tab_bottom_line_left'] = `${tab.offsetLeft}px`;
+    } else {
+      bottomeStyle['--tab_bottom_line_left'] = `calc(${
+        tab.offsetLeft + tab.clientWidth / 2
+      }px - var(--tab_bottom_line_width, 0px) / 2)`;
+    }
   }
 
   return bottomeStyle;
@@ -133,7 +156,8 @@ function getBottomeStyle(tab) {
     bottom: 0;
     left: var(--tab_bottom_line_left, 0px);
     height: var(--tab_bottom_line_height, 3px);
-    width: var(--tab_bottom_line_width, 69px);
+    // width: var(--tab_bottom_line_width, 69px);
+    width: var(--tab_bottom_line_width, 0px);
     background-color: var(--tab_bottom_line_color, blue);
     transition: left 0.5s ease-in-out, width 0.5s 0.1s;
     pointer-events: none;
