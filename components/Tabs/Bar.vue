@@ -7,9 +7,10 @@
       class="tabs_bar-tab_item"
       @mouseenter="handleBottomeStyleTemp"
       @mouseleave="resetBottomeStyleTemp"
+      @click="handleTabChange(index)"
     >
-      <slot :tab="tab" :index="index" :tabChange="() => handleTabChange(index)">
-        <p @click="handleTabChange(index)">{{ tab?.label || tab }}</p>
+      <slot :tab="tab" :index="index">
+        <p>{{ tab?.label || tab }}</p>
       </slot>
     </div>
   </div>
@@ -27,6 +28,10 @@ const props = defineProps({
   tabList: {
     type: Array,
     default: () => []
+  },
+  tabBottomLineColor: {
+    type: String,
+    default: 'blue'
   },
   tabBottomLineHeight: {
     type: [Number, String],
@@ -51,6 +56,13 @@ const cssVariable = computed(() => {
     props.tabBottomLineHeight !== ''
   ) {
     _cssVariable['--tab_bottom_line_height'] = props.tabBottomLineHeight;
+  }
+
+  if (
+    typeof props.tabBottomLineColor === 'string' &&
+    props.tabBottomLineColor !== ''
+  ) {
+    _cssVariable['--tab_bottom_line_color'] = props.tabBottomLineColor;
   }
 
   return _cssVariable;
@@ -116,7 +128,7 @@ function getBottomeStyle(tab) {
     bottom: 0;
     transition: left 0.5s ease-in-out, width 0.5s 0.1s;
     height: var(--tab_bottom_line_height, 3px);
-    background-color: blue;
+    background-color: var(--tab_bottom_line_color, blue);
     left: var(--tab_bottom_line_left, 0px);
     width: var(--tab_bottom_line_width, 69px);
     pointer-events: none;
