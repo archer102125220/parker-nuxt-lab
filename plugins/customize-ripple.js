@@ -15,12 +15,13 @@ export default defineNuxtPlugin((nuxtApp) => {
           isSetPosition = true;
         }
 
-        // Create span el
+        const rippleBlock = document.createElement("span");
+        rippleBlock.classList.add("customize_ripple-block");
         const ripple = document.createElement("span");
-        // Add ripple class to span
-        ripple.classList.add("customize_ripple-content");
-        // Add span to the button
-        el.appendChild(ripple);
+        ripple.classList.add("customize_ripple-block-content");
+        rippleBlock.appendChild(ripple);
+        el.appendChild(rippleBlock);
+
         ripple.addEventListener('animationend', handleRippleEnd);
 
         // Get position of X
@@ -34,9 +35,9 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       }
       function handleRippleEnd(e) {
-        const ripple = e?.target || el.querySelector('.customize_ripple-content');
-        if (typeof ripple?.remove === 'function') {
-          ripple.remove();
+        const rippleBlock = el.querySelector('.customize_ripple-block');
+        if (typeof rippleBlock?.remove === 'function') {
+          rippleBlock.remove();
         }
         handleRippleResetStyle();
       }

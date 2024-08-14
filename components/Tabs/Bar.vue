@@ -146,6 +146,33 @@ function getBottomeStyle(tab) {
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
+  max-width: 100%;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: transparent;
+    border: 0 solid transparent;
+  }
+
+  &::-webkit-scrollbar-button {
+    background: transparent;
+    border-radius: 0px;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+
   &-tab_item {
     padding: 0 10px;
     cursor: pointer;

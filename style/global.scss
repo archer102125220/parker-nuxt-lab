@@ -144,23 +144,29 @@ img[src='img/expand.svg'] {
 
 .customize_ripple {
   position: relative;
-  overflow: hidden;
-
   cursor: pointer;
 
-  &-content {
+  &-block {
+    overflow: hidden;
     position: absolute;
-    border-radius: 50%;
-    /* To make it round */
-    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    &-content {
+      position: absolute;
+      border-radius: 50%;
+      /* To make it round */
+      background-color: rgba(0, 0, 0, 0.3);
 
-    width: 100px;
-    height: 100px;
-    margin-top: -50px;
-    /* for positioning */
-    margin-left: -50px;
+      width: 100px;
+      height: 100px;
+      margin-top: -50px;
+      /* for positioning */
+      margin-left: -50px;
 
-    animation: clickRipple 1s;
-    opacity: 0;
+      animation: clickRipple 1s;
+      opacity: 0;
+    }
   }
 }
