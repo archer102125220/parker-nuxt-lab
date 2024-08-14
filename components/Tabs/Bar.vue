@@ -112,12 +112,12 @@ function getBottomeStyle(tab) {
 
 <style lang="scss" scoped>
 .tabs_bar {
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-  position: relative;
   &-tab_item {
     padding: 0 10px;
     cursor: pointer;
@@ -126,11 +126,11 @@ function getBottomeStyle(tab) {
     content: '';
     position: absolute;
     bottom: 0;
-    transition: left 0.5s ease-in-out, width 0.5s 0.1s;
-    height: var(--tab_bottom_line_height, 3px);
-    background-color: var(--tab_bottom_line_color, blue);
     left: var(--tab_bottom_line_left, 0px);
+    height: var(--tab_bottom_line_height, 3px);
     width: var(--tab_bottom_line_width, 69px);
+    background-color: var(--tab_bottom_line_color, blue);
+    transition: left 0.5s ease-in-out, width 0.5s 0.1s;
     pointer-events: none;
   }
 }
