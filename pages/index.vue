@@ -6,6 +6,10 @@
       @infinityFetch="handleInfinityFetch"
     >
       <div class="index_page-content">
+        <TabsBar
+          v-model="tab"
+          :tabList="['a', 'bb', 'ccc', 'dddd', 'eeeee']"
+        />
         <p class="index_page-content-text">12343</p>
         <WangEditor
           class="index_page-content-wang_editor"
@@ -21,7 +25,11 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+
 const infinityEnd = ref(false);
+
+const tab = ref(0);
+
 function handleRefresh(done) {
   nuxtApp.$store.system.setLoading(true);
   console.log('handleRefresh');
