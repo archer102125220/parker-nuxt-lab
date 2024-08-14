@@ -29,6 +29,10 @@ const props = defineProps({
     type: [Number, String],
     default: 0
   },
+  center: {
+    type: Boolean,
+    default: false
+  },
   hover: {
     type: Boolean,
     default: false
@@ -94,6 +98,12 @@ const cssVariable = computed(() => {
     props.tabBottomLineColor !== ''
   ) {
     _cssVariable['--tab_bottom_line_color'] = props.tabBottomLineColor;
+  }
+
+  if (props.center === true) {
+    _cssVariable['--tab_bar_justify_content'] = 'center';
+  } else {
+    _cssVariable['--tab_bar_justify_content'] = 'flex-start';
   }
 
   return _cssVariable;
@@ -183,7 +193,8 @@ function handleTabBarScroll(e) {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-start;
+  // justify-content: flex-start;
+  justify-content: var(--tab_bar_justify_content, flex-start);
   align-items: center;
   max-width: 100%;
   overflow: auto;
