@@ -1,5 +1,12 @@
 <template>
-  <div class="tabs_bar" :style="cssVariable">
+  <div
+    class="tabs_bar"
+    ref="tabBarRef"
+    :style="cssVariable"
+    @mousemove.stop="handleTabBarScroll"
+    @mousedown="startTabBarScroll"
+    @mouseup.stop="stopTabBarScroll"
+  >
     <div
       v-for="(tab, index) in tabList"
       :key="index"
@@ -49,7 +56,13 @@ const props = defineProps({
 });
 const emits = defineEmits(['update:modelValue']);
 
+const tabBarRef = ref(null);
 const tabListRef = ref(null);
+
+const mouseDown = ref(false);
+const startX = ref(0);
+const scrollLeft = ref(0);
+
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
 
@@ -96,25 +109,13 @@ watch(
 
 onMounted(() => {
   handleBottomeStyle(tabListRef.value[0]);
+  document.addEventListener('mouseup', stopTabBarScroll);
+  document.addEventListener('mousemove', handleTabBarScroll);
 });
-
-function handleTabChange(newTabIndex) {
-  emits('update:modelValue', newTabIndex);
-}
-
-function handleBottomeStyle(tab) {
-  bottomLineStyle.value = getBottomeStyle(tab);
-}
-
-function handleBottomeStyleTemp(_tab) {
-  if (props.hover === false) return;
-  const tab = _tab?.target || _tab;
-  bottomLineStyleTemp.value = getBottomeStyle(tab);
-}
-function resetBottomeStyleTemp() {
-  if (props.hover === false) return;
-  bottomLineStyleTemp.value = null;
-}
+onBeforeUnmount(() => {
+  document.removeEventListener('mouseup', stopTabBarScroll);
+  document.removeEventListener('mousemove', handleTabBarScroll);
+});
 
 function getBottomeStyle(tab) {
   const bottomeStyle = {};
@@ -136,6 +137,44 @@ function getBottomeStyle(tab) {
 
   return bottomeStyle;
 }
+
+function handleBottomeStyle(tab) {
+  bottomLineStyle.value = getBottomeStyle(tab);
+}
+
+function handleBottomeStyleTemp(_tab) {
+  if (props.hover === false) return;
+  const tab = _tab?.target || _tab;
+  bottomLineStyleTemp.value = getBottomeStyle(tab);
+}
+function resetBottomeStyleTemp() {
+  if (props.hover === false) return;
+  bottomLineStyleTemp.value = null;
+}
+
+function handleTabChange(newTabIndex) {
+  emits('update:modelValue', newTabIndex);
+}
+
+function startTabBarScroll(e) {
+  mouseDown.value = true;
+  startX.value = e.pageX - tabBarRef.value.offsetLeft;
+  scrollLeft.value = tabBarRef.value.scrollLeft;
+}
+
+function stopTabBarScroll(e) {
+  mouseDown.value = false;
+}
+
+function handleTabBarScroll(e) {
+  e.preventDefault();
+  if (mouseDown.value === false) {
+    return;
+  }
+  const x = e.pageX - tabBarRef.value.offsetLeft;
+  const scroll = x - startX.value;
+  tabBarRef.value.scrollLeft = scrollLeft.value - scroll;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -148,6 +187,7 @@ function getBottomeStyle(tab) {
   align-items: center;
   max-width: 100%;
   overflow: auto;
+  user-select: none;
 
   &::-webkit-scrollbar {
     width: 0;
