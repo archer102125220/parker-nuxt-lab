@@ -20,6 +20,10 @@ const props = defineProps({
     type: [Number, String],
     default: 0
   },
+  hover: {
+    type: Boolean,
+    default: false
+  },
   tabList: {
     type: Array,
     default: () => []
@@ -73,20 +77,24 @@ function handleBottomeStyle(tab) {
 }
 
 function handleBottomeStyleTemp(_tab) {
+  if (props.hover === false) return;
   const tab = _tab?.target || _tab;
   bottomLineStyleTemp.value = getBottomeStyle(tab);
 }
-function resetBottomeStyleTemp(tab) {
+function resetBottomeStyleTemp() {
+  if (props.hover === false) return;
   bottomLineStyleTemp.value = null;
 }
 
 function getBottomeStyle(tab) {
+  const bottomeStyle = {};
+
   if (typeof tab === 'object' && tab !== null) {
-    return {
-      '--tab_bottom_line_left': `${tab.offsetLeft}px`,
-      '--tab_bottom_line_width': `${tab.clientWidth}px`
-    };
+    bottomeStyle['--tab_bottom_line_left'] = `${tab.offsetLeft}px`;
+    bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
   }
+
+  return bottomeStyle;
 }
 </script>
 
@@ -100,6 +108,7 @@ function getBottomeStyle(tab) {
   position: relative;
   &-tab_item {
     padding: 0 10px;
+    cursor: pointer;
   }
   &::after {
     content: '';
