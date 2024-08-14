@@ -18,6 +18,23 @@ export function doubleTap(doubleTapMs) {
   }
 }
 
+export function customDoubleTap(func, doubleTapMs = 200, defaultFunc) {
+  let timeout, lastTap = 0;
+  return function detectDoubleTap(...args) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (0 < tapLength && tapLength < doubleTapMs) {
+      func.apply(this, args);
+    } else {
+      timeout = setTimeout(() => clearTimeout(timeout), doubleTapMs);
+    }
+    lastTap = currentTime;
+    if(typeof defaultFunc === 'function'){
+      defaultFunc.apply(this, args);
+    }
+  }
+}
+
 export function initializeDoubleTap(doubleTapMs = 200) {
   if (typeof window === 'undefined') return;
 
