@@ -5,6 +5,8 @@
       :key="index"
       ref="tabListRef"
       class="tabs_bar-tab_item"
+      @mouseenter="handleBottomeStyleTemp"
+      @mouseleave="resetBottomeStyleTemp"
     >
       <slot :tab="tab" :index="index" :tabChange="() => handleTabChange(index)">
         <p @click="handleTabChange(index)">{{ tab?.label || tab }}</p>
@@ -54,23 +56,19 @@ watch(
   () => props.modelValue,
   (newValue) => {
     const tabRef = tabListRef.value?.[newValue];
-    console.log(tabRef);
     handleBottomeStyle(tabRef);
   }
 );
 
 onMounted(() => {
-  console.log(tabListRef.value);
   handleBottomeStyle(tabListRef.value[0]);
 });
 
 function handleTabChange(newTabIndex) {
-  console.log({ newTabIndex });
   emits('update:modelValue', newTabIndex);
 }
 
-function handleBottomeStyle(_tab) {
-  const tab = _tab?.target || _tab;
+function handleBottomeStyle(tab) {
   bottomLineStyle.value = getBottomeStyle(tab);
 }
 
@@ -78,12 +76,13 @@ function handleBottomeStyleTemp(_tab) {
   const tab = _tab?.target || _tab;
   bottomLineStyleTemp.value = getBottomeStyle(tab);
 }
+function resetBottomeStyleTemp(tab) {
+  bottomLineStyleTemp.value = null;
+}
 
 function getBottomeStyle(tab) {
   if (typeof tab === 'object' && tab !== null) {
     return {
-      // left: tab.offsetLeft,
-      // width: tab.clientWidth,
       '--tab_bottom_line_left': `${tab.offsetLeft}px`,
       '--tab_bottom_line_width': `${tab.clientWidth}px`
     };
