@@ -6,13 +6,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   console.log(el);
     // },
     mounted(el) {  // 使用nuxt時使用的客戶端掛載生命週期
-      let isSetPosition = false;
       function handleRippleStart(e) {
-        el.classList.add('customize_ripple');
+        // el.classList.add('customize_ripple');
         const elementStyle = window.getComputedStyle(el);
         if (elementStyle.position === 'static') {
           el.style.position = 'relative';
-          isSetPosition = true;
+          el.setAttribute('isSetPosition', true);
         }
 
         const rippleBlock = document.createElement("span");
@@ -42,12 +41,13 @@ export default defineNuxtPlugin((nuxtApp) => {
         handleRippleResetStyle();
       }
       const handleRippleResetStyle = _debounce(() => {
-        el.classList.remove('customize_ripple');
+        // el.classList.remove('customize_ripple');
+        const isSetPosition = el.getAttribute('isSetPosition') === 'true';
         if (isSetPosition === true) {
           el.style.position = '';
-          isSetPosition = false;
+          el.setAttribute('isSetPosition', false);
         }
-      }, 1000 * 60 * 1)
+      }, 1000 * 60 * 1);
       el.addEventListener('mousedown', handleRippleStart);
     }
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
