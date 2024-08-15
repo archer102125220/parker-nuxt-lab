@@ -49,7 +49,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           el.setAttribute('isSetPosition', false);
         }
       }, 1000 * 60 * 1);
-      el.addEventListener('mousedown', handleRippleStart);
+      el.addEventListener('pointerdown', handleRippleStart);
     }
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
     //   // you can provide SSR-specific props here

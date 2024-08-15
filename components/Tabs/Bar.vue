@@ -18,7 +18,7 @@
       class="tabs_bar-tab_item"
       @mouseenter="handleBottomeStyleTemp"
       @mouseleave="resetBottomeStyleTemp"
-      @click="handleTabChange(index)"
+      @pointerdown="handleTabChange(index)"
     >
       <slot
         :tab="tab"
@@ -157,6 +157,11 @@ onBeforeUnmount(() => {
   document.removeEventListener('mouseup', stopTabBarScroll);
   document.removeEventListener('mousemove', handleTabBarScroll);
 });
+
+function isSelected(currentTab, tab, index) {
+  const value = tab?.[props.valueKey] || tab?.value || index;
+  return currentTab === value;
+}
 
 function getBottomeStyle(tab) {
   const bottomeStyle = {};

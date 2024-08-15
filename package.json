@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host 0.0.0.0",
     "dev-https": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 HTTPS=true nuxt dev --dotenv .env.development -p 3000 --host 0.0.0.0 --https --ssl-cert ./local-ssl/cert.pem --ssl-key ./local-ssl/key.pem",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

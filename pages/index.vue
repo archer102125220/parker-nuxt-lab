@@ -8,6 +8,7 @@
       <div class="index_page-content">
         <TabsBar
           v-model="tab"
+          gap="16px"
           bottom-line-height="2px"
           bottom-line-width="30px"
           bottom-line-color="#27C5C3"
