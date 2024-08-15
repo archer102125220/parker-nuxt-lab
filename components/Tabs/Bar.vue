@@ -18,7 +18,7 @@
       class="tabs_bar-tab_item"
       @mouseenter="handleBottomeStyleTemp"
       @mouseleave="resetBottomeStyleTemp"
-      @pointerdown="handleTabChange(index)"
+      @click="handleTabChange(index)"
     >
       <slot
         :tab="tab"
@@ -35,6 +35,10 @@ const props = defineProps({
   modelValue: {
     type: [Number, String],
     default: 0
+  },
+  justifyContent: {
+    type: String,
+    default: 'flex-start'
   },
   center: {
     type: Boolean,
@@ -129,6 +133,10 @@ const cssVariable = computed(() => {
     _cssVariable['--tab_bar_justify_content'] = 'center';
   } else {
     _cssVariable['--tab_bar_justify_content'] = 'flex-start';
+  }
+
+  if (typeof props.justifyContent === 'string' && props.justifyContent !== '') {
+    _cssVariable['--tab_bar_justify_content'] = props.justifyContent;
   }
 
   if (typeof props.gap === 'number') {
