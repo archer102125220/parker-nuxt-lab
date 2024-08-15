@@ -6,6 +6,9 @@
     @mousemove.stop="handleTabBarScroll"
     @mousedown="startTabBarScroll"
     @mouseup.stop="stopTabBarScroll"
+    @touchstart="startTabBarScroll"
+    @touchmove.stop="handleTabBarScroll"
+    @touchend.stop="stopTabBarScroll"
   >
     <div
       v-for="(tab, index) in tabList"
@@ -17,7 +20,11 @@
       @mouseleave="resetBottomeStyleTemp"
       @click="handleTabChange(index)"
     >
-      <slot :tab="tab" :index="index">
+      <slot
+        :tab="tab"
+        :index="index"
+        :selected="isSelected(currentTab, tab, index)"
+      >
         <p>{{ tab?.[tabDisplayKey] || tab?.label || tab }}</p>
       </slot>
     </div>
@@ -37,6 +44,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  gap: {
+    type: [Number, String],
+    default: null
+  },
   tabList: {
     type: Array,
     default: () => []
@@ -45,15 +56,15 @@ const props = defineProps({
     type: [Number, String],
     default: null
   },
-  tabBottomLineColor: {
+  bottomLineColor: {
     type: String,
     default: 'blue'
   },
-  tabBottomLineWidth: {
+  bottomLineWidth: {
     type: [Number, String],
     default: null
   },
-  tabBottomLineHeight: {
+  bottomLineHeight: {
     type: [Number, String],
     default: 3
   }
@@ -104,6 +115,12 @@ const cssVariable = computed(() => {
     _cssVariable['--tab_bar_justify_content'] = 'center';
   } else {
     _cssVariable['--tab_bar_justify_content'] = 'flex-start';
+  }
+
+  if (typeof props.gap === 'number') {
+    _cssVariable['--tab_gap'] = `${props.gap}px`;
+  } else if (typeof props.gap === 'string' && props.gap !== '') {
+    _cssVariable['--tab_gap'] = props.gap;
   }
 
   return _cssVariable;
@@ -168,7 +185,15 @@ function handleTabChange(newTabIndex) {
 
 function startTabBarScroll(e) {
   mouseDown.value = true;
-  startX.value = e.pageX - tabBarRef.value.offsetLeft;
+  const eventX =
+    e.pageX ||
+    e.clientX ||
+    e.offsetX ||
+    e.changedTouches?.[0]?.pageX ||
+    e.changedTouches?.[0]?.clientX ||
+    e.changedTouches?.[0]?.offsetX;
+
+  startX.value = eventX - tabBarRef.value.offsetLeft;
   scrollLeft.value = tabBarRef.value.scrollLeft;
 }
 
@@ -181,7 +206,15 @@ function handleTabBarScroll(e) {
   if (mouseDown.value === false) {
     return;
   }
-  const x = e.pageX - tabBarRef.value.offsetLeft;
+  const eventX =
+    e.pageX ||
+    e.clientX ||
+    e.offsetX ||
+    e.changedTouches?.[0]?.pageX ||
+    e.changedTouches?.[0]?.clientX ||
+    e.changedTouches?.[0]?.offsetX;
+
+  const x = eventX - tabBarRef.value.offsetLeft;
   const scroll = x - startX.value;
   tabBarRef.value.scrollLeft = scrollLeft.value - scroll;
 }
@@ -195,9 +228,10 @@ function handleTabBarScroll(e) {
   flex-wrap: nowrap;
   // justify-content: flex-start;
   justify-content: var(--tab_bar_justify_content, flex-start);
+  // gap: var(--tab_gap);
   align-items: center;
   max-width: 100%;
-  overflow: auto;
+  overflow: hidden;
   user-select: none;
 
   &::-webkit-scrollbar {
@@ -225,7 +259,8 @@ function handleTabBarScroll(e) {
   }
 
   &-tab_item {
-    padding: 0 10px;
+    padding: 0 calc(var(--tab_gap) / 2);
+    white-space: nowrap;
     cursor: pointer;
   }
   &::after {
