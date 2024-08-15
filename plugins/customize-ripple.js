@@ -41,6 +41,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         handleRippleResetStyle();
       }
       const handleRippleResetStyle = _debounce(() => {
+        if (typeof el?.getAttribute !== 'function') return;
         // el.classList.remove('customize_ripple');
         const isSetPosition = el.getAttribute('isSetPosition') === 'true';
         if (isSetPosition === true) {
