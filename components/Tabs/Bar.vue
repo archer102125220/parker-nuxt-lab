@@ -23,9 +23,9 @@
       <slot
         :tab="tab"
         :index="index"
-        :selected="isSelected(currentTab, tab, index)"
+        :selected="isSelected(modelValue, tab, index)"
       >
-        <p>{{ tab?.[tabDisplayKey] || tab?.label || tab }}</p>
+        <p>{{ tab?.[displayKey] || tab?.label || tab }}</p>
       </slot>
     </div>
   </div>
@@ -52,13 +52,21 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  tabDisplayKey: {
+  displayKey: {
     type: [Number, String],
     default: null
   },
+  valueKey: {
+    type: [Number, String],
+    default: null
+  },
+  selectedType: {
+    type: String,
+    default: 'underLine'
+  },
   bottomLineColor: {
     type: String,
-    default: 'blue'
+    default: ''
   },
   bottomLineWidth: {
     type: [Number, String],
@@ -86,29 +94,35 @@ const cssVariable = computed(() => {
     ...(bottomLineStyleTemp.value || bottomLineStyle.value)
   };
 
-  if (typeof props.tabBottomLineHeight === 'number') {
-    _cssVariable['--tab_bottom_line_height'] = `${props.tabBottomLineHeight}px`;
-  } else if (
-    typeof props.tabBottomLineHeight === 'string' &&
-    props.tabBottomLineHeight !== ''
-  ) {
-    _cssVariable['--tab_bottom_line_height'] = props.tabBottomLineHeight;
-  }
+  if (props.selectedType === 'underLine') {
+    _cssVariable['--tab_bottom_line_bottom'] = '0px';
+    if (typeof props.bottomLineHeight === 'number') {
+      _cssVariable['--tab_bottom_line_height'] = `${props.bottomLineHeight}px`;
+    } else if (
+      typeof props.bottomLineHeight === 'string' &&
+      props.bottomLineHeight !== ''
+    ) {
+      _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+    }
 
-  if (typeof props.tabBottomLineWidth === 'number') {
-    _cssVariable['--tab_bottom_line_width'] = `${props.tabBottomLineWidth}px`;
-  } else if (
-    typeof props.tabBottomLineWidth === 'string' &&
-    props.tabBottomLineWidth !== ''
-  ) {
-    _cssVariable['--tab_bottom_line_width'] = props.tabBottomLineWidth;
+    if (typeof props.bottomLineWidth === 'number') {
+      _cssVariable['--tab_bottom_line_width'] = `${props.bottomLineWidth}px`;
+    } else if (
+      typeof props.bottomLineWidth === 'string' &&
+      props.bottomLineWidth !== ''
+    ) {
+      _cssVariable['--tab_bottom_line_width'] = props.bottomLineWidth;
+    }
+  } else if (props.selectedType === 'mask') {
+    // _cssVariable['--tab_bottom_line_height'] = '100%';
+    _cssVariable['--tab_bottom_line_opacity'] = '0.2';
   }
 
   if (
-    typeof props.tabBottomLineColor === 'string' &&
-    props.tabBottomLineColor !== ''
+    typeof props.bottomLineColor === 'string' &&
+    props.bottomLineColor !== ''
   ) {
-    _cssVariable['--tab_bottom_line_color'] = props.tabBottomLineColor;
+    _cssVariable['--tab_bottom_line_color'] = props.bottomLineColor;
   }
 
   if (props.center === true) {
@@ -270,7 +284,8 @@ function handleTabBarScroll(e) {
   &::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    // bottom: 0px;
+    bottom: var(--tab_bottom_line_bottom);
     left: var(--tab_bottom_line_left, 0px);
     height: var(--tab_bottom_line_height, 3px);
     // width: var(--tab_bottom_line_width, 69px);
