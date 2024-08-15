@@ -260,8 +260,12 @@ function handleTabBarScroll(e) {
 
   &-tab_item {
     padding: 0 calc(var(--tab_gap) / 2);
+    color: #606060;
     white-space: nowrap;
     cursor: pointer;
+  }
+  &-tab_item_selected {
+    color: #000;
   }
   &::after {
     content: '';
