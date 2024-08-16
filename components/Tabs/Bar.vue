@@ -3,12 +3,8 @@
     class="tabs_bar"
     ref="tabBarRef"
     :style="cssVariable"
-    @mousemove.stop="handleTabBarScroll"
     @mousedown="startTabBarScroll"
-    @mouseup.stop="stopTabBarScroll"
     @touchstart="startTabBarScroll"
-    @touchmove.stop="handleTabBarScroll"
-    @touchend.stop="stopTabBarScroll"
   >
     <div
       v-for="(tab, index) in tabList"
@@ -160,10 +156,14 @@ onMounted(() => {
   handleBottomeStyle(tabListRef.value[0]);
   document.addEventListener('mouseup', stopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
+  document.addEventListener('touchend', stopTabBarScroll);
+  document.addEventListener('touchmove', handleTabBarScroll);
 });
 onBeforeUnmount(() => {
   document.removeEventListener('mouseup', stopTabBarScroll);
   document.removeEventListener('mousemove', handleTabBarScroll);
+  document.removeEventListener('touchend', stopTabBarScroll);
+  document.removeEventListener('touchmove', handleTabBarScroll);
 });
 
 function isSelected(currentTab, tab, index) {
