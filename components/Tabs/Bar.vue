@@ -147,7 +147,12 @@ const cssVariable = computed(() => {
 watch(
   () => props.modelValue,
   (newValue) => {
-    const tabRef = tabListRef.value?.[newValue];
+    const _tabIndex = props.tabList.findIndex(
+      (tab) => tab?.[props.valueKey] === newValue || tab?.value === newValue
+    );
+    const tabIndex = _tabIndex || newValue;
+    const tabRef =
+      tabListRef.value?.[typeof tabIndex === 'number' ? tabIndex : 0];
     handleBottomeStyle(tabRef);
   }
 );
@@ -303,6 +308,7 @@ function handleTabBarScroll(e) {
     height: var(--tab_bottom_line_height, 3px);
     // width: var(--tab_bottom_line_width, 69px);
     width: var(--tab_bottom_line_width, 0px);
+    border-radius: 5px;
     background-color: var(--tab_bottom_line_color, blue);
     transition: left 0.5s ease-in-out, width 0.5s 0.1s;
     pointer-events: none;
