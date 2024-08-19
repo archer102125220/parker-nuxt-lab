@@ -28,7 +28,7 @@
           <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
           <div class="pull_refresh-trigger-refreshing">
             <div
-              class="pull_refresh-trigger-refreshing-loading_icon pull_refresh-trigger-loading_icon_animation"
+              class="pull_refresh-trigger-refreshing-loading_icon pull_refresh-trigger-icon_center-loading_icon_animation"
             />
             <p class="pull_refresh-trigger-refreshing-label">
               {{ refreshingLabel }}
@@ -36,14 +36,16 @@
           </div>
         </slot>
       </template>
-      <div
-        v-else
-        v-show="isShowRefreshIcon"
-        :class="{
-          'pull_refresh-trigger-icon': true,
-          'pull_refresh-trigger-loading_icon_animation': isPullStart === false
-        }"
-      />
+      <div v-else class="pull_refresh-trigger-icon_center">
+        <div
+          v-show="isShowRefreshIcon"
+          :class="{
+            'pull_refresh-trigger-icon_center-icon': true,
+            'pull_refresh-trigger-icon_center-loading_icon_animation':
+              isPullStart === false
+          }"
+        />
+      </div>
     </div>
 
     <div class="pull_refresh-container">
@@ -65,6 +67,7 @@
 <script setup>
 const props = defineProps({
   label: { type: String, default: '下拉即可刷新...' },
+  height: { type: [String, Number], default: null },
   pullingLabel: { type: String, default: '释放即可刷新...' },
   refreshingLabel: { type: String, default: '加载中...' },
   refresh: { type: Function, default: null },
@@ -98,15 +101,30 @@ const cssVariable = computed(() => {
   const _cssVariable = {};
 
   if (props.iosType === true) {
+    _cssVariable['--refresh_trigger_top'] = '0px';
+
     _cssVariable['--refresh_transition'] = `${duration.value}ms`;
     _cssVariable[
       '--refresh_transform'
     ] = `translate3d(0, ${moveDistance.value}px, 0)`;
   } else {
+    _cssVariable['--refresh_trigger_top'] = '-34px';
+
     _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
-    _cssVariable[
-      '--refresh_icon_transform'
-    ] = `translate3d(0, ${moveDistance.value}px, 0)`;
+    // _cssVariable[
+    //   '--refresh_icon_transform'
+    // ] = `translate3d(0, ${moveDistance.value}px, 0)`
+    _cssVariable['--refresh_icon_top'] = `${moveDistance.value}px`;
+  }
+
+  if (typeof props.height === 'string' && props.height !== '') {
+    _cssVariable['--refresh_height'] = props.height;
+  } else if (typeof typeof props.height === 'number') {
+    _cssVariable['--refresh_height'] = `${props.height}px`;
+  }
+
+  if (moveDistance.value > 0) {
+    _cssVariable['--refresh_overflow'] = 'hidden';
   }
 
   return _cssVariable;
@@ -148,18 +166,18 @@ function getCurrentDistance() {
 
   return rect.bottom - scrollTop;
 }
-function scrollEventListener(e) {
-  if (
-    loading.value === true ||
-    props.infinityEnd === true ||
-    props.isScrollToFetch !== true
-  ) {
-    return;
-  }
-  if (getCurrentDistance() <= props.infinityBuffer) {
-    handleInfinityFetch();
-  }
-}
+// function scrollEventListener(e) {
+//   if (
+//     loading.value === true ||
+//     props.infinityEnd === true ||
+//     props.isScrollToFetch !== true
+//   ) {
+//     return;
+//   }
+//   if (getCurrentDistance() <= props.infinityBuffer) {
+//     handleInfinityFetch();
+//   }
+// }
 async function handleInfinityFetch() {
   loading.value = true;
   if (typeof props.infinityFetch === 'function') {
@@ -173,8 +191,15 @@ async function handleInfinityFetch() {
 }
 
 function handlePullStart(e) {
+  const scrollTop =
+    container.value?.scrollTop ||
+    document.body?.scrollTop ||
+    window.screenY ||
+    window.pageYOffset;
+
+  if (scrollTop > 0) return;
+
   isPullStart.value = true;
-  isShowRefreshIcon.value = true;
   duration.value = 0;
   moveDistance.value = 0;
   startY.value = e.targetTouches?.[0]?.clientY || e.clientY;
@@ -182,35 +207,33 @@ function handlePullStart(e) {
 function handlePulling(e) {
   if (isPullStart.value !== true) return;
   const scrollTop =
-    document.documentElement?.scrollTop || document.body?.scroll;
+    container.value?.scrollTop ||
+    document.body?.scrollTop ||
+    window.screenY ||
+    window.pageYOffset;
 
-  if (scrollTop > 0) {
-    // moveDistance.value = 10;
-    isPulling.value = false;
-    return;
-  }
+  if (scrollTop > 0) return;
 
   const move = (e.targetTouches?.[0]?.clientY || e.clientY) - startY.value;
 
   if (move > 0) {
+    isShowRefreshIcon.value = true;
     const _moveDistance = Math.pow(move, 0.8);
-    const _isPulling = _moveDistance > 50;
-
-    if (_isPulling === true && typeof e?.preventDefault === 'function') {
-      e.preventDefault();
-    }
 
     moveDistance.value = _moveDistance;
-    isPulling.value = _isPulling;
+    isPulling.value = _moveDistance > 50;
   }
 }
 async function handlePullEnd(e) {
   isPullStart.value = false;
+  startY.value = 0;
   duration.value = 300;
   if (moveDistance.value > 50 && isPulling.value === true) {
     refreshing.value = true;
     isPulling.value = false;
-    moveDistance.value = 50;
+    if (props.iosType === true) {
+      moveDistance.value = 50;
+    }
     if (typeof props.refresh === 'function') {
       await props.refresh();
       refreshing.value = false;
@@ -226,7 +249,6 @@ async function handlePullEnd(e) {
       });
     }
   } else {
-    isPullStart.value = false;
     isShowRefreshIcon.value = false;
     moveDistance.value = 0;
   }
@@ -236,11 +258,12 @@ async function handlePullEnd(e) {
 <style lang="scss" scoped>
 .pull_refresh {
   position: relative;
-  transition: var(--refresh_transition);
-  transform: var(--refresh_transform);
+  height: var(--refresh_height);
+  overflow: var(--refresh_overflow);
   &-trigger {
     position: absolute;
-    top: -34px;
+    top: var(--refresh_trigger_top);
+    z-index: -1;
     min-height: 30px;
     width: 100%;
     &-label {
@@ -269,17 +292,25 @@ async function handlePullEnd(e) {
         @extend .pull_refresh-trigger-label;
       }
     }
-    &-loading_icon_animation {
-      animation: loading_animation 1s linear infinite;
-    }
-    &-icon {
-      @extend .pull_refresh-trigger-refreshing-loading_icon;
-      margin: auto;
-      transition: var(--refresh_icon_transition);
+    &-icon_center {
+      position: absolute;
+      top: var(--refresh_icon_top, 0px);
+      width: 100%;
+      transition: all var(--refresh_icon_transition);
       transform: var(--refresh_icon_transform);
+      &-loading_icon_animation {
+        animation: loading_animation 1s linear infinite;
+      }
+      &-icon {
+        @extend .pull_refresh-trigger-refreshing-loading_icon;
+        margin: auto;
+        transition: var(--refresh_icon_transition);
+      }
     }
   }
   &-container {
+    transition: all var(--refresh_transition);
+    transform: var(--refresh_transform);
   }
   &-infinity_label {
     @extend .pull_refresh-trigger-label;

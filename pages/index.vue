@@ -1,6 +1,8 @@
 <template>
   <div class="index_page">
     <PullRefresh
+      :ios-type="true"
+      height="100dvh"
       :infinityEnd="infinityEnd"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
@@ -12,7 +14,16 @@
           bottom-line-height="2px"
           bottom-line-width="30px"
           bottom-line-color="#27C5C3"
-          :tab-list="['a', 'bb', 'ccc', 'dddd', 'eeeee', 'ffffff', 'ggggggg', 'hhhhhhhh']"
+          :tab-list="[
+            'a',
+            'bb',
+            'ccc',
+            'dddd',
+            'eeeee',
+            'ffffff',
+            'ggggggg',
+            'hhhhhhhh'
+          ]"
         />
         <p class="index_page-content-text">12343</p>
         <WangEditor
@@ -39,7 +50,7 @@ function handleRefresh(done) {
   console.log('handleRefresh');
   setTimeout(() => {
     console.log('handleRefresh setTimeout');
-    nuxtApp.$successMessage('handleRefresh');
+    // nuxtApp.$successMessage('handleRefresh');
     nuxtApp.$store.system.setLoading(false);
     done();
   }, 1000);
@@ -50,7 +61,7 @@ function handleInfinityFetch(done) {
   setTimeout(() => {
     // infinityEnd.value = true;
     console.log('handleInfinityFetch setTimeout');
-    nuxtApp.$successMessage('handleInfinityFetch');
+    // nuxtApp.$successMessage('handleInfinityFetch');
     nuxtApp.$store.system.setLoading(false);
     done();
   }, 1000);
@@ -60,7 +71,7 @@ function handleInfinityFetch(done) {
 <style lang="scss" scoped>
 .index_page {
   &-content {
-    min-height: 100dvh;
+    // min-height: 100dvh;
     &-text {
       height: 200px;
     }
