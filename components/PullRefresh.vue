@@ -184,21 +184,30 @@ function handlePulling(e) {
   const scrollTop =
     document.documentElement?.scrollTop || document.body?.scroll;
 
-  if (scrollTop > 0) return;
+  if (scrollTop > 0) {
+    // moveDistance.value = 10;
+    isPulling.value = false;
+    return;
+  }
 
   const move = (e.targetTouches?.[0]?.clientY || e.clientY) - startY.value;
 
   if (move > 0) {
     const _moveDistance = Math.pow(move, 0.8);
+    const _isPulling = _moveDistance > 50;
+
+    if (_isPulling === true && typeof e?.preventDefault === 'function') {
+      e.preventDefault();
+    }
 
     moveDistance.value = _moveDistance;
-    isPulling.value = _moveDistance > 50;
+    isPulling.value = _isPulling;
   }
 }
 async function handlePullEnd(e) {
   isPullStart.value = false;
   duration.value = 300;
-  if (moveDistance.value > 50) {
+  if (moveDistance.value > 50 && isPulling.value === true) {
     refreshing.value = true;
     isPulling.value = false;
     moveDistance.value = 50;
