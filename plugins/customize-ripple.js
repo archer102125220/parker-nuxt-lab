@@ -1,13 +1,12 @@
-import _debounce from 'lodash/debounce';
-
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.directive('customize-ripple', {
     // inserted(el) { // 直接使用vue時使用的掛載生命週期
     //   console.log(el);
     // },
-    mounted(el) {  // 使用nuxt時使用的客戶端掛載生命週期
+    mounted(el, binding) {  // 使用nuxt時使用的客戶端掛載生命週期
       function handleRippleStart(e) {
-        // el.classList.add('customize_ripple');
+        if (binding?.value === false) return;
+        // el.classList.add('customize_ripple');  // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
         const elementStyle = window.getComputedStyle(el);
         if (elementStyle.position === 'static') {
           el.style.position = 'relative';
@@ -38,17 +37,19 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (typeof rippleBlock?.remove === 'function') {
           rippleBlock.remove();
         }
-        handleRippleResetStyle();
+        if (el.querySelectorAll('.click_ripple-block').length <= 0) {
+          handleRippleResetStyle();
+        }
       }
-      const handleRippleResetStyle = _debounce(() => {
+      function handleRippleResetStyle() {
         if (typeof el?.getAttribute !== 'function') return;
-        // el.classList.remove('customize_ripple');
+        // el.classList.remove('click_ripple'); // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
         const isSetPosition = el.getAttribute('isSetPosition') === 'true';
         if (isSetPosition === true) {
           el.style.position = '';
-          el.setAttribute('isSetPosition', false);
+          el.setAttribute('isSetPosition', 'false');
         }
-      }, 1000 * 60 * 1);
+      }
       el.addEventListener('pointerdown', handleRippleStart);
     }
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
