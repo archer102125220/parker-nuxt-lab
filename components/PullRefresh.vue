@@ -101,20 +101,15 @@ const cssVariable = computed(() => {
   const _cssVariable = {};
 
   if (props.iosType === true) {
-    _cssVariable['--refresh_trigger_top'] = '0px';
-
     _cssVariable['--refresh_transition'] = `${duration.value}ms`;
     _cssVariable[
       '--refresh_transform'
     ] = `translate3d(0, ${moveDistance.value}px, 0)`;
   } else {
-    _cssVariable['--refresh_trigger_top'] = '-34px';
-
     _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
-    // _cssVariable[
-    //   '--refresh_icon_transform'
-    // ] = `translate3d(0, ${moveDistance.value}px, 0)`
-    _cssVariable['--refresh_icon_top'] = `${moveDistance.value}px`;
+    _cssVariable[
+      '--refresh_icon_transform'
+    ] = `translate3d(0, ${moveDistance.value - 25}px, 0)`;
   }
 
   if (typeof props.height === 'string' && props.height !== '') {
@@ -262,7 +257,7 @@ async function handlePullEnd(e) {
   overflow: var(--refresh_overflow);
   &-trigger {
     position: absolute;
-    top: var(--refresh_trigger_top);
+    top: 0;
     z-index: -1;
     min-height: 30px;
     width: 100%;

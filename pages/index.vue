@@ -1,7 +1,7 @@
 <template>
   <div class="index_page">
     <PullRefresh
-      :ios-type="true"
+      :ios-type="false"
       height="100dvh"
       :infinityEnd="infinityEnd"
       @refresh="handleRefresh"
