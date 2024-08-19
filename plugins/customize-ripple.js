@@ -37,7 +37,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (typeof rippleBlock?.remove === 'function') {
           rippleBlock.remove();
         }
-        if (el.querySelectorAll('.click_ripple-block').length <= 0) {
+        if (el.querySelectorAll('.customize_ripple-block').length <= 0) {
           handleRippleResetStyle();
         }
       }

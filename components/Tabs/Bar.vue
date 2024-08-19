@@ -150,9 +150,9 @@ watch(
     const _tabIndex = props.tabList.findIndex(
       (tab) => tab?.[props.valueKey] === newValue || tab?.value === newValue
     );
-    const tabIndex = _tabIndex || newValue;
-    const tabRef =
-      tabListRef.value?.[typeof tabIndex === 'number' ? tabIndex : 0];
+    const tabIndex =
+      typeof _tabIndex === 'number' && _tabIndex > -1 ? _tabIndex : newValue;
+    const tabRef = tabListRef.value?.[tabIndex || 0];
     handleBottomeStyle(tabRef);
   }
 );
@@ -234,9 +234,11 @@ function stopTabBarScroll(e) {
 }
 
 function handleTabBarScroll(e) {
-  e.preventDefault();
   if (mouseDown.value === false) {
     return;
+  }
+  if (typeof e?.preventDefault === 'function') {
+    e.preventDefault();
   }
   const eventX =
     e.pageX ||
