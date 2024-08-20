@@ -37,14 +37,35 @@
         </slot>
       </template>
       <div v-else class="pull_refresh-trigger-icon_center">
-        <div
-          v-show="isShowRefreshIcon"
-          :class="{
-            'pull_refresh-trigger-icon_center-icon': true,
-            'pull_refresh-trigger-icon_center-loading_icon_animation':
-              isPullStart === false
-          }"
-        />
+        <slot
+          name="refreshIcon"
+          :is-show-refresh-icon="isShowRefreshIcon"
+          :is-pull-start="isPullStart"
+        >
+          <div
+            v-if="hasRefreshIcon === false"
+            v-show="isShowRefreshIcon"
+            :class="{
+              'pull_refresh-trigger-icon_center-icon': true,
+              'pull_refresh-trigger-icon_center-loading_icon_animation':
+                isPullStart === false
+            }"
+          />
+          <div
+            v-else
+            v-show="isShowRefreshIcon"
+            class="pull_refresh-trigger-icon_center-icon_img_bg"
+          >
+            <img
+              :src="computedRefreshIcon"
+              :class="{
+                'pull_refresh-trigger-icon_center-icon_img_bg-icon_img': true,
+                'pull_refresh-trigger-icon_center-loading_icon_animation':
+                  isPullStart === false
+              }"
+            />
+          </div>
+        </slot>
       </div>
     </div>
 
@@ -71,13 +92,15 @@ const props = defineProps({
   pullingLabel: { type: String, default: '释放即可刷新...' },
   refreshingLabel: { type: String, default: '加载中...' },
   refresh: { type: Function, default: null },
+  refreshIcon: { type: String, default: null },
+  refreshingIcon: { type: String, default: null },
+  iosType: { type: Boolean, default: true },
   infinityLabel: { type: String, default: '拉至底部可繼續加载' },
   infinityEndLbael: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
-  infinityFetch: { type: Function, default: null },
-  iosType: { type: Boolean, default: true }
+  infinityFetch: { type: Function, default: null }
 });
 const emit = defineEmits(['refresh', 'infinityFetch']);
 
@@ -107,9 +130,9 @@ const cssVariable = computed(() => {
     ] = `translate3d(0, ${moveDistance.value}px, 0)`;
   } else {
     _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
-    _cssVariable[
-      '--refresh_icon_transform'
-    ] = `translate3d(0, ${moveDistance.value - 25}px, 0)`;
+    _cssVariable['--refresh_icon_transform'] = `translate3d(0, ${
+      moveDistance.value - 25
+    }px, 0)`;
   }
 
   if (typeof props.height === 'string' && props.height !== '') {
@@ -123,6 +146,16 @@ const cssVariable = computed(() => {
   }
 
   return _cssVariable;
+});
+
+const hasRefreshIcon = computed(() => {
+  return typeof props.refreshIcon === 'string' && props.refreshIcon !== '';
+});
+const computedRefreshIcon = computed(() => {
+  return (
+    (isPullStart.value === true ? props.refreshIcon : props.refreshingIcon) ||
+    props.refreshIcon
+  );
 });
 
 watch(
@@ -288,9 +321,11 @@ async function handlePullEnd(e) {
       }
     }
     &-icon_center {
-      position: absolute;
-      top: var(--refresh_icon_top, 0px);
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       transition: all var(--refresh_icon_transition);
       transform: var(--refresh_icon_transform);
       &-loading_icon_animation {
@@ -300,6 +335,23 @@ async function handlePullEnd(e) {
         @extend .pull_refresh-trigger-refreshing-loading_icon;
         margin: auto;
         transition: var(--refresh_icon_transition);
+      }
+      &-icon_img_bg {
+        margin: auto;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        border-radius: 50%;
+        background-color: #fff;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.117647),
+          0 1px 4px rgba(0, 0, 0, 0.117647);
+        &-icon_img {
+          display: block;
+          width: 23px;
+          height: 23px;
+          margin: auto;
+          transition: var(--refresh_icon_transition);
+        }
       }
     }
   }

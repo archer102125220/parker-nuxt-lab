@@ -3,6 +3,8 @@
     <PullRefresh
       :ios-type="false"
       height="100dvh"
+      refresh-icon="/img/icon/refresh-icon.svg"
+      refreshing-icon="/img/icon/refreshing-icon.svg"
       :infinityEnd="infinityEnd"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
