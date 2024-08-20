@@ -83,7 +83,7 @@
         {{ infinityLoading === true ? refreshingLabel : infinityLabel }}
       </p>
       <p v-else class="scroll_fetch-infinity_label">
-        {{ infinityEndLbael }}
+        {{ infinityEndLabel }}
       </p>
     </slot>
   </div>
@@ -100,7 +100,7 @@ const props = defineProps({
   refreshingIcon: { type: String, default: null },
   iosType: { type: Boolean, default: true },
   infinityLabel: { type: String, default: '拉至底部可繼續加载' },
-  infinityEndLbael: { type: String, default: '沒有更多資料了' },
+  infinityEndLabel: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
