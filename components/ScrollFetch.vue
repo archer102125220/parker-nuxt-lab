@@ -73,15 +73,19 @@
       <slot />
     </div>
 
-    <slot name="infinityLbael" :loading="loading" :infinityEnd="infinityEnd">
+    <div ref="infinityTriggerRef" />
+    <slot
+      name="infinityLbael"
+      :loading="infinityLoading"
+      :infinityEnd="infinityEnd"
+    >
       <p v-if="infinityEnd === false" class="scroll_fetch-infinity_label">
-        {{ loading === true ? refreshingLabel : infinityLabel }}
+        {{ infinityLoading === true ? refreshingLabel : infinityLabel }}
       </p>
       <p v-else class="scroll_fetch-infinity_label">
         {{ infinityEndLbael }}
       </p>
     </slot>
-    <div ref="infinityTrigger" />
   </div>
 </template>
 
@@ -105,9 +109,9 @@ const props = defineProps({
 const emit = defineEmits(['refresh', 'infinityFetch']);
 
 const containerRef = ref(null);
-const infinityTrigger = ref(null);
-const observer = ref(null);
+const infinityTriggerRef = ref(null);
 
+const observer = ref(null);
 const isPullStart = ref(false);
 const isShowRefreshIcon = ref(false);
 
@@ -118,7 +122,7 @@ const duration = ref(0);
 const refreshing = ref(false);
 const isPulling = ref(false);
 
-const loading = ref(false);
+const infinityLoading = ref(false);
 
 const cssVariable = computed(() => {
   const _cssVariable = {};
@@ -143,6 +147,8 @@ const cssVariable = computed(() => {
 
   if (moveDistance.value > 0) {
     _cssVariable['--refresh_overflow'] = 'hidden';
+  } else {
+    _cssVariable['--refresh_overflow'] = 'auto';
   }
 
   return _cssVariable;
@@ -177,15 +183,15 @@ onMounted(() => {
     }
   });
 
-  observer.value.observe(infinityTrigger.value);
+  observer.value.observe(infinityTriggerRef.value);
 });
 onUnmounted(() => {
   // window.removeEventListener('scroll', scrollEventListener);
   if (
-    typeof infinityTrigger.value === 'object' &&
-    infinityTrigger.value !== null
+    typeof infinityTriggerRef.value === 'object' &&
+    infinityTriggerRef.value !== null
   ) {
-    observer.value.unobserve(infinityTrigger.value);
+    observer.value.unobserve(infinityTriggerRef.value);
   }
 });
 function getCurrentDistance() {
@@ -196,7 +202,7 @@ function getCurrentDistance() {
 }
 // function scrollEventListener(e) {
 //   if (
-//     loading.value === true ||
+//     infinityLoading.value === true ||
 //     props.infinityEnd === true ||
 //     props.isScrollToFetch !== true
 //   ) {
@@ -207,42 +213,59 @@ function getCurrentDistance() {
 //   }
 // }
 async function handleInfinityFetch() {
-  loading.value = true;
+  infinityLoading.value = true;
   if (typeof props.infinityFetch === 'function') {
     await props.infinityFetch();
-    loading.value = false;
+    infinityLoading.value = false;
   } else {
     emit('infinityFetch', () => {
-      loading.value = false;
+      infinityLoading.value = false;
     });
   }
 }
 
 function handlePullStart(e) {
-  const scrollTop =
-    containerRef.value?.scrollTop ||
-    document.body?.scrollTop ||
-    window.screenY ||
-    window.pageYOffset;
+  // const scrollTop =
+  //   containerRef.value?.scrollTop ||
+  //   document.body?.scrollTop ||
+  //   window.screenY ||
+  //   window.pageYOffset;
+  const scrollTop = containerRef.value?.scrollTop;
 
   if (scrollTop > 0) return;
 
   isPullStart.value = true;
   duration.value = 0;
   moveDistance.value = 0;
-  startY.value = e.targetTouches?.[0]?.clientY || e.clientY;
+  startY.value =
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.offsetY ||
+    e.clientY;
 }
 function handlePulling(e) {
   if (isPullStart.value !== true) return;
-  const scrollTop =
-    containerRef.value?.scrollTop ||
-    document.body?.scrollTop ||
-    window.screenY ||
-    window.pageYOffset;
+  // const scrollTop =
+  //   containerRef.value?.scrollTop ||
+  //   document.body?.scrollTop ||
+  //   window.screenY ||
+  //   window.pageYOffset;
+  const scrollTop = containerRef.value?.scrollTop;
 
   if (scrollTop > 0) return;
 
-  const move = (e.targetTouches?.[0]?.clientY || e.clientY) - startY.value;
+  const currentClientY =
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.offsetY ||
+    e.clientY;
+  const move = currentClientY - startY.value;
 
   if (move > 0) {
     isShowRefreshIcon.value = true;
