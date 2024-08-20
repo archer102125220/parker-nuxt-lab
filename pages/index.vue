@@ -1,7 +1,7 @@
 <template>
   <div class="index_page">
-    <PullRefresh
-      :ios-type="false"
+    <ScrollFetch
+      :ios-type="true"
       height="100dvh"
       refresh-icon="/img/icon/refresh-icon.svg"
       refreshing-icon="/img/icon/refreshing-icon.svg"
@@ -36,7 +36,7 @@
           <Youtube video-id="RTtmcqPXwuw" autoplay />
         </div>
       </div>
-    </PullRefresh>
+    </ScrollFetch>
   </div>
 </template>
 

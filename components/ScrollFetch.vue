@@ -1,6 +1,6 @@
 <template>
   <div
-    class="pull_refresh"
+    class="scroll_fetch"
     ref="container"
     :style="cssVariable"
     @mousedown="handlePullStart"
@@ -11,7 +11,7 @@
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
   >
-    <div class="pull_refresh-trigger">
+    <div class="scroll_fetch-trigger">
       <template v-if="iosType === true">
         <slot
           v-if="refreshing === false"
@@ -20,23 +20,23 @@
           :isPullStart="isPullStart"
           :isShowRefreshIcon="isShowRefreshIcon"
         >
-          <p v-show="isShowRefreshIcon" class="pull_refresh-trigger-label">
+          <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-label">
             {{ isPulling === true ? label : pullingLabel }}
           </p>
         </slot>
         <slot v-else name="refreshing">
           <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
-          <div class="pull_refresh-trigger-refreshing">
+          <div class="scroll_fetch-trigger-refreshing">
             <div
-              class="pull_refresh-trigger-refreshing-loading_icon pull_refresh-trigger-icon_center-loading_icon_animation"
+              class="scroll_fetch-trigger-refreshing-loading_icon scroll_fetch-trigger-icon_center-loading_icon_animation"
             />
-            <p class="pull_refresh-trigger-refreshing-label">
+            <p class="scroll_fetch-trigger-refreshing-label">
               {{ refreshingLabel }}
             </p>
           </div>
         </slot>
       </template>
-      <div v-else class="pull_refresh-trigger-icon_center">
+      <div v-else class="scroll_fetch-trigger-icon_center">
         <slot
           name="refreshIcon"
           :is-show-refresh-icon="isShowRefreshIcon"
@@ -46,21 +46,21 @@
             v-if="hasRefreshIcon === false"
             v-show="isShowRefreshIcon"
             :class="{
-              'pull_refresh-trigger-icon_center-icon': true,
-              'pull_refresh-trigger-icon_center-loading_icon_animation':
+              'scroll_fetch-trigger-icon_center-icon': true,
+              'scroll_fetch-trigger-icon_center-loading_icon_animation':
                 isPullStart === false
             }"
           />
           <div
             v-else
             v-show="isShowRefreshIcon"
-            class="pull_refresh-trigger-icon_center-icon_img_bg"
+            class="scroll_fetch-trigger-icon_center-icon_img_bg"
           >
             <img
               :src="computedRefreshIcon"
               :class="{
-                'pull_refresh-trigger-icon_center-icon_img_bg-icon_img': true,
-                'pull_refresh-trigger-icon_center-loading_icon_animation':
+                'scroll_fetch-trigger-icon_center-icon_img_bg-icon_img': true,
+                'scroll_fetch-trigger-icon_center-loading_icon_animation':
                   isPullStart === false
               }"
             />
@@ -69,15 +69,15 @@
       </div>
     </div>
 
-    <div class="pull_refresh-container">
+    <div class="scroll_fetch-container">
       <slot />
     </div>
 
     <slot name="infinityLbael" :loading="loading" :infinityEnd="infinityEnd">
-      <p v-if="infinityEnd === false" class="pull_refresh-infinity_label">
+      <p v-if="infinityEnd === false" class="scroll_fetch-infinity_label">
         {{ loading === true ? refreshingLabel : infinityLabel }}
       </p>
-      <p v-else class="pull_refresh-infinity_label">
+      <p v-else class="scroll_fetch-infinity_label">
         {{ infinityEndLbael }}
       </p>
     </slot>
@@ -284,7 +284,7 @@ async function handlePullEnd(e) {
 </script>
 
 <style lang="scss" scoped>
-.pull_refresh {
+.scroll_fetch {
   position: relative;
   height: var(--refresh_height);
   overflow: var(--refresh_overflow);
@@ -317,7 +317,7 @@ async function handlePullEnd(e) {
         border-radius: 50%;
       }
       &-label {
-        @extend .pull_refresh-trigger-label;
+        @extend .scroll_fetch-trigger-label;
       }
     }
     &-icon_center {
@@ -332,7 +332,7 @@ async function handlePullEnd(e) {
         animation: loading_animation 1s linear infinite;
       }
       &-icon {
-        @extend .pull_refresh-trigger-refreshing-loading_icon;
+        @extend .scroll_fetch-trigger-refreshing-loading_icon;
         margin: auto;
         transition: var(--refresh_icon_transition);
       }
@@ -360,7 +360,7 @@ async function handlePullEnd(e) {
     transform: var(--refresh_transform);
   }
   &-infinity_label {
-    @extend .pull_refresh-trigger-label;
+    @extend .scroll_fetch-trigger-label;
   }
 }
 @keyframes loading_animation {
