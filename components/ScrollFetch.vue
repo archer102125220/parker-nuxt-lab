@@ -1,7 +1,7 @@
 <template>
   <div
     class="scroll_fetch"
-    ref="container"
+    ref="containerRef"
     :style="cssVariable"
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
@@ -104,7 +104,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['refresh', 'infinityFetch']);
 
-const container = ref(null);
+const containerRef = ref(null);
 const infinityTrigger = ref(null);
 const observer = ref(null);
 
@@ -189,7 +189,7 @@ onUnmounted(() => {
   }
 });
 function getCurrentDistance() {
-  const rect = container.value.getBoundingClientRect();
+  const rect = containerRef.value.getBoundingClientRect();
   const scrollTop = window.innerHeight;
 
   return rect.bottom - scrollTop;
@@ -220,7 +220,7 @@ async function handleInfinityFetch() {
 
 function handlePullStart(e) {
   const scrollTop =
-    container.value?.scrollTop ||
+    containerRef.value?.scrollTop ||
     document.body?.scrollTop ||
     window.screenY ||
     window.pageYOffset;
@@ -235,7 +235,7 @@ function handlePullStart(e) {
 function handlePulling(e) {
   if (isPullStart.value !== true) return;
   const scrollTop =
-    container.value?.scrollTop ||
+    containerRef.value?.scrollTop ||
     document.body?.scrollTop ||
     window.screenY ||
     window.pageYOffset;
