@@ -11,7 +11,7 @@
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
   >
-    <div class="scroll_fetch-trigger">
+    <div v-if="refreshDisable === false" class="scroll_fetch-trigger">
       <template v-if="iosType === true">
         <slot
           v-if="refreshing === false"
@@ -75,6 +75,7 @@
 
     <div ref="infinityTriggerRef" />
     <slot
+      v-if="infinityDisable === false"
       name="infinityLbael"
       :loading="infinityLoading"
       :infinityEnd="infinityEnd"
@@ -99,9 +100,11 @@ const props = defineProps({
   refreshIcon: { type: String, default: null },
   refreshingIcon: { type: String, default: null },
   iosType: { type: Boolean, default: true },
+  refreshDisable: { type: Boolean, default: true },
   infinityLabel: { type: String, default: '拉至底部可繼續加载' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
+  infinityDisable: { type: Boolean, default: false },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
   infinityFetch: { type: Function, default: null }
@@ -177,7 +180,11 @@ watch(
 onMounted(() => {
   // window.addEventListener('scroll', scrollEventListener);
   observer.value = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
+    if (
+      entries[0].isIntersecting &&
+      this.infinityDisable === false &&
+      this.infinityEnd === false
+    ) {
       // console.log('元素已出現在畫面可視範圍內');
       handleInfinityFetch();
     }
@@ -213,6 +220,10 @@ function getCurrentDistance() {
 //   }
 // }
 async function handleInfinityFetch() {
+  if (infinityLoading.value === true) {
+    return;
+  }
+
   infinityLoading.value = true;
   if (typeof props.infinityFetch === 'function') {
     await props.infinityFetch();
@@ -279,6 +290,15 @@ async function handlePullEnd(e) {
   isPullStart.value = false;
   startY.value = 0;
   duration.value = 300;
+  if (
+    props.refreshDisable === true ||
+    refreshing.value === true ||
+    infinityLoading.value === true
+  ) {
+    isShowRefreshIcon.value = false;
+    moveDistance.value = 0;
+    return;
+  }
   if (moveDistance.value > 50 && isPulling.value === true) {
     refreshing.value = true;
     isPulling.value = false;
