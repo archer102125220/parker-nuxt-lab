@@ -4,8 +4,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   console.log(el);
     // },
     mounted(el, binding) {  // 使用nuxt時使用的客戶端掛載生命週期
+      el.setAttribute('disable-ripple', binding.value);
+
       function handleRippleStart(e) {
-        if (binding?.value === false) return;
+        const disableRipple = el.getAttribute('disable-ripple') === 'true';
+
+        if (disableRipple === true) return;
         // el.classList.add('customize_ripple');  // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
         const elementStyle = window.getComputedStyle(el);
         if (elementStyle.position === 'static') {
@@ -50,8 +54,12 @@ export default defineNuxtPlugin((nuxtApp) => {
           el.setAttribute('isSetPosition', 'false');
         }
       }
+
       el.addEventListener('pointerdown', handleRippleStart);
-    }
+    },
+    updated(el, binding) {
+      el.setAttribute('disable-ripple', binding.value);
+    },
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
     //   // you can provide SSR-specific props here
     //   return {}
