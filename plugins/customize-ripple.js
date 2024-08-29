@@ -10,9 +10,9 @@ export default defineNuxtPlugin((nuxtApp) => {
         const disableRipple = el.getAttribute('disable-ripple') === 'true';
 
         if (disableRipple === true) return;
-        // el.classList.add('customize_ripple');  // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
         const elementStyle = window.getComputedStyle(el);
         if (elementStyle.position === 'static') {
+          el.classList.add('customize_ripple');  // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
           el.style.position = 'relative';
           el.setAttribute('isSetPosition', true);
         }
@@ -47,9 +47,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
       function handleRippleResetStyle() {
         if (typeof el?.getAttribute !== 'function') return;
-        // el.classList.remove('click_ripple'); // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
         const isSetPosition = el.getAttribute('isSetPosition') === 'true';
         if (isSetPosition === true) {
+          el.classList.remove('click_ripple'); // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
           el.style.position = '';
           el.setAttribute('isSetPosition', 'false');
         }
