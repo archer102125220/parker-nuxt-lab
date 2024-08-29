@@ -1,5 +1,5 @@
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.directive('customize-ripple', {
+  const customizeRipple = {
     // inserted(el) { // 直接使用vue時使用的掛載生命週期
     //   console.log(el);
     // },
@@ -64,5 +64,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   // you can provide SSR-specific props here
     //   return {}
     // }
-  });
+  }
+  nuxtApp.vueApp.directive('customize-ripple', customizeRipple);
+  nuxtApp.vueApp.directive('customizeRipple', customizeRipple);
 });
