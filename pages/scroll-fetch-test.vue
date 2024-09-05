@@ -11,7 +11,13 @@
       @infinityFetch="handleInfinityFetch"
     >
       <div class="scroll_fetch_test_page-content">
-        <p class="scroll_fetch_test_page-content-text">12343</p>
+        <p
+          v-for="(data, index) in dataList"
+          :key="index"
+          class="scroll_fetch_test_page-content-text"
+        >
+          {{ data }}
+        </p>
       </div>
     </ScrollFetch>
   </div>
@@ -21,6 +27,19 @@
 const nuxtApp = useNuxtApp();
 
 const infinityEnd = ref(false);
+
+const dataList = computed(() => {
+  const _dataList = [];
+  for (let i = 0; i <= 100; i++) {
+    // _dataList.push(i);
+    let data = '';
+    for (let j = i; j >= 0; j--) {
+      data += j;
+    }
+    _dataList.push(data);
+  }
+  return _dataList;
+});
 
 function handleRefresh(done) {
   nuxtApp.$store.system.setLoading(true);
