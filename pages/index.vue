@@ -20,6 +20,7 @@ const linkList = computed(() => {
     { to: '/scroll-fetch-test', label: '下拉重載/無限滾動測試' },
     { to: '/wang-editor-test', label: 'WangEditor（HTML編輯器）測試' },
     { to: '/youtube-test', label: 'Youtube測試' },
+    { to: '/swiper-js-test', label: 'SwiperJs測試' },
     { to: '/components-test', label: '組件綜合測試' }
   ];
 });
