@@ -4,7 +4,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   console.log(el);
     // },
     mounted(el, binding) {  // 使用nuxt時使用的客戶端掛載生命週期
-      el.setAttribute('disable-ripple', binding.value);
+      el.setAttribute('disable-ripple', binding.value || false);
 
       function handleRippleStart(e) {
         const disableRipple = el.getAttribute('disable-ripple') === 'true';
@@ -58,7 +58,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       el.addEventListener('pointerdown', handleRippleStart);
     },
     updated(el, binding) {
-      el.setAttribute('disable-ripple', binding.value);
+      el.setAttribute('disable-ripple', binding.value || false);
     },
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
     //   // you can provide SSR-specific props here
