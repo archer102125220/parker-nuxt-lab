@@ -1,4 +1,4 @@
-export function pluginScrollEnd(VueApp) {
+export function pluginScrollEnd(nuxtApp) {
   const scrollEnd = {
     mounted(el, binding) {
       const handler = binding.value?.handler || binding.value;
@@ -32,8 +32,8 @@ export function pluginScrollEnd(VueApp) {
       el.addEventListener('scroll', polyfillScrollEnd);
     }
   }
-  VueApp.directive('scrollEnd', scrollEnd);
-  VueApp.directive('scroll-end', scrollEnd);
+  nuxtApp.vueApp.directive('scrollEnd', scrollEnd);
+  nuxtApp.vueApp.directive('scroll-end', scrollEnd);
 };
 
 export default pluginScrollEnd;
