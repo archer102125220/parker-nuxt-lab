@@ -1,7 +1,29 @@
 <template>
   <div class="index_page">
+    <TabsBar
+      class="index_page-bar"
+      v-model="tab"
+      gap="16px"
+      bottom-line-height="2px"
+      bottom-line-width="30px"
+      bottom-line-color="#27C5C3"
+      :tab-list="tabList"
+    />
+    <div class="index_page-menu">
+      <TabsBar
+        v-model="tab"
+        vertical
+        gap="16px"
+        tab-item-width="100%"
+        bottom-line-width="5px"
+        bottom-line-color="#27C5C3"
+        :tab-list="tabList"
+      />
+    </div>
     <ScrollFetch
-      :ios-type="true"
+      class="index_page-content"
+      :ios-type="false"
+      :refresh-disable="false"
       height="100dvh"
       refresh-icon="/img/icon/refresh-icon.svg"
       refreshing-icon="/img/icon/refreshing-icon.svg"
@@ -9,30 +31,21 @@
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
     >
-      <div class="index_page-content">
+      <div class="index_page-content-scroll_fetch">
         <TabsBar
           v-model="tab"
           gap="16px"
           bottom-line-height="2px"
           bottom-line-width="30px"
           bottom-line-color="#27C5C3"
-          :tab-list="[
-            'a',
-            'bb',
-            'ccc',
-            'dddd',
-            'eeeee',
-            'ffffff',
-            'ggggggg',
-            'hhhhhhhh'
-          ]"
+          :tab-list="tabList"
         />
-        <p class="index_page-content-text">12343</p>
+        <p class="index_page-content-scroll_fetch-text">12343</p>
         <WangEditor
-          class="index_page-content-wang_editor"
+          class="index_page-content-scroll_fetch-wang_editor"
           editorHeight="350px"
         />
-        <div class="index_page-content-youtube">
+        <div class="index_page-content-scroll_fetch-youtube">
           <Youtube video-id="RTtmcqPXwuw" autoplay />
         </div>
       </div>
@@ -46,6 +59,19 @@ const nuxtApp = useNuxtApp();
 const infinityEnd = ref(false);
 
 const tab = ref(0);
+
+const tabList = computed(() => {
+  const _tabList = [];
+  for (let i = 0; i <= 100; i++) {
+    _tabList.push(i);
+    // let tab = '';
+    // for (let j = i; j >= 0; j--) {
+    //   tab += j;
+    // }
+    // _tabList.push(tab);
+  }
+  return _tabList;
+});
 
 function handleRefresh(done) {
   nuxtApp.$store.system.setLoading(true);
@@ -72,17 +98,37 @@ function handleInfinityFetch(done) {
 
 <style lang="scss" scoped>
 .index_page {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  height: 100dvh;
+  &-bar {
+    flex: 1;
+    flex-basis: 100%;
+  }
+  &-menu {
+    flex-shrink: 0;
+    flex-basis: 40px;
+    max-height: 93%;
+    overflow: hidden;
+  }
   &-content {
-    // min-height: 100dvh;
-    &-text {
-      height: 200px;
-    }
-    &-wang_editor {
-      // height: 350px;
-      margin-bottom: 8px;
-    }
-    &-youtube {
-      height: 80dvh;
+    flex: 1;
+    flex-basis: calc(100% - 40px);
+    max-height: 93%;
+    background-color: #fff;
+    &-scroll_fetch {
+      // min-height: 100dvh;
+      &-text {
+        height: 200px;
+      }
+      &-wang_editor {
+        // height: 350px;
+        margin-bottom: 8px;
+      }
+      &-youtube {
+        height: 80dvh;
+      }
     }
   }
 }
