@@ -149,6 +149,7 @@ const props = defineProps({
   }
 });
 const emit = defineEmits([
+  'change',
   'update:modelValue',
   'beforeInit',
   'init',
@@ -340,6 +341,7 @@ function syncSlide(value, swiper) {
   );
   const slideIndex =
     typeof _slideIndex === 'number' && _slideIndex > -1 ? _slideIndex : value;
+  console.log({ slideIndex });
   swiper.slideTo(slideIndex || 0);
 }
 function afterInit(swiper) {
@@ -365,6 +367,7 @@ function slideChange(swiper) {
 
   if (props.modelValue !== slideValue) {
     emit('update:modelValue', slideValue);
+    emit('change', slideValue);
   }
   emit('slideChange', swiper);
 }

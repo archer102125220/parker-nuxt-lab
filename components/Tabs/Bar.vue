@@ -89,7 +89,7 @@ const props = defineProps({
     default: 10
   }
 });
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'change']);
 
 const tabBarRef = ref(null);
 const tabListRef = ref(null);
@@ -337,6 +337,7 @@ function handleCheckTab(tabListRef) {
 
 function handleTabChange(newTabIndex) {
   emits('update:modelValue', newTabIndex);
+  emits('change', newTabIndex);
 }
 function handleVerticalStartTabBarScroll(e) {
   const eventY =
