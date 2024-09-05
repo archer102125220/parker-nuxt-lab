@@ -1,7 +1,7 @@
 <template>
   <div
+    ref="scrollFetchRef"
     class="scroll_fetch"
-    ref="containerRef"
     :style="cssVariable"
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
@@ -10,6 +10,7 @@
     @touchstart="handlePullStart"
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
+    @scroll="handleScroll"
   >
     <div v-if="refreshDisable === false" class="scroll_fetch-trigger">
       <template v-if="iosType === true">
@@ -31,7 +32,7 @@
               class="scroll_fetch-trigger-refreshing-loading_icon scroll_fetch-trigger-icon_center-loading_icon_animation"
             />
             <p class="scroll_fetch-trigger-refreshing-label">
-              {{ refreshingLabel }}
+              {{ loadingLabel }}
             </p>
           </div>
         </slot>
@@ -81,7 +82,7 @@
       :infinityEnd="infinityEnd"
     >
       <p v-if="infinityEnd === false" class="scroll_fetch-infinity_label">
-        {{ infinityLoading === true ? refreshingLabel : infinityLabel }}
+        {{ infinityLoading === true ? loadingLabel : infinityLabel }}
       </p>
       <p v-else class="scroll_fetch-infinity_label">
         {{ infinityEndLabel }}
@@ -94,14 +95,14 @@
 const props = defineProps({
   label: { type: String, default: '下拉即可刷新...' },
   height: { type: [String, Number], default: null },
-  pullingLabel: { type: String, default: '释放即可刷新...' },
-  refreshingLabel: { type: String, default: '加载中...' },
+  pullingLabel: { type: String, default: '釋放即可刷新...' },
+  loadingLabel: { type: String, default: '加載中...' },
   refresh: { type: Function, default: null },
   refreshIcon: { type: String, default: null },
   refreshingIcon: { type: String, default: null },
   iosType: { type: Boolean, default: true },
   refreshDisable: { type: Boolean, default: true },
-  infinityLabel: { type: String, default: '拉至底部可繼續加载' },
+  infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
   infinityDisable: { type: Boolean, default: false },
@@ -109,9 +110,9 @@ const props = defineProps({
   infinityEnd: { type: Boolean, default: true },
   infinityFetch: { type: Function, default: null }
 });
-const emit = defineEmits(['refresh', 'infinityFetch']);
+const emit = defineEmits(['refresh', 'infinityFetch', 'scroll']);
 
-const containerRef = ref(null);
+const scrollFetchRef = ref(null);
 const infinityTriggerRef = ref(null);
 
 const observer = ref(null);
@@ -132,9 +133,8 @@ const cssVariable = computed(() => {
 
   if (props.iosType === true) {
     _cssVariable['--refresh_transition'] = `${duration.value}ms`;
-    _cssVariable[
-      '--refresh_transform'
-    ] = `translate3d(0, ${moveDistance.value}px, 0)`;
+    _cssVariable['--refresh_transform'] =
+      `translate3d(0, ${moveDistance.value}px, 0)`;
   } else {
     _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
     _cssVariable['--refresh_icon_transform'] = `translate3d(0, ${
@@ -150,8 +150,10 @@ const cssVariable = computed(() => {
 
   if (moveDistance.value > 0) {
     _cssVariable['--refresh_overflow'] = 'hidden';
+    _cssVariable['--refresh_trigger_z_index'] = 2;
   } else {
     _cssVariable['--refresh_overflow'] = 'auto';
+    _cssVariable['--refresh_trigger_z_index'] = -1;
   }
 
   return _cssVariable;
@@ -182,8 +184,8 @@ onMounted(() => {
   observer.value = new IntersectionObserver((entries) => {
     if (
       entries[0].isIntersecting &&
-      this.infinityDisable === false &&
-      this.infinityEnd === false
+      props.infinityDisable === false &&
+      props.infinityEnd === false
     ) {
       // console.log('元素已出現在畫面可視範圍內');
       handleInfinityFetch();
@@ -202,7 +204,7 @@ onUnmounted(() => {
   }
 });
 function getCurrentDistance() {
-  const rect = containerRef.value.getBoundingClientRect();
+  const rect = scrollFetchRef.value.getBoundingClientRect();
   const scrollTop = window.innerHeight;
 
   return rect.bottom - scrollTop;
@@ -236,12 +238,19 @@ async function handleInfinityFetch() {
 }
 
 function handlePullStart(e) {
+  if (
+    props.refreshDisable === true ||
+    infinityLoading.value === true ||
+    refreshing.value === true
+  ) {
+    return;
+  }
   // const scrollTop =
-  //   containerRef.value?.scrollTop ||
+  //   scrollFetchRef.value?.scrollTop ||
   //   document.body?.scrollTop ||
   //   window.screenY ||
   //   window.pageYOffset;
-  const scrollTop = containerRef.value?.scrollTop;
+  const scrollTop = scrollFetchRef.value?.scrollTop;
 
   if (scrollTop > 0) return;
 
@@ -260,11 +269,11 @@ function handlePullStart(e) {
 function handlePulling(e) {
   if (isPullStart.value !== true) return;
   // const scrollTop =
-  //   containerRef.value?.scrollTop ||
+  //   scrollFetchRef.value?.scrollTop ||
   //   document.body?.scrollTop ||
   //   window.screenY ||
   //   window.pageYOffset;
-  const scrollTop = containerRef.value?.scrollTop;
+  const scrollTop = scrollFetchRef.value?.scrollTop;
 
   if (scrollTop > 0) return;
 
@@ -324,6 +333,9 @@ async function handlePullEnd(e) {
     moveDistance.value = 0;
   }
 }
+function handleScroll(e) {
+  emit('scroll', e);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -334,7 +346,8 @@ async function handlePullEnd(e) {
   &-trigger {
     position: absolute;
     top: 0;
-    z-index: -1;
+    // z-index: 2;
+    z-index: var(--refresh_trigger_z_index);
     min-height: 30px;
     width: 100%;
     &-label {
@@ -386,7 +399,8 @@ async function handlePullEnd(e) {
         display: flex;
         border-radius: 50%;
         background-color: #fff;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.117647),
+        box-shadow:
+          0 1px 6px rgba(0, 0, 0, 0.117647),
           0 1px 4px rgba(0, 0, 0, 0.117647);
         &-icon_img {
           display: block;
