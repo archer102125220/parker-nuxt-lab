@@ -2,6 +2,7 @@
   <div class="swiper_js_test_page">
     <SwiperJs
       v-model="slide"
+      should-fill-height
       :slide-list="slideList"
       class="swiper_js_test_page-content"
     />
@@ -29,9 +30,12 @@ const slideList = computed(() => {
 
 <style lang="scss" scoped>
 .swiper_js_test_page {
-  // width: 100vw;
+  // width: 100dvw;
+  height: 90dvh;
+  // min-height: 100dvh;
   &-content {
     // width: 100%;
+    height: 100%;
     overflow-x: hidden;
   }
 }
