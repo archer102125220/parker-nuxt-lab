@@ -10,7 +10,10 @@
     </div>
     <div
       ref="tabBarRef"
-      class="tabs_bar-option_list"
+      :class="[
+        'tabs_bar-option_list',
+        selectedType !== '' ? 'tabs_bar-option_list_emphasize' : ''
+      ]"
       @mousedown="handleStartTabBarScroll"
       @touchstart="handleStartTabBarScroll"
     >
@@ -109,6 +112,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  selectedColor: {
+    type: String,
+    default: ''
+  },
   bottomLineWidth: {
     type: [Number, String],
     default: 30
@@ -170,6 +177,10 @@ const cssVariable = computed(() => {
     props.bottomLineColor !== ''
   ) {
     _cssVariable['--tab_bottom_line_color'] = props.bottomLineColor;
+  }
+
+  if (typeof props.selectedColor === 'string' && props.selectedColor !== '') {
+    _cssVariable['--tab_item_selected_color'] = props.selectedColor;
   }
 
   if (typeof props.justifyContent === 'string' && props.justifyContent !== '') {
@@ -638,8 +649,10 @@ function handleTabBarScroll(e) {
       cursor: pointer;
     }
     &-tab_item_selected {
-      color: #000;
+      color: var(--tab_item_selected_color, #000);
     }
+  }
+  &-option_list_emphasize {
     &::after {
       content: '';
       position: absolute;
@@ -655,7 +668,10 @@ function handleTabBarScroll(e) {
       width: var(--tab_bottom_line_width);
       border-radius: 5px;
       opacity: var(--tab_bottom_line_opacity);
-      background-color: var(--tab_bottom_line_color, blue);
+      background-color: var(
+        --tab_item_selected_color,
+        var(--tab_bottom_line_color, blue)
+      );
       transition:
         left 0.4s ease-in-out,
         top 0.4s ease-in-out,
