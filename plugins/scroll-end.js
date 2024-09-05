@@ -1,4 +1,4 @@
-export function pluginScrollEnd(nuxtApp) {
+export const pluginScrollEnd = defineNuxtPlugin((nuxtApp) => {
   const scrollEnd = {
     mounted(el, binding) {
       const handler = binding.value?.handler || binding.value;
@@ -34,6 +34,6 @@ export function pluginScrollEnd(nuxtApp) {
   }
   nuxtApp.vueApp.directive('scrollEnd', scrollEnd);
   nuxtApp.vueApp.directive('scroll-end', scrollEnd);
-};
+});
 
 export default pluginScrollEnd;
