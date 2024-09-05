@@ -33,7 +33,7 @@
           :key="slotName"
           v-bind="$attrs"
           :infinity-end="getInfinityEnd(tabList[index])"
-          :refresh-disable="refreshDisable || statusRefreshDisable"
+          :refresh-disable="getRefreshDisable(tabList[index])"
         >
           <slot :name="slotName" v-bind="arg">
             <p>{{ tabList[index].content || tabList[index] }}</p>
@@ -106,6 +106,14 @@ function getInfinityEnd(tab) {
     return true;
   }
   return tab.infinityEnd;
+}
+function getRefreshDisable(tab) {
+  if (typeof tab?.refreshDisable !== 'boolean') {
+    return props.refreshDisable || statusRefreshDisable.value;
+  }
+  return (
+    tab.refreshDisable || props.refreshDisable || statusRefreshDisable.value
+  );
 }
 function change(...arg) {
   console.log('change');
