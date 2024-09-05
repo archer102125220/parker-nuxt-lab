@@ -128,6 +128,7 @@ const props = defineProps({
 const emits = defineEmits(['update:modelValue', 'change']);
 
 const tabBarRootRef = ref(null);
+// const tabBarRef = useTemplateRef('tabBarRef'); // vue 3.5之後官方推薦的取得dom的寫法
 const tabBarRef = ref(null);
 const tabListRef = ref(null);
 
