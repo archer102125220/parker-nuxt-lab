@@ -9,6 +9,24 @@
       bottom-line-color="#27C5C3"
       :tab-list="tabList"
     />
+    <TabsBar
+      class="tab_test_page-bar"
+      v-model="tab"
+      gap="16px"
+      bottom-line-height="2px"
+      bottom-line-width="30px"
+      bottom-line-color="#27C5C3"
+      :tab-list="tabList"
+    >
+      <template #prev="{ ...arg }">
+        <div v-bind="arg" v-customize-ripple class="tab_test_page-bar-prev">
+          <img
+            class="tab_test_page-bar-prev-img"
+            src="/img/icon/arrow/arrow-right-line-black.svg"
+          />
+        </div>
+      </template>
+    </TabsBar>
     <TabsContent
       class="tab_test_page-tab_content"
       height="100%"
@@ -104,6 +122,27 @@ function handleInfinityFetch(done) {
   &-bar {
     // flex: 1;
     // flex-basis: 100%;
+    &-prev {
+      flex-shrink: 0;
+      width: var(--navigation_width);
+      min-height: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-top-right-radius: var(--navigation_top_right_radius);
+      border-bottom-right-radius: var(--navigation_bottom_right_radius);
+      border-bottom-left-radius: var(--navigation_bottom_left_radius);
+
+      overflow: hidden;
+
+      transform: rotate(180deg);
+
+      &-img {
+        width: var(--navigation_img_size);
+        height: var(--navigation_img_size);
+      }
+    }
   }
   &-tab_content {
     // flex: 1;

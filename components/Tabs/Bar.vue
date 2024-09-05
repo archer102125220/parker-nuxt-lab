@@ -1,13 +1,18 @@
 <template>
   <div ref="tabBarRootRef" class="tabs_bar" :style="cssVariable">
-    <div
+    <slot
       v-if="hasNavigation === true"
-      v-customize-ripple
-      class="tabs_bar-prev"
+      name="prev"
       @pointerup="handlePrevScroll"
     >
-      <img class="tabs_bar-prev-img" :src="navigationImg" />
-    </div>
+      <div
+        v-customize-ripple
+        class="tabs_bar-prev"
+        @pointerup="handlePrevScroll"
+      >
+        <img class="tabs_bar-prev-img" :src="navigationImg" />
+      </div>
+    </slot>
     <div
       ref="tabBarRef"
       :class="[
@@ -20,9 +25,14 @@
       <div
         v-for="(tab, index) in tabList"
         :key="index"
-        v-customize-ripple
         ref="tabListRef"
-        class="tabs_bar-option_list-tab_item"
+        v-customize-ripple
+        :class="[
+          'tabs_bar-option_list-tab_item',
+          isSelected(modelValue, tab, index) === true
+            ? 'tabs_bar-option_list-tab_item_selected'
+            : ''
+        ]"
         @mouseenter="handleBottomeStyleTemp"
         @mouseleave="handleResetBottomeStyleTemp"
         @click="handleTabChange(index)"
@@ -32,18 +42,24 @@
           :index="index"
           :selected="isSelected(modelValue, tab, index)"
         >
-          <p>{{ tab?.[displayKey] || tab?.label || tab }}</p>
+          <p>{{ tab[displayKey] || tab.label || tab }}</p>
         </slot>
       </div>
     </div>
-    <div
+
+    <slot
       v-if="hasNavigation === true"
-      v-customize-ripple
-      class="tabs_bar-next"
+      name="next"
       @pointerup="handleNextScroll"
     >
-      <img class="tabs_bar-next-img" :src="navigationImg" />
-    </div>
+      <div
+        v-customize-ripple
+        class="tabs_bar-next"
+        @pointerup="handleNextScroll"
+      >
+        <img class="tabs_bar-next-img" :src="navigationImg" />
+      </div>
+    </slot>
   </div>
 </template>
 <script setup>
@@ -321,9 +337,9 @@ function getCurrentTabIndex(tab) {
   );
   return typeof _tabIndex === 'number' && _tabIndex > -1 ? _tabIndex : tab;
 }
-function isSelected(currentTab, tab, index) {
+function isSelected(modelValue, tab, index) {
   const value = tab?.[props.valueKey] || tab?.value || index;
-  return currentTab === value;
+  return modelValue === value;
 }
 
 function handlePrevScroll() {
