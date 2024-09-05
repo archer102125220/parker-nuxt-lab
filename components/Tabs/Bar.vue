@@ -3,8 +3,8 @@
     class="tabs_bar"
     ref="tabBarRef"
     :style="cssVariable"
-    @mousedown="startTabBarScroll"
-    @touchstart="startTabBarScroll"
+    @mousedown="handleStartTabBarScroll"
+    @touchstart="handleStartTabBarScroll"
   >
     <div
       v-for="(tab, index) in tabList"
@@ -13,7 +13,7 @@
       ref="tabListRef"
       class="tabs_bar-tab_item"
       @mouseenter="handleBottomeStyleTemp"
-      @mouseleave="resetBottomeStyleTemp"
+      @mouseleave="handleResetBottomeStyleTemp"
       @click="handleTabChange(index)"
     >
       <slot
@@ -36,7 +36,19 @@ const props = defineProps({
     type: String,
     default: 'flex-start'
   },
-  center: {
+  tabItemWidth: {
+    type: String,
+    default: null
+  },
+  tabItemTextAlign: {
+    type: String,
+    default: null
+  },
+  alignItems: {
+    type: String,
+    default: 'center'
+  },
+  vertical: {
     type: Boolean,
     default: false
   },
@@ -70,11 +82,11 @@ const props = defineProps({
   },
   bottomLineWidth: {
     type: [Number, String],
-    default: null
+    default: 30
   },
   bottomLineHeight: {
     type: [Number, String],
-    default: 3
+    default: 10
   }
 });
 const emits = defineEmits(['update:modelValue']);
@@ -84,7 +96,9 @@ const tabListRef = ref(null);
 
 const mouseDown = ref(false);
 const startX = ref(0);
+const startY = ref(0);
 const scrollLeft = ref(0);
+const scrollTop = ref(0);
 
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
@@ -96,13 +110,16 @@ const cssVariable = computed(() => {
 
   if (props.selectedType === 'underLine') {
     _cssVariable['--tab_bottom_line_bottom'] = '0px';
-    if (typeof props.bottomLineHeight === 'number') {
-      _cssVariable['--tab_bottom_line_height'] = `${props.bottomLineHeight}px`;
-    } else if (
-      typeof props.bottomLineHeight === 'string' &&
-      props.bottomLineHeight !== ''
-    ) {
-      _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+    if (props.vertical === false) {
+      if (typeof props.bottomLineHeight === 'number') {
+        _cssVariable['--tab_bottom_line_height'] =
+          `${props.bottomLineHeight}px`;
+      } else if (
+        typeof props.bottomLineHeight === 'string' &&
+        props.bottomLineHeight !== ''
+      ) {
+        _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+      }
     }
 
     if (typeof props.bottomLineWidth === 'number') {
@@ -115,7 +132,7 @@ const cssVariable = computed(() => {
     }
   } else if (props.selectedType === 'mask') {
     // _cssVariable['--tab_bottom_line_height'] = '100%';
-    _cssVariable['--tab_bottom_line_opacity'] = '0.2';
+    _cssVariable['--tab_bottom_line_opacity'] = '0.1';
   }
 
   if (
@@ -125,14 +142,12 @@ const cssVariable = computed(() => {
     _cssVariable['--tab_bottom_line_color'] = props.bottomLineColor;
   }
 
-  if (props.center === true) {
-    _cssVariable['--tab_bar_justify_content'] = 'center';
-  } else {
-    _cssVariable['--tab_bar_justify_content'] = 'flex-start';
-  }
-
   if (typeof props.justifyContent === 'string' && props.justifyContent !== '') {
     _cssVariable['--tab_bar_justify_content'] = props.justifyContent;
+  }
+
+  if (typeof props.alignItems === 'string' && props.alignItems !== '') {
+    _cssVariable['--tab_bar_align_items'] = props.alignItems;
   }
 
   if (typeof props.gap === 'number') {
@@ -141,28 +156,66 @@ const cssVariable = computed(() => {
     _cssVariable['--tab_gap'] = props.gap;
   }
 
+  if (props.vertical === true) {
+    _cssVariable['--tab_bottom_line_bottom'] = 'unset';
+    _cssVariable['--tab_flex_direction'] = 'column';
+    if (isNaN(Number(props.tabItemWidth)) === false) {
+      _cssVariable['--tab_item_width'] = `${props.tabItemWidth}px`;
+    } else if (
+      typeof props.tabItemWidth === 'string' &&
+      props.tabItemWidth !== ''
+    ) {
+      _cssVariable['--tab_item_width'] = props.tabItemWidth;
+    }
+    if (
+      typeof props.tabItemTextAlign === 'string' &&
+      props.tabItemTextAlign !== ''
+    ) {
+      _cssVariable['--tab_item_text_align'] = props.tabItemTextAlign;
+    }
+  } else {
+    _cssVariable['--tab_flex_direction'] = 'row';
+  }
+
   return _cssVariable;
 });
 
 watch(
   () => props.modelValue,
   (newValue) => {
-    const _tabIndex = props.tabList.findIndex(
-      (tab) => tab?.[props.valueKey] === newValue || tab?.value === newValue
-    );
-    const tabIndex =
-      typeof _tabIndex === 'number' && _tabIndex > -1 ? _tabIndex : newValue;
-    const tabRef = tabListRef.value?.[tabIndex || 0];
-    handleBottomeStyle(tabRef);
+    if (Array.isArray(tabListRef.value) === true) {
+      const tabRef = tabListRef.value?.[getCurrentTabIndex(newValue) || 0];
+      handleBottomeStyle(tabRef);
+      handleCheckTab(tabRef);
+    }
+  }
+);
+watch(
+  () => props.tabList,
+  async () => {
+    await nextTick();
+    if (Array.isArray(tabListRef.value) === true) {
+      const tabRef =
+        tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0];
+      handleBottomeStyle(tabRef);
+      handleCheckTab(tabRef);
+    }
+  },
+  {
+    deep: true
   }
 );
 
 onMounted(() => {
-  handleBottomeStyle(tabListRef.value[0]);
+  handleBottomeStyle(
+    tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
+  );
   document.addEventListener('mouseup', stopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
   document.addEventListener('touchend', stopTabBarScroll);
-  document.addEventListener('touchmove', handleTabBarScroll);
+  document.addEventListener('touchmove', handleTabBarScroll, {
+    passive: false
+  });
 });
 onBeforeUnmount(() => {
   document.removeEventListener('mouseup', stopTabBarScroll);
@@ -171,6 +224,12 @@ onBeforeUnmount(() => {
   document.removeEventListener('touchmove', handleTabBarScroll);
 });
 
+function getCurrentTabIndex(tab) {
+  const _tabIndex = props.tabList.findIndex(
+    (_tab) => _tab?.[props.valueKey] === tab || _tab?.value === tab
+  );
+  return typeof _tabIndex === 'number' && _tabIndex > -1 ? _tabIndex : tab;
+}
 function isSelected(currentTab, tab, index) {
   const value = tab?.[props.valueKey] || tab?.value || index;
   return currentTab === value;
@@ -180,17 +239,46 @@ function getBottomeStyle(tab) {
   const bottomeStyle = {};
 
   if (typeof tab === 'object' && tab !== null) {
-    if (
-      (typeof props.tabBottomLineWidth !== 'number' &&
-        typeof props.tabBottomLineWidth !== 'string') ||
-      props.tabBottomLineWidth === ''
-    ) {
-      bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
-      bottomeStyle['--tab_bottom_line_left'] = `${tab.offsetLeft}px`;
+    if (props.vertical === true) {
+      bottomeStyle['--tab_bottom_line_height'] = `${tab.clientHeight}px`;
+    }
+
+    if (props.vertical === false) {
+      bottomeStyle['--tab_bottom_line_top'] = 'unset';
+      if (
+        (typeof props.bottomLineWidth !== 'number' &&
+          typeof props.bottomLineWidth !== 'string') ||
+        props.bottomLineWidth === ''
+      ) {
+        bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
+        bottomeStyle['--tab_bottom_line_left'] = `${tab.offsetLeft}px`;
+      } else {
+        bottomeStyle['--tab_bottom_line_left'] = `calc(${
+          tab.offsetLeft + tab.clientWidth / 2
+        }px - var(--tab_bottom_line_width, 0px) / 2)`;
+      }
     } else {
-      bottomeStyle['--tab_bottom_line_left'] = `calc(${
-        tab.offsetLeft + tab.clientWidth / 2
-      }px - var(--tab_bottom_line_width, 0px) / 2)`;
+      bottomeStyle['--tab_bottom_line_left'] = '0px';
+      if (
+        (typeof props.bottomLineHeight !== 'number' &&
+          typeof props.bottomLineHeight !== 'string') ||
+        props.bottomLineHeight === ''
+      ) {
+        bottomeStyle['--tab_bottom_line_height'] = `${tab.clientHeight}px`;
+        bottomeStyle['--tab_bottom_line_top'] = `${tab.offsetTop}px`;
+      } else {
+        bottomeStyle['--tab_bottom_line_top'] = `calc(${
+          tab.offsetTop + tab.clientHeight / 2
+        }px - var(--tab_bottom_line_height, 0px) / 2)`;
+      }
+    }
+
+    if (props.selectedType === 'mask') {
+      if (props.vertical === true) {
+        bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
+      } else {
+        bottomeStyle['--tab_bottom_line_height'] = `${tab.clientHeight}px`;
+      }
     }
   }
 
@@ -206,21 +294,73 @@ function handleBottomeStyleTemp(_tab) {
   const tab = _tab?.target || _tab;
   bottomLineStyleTemp.value = getBottomeStyle(tab);
 }
-function resetBottomeStyleTemp() {
+function handleResetBottomeStyleTemp() {
   if (props.hover === false) return;
   bottomLineStyleTemp.value = null;
+}
+function handleCheckTab(tabListRef) {
+  const boundingClientRect = tabListRef?.getBoundingClientRect?.();
+
+  const _tabBarRef = tabBarRef.value;
+  const tabBarRefBoundingClientRect = _tabBarRef?.getBoundingClientRect?.();
+
+  // const tabListRefBottom = boundingClientRect?.y + tabListRef?.clientHeight;
+  const tabListRefBottom = boundingClientRect?.bottom;
+  const tabBarRefClientHeight = _tabBarRef?.clientHeight;
+  const tabBarRefTop = tabBarRefBoundingClientRect.top;
+
+  // const tabListRefRight = boundingClientRect?.x + tabListRef?.clientWidth;
+  const tabListRefRight = boundingClientRect?.right;
+  const tabBarRefClientWidth = _tabBarRef?.clientWidth;
+  const tabBarRefRight = tabBarRefBoundingClientRect.right;
+
+  if (
+    props.vertical === true &&
+    (tabListRefBottom - tabBarRefTop < 0 ||
+      tabListRefBottom - tabBarRefTop > tabBarRefClientHeight)
+  ) {
+    tabBarRef.value.scrollTo({
+      top: tabListRef.offsetTop,
+      behavior: 'smooth'
+    });
+  } else if (
+    props.vertical === false &&
+    (tabBarRefRight - tabListRefRight < 0 ||
+      tabBarRefRight - tabListRefRight > tabBarRefClientWidth)
+  ) {
+    tabBarRef.value.scrollTo({
+      left: tabListRef.offsetLeft,
+      behavior: 'smooth'
+    });
+  }
 }
 
 function handleTabChange(newTabIndex) {
   emits('update:modelValue', newTabIndex);
 }
+function handleVerticalStartTabBarScroll(e) {
+  const eventY =
+    e.pageY ||
+    e.clientY ||
+    e.offsetY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.offsetY;
 
-function startTabBarScroll(e) {
-  mouseDown.value = true;
+  startY.value = eventY - tabBarRef.value.offsetTop;
+  scrollTop.value = tabBarRef.value.scrollTop;
+}
+function handleHorizontalStartTabBarScroll(e) {
   const eventX =
     e.pageX ||
     e.clientX ||
     e.offsetX ||
+    e.targetTouches?.[0]?.pageX ||
+    e.targetTouches?.[0]?.clientX ||
+    e.targetTouches?.[0]?.offsetX ||
     e.changedTouches?.[0]?.pageX ||
     e.changedTouches?.[0]?.clientX ||
     e.changedTouches?.[0]?.offsetX;
@@ -228,29 +368,63 @@ function startTabBarScroll(e) {
   startX.value = eventX - tabBarRef.value.offsetLeft;
   scrollLeft.value = tabBarRef.value.scrollLeft;
 }
+function handleStartTabBarScroll(e) {
+  e.stopPropagation();
+  mouseDown.value = true;
+  if (props.vertical === true) {
+    handleVerticalStartTabBarScroll(e);
+  } else {
+    handleHorizontalStartTabBarScroll(e);
+  }
+}
 
 function stopTabBarScroll(e) {
   mouseDown.value = false;
 }
 
-function handleTabBarScroll(e) {
-  if (mouseDown.value === false) {
-    return;
-  }
-  if (typeof e?.preventDefault === 'function') {
-    e.preventDefault();
-  }
+function handleVerticalTabBarScroll(e) {
+  const eventY =
+    e.pageY ||
+    e.clientY ||
+    e.offsetY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.offsetY;
+
+  const y = eventY - tabBarRef.value.offsetTop;
+  const scrollY = y - startY.value;
+
+  tabBarRef.value.scrollTop = scrollTop.value - scrollY;
+}
+function handleHorizontalTabBarScroll(e) {
   const eventX =
     e.pageX ||
     e.clientX ||
     e.offsetX ||
+    e.targetTouches?.[0]?.pageX ||
+    e.targetTouches?.[0]?.clientX ||
+    e.targetTouches?.[0]?.offsetX ||
     e.changedTouches?.[0]?.pageX ||
     e.changedTouches?.[0]?.clientX ||
     e.changedTouches?.[0]?.offsetX;
 
   const x = eventX - tabBarRef.value.offsetLeft;
-  const scroll = x - startX.value;
-  tabBarRef.value.scrollLeft = scrollLeft.value - scroll;
+  const scrollX = x - startX.value;
+  tabBarRef.value.scrollLeft = scrollLeft.value - scrollX;
+}
+function handleTabBarScroll(e) {
+  if (mouseDown.value === false) {
+    return;
+  }
+  e.preventDefault();
+  if (props.vertical === true) {
+    handleVerticalTabBarScroll(e);
+  } else {
+    handleHorizontalTabBarScroll(e);
+  }
 }
 </script>
 
@@ -258,13 +432,15 @@ function handleTabBarScroll(e) {
 .tabs_bar {
   position: relative;
   display: flex;
-  flex-direction: row;
+  // flex-direction: row;
+  flex-direction: var(--tab_flex_direction);
   flex-wrap: nowrap;
-  // justify-content: flex-start;
   justify-content: var(--tab_bar_justify_content, flex-start);
   // gap: var(--tab_gap);
-  align-items: center;
+  // align-items: center;
+  align-items: var(--tab_bar_align_items, cneter);
   max-width: 100%;
+  max-height: 100%;
   overflow: hidden;
   user-select: none;
 
@@ -294,7 +470,20 @@ function handleTabBarScroll(e) {
 
   &-tab_item {
     padding: 0 calc(var(--tab_gap) / 2);
+    // min-height: 25px;
+    width: var(--tab_item_width);
+
     color: #606060;
+    // text-align: center;
+    text-align: var(--tab_item_text_align);
+
+    /* Body/17px */
+    font-family: 'PingFang SC';
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 25.5px */
+
     white-space: nowrap;
     cursor: pointer;
   }
@@ -305,14 +494,22 @@ function handleTabBarScroll(e) {
     content: '';
     position: absolute;
     // bottom: 0px;
+    top: var(--tab_bottom_line_top);
     bottom: var(--tab_bottom_line_bottom);
-    left: var(--tab_bottom_line_left, 0px);
-    height: var(--tab_bottom_line_height, 3px);
+    // left: var(--tab_bottom_line_left, 0px);
+    left: var(--tab_bottom_line_left);
+    // height: var(--tab_bottom_line_height, 3px);
     // width: var(--tab_bottom_line_width, 69px);
-    width: var(--tab_bottom_line_width, 0px);
+    // width: var(--tab_bottom_line_width, 0px);
+    height: var(--tab_bottom_line_height);
+    width: var(--tab_bottom_line_width);
     border-radius: 5px;
+    opacity: var(--tab_bottom_line_opacity);
     background-color: var(--tab_bottom_line_color, blue);
-    transition: left 0.5s ease-in-out, width 0.5s 0.1s;
+    transition:
+      left 0.4s ease-in-out,
+      top 0.4s ease-in-out,
+      width 0.4s 0.1s;
     pointer-events: none;
   }
 }
