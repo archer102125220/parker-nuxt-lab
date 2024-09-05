@@ -1,28 +1,45 @@
 <template>
-  <div
-    class="tabs_bar"
-    ref="tabBarRef"
-    :style="cssVariable"
-    @mousedown="handleStartTabBarScroll"
-    @touchstart="handleStartTabBarScroll"
-  >
+  <div ref="tabBarRootRef" class="tabs_bar" :style="cssVariable">
     <div
-      v-for="(tab, index) in tabList"
-      :key="index"
+      v-if="hasNavigation === true"
       v-customize-ripple
-      ref="tabListRef"
-      class="tabs_bar-tab_item"
-      @mouseenter="handleBottomeStyleTemp"
-      @mouseleave="handleResetBottomeStyleTemp"
-      @click="handleTabChange(index)"
+      class="tabs_bar-prev"
+      @pointerup="handlePrevScroll"
     >
-      <slot
-        :tab="tab"
-        :index="index"
-        :selected="isSelected(modelValue, tab, index)"
+      <img class="tabs_bar-prev-img" :src="navigationImg" />
+    </div>
+    <div
+      ref="tabBarRef"
+      class="tabs_bar-option_list"
+      @mousedown="handleStartTabBarScroll"
+      @touchstart="handleStartTabBarScroll"
+    >
+      <div
+        v-for="(tab, index) in tabList"
+        :key="index"
+        v-customize-ripple
+        ref="tabListRef"
+        class="tabs_bar-option_list-tab_item"
+        @mouseenter="handleBottomeStyleTemp"
+        @mouseleave="handleResetBottomeStyleTemp"
+        @click="handleTabChange(index)"
       >
-        <p>{{ tab?.[displayKey] || tab?.label || tab }}</p>
-      </slot>
+        <slot
+          :tab="tab"
+          :index="index"
+          :selected="isSelected(modelValue, tab, index)"
+        >
+          <p>{{ tab?.[displayKey] || tab?.label || tab }}</p>
+        </slot>
+      </div>
+    </div>
+    <div
+      v-if="hasNavigation === true"
+      v-customize-ripple
+      class="tabs_bar-next"
+      @pointerup="handleNextScroll"
+    >
+      <img class="tabs_bar-next-img" :src="navigationImg" />
     </div>
   </div>
 </template>
@@ -48,6 +65,10 @@ const props = defineProps({
     type: String,
     default: 'center'
   },
+  hasNavigation: {
+    type: Boolean,
+    default: true
+  },
   vertical: {
     type: Boolean,
     default: false
@@ -57,6 +78,14 @@ const props = defineProps({
     default: false
   },
   gap: {
+    type: [Number, String],
+    default: null
+  },
+  bottomLineDistance: {
+    type: [Number, String],
+    default: null
+  },
+  leftLineDistance: {
     type: [Number, String],
     default: null
   },
@@ -91,6 +120,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['update:modelValue', 'change']);
 
+const tabBarRootRef = ref(null);
 const tabBarRef = ref(null);
 const tabListRef = ref(null);
 
@@ -156,9 +186,36 @@ const cssVariable = computed(() => {
     _cssVariable['--tab_gap'] = props.gap;
   }
 
+  if (typeof props.bottomLineDistance === 'number') {
+    _cssVariable['--tab_bar_bottom_line_distance'] =
+      `${props.bottomLineDistance}px`;
+  } else if (
+    typeof props.bottomLineDistance === 'string' &&
+    props.bottomLineDistance !== ''
+  ) {
+    _cssVariable['--tab_bar_bottom_line_distance'] = props.bottomLineDistance;
+  }
+
+  if (typeof props.leftLineDistance === 'number') {
+    _cssVariable['--tab_bar_left_line_distance'] =
+      `${props.leftLineDistance}px`;
+  } else if (
+    typeof props.leftLineDistance === 'string' &&
+    props.leftLineDistance !== ''
+  ) {
+    _cssVariable['--tab_bar_left_line_distance'] = props.leftLineDistance;
+  }
+
   if (props.vertical === true) {
     _cssVariable['--tab_bottom_line_bottom'] = 'unset';
     _cssVariable['--tab_flex_direction'] = 'column';
+    _cssVariable['--navigation_width'] = '100%';
+    _cssVariable['--navigation_img_size'] = '24px';
+    _cssVariable['--navigation_bottom_right_radius'] = '15px';
+    _cssVariable['--navigation_bottom_left_radius'] = '15px';
+    // _cssVariable['--navigation_background'] =
+    //   'linear-gradient(to bottom, transparent, #0000005c 80%)';
+
     if (isNaN(Number(props.tabItemWidth)) === false) {
       _cssVariable['--tab_item_width'] = `${props.tabItemWidth}px`;
     } else if (
@@ -174,10 +231,32 @@ const cssVariable = computed(() => {
       _cssVariable['--tab_item_text_align'] = props.tabItemTextAlign;
     }
   } else {
+    // if (
+    //   typeof tabBarRootRef.value === 'object' &&
+    //   tabBarRootRef.value !== null
+    // ) {
+    //   const tabBarRootStyle = window.getComputedStyle(tabBarRootRef.value);
+    //   _cssVariable['--tab_bottom_line_bottom'] =
+    //     `-${tabBarRootStyle.bottomLineDistance}`;
+    // } else {
+    //   _cssVariable['--tab_bottom_line_bottom'] = '0px';
+    // }
+    _cssVariable['--tab_bottom_line_bottom'] = '0px';
+
     _cssVariable['--tab_flex_direction'] = 'row';
+    _cssVariable['--navigation_width'] = '24px';
+    _cssVariable['--navigation_top_right_radius'] = '15px';
+    _cssVariable['--navigation_bottom_right_radius'] = '15px';
+    // _cssVariable['--navigation_background'] =
+    //   'linear-gradient(to right, transparent, #0000005c 80%)';
   }
 
   return _cssVariable;
+});
+const navigationImg = computed(() => {
+  return props.vertical === true
+    ? '/img/icon/arrow/arrow-down-line-black.svg'
+    : '/img/icon/arrow/arrow-right-line-black.svg';
 });
 
 watch(
@@ -233,6 +312,33 @@ function getCurrentTabIndex(tab) {
 function isSelected(currentTab, tab, index) {
   const value = tab?.[props.valueKey] || tab?.value || index;
   return currentTab === value;
+}
+
+function handlePrevScroll() {
+  if (props.vertical === true) {
+    tabBarRef.value.scrollTo({
+      top: tabBarRef.value.scrollTop - 100,
+      behavior: 'smooth'
+    });
+  } else {
+    tabBarRef.value.scrollTo({
+      left: tabBarRef.value.scrollLeft - 100,
+      behavior: 'smooth'
+    });
+  }
+}
+function handleNextScroll() {
+  if (props.vertical === true) {
+    tabBarRef.value.scrollTo({
+      top: tabBarRef.value.scrollTop + 100,
+      behavior: 'smooth'
+    });
+  } else {
+    tabBarRef.value.scrollTo({
+      left: tabBarRef.value.scrollLeft + 100,
+      behavior: 'smooth'
+    });
+  }
 }
 
 function getBottomeStyle(tab) {
@@ -431,87 +537,131 @@ function handleTabBarScroll(e) {
 
 <style lang="scss" scoped>
 .tabs_bar {
-  position: relative;
   display: flex;
-  // flex-direction: row;
   flex-direction: var(--tab_flex_direction);
-  flex-wrap: nowrap;
-  justify-content: var(--tab_bar_justify_content, flex-start);
-  // gap: var(--tab_gap);
-  // align-items: center;
-  align-items: var(--tab_bar_align_items, cneter);
+  gap: 8px;
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
-  user-select: none;
-
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+  &-prev {
+    @extend .tabs_bar-next;
+    transform: rotate(180deg);
+    &-img {
+      @extend .tabs_bar-next-img;
+    }
   }
+  &-next {
+    flex-shrink: 0;
+    // flex-basis: 24px;
+    // width: 24px;
+    width: var(--navigation_width);
+    min-height: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // border-top-right-radius: 30px;
+    // border-bottom-right-radius: 30px;
+    // border-top-right-radius: 15px;
+    // border-bottom-right-radius: 15px;
+    border-top-right-radius: var(--navigation_top_right_radius);
+    border-bottom-right-radius: var(--navigation_bottom_right_radius);
+    border-bottom-left-radius: var(--navigation_bottom_left_radius);
+    // background: linear-gradient(to right, transparent, #0000005c 80%);
+    // background: var(--navigation_background);
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 0px;
-    background-color: transparent;
-    border: 0 solid transparent;
+    overflow: hidden;
+    &-img {
+      width: var(--navigation_img_size);
+      height: var(--navigation_img_size);
+    }
   }
+  &-option_list {
+    flex: 1;
+    position: relative;
+    display: flex;
+    // flex-direction: row;
+    flex-direction: var(--tab_flex_direction);
+    flex-wrap: nowrap;
+    justify-content: var(--tab_bar_justify_content, flex-start);
+    // gap: var(--tab_gap);
+    // align-items: center;
+    align-items: var(--tab_bar_align_items, cneter);
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+    overflow: hidden;
+    // overflow-x: hidden;
+    // overflow-y: hidden;
 
-  &::-webkit-scrollbar-button {
-    background: transparent;
-    border-radius: 0px;
-  }
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
 
-  &::-webkit-scrollbar-track-piece {
-    background-color: transparent;
-  }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 0px;
+      background-color: transparent;
+      border: 0 solid transparent;
+    }
 
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
+    &::-webkit-scrollbar-button {
+      background: transparent;
+      border-radius: 0px;
+    }
 
-  &-tab_item {
-    padding: 0 calc(var(--tab_gap) / 2);
-    // min-height: 25px;
-    width: var(--tab_item_width);
+    &::-webkit-scrollbar-track-piece {
+      background-color: transparent;
+    }
 
-    color: #606060;
-    // text-align: center;
-    text-align: var(--tab_item_text_align);
+    &::-webkit-scrollbar-track {
+      box-shadow: transparent;
+    }
 
-    /* Body/17px */
-    font-family: 'PingFang SC';
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 150%; /* 25.5px */
+    &-tab_item {
+      padding: 0 calc(var(--tab_gap) / 2);
+      // min-height: 25px;
+      width: var(--tab_item_width);
 
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  &-tab_item_selected {
-    color: #000;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    // bottom: 0px;
-    top: var(--tab_bottom_line_top);
-    bottom: var(--tab_bottom_line_bottom);
-    // left: var(--tab_bottom_line_left, 0px);
-    left: var(--tab_bottom_line_left);
-    // height: var(--tab_bottom_line_height, 3px);
-    // width: var(--tab_bottom_line_width, 69px);
-    // width: var(--tab_bottom_line_width, 0px);
-    height: var(--tab_bottom_line_height);
-    width: var(--tab_bottom_line_width);
-    border-radius: 5px;
-    opacity: var(--tab_bottom_line_opacity);
-    background-color: var(--tab_bottom_line_color, blue);
-    transition:
-      left 0.4s ease-in-out,
-      top 0.4s ease-in-out,
-      width 0.4s 0.1s;
-    pointer-events: none;
+      color: #606060;
+      // text-align: center;
+      text-align: var(--tab_item_text_align);
+
+      /* Body/17px */
+      font-family: 'PingFang SC';
+      font-size: 17px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%; /* 25.5px */
+
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    &-tab_item_selected {
+      color: #000;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      // bottom: 0px;
+      top: var(--tab_bottom_line_top);
+      bottom: var(--tab_bottom_line_bottom);
+      // left: var(--tab_bottom_line_left, 0px);
+      left: var(--tab_bottom_line_left);
+      // height: var(--tab_bottom_line_height, 3px);
+      // width: var(--tab_bottom_line_width, 69px);
+      // width: var(--tab_bottom_line_width, 0px);
+      height: var(--tab_bottom_line_height);
+      width: var(--tab_bottom_line_width);
+      border-radius: 5px;
+      opacity: var(--tab_bottom_line_opacity);
+      background-color: var(--tab_bottom_line_color, blue);
+      transition:
+        left 0.4s ease-in-out,
+        top 0.4s ease-in-out,
+        width 0.4s 0.1s;
+      pointer-events: none;
+    }
   }
 }
 </style>
