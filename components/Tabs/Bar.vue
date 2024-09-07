@@ -699,12 +699,6 @@ function handleHorizontalTabBarScroll(e) {
   const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
   const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
 
-  console.log({
-    firstTabBoundingClientRect,
-    lastTabBoundingClientRect,
-    tabBarBoundingClientRect
-  });
-
   if (
     Math.floor(firstTabBoundingClientRect.left) ===
     Math.floor(tabBarBoundingClientRect.left)
