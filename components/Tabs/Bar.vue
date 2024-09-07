@@ -367,7 +367,7 @@ onMounted(() => {
   handleBottomeStyle(
     tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
   );
-  handleNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
+  handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   document.addEventListener('mouseup', stopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
   document.addEventListener('touchend', stopTabBarScroll);
@@ -394,7 +394,7 @@ function isSelected(modelValue, tab, index) {
 }
 
 function handlePrevScroll() {
-  handleNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
+  handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: tabBarRef.value.scrollTop - SCROLL_STEP,
@@ -408,7 +408,7 @@ function handlePrevScroll() {
   }
 }
 function handleNextScroll() {
-  handleNavigationShow(SCROLL_STEP, 0 - SCROLL_STEP);
+  handleCalculateNavigationShow(SCROLL_STEP, 0 - SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: tabBarRef.value.scrollTop + SCROLL_STEP,
@@ -422,7 +422,7 @@ function handleNextScroll() {
   }
 }
 
-function handleNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
+function handleCalculateNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
   let _prevOpacity = prevOpacity.value;
   let _nextOpacity = nextOpacity.value;
 
@@ -477,6 +477,52 @@ function handleNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
 
   prevOpacity.value = _prevOpacity;
   nextOpacity.value = _nextOpacity;
+}
+function handleNavigationShow() {
+  const _tabBarRef = tabBarRef.value;
+  const _tabListRef = tabListRef.value || [];
+  const firstTabRef = _tabListRef[0];
+  const lastTabRef = _tabListRef[_tabListRef.length - 1];
+
+  const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
+  const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
+  const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
+
+  if (props.vertical === true) {
+    if (
+      Math.floor(firstTabBoundingClientRect.top) ===
+      Math.floor(tabBarBoundingClientRect.top)
+    ) {
+      prevOpacity.value = 0;
+    } else {
+      prevOpacity.value = 1;
+    }
+    if (
+      Math.floor(lastTabBoundingClientRect.bottom) ===
+      Math.floor(tabBarBoundingClientRect.bottom)
+    ) {
+      nextOpacity.value = 0;
+    } else {
+      nextOpacity.value = 1;
+    }
+  } else {
+    if (
+      Math.floor(firstTabBoundingClientRect.left) ===
+      Math.floor(tabBarBoundingClientRect.left)
+    ) {
+      prevOpacity.value = 0;
+    } else {
+      prevOpacity.value = 1;
+    }
+    if (
+      Math.floor(lastTabBoundingClientRect.right) ===
+      Math.floor(tabBarBoundingClientRect.right)
+    ) {
+      nextOpacity.value = 0;
+    } else {
+      nextOpacity.value = 1;
+    }
+  }
 }
 
 function getBottomeStyle(tab) {
@@ -577,6 +623,35 @@ function handleCheckTab(tabListRef) {
       behavior: 'smooth'
     });
   }
+  handleCheckTabAnimationFrame();
+}
+function handleCheckTabAnimationFrame() {
+  nextTick(() => {
+    window.requestAnimationFrame(() => {
+      const _tabBarRef = tabBarRef.value;
+      const _tabListRef = tabListRef.value || [];
+      const firstTabRef = _tabListRef[0];
+      const lastTabRef = _tabListRef[_tabListRef.length - 1];
+
+      if (firstTabRef === undefined || lastTabRef === undefined) {
+        return setTimeout(() => handleCheckTabAnimationFrame(), 100);
+      }
+
+      const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
+      const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
+      const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
+      console.log({
+        _tabListRef,
+        firstTabRef,
+        lastTabRef,
+        firstTabBoundingClientRect,
+        lastTabBoundingClientRect,
+        tabBarBoundingClientRect
+      });
+
+      setTimeout(() => handleNavigationShow(), 100);
+    });
+  });
 }
 
 function handleTabChange(newTabIndex) {
@@ -643,35 +718,9 @@ function handleVerticalTabBarScroll(e) {
   const scrollY = y - startY.value;
 
   const newScrollTop = scrollTop.value - scrollY;
-
-  const _tabBarRef = tabBarRef.value;
-  const _tabListRef = tabListRef.value || [];
-  const firstTabRef = _tabListRef[0];
-  const lastTabRef = _tabListRef[_tabListRef.length - 1];
-
-  const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
-  const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
-  const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
-
-  if (
-    Math.floor(firstTabBoundingClientRect.top) ===
-    Math.floor(tabBarBoundingClientRect.top)
-  ) {
-    prevOpacity.value = 0;
-  } else {
-    prevOpacity.value = 1;
-  }
-
-  if (
-    Math.floor(lastTabBoundingClientRect.bottom) ===
-    Math.floor(tabBarBoundingClientRect.bottom)
-  ) {
-    nextOpacity.value = 0;
-  } else {
-    nextOpacity.value = 1;
-  }
-
   tabBarRef.value.scrollTop = newScrollTop;
+
+  handleNavigationShow();
 }
 function handleHorizontalTabBarScroll(e) {
   const eventX =
@@ -689,35 +738,9 @@ function handleHorizontalTabBarScroll(e) {
   const scrollX = x - startX.value;
 
   const newScrollLeft = scrollLeft.value - scrollX;
-
-  const _tabBarRef = tabBarRef.value;
-  const _tabListRef = tabListRef.value || [];
-  const firstTabRef = _tabListRef[0];
-  const lastTabRef = _tabListRef[_tabListRef.length - 1];
-
-  const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
-  const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
-  const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
-
-  if (
-    Math.floor(firstTabBoundingClientRect.left) ===
-    Math.floor(tabBarBoundingClientRect.left)
-  ) {
-    prevOpacity.value = 0;
-  } else {
-    prevOpacity.value = 1;
-  }
-
-  if (
-    Math.floor(lastTabBoundingClientRect.right) ===
-    Math.floor(tabBarBoundingClientRect.right)
-  ) {
-    nextOpacity.value = 0;
-  } else {
-    nextOpacity.value = 1;
-  }
-
   tabBarRef.value.scrollLeft = newScrollLeft;
+
+  handleNavigationShow();
 }
 function handleTabBarScroll(e) {
   if (mouseDown.value === false) {
