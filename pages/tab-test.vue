@@ -13,6 +13,16 @@
       class="tab_test_page-bar"
       v-model="tab"
       gap="16px"
+      is-navigation-absolute
+      bottom-line-height="2px"
+      bottom-line-width="30px"
+      bottom-line-color="#27C5C3"
+      :tab-list="tabList"
+    />
+    <TabsBar
+      class="tab_test_page-bar"
+      v-model="tab"
+      gap="16px"
       bottom-line-height="2px"
       bottom-line-width="30px"
       bottom-line-color="#27C5C3"
@@ -81,7 +91,7 @@ const tab = ref(0);
 
 const tabList = computed(() => {
   const _tabList = [];
-  for (let i = 0; i <= 100; i++) {
+  for (let i = 0; i <= 20; i++) {
     _tabList.push(i);
     // let tab = '';
     // for (let j = i; j >= 0; j--) {

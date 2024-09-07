@@ -1,18 +1,20 @@
 <template>
   <div ref="tabBarRootRef" class="tabs_bar" :style="cssVariable">
-    <slot
-      v-if="hasNavigation === true"
-      name="prev"
-      @pointerup="handlePrevScroll"
+    <div
+      v-if="hasNavigation === true && showPrev === true"
+      class="tabs_bar-prev_position"
     >
-      <div
-        v-customize-ripple
-        class="tabs_bar-prev"
-        @pointerup="handlePrevScroll"
-      >
-        <img class="tabs_bar-prev-img" :src="navigationImg" />
-      </div>
-    </slot>
+      <slot name="prev" @pointerup="handlePrevScroll">
+        <div
+          v-customize-ripple
+          class="tabs_bar-prev_position-prev"
+          @pointerup="handlePrevScroll"
+        >
+          <img class="tabs_bar-prev_position-prev-img" :src="navigationImg" />
+        </div>
+      </slot>
+    </div>
+
     <div
       ref="tabBarRef"
       :class="[
@@ -47,22 +49,25 @@
       </div>
     </div>
 
-    <slot
-      v-if="hasNavigation === true"
-      name="next"
-      @pointerup="handleNextScroll"
+    <div
+      v-if="hasNavigation === true && showNext === true"
+      class="tabs_bar-next_position"
     >
-      <div
-        v-customize-ripple
-        class="tabs_bar-next"
-        @pointerup="handleNextScroll"
-      >
-        <img class="tabs_bar-next-img" :src="navigationImg" />
-      </div>
-    </slot>
+      <slot name="next" @pointerup="handleNextScroll">
+        <div
+          v-customize-ripple
+          class="tabs_bar-next_position-next"
+          @pointerup="handleNextScroll"
+        >
+          <img class="tabs_bar-next_position-next-img" :src="navigationImg" />
+        </div>
+      </slot>
+    </div>
   </div>
 </template>
 <script setup>
+const SCROLL_STEP = 100;
+
 const props = defineProps({
   modelValue: {
     type: [Number, String],
@@ -87,6 +92,10 @@ const props = defineProps({
   hasNavigation: {
     type: Boolean,
     default: true
+  },
+  isNavigationAbsolute: {
+    type: Boolean,
+    default: false
   },
   vertical: {
     type: Boolean,
@@ -153,13 +162,19 @@ const startX = ref(0);
 const startY = ref(0);
 const scrollLeft = ref(0);
 const scrollTop = ref(0);
+const prevOpacity = ref(1);
+const nextOpacity = ref(1);
+const showPrev = ref(true);
+const showNext = ref(true);
 
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
 
 const cssVariable = computed(() => {
   const _cssVariable = {
-    ...(bottomLineStyleTemp.value || bottomLineStyle.value)
+    ...(bottomLineStyleTemp.value || bottomLineStyle.value),
+    '--prev_opacity': prevOpacity.value,
+    '--next_opacity': nextOpacity.value
   };
 
   if (props.selectedType === 'underLine') {
@@ -232,6 +247,17 @@ const cssVariable = computed(() => {
     props.leftLineDistance !== ''
   ) {
     _cssVariable['--tab_bar_left_line_distance'] = props.leftLineDistance;
+  }
+
+  if (props.isNavigationAbsolute === true) {
+    _cssVariable['--navigation_position'] = 'absolute';
+    if (props.vertical === true) {
+      _cssVariable['--prev_top'] = '0px';
+      _cssVariable['--next_bottom'] = '0px';
+    } else {
+      _cssVariable['--prev_left'] = '0px';
+      _cssVariable['--next_right'] = '0px';
+    }
   }
 
   if (props.vertical === true) {
@@ -312,11 +338,36 @@ watch(
     deep: true
   }
 );
+watch(
+  () => nextOpacity.value,
+  (newNextOpacity) => {
+    if (props.isNavigationAbsolute === true) {
+      nextTick(() => {
+        window.requestAnimationFrame(() => {
+          showNext.value = newNextOpacity === 1;
+        });
+      });
+    }
+  }
+);
+watch(
+  () => prevOpacity.value,
+  (newPrevOpacity) => {
+    if (props.isNavigationAbsolute === true) {
+      nextTick(() => {
+        window.requestAnimationFrame(() => {
+          showPrev.value = newPrevOpacity === 1;
+        });
+      });
+    }
+  }
+);
 
 onMounted(() => {
   handleBottomeStyle(
     tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
   );
+  handleNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   document.addEventListener('mouseup', stopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
   document.addEventListener('touchend', stopTabBarScroll);
@@ -343,30 +394,89 @@ function isSelected(modelValue, tab, index) {
 }
 
 function handlePrevScroll() {
+  handleNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
-      top: tabBarRef.value.scrollTop - 100,
+      top: tabBarRef.value.scrollTop - SCROLL_STEP,
       behavior: 'smooth'
     });
   } else {
     tabBarRef.value.scrollTo({
-      left: tabBarRef.value.scrollLeft - 100,
+      left: tabBarRef.value.scrollLeft - SCROLL_STEP,
       behavior: 'smooth'
     });
   }
 }
 function handleNextScroll() {
+  handleNavigationShow(SCROLL_STEP, 0 - SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
-      top: tabBarRef.value.scrollTop + 100,
+      top: tabBarRef.value.scrollTop + SCROLL_STEP,
       behavior: 'smooth'
     });
   } else {
     tabBarRef.value.scrollTo({
-      left: tabBarRef.value.scrollLeft + 100,
+      left: tabBarRef.value.scrollLeft + SCROLL_STEP,
       behavior: 'smooth'
     });
   }
+}
+
+function handleNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
+  let _prevOpacity = prevOpacity.value;
+  let _nextOpacity = nextOpacity.value;
+
+  const _tabBarRef = tabBarRef.value;
+  const _tabListRef = tabListRef.value || [];
+  const firstTabRef = _tabListRef[0];
+  const lastTabRef = _tabListRef[_tabListRef.length - 1];
+
+  const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
+  const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
+  const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
+
+  if (props.vertical === true) {
+    if (
+      firstTabBoundingClientRect.top > 0 &&
+      Math.floor(firstTabBoundingClientRect.top + prevScrollStep) <=
+        Math.floor(tabBarBoundingClientRect.top)
+    ) {
+      _prevOpacity = 0;
+    } else {
+      _prevOpacity = 1;
+    }
+
+    if (
+      Math.floor(lastTabBoundingClientRect.bottom + nextScrollStep) <=
+      Math.floor(tabBarBoundingClientRect.bottom)
+    ) {
+      _nextOpacity = 0;
+    } else {
+      _nextOpacity = 1;
+    }
+  } else {
+    if (
+      firstTabBoundingClientRect.right > 0 &&
+      Math.floor(firstTabBoundingClientRect.right + prevScrollStep) <=
+        Math.floor(tabBarBoundingClientRect.left)
+    ) {
+      _prevOpacity = 0;
+    } else {
+      _prevOpacity = 1;
+    }
+
+    if (
+      Math.floor(lastTabBoundingClientRect.right + nextScrollStep) <=
+      Math.floor(tabBarBoundingClientRect.right)
+    ) {
+      _nextOpacity = 0;
+    } else {
+      _nextOpacity = 1;
+    }
+  }
+
+  prevOpacity.value = _prevOpacity;
+  nextOpacity.value = _nextOpacity;
 }
 
 function getBottomeStyle(tab) {
@@ -532,7 +642,36 @@ function handleVerticalTabBarScroll(e) {
   const y = eventY - tabBarRef.value.offsetTop;
   const scrollY = y - startY.value;
 
-  tabBarRef.value.scrollTop = scrollTop.value - scrollY;
+  const newScrollTop = scrollTop.value - scrollY;
+
+  const _tabBarRef = tabBarRef.value;
+  const _tabListRef = tabListRef.value || [];
+  const firstTabRef = _tabListRef[0];
+  const lastTabRef = _tabListRef[_tabListRef.length - 1];
+
+  const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
+  const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
+  const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
+
+  if (
+    Math.floor(firstTabBoundingClientRect.top) ===
+    Math.floor(tabBarBoundingClientRect.top)
+  ) {
+    prevOpacity.value = 0;
+  } else {
+    prevOpacity.value = 1;
+  }
+
+  if (
+    Math.floor(lastTabBoundingClientRect.bottom) ===
+    Math.floor(tabBarBoundingClientRect.bottom)
+  ) {
+    nextOpacity.value = 0;
+  } else {
+    nextOpacity.value = 1;
+  }
+
+  tabBarRef.value.scrollTop = newScrollTop;
 }
 function handleHorizontalTabBarScroll(e) {
   const eventX =
@@ -548,7 +687,43 @@ function handleHorizontalTabBarScroll(e) {
 
   const x = eventX - tabBarRef.value.offsetLeft;
   const scrollX = x - startX.value;
-  tabBarRef.value.scrollLeft = scrollLeft.value - scrollX;
+
+  const newScrollLeft = scrollLeft.value - scrollX;
+
+  const _tabBarRef = tabBarRef.value;
+  const _tabListRef = tabListRef.value || [];
+  const firstTabRef = _tabListRef[0];
+  const lastTabRef = _tabListRef[_tabListRef.length - 1];
+
+  const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
+  const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
+  const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
+
+  console.log({
+    firstTabBoundingClientRect,
+    lastTabBoundingClientRect,
+    tabBarBoundingClientRect
+  });
+
+  if (
+    Math.floor(firstTabBoundingClientRect.left) ===
+    Math.floor(tabBarBoundingClientRect.left)
+  ) {
+    prevOpacity.value = 0;
+  } else {
+    prevOpacity.value = 1;
+  }
+
+  if (
+    Math.floor(lastTabBoundingClientRect.right) ===
+    Math.floor(tabBarBoundingClientRect.right)
+  ) {
+    nextOpacity.value = 0;
+  } else {
+    nextOpacity.value = 1;
+  }
+
+  tabBarRef.value.scrollLeft = newScrollLeft;
 }
 function handleTabBarScroll(e) {
   if (mouseDown.value === false) {
@@ -565,43 +740,66 @@ function handleTabBarScroll(e) {
 
 <style lang="scss" scoped>
 .tabs_bar {
+  position: relative;
   display: flex;
   flex-direction: var(--tab_flex_direction);
   gap: 8px;
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
-  &-prev {
-    @extend .tabs_bar-next;
-    transform: rotate(180deg);
-    &-img {
-      @extend .tabs_bar-next-img;
+
+  &-prev_position {
+    flex-shrink: 0;
+    position: var(--navigation_position);
+    top: var(--prev_top);
+    left: var(--prev_left);
+    z-index: 1;
+
+    opacity: var(--prev_opacity);
+    transition: opacity 0.2s;
+
+    &-prev {
+      @extend .tabs_bar-next_position-next;
+      transform: rotate(180deg);
+      &-img {
+        @extend .tabs_bar-next_position-next-img;
+      }
     }
   }
-  &-next {
+  &-next_position {
     flex-shrink: 0;
-    // flex-basis: 24px;
-    // width: 24px;
-    width: var(--navigation_width);
-    min-height: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    // border-top-right-radius: 30px;
-    // border-bottom-right-radius: 30px;
-    // border-top-right-radius: 15px;
-    // border-bottom-right-radius: 15px;
-    border-top-right-radius: var(--navigation_top_right_radius);
-    border-bottom-right-radius: var(--navigation_bottom_right_radius);
-    border-bottom-left-radius: var(--navigation_bottom_left_radius);
-    // background: linear-gradient(to right, transparent, #0000005c 80%);
-    // background: var(--navigation_background);
+    position: var(--navigation_position);
+    right: var(--next_right);
+    bottom: var(--next_bottom);
+    z-index: 1;
 
-    overflow: hidden;
-    &-img {
-      width: var(--navigation_img_size);
-      height: var(--navigation_img_size);
+    opacity: var(--next_opacity);
+    transition: opacity 0.2s;
+
+    &-next {
+      // flex-basis: 24px;
+      // width: 24px;
+      width: var(--navigation_width);
+      min-height: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      // border-top-right-radius: 30px;
+      // border-bottom-right-radius: 30px;
+      // border-top-right-radius: 15px;
+      // border-bottom-right-radius: 15px;
+      border-top-right-radius: var(--navigation_top_right_radius);
+      border-bottom-right-radius: var(--navigation_bottom_right_radius);
+      border-bottom-left-radius: var(--navigation_bottom_left_radius);
+      // background: linear-gradient(to right, transparent, #0000005c 80%);
+      // background: var(--navigation_background);
+
+      overflow: hidden;
+      &-img {
+        width: var(--navigation_img_size);
+        height: var(--navigation_img_size);
+      }
     }
   }
   &-option_list {
