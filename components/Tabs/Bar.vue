@@ -483,6 +483,8 @@ function handleCalculateNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
   nextOpacity.value = _nextOpacity;
 }
 function handleNavigationShow() {
+  if (props.hasNavigation === false) return;
+
   const _tabBarRef = tabBarRef.value;
   const _tabListRef = tabListRef.value || [];
   const firstTabRef = _tabListRef[0];
