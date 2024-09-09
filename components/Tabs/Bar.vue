@@ -21,6 +21,9 @@
         'tabs_bar-option_list',
         selectedType !== '' ? 'tabs_bar-option_list_emphasize' : ''
       ]"
+      v-scroll-end="{
+        handler: handleTabBarScrollEnd
+      }"
       @mousedown="handleStartTabBarScroll"
       @touchstart="handleStartTabBarScroll"
     >
@@ -158,6 +161,7 @@ const tabBarRef = ref(null);
 const tabListRef = ref(null);
 
 const mouseDown = ref(false);
+const isAutoScroll = ref(false);
 const startX = ref(0);
 const startY = ref(0);
 const scrollLeft = ref(0);
@@ -368,17 +372,17 @@ onMounted(() => {
     tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
   );
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
-  document.addEventListener('mouseup', stopTabBarScroll);
+  document.addEventListener('mouseup', handleStopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
-  document.addEventListener('touchend', stopTabBarScroll);
+  document.addEventListener('touchend', handleStopTabBarScroll);
   document.addEventListener('touchmove', handleTabBarScroll, {
     passive: false
   });
 });
 onBeforeUnmount(() => {
-  document.removeEventListener('mouseup', stopTabBarScroll);
+  document.removeEventListener('mouseup', handleStopTabBarScroll);
   document.removeEventListener('mousemove', handleTabBarScroll);
-  document.removeEventListener('touchend', stopTabBarScroll);
+  document.removeEventListener('touchend', handleStopTabBarScroll);
   document.removeEventListener('touchmove', handleTabBarScroll);
 });
 
@@ -589,6 +593,7 @@ function handleResetBottomeStyleTemp() {
   bottomLineStyleTemp.value = null;
 }
 function handleCheckTab(tabListRef) {
+  isAutoScroll.value = true;
   const boundingClientRect = tabListRef?.getBoundingClientRect?.();
 
   const _tabBarRef = tabBarRef.value;
@@ -623,35 +628,6 @@ function handleCheckTab(tabListRef) {
       behavior: 'smooth'
     });
   }
-  handleCheckTabAnimationFrame();
-}
-function handleCheckTabAnimationFrame() {
-  nextTick(() => {
-    window.requestAnimationFrame(() => {
-      const _tabBarRef = tabBarRef.value;
-      const _tabListRef = tabListRef.value || [];
-      const firstTabRef = _tabListRef[0];
-      const lastTabRef = _tabListRef[_tabListRef.length - 1];
-
-      if (firstTabRef === undefined || lastTabRef === undefined) {
-        return setTimeout(() => handleCheckTabAnimationFrame(), 100);
-      }
-
-      const firstTabBoundingClientRect = firstTabRef?.getBoundingClientRect();
-      const lastTabBoundingClientRect = lastTabRef?.getBoundingClientRect();
-      const tabBarBoundingClientRect = _tabBarRef.getBoundingClientRect();
-      console.log({
-        _tabListRef,
-        firstTabRef,
-        lastTabRef,
-        firstTabBoundingClientRect,
-        lastTabBoundingClientRect,
-        tabBarBoundingClientRect
-      });
-
-      setTimeout(() => handleNavigationShow(), 100);
-    });
-  });
 }
 
 function handleTabChange(newTabIndex) {
@@ -690,6 +666,7 @@ function handleHorizontalStartTabBarScroll(e) {
 }
 function handleStartTabBarScroll(e) {
   e.stopPropagation();
+  isAutoScroll.value = false;
   mouseDown.value = true;
   if (props.vertical === true) {
     handleVerticalStartTabBarScroll(e);
@@ -697,8 +674,13 @@ function handleStartTabBarScroll(e) {
     handleHorizontalStartTabBarScroll(e);
   }
 }
+function handleTabBarScrollEnd(e) {
+  if (isAutoScroll.value === false) return;
+  // console.log(e);
+  handleNavigationShow();
+}
 
-function stopTabBarScroll(e) {
+function handleStopTabBarScroll(e) {
   mouseDown.value = false;
 }
 
