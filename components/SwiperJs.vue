@@ -1,29 +1,29 @@
 <template>
-  <div class="swiperjs" :style="cssVariable">
+  <div class="swiper_js" :style="cssVariable">
     <!-- If we need navigation buttons -->
-    <div v-if="hasNavigation" ref="prevRef" class="swiperjs-prev">
+    <div v-if="hasNavigation" ref="prevRef" class="swiper_js-prev">
       <slot name="prev">
-        <div v-ripple class="swiperjs-prev-btn">
+        <div v-ripple class="swiper_js-prev-btn">
           {{ '<' }}
         </div>
       </slot>
     </div>
-    <div v-if="hasNavigation" ref="nextRef" class="swiperjs-next">
+    <div v-if="hasNavigation" ref="nextRef" class="swiper_js-next">
       <slot name="next">
-        <div v-ripple class="swiperjs-prev-btn">
+        <div v-ripple class="swiper_js-prev-btn">
           {{ '>' }}
         </div>
       </slot>
     </div>
 
     <!-- Additional required wrapper -->
-    <div ref="swiperRef" class="swiperjs-content">
-      <div class="swiperjs-content-wrapper swiper-wrapper">
+    <div ref="swiperRef" class="swiper_js-content">
+      <div class="swiper_js-content-wrapper swiper-wrapper">
         <!-- Slides -->
         <div
           v-for="(slide, index) in slideList"
           :key="slide[slotNameKey] || slide.slotName || index"
-          class="swiperjs-content-wrapper-slide swiper-slide"
+          class="swiper_js-content-wrapper-slide swiper-slide"
         >
           <slot
             v-if="slotNameIsDefault === false"
@@ -392,7 +392,7 @@ function beforeTransitionStart(swiper) {
 </script>
 
 <style lang="scss" scoped>
-.swiperjs {
+.swiper_js {
   position: relative;
   &-prev {
     position: absolute;
@@ -415,10 +415,10 @@ function beforeTransitionStart(swiper) {
     }
   }
   &-next {
-    @extend .swiperjs-prev;
+    @extend .swiper_js-prev;
     right: 5px;
     &-btn {
-      @extend .swiperjs-prev-btn;
+      @extend .swiper_js-prev-btn;
     }
   }
   &-content {

@@ -21,6 +21,7 @@ const linkList = computed(() => {
     { to: '/wang-editor-test', label: 'WangEditor（HTML編輯器）測試' },
     { to: '/youtube-test', label: 'Youtube測試' },
     { to: '/swiper-js-test', label: 'SwiperJs測試' },
+    { to: '/swiper-test', label: '自製Swiper測試' },
     { to: '/components-test', label: '組件綜合測試' }
   ];
 });
