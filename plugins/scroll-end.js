@@ -9,7 +9,7 @@ export const pluginScrollEnd = defineNuxtPlugin((nuxtApp) => {
 
       const wait = binding.value?.wait || 100;
 
-      if ('onscrollend' in window) {
+      if ('onscrollend' in el) {
         function handleScrollEnd(...arg) {
           setTimeout(() => handler(...arg), wait);
         }
