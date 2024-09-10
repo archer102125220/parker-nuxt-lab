@@ -1,6 +1,6 @@
 <template>
   <div class="swiper_test_page">
-    <Swiper
+    <SwiperCustom
       v-model="slide"
       should-fill-height
       :slide-list="slideList"

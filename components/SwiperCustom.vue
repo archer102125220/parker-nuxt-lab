@@ -21,7 +21,6 @@
         @mousedown="handleChangStart"
         @touchstart="handleChangStart"
       >
-        <!-- Slides -->
         <div
           v-for="(slide, index) in slideList"
           :key="slide[slotNameKey] || slide.slotName || index"
@@ -262,6 +261,8 @@ function handleSliderMove(e) {
     e.changedTouches?.[0]?.clientX ||
     e.changedTouches?.[0]?.offsetX;
   moveX.value = eventX;
+
+  emit('sliderMove', e);
 }
 function handleChanging(e) {
   isDragging.value = false;
