@@ -162,6 +162,8 @@ const tabListRef = ref(null);
 
 const mouseDown = ref(false);
 const isAutoScroll = ref(false);
+const nextDisable = ref(false);
+const prevDisable = ref(false);
 const startX = ref(0);
 const startY = ref(0);
 const scrollLeft = ref(0);
@@ -345,6 +347,7 @@ watch(
 watch(
   () => nextOpacity.value,
   (newNextOpacity) => {
+    nextDisable.value = newNextOpacity === 0;
     if (props.isNavigationAbsolute === true) {
       nextTick(() => {
         window.requestAnimationFrame(() => {
@@ -357,6 +360,7 @@ watch(
 watch(
   () => prevOpacity.value,
   (newPrevOpacity) => {
+    prevDisable.value = newPrevOpacity === 0;
     if (props.isNavigationAbsolute === true) {
       nextTick(() => {
         window.requestAnimationFrame(() => {
@@ -398,6 +402,7 @@ function isSelected(modelValue, tab, index) {
 }
 
 function handlePrevScroll() {
+  if (prevDisable.value === true) return;
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
@@ -412,6 +417,7 @@ function handlePrevScroll() {
   }
 }
 function handleNextScroll() {
+  if (nextDisable.value === true) return;
   handleCalculateNavigationShow(SCROLL_STEP, 0 - SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
@@ -441,41 +447,57 @@ function handleCalculateNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
 
   if (props.vertical === true) {
     if (
-      firstTabBoundingClientRect.top > 0 &&
-      Math.floor(firstTabBoundingClientRect.top + prevScrollStep) <=
-        Math.floor(tabBarBoundingClientRect.top)
+      firstTabBoundingClientRect.bottom >= tabBarBoundingClientRect.top &&
+      lastTabBoundingClientRect.bottom <= tabBarBoundingClientRect.bottom
     ) {
       _prevOpacity = 0;
-    } else {
-      _prevOpacity = 1;
-    }
-
-    if (
-      Math.floor(lastTabBoundingClientRect.bottom + nextScrollStep) <=
-      Math.floor(tabBarBoundingClientRect.bottom)
-    ) {
       _nextOpacity = 0;
     } else {
-      _nextOpacity = 1;
+      if (
+        firstTabBoundingClientRect.top > 0 &&
+        Math.floor(firstTabBoundingClientRect.bottom + prevScrollStep) <=
+          Math.floor(tabBarBoundingClientRect.top)
+      ) {
+        _prevOpacity = 0;
+      } else {
+        _prevOpacity = 1;
+      }
+
+      if (
+        Math.floor(lastTabBoundingClientRect.bottom + nextScrollStep) <=
+        Math.floor(tabBarBoundingClientRect.bottom)
+      ) {
+        _nextOpacity = 0;
+      } else {
+        _nextOpacity = 1;
+      }
     }
   } else {
     if (
-      firstTabBoundingClientRect.right > 0 &&
-      Math.floor(firstTabBoundingClientRect.right + prevScrollStep) <=
-        Math.floor(tabBarBoundingClientRect.left)
+      firstTabBoundingClientRect.right >= tabBarBoundingClientRect.left &&
+      lastTabBoundingClientRect.right <= tabBarBoundingClientRect.right
     ) {
       _prevOpacity = 0;
-    } else {
-      _prevOpacity = 1;
-    }
-
-    if (
-      Math.floor(lastTabBoundingClientRect.right + nextScrollStep) <=
-      Math.floor(tabBarBoundingClientRect.right)
-    ) {
       _nextOpacity = 0;
     } else {
-      _nextOpacity = 1;
+      if (
+        firstTabBoundingClientRect.right > 0 &&
+        Math.floor(firstTabBoundingClientRect.right + prevScrollStep) <=
+          Math.floor(tabBarBoundingClientRect.left)
+      ) {
+        _prevOpacity = 0;
+      } else {
+        _prevOpacity = 1;
+      }
+
+      if (
+        Math.floor(lastTabBoundingClientRect.right + nextScrollStep) <=
+        Math.floor(tabBarBoundingClientRect.right)
+      ) {
+        _nextOpacity = 0;
+      } else {
+        _nextOpacity = 1;
+      }
     }
   }
 
