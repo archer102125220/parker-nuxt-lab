@@ -116,7 +116,9 @@ const sliderContent = ref(null);
 const sliderWrapper = ref(null);
 const sliderActiveIndex = ref(0);
 const isDragging = ref(false);
+const canCancel = ref(false);
 const startX = ref(null);
+const startY = ref(null);
 const moveX = ref(null);
 
 const cssVariable = computed(() => {
@@ -234,6 +236,7 @@ function handleNext() {
 
 function handleChangStart(e) {
   isDragging.value = true;
+  canCancel.value = true;
 
   const eventX =
     e.pageX ||
@@ -246,9 +249,33 @@ function handleChangStart(e) {
     e.changedTouches?.[0]?.clientX ||
     e.changedTouches?.[0]?.offsetX;
   startX.value = eventX;
+
+  const eventY =
+    e.pageY ||
+    e.clientY ||
+    e.offsetY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.offsetY;
+
+  startY.value = eventY;
 }
 function handleSliderMove(e) {
   if (isDragging.value === false) return;
+
+  const eventY =
+    e.pageY ||
+    e.clientY ||
+    e.offsetY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.offsetY;
 
   const eventX =
     e.pageX ||
@@ -260,6 +287,19 @@ function handleSliderMove(e) {
     e.changedTouches?.[0]?.pageX ||
     e.changedTouches?.[0]?.clientX ||
     e.changedTouches?.[0]?.offsetX;
+
+  if (
+    Math.abs(eventX - startX.value) > 15 ||
+    (moveX.value > 0 && Math.abs(moveX.value - startX.value) > 20)
+  ) {
+    canCancel.value = false;
+  }
+
+  if (Math.abs(startY.value - eventY) > 5 && canCancel.value === true) {
+    isDragging.value = false;
+    return;
+  }
+
   moveX.value = eventX;
 
   emit('sliderMove', e);

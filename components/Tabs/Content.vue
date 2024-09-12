@@ -5,7 +5,7 @@
     @mouseover="resetRefreshDisable"
     @touchend="resetRefreshDisable"
   >
-    <slot />
+    <slot v-if="slotNameKey !== 'default'" />
     <slot name="loading">
       <LoadingBar :loading="loading" />
     </slot>
