@@ -287,7 +287,7 @@ function handlePulling(e) {
     e.clientY;
   const move = currentClientY - startY.value;
 
-  if (move > 0) {
+  if (startY.value > 0 && move > 0) {
     isShowRefreshIcon.value = true;
     const _moveDistance = Math.pow(move, 0.8);
 

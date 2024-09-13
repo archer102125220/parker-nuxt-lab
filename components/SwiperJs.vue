@@ -83,6 +83,10 @@ const props = defineProps({
     type: [Number, String],
     default: null
   },
+  longSwipesRatio: {
+    type: Number,
+    default: 0.2
+  },
   slideList: {
     type: Array,
     default: () => []
@@ -219,6 +223,7 @@ function handleSwiperInit() {
     centeredSlides: props.centeredSlides,
     slidesPerView: props.slidesPerView,
     spaceBetween: props.spaceBetween,
+    longSwipesRatio: props.longSwipesRatio,
     on: {
       beforeInit,
       init,
@@ -295,7 +300,8 @@ function handleSwiperUpdata(newProps) {
       modules: [],
       centeredSlides: newProps.centeredSlides,
       slidesPerView: newProps.slidesPerView,
-      spaceBetween: newProps.spaceBetween
+      spaceBetween: newProps.spaceBetween,
+      longSwipesRatio: newProps.longSwipesRatio
     };
     if (newProps.hasNavigation === true) {
       _params.modules = [..._params.modules, Navigation];

@@ -69,6 +69,10 @@ const props = defineProps({
     type: [Number, String],
     default: null
   },
+  longSwipesRatio: {
+    type: Number,
+    default: 0.2
+  },
   slideList: {
     type: Array,
     default: () => []
@@ -87,7 +91,7 @@ const props = defineProps({
   },
   hasNavigation: {
     type: Boolean,
-    default: true
+    default: false
   },
   shouldFillHeight: {
     type: Boolean,
@@ -307,18 +311,21 @@ function handleSliderMove(e) {
 function handleChanging(e) {
   isDragging.value = false;
 
-  const _deltaX = deltaX.value;
-  const sliderContentWidth = sliderContent.value?.clientWidth || 1;
-  const newSliderActiveIndex = slideXList.value.findIndex((slideX) => {
-    const slideXAbs = Math.abs(slideX);
-    const deltaXAbs = Math.abs(_deltaX);
-    const difference = Math.abs(slideXAbs - deltaXAbs);
+  const _slideXList = slideXList.value;
 
-    return (
-      (_deltaX >= 0 && slideX === 0) ||
-      (difference >= 0 && difference <= sliderContentWidth / 2)
+  let newSliderActiveIndex = -1;
+  if (moveX.value > startX.value) {
+    // prev
+    newSliderActiveIndex = _slideXList.findIndex((slideX) =>
+      handleSlideXFindLast(slideX)
     );
-  });
+  } else if (moveX.value < startX.value) {
+    // next
+    newSliderActiveIndex = _slideXList.findLastIndex((slideX) =>
+      handleSlideXFindLast(slideX)
+    );
+  }
+
   if (newSliderActiveIndex >= 0) {
     const newSlide = props.slideList[newSliderActiveIndex] || {};
     const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
@@ -330,6 +337,26 @@ function handleChanging(e) {
 
   startX.value = null;
   moveX.value = null;
+}
+function handleSlideXFindLast(slideX) {
+  const sliderContentWidth = sliderContent.value?.clientWidth || 1;
+  const longSwipesRatio =
+    typeof props.longSwipesRatio !== 'number' ? 0.5 : props.longSwipesRatio;
+  const _longSwipesRatio =
+    longSwipesRatio >= 1 ? longSwipesRatio : Math.abs(1 - longSwipesRatio);
+
+  const slideXAbs = Math.abs(slideX);
+  const deltaXAbs = Math.abs(deltaX.value);
+  const difference = Math.abs(slideXAbs - deltaXAbs);
+
+  // return (
+  //   (deltaX.value >= 0 && slideX === 0) ||
+  //   (difference >= 0 && difference <= sliderContentWidth * 0.8)
+  // );
+  return (
+    (deltaX.value >= 0 && slideX === 0) ||
+    (difference >= 0 && difference <= sliderContentWidth * _longSwipesRatio)
+  );
 }
 </script>
 
