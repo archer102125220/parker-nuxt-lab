@@ -3,7 +3,7 @@
     ref="tabBarRootRef"
     class="tabs_bar"
     :style="cssVariable"
-    @wheel="handleWheelScroll"
+    @wheel.stop.prevent="handleWheelScroll"
   >
     <div
       v-if="hasNavigation === true && showPrev === true"
@@ -396,7 +396,6 @@ onBeforeUnmount(() => {
 });
 
 function handleWheelScroll(event) {
-  event.preventDefault();
   let scrollStep = SCROLL_STEP;
 
   if (props.vertical === true) {
