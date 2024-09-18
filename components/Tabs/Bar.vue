@@ -1,5 +1,10 @@
 <template>
-  <div ref="tabBarRootRef" class="tabs_bar" :style="cssVariable">
+  <div
+    ref="tabBarRootRef"
+    class="tabs_bar"
+    :style="cssVariable"
+    @wheel="handleWheelScroll"
+  >
     <div
       v-if="hasNavigation === true && showPrev === true"
       class="tabs_bar-prev_position"
@@ -389,6 +394,42 @@ onBeforeUnmount(() => {
   document.removeEventListener('touchend', handleStopTabBarScroll);
   document.removeEventListener('touchmove', handleTabBarScroll);
 });
+
+function handleWheelScroll(event) {
+  event.preventDefault();
+  let scrollStep = SCROLL_STEP;
+
+  if (props.vertical === true) {
+    let mouseScroll = tabBarRef.value.scrollTop;
+    if (event.wheelDelta <= 0 || event.detail > 0) {
+      mouseScroll += SCROLL_STEP;
+    } else {
+      mouseScroll += SCROLL_STEP * -1;
+      scrollStep = SCROLL_STEP * -1;
+    }
+    mouseScroll += Math.min(Math.max(0.125, scrollStep), 4);
+
+    tabBarRef.value.scrollTo({
+      top: mouseScroll,
+      behavior: 'smooth'
+    });
+  } else {
+    let mouseScroll = tabBarRef.value.scrollLeft;
+    if (event.wheelDelta <= 0 || event.detail > 0) {
+      mouseScroll += SCROLL_STEP;
+    } else {
+      mouseScroll += SCROLL_STEP * -1;
+      scrollStep = SCROLL_STEP * -1;
+    }
+    mouseScroll += Math.min(Math.max(0.125, mouseScroll), 4);
+
+    tabBarRef.value.scrollTo({
+      left: mouseScroll,
+      behavior: 'smooth'
+    });
+  }
+  handleCalculateNavigationShow(scrollStep, 0 - scrollStep);
+}
 
 function getCurrentTabIndex(tab) {
   const _tabIndex = props.tabList.findIndex(
