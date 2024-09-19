@@ -11,7 +11,7 @@
     >
       <slot name="prev" @pointerup="handlePrevScroll">
         <div
-          v-customize-ripple
+          v-customize-ripple="loading"
           class="tabs_bar-prev_position-prev"
           @pointerup="handlePrevScroll"
         >
@@ -36,7 +36,7 @@
         v-for="(tab, index) in tabList"
         :key="index"
         ref="tabListRef"
-        v-customize-ripple
+        v-customize-ripple="loading"
         :class="[
           'tabs_bar-option_list-tab_item',
           isSelected(modelValue, tab, index) === true
@@ -66,7 +66,7 @@
     >
       <slot name="next" @pointerup="handleNextScroll">
         <div
-          v-customize-ripple
+          v-customize-ripple="loading"
           class="tabs_bar-next_position-next"
           @pointerup="handleNextScroll"
         >
@@ -80,6 +80,10 @@
 const SCROLL_STEP = 100;
 
 const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  },
   modelValue: {
     type: [Number, String],
     default: 0
@@ -193,25 +197,30 @@ const cssVariable = computed(() => {
 
   if (props.selectedType === 'underLine') {
     _cssVariable['--tab_bottom_line_bottom'] = '0px';
-    if (props.vertical === false) {
-      if (typeof props.bottomLineHeight === 'number') {
-        _cssVariable['--tab_bottom_line_height'] =
-          `${props.bottomLineHeight}px`;
-      } else if (
-        typeof props.bottomLineHeight === 'string' &&
-        props.bottomLineHeight !== ''
-      ) {
-        _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+    if (Array(props.tabList) && props.tabList.length > 0) {
+      if (props.vertical === false) {
+        if (typeof props.bottomLineHeight === 'number') {
+          _cssVariable['--tab_bottom_line_height'] =
+            `${props.bottomLineHeight}px`;
+        } else if (
+          typeof props.bottomLineHeight === 'string' &&
+          props.bottomLineHeight !== ''
+        ) {
+          _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+        }
       }
-    }
 
-    if (typeof props.bottomLineWidth === 'number') {
-      _cssVariable['--tab_bottom_line_width'] = `${props.bottomLineWidth}px`;
-    } else if (
-      typeof props.bottomLineWidth === 'string' &&
-      props.bottomLineWidth !== ''
-    ) {
-      _cssVariable['--tab_bottom_line_width'] = props.bottomLineWidth;
+      if (typeof props.bottomLineWidth === 'number') {
+        _cssVariable['--tab_bottom_line_width'] = `${props.bottomLineWidth}px`;
+      } else if (
+        typeof props.bottomLineWidth === 'string' &&
+        props.bottomLineWidth !== ''
+      ) {
+        _cssVariable['--tab_bottom_line_width'] = props.bottomLineWidth;
+      }
+    } else {
+      _cssVariable['--tab_bottom_line_width'] = '0px';
+      _cssVariable['--tab_bottom_line_height'] = '0px';
     }
   } else if (props.selectedType === 'mask') {
     // _cssVariable['--tab_bottom_line_height'] = '100%';
@@ -707,8 +716,10 @@ function handleCheckTab(tabListRef) {
 }
 
 function handleTabChange(newTabIndex) {
-  emits('update:modelValue', newTabIndex);
-  emits('change', newTabIndex);
+  if (props.loading === true) return;
+  const newTab = props.tabList[newTabIndex]?.[props.valueKey] || newTabIndex;
+  emits('update:modelValue', newTab, newTabIndex);
+  emits('change', newTab, newTabIndex);
 }
 function handleVerticalStartTabBarScroll(e) {
   const eventY =
