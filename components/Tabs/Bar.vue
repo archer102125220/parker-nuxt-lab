@@ -29,6 +29,7 @@
       v-scroll-end="{
         handler: handleTabBarScrollEnd
       }"
+      @scroll="handleScroll"
       @mousedown="handleStartTabBarScroll"
       @touchstart="handleStartTabBarScroll"
     >
@@ -165,7 +166,15 @@ const props = defineProps({
     default: 10
   }
 });
-const emits = defineEmits(['update:modelValue', 'change']);
+const emits = defineEmits([
+  'update:modelValue',
+  'change',
+  'onColumnScroll',
+  'scroll',
+  'horizontalScroll',
+  'verticalScroll',
+  'scrollEnd'
+]);
 
 const tabBarRootRef = ref(null);
 // const tabBarRef = useTemplateRef('tabBarRef'); // vue 3.5之後官方推薦的取得dom的寫法
@@ -762,6 +771,7 @@ function handleStartTabBarScroll(e) {
   }
 }
 function handleTabBarScrollEnd(e) {
+  emits('scrollEnd', ...arg);
   if (isAutoScroll.value === false) return;
   // console.log(e);
   handleNavigationShow();
@@ -821,6 +831,10 @@ function handleTabBarScroll(e) {
   } else {
     handleHorizontalTabBarScroll(e);
   }
+}
+function handleScroll(event) {
+  emits('scroll', event);
+  emits('onColumnScroll', event.type === 'scroll');
 }
 </script>
 
