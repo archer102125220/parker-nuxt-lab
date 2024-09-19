@@ -55,6 +55,9 @@
           <p>{{ tab[displayKey] || tab.label || tab }}</p>
         </slot>
       </div>
+      <p v-if="tabList.length <= 0" class="tabs_bar-option_list-empty">
+        暫無資料
+      </p>
     </div>
 
     <div
@@ -937,6 +940,11 @@ function handleTabBarScroll(e) {
     }
     &-tab_item_selected {
       color: var(--tab_item_selected_color, #000);
+    }
+
+    &-empty {
+      flex: 1;
+      text-align: center;
     }
   }
   &-option_list_emphasize {
