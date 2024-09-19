@@ -344,6 +344,17 @@ watch(
       handleBottomeStyle(tabRef);
       handleCheckTab(tabRef);
     }
+    if (props.vertical === true) {
+      tabBarRef.value.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    } else if (props.vertical === false) {
+      tabBarRef.value.scrollTo({
+        left: 0,
+        behavior: 'smooth'
+      });
+    }
   },
   {
     deep: true
