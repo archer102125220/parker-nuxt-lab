@@ -398,35 +398,33 @@ onBeforeUnmount(() => {
 function handleWheelScroll(event) {
   let scrollStep = SCROLL_STEP;
 
+  let mouseScroll;
   if (props.vertical === true) {
-    let mouseScroll = tabBarRef.value.scrollTop;
-    if (event.wheelDelta <= 0 || event.detail > 0) {
-      mouseScroll += SCROLL_STEP;
-    } else {
-      mouseScroll += SCROLL_STEP * -1;
-      scrollStep = SCROLL_STEP * -1;
-    }
-    mouseScroll += Math.min(Math.max(0.125, scrollStep), 4);
+    mouseScroll = tabBarRef.value.scrollTop;
+  } else {
+    mouseScroll = tabBarRef.value.scrollLeft;
+  }
 
+  if (event.deltaY > 0) {
+    mouseScroll += SCROLL_STEP;
+  } else {
+    mouseScroll += SCROLL_STEP * -1;
+    scrollStep = SCROLL_STEP * -1;
+  }
+  mouseScroll += Math.min(Math.max(0.125, scrollStep), 4);
+
+  if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: mouseScroll,
       behavior: 'smooth'
     });
   } else {
-    let mouseScroll = tabBarRef.value.scrollLeft;
-    if (event.wheelDelta <= 0 || event.detail > 0) {
-      mouseScroll += SCROLL_STEP;
-    } else {
-      mouseScroll += SCROLL_STEP * -1;
-      scrollStep = SCROLL_STEP * -1;
-    }
-    mouseScroll += Math.min(Math.max(0.125, mouseScroll), 4);
-
     tabBarRef.value.scrollTo({
       left: mouseScroll,
       behavior: 'smooth'
     });
   }
+
   handleCalculateNavigationShow(scrollStep, 0 - scrollStep);
 }
 
