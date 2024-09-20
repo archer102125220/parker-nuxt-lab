@@ -169,7 +169,6 @@ const props = defineProps({
 const emits = defineEmits([
   'update:modelValue',
   'change',
-  'onColumnScroll',
   'scroll',
   'horizontalScroll',
   'verticalScroll',
@@ -834,7 +833,6 @@ function handleTabBarScroll(e) {
 }
 function handleScroll(event) {
   emits('scroll', event);
-  emits('onColumnScroll', event.type === 'scroll');
 }
 </script>
 
