@@ -93,15 +93,17 @@
 
 <script setup>
 const props = defineProps({
-  label: { type: String, default: '下拉即可刷新...' },
+  label: { type: String, default: '下拉即可重整...' },
   height: { type: [String, Number], default: null },
-  pullingLabel: { type: String, default: '釋放即可刷新...' },
+  containerHeight: { type: [String, Number], default: null },
+  pullingLabel: { type: String, default: '釋放即可重整...' },
   loadingLabel: { type: String, default: '加載中...' },
   refresh: { type: Function, default: null },
   refreshIcon: { type: String, default: null },
   refreshingIcon: { type: String, default: null },
-  iosType: { type: Boolean, default: true },
   refreshDisable: { type: Boolean, default: true },
+  loading: { type: Boolean, default: false },
+  iosType: { type: Boolean, default: false },
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
@@ -183,6 +185,7 @@ onMounted(() => {
   // window.addEventListener('scroll', scrollEventListener);
   observer.value = new IntersectionObserver((entries) => {
     if (
+      props.loading === false &&
       entries[0].isIntersecting &&
       props.infinityDisable === false &&
       props.infinityEnd === false
@@ -267,7 +270,14 @@ function handlePullStart(e) {
     e.clientY;
 }
 function handlePulling(e) {
-  if (isPullStart.value !== true) return;
+  if (
+    props.refreshDisable === true ||
+    isPullStart.value !== true ||
+    infinityLoading.value === true ||
+    refreshing.value === true ||
+    props.loading === true
+  )
+    return;
   // const scrollTop =
   //   scrollFetchRef.value?.scrollTop ||
   //   document.body?.scrollTop ||
