@@ -778,7 +778,7 @@ function handleStartTabBarScroll(e) {
   }
 }
 function handleTabBarScrollEnd(e) {
-  emits('scrollEnd', ...arg);
+  emits('scrollEnd', e);
   if (isAutoScroll.value === false) return;
   // console.log(e);
   handleNavigationShow();
