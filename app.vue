@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-const LAYOUT_SETTING = [];
+const LAYOUT_SETTING = [{ name: 'index', layout: 'index' }];
 const NO_GO_TOP = [];
 
 const nuxtApp = useNuxtApp();
@@ -36,6 +36,7 @@ const error = useError();
 
 const router = useRouter();
 const route = useRoute();
+console.log(route);
 const getRouteBaseName = useRouteBaseName();
 useHead({
   titleTemplate: (titleChunk) => {
@@ -77,14 +78,10 @@ function handleLayoutName(newRoute) {
           ({ path, exact, name }) =>
             (exact === true
               ? path === newRoute.href
-              : newRoute.href.includes(path)) ||
+              : newRoute.href?.includes(path)) ||
             getRouteBaseName(newRoute) === name
         )?.layout;
-  if (newLayoutName === 'profile') {
-    goTopPx.value = 130;
-  } else {
-    goTopPx.value = 100;
-  }
+
   $store.system.setLayoutName(
     typeof newLayoutName === 'boolean'
       ? newLayoutName

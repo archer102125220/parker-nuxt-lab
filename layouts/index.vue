@@ -1,6 +1,5 @@
 <template>
-  <div class="defalut_layout">
-    <LayoutHeader />
+  <div class="index_layout">
     <main :class="mainClassName">
       <slot />
     </main>
@@ -15,13 +14,13 @@ const getRouteBaseName = useRouteBaseName();
 
 const mainClassName = computed(() =>
   getRouteBaseName(route) === 'index' || $store.system.isIndexPage === true
-    ? 'defalut_layout-home_content'
-    : 'defalut_layout-content'
+    ? 'index_layout-home_content'
+    : 'index_layout-content'
 );
 </script>
 
 <style lang="scss" scoped>
-.defalut_layout {
+.index_layout {
   // height: 100vh;
   width: 100vw;
   // width: 1210px;
