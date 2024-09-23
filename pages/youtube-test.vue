@@ -8,6 +8,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: 'youtube整合測試'
+});
 </script>
 
 <style lang="scss" scoped>

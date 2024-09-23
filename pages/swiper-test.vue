@@ -11,6 +11,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: '自製Swiper測試'
+});
 
 const slide = ref(0);
 

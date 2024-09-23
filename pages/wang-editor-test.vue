@@ -6,6 +6,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: 'Wang Editor整合測試'
+});
 </script>
 
 <style lang="scss" scoped>

@@ -25,6 +25,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: '自製下拉重整及無限滾動測試'
+});
 
 const infinityEnd = ref(false);
 

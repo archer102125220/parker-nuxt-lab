@@ -11,6 +11,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: 'Swiper.js整合測試'
+});
 
 const slide = ref(0);
 

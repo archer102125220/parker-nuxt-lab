@@ -55,6 +55,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: '組件綜合測試'
+});
 
 const infinityEnd = ref(false);
 

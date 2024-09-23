@@ -84,6 +84,9 @@
 
 <script setup>
 const nuxtApp = useNuxtApp();
+useHead({
+  title: '自製Tab測試'
+});
 
 const infinityEnd = ref(false);
 
