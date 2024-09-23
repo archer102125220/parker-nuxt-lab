@@ -3,7 +3,7 @@
     <ScrollFetch
       :ios-type="false"
       :refresh-disable="false"
-      height="100dvh"
+      height="90dvh"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
       :infinityEnd="infinityEnd"

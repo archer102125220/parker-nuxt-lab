@@ -35,7 +35,7 @@ const mainClassName = computed(() =>
   &-content {
     width: 1210px;
     max-width: 100%;
-    min-height: 100vh;
+    min-height: 80vh;
     // margin: 0 40px;
     margin: auto;
     @include mobile {
