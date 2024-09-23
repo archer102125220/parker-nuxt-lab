@@ -408,9 +408,9 @@ watch(
 );
 
 onMounted(() => {
-  handleBottomeStyle(
-    tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
-  );
+  // handleBottomeStyle(
+  //   tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
+  // );
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   document.addEventListener('mouseup', handleStopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
@@ -418,6 +418,14 @@ onMounted(() => {
   document.addEventListener('touchmove', handleTabBarScroll, {
     passive: false
   });
+  nextTick(() =>
+    // css等畫面設置完全生效後再計算底線/遮罩的位置高度為多少
+    window.requestAnimationFrame(() =>
+      handleBottomeStyle(
+        tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
+      )
+    )
+  );
 });
 onBeforeUnmount(() => {
   document.removeEventListener('mouseup', handleStopTabBarScroll);
