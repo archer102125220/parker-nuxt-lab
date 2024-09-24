@@ -176,8 +176,8 @@ const emits = defineEmits([
 ]);
 
 const tabBarRootRef = ref(null);
-// const tabBarRef = useTemplateRef('tabBarRef'); // vue 3.5之後官方推薦的取得dom的寫法
-const tabBarRef = ref(null);
+const tabBarRef = useTemplateRef('tabBarRef'); // vue 3.5之後官方推薦的取得dom的寫法
+// const tabBarRef = ref(null); // vue 3.5之前取得dom的寫法
 const tabListRef = ref(null);
 
 const mouseDown = ref(false);

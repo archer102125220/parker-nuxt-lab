@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+// https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
 const linkList = computed(() => [
@@ -23,11 +24,12 @@ const linkList = computed(() => [
   { to: '/swiper-test', label: '自製Swiper測試' },
   { to: '/components-test', label: '組件綜合測試' },
   { to: '/triangle-test', label: 'css三角形測試' },
-  { to: '/triangle-full-test', label: 'css三角形滿版測試' }
+  { to: '/triangle-full-test', label: 'css三角形滿版測試' },
+  { to: '/triangle-anime-test', label: 'css三角形滿版動畫測試' }
 ]);
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .index_page {
   display: flex;
   flex-wrap: wrap;

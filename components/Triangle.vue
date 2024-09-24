@@ -1,5 +1,5 @@
 <template>
-  <div class="triangle" :style="cssVariable" />
+  <div ref="triangleEl" class="triangle" :style="cssVariable" />
 </template>
 
 <script setup>
@@ -13,6 +13,9 @@ const props = defineProps({
   angleUpperLeft: { type: Boolean, default: true },
   angleLowerRight: { type: Boolean, default: false }
 });
+
+const triangleEl = useTemplateRef('triangleEl');
+
 const cssVariable = computed(() => {
   const _cssVariable = {};
   let height = null;
@@ -61,6 +64,12 @@ const cssVariable = computed(() => {
   }
 
   return _cssVariable;
+});
+
+defineExpose({
+  get el() {
+    return triangleEl.value;
+  }
 });
 </script>
 

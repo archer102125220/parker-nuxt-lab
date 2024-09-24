@@ -20,7 +20,7 @@ const mainClassName = computed(() =>
 );
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .full_screen_layout {
   position: relative;
   // height: 100vh;
