@@ -1,24 +1,14 @@
 <template>
   <div class="full_screen_layout">
     <LayoutHeader class="full_screen_layout-header" />
-    <main :class="mainClassName">
+    <main class="full_screen_layout-content">
       <slot />
     </main>
     <!-- <LayoutFooter /> -->
   </div>
 </template>
 
-<script setup>
-const { $store } = useNuxtApp();
-const route = useRoute();
-const getRouteBaseName = useRouteBaseName();
-
-const mainClassName = computed(() =>
-  getRouteBaseName(route) === 'index' || $store.system.isIndexPage === true
-    ? 'full_screen_layout-home_content'
-    : 'full_screen_layout-content'
-);
-</script>
+<script setup></script>
 
 <style lang="scss">
 .full_screen_layout {
@@ -38,12 +28,12 @@ const mainClassName = computed(() =>
     position: absolute;
     top: 16px;
     left: 16px;
-    z-index: 2;
+    z-index: 3;
   }
   &-content {
     width: 1210px;
     max-width: 100%;
-    min-height: 80vh;
+    min-height: 100vh;
     // margin: 0 40px;
     margin: auto;
     @include mobile {
@@ -54,9 +44,6 @@ const mainClassName = computed(() =>
       width: calc(100% - 20px);
       margin: 20px 10px;
     }
-  }
-  &-home_content {
-    min-height: 100vh;
   }
 }
 </style>
