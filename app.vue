@@ -27,7 +27,10 @@
 </template>
 
 <script setup>
-const LAYOUT_SETTING = [{ name: 'index', layout: 'index' }];
+const LAYOUT_SETTING = [
+  { name: 'index', layout: 'index' },
+  { path: '/triangle-full-test', layout: 'full-screen' }
+];
 const NO_GO_TOP = [];
 
 const nuxtApp = useNuxtApp();

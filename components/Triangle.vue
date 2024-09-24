@@ -65,6 +65,7 @@ const cssVariable = computed(() => {
 </script>
 
 <style lang="scss">
+// https://www.cnblogs.com/weiqinl/p/7048205.html
 .triangle {
   width: 0px;
   height: 0px;

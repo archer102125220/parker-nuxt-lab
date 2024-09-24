@@ -22,7 +22,8 @@ const linkList = computed(() => [
   { to: '/swiper-js-test', label: 'SwiperJs測試' },
   { to: '/swiper-test', label: '自製Swiper測試' },
   { to: '/components-test', label: '組件綜合測試' },
-  { to: '/triangle-test', label: 'css三角形測試' }
+  { to: '/triangle-test', label: 'css三角形測試' },
+  { to: '/triangle-full-test', label: 'css三角形滿版測試' }
 ]);
 </script>
 
