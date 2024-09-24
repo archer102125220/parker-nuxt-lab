@@ -5,6 +5,18 @@
     <div class="triangle_test_page-cases_3" />
     <div class="triangle_test_page-cases_4" />
     <div class="triangle_test_page-cases_5" />
+    <div class="triangle_test_page-cases_6" />
+
+    <Triangle size="100px" />
+
+    <div class="triangle_test_page-cases_7">
+      <Triangle size="100px" angle-upper-left />
+      <Triangle size="100px" color="rgb(147, 147, 255)" angle-lower-right />
+    </div>
+    <div class="triangle_test_page-cases_7">
+      <Triangle size="100px" angle-lower-left />
+      <Triangle size="100px" angle-upper-right />
+    </div>
   </div>
 </template>
 
@@ -60,6 +72,22 @@ useHead({
     border-color: transparent rgb(255, 121, 121);
     border-width: 0px 50px 50px 0px;
     border-style: solid;
+  }
+
+  &-cases_6 {
+    width: 0px;
+    height: 0px;
+    border-color: rgb(255, 121, 121) transparent;
+    border-width: 0px 50px 50px 0px;
+    border-style: solid;
+  }
+
+  &-cases_7 {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
   }
 }
 </style>
