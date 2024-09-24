@@ -66,6 +66,7 @@ const cssVariable = computed(() => {
 
 <style lang="scss">
 // https://www.cnblogs.com/weiqinl/p/7048205.html
+// http://tool.uis.cc/sjmaker/
 .triangle {
   width: 0px;
   height: 0px;
