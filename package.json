@@ -17,6 +17,7 @@
     "@mdi/font": "^7.4.47",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
+    "animejs": "^3.2.2",
     "axios": "^1.7.2",
     "dayjs": "^1.11.12",
     "flag-icons": "^7.2.3",
@@ -33,7 +34,7 @@
     "read-excel-file": "^5.8.3",
     "swiper": "^11.1.4",
     "videojs": "^1.0.0",
-    "vue": "latest",
+    "vue": "^3.5.8",
     "vue-lazyload": "^3.0.0",
     "vuetify": "^3.6.13"
   },
