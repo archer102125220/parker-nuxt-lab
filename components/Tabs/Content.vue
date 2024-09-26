@@ -45,9 +45,9 @@
           :infinity-buffer="infinityBuffer"
           :infinity-disable="infinityDisable"
           :is-scroll-to-fetch="isScrollToFetch"
-          :infinity-end-label="infinityEndLabel"
           :infinity-end="getInfinityEnd(tabList[index])"
           :refresh-disable="getRefreshDisable(tabList[index])"
+          :infinity-end-label="getInfinityEndLabel(tabList[index])"
           v-bind="$attrs"
         >
           <slot :name="slotName" v-bind="arg">
@@ -132,6 +132,12 @@ function getInfinityEnd(tab) {
     return true;
   }
   return tab.infinityEnd;
+}
+function getInfinityEndLabel(tab) {
+  if (typeof tab?.infinityEndLabel !== 'string') {
+    return props.infinityEndLabel;
+  }
+  return tab?.infinityEndLabel;
 }
 function getRefreshDisable(tab) {
   if (typeof tab?.refreshDisable !== 'boolean') {
