@@ -30,10 +30,25 @@
 
         <ScrollFetch
           v-else
+          class="tabs_content-swiper-scroll_fetch"
           :key="slotName"
-          v-bind="$attrs"
+          :height="height"
+          :refresh="refresh"
+          :loading="loading"
+          :ios-type="iosType"
+          :refresh-icon="refreshIcon"
+          :pullingLabel="pullingLabel"
+          :loadingLabel="loadingLabel"
+          :infinity-fetch="infinityFetch"
+          :infinity-label="infinityLabel"
+          :refreshing-icon="refreshingIcon"
+          :infinity-buffer="infinityBuffer"
+          :infinity-disable="infinityDisable"
+          :is-scroll-to-fetch="isScrollToFetch"
+          :infinity-end-label="infinityEndLabel"
           :infinity-end="getInfinityEnd(tabList[index])"
           :refresh-disable="getRefreshDisable(tabList[index])"
+          v-bind="$attrs"
         >
           <slot :name="slotName" v-bind="arg">
             <p>{{ tabList[index].content || tabList[index] }}</p>
@@ -55,6 +70,14 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  valueKey: {
+    type: [Number, String],
+    default: null
+  },
+  slotNameKey: {
+    type: [Number, String],
+    default: null
+  },
   loading: {
     type: Boolean,
     default: false
@@ -63,18 +86,21 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  refreshDisable: {
-    type: Boolean,
-    default: false
-  },
-  valueKey: {
-    type: [Number, String],
-    default: null
-  },
-  slotNameKey: {
-    type: [Number, String],
-    default: null
-  }
+  label: { type: String, default: undefined },
+  height: { type: [String, Number], default: undefined },
+  pullingLabel: { type: String, default: undefined },
+  loadingLabel: { type: String, default: undefined },
+  refresh: { type: Function, default: undefined },
+  refreshIcon: { type: String, default: undefined },
+  refreshingIcon: { type: String, default: undefined },
+  refreshDisable: { type: Boolean, default: undefined },
+  iosType: { type: Boolean, default: undefined },
+  infinityLabel: { type: String, default: undefined },
+  infinityEndLabel: { type: String, default: undefined },
+  infinityBuffer: { type: Number, default: undefined },
+  infinityDisable: { type: Boolean, default: undefined },
+  isScrollToFetch: { type: Boolean, default: undefined },
+  infinityFetch: { type: Function, default: undefined }
 });
 const emits = defineEmits(['change', 'update:modelValue', 'sliderMove']);
 
@@ -135,6 +161,9 @@ function resetRefreshDisable() {
   height: 100%;
   &-swiper {
     height: 100%;
+    :deep(.tabs_content-swiper-scroll_fetch.scroll_fetch) {
+      position: static;
+    }
   }
 }
 </style>
