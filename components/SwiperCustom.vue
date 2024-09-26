@@ -34,17 +34,67 @@
           />
           <slot v-else name="default-top" :item="slide" :index="index" />
 
-          <slot
-            v-if="slotNameIsDefault === false"
-            :name="slide[slotNameKey] || slide.slotName || index"
-            :item="slide"
-            :index="index"
-          >
-            <p>{{ slide.content || slide }}</p>
-          </slot>
-          <slot v-else :item="slide" :index="index">
-            <p>{{ slide.content || slide }}</p>
-          </slot>
+          <div class="swiper-content-wrapper-slide-center">
+            <slot
+              v-if="slotNameIsDefault === false"
+              :name="`${slide[slotNameKey] || slide.slotName || index}-left`"
+              :item="slide"
+              :index="index"
+            />
+            <slot v-else name="default-left" :item="slide" :index="index" />
+
+            <div class="swiper-content-wrapper-slide-center-middle">
+              <slot
+                v-if="slotNameIsDefault === false"
+                :name="`${
+                  slide[slotNameKey] || slide.slotName || index
+                }-middle_top`"
+                :item="slide"
+                :index="index"
+              />
+              <slot
+                v-else
+                name="default-middle_top"
+                :item="slide"
+                :index="index"
+              />
+
+              <slot
+                v-if="slotNameIsDefault === false"
+                :name="slide[slotNameKey] || slide.slotName || index"
+                :item="slide"
+                :index="index"
+              >
+                <p>{{ slide.content || slide }}</p>
+              </slot>
+              <slot v-else :item="slide" :index="index">
+                <p>{{ slide.content || slide }}</p>
+              </slot>
+
+              <slot
+                v-if="slotNameIsDefault === false"
+                :name="`${
+                  slide[slotNameKey] || slide.slotName || index
+                }-middle_bottom`"
+                :item="slide"
+                :index="index"
+              />
+              <slot
+                v-else
+                name="default-middle_bottom"
+                :item="slide"
+                :index="index"
+              />
+            </div>
+
+            <slot
+              v-if="slotNameIsDefault === false"
+              :name="`${slide[slotNameKey] || slide.slotName || index}-right`"
+              :item="slide"
+              :index="index"
+            />
+            <slot v-else name="default-right" :item="slide" :index="index" />
+          </div>
 
           <slot
             v-if="slotNameIsDefault === false"
@@ -418,6 +468,19 @@ function handleSlideXFindLast(slideX) {
 
         overflow-y: var(--slide_overflow_y);
         overflow-x: var(--slide_overflow_x);
+
+        &-center {
+          position: relative;
+          display: flex;
+          height: var(--content_wrapper_slide_height);
+          &-middle {
+            flex: 1;
+            position: relative;
+            height: var(--content_wrapper_slide_height);
+            overflow-y: var(--slide_overflow_y);
+            overflow-x: var(--slide_overflow_x);
+          }
+        }
       }
     }
   }
