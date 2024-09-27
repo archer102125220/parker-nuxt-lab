@@ -39,35 +39,24 @@
 <script setup>
 import animejs from 'animejs';
 
-const props = defineProps({
-  isMobile: { type: Boolean, default: null }
-});
-
 const triangleLeft = useTemplateRef('triangleLeft');
 const triangleRight = useTemplateRef('triangleRight');
 const triangleBgLeft = useTemplateRef('triangleBgLeft');
 const triangleBgRight = useTemplateRef('triangleBgRight');
 
-watch(
-  () => props.isMobile,
-  (newIsMobile, oldIsMobile) => {
-    if (newIsMobile !== oldIsMobile) {
-      handleAnimeInit(newIsMobile);
-    }
-  }
-);
-
-function handleAnimeInit(isMobile) {
+function handleAnimeInit() {
   animejs({
     targets: triangleLeft.value?.el,
-    left: isMobile ? '-2px' : '-10px',
-    top: isMobile ? '-2px' : '-10px',
+    left: '-10px',
+    top: '-10px',
     duration: 200
   });
   animejs({
     targets: triangleRight.value?.el,
-    right: isMobile ? '-2px' : '-10px',
-    bottom: isMobile ? '-2px' : '-10px',
+    // right: isMobile ? '-2px' : isTablet ? '-20px' : '-10px',
+    // bottom: isMobile ? '-2px' : isTablet ? '-20px' : '-10px',
+    right: '-10px',
+    bottom: '-10px',
     duration: 200
   });
 }
@@ -100,7 +89,7 @@ function handleAnime() {
 }
 
 onMounted(() => {
-  handleAnimeInit(props.isMobile);
+  handleAnimeInit();
 });
 </script>
 
@@ -120,11 +109,6 @@ onMounted(() => {
     top: calc(100vh - 10px);
     left: calc(-100vw - 10px);
     z-index: 2;
-
-    @include mobile {
-      top: calc(100vh - 2px);
-      left: calc(-100vw - 2px);
-    }
   }
 
   &-triangle_background_right {
@@ -141,11 +125,6 @@ onMounted(() => {
     right: calc(-100vw - 10px);
     bottom: calc(100vh - 10px);
     z-index: 2;
-
-    @include mobile {
-      right: calc(-100vw - 2px);
-      bottom: calc(100vh - 2px);
-    }
   }
 }
 </style>
