@@ -50,7 +50,7 @@ useHead({
   },
   meta: [
     { id: 'meta-lang', language: $i18n.locale.value },
-    { copyright: 'Copyright © 2024 Jiapin IMS, Inc.' }
+    { copyright: `Copyright © ${$dayjs().year()} Parker Chen. All rights reserved.` }
   ]
 });
 
