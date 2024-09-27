@@ -1,6 +1,6 @@
 <template>
   <div class="triangle_anime_test_page" @click="handleAnime">
-    <AnimationTriangleEnter>
+    <AnimationTriangleEnter :is-mobile="$store.system.isMobile">
       <p>test</p>
     </AnimationTriangleEnter>
   </div>

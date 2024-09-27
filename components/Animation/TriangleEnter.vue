@@ -39,15 +39,38 @@
 <script setup>
 import animejs from 'animejs';
 
-// const nuxtApp = useNuxtApp();
-useHead({
-  title: 'css三角形滿版動畫測試'
+const props = defineProps({
+  isMobile: { type: Boolean, default: null }
 });
 
 const triangleLeft = useTemplateRef('triangleLeft');
 const triangleRight = useTemplateRef('triangleRight');
 const triangleBgLeft = useTemplateRef('triangleBgLeft');
 const triangleBgRight = useTemplateRef('triangleBgRight');
+
+watch(
+  () => props.isMobile,
+  (newIsMobile, oldIsMobile) => {
+    if (newIsMobile !== oldIsMobile) {
+      handleAnimeInit(newIsMobile);
+    }
+  }
+);
+
+function handleAnimeInit(isMobile) {
+  animejs({
+    targets: triangleLeft.value?.el,
+    left: isMobile ? '-2px' : '-10px',
+    top: isMobile ? '-2px' : '-10px',
+    duration: 200
+  });
+  animejs({
+    targets: triangleRight.value?.el,
+    right: isMobile ? '-2px' : '-10px',
+    bottom: isMobile ? '-2px' : '-10px',
+    duration: 200
+  });
+}
 
 function handleAnime() {
   animejs({
@@ -77,18 +100,7 @@ function handleAnime() {
 }
 
 onMounted(() => {
-  animejs({
-    targets: triangleLeft.value?.el,
-    left: '-2px',
-    top: '-2px',
-    duration: 200
-  });
-  animejs({
-    targets: triangleRight.value?.el,
-    right: '-2px',
-    bottom: '-2px',
-    duration: 200
-  });
+  handleAnimeInit(props.isMobile);
 });
 </script>
 
@@ -105,9 +117,14 @@ onMounted(() => {
     // top: -2px;
     // left: -2px;
 
-    top: calc(100vh - 2px);
-    left: calc(-100vw - 2px);
+    top: calc(100vh - 10px);
+    left: calc(-100vw - 10px);
     z-index: 2;
+
+    @include mobile {
+      top: calc(100vh - 2px);
+      left: calc(-100vw - 2px);
+    }
   }
 
   &-triangle_background_right {
@@ -121,9 +138,14 @@ onMounted(() => {
     // right: -2px;
     // bottom: -2px;
 
-    right: calc(-100vw - 2px);
-    bottom: calc(100vh - 2px);
+    right: calc(-100vw - 10px);
+    bottom: calc(100vh - 10px);
     z-index: 2;
+
+    @include mobile {
+      right: calc(-100vw - 2px);
+      bottom: calc(100vh - 2px);
+    }
   }
 }
 </style>
