@@ -25,7 +25,9 @@ const linkList = computed(() => [
   { to: '/components-test', label: '組件綜合測試' },
   { to: '/triangle-test', label: 'css三角形測試' },
   { to: '/triangle-full-test', label: 'css三角形滿版測試' },
-  { to: '/triangle-anime-test', label: 'css三角形滿版動畫測試' }
+  { to: '/triangle-anime-test', label: 'css三角形滿版動畫測試' },
+  { to: '/query-back-test', label: '路由query與上一頁測試' },
+  { to: '/params-back-test/0', label: '路由參數與上一頁測試' }
 ]);
 </script>
 
