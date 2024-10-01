@@ -56,9 +56,9 @@
           <p>{{ tab[displayKey] || tab.label || tab }}</p>
         </slot>
       </div>
-      <p v-if="tabList.length <= 0" class="tabs_bar-option_list-empty">
-        暫無資料
-      </p>
+      <slot v-if="tabList.length <= 0" name="empty">
+        <p class="tabs_bar-option_list-empty">{{ empty }}</p>
+      </slot>
     </div>
 
     <div
@@ -92,6 +92,10 @@ const props = defineProps({
   justifyContent: {
     type: String,
     default: 'flex-start'
+  },
+  empty: {
+    type: String,
+    default: '暫無資料'
   },
   tabItemWidth: {
     type: String,
@@ -229,6 +233,7 @@ const cssVariable = computed(() => {
     } else {
       _cssVariable['--tab_bottom_line_width'] = '0px';
       _cssVariable['--tab_bottom_line_height'] = '0px';
+      _cssVariable['--tab_bar_min_width'] = '100%';
     }
   } else if (props.selectedType === 'mask') {
     // _cssVariable['--tab_bottom_line_height'] = '100%';
