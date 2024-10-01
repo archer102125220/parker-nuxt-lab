@@ -341,25 +341,25 @@ async function handlePullEnd(e) {
   startY.value = 0;
   duration.value = 300;
 
+  if (moveDistance.value <= 6) {
+    moveDistance.value = 0;
+    refreshIconRotate.value = 0;
+    refreshTriggerZIndex.value = -1;
+    isShowRefreshIcon.value = false;
+  } else {
+    nextTick(() => {
+      window.requestAnimationFrame(() => {
+        moveDistance.value = 0;
+        refreshIconRotate.value = 0;
+      });
+    });
+  }
+
   if (
     props.refreshDisable === true ||
     refreshing.value === true ||
     infinityLoading.value === true
   ) {
-    if (moveDistance.value <= 2) {
-      moveDistance.value = 0;
-      refreshIconRotate.value = 0;
-      refreshTriggerZIndex.value = -1;
-      isShowRefreshIcon.value = false;
-    } else {
-      nextTick(() => {
-        window.requestAnimationFrame(() => {
-          moveDistance.value = 0;
-          refreshIconRotate.value = 0;
-        });
-      });
-    }
-
     return;
   }
 
