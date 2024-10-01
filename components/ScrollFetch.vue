@@ -346,7 +346,7 @@ function handlePulling(e) {
 
     const _moveDistance = Math.pow(move, 0.8);
 
-    if (_moveDistance < MOVE_DISTANCE_LIMIT + 10) {
+    if (_moveDistance < MOVE_DISTANCE_LIMIT + 5) {
       moveDistance.value = _moveDistance;
       refreshIconRotate.value = _moveDistance * 5.5;
     }
