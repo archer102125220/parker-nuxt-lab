@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-const MOVE_DISTANCE_LIMIT = 90;
+const MOVE_DISTANCE_LIMIT = 50;
 
 const props = defineProps({
   label: { type: String, default: '下拉即可重整...' },
@@ -327,7 +327,7 @@ function handlePulling(e) {
 
     if (_moveDistance < MOVE_DISTANCE_LIMIT + 10) {
       moveDistance.value = _moveDistance;
-      refreshIconRotate.value = _moveDistance * 3.5;
+      refreshIconRotate.value = _moveDistance * 5.5;
     }
     isPulling.value = _moveDistance > MOVE_DISTANCE_LIMIT;
 
