@@ -494,8 +494,11 @@ function handleScroll(e) {
   from {
     transform: scale(1);
   }
+  50% {
+    transform: scale(1.5);
+  }
   to {
-    transform: scale(1.3);
+    transform: scale(1);
   }
 }
 </style>
