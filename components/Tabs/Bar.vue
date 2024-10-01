@@ -719,7 +719,8 @@ function handleCheckTab(tabListRef) {
   const boundingClientRect = tabListRef?.getBoundingClientRect?.();
 
   const _tabBarRef = tabBarRef.value;
-  const tabBarRefBoundingClientRect = _tabBarRef?.getBoundingClientRect?.();
+  const tabBarRefBoundingClientRect =
+    _tabBarRef?.getBoundingClientRect?.() || {};
 
   // const tabListRefBottom = boundingClientRect?.y + tabListRef?.clientHeight;
   const tabListRefBottom = boundingClientRect?.bottom;
