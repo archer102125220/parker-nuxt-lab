@@ -720,7 +720,7 @@ function handleCheckTab(tabListRef) {
 
   if (
     props.vertical === true &&
-    (tabListRefBottom - tabBarRefTop < 0 ||
+    (tabListRefBottom - tabBarRefTop <= 0 ||
       tabListRefBottom - tabBarRefTop > tabBarRefClientHeight)
   ) {
     tabBarRef.value.scrollTo({
@@ -729,7 +729,7 @@ function handleCheckTab(tabListRef) {
     });
   } else if (
     props.vertical === false &&
-    (tabBarRefRight - tabListRefRight < 0 ||
+    (tabBarRefRight - tabListRefRight <= 0 ||
       tabBarRefRight - tabListRefRight > tabBarRefClientWidth)
   ) {
     tabBarRef.value.scrollTo({
