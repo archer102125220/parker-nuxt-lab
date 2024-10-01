@@ -78,8 +78,18 @@
       </div>
     </div>
 
-    <div class="scroll_fetch-container" @transitionend="handleRefreshIcon">
+    <div
+      v-if="isEmpty === false"
+      class="scroll_fetch-container"
+      @transitionend="handleRefreshIcon"
+    >
       <slot />
+    </div>
+
+    <div v-if="isEmpty === true" class="scroll_fetch-empty">
+      <slot name="empty">
+        <p class="scroll_fetch-empty-label">{{ emptyLabel }}</p>
+      </slot>
     </div>
 
     <div ref="infinityTriggerRef" />
@@ -114,6 +124,8 @@ const props = defineProps({
   refreshDisable: { type: Boolean, default: true },
   loading: { type: Boolean, default: false },
   iosType: { type: Boolean, default: false },
+  isEmpty: { type: Boolean, default: false },
+  emptyLabel: { type: String, default: '暂无资料' },
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
   infinityBuffer: { type: Number, default: 100 },
@@ -162,8 +174,17 @@ const cssVariable = computed(() => {
 
   if (typeof props.height === 'string' && props.height !== '') {
     _cssVariable['--refresh_height'] = props.height;
-  } else if (typeof typeof props.height === 'number') {
+  } else if (typeof props.height === 'number') {
     _cssVariable['--refresh_height'] = `${props.height}px`;
+  }
+
+  if (
+    typeof props.containerHeight === 'string' &&
+    props.containerHeight !== ''
+  ) {
+    _cssVariable['--refresh_container_height'] = props.containerHeight;
+  } else if (typeof props.containerHeight === 'number') {
+    _cssVariable['--refresh_container_height'] = `${props.containerHeight}px`;
   }
 
   if (moveDistance.value > 0) {
@@ -346,13 +367,6 @@ async function handlePullEnd(e) {
     refreshIconRotate.value = 0;
     refreshTriggerZIndex.value = -1;
     isShowRefreshIcon.value = false;
-  } else {
-    nextTick(() => {
-      window.requestAnimationFrame(() => {
-        moveDistance.value = 0;
-        refreshIconRotate.value = 0;
-      });
-    });
   }
 
   if (
@@ -360,6 +374,14 @@ async function handlePullEnd(e) {
     refreshing.value === true ||
     infinityLoading.value === true
   ) {
+    if (moveDistance.value > 6) {
+      nextTick(() => {
+        window.requestAnimationFrame(() => {
+          moveDistance.value = 0;
+          refreshIconRotate.value = 0;
+        });
+      });
+    }
     return;
   }
 
@@ -475,8 +497,20 @@ function handleScroll(e) {
     }
   }
   &-container {
+    height: var(--refresh_container_height);
     transition: all var(--refresh_transition);
     transform: var(--refresh_transform);
+  }
+  &-empty {
+    height: var(--refresh_container_height, 100%);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    &-label {
+      margin: auto;
+      margin-top: 50%;
+      text-align: center;
+    }
   }
   &-infinity_label {
     @extend .scroll_fetch-trigger-label;
