@@ -187,6 +187,7 @@ const tabBarRef = useTemplateRef('tabBarRef'); // vue 3.5之後官方推薦的�
 // const tabBarRef = ref(null); // vue 3.5之前取得dom的寫法
 const tabListRef = ref(null);
 
+const observer = ref(null);
 const mouseDown = ref(false);
 const isAutoScroll = ref(false);
 const nextDisable = ref(false);
@@ -419,9 +420,6 @@ watch(
 );
 
 onMounted(() => {
-  // handleBottomeStyle(
-  //   tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
-  // );
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   document.addEventListener('mouseup', handleStopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
@@ -433,12 +431,23 @@ onMounted(() => {
     // css等畫面設置完全生效後再計算底線/遮罩的位置高度為多少
     window.requestAnimationFrame(handleResize)
   );
+
+  observer.value = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      handleResize();
+    }
+  });
+
+  observer.value.observe(tabBarRef.value);
 });
 onBeforeUnmount(() => {
   document.removeEventListener('mouseup', handleStopTabBarScroll);
   document.removeEventListener('mousemove', handleTabBarScroll);
   document.removeEventListener('touchend', handleStopTabBarScroll);
   document.removeEventListener('touchmove', handleTabBarScroll);
+  if (typeof tabBarRef.value === 'object' && tabBarRef.value !== null) {
+    observer.value.unobserve(tabBarRef.value);
+  }
 });
 
 const handleResize = _debounce(function () {
