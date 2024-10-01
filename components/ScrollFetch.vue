@@ -340,20 +340,31 @@ async function handlePullEnd(e) {
   isPullStart.value = false;
   startY.value = 0;
   duration.value = 300;
+
   if (
     props.refreshDisable === true ||
     refreshing.value === true ||
     infinityLoading.value === true
   ) {
-    // isShowRefreshIcon.value = false;
-    moveDistance.value = 0;
-    refreshIconRotate.value = 0;
+    if (refreshIconAnimation.value === false) {
+      if (moveDistance.value <= 2) {
+        moveDistance.value = 0;
+        refreshIconRotate.value = 0;
+        refreshTriggerZIndex.value = -1;
+        isShowRefreshIcon.value = false;
+      } else {
+        nextTick(() => {
+          window.requestAnimationFrame(() => {
+            moveDistance.value = 0;
+            refreshIconRotate.value = 0;
+          });
+        });
+      }
+    }
 
-    // nextTick(() => {
-    //   window.requestAnimationFrame(() => (refreshTriggerZIndex.value = -1));
-    // });
     return;
   }
+
   if (moveDistance.value > MOVE_DISTANCE_LIMIT && isPulling.value === true) {
     refreshing.value = true;
     isPulling.value = false;
@@ -363,34 +374,14 @@ async function handlePullEnd(e) {
     if (typeof props.refresh === 'function') {
       await props.refresh();
       refreshing.value = false;
-      // setTimeout(() => {
-      //   nextTick(() =>
-      //     window.requestAnimationFrame(
-      //       () => (isShowRefreshIcon.value = false)
-      //     )
-      //   );
-      // }, 100);
     } else {
       emit('refresh', () => {
         refreshing.value = false;
-        // setTimeout(() => {
-        //   nextTick(() =>
-        //     window.requestAnimationFrame(
-        //       () => (isShowRefreshIcon.value = false)
-        //     )
-        //   );
-        // }, 100);
       });
     }
   } else {
     moveDistance.value = 0;
     refreshIconRotate.value = 0;
-    // nextTick(() => {
-    //   window.requestAnimationFrame(() => {
-    //     refreshTriggerZIndex.value = -1;
-    //     isShowRefreshIcon.value = false;
-    //   });
-    // });
   }
 }
 function handleRefreshIcon() {
