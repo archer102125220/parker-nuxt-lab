@@ -346,20 +346,18 @@ async function handlePullEnd(e) {
     refreshing.value === true ||
     infinityLoading.value === true
   ) {
-    if (refreshIconAnimation.value === false) {
-      if (moveDistance.value <= 2) {
-        moveDistance.value = 0;
-        refreshIconRotate.value = 0;
-        refreshTriggerZIndex.value = -1;
-        isShowRefreshIcon.value = false;
-      } else {
-        nextTick(() => {
-          window.requestAnimationFrame(() => {
-            moveDistance.value = 0;
-            refreshIconRotate.value = 0;
-          });
+    if (moveDistance.value <= 2) {
+      moveDistance.value = 0;
+      refreshIconRotate.value = 0;
+      refreshTriggerZIndex.value = -1;
+      isShowRefreshIcon.value = false;
+    } else {
+      nextTick(() => {
+        window.requestAnimationFrame(() => {
+          moveDistance.value = 0;
+          refreshIconRotate.value = 0;
         });
-      }
+      });
     }
 
     return;
