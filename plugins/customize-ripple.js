@@ -26,10 +26,14 @@ export default defineNuxtPlugin((nuxtApp) => {
 
         ripple.addEventListener('animationend', handleRippleEnd);
 
+        const currentTargeClientRectt = e.currentTarget.getBoundingClientRect();
+
         // Get position of X
-        const x = e.clientX - e.currentTarget.offsetLeft;
+        // const x = e.clientX - e.currentTarget.offsetLeft;
+        const x = e.clientX - currentTargeClientRectt.x;
         // Get position of Y
-        const y = e.clientY - e.currentTarget.offsetTop;
+        // const y = e.clientY - e.currentTarget.offsetTop;
+        const y = e.clientY - currentTargeClientRectt.y;
 
         // Position the span el
         ripple.style.left = `${x}px`;
