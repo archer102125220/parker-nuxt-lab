@@ -346,11 +346,14 @@ const navigationImg = computed(() => {
 
 watch(
   () => props.modelValue,
-  (newValue) => {
+  async (newValue) => {
+    await nextTick();
     if (Array.isArray(tabListRef.value) === true) {
-      const tabRef = tabListRef.value?.[getCurrentTabIndex(newValue) || 0];
-      handleBottomeStyle(tabRef);
-      handleCheckTab(tabRef);
+      window.requestAnimationFrame(() => {
+        const tabRef = tabListRef.value?.[getCurrentTabIndex(newValue) || 0];
+        handleBottomeStyle(tabRef);
+        handleCheckTab(tabRef);
+      });
     }
   }
 );
