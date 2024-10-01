@@ -37,7 +37,11 @@
           </div>
         </slot>
       </template>
-      <div v-else class="scroll_fetch-trigger-icon_center">
+      <div
+        v-else
+        class="scroll_fetch-trigger-icon_center"
+        @transitionend="handleRefreshIcon"
+      >
         <slot
           name="refreshIcon"
           :is-show-refresh-icon="isShowRefreshIcon"
@@ -49,20 +53,24 @@
             :class="{
               'scroll_fetch-trigger-icon_center-icon': true,
               'scroll_fetch-trigger-icon_center-loading_icon_animation':
-                isPullStart === false
+                refreshing === true && isPullStart === false
             }"
           />
           <div
             v-else
             v-show="isShowRefreshIcon"
-            class="scroll_fetch-trigger-icon_center-icon_img_bg"
+            :class="{
+              'scroll_fetch-trigger-icon_center-icon_img_bg': true,
+              'scroll_fetch-trigger-icon_center-icon_img_bg-refresh_icon_animation':
+                refreshIconAnimation
+            }"
           >
             <img
               :src="computedRefreshIcon"
               :class="{
                 'scroll_fetch-trigger-icon_center-icon_img_bg-icon_img': true,
                 'scroll_fetch-trigger-icon_center-loading_icon_animation':
-                  isPullStart === false
+                  refreshing === true && isPullStart === false
               }"
             />
           </div>
@@ -70,7 +78,7 @@
       </div>
     </div>
 
-    <div class="scroll_fetch-container">
+    <div class="scroll_fetch-container" @transitionend="handleRefreshIcon">
       <slot />
     </div>
 
@@ -79,7 +87,7 @@
       v-if="infinityDisable === false"
       name="infinityLbael"
       :loading="infinityLoading"
-      :infinityEnd="infinityEnd"
+      :infinity-end="infinityEnd"
     >
       <p v-if="infinityEnd === false" class="scroll_fetch-infinity_label">
         {{ infinityLoading === true ? loadingLabel : infinityLabel }}
@@ -92,6 +100,8 @@
 </template>
 
 <script setup>
+const MOVE_DISTANCE_LIMIT = 90;
+
 const props = defineProps({
   label: { type: String, default: '下拉即可重整...' },
   height: { type: [String, Number], default: null },
@@ -130,6 +140,10 @@ const isPulling = ref(false);
 
 const infinityLoading = ref(false);
 
+const refreshIconAnimation = ref(false);
+const refreshTriggerZIndex = ref(-1);
+const refreshIconRotate = ref(0);
+
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
@@ -142,6 +156,8 @@ const cssVariable = computed(() => {
     _cssVariable['--refresh_icon_transform'] = `translate3d(0, ${
       moveDistance.value - 25
     }px, 0)`;
+    _cssVariable['--refresh_icon_rotate'] =
+      `rotate(${refreshIconRotate.value}deg)`;
   }
 
   if (typeof props.height === 'string' && props.height !== '') {
@@ -152,11 +168,12 @@ const cssVariable = computed(() => {
 
   if (moveDistance.value > 0) {
     _cssVariable['--refresh_overflow'] = 'hidden';
-    _cssVariable['--refresh_trigger_z_index'] = 2;
+    // _cssVariable['--refresh_trigger_z_index'] = 2;
   } else {
     _cssVariable['--refresh_overflow'] = 'auto';
-    _cssVariable['--refresh_trigger_z_index'] = -1;
+    // _cssVariable['--refresh_trigger_z_index'] = -1;
   }
+  _cssVariable['--refresh_trigger_z_index'] = refreshTriggerZIndex.value;
 
   return _cssVariable;
 });
@@ -166,8 +183,9 @@ const hasRefreshIcon = computed(() => {
 });
 const computedRefreshIcon = computed(() => {
   return (
-    (isPullStart.value === true ? props.refreshIcon : props.refreshingIcon) ||
-    props.refreshIcon
+    (refreshing.value === true && isPullStart.value === false
+      ? props.refreshingIcon
+      : props.refreshIcon) || props.refreshIcon
   );
 });
 
@@ -176,6 +194,7 @@ watch(
   (newRefreshing) => {
     if (newRefreshing === false && duration.value === 300) {
       moveDistance.value = 0;
+      refreshIconRotate.value = 0;
       isPulling.value = false;
     }
   }
@@ -260,6 +279,7 @@ function handlePullStart(e) {
   isPullStart.value = true;
   duration.value = 0;
   moveDistance.value = 0;
+  refreshIconRotate.value = 0;
   startY.value =
     e.targetTouches?.[0]?.clientY ||
     e.targetTouches?.[0]?.pageY ||
@@ -299,10 +319,21 @@ function handlePulling(e) {
 
   if (startY.value > 0 && move > 0) {
     isShowRefreshIcon.value = true;
+    if (props.iosType === false) {
+      refreshTriggerZIndex.value = 2;
+    }
+
     const _moveDistance = Math.pow(move, 0.8);
 
-    moveDistance.value = _moveDistance;
-    isPulling.value = _moveDistance > 50;
+    if (_moveDistance < MOVE_DISTANCE_LIMIT + 10) {
+      moveDistance.value = _moveDistance;
+      refreshIconRotate.value = _moveDistance * 3.5;
+    }
+    isPulling.value = _moveDistance > MOVE_DISTANCE_LIMIT;
+
+    if (props.iosType === false) {
+      refreshIconAnimation.value = _moveDistance > MOVE_DISTANCE_LIMIT;
+    }
   }
 }
 async function handlePullEnd(e) {
@@ -314,11 +345,16 @@ async function handlePullEnd(e) {
     refreshing.value === true ||
     infinityLoading.value === true
   ) {
-    isShowRefreshIcon.value = false;
+    // isShowRefreshIcon.value = false;
     moveDistance.value = 0;
+    refreshIconRotate.value = 0;
+
+    // nextTick(() => {
+    //   window.requestAnimationFrame(() => (refreshTriggerZIndex.value = -1));
+    // });
     return;
   }
-  if (moveDistance.value > 50 && isPulling.value === true) {
+  if (moveDistance.value > MOVE_DISTANCE_LIMIT && isPulling.value === true) {
     refreshing.value = true;
     isPulling.value = false;
     if (props.iosType === true) {
@@ -327,20 +363,42 @@ async function handlePullEnd(e) {
     if (typeof props.refresh === 'function') {
       await props.refresh();
       refreshing.value = false;
-      setTimeout(() => {
-        isShowRefreshIcon.value = false;
-      }, 100);
+      // setTimeout(() => {
+      //   nextTick(() =>
+      //     window.requestAnimationFrame(
+      //       () => (isShowRefreshIcon.value = false)
+      //     )
+      //   );
+      // }, 100);
     } else {
       emit('refresh', () => {
         refreshing.value = false;
-        setTimeout(() => {
-          isShowRefreshIcon.value = false;
-        }, 100);
+        // setTimeout(() => {
+        //   nextTick(() =>
+        //     window.requestAnimationFrame(
+        //       () => (isShowRefreshIcon.value = false)
+        //     )
+        //   );
+        // }, 100);
       });
     }
   } else {
-    isShowRefreshIcon.value = false;
     moveDistance.value = 0;
+    refreshIconRotate.value = 0;
+    // nextTick(() => {
+    //   window.requestAnimationFrame(() => {
+    //     refreshTriggerZIndex.value = -1;
+    //     isShowRefreshIcon.value = false;
+    //   });
+    // });
+  }
+}
+function handleRefreshIcon() {
+  if (refreshing.value === false) {
+    window.requestAnimationFrame(() => {
+      refreshTriggerZIndex.value = -1;
+      isShowRefreshIcon.value = false;
+    });
   }
 }
 function handleScroll(e) {
@@ -412,12 +470,17 @@ function handleScroll(e) {
         box-shadow:
           0 1px 6px rgba(0, 0, 0, 0.117647),
           0 1px 4px rgba(0, 0, 0, 0.117647);
+
+        &-refresh_icon_animation {
+          animation: refresh_icon_animation 0.2s;
+        }
         &-icon_img {
           display: block;
           width: 23px;
           height: 23px;
           margin: auto;
           transition: var(--refresh_icon_transition);
+          transform: var(--refresh_icon_rotate);
         }
       }
     }
@@ -436,6 +499,14 @@ function handleScroll(e) {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+@keyframes refresh_icon_animation {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
   }
 }
 </style>
