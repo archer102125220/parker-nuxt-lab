@@ -4,6 +4,7 @@
     class="tabs_bar"
     :style="cssVariable"
     @wheel.stop.prevent="handleWheelScroll"
+    @resize="handleResize"
   >
     <div
       v-if="hasNavigation === true && showPrev === true"
@@ -78,6 +79,8 @@
   </div>
 </template>
 <script setup>
+import _debounce from 'lodash/debounce';
+
 const SCROLL_STEP = 100;
 
 const props = defineProps({
@@ -428,11 +431,7 @@ onMounted(() => {
   });
   nextTick(() =>
     // css等畫面設置完全生效後再計算底線/遮罩的位置高度為多少
-    window.requestAnimationFrame(() =>
-      handleBottomeStyle(
-        tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0]
-      )
-    )
+    window.requestAnimationFrame(handleResize)
   );
 });
 onBeforeUnmount(() => {
@@ -442,6 +441,11 @@ onBeforeUnmount(() => {
   document.removeEventListener('touchmove', handleTabBarScroll);
 });
 
+const handleResize = _debounce(function () {
+  const tabRef = tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0];
+  handleBottomeStyle(tabRef);
+  handleCheckTab(tabRef);
+}, 100);
 function handleWheelScroll(event) {
   let scrollStep = SCROLL_STEP;
 
