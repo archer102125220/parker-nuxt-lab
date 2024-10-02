@@ -43,10 +43,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       const lazySrc = binding.value?.src || binding.value || src;
       el.setAttribute('lazy-src', lazySrc);
-      const errorImg = config?.error || binding.value?.errorImg || src;
+      const errorImg = binding.value?.errorImg || config?.error || src;
       el.setAttribute('error-img', errorImg);
 
-      el.src = config?.loading || binding.value?.loading || src;
+      el.src = binding.value?.loading || config?.loading || src;
 
       if (typeof binding.value?.error === 'function') {
         el.addEventListener('error', binding.value.error);
@@ -65,10 +65,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       const lazySrc = binding.value?.src || binding.value || src;
       el.setAttribute('lazy-src', lazySrc);
-      const errorImg = config?.error || binding.value?.errorImg || src;
+      const errorImg = binding.value?.errorImg || config?.error || src;
       el.setAttribute('error-img', errorImg);
 
-      el.src = config?.loading || binding.value?.loading || src;
+      el.src = binding.value?.loading || config?.loading || src;
 
       if (typeof binding.oldValue?.error === 'function') {
         el.removeEventListener('error', binding.oldValue.error);
