@@ -15,7 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
   }
 
-  const customizeRipple = {
+  const customizeLazyload = {
     mounted(el, binding) {
       el.setAttribute('lazy-src', binding.value || binding.value?.src || '');
 
@@ -31,6 +31,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
     },
   }
-  nuxtApp.vueApp.directive('customize-lazyload', customizeRipple);
-  nuxtApp.vueApp.directive('customizeLazyload', customizeRipple);
+  nuxtApp.vueApp.directive('customize-lazyload', customizeLazyload);
+  nuxtApp.vueApp.directive('customizeLazyload', customizeLazyload);
 });
