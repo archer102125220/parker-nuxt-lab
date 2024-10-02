@@ -39,9 +39,14 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const customizeLazyload = {
     mounted(el, binding) {
+      const lazySrc = binding.value?.src || binding.value || src;
+      if (typeof observer?.observe !== 'function') {
+        el.src = lazySrc;
+        return;
+      }
+
       const src = el.src || '';
 
-      const lazySrc = binding.value?.src || binding.value || src;
       el.setAttribute('lazy-src', lazySrc);
       const errorImg = binding.value?.errorImg || config?.error || src;
       el.setAttribute('error-img', errorImg);
@@ -61,9 +66,14 @@ export default defineNuxtPlugin((nuxtApp) => {
         return;
       }
 
+      const lazySrc = binding.value?.src || binding.value || src;
+      if (typeof observer?.observe !== 'function') {
+        el.src = lazySrc;
+        return;
+      }
+
       const src = el.src || '';
 
-      const lazySrc = binding.value?.src || binding.value || src;
       el.setAttribute('lazy-src', lazySrc);
       const errorImg = binding.value?.errorImg || config?.error || src;
       el.setAttribute('error-img', errorImg);
