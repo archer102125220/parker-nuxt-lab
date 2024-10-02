@@ -1,15 +1,17 @@
+import '@/style/customize-ripple.scss';
+
 export default defineNuxtPlugin((nuxtApp) => {
   const customizeRipple = {
     // inserted(el) { // 直接使用vue時使用的掛載生命週期
     //   console.log(el);
     // },
     mounted(el, binding) {  // 使用nuxt時使用的客戶端掛載生命週期
-      el.setAttribute('disable-ripple', binding.value || false);
+      el.setAttribute('enabled-ripple', binding.value || true);
 
       function handleRippleStart(e) {
-        const disableRipple = el.getAttribute('disable-ripple') === 'true';
+        const enabledRipple = el.getAttribute('enabled-ripple') === 'true';
 
-        if (disableRipple === true) return;
+        if (enabledRipple === false) return;
         const elementStyle = window.getComputedStyle(el);
         if (elementStyle.position === 'static') {
           el.classList.add('customize_ripple');  // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
@@ -62,7 +64,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       el.addEventListener('pointerdown', handleRippleStart);
     },
     updated(el, binding) {
-      el.setAttribute('disable-ripple', binding.value || false);
+      el.setAttribute('enabled-ripple', binding.value || true);
     },
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
     //   // you can provide SSR-specific props here

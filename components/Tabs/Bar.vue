@@ -12,7 +12,7 @@
     >
       <slot name="prev" @pointerup="handlePrevScroll">
         <div
-          v-customize-ripple="loading"
+          v-ripple="loading === false"
           class="tabs_bar-prev_position-prev"
           @pointerup="handlePrevScroll"
         >
@@ -38,7 +38,7 @@
         v-for="(tab, index) in tabList"
         :key="index"
         ref="tabListRef"
-        v-customize-ripple="loading"
+        v-ripple="loading === false"
         :class="[
           'tabs_bar-option_list-tab_item',
           isSelected(modelValue, tab, index) === true
@@ -68,7 +68,7 @@
     >
       <slot name="next" @pointerup="handleNextScroll">
         <div
-          v-customize-ripple="loading"
+          v-ripple="loading === false"
           class="tabs_bar-next_position-next"
           @pointerup="handleNextScroll"
         >

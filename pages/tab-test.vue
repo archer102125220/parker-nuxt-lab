@@ -29,7 +29,7 @@
       :tab-list="tabList"
     >
       <template #prev="{ ...arg }">
-        <div v-bind="arg" v-customize-ripple class="tab_test_page-bar-prev">
+        <div v-bind="arg" v-ripple class="tab_test_page-bar-prev">
           <img
             class="tab_test_page-bar-prev-img"
             src="/img/icon/arrow/arrow-right-line-black.svg"

@@ -1,9 +1,9 @@
 <template>
-  <div class="index_page">
+  <div class="home_page">
     <NuxtLink
       v-for="link in linkList"
       :key="link.to"
-      class="index_page-content"
+      class="home_page-content"
       :to="link.to"
     >
       {{ link.label }}
@@ -16,7 +16,6 @@
 const nuxtApp = useNuxtApp();
 
 const linkList = computed(() => [
-  { to: '/customize-ripple-test', label: '自製ripple directive測試' },
   { to: '/tab-test', label: 'Tabs組件測試' },
   { to: '/scroll-fetch-test', label: '下拉重載/無限滾動測試' },
   { to: '/wang-editor-test', label: 'WangEditor（HTML編輯器）測試' },
@@ -33,7 +32,7 @@ const linkList = computed(() => [
 </script>
 
 <style lang="scss">
-.index_page {
+.home_page {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
