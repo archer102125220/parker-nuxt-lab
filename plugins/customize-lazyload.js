@@ -1,4 +1,4 @@
-
+const config = {};
 export default defineNuxtPlugin((nuxtApp) => {
   let observer = null;
   if (typeof window?.IntersectionObserver === 'function') {
