@@ -57,7 +57,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
     },
     updated(el, binding) {
-      if (binding.value?.src === binding.oldValue?.src) {
+      if (binding.value === binding.oldValue || binding.value?.src === binding.oldValue?.src) {
         return;
       }
 
