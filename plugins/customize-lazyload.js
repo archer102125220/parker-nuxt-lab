@@ -19,6 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const customizeLazyload = {
     mounted(el, binding) {
       el.setAttribute('lazy-src', binding.value || binding.value?.src || '');
+      el.src = binding.value?.loading || '';
 
       if (typeof observer.observe === 'function') {
         observer.observe(el);
@@ -26,6 +27,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     updated(el, binding) {
       el.setAttribute('lazy-src', binding.value || binding.value?.src || '');
+      el.src = binding.value?.loading || '';
 
       if (typeof observer.observe === 'function') {
         observer.observe(el);
