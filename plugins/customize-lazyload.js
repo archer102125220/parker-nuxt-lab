@@ -4,6 +4,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (typeof window?.IntersectionObserver === 'function') {
     function handleLazyload(el) {
       el.src = el.getAttribute('lazy-src') || '';
+      el.removeAttribute('lazy-src');
     }
     observer = new window.IntersectionObserver((entries) => {
       entries.forEach(entry => {
