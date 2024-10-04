@@ -171,6 +171,10 @@ const props = defineProps({
   bottomLineHeight: {
     type: [Number, String],
     default: 10
+  },
+  scrollDisable: {
+    type: Boolean,
+    default: false
   }
 });
 const emits = defineEmits([
@@ -790,6 +794,10 @@ function handleHorizontalStartTabBarScroll(e) {
   scrollLeft.value = tabBarRef.value.scrollLeft;
 }
 function handleStartTabBarScroll(e) {
+  if (props.scrollDisable === true) {
+    mouseDown.value = false;
+    return;
+  }
   e.stopPropagation();
   isAutoScroll.value = false;
   mouseDown.value = true;
@@ -800,6 +808,9 @@ function handleStartTabBarScroll(e) {
   }
 }
 function handleTabBarScrollEnd(e) {
+  if (props.scrollDisable === true) {
+    return;
+  }
   emits('scrollEnd', e);
   if (isAutoScroll.value === false) return;
   // console.log(e);
@@ -851,7 +862,7 @@ function handleHorizontalTabBarScroll(e) {
   handleNavigationShow();
 }
 function handleTabBarScroll(e) {
-  if (mouseDown.value === false) {
+  if (mouseDown.value === false || props.scrollDisable === true) {
     return;
   }
   e.preventDefault();
@@ -862,6 +873,9 @@ function handleTabBarScroll(e) {
   }
 }
 function handleScroll(event) {
+  if (props.scrollDisable === true) {
+    return;
+  }
   emits('scroll', event);
 }
 </script>

@@ -22,11 +22,16 @@
       @sliderMove="sliderMove"
     >
       <template v-for="_slot in slots" #[_slot]="{ ...arg }">
-        <slot :name="_slot" v-bind="arg" />
+        <slot :name="_slot" v-bind="arg" :is-tab-moveing="isTabMoveing" />
       </template>
 
       <template v-for="(slotName, index) in slotsList" #[slotName]="{ ...arg }">
-        <slot v-if="scrollFetch === false" :name="slotName" v-bind="arg" />
+        <slot
+          v-if="scrollFetch === false"
+          :name="slotName"
+          v-bind="arg"
+          :is-tab-moveing="isTabMoveing"
+        />
 
         <ScrollFetch
           v-else
@@ -50,7 +55,7 @@
           :infinity-end-label="getInfinityEndLabel(tabList[index])"
           v-bind="$attrs"
         >
-          <slot :name="slotName" v-bind="arg">
+          <slot :name="slotName" v-bind="arg" :is-tab-moveing="isTabMoveing">
             <p>{{ tabList[index].content || tabList[index] }}</p>
           </slot>
         </ScrollFetch>
@@ -61,6 +66,7 @@
 
 <script setup>
 const $slotsList = useSlots();
+
 const props = defineProps({
   modelValue: {
     type: [Number, String],
@@ -104,7 +110,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['change', 'update:modelValue', 'sliderMove']);
 
-const statusRefreshDisable = ref(false);
+const isTabMoveing = ref(false);
 
 const slotsList = computed(() => {
   return props.tabList.map((tab, index) => getSlotsKey(tab, index));
@@ -141,11 +147,9 @@ function getInfinityEndLabel(tab) {
 }
 function getRefreshDisable(tab) {
   if (typeof tab?.refreshDisable !== 'boolean') {
-    return props.refreshDisable || statusRefreshDisable.value;
+    return props.refreshDisable || isTabMoveing.value;
   }
-  return (
-    tab.refreshDisable || props.refreshDisable || statusRefreshDisable.value
-  );
+  return tab.refreshDisable || props.refreshDisable || isTabMoveing.value;
 }
 function change(...arg) {
   console.log('change');
@@ -153,11 +157,11 @@ function change(...arg) {
   emits('change', ...arg);
 }
 function sliderMove(...arg) {
-  statusRefreshDisable.value = true;
+  isTabMoveing.value = true;
   emits('sliderMove', ...arg);
 }
 function resetRefreshDisable() {
-  statusRefreshDisable.value = false;
+  isTabMoveing.value = false;
 }
 </script>
 <style lang="scss" scoped>
