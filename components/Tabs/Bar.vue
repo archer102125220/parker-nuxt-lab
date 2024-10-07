@@ -79,9 +79,9 @@
   </div>
 </template>
 <script setup>
-import _debounce from 'lodash/debounce';
-
 const SCROLL_STEP = 100;
+const SELECTED_TRANSITION =
+  'left 0.4s ease-in-out, top 0.4s ease-in-out, width 0.4s 0.1s';
 
 const props = defineProps({
   loading: {
@@ -204,6 +204,7 @@ const prevOpacity = ref(1);
 const nextOpacity = ref(1);
 const showPrev = ref(true);
 const showNext = ref(true);
+const selectedTransition = ref(SELECTED_TRANSITION);
 
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
@@ -212,7 +213,8 @@ const cssVariable = computed(() => {
   const _cssVariable = {
     ...(bottomLineStyleTemp.value || bottomLineStyle.value),
     '--prev_opacity': prevOpacity.value,
-    '--next_opacity': nextOpacity.value
+    '--next_opacity': nextOpacity.value,
+    '--selected_transition': selectedTransition.value
   };
 
   if (props.selectedType === 'underLine') {
@@ -372,9 +374,11 @@ watch(
 );
 watch(
   () => props.tabList,
-  async () => {
-    await nextTick();
-    if (Array.isArray(tabListRef.value) === true) {
+  async (newTabList, oldTabList) => {
+    if (
+      JSON.stringify(newTabList) !== JSON.stringify(oldTabList) &&
+      Array.isArray(tabListRef.value) === true
+    ) {
       const tabRef =
         tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0];
       handleBottomeStyle(tabRef);
@@ -383,12 +387,34 @@ watch(
     if (props.vertical === true) {
       tabBarRef.value.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        // behavior: 'smooth',
+        behavior: 'instant'
       });
-    } else if (props.vertical === false) {
+    } else if (
+      JSON.stringify(newTabList) !== JSON.stringify(oldTabList) &&
+      props.vertical === false
+    ) {
       tabBarRef.value.scrollTo({
         left: 0,
-        behavior: 'smooth'
+        // behavior: 'smooth',
+        behavior: 'instant'
+      });
+    }
+    await nextTick();
+    selectedTransition.value = '';
+
+    if (
+      Array.isArray(tabListRef.value) === true &&
+      Array.isArray(newTabList) === true &&
+      newTabList.length > 0
+    ) {
+      const tab = tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0];
+      handleBottomeStyle(tab);
+      handleCheckTab(tab);
+
+      await nextTick();
+      window.requestAnimationFrame(() => {
+        selectedTransition.value = SELECTED_TRANSITION;
       });
     }
   },
@@ -454,11 +480,11 @@ onBeforeUnmount(() => {
   }
 });
 
-const handleResize = _debounce(function () {
+function handleResize() {
   const tabRef = tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0];
   handleBottomeStyle(tabRef);
   handleCheckTab(tabRef);
-}, 100);
+}
 function handleWheelScroll(event) {
   let scrollStep = SCROLL_STEP;
 
@@ -1034,10 +1060,11 @@ function handleScroll(event) {
         --tab_item_selected_color,
         var(--tab_bottom_line_color, blue)
       );
-      transition:
-        left 0.4s ease-in-out,
-        top 0.4s ease-in-out,
-        width 0.4s 0.1s;
+      // transition:
+      //   left 0.4s ease-in-out,
+      //   top 0.4s ease-in-out,
+      //   width 0.4s 0.1s;
+      transition: var(--selected_transition);
       pointer-events: none;
     }
   }
