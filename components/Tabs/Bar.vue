@@ -82,6 +82,7 @@
 const SCROLL_STEP = 100;
 const SELECTED_TRANSITION =
   'left 0.4s ease-in-out, top 0.4s ease-in-out, width 0.4s 0.1s';
+const IS_KEEP_SCROLL_LIMIT = 50;
 
 const props = defineProps({
   loading: {
@@ -175,6 +176,10 @@ const props = defineProps({
   scrollDisable: {
     type: Boolean,
     default: false
+  },
+  blankAtTheEnd: {
+    type: Boolean,
+    default: false
   }
 });
 const emits = defineEmits([
@@ -205,6 +210,10 @@ const nextOpacity = ref(1);
 const showPrev = ref(true);
 const showNext = ref(true);
 const selectedTransition = ref(SELECTED_TRANSITION);
+
+const isKeepScroll = ref(false);
+const scrollTimer = ref(-1);
+const animationFrameTimer = ref(-1);
 
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
@@ -351,6 +360,14 @@ const cssVariable = computed(() => {
     //   'linear-gradient(to right, transparent, #0000005c 80%)';
   }
 
+  if (props.blankAtTheEnd === true) {
+    if (props.vertical === true) {
+      _cssVariable['--tab_bar_bottom_line_distance'] = '40px';
+    } else {
+      _cssVariable['--tab_bar_right_line_distance'] = '20px';
+    }
+  }
+
   return _cssVariable;
 });
 const navigationImg = computed(() => {
@@ -495,25 +512,33 @@ function handleWheelScroll(event) {
     mouseScroll = tabBarRef.value.scrollLeft;
   }
 
-  if (event.deltaY > 0) {
+  if (
+    (event?.deltaX !== 0 && event?.deltaX > 0) ||
+    (event?.deltaY !== 0 && event?.deltaY > 0)
+  ) {
     mouseScroll += SCROLL_STEP;
   } else {
     mouseScroll += SCROLL_STEP * -1;
     scrollStep = SCROLL_STEP * -1;
   }
-  mouseScroll += Math.min(Math.max(0.125, scrollStep), 4);
+  mouseScroll += Math.min(Math.max(0.125, mouseScroll), 4);
 
-  if (props.vertical === true) {
-    tabBarRef.value.scrollTo({
-      top: mouseScroll,
-      behavior: 'smooth'
-    });
-  } else {
-    tabBarRef.value.scrollTo({
-      left: mouseScroll,
-      behavior: 'smooth'
-    });
-  }
+  // if (props.vertical === true) {
+  //   tabBarRef.value.scrollTo({
+  //     top: mouseScroll,
+  //     behavior: 'smooth'
+  //   });
+  // } else {
+  //   tabBarRef.value.scrollTo({
+  //     left: mouseScroll,
+  //     behavior: 'smooth'
+  //   });
+  // }
+  handleCustomKeepScroll(
+    mouseScroll,
+    (event?.deltaX !== 0 && event?.deltaX > 0) ||
+      (event?.deltaY !== 0 && event?.deltaY > 0)
+  );
 
   handleCalculateNavigationShow(scrollStep, 0 - scrollStep);
 }
@@ -845,9 +870,29 @@ function handleTabBarScrollEnd(e) {
 
 function handleStopTabBarScroll(e) {
   mouseDown.value = false;
+  if (props.scrollDisable === true) {
+    return;
+  }
+
+  if (isKeepScroll.value === true) {
+    if (animationFrameTimer.value !== -1) {
+      window.cancelAnimationFrame(animationFrameTimer.value);
+      animationFrameTimer.value = -1;
+    }
+    if (props.vertical === true) {
+      handleCustomVerticalScroll(e);
+    } else {
+      handleCustomHorizontalScroll(e);
+    }
+
+    isKeepScroll.value = false;
+  }
 }
 
 function handleVerticalTabBarScroll(e) {
+  if (scrollTimer.value !== -1) {
+    clearTimeout(scrollTimer.value);
+  }
   const eventY =
     e.pageY ||
     e.clientY ||
@@ -864,10 +909,17 @@ function handleVerticalTabBarScroll(e) {
 
   const newScrollTop = scrollTop.value - scrollY;
   tabBarRef.value.scrollTop = newScrollTop;
+  if (Math.abs(scrollY) > IS_KEEP_SCROLL_LIMIT) {
+    isKeepScroll.value = true;
+    scrollTimer.value = setTimeout(() => (isKeepScroll.value = false), 100);
+  }
 
   handleNavigationShow();
 }
 function handleHorizontalTabBarScroll(e) {
+  if (scrollTimer.value !== -1) {
+    clearTimeout(scrollTimer.value);
+  }
   const eventX =
     e.pageX ||
     e.clientX ||
@@ -884,6 +936,10 @@ function handleHorizontalTabBarScroll(e) {
 
   const newScrollLeft = scrollLeft.value - scrollX;
   tabBarRef.value.scrollLeft = newScrollLeft;
+  if (Math.abs(scrollX) > IS_KEEP_SCROLL_LIMIT) {
+    isKeepScroll.value = true;
+    scrollTimer.value = setTimeout(() => (isKeepScroll.value = false), 100);
+  }
 
   handleNavigationShow();
 }
@@ -892,6 +948,12 @@ function handleTabBarScroll(e) {
     return;
   }
   e.preventDefault();
+
+  if (animationFrameTimer.value !== -1) {
+    window.cancelAnimationFrame(animationFrameTimer.value);
+    animationFrameTimer.value = -1;
+    isKeepScroll.value = false;
+  }
   if (props.vertical === true) {
     handleVerticalTabBarScroll(e);
   } else {
@@ -903,6 +965,142 @@ function handleScroll(event) {
     return;
   }
   emits('scroll', event);
+}
+
+function handleCustomVerticalScroll(e) {
+  const eventY =
+    e.pageY ||
+    e.clientY ||
+    e.offsetY ||
+    e.targetTouches?.[0]?.pageY ||
+    e.targetTouches?.[0]?.clientY ||
+    e.targetTouches?.[0]?.offsetY ||
+    e.changedTouches?.[0]?.pageY ||
+    e.changedTouches?.[0]?.clientY ||
+    e.changedTouches?.[0]?.offsetY;
+
+  const endY = eventY - tabBarRef.value.offsetTop;
+  const scrollY = endY - startY.value;
+  const newScrollTop = tabBarRef.value.scrollTop - scrollY;
+
+  handleCustomKeepScroll(newScrollTop, endY < startY.value);
+}
+function handleCustomHorizontalScroll(e) {
+  const eventX =
+    e.pageX ||
+    e.clientX ||
+    e.offsetX ||
+    e.targetTouches?.[0]?.pageX ||
+    e.targetTouches?.[0]?.clientX ||
+    e.targetTouches?.[0]?.offsetX ||
+    e.changedTouches?.[0]?.pageX ||
+    e.changedTouches?.[0]?.clientX ||
+    e.changedTouches?.[0]?.offsetX;
+
+  const endX = eventX - tabBarRef.value.offsetLeft;
+  const scrollX = endX - startX.value;
+  const newScrollLeft = tabBarRef.value.scrollLeft - scrollX;
+
+  handleCustomKeepScroll(newScrollLeft, endX < startX.value);
+}
+// https://segmentfault.com/q/1010000043579651
+
+function handleCustomKeepScroll(targetPosition, isScrollNext = true) {
+  if (animationFrameTimer.value !== -1) {
+    window.cancelAnimationFrame(animationFrameTimer.value);
+    animationFrameTimer.value = -1;
+    isKeepScroll.value = false;
+  }
+
+  let target = 0;
+  if (props.vertical === true) {
+    target = (tabBarRef.value?.scrollTop || 0) - targetPosition;
+  } else {
+    target = (tabBarRef.value?.scrollLeft || 0) - targetPosition;
+  }
+
+  const scrollFps = Math.max(Math.abs(target / 20), 1);
+
+  handleCustomKeepScrollStep(targetPosition, scrollFps, isScrollNext);
+}
+function handleCustomKeepScrollStep(
+  targetPosition,
+  scrollFps = 1,
+  isScrollNext = true
+) {
+  if (typeof tabBarRef.value?.scrollTo !== 'function') return;
+
+  if (animationFrameTimer.value !== -1) {
+    window.cancelAnimationFrame(animationFrameTimer.value);
+    isKeepScroll.value = false;
+  }
+  let scrollTarget = 0;
+  let start = 0;
+  let scrollEnd = 0;
+
+  if (props.vertical === true) {
+    start = tabBarRef.value?.scrollTop || 0;
+    scrollEnd =
+      Math.max(
+        tabBarRef.value?.scrollHeight,
+        tabBarRef.value?.offsetHeight,
+        scrollTarget
+      ) - tabBarRef.value?.clientHeight;
+  } else {
+    start = tabBarRef.value?.scrollLeft || 0;
+    scrollEnd =
+      Math.max(
+        tabBarRef.value?.scrollWidth,
+        tabBarRef.value?.offsetWidth,
+        scrollTarget
+      ) - tabBarRef.value?.clientWidth;
+  }
+
+  if (isScrollNext === true) {
+    scrollTarget = start + scrollFps;
+    scrollEnd =
+      Math.max(
+        tabBarRef.value?.scrollHeight,
+        tabBarRef.value?.offsetHeight,
+        scrollTarget
+      ) - tabBarRef.value?.clientHeight;
+  } else {
+    scrollTarget = start - scrollFps;
+    scrollEnd =
+      Math.max(
+        tabBarRef.value?.scrollWidth,
+        tabBarRef.value?.offsetWidth,
+        scrollTarget
+      ) - tabBarRef.value?.clientWidth;
+  }
+
+  if (
+    (isScrollNext === true && scrollTarget > targetPosition) ||
+    (isScrollNext === false && scrollTarget < targetPosition) ||
+    (start === 0 && targetPosition < 0) ||
+    start === scrollEnd
+  ) {
+    animationFrameTimer.value = -1;
+    isKeepScroll.value = false;
+    return;
+  }
+
+  if (props.vertical === true) {
+    tabBarRef.value.scrollTo({
+      top: scrollTarget,
+      behavior: 'instant'
+    });
+  } else {
+    tabBarRef.value.scrollTo({
+      left: scrollTarget,
+      behavior: 'instant'
+    });
+  }
+
+  animationFrameTimer.value = window.requestAnimationFrame(() => {
+    animationFrameTimer.value = -1;
+    handleCustomKeepScrollStep(targetPosition, scrollFps, isScrollNext);
+  });
 }
 </script>
 
@@ -983,10 +1181,13 @@ function handleScroll(event) {
     align-items: var(--tab_bar_align_items, cneter);
     max-width: 100%;
     max-height: 100%;
-    user-select: none;
+    padding-bottom: var(--tab_bar_bottom_line_distance);
+    padding-left: var(--tab_bar_left_line_distance);
+    padding-right: var(--tab_bar_right_line_distance);
     overflow: hidden;
     // overflow-x: hidden;
     // overflow-y: hidden;
+    user-select: none;
 
     &::-webkit-scrollbar {
       width: 0;
