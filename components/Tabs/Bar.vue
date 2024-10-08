@@ -21,6 +21,8 @@
       </slot>
     </div>
 
+    <div class="tabs_bar-first_limit_shadow" />
+
     <div
       ref="tabBarRef"
       :class="[
@@ -62,6 +64,8 @@
       </slot>
     </div>
 
+    <div class="tabs_bar-last_limit_shadow" />
+
     <div
       v-if="hasNavigation === true && showNext === true"
       class="tabs_bar-next_position"
@@ -83,6 +87,7 @@ const SCROLL_STEP = 100;
 const SELECTED_TRANSITION =
   'left 0.4s ease-in-out, top 0.4s ease-in-out, width 0.4s 0.1s';
 const IS_KEEP_SCROLL_LIMIT = 50;
+const LIMIT_SHADOW_SIZE = 60;
 
 const props = defineProps({
   loading: {
@@ -180,6 +185,10 @@ const props = defineProps({
   blankAtTheEnd: {
     type: Boolean,
     default: false
+  },
+  limitShadow: {
+    type: Boolean,
+    default: false
   }
 });
 const emits = defineEmits([
@@ -214,6 +223,9 @@ const selectedTransition = ref(SELECTED_TRANSITION);
 const isKeepScroll = ref(false);
 const scrollTimer = ref(-1);
 const animationFrameTimer = ref(-1);
+
+const firstLimitShadowSize = ref(0);
+const lastLimitShadowSize = ref(0);
 
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
@@ -339,6 +351,43 @@ const cssVariable = computed(() => {
     ) {
       _cssVariable['--tab_item_text_align'] = props.tabItemTextAlign;
     }
+
+    if (props.limitShadow === true) {
+      _cssVariable['--first_limit_shadow_left'] = '-2px';
+      _cssVariable['--first_limit_shadow_right'] = '-2px';
+      _cssVariable['--last_limit_shadow_left'] = '-2px';
+      _cssVariable['--last_limit_shadow_right'] = '-2px';
+      _cssVariable['--first_limit_shadow_width'] = 'unset';
+      _cssVariable['--last_limit_shadow_width'] = 'unset';
+      _cssVariable['--first_limit_shadow_bottom'] = 'unset';
+      _cssVariable['--last_limit_shadow_top'] = 'unset';
+
+      if (firstLimitShadowSize.value > 0) {
+        _cssVariable['--first_limit_shadow_top'] = `-${
+          firstLimitShadowSize.value * 0.7
+        }px`;
+        _cssVariable['--first_limit_shadow_height'] =
+          `${firstLimitShadowSize.value}px`;
+      } else {
+        _cssVariable['--first_limit_shadow_top'] = `-${
+          LIMIT_SHADOW_SIZE * 2
+        }px`;
+        _cssVariable['--first_limit_shadow_height'] = '0px';
+      }
+
+      if (lastLimitShadowSize.value > 0) {
+        _cssVariable['--last_limit_shadow_bottom'] = `-${
+          lastLimitShadowSize.value * 0.7
+        }px`;
+        _cssVariable['--last_limit_shadow_height'] =
+          `${lastLimitShadowSize.value}px`;
+      } else {
+        _cssVariable['--last_limit_shadow_bottom'] = `-${
+          LIMIT_SHADOW_SIZE * 2
+        }px`;
+        _cssVariable['--last_limit_shadow_height'] = '0px';
+      }
+    }
   } else {
     // if (
     //   typeof tabBarRootRef.value === 'object' &&
@@ -358,6 +407,43 @@ const cssVariable = computed(() => {
     _cssVariable['--navigation_bottom_right_radius'] = '15px';
     // _cssVariable['--navigation_background'] =
     //   'linear-gradient(to right, transparent, #0000005c 80%)';
+
+    if (props.limitShadow === true) {
+      _cssVariable['--first_limit_shadow_top'] = '-2px';
+      _cssVariable['--first_limit_shadow_bottom'] = '-2px';
+      _cssVariable['--last_limit_shadow_top'] = '-2px';
+      _cssVariable['--last_limit_shadow_bottom'] = '-2px';
+      _cssVariable['--first_limit_shadow_height'] = 'unset';
+      _cssVariable['--last_limit_shadow_height'] = 'unset';
+      _cssVariable['--first_limit_shadow_right'] = 'unset';
+      _cssVariable['--last_limit_shadow_left'] = 'unset';
+
+      if (firstLimitShadowSize.value > 0) {
+        _cssVariable['--first_limit_shadow_left'] = `-${
+          firstLimitShadowSize.value * 0.7
+        }px`;
+        _cssVariable['--first_limit_shadow_width'] =
+          `${firstLimitShadowSize.value}px`;
+      } else {
+        _cssVariable['--first_limit_shadow_left'] = `-${
+          LIMIT_SHADOW_SIZE * 2
+        }px`;
+        _cssVariable['--first_limit_shadow_width'] = '0px';
+      }
+
+      if (lastLimitShadowSize.value > 0) {
+        _cssVariable['--last_limit_shadow_right'] = `-${
+          lastLimitShadowSize.value * 0.7
+        }px`;
+        _cssVariable['--last_limit_shadow_width'] =
+          `${lastLimitShadowSize.value}px`;
+      } else {
+        _cssVariable['--last_limit_shadow_right'] = `-${
+          LIMIT_SHADOW_SIZE * 2
+        }px`;
+        _cssVariable['--last_limit_shadow_width'] = '0px';
+      }
+    }
   }
 
   if (props.blankAtTheEnd === true) {
@@ -474,6 +560,8 @@ onMounted(() => {
   document.addEventListener('touchmove', handleTabBarScroll, {
     passive: false
   });
+  window.addEventListener('pointerup', resetLimitShadowSize);
+  window.addEventListener('resize', handleResize);
   nextTick(() =>
     // css等畫面設置完全生效後再計算底線/遮罩的位置高度為多少
     window.requestAnimationFrame(handleResize)
@@ -492,6 +580,8 @@ onBeforeUnmount(() => {
   document.removeEventListener('mousemove', handleTabBarScroll);
   document.removeEventListener('touchend', handleStopTabBarScroll);
   document.removeEventListener('touchmove', handleTabBarScroll);
+  window.removeEventListener('pointerup', resetLimitShadowSize);
+  window.removeEventListener('resize', handleResize);
   if (typeof tabBarRef.value === 'object' && tabBarRef.value !== null) {
     observer.value.unobserve(tabBarRef.value);
   }
@@ -871,6 +961,7 @@ function handleTabBarScrollEnd(e) {
 
 function handleStopTabBarScroll(e) {
   mouseDown.value = false;
+  resetLimitShadowSize();
   if (props.scrollDisable === true) {
     return;
   }
@@ -909,10 +1000,39 @@ function handleVerticalTabBarScroll(e) {
   const scrollY = y - startY.value;
 
   const newScrollTop = scrollTop.value - scrollY;
+  const oldScrollTop = tabBarRef.value.scrollTop;
   tabBarRef.value.scrollTop = newScrollTop;
+
+  if (props.limitShadow === true) {
+    let _firstLimitShadowSize = 0;
+    let _lastLimitShadowSize = 0;
+    if (oldScrollTop === tabBarRef.value.scrollTop) {
+      if (oldScrollTop === 0) {
+        _firstLimitShadowSize = LIMIT_SHADOW_SIZE;
+      } else if (handleScrollEndLimit(tabBarRef.value) <= newScrollTop) {
+        _lastLimitShadowSize = LIMIT_SHADOW_SIZE;
+      }
+    }
+    firstLimitShadowSize.value = _firstLimitShadowSize;
+    lastLimitShadowSize.value = _lastLimitShadowSize;
+
+    if (_firstLimitShadowSize !== 0 || _lastLimitShadowSize !== 0) {
+      nextTick(() => {
+        setTimeout(() => {
+          if (mouseDown.value === false) {
+            resetLimitShadowSize();
+          }
+        }, 1000);
+      });
+    }
+  }
+
   if (Math.abs(scrollY) > IS_KEEP_SCROLL_LIMIT) {
     isKeepScroll.value = true;
-    scrollTimer.value = setTimeout(() => (isKeepScroll.value = false), 100);
+    scrollTimer.value = setTimeout(() => {
+      scrollTimer.value = -1;
+      isKeepScroll.value = false;
+    }, 100);
   }
 
   handleNavigationShow();
@@ -936,10 +1056,39 @@ function handleHorizontalTabBarScroll(e) {
   const scrollX = x - startX.value;
 
   const newScrollLeft = scrollLeft.value - scrollX;
+  const oldScrollLeft = tabBarRef.value.scrollLeft;
   tabBarRef.value.scrollLeft = newScrollLeft;
+
+  if (props.limitShadow === true) {
+    let _firstLimitShadowSize = 0;
+    let _lastLimitShadowSize = 0;
+    if (oldScrollLeft === tabBarRef.value.scrollLeft) {
+      if (oldScrollLeft === 0) {
+        _firstLimitShadowSize = LIMIT_SHADOW_SIZE;
+      } else if (handleScrollEndLimit(tabBarRef.value) <= newScrollLeft) {
+        _lastLimitShadowSize = LIMIT_SHADOW_SIZE;
+      }
+    }
+    firstLimitShadowSize.value = _firstLimitShadowSize;
+    lastLimitShadowSize.value = _lastLimitShadowSize;
+
+    if (_firstLimitShadowSize !== 0 || _lastLimitShadowSize !== 0) {
+      nextTick(() => {
+        setTimeout(() => {
+          if (mouseDown.value === false) {
+            resetLimitShadowSize();
+          }
+        }, 1000);
+      });
+    }
+  }
+
   if (Math.abs(scrollX) > IS_KEEP_SCROLL_LIMIT) {
     isKeepScroll.value = true;
-    scrollTimer.value = setTimeout(() => (isKeepScroll.value = false), 100);
+    scrollTimer.value = setTimeout(() => {
+      scrollTimer.value = -1;
+      isKeepScroll.value = false;
+    }, 100);
   }
 
   handleNavigationShow();
@@ -961,13 +1110,28 @@ function handleTabBarScroll(e) {
     handleHorizontalTabBarScroll(e);
   }
 }
+
+function resetLimitShadowSize() {
+  firstLimitShadowSize.value = 0;
+  lastLimitShadowSize.value = 0;
+}
+
 function handleScroll(event) {
   if (props.scrollDisable === true) {
     return;
   }
   emits('scroll', event);
 }
+function handleScrollEndLimit(element) {
+  const scrollEndLimit =
+    props.vertical === true
+      ? Math.max(element?.scrollHeight, element?.offsetHeight, 0) -
+        (element?.clientHeight || 0)
+      : Math.max(element?.scrollWidth, element?.offsetWidth, 0) -
+        (element?.clientWidth || 0);
 
+  return scrollEndLimit;
+}
 function handleCustomVerticalScroll(e) {
   const eventY =
     e.pageY ||
@@ -1037,21 +1201,22 @@ function handleCustomKeepScrollStep(
   }
   let scrollTarget = 0;
   let start = 0;
-  let scrollEnd = 0;
+  // let scrollEndLimit = 0;
+  const scrollEndLimit = handleScrollEndLimit(tabBarRef.value);
 
   if (props.vertical === true) {
     start = tabBarRef.value?.scrollTop || 0;
-    scrollEnd =
-      Math.max(
-        tabBarRef.value?.scrollHeight,
-        tabBarRef.value?.offsetHeight,
-        0
-      ) - tabBarRef.value?.clientHeight;
+    // scrollEndLimit =
+    //   Math.max(
+    //     tabBarRef.value?.scrollHeight,
+    //     tabBarRef.value?.offsetHeight,
+    //     0
+    //   ) - tabBarRef.value?.clientHeight;
   } else {
     start = tabBarRef.value?.scrollLeft || 0;
-    scrollEnd =
-      Math.max(tabBarRef.value?.scrollWidth, tabBarRef.value?.offsetWidth, 0) -
-      tabBarRef.value?.clientWidth;
+    // scrollEndLimit =
+    //   Math.max(tabBarRef.value?.scrollWidth, tabBarRef.value?.offsetWidth, 0) -
+    //   tabBarRef.value?.clientWidth;
   }
 
   if (isScrollNext === true) {
@@ -1064,7 +1229,7 @@ function handleCustomKeepScrollStep(
     (isScrollNext === true && scrollTarget > targetPosition) ||
     (isScrollNext === false && scrollTarget < targetPosition) ||
     (start === 0 && targetPosition < 0) ||
-    scrollTarget >= scrollEnd
+    scrollTarget >= scrollEndLimit
   ) {
     handleCalculateNavigationShow(targetPosition, 0 - targetPosition);
     animationFrameTimer.value = -1;
@@ -1155,6 +1320,25 @@ function handleCustomKeepScrollStep(
       }
     }
   }
+
+  &-first_limit_shadow {
+    position: absolute;
+    z-index: 1;
+
+    height: var(--first_limit_shadow_height);
+    width: var(--first_limit_shadow_width);
+    left: var(--first_limit_shadow_left);
+    right: var(--first_limit_shadow_right);
+    top: var(--first_limit_shadow_top);
+    bottom: var(--first_limit_shadow_bottom);
+
+    background-color: #9d9c9c38;
+    border-radius: 50%;
+    transition:
+      width 0.2s,
+      height 0.2s;
+  }
+
   &-option_list {
     flex: 1;
     position: relative;
@@ -1228,6 +1412,18 @@ function handleCustomKeepScrollStep(
       text-align: center;
     }
   }
+
+  &-last_limit_shadow {
+    @extend .tabs_bar-first_limit_shadow;
+
+    height: var(--last_limit_shadow_height);
+    width: var(--last_limit_shadow_width);
+    left: var(--last_limit_shadow_left);
+    right: var(--last_limit_shadow_right);
+    top: var(--last_limit_shadow_top);
+    bottom: var(--last_limit_shadow_bottom);
+  }
+
   &-option_list_emphasize {
     &::after {
       content: '';

@@ -13,6 +13,16 @@
       class="tab_test_page-bar"
       v-model="tab"
       gap="16px"
+      limit-shadow
+      bottom-line-height="2px"
+      bottom-line-width="30px"
+      bottom-line-color="#27C5C3"
+      :tab-list="tabList"
+    />
+    <TabsBar
+      class="tab_test_page-bar"
+      v-model="tab"
+      gap="16px"
       is-navigation-absolute
       bottom-line-height="2px"
       bottom-line-width="30px"
