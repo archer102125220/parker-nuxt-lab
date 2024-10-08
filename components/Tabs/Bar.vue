@@ -586,6 +586,7 @@ function handleNextScroll() {
 }
 
 function handleCalculateNavigationShow(prevScrollStep = 0, nextScrollStep = 0) {
+  if (props.hasNavigation === false) return;
   let _prevOpacity = prevOpacity.value;
   let _nextOpacity = nextOpacity.value;
 
@@ -1003,8 +1004,8 @@ function handleCustomHorizontalScroll(e) {
 
   handleCustomKeepScroll(newScrollLeft, endX < startX.value);
 }
-// https://segmentfault.com/q/1010000043579651
 
+// https://segmentfault.com/q/1010000043579651
 function handleCustomKeepScroll(targetPosition, isScrollNext = true) {
   if (animationFrameTimer.value !== -1) {
     window.cancelAnimationFrame(animationFrameTimer.value);
@@ -1044,42 +1045,28 @@ function handleCustomKeepScrollStep(
       Math.max(
         tabBarRef.value?.scrollHeight,
         tabBarRef.value?.offsetHeight,
-        scrollTarget
+        0
       ) - tabBarRef.value?.clientHeight;
   } else {
     start = tabBarRef.value?.scrollLeft || 0;
     scrollEnd =
-      Math.max(
-        tabBarRef.value?.scrollWidth,
-        tabBarRef.value?.offsetWidth,
-        scrollTarget
-      ) - tabBarRef.value?.clientWidth;
+      Math.max(tabBarRef.value?.scrollWidth, tabBarRef.value?.offsetWidth, 0) -
+      tabBarRef.value?.clientWidth;
   }
 
   if (isScrollNext === true) {
     scrollTarget = start + scrollFps;
-    scrollEnd =
-      Math.max(
-        tabBarRef.value?.scrollHeight,
-        tabBarRef.value?.offsetHeight,
-        scrollTarget
-      ) - tabBarRef.value?.clientHeight;
   } else {
     scrollTarget = start - scrollFps;
-    scrollEnd =
-      Math.max(
-        tabBarRef.value?.scrollWidth,
-        tabBarRef.value?.offsetWidth,
-        scrollTarget
-      ) - tabBarRef.value?.clientWidth;
   }
 
   if (
     (isScrollNext === true && scrollTarget > targetPosition) ||
     (isScrollNext === false && scrollTarget < targetPosition) ||
     (start === 0 && targetPosition < 0) ||
-    start === scrollEnd
+    scrollTarget >= scrollEnd
   ) {
+    handleCalculateNavigationShow(targetPosition, 0 - targetPosition);
     animationFrameTimer.value = -1;
     isKeepScroll.value = false;
     return;
