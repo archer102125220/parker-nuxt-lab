@@ -312,7 +312,9 @@ function handlePullStart(e) {
     e.changedTouches?.[0]?.clientY ||
     e.changedTouches?.[0]?.pageY ||
     e.changedTouches?.[0]?.offsetY ||
-    e.clientY;
+    e.clientY ||
+    e.pageY ||
+    e.offsetY;
 }
 function handlePulling(e) {
   if (
@@ -339,7 +341,9 @@ function handlePulling(e) {
     e.changedTouches?.[0]?.clientY ||
     e.changedTouches?.[0]?.pageY ||
     e.changedTouches?.[0]?.offsetY ||
-    e.clientY;
+    e.clientY ||
+    e.pageY ||
+    e.offsetY;
   const move = currentClientY - startY.value;
 
   if (startY.value > 0 && move > 0) {

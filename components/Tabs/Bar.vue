@@ -34,9 +34,11 @@
       }"
       @scroll="handleScroll"
       @mousedown="handleStartTabBarScroll"
+      @mousemove="handleTabBarScroll"
       @mouseover="handleStopTabBarScroll"
       @mouseup="handleStopTabBarScroll"
       @touchstart="handleStartTabBarScroll"
+      @touchmove="handleTabBarScroll"
       @touchend="handleStopTabBarScroll"
       @touchcancel="handleStopTabBarScroll"
     >
@@ -230,10 +232,17 @@ const animationFrameTimer = ref(-1);
 
 const firstLimitShadowSize = ref(0);
 const lastLimitShadowSize = ref(0);
+const resetLimitShadowSizeTimer = ref(-1);
 
 const bottomLineStyle = ref({});
 const bottomLineStyleTemp = ref(null);
 
+const computedLimitShadow = computed(() => {
+  if (typeof props.limitShadow !== 'boolean') {
+    return props.vertical;
+  }
+  return props.limitShadow;
+});
 const cssVariable = computed(() => {
   const _cssVariable = {
     ...(bottomLineStyleTemp.value || bottomLineStyle.value),
@@ -356,7 +365,7 @@ const cssVariable = computed(() => {
       _cssVariable['--tab_item_text_align'] = props.tabItemTextAlign;
     }
 
-    if (props.limitShadow === true) {
+    if (computedLimitShadow.value === true) {
       _cssVariable['--first_limit_shadow_left'] = '-2px';
       _cssVariable['--first_limit_shadow_right'] = '-2px';
       _cssVariable['--last_limit_shadow_left'] = '-2px';
@@ -412,7 +421,7 @@ const cssVariable = computed(() => {
     // _cssVariable['--navigation_background'] =
     //   'linear-gradient(to right, transparent, #0000005c 80%)';
 
-    if (props.limitShadow === true) {
+    if (computedLimitShadow.value === true) {
       _cssVariable['--first_limit_shadow_top'] = '-2px';
       _cssVariable['--first_limit_shadow_bottom'] = '-2px';
       _cssVariable['--last_limit_shadow_top'] = '-2px';
@@ -964,7 +973,11 @@ function handleTabBarScrollEnd(e) {
   handleNavigationShow();
 }
 
-function handleStopTabBarScroll(e) {
+async function handleStopTabBarScroll(e) {
+  mouseDown.value = false;
+  resetLimitShadowSize();
+
+  await nextTick();
   if (props.scrollDisable !== true && isKeepScroll.value === true) {
     if (isKeepScroll.value === true) {
       if (animationFrameTimer.value !== -1) {
@@ -980,14 +993,15 @@ function handleStopTabBarScroll(e) {
       isKeepScroll.value = false;
     }
   }
-
-  mouseDown.value = false;
-  resetLimitShadowSize();
 }
 
 function handleVerticalTabBarScroll(e) {
   if (scrollTimer.value !== -1) {
     clearTimeout(scrollTimer.value);
+  }
+  if (resetLimitShadowSizeTimer.value !== -1) {
+    clearTimeout(resetLimitShadowSizeTimer.value);
+    resetLimitShadowSizeTimer.value = -1;
   }
   const eventY =
     e.pageY ||
@@ -1008,7 +1022,7 @@ function handleVerticalTabBarScroll(e) {
   tabBarRef.value.scrollTop = newScrollTop;
 
   const scrollEndLimit = getScrollEndLimit(tabBarRef.value);
-  if (props.limitShadow === true && scrollEndLimit > 0) {
+  if (computedLimitShadow.value === true && scrollEndLimit > 0) {
     let _firstLimitShadowSize = 0;
     let _lastLimitShadowSize = 0;
     if (oldScrollTop === tabBarRef.value.scrollTop) {
@@ -1021,15 +1035,12 @@ function handleVerticalTabBarScroll(e) {
     firstLimitShadowSize.value = _firstLimitShadowSize;
     lastLimitShadowSize.value = _lastLimitShadowSize;
 
-    if (_firstLimitShadowSize !== 0 || _lastLimitShadowSize !== 0) {
-      nextTick(() => {
-        setTimeout(() => {
-          if (mouseDown.value === false) {
-            resetLimitShadowSize();
-          }
-        }, 1000);
-      });
-    }
+    resetLimitShadowSizeTimer.value = setTimeout(() => {
+      resetLimitShadowSizeTimer.value = -1;
+      if (firstLimitShadowSize.value !== 0 || lastLimitShadowSize.value !== 0) {
+        resetLimitShadowSize();
+      }
+    }, 900);
   }
 
   if (Math.abs(scrollY) > IS_KEEP_SCROLL_LIMIT) {
@@ -1045,6 +1056,10 @@ function handleVerticalTabBarScroll(e) {
 function handleHorizontalTabBarScroll(e) {
   if (scrollTimer.value !== -1) {
     clearTimeout(scrollTimer.value);
+  }
+  if (resetLimitShadowSizeTimer.value !== -1) {
+    clearTimeout(resetLimitShadowSizeTimer.value);
+    resetLimitShadowSizeTimer.value = -1;
   }
   const eventX =
     e.pageX ||
@@ -1065,7 +1080,7 @@ function handleHorizontalTabBarScroll(e) {
   tabBarRef.value.scrollLeft = newScrollLeft;
 
   const scrollEndLimit = getScrollEndLimit(tabBarRef.value);
-  if (props.limitShadow === true && scrollEndLimit > 0) {
+  if (computedLimitShadow.value === true && scrollEndLimit > 0) {
     let _firstLimitShadowSize = 0;
     let _lastLimitShadowSize = 0;
     if (oldScrollLeft === tabBarRef.value.scrollLeft) {
@@ -1078,15 +1093,12 @@ function handleHorizontalTabBarScroll(e) {
     firstLimitShadowSize.value = _firstLimitShadowSize;
     lastLimitShadowSize.value = _lastLimitShadowSize;
 
-    if (_firstLimitShadowSize !== 0 || _lastLimitShadowSize !== 0) {
-      nextTick(() => {
-        setTimeout(() => {
-          if (mouseDown.value === false) {
-            resetLimitShadowSize();
-          }
-        }, 1000);
-      });
-    }
+    resetLimitShadowSizeTimer.value = setTimeout(() => {
+      resetLimitShadowSizeTimer.value = -1;
+      if (firstLimitShadowSize.value !== 0 || lastLimitShadowSize.value !== 0) {
+        resetLimitShadowSize();
+      }
+    }, 900);
   }
 
   if (Math.abs(scrollX) > IS_KEEP_SCROLL_LIMIT) {
