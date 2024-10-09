@@ -194,7 +194,7 @@ const props = defineProps({
   },
   limitShadow: {
     type: Boolean,
-    default: false
+    default: null
   }
 });
 const emits = defineEmits([
