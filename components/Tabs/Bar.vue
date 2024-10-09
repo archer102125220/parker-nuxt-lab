@@ -34,7 +34,11 @@
       }"
       @scroll="handleScroll"
       @mousedown="handleStartTabBarScroll"
+      @mouseover="handleStopTabBarScroll"
+      @mouseup="handleStopTabBarScroll"
       @touchstart="handleStartTabBarScroll"
+      @touchend="handleStopTabBarScroll"
+      @touchcancel="handleStopTabBarScroll"
     >
       <div
         v-for="(tab, index) in tabList"
@@ -554,13 +558,13 @@ watch(
 
 onMounted(() => {
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
-  document.addEventListener('mouseup', handleStopTabBarScroll);
   document.addEventListener('mousemove', handleTabBarScroll);
-  document.addEventListener('touchend', handleStopTabBarScroll);
+  document.addEventListener('mouseup', handleStopTabBarScroll);
   document.addEventListener('touchmove', handleTabBarScroll, {
     passive: false
   });
-  window.addEventListener('pointerup', resetLimitShadowSize);
+
+  window.addEventListener('contextmenu', handleStopTabBarScroll);
   window.addEventListener('resize', handleResize);
   nextTick(() =>
     // css等畫面設置完全生效後再計算底線/遮罩的位置高度為多少
@@ -576,11 +580,11 @@ onMounted(() => {
   observer.value.observe(tabBarRef.value);
 });
 onBeforeUnmount(() => {
-  document.removeEventListener('mouseup', handleStopTabBarScroll);
   document.removeEventListener('mousemove', handleTabBarScroll);
-  document.removeEventListener('touchend', handleStopTabBarScroll);
+  document.removeEventListener('mouseup', handleStopTabBarScroll);
   document.removeEventListener('touchmove', handleTabBarScroll);
-  window.removeEventListener('pointerup', resetLimitShadowSize);
+
+  window.removeEventListener('contextmenu', handleStopTabBarScroll);
   window.removeEventListener('resize', handleResize);
   if (typeof tabBarRef.value === 'object' && tabBarRef.value !== null) {
     observer.value.unobserve(tabBarRef.value);
@@ -938,6 +942,7 @@ function handleHorizontalStartTabBarScroll(e) {
 function handleStartTabBarScroll(e) {
   if (props.scrollDisable === true) {
     mouseDown.value = false;
+    resetLimitShadowSize();
     return;
   }
   e.stopPropagation();
@@ -960,25 +965,24 @@ function handleTabBarScrollEnd(e) {
 }
 
 function handleStopTabBarScroll(e) {
+  if (props.scrollDisable !== true && isKeepScroll.value === true) {
+    if (isKeepScroll.value === true) {
+      if (animationFrameTimer.value !== -1) {
+        window.cancelAnimationFrame(animationFrameTimer.value);
+        animationFrameTimer.value = -1;
+      }
+      if (props.vertical === true) {
+        handleCustomVerticalScroll(e);
+      } else {
+        handleCustomHorizontalScroll(e);
+      }
+
+      isKeepScroll.value = false;
+    }
+  }
+
   mouseDown.value = false;
   resetLimitShadowSize();
-  if (props.scrollDisable === true) {
-    return;
-  }
-
-  if (isKeepScroll.value === true) {
-    if (animationFrameTimer.value !== -1) {
-      window.cancelAnimationFrame(animationFrameTimer.value);
-      animationFrameTimer.value = -1;
-    }
-    if (props.vertical === true) {
-      handleCustomVerticalScroll(e);
-    } else {
-      handleCustomHorizontalScroll(e);
-    }
-
-    isKeepScroll.value = false;
-  }
 }
 
 function handleVerticalTabBarScroll(e) {
@@ -1003,13 +1007,14 @@ function handleVerticalTabBarScroll(e) {
   const oldScrollTop = tabBarRef.value.scrollTop;
   tabBarRef.value.scrollTop = newScrollTop;
 
-  if (props.limitShadow === true) {
+  const scrollEndLimit = getScrollEndLimit(tabBarRef.value);
+  if (props.limitShadow === true && scrollEndLimit > 0) {
     let _firstLimitShadowSize = 0;
     let _lastLimitShadowSize = 0;
     if (oldScrollTop === tabBarRef.value.scrollTop) {
       if (oldScrollTop === 0) {
         _firstLimitShadowSize = LIMIT_SHADOW_SIZE;
-      } else if (handleScrollEndLimit(tabBarRef.value) <= newScrollTop) {
+      } else if (scrollEndLimit <= newScrollTop) {
         _lastLimitShadowSize = LIMIT_SHADOW_SIZE;
       }
     }
@@ -1059,13 +1064,14 @@ function handleHorizontalTabBarScroll(e) {
   const oldScrollLeft = tabBarRef.value.scrollLeft;
   tabBarRef.value.scrollLeft = newScrollLeft;
 
-  if (props.limitShadow === true) {
+  const scrollEndLimit = getScrollEndLimit(tabBarRef.value);
+  if (props.limitShadow === true && scrollEndLimit > 0) {
     let _firstLimitShadowSize = 0;
     let _lastLimitShadowSize = 0;
     if (oldScrollLeft === tabBarRef.value.scrollLeft) {
       if (oldScrollLeft === 0) {
         _firstLimitShadowSize = LIMIT_SHADOW_SIZE;
-      } else if (handleScrollEndLimit(tabBarRef.value) <= newScrollLeft) {
+      } else if (scrollEndLimit <= newScrollLeft) {
         _lastLimitShadowSize = LIMIT_SHADOW_SIZE;
       }
     }
@@ -1095,6 +1101,7 @@ function handleHorizontalTabBarScroll(e) {
 }
 function handleTabBarScroll(e) {
   if (mouseDown.value === false || props.scrollDisable === true) {
+    resetLimitShadowSize();
     return;
   }
   e.preventDefault();
@@ -1122,7 +1129,7 @@ function handleScroll(event) {
   }
   emits('scroll', event);
 }
-function handleScrollEndLimit(element) {
+function getScrollEndLimit(element) {
   const scrollEndLimit =
     props.vertical === true
       ? Math.max(element?.scrollHeight, element?.offsetHeight, 0) -
@@ -1202,7 +1209,7 @@ function handleCustomKeepScrollStep(
   let scrollTarget = 0;
   let start = 0;
   // let scrollEndLimit = 0;
-  const scrollEndLimit = handleScrollEndLimit(tabBarRef.value);
+  const scrollEndLimit = getScrollEndLimit(tabBarRef.value);
 
   if (props.vertical === true) {
     start = tabBarRef.value?.scrollTop || 0;
