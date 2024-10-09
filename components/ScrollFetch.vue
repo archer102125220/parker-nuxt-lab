@@ -223,6 +223,8 @@ watch(
 
 onMounted(() => {
   // window.addEventListener('scroll', scrollEventListener);
+  window.addEventListener('contextmenu', handlePullEnd);
+
   observer.value = new IntersectionObserver((entries) => {
     if (
       props.loading === false &&
@@ -239,6 +241,8 @@ onMounted(() => {
 });
 onUnmounted(() => {
   // window.removeEventListener('scroll', scrollEventListener);
+  window.removeEventListener('contextmenu', handlePullEnd);
+
   if (
     typeof infinityTriggerRef.value === 'object' &&
     infinityTriggerRef.value !== null
