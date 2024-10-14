@@ -664,71 +664,31 @@ function isSelected(modelValue, tab, index) {
 
 function handlePrevScroll() {
   if (prevDisable.value === true) return;
-  let hasScroll = false;
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: tabBarRef.value.scrollTop - SCROLL_STEP,
       behavior: 'smooth'
     });
-    hasScroll = true;
   } else {
     tabBarRef.value.scrollTo({
       left: tabBarRef.value.scrollLeft - SCROLL_STEP,
       behavior: 'smooth'
     });
-    hasScroll = true;
-  }
-
-  if (hasScroll === true) {
-    window.requestAnimationFrame(() => {
-      emits(
-        'scrollEnd',
-        props.modelValue,
-        getCurrentTabIndex(props.modelValue) || 0,
-        false
-      );
-      emits(
-        'scroll-end',
-        props.modelValue,
-        getCurrentTabIndex(props.modelValue) || 0,
-        false
-      );
-    });
   }
 }
 function handleNextScroll() {
   if (nextDisable.value === true) return;
-  let hasScroll = false;
   handleCalculateNavigationShow(SCROLL_STEP, 0 - SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: tabBarRef.value.scrollTop + SCROLL_STEP,
       behavior: 'smooth'
     });
-    hasScroll = true;
   } else {
     tabBarRef.value.scrollTo({
       left: tabBarRef.value.scrollLeft + SCROLL_STEP,
       behavior: 'smooth'
-    });
-    hasScroll = true;
-  }
-
-  if (hasScroll === true) {
-    window.requestAnimationFrame(() => {
-      emits(
-        'scrollEnd',
-        props.modelValue,
-        getCurrentTabIndex(props.modelValue) || 0,
-        false
-      );
-      emits(
-        'scroll-end',
-        props.modelValue,
-        getCurrentTabIndex(props.modelValue) || 0,
-        false
-      );
     });
   }
 }
@@ -924,71 +884,81 @@ function handleCheckTab(tabListRef) {
     animationFrameTimer.value = -1;
   }
   isAutoScroll.value = true;
-  let hasScroll = false;
   const boundingClientRect = tabListRef?.getBoundingClientRect?.();
 
   const _tabBarRef = tabBarRef.value;
   const tabBarRefBoundingClientRect =
     _tabBarRef?.getBoundingClientRect?.() || {};
 
-  // const tabListRefBottom = boundingClientRect?.y + tabListRef?.clientHeight;
-  const tabListRefBottom = boundingClientRect?.bottom;
-  const tabBarRefClientHeight = _tabBarRef?.clientHeight;
-  const tabBarRefTop = tabBarRefBoundingClientRect.top;
+  const tabListRefClientHeight = tabListRef?.clientHeight || 0;
+  const tabRefTop = boundingClientRect?.y + tabListRefClientHeight;
 
-  // const tabListRefRight = boundingClientRect?.x + tabListRef?.clientWidth;
-  const tabListRefRight = boundingClientRect?.right;
-  const tabBarRefClientWidth = _tabBarRef?.clientWidth;
-  const tabBarRefRight = tabBarRefBoundingClientRect.right;
+  const tabBarRefClientHeight = _tabBarRef?.clientHeight || 0;
+  const tabBarRefTop = tabBarRefBoundingClientRect.top;
 
   if (
     props.vertical === true &&
-    (tabListRefBottom - tabBarRefTop <= 0 ||
-      tabListRefBottom - tabBarRefTop > tabBarRefClientHeight + 50)
+    (tabRefTop - tabBarRefTop <= tabListRefClientHeight / 2 ||
+      tabRefTop - tabBarRefTop > tabBarRefClientHeight + 50)
   ) {
     tabBarRef.value.scrollTo({
       top: tabListRef.offsetTop,
       behavior: 'smooth'
     });
-    hasScroll = true;
+  } else if (
+    props.vertical === true &&
+    handleIsNeedScroll(tabListRef) === true
+  ) {
+    tabBarRef.value.scrollTo({
+      top: tabListRef.offsetTop,
+      behavior: 'smooth'
+    });
   } else if (
     props.vertical === false &&
-    (tabBarRefRight - tabListRefRight <= 0 ||
-      tabBarRefRight - tabListRefRight > tabBarRefClientWidth)
+    handleIsNeedScroll(tabListRef) === true
   ) {
     tabBarRef.value.scrollTo({
       left: tabListRef.offsetLeft,
       behavior: 'smooth'
     });
-    hasScroll = true;
-  }
-
-  if (hasScroll === true) {
-    nextTick(() =>
-      window.requestAnimationFrame(() => {
-        emits(
-          'scrollEnd',
-          props.modelValue,
-          getCurrentTabIndex(props.modelValue) || 0,
-          true
-        );
-        emits(
-          'scroll-end',
-          props.modelValue,
-          getCurrentTabIndex(props.modelValue) || 0,
-          true
-        );
-        isAutoScroll.value = false;
-      })
-    );
   }
 }
 
 function handleTabChange(newTabIndex) {
   if (props.loading === true) return;
   const newTab = props.tabList[newTabIndex]?.[props.valueKey] || newTabIndex;
-  emits('update:modelValue', newTab, newTabIndex);
-  emits('change', newTab, newTabIndex);
+
+  const tab = tabListRef.value?.[newTabIndex];
+  emits('update:modelValue', newTab, newTabIndex, handleIsNeedScroll(tab));
+  emits('change', newTab, newTabIndex, handleIsNeedScroll(tab));
+}
+function handleIsNeedScroll(tabRef) {
+  const _tabBarRef = tabBarRef.value;
+  const tabBarRefBoundingClientRect =
+    _tabBarRef?.getBoundingClientRect?.() || {};
+
+  const boundingClientRect = tabRef?.getBoundingClientRect?.();
+
+  const tabRefClientHeight = tabRef?.clientHeight || 0;
+  const tabRefTop = boundingClientRect?.y + tabRefClientHeight;
+  const tabBarRefClientHeight = _tabBarRef?.clientHeight;
+  const tabBarRefTop = tabBarRefBoundingClientRect.top;
+
+  const tabRefRight = boundingClientRect?.x + tabRef?.clientWidth;
+  const tabBarRefClientWidth = _tabBarRef?.clientWidth;
+  const tabBarRefRight = tabBarRefBoundingClientRect.right;
+
+  return (
+    (props.vertical === true &&
+      (tabRefTop - tabBarRefTop <= tabRefClientHeight / 2 ||
+        tabRefTop - tabBarRefTop > tabBarRefClientHeight + 50)) ||
+    (props.vertical === true &&
+      (tabRefTop - tabBarRefTop <= 0 ||
+        tabRefTop - tabBarRefTop > tabBarRefClientHeight)) ||
+    (props.vertical === false &&
+      (tabBarRefRight - tabRefRight <= 0 ||
+        tabBarRefRight - tabRefRight > tabBarRefClientWidth))
+  );
 }
 function handleVerticalStartTabBarScroll(e) {
   const eventY =
