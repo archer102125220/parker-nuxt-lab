@@ -129,7 +129,7 @@ const props = defineProps({
     type: [Number, String, Object],
     default: 0
   },
-  valueKey: {
+  modelValueKey: {
     type: [Number, String],
     default: null
   },
@@ -257,6 +257,15 @@ watch(
   () => props.modelValue,
   (newModelValue) => {
     syncSlide(newModelValue, swiperObj.value);
+  },
+  {
+    deep: true
+  }
+);
+watch(
+  () => props.slideList,
+  (newSlideList) => {
+    syncSlideList(newSlideList, swiperObj.value);
   },
   {
     deep: true
@@ -398,6 +407,25 @@ function syncSlide(value, swiper) {
   const slideIndex =
     typeof _slideIndex === 'number' && _slideIndex > -1 ? _slideIndex : value;
   console.log({ slideIndex });
+  swiper.slideTo(slideIndex || 0);
+}
+function syncSlideList(newSlideList = [], swiper) {
+  if (
+    typeof swiper?.slideTo !== 'function' ||
+    Array.isArray(newSlideList) === false ||
+    newSlideList.length <= 0
+  ) {
+    return;
+  }
+  const _slideIndex = newSlideList.findIndex(
+    (slide) =>
+      slide?.[props.modelValueKey] === props.modelValue ||
+      slide?.value === props.modelValue
+  );
+  const slideIndex =
+    typeof _slideIndex === 'number' && _slideIndex > -1
+      ? _slideIndex
+      : props.modelValue;
   swiper.slideTo(slideIndex || 0);
 }
 function afterInit(swiper) {

@@ -115,7 +115,7 @@ const props = defineProps({
     type: [Number, String, Object],
     default: 0
   },
-  valueKey: {
+  modelValueKey: {
     type: [Number, String],
     default: null
   },
@@ -245,16 +245,26 @@ onUnmounted(() => {
 watch(
   () => props.modelValue,
   (newModelValue) => {
-    const swiperIndex = getCurrentSwiperIndex(newModelValue);
+    const swiperIndex = getCurrentSwiperIndex(newModelValue, props.slideList);
     sliderActiveIndex.value = swiperIndex;
   },
   { deep: true, immediate: true }
 );
+watch(
+  () => props.slideList,
+  (newSlideList) => {
+    const swiperIndex = getCurrentSwiperIndex(props.modelValue, newSlideList);
+    sliderActiveIndex.value = swiperIndex;
+  },
+  {
+    deep: true
+  }
+);
 
-function getCurrentSwiperIndex(slide) {
-  const _slideIndex = props.slideList.findIndex(
+function getCurrentSwiperIndex(slide, slideList = []) {
+  const _slideIndex = slideList.findIndex(
     (_slide) =>
-      _slide?.[props.valueKey] === slide ||
+      _slide?.[props.modelValueKey] === slide ||
       _slide?.value === slide ||
       _slide === slide
   );
@@ -267,7 +277,8 @@ function handlePrev() {
   if (sliderActiveIndex.value > 0) {
     const newSliderActiveIndex = sliderActiveIndex.value - 1;
     const newSlide = props.slideList[newSliderActiveIndex] || {};
-    const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
+    const newValue =
+      newSlide[props.modelValueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -280,7 +291,8 @@ function handleNext() {
   if (sliderActiveIndex.value < _slideList.length) {
     const newSliderActiveIndex = sliderActiveIndex.value + 1;
     const newSlide = props.slideList[newSliderActiveIndex] || {};
-    const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
+    const newValue =
+      newSlide[props.modelValueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -378,7 +390,8 @@ function handleChanging(e) {
 
   if (newSliderActiveIndex >= 0) {
     const newSlide = props.slideList[newSliderActiveIndex] || {};
-    const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
+    const newValue =
+      newSlide[props.modelValueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
