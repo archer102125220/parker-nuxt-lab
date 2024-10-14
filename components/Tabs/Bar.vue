@@ -30,7 +30,8 @@
         selectedType !== '' ? 'tabs_bar-option_list_emphasize' : ''
       ]"
       v-scroll-end="{
-        handler: handleTabBarScrollEnd
+        handler: handleTabBarScrollEnd,
+        wait: scrollEndWait
       }"
       @scroll="handleScroll"
       @mousedown="handleStartTabBarScroll"
@@ -194,6 +195,10 @@ const props = defineProps({
   },
   limitShadow: {
     type: Boolean,
+    default: null
+  },
+  scrollEndWait: {
+    type: Number,
     default: null
   }
 });
@@ -659,31 +664,71 @@ function isSelected(modelValue, tab, index) {
 
 function handlePrevScroll() {
   if (prevDisable.value === true) return;
+  let hasScroll = false;
   handleCalculateNavigationShow(0 - SCROLL_STEP, SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: tabBarRef.value.scrollTop - SCROLL_STEP,
       behavior: 'smooth'
     });
+    hasScroll = true;
   } else {
     tabBarRef.value.scrollTo({
       left: tabBarRef.value.scrollLeft - SCROLL_STEP,
       behavior: 'smooth'
     });
+    hasScroll = true;
+  }
+
+  if (hasScroll === true) {
+    window.requestAnimationFrame(() => {
+      emits(
+        'scrollEnd',
+        props.modelValue,
+        getCurrentTabIndex(props.modelValue) || 0,
+        false
+      );
+      emits(
+        'scroll-end',
+        props.modelValue,
+        getCurrentTabIndex(props.modelValue) || 0,
+        false
+      );
+    });
   }
 }
 function handleNextScroll() {
   if (nextDisable.value === true) return;
+  let hasScroll = false;
   handleCalculateNavigationShow(SCROLL_STEP, 0 - SCROLL_STEP);
   if (props.vertical === true) {
     tabBarRef.value.scrollTo({
       top: tabBarRef.value.scrollTop + SCROLL_STEP,
       behavior: 'smooth'
     });
+    hasScroll = true;
   } else {
     tabBarRef.value.scrollTo({
       left: tabBarRef.value.scrollLeft + SCROLL_STEP,
       behavior: 'smooth'
+    });
+    hasScroll = true;
+  }
+
+  if (hasScroll === true) {
+    window.requestAnimationFrame(() => {
+      emits(
+        'scrollEnd',
+        props.modelValue,
+        getCurrentTabIndex(props.modelValue) || 0,
+        false
+      );
+      emits(
+        'scroll-end',
+        props.modelValue,
+        getCurrentTabIndex(props.modelValue) || 0,
+        false
+      );
     });
   }
 }
@@ -874,7 +919,12 @@ function handleResetBottomeStyleTemp() {
   bottomLineStyleTemp.value = null;
 }
 function handleCheckTab(tabListRef) {
+  if (animationFrameTimer.value !== -1) {
+    window.cancelAnimationFrame(animationFrameTimer.value);
+    animationFrameTimer.value = -1;
+  }
   isAutoScroll.value = true;
+  let hasScroll = false;
   const boundingClientRect = tabListRef?.getBoundingClientRect?.();
 
   const _tabBarRef = tabBarRef.value;
@@ -894,12 +944,13 @@ function handleCheckTab(tabListRef) {
   if (
     props.vertical === true &&
     (tabListRefBottom - tabBarRefTop <= 0 ||
-      tabListRefBottom - tabBarRefTop > tabBarRefClientHeight)
+      tabListRefBottom - tabBarRefTop > tabBarRefClientHeight + 50)
   ) {
     tabBarRef.value.scrollTo({
       top: tabListRef.offsetTop,
       behavior: 'smooth'
     });
+    hasScroll = true;
   } else if (
     props.vertical === false &&
     (tabBarRefRight - tabListRefRight <= 0 ||
@@ -909,6 +960,27 @@ function handleCheckTab(tabListRef) {
       left: tabListRef.offsetLeft,
       behavior: 'smooth'
     });
+    hasScroll = true;
+  }
+
+  if (hasScroll === true) {
+    nextTick(() =>
+      window.requestAnimationFrame(() => {
+        emits(
+          'scrollEnd',
+          props.modelValue,
+          getCurrentTabIndex(props.modelValue) || 0,
+          true
+        );
+        emits(
+          'scroll-end',
+          props.modelValue,
+          getCurrentTabIndex(props.modelValue) || 0,
+          true
+        );
+        isAutoScroll.value = false;
+      })
+    );
   }
 }
 
@@ -963,11 +1035,16 @@ function handleStartTabBarScroll(e) {
     handleHorizontalStartTabBarScroll(e);
   }
 }
-function handleTabBarScrollEnd(e) {
+function handleTabBarScrollEnd() {
   if (props.scrollDisable === true) {
     return;
   }
-  emits('scrollEnd', e);
+  emits(
+    'scrollEnd',
+    props.modelValue,
+    getCurrentTabIndex(props.modelValue) || 0,
+    true
+  );
   if (isAutoScroll.value === false) return;
   // console.log(e);
   handleNavigationShow();
