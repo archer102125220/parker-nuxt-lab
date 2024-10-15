@@ -1,7 +1,16 @@
 <template>
   <div class="params_back_test_page">
     <p>{{ paramsTestData }}</p>
-    <v-btn color="primary" @click="handleRouteParams">增加params</v-btn>
+    <div>
+      <v-btn color="primary" @click="handleRouteParamsPush">
+        增加params(Push)
+      </v-btn>
+    </div>
+    <div>
+      <v-btn color="primary" @click="handleRouteParamsReplace">
+        增加params(Replace)
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -29,8 +38,15 @@ watch(
   { deep: true, immediate: true }
 );
 
-function handleRouteParams() {
+function handleRouteParamsPush() {
   router.push({
+    params: {
+      testData: paramsTestData.value + 1
+    }
+  });
+}
+function handleRouteParamsReplace() {
+  router.replace({
     params: {
       testData: paramsTestData.value + 1
     }

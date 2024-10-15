@@ -1,7 +1,16 @@
 <template>
   <div class="query_back_test_page">
     <p>{{ queryTestData }}</p>
-    <v-btn color="primary" @click="handleRouteQuery">增加query</v-btn>
+    <div>
+      <v-btn color="primary" @click="handleRouteQueryPush">
+        增加query(push)
+      </v-btn>
+    </div>
+    <div>
+      <v-btn color="primary" @click="handleRouteQueryReplace">
+        增加query(replace)
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -28,8 +37,16 @@ watch(
   { deep: true, immediate: true }
 );
 
-function handleRouteQuery() {
+function handleRouteQueryPush() {
+  console.log(router);
   router.push({
+    query: {
+      testData: queryTestData.value + 1
+    }
+  });
+}
+function handleRouteQueryReplace() {
+  router.replace({
     query: {
       testData: queryTestData.value + 1
     }
