@@ -884,39 +884,20 @@ function handleCheckTab(tabListRef) {
     animationFrameTimer.value = -1;
   }
   isAutoScroll.value = true;
-  const boundingClientRect = tabListRef?.getBoundingClientRect?.();
 
-  const _tabBarRef = tabBarRef.value;
-  const tabBarRefBoundingClientRect =
-    _tabBarRef?.getBoundingClientRect?.() || {};
+  const isNeedScroll = handleIsNeedScroll(tabListRef);
 
-  const tabListRefClientHeight = tabListRef?.clientHeight || 0;
-  const tabRefTop = boundingClientRect?.y + tabListRefClientHeight;
-
-  const tabBarRefClientHeight = _tabBarRef?.clientHeight || 0;
-  const tabBarRefTop = tabBarRefBoundingClientRect.top;
-
-  if (
-    props.vertical === true &&
-    (tabRefTop - tabBarRefTop <= tabListRefClientHeight / 2 ||
-      tabRefTop - tabBarRefTop > tabBarRefClientHeight + 50)
-  ) {
+  if (isNeedScroll.verticalBufferScroll === true) {
     tabBarRef.value.scrollTo({
       top: tabListRef.offsetTop,
       behavior: 'smooth'
     });
-  } else if (
-    props.vertical === true &&
-    handleIsNeedScroll(tabListRef) === true
-  ) {
+  } else if (isNeedScroll.verticalScroll === true) {
     tabBarRef.value.scrollTo({
-      top: tabListRef.offsetTop,
+      top: tabListRef.offsetTop - tabBarRef.value.clientHeight * 0.8,
       behavior: 'smooth'
     });
-  } else if (
-    props.vertical === false &&
-    handleIsNeedScroll(tabListRef) === true
-  ) {
+  } else if (isNeedScroll.horizontalScroll === true) {
     tabBarRef.value.scrollTo({
       left: tabListRef.offsetLeft,
       behavior: 'smooth'
@@ -929,8 +910,10 @@ function handleTabChange(newTabIndex) {
   const newTab = props.tabList[newTabIndex]?.[props.valueKey] || newTabIndex;
 
   const tab = tabListRef.value?.[newTabIndex];
-  emits('update:modelValue', newTab, newTabIndex, handleIsNeedScroll(tab));
-  emits('change', newTab, newTabIndex, handleIsNeedScroll(tab));
+  const isNeedScroll = handleIsNeedScroll(tab) || {};
+
+  emits('update:modelValue', newTab, newTabIndex, isNeedScroll);
+  emits('change', newTab, newTabIndex, isNeedScroll);
 }
 function handleIsNeedScroll(tabRef) {
   const _tabBarRef = tabBarRef.value;
@@ -948,17 +931,20 @@ function handleIsNeedScroll(tabRef) {
   const tabBarRefClientWidth = _tabBarRef?.clientWidth;
   const tabBarRefRight = tabBarRefBoundingClientRect.right;
 
-  return (
-    (props.vertical === true &&
-      (tabRefTop - tabBarRefTop <= tabRefClientHeight / 2 ||
-        tabRefTop - tabBarRefTop > tabBarRefClientHeight + 50)) ||
-    (props.vertical === true &&
-      (tabRefTop - tabBarRefTop <= 0 ||
-        tabRefTop - tabBarRefTop > tabBarRefClientHeight)) ||
-    (props.vertical === false &&
-      (tabBarRefRight - tabRefRight <= 0 ||
-        tabBarRefRight - tabRefRight > tabBarRefClientWidth))
-  );
+  const verticalBufferScroll =
+    props.vertical === true &&
+    (tabRefTop - tabBarRefTop <= tabRefClientHeight / 2 ||
+      tabRefTop - tabBarRefTop > tabBarRefClientHeight + 50);
+  const verticalScroll =
+    props.vertical === true &&
+    (tabRefTop - tabBarRefTop <= 0 ||
+      tabRefTop - tabBarRefTop > tabBarRefClientHeight);
+  const horizontalScroll =
+    props.vertical === false &&
+    (tabBarRefRight - tabRefRight <= 0 ||
+      tabBarRefRight - tabRefRight > tabBarRefClientWidth);
+
+  return { verticalBufferScroll, verticalScroll, horizontalScroll };
 }
 function handleVerticalStartTabBarScroll(e) {
   const eventY =
