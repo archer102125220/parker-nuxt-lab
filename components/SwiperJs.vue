@@ -246,31 +246,39 @@ const cssVariable = computed(() => {
 
 watch(
   () => props,
-  (newProps) => {
-    handleSwiperUpdata(newProps);
+  async (newProps) => {
+    // handleSwiperUpdata(newProps);
+    await nextTick();
+    window.requestAnimationFrame(() => {
+      handleSwiperUpdata(newProps);
+      syncSlideList(newProps.slideList, swiperObj.value);
+      if (newProps.value !== oldProps.value) {
+        syncSlide(newProps.value, swiperObj.value);
+      }
+    });
   },
   {
     deep: true
   }
 );
-watch(
-  () => props.modelValue,
-  (newModelValue) => {
-    syncSlide(newModelValue, swiperObj.value);
-  },
-  {
-    deep: true
-  }
-);
-watch(
-  () => props.slideList,
-  (newSlideList) => {
-    syncSlideList(newSlideList, swiperObj.value);
-  },
-  {
-    deep: true
-  }
-);
+// watch(
+//   () => props.modelValue,
+//   (newModelValue) => {
+//     syncSlide(newModelValue, swiperObj.value);
+//   },
+//   {
+//     deep: true
+//   }
+// );
+// watch(
+//   () => props.slideList,
+//   (newSlideList) => {
+//     syncSlideList(newSlideList, swiperObj.value);
+//   },
+//   {
+//     deep: true
+//   }
+// );
 
 onMounted(() => {
   handleSwiperInit();
