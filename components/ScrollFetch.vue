@@ -112,6 +112,8 @@
 <script setup>
 const MOVE_DISTANCE_LIMIT = 50;
 
+const { $polyfillScrollEnd } = useNuxtApp();
+
 const props = defineProps({
   label: { type: String, default: '下拉即可重整...' },
   height: { type: [String, Number], default: null },
@@ -155,6 +157,10 @@ const infinityLoading = ref(false);
 const refreshIconAnimation = ref(false);
 const refreshTriggerZIndex = ref(-1);
 const refreshIconRotate = ref(0);
+
+const parentScrollIsTop = ref(false);
+const parentIsScrollIng = ref(false);
+const removeParentScrollEnd = ref(false);
 
 const cssVariable = computed(() => {
   const _cssVariable = {};
@@ -222,8 +228,10 @@ watch(
 );
 
 onMounted(() => {
-  // window.addEventListener('scroll', scrollEventListener);
   window.addEventListener('contextmenu', handlePullEnd);
+  window.addEventListener('scroll', windowScroll);
+
+  removeParentScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
 
   observer.value = new IntersectionObserver((entries) => {
     if (
@@ -240,8 +248,12 @@ onMounted(() => {
   observer.value.observe(infinityTriggerRef.value);
 });
 onUnmounted(() => {
-  // window.removeEventListener('scroll', scrollEventListener);
   window.removeEventListener('contextmenu', handlePullEnd);
+  window.removeEventListener('scroll', windowScroll);
+
+  if (typeof removeParentScrollEnd.value === 'function') {
+    removeParentScrollEnd.value();
+  }
 
   if (
     typeof infinityTriggerRef.value === 'object' &&
@@ -250,24 +262,6 @@ onUnmounted(() => {
     observer.value.unobserve(infinityTriggerRef.value);
   }
 });
-function getCurrentDistance() {
-  const rect = scrollFetchRef.value.getBoundingClientRect();
-  const scrollTop = window.innerHeight;
-
-  return rect.bottom - scrollTop;
-}
-// function scrollEventListener(e) {
-//   if (
-//     infinityLoading.value === true ||
-//     props.infinityEnd === true ||
-//     props.isScrollToFetch !== true
-//   ) {
-//     return;
-//   }
-//   if (getCurrentDistance() <= props.infinityBuffer) {
-//     handleInfinityFetch();
-//   }
-// }
 async function handleInfinityFetch() {
   if (infinityLoading.value === true) {
     return;
@@ -357,6 +351,8 @@ function handlePulling(e) {
     if (_moveDistance < MOVE_DISTANCE_LIMIT + 5) {
       moveDistance.value = _moveDistance;
       refreshIconRotate.value = _moveDistance * 5.5;
+    } else if (typeof window?.navigator?.vibrate === 'function') {
+      window.navigator.vibrate(100);
     }
     isPulling.value = _moveDistance > MOVE_DISTANCE_LIMIT;
 
@@ -422,6 +418,31 @@ function handleRefreshIcon() {
 }
 function handleScroll(e) {
   emit('scroll', e);
+}
+function windowScroll(e) {
+  if (e.target === scrollFetchRef.value) {
+    parentScrollIsTop.value = false;
+    parentIsScrollIng.value = false;
+    return;
+  }
+
+  parentIsScrollIng.value = true;
+
+  const scrollElement = e.target?.body || e.target?.document?.body || e.target;
+  const scrollElementBoundingClientReact =
+    scrollElement?.getBoundingClientRect?.();
+
+  parentScrollIsTop.value = scrollElementBoundingClientReact?.y === 0;
+}
+function windowScrollEnd(e) {
+  // parentScrollIsTop.value = false;
+  parentIsScrollIng.value = false;
+
+  const scrollElement = e.target?.body || e.target?.document?.body || e.target;
+  const scrollElementBoundingClientReact =
+    scrollElement?.getBoundingClientRect?.();
+
+  parentScrollIsTop.value = scrollElementBoundingClientReact?.y === 0;
 }
 </script>
 
