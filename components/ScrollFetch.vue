@@ -363,7 +363,11 @@ function handlePulling(e) {
     if (_moveDistance < MOVE_DISTANCE_LIMIT + 5) {
       moveDistance.value = _moveDistance;
       refreshIconRotate.value = _moveDistance * 5.5;
-    } else if (typeof window?.navigator?.vibrate === 'function') {
+    } else if (
+      typeof window?.navigator?.vibrate === 'function' &&
+      _moveDistance <= MOVE_DISTANCE_LIMIT + 4 &&
+      _moveDistance >= MOVE_DISTANCE_LIMIT + 3
+    ) {
       window.navigator.vibrate(100);
     }
     isPulling.value = _moveDistance > MOVE_DISTANCE_LIMIT;
