@@ -12,6 +12,12 @@ export const pluginScrollEnd = defineNuxtPlugin((nuxtApp) => {
   }
   nuxtApp.vueApp.directive('scrollEnd', scrollEnd);
   nuxtApp.vueApp.directive('scroll-end', scrollEnd);
+
+  return {
+    provide: {
+      polyfillScrollEnd: handlePolyfillScrollEnd
+    },
+  };
 });
 
 export default pluginScrollEnd;
