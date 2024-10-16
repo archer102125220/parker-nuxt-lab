@@ -280,6 +280,7 @@ async function handleInfinityFetch() {
 
 function handlePullStart(e) {
   if (
+    (parentIsScrollIng.value === true && parentScrollIsTop.value === false) ||
     props.refreshDisable === true ||
     infinityLoading.value === true ||
     refreshing.value === true
@@ -311,6 +312,17 @@ function handlePullStart(e) {
     e.offsetY;
 }
 function handlePulling(e) {
+  if (parentIsScrollIng.value === true && parentScrollIsTop.value === false) {
+    moveDistance.value = 20;
+    handlePullEnd(e);
+  } else if (
+    isPullStart.value === false &&
+    parentIsScrollIng.value === true &&
+    parentScrollIsTop.value === true
+  ) {
+    handlePullStart(e);
+  }
+
   if (
     props.refreshDisable === true ||
     isPullStart.value !== true ||
