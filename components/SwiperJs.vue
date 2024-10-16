@@ -252,8 +252,8 @@ watch(
     window.requestAnimationFrame(() => {
       handleSwiperUpdata(newProps);
       syncSlideList(newProps.slideList, swiperObj.value);
-      if (newProps.value !== oldProps.value) {
-        syncSlide(newProps.value, swiperObj.value);
+      if (newProps.modelValue !== oldProps.modelValue) {
+        syncSlide(newProps.modelValue, swiperObj.value);
       }
     });
   },
