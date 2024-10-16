@@ -160,7 +160,7 @@ const refreshIconRotate = ref(0);
 
 const parentScrollIsTop = ref(false);
 const parentIsScrollIng = ref(false);
-const removeParentScrollEnd = ref(false);
+const removeParentScrollEnd = ref(() => {});
 
 const cssVariable = computed(() => {
   const _cssVariable = {};
