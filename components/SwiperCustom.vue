@@ -2,16 +2,16 @@
   <div ref="swiper" class="swiper" :style="cssVariable">
     <div v-if="hasNavigation" class="swiper-prev" @click="handlePrev">
       <slot name="prev">
-        <div v-ripple class="swiper-prev-btn">
+        <p v-ripple class="swiper-prev-btn">
           {{ '<' }}
-        </div>
+        </p>
       </slot>
     </div>
     <div v-if="hasNavigation" class="swiper-next" @click="handleNext">
       <slot name="next">
-        <div v-ripple class="swiper-prev-btn">
+        <p v-ripple class="swiper-prev-btn">
           {{ '>' }}
-        </div>
+        </p>
       </slot>
     </div>
     <div ref="sliderContent" class="swiper-content">
