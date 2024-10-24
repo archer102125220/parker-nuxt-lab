@@ -16,6 +16,7 @@
 const nuxtApp = useNuxtApp();
 
 const linkList = computed(() => [
+  { to: '/customize-ripple-test', label: '自製ripple directive測試' },
   { to: '/tab-test', label: 'Tabs組件測試' },
   { to: '/scroll-fetch-test', label: '下拉重載/無限滾動測試' },
   { to: '/wang-editor-test', label: 'WangEditor（HTML編輯器）測試' },
@@ -27,7 +28,9 @@ const linkList = computed(() => [
   { to: '/triangle-full-test', label: 'css三角形滿版測試' },
   { to: '/triangle-anime-test', label: 'css三角形滿版動畫測試' },
   { to: '/query-back-test', label: '路由query與上一頁測試' },
-  { to: '/params-back-test/0', label: '路由參數與上一頁測試' }
+  { to: '/params-back-test/0', label: '路由參數與上一頁測試' },
+  { to: '/customize-lazyload-test', label: '自製lazyload directive測試' },
+  { to: '/web-authn', label: '生物辨識測試' }
 ]);
 </script>
 

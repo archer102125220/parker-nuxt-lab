@@ -5,7 +5,7 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      axios: axiosInit(runtimeConfig.public.API_BASE_URL),
+      request: axiosInit(runtimeConfig.public.API_BASE),
     },
   };
 });
