@@ -5,6 +5,12 @@
         <p class="web_authn_page-register-title">向伺服器註冊生物辨識資料</p>
         <v-text-field
           clearable
+          label="id"
+          class="web_authn_page-register-id"
+          v-model="registerId"
+        />
+        <v-text-field
+          clearable
           label="帳號"
           class="web_authn_page-register-account"
           v-model="registerAccount"
@@ -41,11 +47,13 @@
 </template>
 
 <script setup>
+// https://blog.techbridge.cc/2019/08/17/webauthn-intro
 const nuxtApp = useNuxtApp();
 useHead({
   title: '生物辨識測試'
 });
 
+const registerId = ref('');
 const registerAccount = ref('');
 const registerName = ref('');
 const registerOutput = ref('');
@@ -58,13 +66,17 @@ async function handleWebAuthnRegister() {
       await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
     const challenge = Uint8Array.from(challengeString.split(','));
 
-    const userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw=';
-    const id = Uint8Array.from(window.atob(userID), (c) => c.charCodeAt(0));
+    // const encodedData = window.btoa("Hello, world"); // 编码
+    // const decodedData = window.atob(encodedData); // 解码
+
+    // const userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw=';
+    // const id = Uint8Array.from(window.atob(userID), (c) => c.charCodeAt(0));
+    const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
 
     const publicKeyCredentialCreationOptions = {
       challenge,
       rp: {
-        name: 'Tech Bridge'
+        name: 'Nuxt Lab'
         // id: 'techbridge.inc'
       },
       user: {
@@ -83,34 +95,6 @@ async function handleWebAuthnRegister() {
     const credentials = await navigator.credentials.create({
       publicKey: publicKeyCredentialCreationOptions
     });
-
-    // const challenge = new Uint8Array(32);
-    // window.crypto.getRandomValues(challenge);
-
-    // const userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw=';
-    // const id = Uint8Array.from(window.atob(userID), (c) => c.charCodeAt(0));
-
-    // const publicKeyCredentialCreationOptions = {
-    //   challenge,
-    //   rp: {
-    //     name: 'Tech Bridge',
-    //     id: 'techbridge.inc'
-    //   },
-    //   user: {
-    //     id,
-    //     name: 'arvin@techbridge.cc',
-    //     displayName: 'Arvin'
-    //   },
-    //   pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-    //   authenticatorSelection: {
-    //     authenticatorAttachment: 'platform'
-    //   },
-    //   timeout: 60000,
-    //   attestation: 'direct'
-    // };
-    // const credentials = await navigator.credentials.create(
-    //   publicKeyCredentialCreationOptions
-    // );
 
     console.log({
       credentials,
@@ -137,6 +121,9 @@ function handleWebAuthnLogin() {
     margin-bottom: 16px;
     &-title {
       margin-bottom: 16px;
+    }
+    &-id {
+      margin-bottom: 8px;
     }
     &-account {
       margin-bottom: 8px;
