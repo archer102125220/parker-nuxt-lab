@@ -12,7 +12,7 @@
     >
       <slot name="prev" @pointerup="handlePrevScroll">
         <div
-          v-ripple="loading === false"
+          v-ripple="loading === false && ripple === true"
           class="tabs_bar-prev_position-prev"
           @pointerup="handlePrevScroll"
         >
@@ -47,7 +47,7 @@
         v-for="(tab, index) in tabList"
         :key="index"
         ref="tabListRef"
-        v-ripple="loading === false"
+        v-ripple="loading === false && ripple === true"
         :class="[
           'tabs_bar-option_list-tab_item',
           isSelected(modelValue, tab, index) === true
@@ -79,7 +79,7 @@
     >
       <slot name="next" @pointerup="handleNextScroll">
         <div
-          v-ripple="loading === false"
+          v-ripple="loading === false && ripple === true"
           class="tabs_bar-next_position-next"
           @pointerup="handleNextScroll"
         >
@@ -200,6 +200,10 @@ const props = defineProps({
   scrollEndWait: {
     type: Number,
     default: null
+  },
+  ripple: {
+    type: Boolean,
+    default: true
   }
 });
 const emits = defineEmits([

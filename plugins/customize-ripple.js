@@ -6,7 +6,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   console.log(el);
     // },
     mounted(el, binding) {  // 使用nuxt時使用的客戶端掛載生命週期
-      el.setAttribute('enabled-ripple', binding.value || true);
+      let enabledRipple = binding.value;
+      if (typeof enabledRipple !== 'boolean') {
+        enabledRipple = true
+      }
+      el.setAttribute('enabled-ripple', enabledRipple);
 
       function handleRippleStart(e) {
         const enabledRipple = el.getAttribute('enabled-ripple') === 'true';
@@ -64,7 +68,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       el.addEventListener('pointerdown', handleRippleStart);
     },
     updated(el, binding) {
-      el.setAttribute('enabled-ripple', binding.value || true);
+      let enabledRipple = binding.value;
+      if (typeof enabledRipple !== 'boolean') {
+        enabledRipple = true
+      }
+      el.setAttribute('enabled-ripple', enabledRipple);
     },
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
     //   // you can provide SSR-specific props here
