@@ -97,7 +97,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // apiBaseUrl: 'https://dev-zack.jiapin.online',
-      API_BASE: process.env.API_BASE,
+      API_BASE: process.env.API_BASE || '/api',
       // websocketBaseUrl:
       //   'wss://dev-zack2.jiapin.online:3000/ws?role=STORE&cid=',
       WEBSOCKET_BASE_URL:
