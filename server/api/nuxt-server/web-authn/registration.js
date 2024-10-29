@@ -45,6 +45,7 @@ export default defineEventHandler(async (event) => {
   console.log(credentialId);
   console.log(publicKeyBytes);
   // console.log(publicKeyObject);
+  console.log(base64Js.encodeURL(challenge), clientDataObj, base64Js.encodeURL(challenge) === clientDataObj.challenge);
 
   return { ...body, decodeClientDataObj: clientDataObj };
 });
