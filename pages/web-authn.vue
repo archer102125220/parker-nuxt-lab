@@ -47,16 +47,20 @@
 </template>
 
 <script setup>
+import { Base64 as base64Js } from 'js-base64';
+
 // https://blog.techbridge.cc/2019/08/17/webauthn-intro
 const nuxtApp = useNuxtApp();
 useHead({
   title: '生物辨識測試'
 });
 
-const registerId = ref('');
-const registerAccount = ref('');
-const registerName = ref('');
-const registerOutput = ref('');
+const challenge = ref(null);
+
+const registerId = ref('test');
+const registerAccount = ref('test');
+const registerName = ref('test');
+const registerOutput = ref(null);
 const loginAccount = ref('');
 const loginOutput = ref('');
 
@@ -64,7 +68,7 @@ async function handleWebAuthnRegister() {
   try {
     const challengeString =
       await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
-    const challenge = Uint8Array.from(challengeString.split(','));
+    challenge.value = Uint8Array.from(challengeString.split(','));
 
     // const encodedData = window.btoa("Hello, world"); // 编码
     // const decodedData = window.atob(encodedData); // 解码
@@ -74,7 +78,7 @@ async function handleWebAuthnRegister() {
     const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
 
     const publicKeyCredentialCreationOptions = {
-      challenge,
+      challenge: challenge.value,
       rp: {
         name: 'Nuxt Lab'
         // id: 'techbridge.inc'
@@ -84,7 +88,20 @@ async function handleWebAuthnRegister() {
         name: registerAccount.value,
         displayName: registerName.value
       },
-      pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+
+      // This Relying Party will accept either an ES256 or RS256 credential, but
+      // prefers an ES256 credential.
+      pubKeyCredParams: [
+        {
+          type: 'public-key',
+          alg: -7 // "ES256" as registered in the IANA COSE Algorithms registry
+        },
+        {
+          type: 'public-key',
+          alg: -257 // Value registered by this specification for "RS256"
+        }
+      ],
+
       // authenticatorSelection: {
       //   authenticatorAttachment: 'platform'
       // },
@@ -95,14 +112,36 @@ async function handleWebAuthnRegister() {
     const credentials = await navigator.credentials.create({
       publicKey: publicKeyCredentialCreationOptions
     });
+    const credentialsJSON = {
+      authenticatorAttachment: credentials.authenticatorAttachment,
+      id: credentials.id,
+      // rawId: credentials.rawId,
+      response: {
+        attestationObject: credentials.response.attestationObject,
+        clientDataJSON: credentials.response.clientDataJSON
+      },
+      rawId: base64Js.encodeURL(credentials.rawId),
+      attestationObject: base64Js.encodeURL(
+        credentials.response.attestationObject
+      ),
+      clientDataJSON: base64Js.encodeURL(credentials.response.clientDataJSON)
+    };
+
+    const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
+      challengeString,
+      credentials: credentialsJSON
+    });
 
     console.log({
       credentials,
-      // challengeString,
+      credentialsJSON,
       challenge,
       registerAccount: registerAccount.value,
-      registerName: registerName.value
+      registerName: registerName.value,
+      response
     });
+
+    registerOutput.value = response;
   } catch (error) {
     console.error(error);
   }
@@ -135,6 +174,10 @@ function handleWebAuthnLogin() {
       margin-bottom: 16px;
       text-align: center;
     }
+    &-output {
+      max-width: 100%;
+      word-wrap: break-word;
+    }
   }
 
   &-login {
@@ -147,6 +190,9 @@ function handleWebAuthnLogin() {
     }
     &-submit {
       @extend .web_authn_page-register-submit;
+    }
+    &-output {
+      @extend .web_authn_page-register-output;
     }
   }
 }
