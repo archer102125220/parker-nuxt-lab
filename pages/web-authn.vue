@@ -120,13 +120,14 @@ async function handleWebAuthnRegister() {
         attestationObject: credentials.response.attestationObject,
         clientDataJSON: credentials.response.clientDataJSON
       },
-      rawId: base64Js.encodeURL(credentials.rawId),
+      rawId: base64Js.encodeURL(new Uint8Array(credentials.rawId)),
       attestationObject: base64Js.encodeURL(
-        credentials.response.attestationObject
+        new Uint8Array(credentials.response.attestationObject)
       ),
-      clientDataJSON: base64Js.encodeURL(credentials.response.clientDataJSON)
+      clientDataJSON: base64Js.encodeURL(
+        new Uint8Array(credentials.response.clientDataJSON)
+      )
     };
-
     const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
       challengeString,
       credentials: credentialsJSON
@@ -138,7 +139,11 @@ async function handleWebAuthnRegister() {
       challenge,
       registerAccount: registerAccount.value,
       registerName: registerName.value,
-      response
+      response,
+
+      'credentialsJSON.attestationObject': base64Js.decode(
+        credentialsJSON.attestationObject
+      )
     });
 
     registerOutput.value = response;
