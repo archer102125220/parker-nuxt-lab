@@ -27,7 +27,7 @@
       ref="tabBarRef"
       :class="[
         'tabs_bar-option_list',
-        selectedType !== '' ? 'tabs_bar-option_list_emphasize' : ''
+        validSelectedType !== false ? 'tabs_bar-option_list_emphasize' : ''
       ]"
       v-scroll-end="{
         handler: handleTabBarScrollEnd,
@@ -42,6 +42,7 @@
       @touchmove="handleTabBarScroll"
       @touchend="handleStopTabBarScroll"
       @touchcancel="handleStopTabBarScroll"
+      @transitionend="optionTransitionEnd"
     >
       <div
         v-for="(tab, index) in tabList"
@@ -201,6 +202,14 @@ const props = defineProps({
     type: Number,
     default: null
   },
+  moveTransition: {
+    type: Boolean,
+    default: null
+  },
+  lineBorderRadius: {
+    type: [Number, String],
+    default: null
+  },
   ripple: {
     type: Boolean,
     default: true
@@ -252,45 +261,70 @@ const computedLimitShadow = computed(() => {
   }
   return props.limitShadow;
 });
+const computedMoveTransition = computed(() => {
+  if (typeof props.moveTransition !== 'boolean') {
+    return props.vertical;
+  }
+  return props.moveTransition;
+});
+const validSelectedType = computed(() => {
+  return typeof props.selectedType === 'string' && props.selectedType !== '';
+});
 const cssVariable = computed(() => {
   const _cssVariable = {
     ...(bottomLineStyleTemp.value || bottomLineStyle.value),
     '--prev_opacity': prevOpacity.value,
     '--next_opacity': nextOpacity.value,
-    '--selected_transition': selectedTransition.value
+    '--selected_transition':
+      computedMoveTransition.value === false ? '' : selectedTransition.value
   };
 
-  if (props.selectedType === 'underLine') {
-    _cssVariable['--tab_bottom_line_bottom'] = '0px';
-    if (Array(props.tabList) && props.tabList.length > 0) {
-      if (props.vertical === false) {
-        if (typeof props.bottomLineHeight === 'number') {
-          _cssVariable['--tab_bottom_line_height'] =
-            `${props.bottomLineHeight}px`;
-        } else if (
-          typeof props.bottomLineHeight === 'string' &&
-          props.bottomLineHeight !== ''
-        ) {
-          _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
-        }
-      }
-
-      if (typeof props.bottomLineWidth === 'number') {
-        _cssVariable['--tab_bottom_line_width'] = `${props.bottomLineWidth}px`;
-      } else if (
-        typeof props.bottomLineWidth === 'string' &&
-        props.bottomLineWidth !== ''
-      ) {
-        _cssVariable['--tab_bottom_line_width'] = props.bottomLineWidth;
-      }
-    } else {
-      _cssVariable['--tab_bottom_line_width'] = '0px';
-      _cssVariable['--tab_bottom_line_height'] = '0px';
-      _cssVariable['--tab_bar_min_width'] = '100%';
+  if (validSelectedType.value === true) {
+    if (
+      typeof props.lineBorderRadius === 'string' &&
+      props.lineBorderRadius !== ''
+    ) {
+      _cssVariable['--tab_bottom_line_border_radius'] = props.lineBorderRadius;
+    } else if (typeof props.lineBorderRadius === 'number') {
+      _cssVariable['--tab_bottom_line_border_radius'] =
+        `${props.lineBorderRadius}px`;
     }
-  } else if (props.selectedType === 'mask') {
-    // _cssVariable['--tab_bottom_line_height'] = '100%';
-    _cssVariable['--tab_bottom_line_opacity'] = '0.1';
+
+    if (props.selectedType === 'underLine') {
+      _cssVariable['--tab_bottom_line_bottom'] = '0px';
+      if (Array(props.tabList) && props.tabList.length > 0) {
+        if (props.vertical === false) {
+          if (typeof props.bottomLineHeight === 'number') {
+            _cssVariable['--tab_bottom_line_height'] =
+              `${props.bottomLineHeight}px`;
+          } else if (
+            typeof props.bottomLineHeight === 'string' &&
+            props.bottomLineHeight !== ''
+          ) {
+            _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+          }
+        }
+
+        if (typeof props.bottomLineWidth === 'number') {
+          _cssVariable['--tab_bottom_line_width'] =
+            `${props.bottomLineWidth}px`;
+        } else if (
+          typeof props.bottomLineWidth === 'string' &&
+          props.bottomLineWidth !== ''
+        ) {
+          _cssVariable['--tab_bottom_line_width'] = props.bottomLineWidth;
+        }
+      } else {
+        _cssVariable['--tab_bottom_line_width'] = '0px';
+        _cssVariable['--tab_bottom_line_height'] = '0px';
+        _cssVariable['--tab_bar_min_width'] = '100%';
+      }
+    } else if (props.selectedType === 'mask') {
+      // _cssVariable['--tab_bottom_line_height'] = '100%';
+      _cssVariable['--tab_bottom_line_opacity'] = '0.1';
+    }
+  } else {
+    _cssVariable['--tab_bar_min_width'] = '100%';
   }
 
   if (
@@ -608,6 +642,16 @@ onBeforeUnmount(() => {
     observer.value.unobserve(tabBarRef.value);
   }
 });
+
+function optionTransitionEnd() {
+  nextTick(() =>
+    window.requestAnimationFrame(() => {
+      const tab =
+        tabListRef?.value?.[getCurrentTabIndex(props.modelValue) || 0];
+      handleBottomeStyle(tab);
+    })
+  );
+}
 
 function handleResize() {
   const tabRef = tabListRef.value?.[getCurrentTabIndex(props.modelValue) || 0];
@@ -1494,7 +1538,8 @@ function handleCustomKeepScrollStep(
       // width: var(--tab_bottom_line_width, 0px);
       height: var(--tab_bottom_line_height);
       width: var(--tab_bottom_line_width);
-      border-radius: 5px;
+      // border-radius: 5px;
+      border-radius: var(--tab_bottom_line_border_radius);
       opacity: var(--tab_bottom_line_opacity);
       background-color: var(
         --tab_item_selected_color,
