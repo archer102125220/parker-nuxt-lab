@@ -25,7 +25,14 @@
           <v-btn color="primary" type="submit">註冊</v-btn>
         </div>
       </form>
-      <p class="web_authn_page-register-output">{{ registerOutput }}</p>
+      <div class="web_authn_page-register-output">
+        <p>web authn回傳：</p>
+        <p>{{ registerWebApiOutput }}</p>
+      </div>
+      <div class="web_authn_page-register-output">
+        <p>伺服端回傳：</p>
+        <p>{{ registerOutput }}</p>
+      </div>
     </div>
 
     <div class="web_authn_page-login">
@@ -41,34 +48,48 @@
           <v-btn color="primary" type="submit">驗證</v-btn>
         </div>
       </form>
-      <p class="web_authn_page-login-output">{{ loginOutput }}</p>
+      <div class="web_authn_page-login-output">
+        <p>web authn回傳：</p>
+        <p>{{ loginWebApiOutput }}</p>
+      </div>
+      <div class="web_authn_page-login-output">
+        <p>伺服端回傳：</p>
+        <p>{{ loginOutput }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+// https://blog.techbridge.cc/2019/08/17/webauthn-intro
+// https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/
+// https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API#browser_compatibility
 import { Base64 as base64Js } from 'js-base64';
 
-// https://blog.techbridge.cc/2019/08/17/webauthn-intro
 const nuxtApp = useNuxtApp();
 useHead({
   title: '生物辨識測試'
 });
 
 const challenge = ref(null);
+const credentialId = ref(null);
+const publicKeyBytes = ref(null);
 
 const registerId = ref('test');
 const registerAccount = ref('test');
 const registerName = ref('test');
+const registerWebApiOutput = ref(null);
 const registerOutput = ref(null);
-const loginAccount = ref('');
-const loginOutput = ref('');
+
+const loginAccount = ref('test');
+const loginWebApiOutput = ref(null);
+const loginOutput = ref(null);
 
 async function handleWebAuthnRegister() {
   try {
     const challengeString =
       await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
-    challenge.value = Uint8Array.from(challengeString.split(','));
+    challenge.value = base64Js.toUint8Array(base64Js.decode(challengeString));
 
     // const encodedData = window.btoa("Hello, world"); // 编码
     // const decodedData = window.atob(encodedData); // 解码
@@ -109,53 +130,147 @@ async function handleWebAuthnRegister() {
       attestation: 'direct'
     };
 
-    const credentials = await navigator.credentials.create({
+    const credential = await navigator.credentials.create({
       publicKey: publicKeyCredentialCreationOptions
     });
+    registerWebApiOutput.value = credential;
     const credentialsJSON = {
-      authenticatorAttachment: credentials.authenticatorAttachment,
-      id: credentials.id,
-      // rawId: credentials.rawId,
+      authenticatorAttachment: credential.authenticatorAttachment,
+      id: credential.id,
+      // rawId: credential.rawId,
       response: {
-        attestationObject: credentials.response.attestationObject,
-        clientDataJSON: credentials.response.clientDataJSON
+        attestationObject: credential.response.attestationObject,
+        clientDataJSON: credential.response.clientDataJSON
       },
-      rawId: base64Js.encodeURL(new Uint8Array(credentials.rawId)),
-      attestationObject: base64Js.encodeURL(
-        new Uint8Array(credentials.response.attestationObject)
+      rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
+      attestationObject: base64Js.fromUint8Array(
+        new Uint8Array(credential.response.attestationObject),
+        true
       ),
-      clientDataJSON: base64Js.encodeURL(
-        new Uint8Array(credentials.response.clientDataJSON)
+      clientDataJSON: base64Js.fromUint8Array(
+        new Uint8Array(credential.response.clientDataJSON),
+        true
       )
     };
     const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
       challengeString,
-      credentials: credentialsJSON
+      credential: credentialsJSON
     });
 
+    const transports = credential.response.getTransports();
+
     console.log({
-      credentials,
+      credential,
       credentialsJSON,
       challenge,
       registerAccount: registerAccount.value,
       registerName: registerName.value,
       response,
 
-      'credentialsJSON.attestationObject': base64Js.decode(
+      'credentialsJSON.attestationObject': base64Js.toUint8Array(
         credentialsJSON.attestationObject
-      )
+      ),
+      transports
     });
 
+    console.log({
+      credentialId: base64Js.toUint8Array(
+        response?.base64URLServerSaveData?.credentialId
+      ),
+      publicKeyBytes: base64Js.toUint8Array(
+        response?.base64URLServerSaveData?.publicKeyBytes
+      )
+    });
     registerOutput.value = response;
+    credentialId.value = response?.base64URLServerSaveData?.credentialId;
+    publicKeyBytes.value = response?.base64URLServerSaveData?.publicKeyBytes;
   } catch (error) {
     console.error(error);
   }
 }
 
-function handleWebAuthnLogin() {
+async function handleWebAuthnLogin() {
   console.log({
-    loginAccount: loginAccount.value
+    loginAccount: loginAccount.value,
+    credentialId: base64Js.toUint8Array(credentialId.value)
   });
+  try {
+    const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
+
+    const publicKey = {
+      challenge: challenge.value,
+      rp: {
+        name: 'Nuxt Lab'
+        // id: 'techbridge.inc'
+      },
+      user: {
+        id,
+        name: registerAccount.value,
+        displayName: registerName.value
+      },
+
+      // This Relying Party will accept either an ES256 or RS256 credential, but
+      // prefers an ES256 credential.
+      pubKeyCredParams: [
+        {
+          type: 'public-key',
+          alg: -7 // "ES256" as registered in the IANA COSE Algorithms registry
+        },
+        {
+          type: 'public-key',
+          alg: -257 // Value registered by this specification for "RS256"
+        }
+      ],
+
+      // authenticatorSelection: {
+      //   authenticatorAttachment: 'platform'
+      // },
+      timeout: 60000,
+      attestation: 'direct'
+    };
+    const allowCredentials = [
+      {
+        id: base64Js.toUint8Array(credentialId.value), // from registration
+        type: 'public-key',
+        transports: ['internal', 'usb', 'ble', 'nfc']
+      }
+    ];
+
+    const credential = await navigator.credentials.get({
+      publicKey,
+      allowCredentials
+    });
+    console.log(credential);
+    loginWebApiOutput.value = credential;
+
+    const credentialsJSON = {
+      authenticatorAttachment: credential.authenticatorAttachment,
+      id: credential.id,
+      // rawId: credential.rawId,
+      response: {
+        attestationObject: credential.response.attestationObject,
+        clientDataJSON: credential.response.clientDataJSON
+      },
+      rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
+      attestationObject: base64Js.fromUint8Array(
+        new Uint8Array(credential.response.attestationObject),
+        true
+      ),
+      clientDataJSON: base64Js.fromUint8Array(
+        new Uint8Array(credential.response.clientDataJSON),
+        true
+      )
+    };
+
+    const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
+      challengeString,
+      credential: credentialsJSON
+    });
+
+    loginOutput.value = response;
+  } catch (error) {
+    console.error(error);
+  }
 }
 </script>
 
@@ -181,7 +296,10 @@ function handleWebAuthnLogin() {
     }
     &-output {
       max-width: 100%;
+      max-height: 700px;
       word-wrap: break-word;
+      overflow: auto;
+      margin-bottom: 16px;
     }
   }
 

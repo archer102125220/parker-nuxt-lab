@@ -40,7 +40,7 @@ const error = useError();
 
 const router = useRouter();
 const route = useRoute();
-console.log(route);
+// console.log(route);
 const getRouteBaseName = useRouteBaseName();
 useHead({
   titleTemplate: (titleChunk) => {

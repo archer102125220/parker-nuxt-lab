@@ -11,3 +11,9 @@ export function POST_webAuthnRegistration(payload) {
 
   return $request.post(`${prefix}/registration`, payload);
 }
+
+export function POST_webAuthnVerify(payload) {
+  const { $request } = useNuxtApp();
+
+  return $request.post(`${prefix}/verify`, payload);
+}
