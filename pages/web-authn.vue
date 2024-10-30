@@ -71,7 +71,6 @@ useHead({
   title: '生物辨識測試'
 });
 
-const challenge = ref(null);
 const credentialId = ref(null);
 const publicKeyBytes = ref(null);
 
@@ -89,7 +88,7 @@ async function handleWebAuthnRegister() {
   try {
     const challengeString =
       await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
-    challenge.value = base64Js.toUint8Array(base64Js.decode(challengeString));
+    const challenge = base64Js.toUint8Array(base64Js.decode(challengeString));
 
     // const encodedData = window.btoa("Hello, world"); // 编码
     // const decodedData = window.atob(encodedData); // 解码
@@ -99,7 +98,7 @@ async function handleWebAuthnRegister() {
     const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
 
     const publicKeyCredentialCreationOptions = {
-      challenge: challenge.value,
+      challenge,
       rp: {
         name: 'Nuxt Lab'
         // id: 'techbridge.inc'
@@ -195,10 +194,14 @@ async function handleWebAuthnLogin() {
     credentialId: base64Js.toUint8Array(credentialId.value)
   });
   try {
+    const challengeString =
+      await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
+    const challenge = base64Js.toUint8Array(base64Js.decode(challengeString));
+
     const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
 
     const publicKey = {
-      challenge: challenge.value,
+      challenge,
       rp: {
         name: 'Nuxt Lab'
         // id: 'techbridge.inc'
