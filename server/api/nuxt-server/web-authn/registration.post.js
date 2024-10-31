@@ -39,16 +39,31 @@ export default defineEventHandler(async (event) => {
 
   const attestationObject = credential.attestationObject;
   const decodedAttestationObj = decode(attestationObject);
-  // console.log(decodedAttestationObj);
+  console.log(Object.keys(decodedAttestationObj));
+  console.log(decodedAttestationObj.fmt);
+  console.log(decodedAttestationObj.attStmt.alg);
+  console.log(decodedAttestationObj.attStmt.sig);
+  console.log(decodedAttestationObj.attStmt.x5c);
+  console.log(decodedAttestationObj.attStmt.ecdaaKeyId);
+
 
   const { authData } = decodedAttestationObj;
+  // console.log(authData);
+
   const credentialIdLength = authData[55];
   // get the credential ID
-  const credentialId = authData.slice(56, 56 + credentialIdLength);
+  const credentialId = authData.slice(55, 55 + credentialIdLength);
   // get the public key object
-  const publicKeyBytes = authData.slice(56 + credentialIdLength, authData.length - 1);
+  const publicKeyBytes = authData.slice(55 + credentialIdLength, authData.length - 1);
   // the publicKeyBytes are encoded again as CBOR
   // const publicKeyObject = decode(publicKeyBytes); // error ?
+
+  // console.log(credentialId);
+  // console.log(decode(credentialId));
+  // console.log(publicKeyBytes);
+  // console.log(decode(publicKeyBytes));
+  // console.log(utf8Decoder.decode(credentialId), '123');
+  // console.log(utf8Decoder.decode(publicKeyBytes), '456');
   // console.log(publicKeyObject);
 
   // console.log(credentialIdLength);

@@ -6,58 +6,38 @@ export default defineEventHandler(async (event) => {
   const challengeString = body.challengeString || '';
   const challenge = base64Js.toUint8Array(base64Js.decode(challengeString));
 
-  const credentials = {
-    authenticatorAttachment: body.credentials.authenticatorAttachment,
-    id: body.credentials.id,
+
+  const credential = {
+    authenticatorAttachment: body.credential.authenticatorAttachment,
+    id: body.credential.id,
     rawId: base64Js.toUint8Array(
-      body.credentials.rawId
-    ),
-    // response: {
-    //   attestationObject: body.credentials.response.attestationObject,
-    //   clientDataJSON: body.credentials.response.clientDataJSON
-    // },
-    attestationObject: base64Js.toUint8Array(
-      body.credentials.attestationObject
+      body.credential.rawId
     ),
     clientDataJSON: base64Js.toUint8Array(
-      body.credentials.clientDataJSON
+      body.credential.clientDataJSON
+    ),
+    userHandle: base64Js.decode(
+      body.credential.userHandle
     )
   };
-  // console.log(credentials.rawId);
+  // console.log(credential.rawId);
 
   const utf8Decoder = new TextDecoder('utf-8');
-
-  const decodedClientData = utf8Decoder.decode(credentials.clientDataJSON)
+  const decodedClientData = utf8Decoder.decode(credential.clientDataJSON)
   const clientDataObj = JSON.parse(decodedClientData);
 
-  // if (clientDataObj?.type !== 'webauthn.create') {
-  //   throw createError({
-  //     statusCode: 401,
-  //     statusMessage: 'clientData.type error',
-  //   })
-  // }
+  console.log(clientDataObj);
 
-  const attestationObject = credentials.attestationObject;
-  const decodedAttestationObj = decode(attestationObject);
-  // console.log(decodedAttestationObj);
-
-  const { authData } = decodedAttestationObj;
-  const credentialIdLength = authData[55];
-  // get the credential ID
-  const credentialId = authData.slice(56, 56 + credentialIdLength);
-  // get the public key object
-  const publicKeyBytes = authData.slice(56 + credentialIdLength, authData.length - 1);
-  // the publicKeyBytes are encoded again as CBOR
-  // const publicKeyObject = decode(publicKeyBytes); // error ?
-  // console.log(publicKeyObject);
+  if (clientDataObj?.type !== 'webauthn.get') {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'clientData.type error',
+    })
+  }
 
   return {
     ...body,
     decodeClientDataObj: clientDataObj,
     success: base64Js.fromUint8Array(challenge, true) === clientDataObj.challenge,
-    base64URLServerSaveData: {
-      credentialId: base64Js.fromUint8Array(credentialId, true),
-      publicKeyBytes: base64Js.fromUint8Array(publicKeyBytes, true),
-    }
   };
 });

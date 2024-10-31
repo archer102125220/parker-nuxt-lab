@@ -37,13 +37,13 @@
 
     <div class="web_authn_page-login">
       <form @submit.prevent="handleWebAuthnLogin">
-        <p class="web_authn_page-login-title">執行身份驗證</p>
+        <!-- <p class="web_authn_page-login-title">執行身份驗證</p>
         <v-text-field
           clearable
           label="帳號"
           class="web_authn_page-login-account"
           v-model="loginAccount"
-        />
+        /> -->
         <div class="web_authn_page-login-submit">
           <v-btn color="primary" type="submit">驗證</v-btn>
         </div>
@@ -64,6 +64,7 @@
 // https://blog.techbridge.cc/2019/08/17/webauthn-intro
 // https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API#browser_compatibility
+// https://flyhigher.top/develop/2160.html#verify-authenticator
 import { Base64 as base64Js } from 'js-base64';
 
 const nuxtApp = useNuxtApp();
@@ -80,60 +81,74 @@ const registerName = ref('test');
 const registerWebApiOutput = ref(null);
 const registerOutput = ref(null);
 
-const loginAccount = ref('test');
+// const loginAccount = ref('test');
 const loginWebApiOutput = ref(null);
 const loginOutput = ref(null);
 
+async function handleGeneratePublicKeySetting() {
+  const challengeString =
+    await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
+  const challenge = base64Js.toUint8Array(challengeString);
+
+  const publicKeyCredentialCreationOptions = {
+    challenge,
+    rp: {
+      name: 'Nuxt Lab'
+      // id: 'techbridge.inc'
+    },
+
+    // This Relying Party will accept either an ES256 or RS256 credential, but
+    // prefers an ES256 credential.
+    pubKeyCredParams: [
+      {
+        type: 'public-key',
+        alg: -7 // "ES256" as registered in the IANA COSE Algorithms registry
+      },
+      {
+        type: 'public-key',
+        alg: -257 // Value registered by this specification for "RS256"
+      }
+    ],
+
+    // authenticatorSelection: {
+    //   authenticatorAttachment: 'platform'
+    // },
+    timeout: 60000,
+    attestation: 'direct',
+    // attestation: 'none'
+  };
+
+  return { publicKeyCredentialCreationOptions, challengeString, challenge };
+}
+
 async function handleWebAuthnRegister() {
+  nuxtApp.$store.system.setLoading(true);
   try {
-    const challengeString =
-      await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
-    const challenge = base64Js.toUint8Array(base64Js.decode(challengeString));
+    const {
+      publicKeyCredentialCreationOptions: publicKeySetting,
+      challengeString
+    } = await handleGeneratePublicKeySetting();
 
     // const encodedData = window.btoa("Hello, world"); // 编码
     // const decodedData = window.atob(encodedData); // 解码
 
     // const userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw=';
     // const id = Uint8Array.from(window.atob(userID), (c) => c.charCodeAt(0));
+    // const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
     const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
-
-    const publicKeyCredentialCreationOptions = {
-      challenge,
-      rp: {
-        name: 'Nuxt Lab'
-        // id: 'techbridge.inc'
-      },
-      user: {
-        id,
-        name: registerAccount.value,
-        displayName: registerName.value
-      },
-
-      // This Relying Party will accept either an ES256 or RS256 credential, but
-      // prefers an ES256 credential.
-      pubKeyCredParams: [
-        {
-          type: 'public-key',
-          alg: -7 // "ES256" as registered in the IANA COSE Algorithms registry
-        },
-        {
-          type: 'public-key',
-          alg: -257 // Value registered by this specification for "RS256"
-        }
-      ],
-
-      // authenticatorSelection: {
-      //   authenticatorAttachment: 'platform'
-      // },
-      timeout: 60000,
-      attestation: 'direct'
+    publicKeySetting.user = {
+      id,
+      name: registerAccount.value,
+      displayName: registerName.value
     };
 
     const credential = await navigator.credentials.create({
-      publicKey: publicKeyCredentialCreationOptions
+      publicKey: publicKeySetting
     });
     registerWebApiOutput.value = credential;
-    const credentialsJSON = {
+    console.log(credential);
+
+    const credentialJSON = {
       authenticatorAttachment: credential.authenticatorAttachment,
       id: credential.id,
       // rawId: credential.rawId,
@@ -149,28 +164,16 @@ async function handleWebAuthnRegister() {
       clientDataJSON: base64Js.fromUint8Array(
         new Uint8Array(credential.response.clientDataJSON),
         true
-      )
+      ),
+      type: credential.type
     };
     const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
       challengeString,
-      credential: credentialsJSON
+      credential: credentialJSON
     });
 
-    const transports = credential.response.getTransports();
-
-    console.log({
-      credential,
-      credentialsJSON,
-      challenge,
-      registerAccount: registerAccount.value,
-      registerName: registerName.value,
-      response,
-
-      'credentialsJSON.attestationObject': base64Js.toUint8Array(
-        credentialsJSON.attestationObject
-      ),
-      transports
-    });
+    // const transports = credential.response.getTransports();
+    // console.log({ transports });
 
     console.log({
       credentialId: base64Js.toUint8Array(
@@ -186,51 +189,23 @@ async function handleWebAuthnRegister() {
   } catch (error) {
     console.error(error);
   }
+  nuxtApp.$store.system.setLoading(false);
 }
 
 async function handleWebAuthnLogin() {
+  nuxtApp.$store.system.setLoading(true);
   console.log({
-    loginAccount: loginAccount.value,
+    // loginAccount: loginAccount.value,
     credentialId: base64Js.toUint8Array(credentialId.value)
   });
   try {
-    const challengeString =
-      await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
-    const challenge = base64Js.toUint8Array(base64Js.decode(challengeString));
+    const {
+      publicKeyCredentialCreationOptions: publicKeySetting,
+      challengeString
+    } = await handleGeneratePublicKeySetting();
 
-    const id = Uint8Array.from(registerId.value, (c) => c.charCodeAt(0));
+    // publicKeySetting.user = undefined;
 
-    const publicKey = {
-      challenge,
-      rp: {
-        name: 'Nuxt Lab'
-        // id: 'techbridge.inc'
-      },
-      user: {
-        id,
-        name: registerAccount.value,
-        displayName: registerName.value
-      },
-
-      // This Relying Party will accept either an ES256 or RS256 credential, but
-      // prefers an ES256 credential.
-      pubKeyCredParams: [
-        {
-          type: 'public-key',
-          alg: -7 // "ES256" as registered in the IANA COSE Algorithms registry
-        },
-        {
-          type: 'public-key',
-          alg: -257 // Value registered by this specification for "RS256"
-        }
-      ],
-
-      // authenticatorSelection: {
-      //   authenticatorAttachment: 'platform'
-      // },
-      timeout: 60000,
-      attestation: 'direct'
-    };
     const allowCredentials = [
       {
         id: base64Js.toUint8Array(credentialId.value), // from registration
@@ -240,40 +215,54 @@ async function handleWebAuthnLogin() {
     ];
 
     const credential = await navigator.credentials.get({
-      publicKey,
+      publicKey: publicKeySetting,
       allowCredentials
     });
     console.log(credential);
     loginWebApiOutput.value = credential;
 
-    const credentialsJSON = {
+    const utf8Decoder = new TextDecoder('utf-8');
+
+    const credentialJSON = {
       authenticatorAttachment: credential.authenticatorAttachment,
       id: credential.id,
       // rawId: credential.rawId,
       response: {
-        attestationObject: credential.response.attestationObject,
-        clientDataJSON: credential.response.clientDataJSON
+        userHandle: credential.response.userHandle,
+        signature: credential.response.signature,
+        clientDataJSON: credential.response.clientDataJSON,
+        authenticatorData: credential.response.authenticatorData
       },
       rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
-      attestationObject: base64Js.fromUint8Array(
-        new Uint8Array(credential.response.attestationObject),
-        true
-      ),
       clientDataJSON: base64Js.fromUint8Array(
         new Uint8Array(credential.response.clientDataJSON),
         true
-      )
+      ),
+      userHandle: base64Js.encodeURL(
+        utf8Decoder.decode(credential.response.userHandle)
+      ),
+      signature: base64Js.encodeURL(
+        new Uint8Array(credential.response.signature)
+      ),
+      authenticatorData: base64Js.encodeURL(
+        new Uint8Array(credential.response.authenticatorData)
+      ),
+      type: credential.type
     };
 
-    const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
+    console.log({ credentialJSON });
+
+    const response = await nuxtApp.$webAuthn.POST_webAuthnVerify({
+      userId: registerId.value,
       challengeString,
-      credential: credentialsJSON
+      credential: credentialJSON
     });
 
     loginOutput.value = response;
   } catch (error) {
     console.error(error);
   }
+  nuxtApp.$store.system.setLoading(false);
 }
 </script>
 
