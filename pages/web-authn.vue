@@ -1,5 +1,6 @@
 <template>
   <div class="web_authn_page">
+    <h1>原生方式為主，套件用來編碼、解碼用</h1>
     <div class="web_authn_page-register">
       <form @submit.prevent="handleWebAuthnRegister">
         <p class="web_authn_page-register-title">向伺服器註冊生物辨識資料</p>
