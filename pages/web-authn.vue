@@ -25,35 +25,35 @@
           <v-btn color="primary" type="submit">註冊</v-btn>
         </div>
       </form>
+      <p class="web_authn_page-register-output_title">web authn回傳：</p>
       <div class="web_authn_page-register-output">
-        <p>web authn回傳：</p>
         <p>{{ registerWebApiOutput }}</p>
       </div>
+      <p class="web_authn_page-register-output_title">伺服端回傳：</p>
       <div class="web_authn_page-register-output">
-        <p>伺服端回傳：</p>
         <p>{{ registerOutput }}</p>
       </div>
     </div>
 
     <div class="web_authn_page-login">
       <form @submit.prevent="handleWebAuthnLogin">
-        <!-- <p class="web_authn_page-login-title">執行身份驗證</p>
+        <p class="web_authn_page-login-title">執行身份驗證</p>
         <v-text-field
           clearable
           label="帳號"
-          class="web_authn_page-login-account"
-          v-model="loginAccount"
-        /> -->
+          class="web_authn_page-login-id"
+          v-model="loginId"
+        />
         <div class="web_authn_page-login-submit">
           <v-btn color="primary" type="submit">驗證</v-btn>
         </div>
       </form>
+      <p class="web_authn_page-login-output_title">web authn回傳：</p>
       <div class="web_authn_page-login-output">
-        <p>web authn回傳：</p>
         <p>{{ loginWebApiOutput }}</p>
       </div>
+      <p class="web_authn_page-login-output_title">web 伺服端回傳：</p>
       <div class="web_authn_page-login-output">
-        <p>伺服端回傳：</p>
         <p>{{ loginOutput }}</p>
       </div>
     </div>
@@ -73,15 +73,16 @@ useHead({
 });
 
 const credentialId = ref(null);
-const publicKeyBytes = ref(null);
+const credentialPublicKeyPem = ref(null);
+const credentialPublicKeyJwk = ref(null);
 
-const registerId = ref('test');
-const registerAccount = ref('test');
-const registerName = ref('test');
+const registerId = ref('testId');
+const registerAccount = ref('testAccount');
+const registerName = ref('testName');
 const registerWebApiOutput = ref(null);
 const registerOutput = ref(null);
 
-// const loginAccount = ref('test');
+const loginId = ref('testId');
 const loginWebApiOutput = ref(null);
 const loginOutput = ref(null);
 
@@ -114,8 +115,7 @@ async function handleGeneratePublicKeySetting() {
     //   authenticatorAttachment: 'platform'
     // },
     timeout: 60000,
-    attestation: 'direct',
-    // attestation: 'none'
+    attestation: 'direct'
   };
 
   return { publicKeyCredentialCreationOptions, challengeString, challenge };
@@ -123,11 +123,14 @@ async function handleGeneratePublicKeySetting() {
 
 async function handleWebAuthnRegister() {
   nuxtApp.$store.system.setLoading(true);
+  console.log('---create start---');
   try {
     const {
       publicKeyCredentialCreationOptions: publicKeySetting,
       challengeString
     } = await handleGeneratePublicKeySetting();
+
+    console.log({ publicKeySetting });
 
     // const encodedData = window.btoa("Hello, world"); // 编码
     // const decodedData = window.atob(encodedData); // 解码
@@ -148,25 +151,36 @@ async function handleWebAuthnRegister() {
     registerWebApiOutput.value = credential;
     console.log(credential);
 
-    const credentialJSON = {
-      authenticatorAttachment: credential.authenticatorAttachment,
-      id: credential.id,
-      // rawId: credential.rawId,
-      response: {
-        attestationObject: credential.response.attestationObject,
-        clientDataJSON: credential.response.clientDataJSON
-      },
-      rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
-      attestationObject: base64Js.fromUint8Array(
-        new Uint8Array(credential.response.attestationObject),
-        true
-      ),
-      clientDataJSON: base64Js.fromUint8Array(
-        new Uint8Array(credential.response.clientDataJSON),
-        true
-      ),
-      type: credential.type
-    };
+    // const credentialJSON = {
+    //   authenticatorAttachment: credential.authenticatorAttachment,
+    //   id: credential.id,
+    //   // rawId: credential.rawId,
+    //   response: {
+    //     originalAttestationObject: credential.response.attestationObject,
+    //     attestationObject: base64Js.fromUint8Array(
+    //       new Uint8Array(credential.response.attestationObject),
+    //       true
+    //     ),
+    //     originalClientDataJSON: credential.response.clientDataJSON,
+    //     clientDataJSON: base64Js.fromUint8Array(
+    //       new Uint8Array(credential.response.clientDataJSON),
+    //       true
+    //     )
+    //   },
+    //   rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
+    //   attestationObject: base64Js.fromUint8Array(
+    //     new Uint8Array(credential.response.attestationObject),
+    //     true
+    //   ),
+    //   clientDataJSON: base64Js.fromUint8Array(
+    //     new Uint8Array(credential.response.clientDataJSON),
+    //     true
+    //   ),
+    //   type: credential.type
+    // };
+    const credentialJSON = credential.toJSON();
+    console.log({ credentialJSON });
+
     const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
       challengeString,
       credential: credentialJSON
@@ -175,30 +189,46 @@ async function handleWebAuthnRegister() {
     // const transports = credential.response.getTransports();
     // console.log({ transports });
 
+    const _credentialPublicKeyPem = base64Js.decode(
+      response.base64URLServerSaveData.credentialPublicKeyPem
+    );
+    const _credentialPublicKeyJwk = JSON.parse(
+      base64Js.decode(response.base64URLServerSaveData.credentialPublicKeyJwk)
+    );
+
     console.log({
+      response,
+      credentialJSON,
+      credentialPublicKeyPem: _credentialPublicKeyPem,
+      credentialPublicKeyJwk: _credentialPublicKeyJwk,
       credentialId: base64Js.toUint8Array(
         response?.base64URLServerSaveData?.credentialId
-      ),
-      publicKeyBytes: base64Js.toUint8Array(
-        response?.base64URLServerSaveData?.publicKeyBytes
       )
     });
     registerOutput.value = response;
     credentialId.value = response?.base64URLServerSaveData?.credentialId;
-    publicKeyBytes.value = response?.base64URLServerSaveData?.publicKeyBytes;
+
+    credentialPublicKeyPem.value = _credentialPublicKeyPem;
+    credentialPublicKeyJwk.value = _credentialPublicKeyJwk;
+
+    nuxtApp.$successMessage('憑證註冊成功');
   } catch (error) {
     console.error(error);
   }
+  console.log('---create end---');
   nuxtApp.$store.system.setLoading(false);
 }
 
 async function handleWebAuthnLogin() {
   nuxtApp.$store.system.setLoading(true);
-  console.log({
-    // loginAccount: loginAccount.value,
-    credentialId: base64Js.toUint8Array(credentialId.value)
-  });
+  console.log('---get start---');
+
   try {
+    // console.log({
+    //   loginId: loginId.value,
+    //   credentialId: base64Js.toUint8Array(credentialId.value)
+    // });
+
     const {
       publicKeyCredentialCreationOptions: publicKeySetting,
       challengeString
@@ -206,9 +236,12 @@ async function handleWebAuthnLogin() {
 
     // publicKeySetting.user = undefined;
 
+    // const id = Uint8Array.from(loginId.value, (c) => c.charCodeAt(0));
     const allowCredentials = [
       {
-        id: base64Js.toUint8Array(credentialId.value), // from registration
+        // id, // from registration
+        // id: base64Js.toUint8Array(credentialId.value), // from registration
+        id: credentialId.value, // from registration
         type: 'public-key',
         transports: ['internal', 'usb', 'ble', 'nfc']
       }
@@ -221,7 +254,7 @@ async function handleWebAuthnLogin() {
     console.log(credential);
     loginWebApiOutput.value = credential;
 
-    const utf8Decoder = new TextDecoder('utf-8');
+    console.log(new Uint8Array(credential.response.userHandle));
 
     const credentialJSON = {
       authenticatorAttachment: credential.authenticatorAttachment,
@@ -238,8 +271,10 @@ async function handleWebAuthnLogin() {
         new Uint8Array(credential.response.clientDataJSON),
         true
       ),
-      userHandle: base64Js.encodeURL(
-        utf8Decoder.decode(credential.response.userHandle)
+      userHandle: base64Js.fromUint8Array(
+        // utf8Decoder.decode(credential.response.userHandle)
+        new Uint8Array(credential.response.userHandle),
+        true
       ),
       signature: base64Js.encodeURL(
         new Uint8Array(credential.response.signature)
@@ -253,15 +288,26 @@ async function handleWebAuthnLogin() {
     console.log({ credentialJSON });
 
     const response = await nuxtApp.$webAuthn.POST_webAuthnVerify({
-      userId: registerId.value,
+      userId: loginId.value,
       challengeString,
-      credential: credentialJSON
+      credentialId: credentialId.value,
+      credential: credentialJSON,
+      base64URLServerSaveData: {
+        credentialPublicKeyPem: base64Js.encodeURL(
+          credentialPublicKeyPem.value
+        ),
+        credentialPublicKeyJwk: base64Js.encodeURL(
+          JSON.stringify(credentialPublicKeyJwk.value)
+        )
+      }
     });
 
     loginOutput.value = response;
   } catch (error) {
     console.error(error);
   }
+
+  console.log('---get end---');
   nuxtApp.$store.system.setLoading(false);
 }
 </script>
@@ -286,9 +332,12 @@ async function handleWebAuthnLogin() {
       margin-bottom: 16px;
       text-align: center;
     }
+    &-output_title {
+      margin-bottom: 16px;
+    }
     &-output {
       max-width: 100%;
-      max-height: 700px;
+      max-height: 400px;
       word-wrap: break-word;
       overflow: auto;
       margin-bottom: 16px;
@@ -300,11 +349,14 @@ async function handleWebAuthnLogin() {
     &-title {
       @extend .web_authn_page-register-title;
     }
-    &-account {
-      @extend .web_authn_page-register-account;
+    &-id {
+      @extend .web_authn_page-register-id;
     }
     &-submit {
       @extend .web_authn_page-register-submit;
+    }
+    &-output_title {
+      @extend .web_authn_page-register-output_title;
     }
     &-output {
       @extend .web_authn_page-register-output;
