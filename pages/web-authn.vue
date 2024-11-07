@@ -214,6 +214,7 @@ async function handleWebAuthnRegister() {
 
     nuxtApp.$successMessage('憑證註冊成功');
   } catch (error) {
+    nuxtApp.$errorMessage('登入憑證失敗');
     console.error(error);
   }
   console.log('---create end---');
@@ -304,8 +305,11 @@ async function handleWebAuthnLogin() {
     });
 
     loginOutput.value = response;
+
+    nuxtApp.$successMessage('登入憑證成功');
   } catch (error) {
     console.error(error);
+    nuxtApp.$errorMessage('登入憑證失敗');
   }
 
   console.log('---get end---');
