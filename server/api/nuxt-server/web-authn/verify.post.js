@@ -1,5 +1,5 @@
 import { Base64 as base64Js } from 'js-base64';
-import fido2Lib from 'fido2-lib';
+import { parseAuthenticatorData } from '@/utils/fido2-lib';
 
 // 簽章驗證之部分找不到相關資料，因此此部分略過待完全依賴fido2-lib套件在實作驗證
 
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
   // console.log({ base64URLServerSaveDataCredentialPublicKeyPem, base64URLServerSaveDataCredentialPublicKeyJwk });
 
 
-  const authenticatorData = await fido2Lib.parseAuthenticatorData(credential.authenticatorData.buffer);
+  const authenticatorData = await parseAuthenticatorData(credential.authenticatorData.buffer);
   console.log(authenticatorData);
 
   if (clientDataObj?.type !== 'webauthn.get') {

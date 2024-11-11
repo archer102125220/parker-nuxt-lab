@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
 
 
   const attestationObject = await fido2Lib.parseAttestationObject(credential.response.attestationObject.buffer);
-  console.log(attestationObject);
+  // console.log(attestationObject);
 
   const alg = attestationObject.get('alg');
   if (alg?.hashAlg !== 'SHA-256') {

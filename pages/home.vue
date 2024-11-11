@@ -30,7 +30,8 @@ const linkList = computed(() => [
   { to: '/query-back-test', label: '路由query與上一頁測試' },
   { to: '/params-back-test/0', label: '路由參數與上一頁測試' },
   { to: '/customize-lazyload-test', label: '自製lazyload directive測試' },
-  { to: '/web-authn', label: '生物辨識測試' }
+  { to: '/web-authn', label: '生物辨識測試（原生）' },
+  { to: '/fido2-lib', label: '生物辨識測試（fido2-lib）' }
 ]);
 </script>
 
