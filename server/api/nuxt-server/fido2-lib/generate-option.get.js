@@ -2,6 +2,8 @@ import { Base64 as base64Js } from 'js-base64';
 
 import { fido2LibInitialize, getFido2Lib, fido2LibIsInitialized } from '@/utils/fido2-lib';
 
+// https://webauthn-open-source.github.io/fido2-lib/index.html
+
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
