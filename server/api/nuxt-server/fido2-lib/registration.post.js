@@ -1,6 +1,7 @@
 import { Base64 as base64Js } from 'js-base64';
+import { Fido2Lib } from 'fido2-lib';
 
-import { getFido2Lib } from '@/utils/fido2-lib';
+// import { getFido2Lib, reNewFido2Lib } from '@/utils/fido2-lib';
 
 // https://webauthn-open-source.github.io/fido2-lib/index.html
 
@@ -9,7 +10,20 @@ export default defineEventHandler(async (event) => {
 
   // console.log(payload.credential);
 
-  const f2l = getFido2Lib();
+  // const f2l = getFido2Lib();
+  // const f2l = reNewFido2Lib();
+  const f2l = new Fido2Lib({
+    timeout: 60000,
+    // rpId: "example.com",
+    rpName: "Nuxt Lab",
+    // rpIcon: "https://example.com/logo.png",
+    challengeSize: 128,
+    attestation: "direct",
+    cryptoParams: [-7, -257],
+    // authenticatorAttachment: "platform",
+    // authenticatorRequireResidentKey: false,
+    // authenticatorUserVerification: "required"
+  });
 
   const utf8Decoder = new TextDecoder('utf-8');
   const decodedClientData = utf8Decoder.decode(base64Js.toUint8Array(

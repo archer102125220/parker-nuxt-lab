@@ -1,6 +1,7 @@
 import { Fido2Lib } from 'fido2-lib';
 
 let f2l;
+let option;
 
 export * from 'fido2-lib';
 
@@ -16,11 +17,16 @@ export function getFido2Lib() {
   return f2l;
 }
 
-export function fido2LibInitialize(option) {
+export function fido2LibInitialize(_option) {
+  option = _option;
   return f2l = new Fido2Lib(option);
 }
 
-export function newFido2Lib(option) {
+export function newFido2Lib(_option) {
+  return new Fido2Lib(_option);
+}
+
+export function reNewFido2Lib() {
   return new Fido2Lib(option);
 }
 
