@@ -81,7 +81,10 @@ export default defineEventHandler(async (event) => {
     success: true,
     base64URLServerSaveData: {
       resultId: attestationResult.request.id,
+      publicKey: base64Js.fromUint8Array(new Uint8Array(attestationResult.request.response.publicKey), true),
       credentialPublicKeyPem: base64Js.encodeURL(attestationResult.authnrData.get('credentialPublicKeyPem')),
+      credentialPublicKeyJwk: base64Js.encodeURL(JSON.stringify(attestationResult.authnrData.get('credentialPublicKeyJwk'))),
+      counter: outputAuthnrData.counter
     }
   };
 });

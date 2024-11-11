@@ -123,6 +123,7 @@ async function handleGeneratePublicKeySetting() {
 }
 
 async function handleWebAuthnRegister() {
+  if (nuxtApp.$store.system.loading === true) return;
   nuxtApp.$store.system.setLoading(true);
   console.log('---create start---');
   try {
@@ -222,6 +223,7 @@ async function handleWebAuthnRegister() {
 }
 
 async function handleWebAuthnLogin() {
+  if (nuxtApp.$store.system.loading === true) return;
   nuxtApp.$store.system.setLoading(true);
   console.log('---get start---');
 
