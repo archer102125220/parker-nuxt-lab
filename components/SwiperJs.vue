@@ -246,7 +246,7 @@ const cssVariable = computed(() => {
 
 watch(
   () => props,
-  async (newProps) => {
+  async (newProps, oldProps) => {
     // handleSwiperUpdata(newProps);
     await nextTick();
     window.requestAnimationFrame(() => {

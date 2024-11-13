@@ -16,20 +16,11 @@
 const nuxtApp = useNuxtApp();
 
 const linkList = computed(() => [
-  { to: '/customize-ripple-test', label: '自製ripple directive測試' },
-  { to: '/tab-test', label: 'Tabs組件測試' },
-  { to: '/scroll-fetch-test', label: '下拉重載/無限滾動測試' },
-  { to: '/wang-editor-test', label: 'WangEditor（HTML編輯器）測試' },
-  { to: '/youtube-test', label: 'Youtube測試' },
-  { to: '/swiper-js-test', label: 'SwiperJs測試' },
-  { to: '/swiper-test', label: '自製Swiper測試' },
+  { to: '/components', label: '自製組件及第三方整合組件' },
   { to: '/components-test', label: '組件綜合測試' },
-  { to: '/triangle-test', label: 'css三角形測試' },
-  { to: '/triangle-full-test', label: 'css三角形滿版測試' },
-  { to: '/triangle-anime-test', label: 'css三角形滿版動畫測試' },
-  { to: '/query-back-test', label: '路由query與上一頁測試' },
-  { to: '/params-back-test/0', label: '路由參數與上一頁測試' },
-  { to: '/customize-lazyload-test', label: '自製lazyload directive測試' },
+  { to: '/directives', label: '自製vue指令' },
+  { to: '/route', label: 'route相關測試' },
+  { to: '/css-drawing', label: 'css繪圖相關測試' },
   { to: '/web-authn', label: '生物辨識測試（原生）' },
   { to: '/fido2-lib', label: '生物辨識測試（fido2-lib）' }
 ]);
