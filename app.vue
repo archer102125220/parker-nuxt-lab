@@ -29,8 +29,8 @@
 <script setup>
 const LAYOUT_SETTING = [
   { name: 'index', layout: 'index' },
-  { path: '/triangle-full-test', layout: 'full-screen' },
-  { path: '/triangle-anime-test', layout: 'full-screen' }
+  { path: '/css-drawing/triangle-full-test', layout: 'full-screen' },
+  { path: '/css-drawing/triangle-full-test', layout: 'full-screen' }
 ];
 const NO_GO_TOP = [];
 
@@ -50,7 +50,9 @@ useHead({
   },
   meta: [
     { id: 'meta-lang', language: $i18n.locale.value },
-    { copyright: `Copyright © ${$dayjs().year()} Parker Chen. All rights reserved.` }
+    {
+      copyright: `Copyright © ${$dayjs().year()} Parker Chen. All rights reserved.`
+    }
   ]
 });
 

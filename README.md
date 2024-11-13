@@ -73,3 +73,7 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+public/models：face-api.js models(weights), https://github.com/justadudewhohacks/face-api.js/tree/master
+mac install node-canvas：https://github.com/Automattic/node-canvas
