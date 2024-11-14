@@ -1,7 +1,7 @@
 <template>
   <div :style="$store.system.loading === true ? 'cursor: wait;' : ''">
-    <NuxtLayout :name="layoutName">
-      <NuxtPage :page-key="handleLayoutName" />
+    <NuxtLayout>
+      <NuxtPage />
     </NuxtLayout>
     <client-only>
       <LoadingBar :loading="loading" position="fixed" />
@@ -27,16 +27,10 @@
 </template>
 
 <script setup>
-const LAYOUT_SETTING = [
-  { name: 'index', layout: 'index' },
-  { path: '/css-drawing/triangle-full-test', layout: 'full-screen' },
-  { path: '/css-drawing/triangle-full-test', layout: 'full-screen' }
-];
 const NO_GO_TOP = [];
 
 const nuxtApp = useNuxtApp();
 const { $i18n, $dayjs, $store } = nuxtApp;
-const error = useError();
 
 const router = useRouter();
 const route = useRoute();
@@ -66,7 +60,6 @@ nuxtApp.hook('page:finish', () => {
 const goTopPx = ref(100);
 const loading = computed(() => $store.system.loading);
 const messageState = computed(() => $store.system.messageState || {});
-const layoutName = computed(() => $store.system.layoutName);
 const needGoTop = computed(() => {
   const routeName = getRouteBaseName(route);
   if (NO_GO_TOP.includes(routeName)) {
@@ -74,27 +67,6 @@ const needGoTop = computed(() => {
   }
   return true;
 });
-
-function handleLayoutName(newRoute) {
-  // console.log(error.value);
-  const newLayoutName =
-    typeof error.value !== 'undefined' && error.value !== null
-      ? 'sign-up'
-      : LAYOUT_SETTING.find(
-          ({ path, exact, name }) =>
-            (exact === true
-              ? path === newRoute.href
-              : newRoute.href?.includes(path)) ||
-            getRouteBaseName(newRoute) === name
-        )?.layout;
-
-  $store.system.setLayoutName(
-    typeof newLayoutName === 'boolean'
-      ? newLayoutName
-      : newLayoutName || 'default'
-  );
-}
-handleLayoutName(route);
 
 function resetMessageState() {
   $store.system.setMessageState({ text: '', type: 'success' });

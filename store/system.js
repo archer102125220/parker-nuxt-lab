@@ -18,7 +18,6 @@ export const useSystemStore = defineStore('system', {
   state: () => ({
     _welcomeMsg: true,
     displayTitle: '',
-    layoutName: 'default',
     accessToken: null,
     loading: false,
     messageState: { text: '', type: 'success' },
@@ -46,9 +45,6 @@ export const useSystemStore = defineStore('system', {
   actions: {
     setAccessToken(payload) {
       this.accessToken = payload;
-    },
-    setLayoutName(payload) {
-      this.layoutName = payload;
     },
     setLoading(payload) {
       this.loading = payload;
