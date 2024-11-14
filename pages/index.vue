@@ -23,6 +23,7 @@ const linkList = computed(() => [
   { to: '/css-drawing', label: 'css繪圖相關測試' },
   { to: '/web-authn', label: '生物辨識測試（原生）' },
   { to: '/fido2-lib', label: '生物辨識測試（fido2-lib）' },
+  { to: '/web-cam', label: 'WebCam測試' },
   { to: '/face-api', label: 'face-api測試' }
 ]);
 </script>
