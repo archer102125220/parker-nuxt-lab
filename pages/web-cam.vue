@@ -24,7 +24,7 @@
 const videoEl = useTemplateRef('videoEl');
 const canvasEl = useTemplateRef('canvasEl');
 
-const streamObj = ref(null);
+const streamObj = useCameraStream(handleFrameFromVideo);
 
 function handleFrameFromVideo() {
   const video = videoEl.value;
@@ -44,54 +44,8 @@ function handleFrameFromVideo() {
   ctx.restore(); // 到此才輸出，才不會還沒整體操作完就放出，會造成畫面快速抖動
   window.requestAnimationFrame(handleFrameFromVideo);
 }
-
-async function getCameraStream() {
-  try {
-    // 要 camera 的權限
-    const stream = await window.navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'user'
-      }
-    });
-    console.log({ stream });
-    // videoEl.value.srcObject = stream;
-    streamObj.value = stream;
-    handleFrameFromVideo();
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-function handleStopStream(stream) {
-  if (typeof stream?.getTracks !== 'function') return;
-
-  const tracks = stream.getTracks();
-  tracks.forEach((track) => {
-    track.stop();
-    track.clone();
-    if (typeof stream?.removeTrack === 'function') {
-      stream.removeTrack(track);
-    }
-  });
-}
-
-onMounted(() => {
-  getCameraStream();
-});
-
-onBeforeUnmount(() => {
-  if (typeof streamObj.value?.getTracks === 'function') {
-    handleStopStream(streamObj.value);
-
-    streamObj.value = null;
-    if (typeof videoEl.value === 'object') {
-      videoEl.value.srcObject = null;
-    }
-  }
-});
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .web_cam_page {
   font-family: sans-serif;
   &-video {
