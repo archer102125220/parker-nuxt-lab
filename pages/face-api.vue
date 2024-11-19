@@ -9,6 +9,8 @@
       controls
       :srcObject="streamObj"
     />
+
+    <p>Display detected face bounding boxes</p>
     <div class="face_api_page-video_output">
       <canvas
         ref="detectionsVideo"
@@ -24,6 +26,7 @@
       />
     </div>
 
+    <p>Display face landmarks</p>
     <div class="face_api_page-video_output">
       <canvas
         ref="detectionsWithLandmarksVideo"
@@ -40,6 +43,7 @@
       />
     </div>
 
+    <p>Display face expression results</p>
     <div class="face_api_page-video_output">
       <canvas
         ref="detectionsWithExpressionsVideo"
@@ -95,21 +99,21 @@ function handleFrameFromVideo(canvas) {
 
   ctx.drawImage(video, 0, 0, video.width, video.height);
   ctx.restore(); // 到此才輸出，才不會還沒整體操作完就放出，會造成畫面快速抖動
-  window.requestAnimationFrame(() => handleFrameFromVideo(canvas));
+  // window.requestAnimationFrame(() => handleFrameFromVideo(canvas));
 }
 
-async function handleFaceApi() {
+async function handleFaceApi(modelsPath) {
   if (videoEl.value === null) return;
   console.log('handleFaceApi');
 
-  await faceapiInit();
-  await handleDetections();
-  // await handleDetectionsWithLandmarks();
-  // await hadnleDetectionsWithExpressions();
+  await faceapiInit(modelsPath);
+  await handleDetections(modelsPath);
+  await handleDetectionsWithLandmarks(modelsPath);
+  await hadnleDetectionsWithExpressions(modelsPath);
 
   window.requestAnimationFrame(() =>
     setTimeout(async () => {
-      await handleFaceApi();
+      await handleFaceApi(modelsPath);
     }, 100)
   );
 }
@@ -124,8 +128,10 @@ function getDisplaySize(outputEl) {
   };
 }
 
-async function handleDetections() {
+async function handleDetections(modelsPath) {
   if (videoEl.value === null) return;
+  await faceapi.nets.ssdMobilenetv1.load(modelsPath);
+
   const canvas = detectionsVideo.value;
   handleFrameFromVideo(canvas);
 
@@ -147,16 +153,17 @@ async function handleDetections() {
   }
 }
 
-async function handleDetectionsWithLandmarks() {
+async function handleDetectionsWithLandmarks(modelsPath) {
   if (videoEl.value === null) return;
+  await faceapi.loadFaceLandmarkModel(modelsPath);
+
   const canvas = detectionsWithLandmarksVideo.value;
   handleFrameFromVideo(canvas);
 
-  console.log('handleDetectionsWithLandmarks');
   try {
     const displaySize = getDisplaySize(videoEl.value);
 
-    faceapi.matchDimensions(detectionsOutput.value, displaySize);
+    faceapi.matchDimensions(detectionsWithLandmarksOutput.value, displaySize);
 
     /* Display face landmarks */
     const detectionsWithLandmarks = await faceapi
@@ -182,16 +189,18 @@ async function handleDetectionsWithLandmarks() {
   }
 }
 
-async function hadnleDetectionsWithExpressions() {
+async function hadnleDetectionsWithExpressions(modelsPath) {
   if (videoEl.value === null) return;
+  await faceapi.loadFaceLandmarkModel(modelsPath);
+  await faceapi.loadFaceExpressionModel(modelsPath);
+
   const canvas = detectionsWithExpressionsVideo.value;
   handleFrameFromVideo(canvas);
 
-  console.log('hadnleDetectionsWithExpressions');
   try {
     const displaySize = getDisplaySize(videoEl.value);
 
-    faceapi.matchDimensions(detectionsOutput.value, displaySize);
+    faceapi.matchDimensions(detectionsWithExpressionsOutput.value, displaySize);
 
     /* Display face expression results */
     const detectionsWithExpressions = await faceapi
@@ -211,7 +220,7 @@ async function hadnleDetectionsWithExpressions() {
     // draw a textbox displaying the face expressions with minimum probability into the canvas
     const minProbability = 0.05;
     faceapi.draw.drawFaceExpressions(
-      detectionsWithExpressionsOutput.vaq,
+      detectionsWithExpressionsOutput.value,
       resizedResults,
       minProbability
     );

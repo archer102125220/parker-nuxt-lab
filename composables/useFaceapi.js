@@ -5,9 +5,8 @@ export function useFaceapi(modelsPath = '/') {
 
   async function faceapiInit(_modelsPath = modelsPath, callback) {
     await faceapi.nets.ssdMobilenetv1.loadFromUri(_modelsPath);
-    await faceapi.nets.ssdMobilenetv1.load(_modelsPath);
     if (typeof callback === 'function') {
-      callback(faceapi);
+      callback(_modelsPath, faceapi);
     }
   }
 
