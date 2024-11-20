@@ -1,15 +1,15 @@
-import amountFormat from '@/utils/amount-format';
-import { createWebSocket } from '@/utils/web-socket';
+import amountFormat from '@/utils/helpers/amount-format';
+import { createWebSocket } from '@/utils/helpers/web-socket';
 import {
   getDistanceBetweenPoints,
   getCurrentPosition,
   distanceCalculation,
   handleDistanceCalculation,
   handleCurrentCalculation,
-} from '@/utils/distance-between-points';
-import { googleGAInit } from '@/utils/ga';
-import dvhSvhLvhPolyfill from '@/utils/large-small-dynamic-viewport-units-polyfill';
-import initializeDoubleTap from '@/utils/doubleTap';
+} from '@/utils/helpers/distance-between-points';
+import { googleGAInit } from '@/utils/third-party/ga';
+import dvhSvhLvhPolyfill from '@/utils/polyfill/large-small-dynamic-viewport-units-polyfill';
+import initializeDoubleTap from '@/utils/helpers/doubleTap';
 
 if (typeof window !== 'undefined') {
   dvhSvhLvhPolyfill();

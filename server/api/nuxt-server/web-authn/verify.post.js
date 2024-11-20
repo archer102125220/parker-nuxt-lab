@@ -1,5 +1,5 @@
 import { Base64 as base64Js } from 'js-base64';
-import { parseAuthenticatorData } from '@/utils/fido2-lib';
+import { parseAuthenticatorData } from '@/utils/third-party/fido2-lib';
 
 // 簽章驗證之部分找不到相關資料，因此此部分略過待完全依賴fido2-lib套件在實作驗證
 

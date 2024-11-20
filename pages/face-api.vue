@@ -64,6 +64,8 @@
 <script setup>
 // https://github.com/justadudewhohacks/face-api.js/tree/master
 
+const MODELS_PATH = '/models';
+
 const videoEl = useTemplateRef('videoEl');
 const detectionsVideo = useTemplateRef('detectionsVideo');
 const detectionsOutput = useTemplateRef('detectionsOutput');
@@ -80,7 +82,7 @@ const detectionsWithExpressionsOutput = useTemplateRef(
   'detectionsWithExpressionsOutput'
 );
 
-const [faceapi, faceapiInit] = useFaceapi('/models');
+const [faceapi, faceapiInit] = useFaceapi(MODELS_PATH);
 const streamObj = useCameraStream(handleFaceApi);
 
 function handleFrameFromVideo(canvas) {
@@ -102,18 +104,17 @@ function handleFrameFromVideo(canvas) {
   // window.requestAnimationFrame(() => handleFrameFromVideo(canvas));
 }
 
-async function handleFaceApi(modelsPath) {
+async function handleFaceApi() {
   if (videoEl.value === null) return;
-  console.log('handleFaceApi');
 
-  await faceapiInit(modelsPath);
-  await handleDetections(modelsPath);
-  await handleDetectionsWithLandmarks(modelsPath);
-  await hadnleDetectionsWithExpressions(modelsPath);
+  await faceapiInit(MODELS_PATH);
+  await handleDetections(MODELS_PATH);
+  await handleDetectionsWithLandmarks(MODELS_PATH);
+  await hadnleDetectionsWithExpressions(MODELS_PATH);
 
   window.requestAnimationFrame(() =>
     setTimeout(async () => {
-      await handleFaceApi(modelsPath);
+      await handleFaceApi(MODELS_PATH);
     }, 100)
   );
 }
@@ -128,9 +129,9 @@ function getDisplaySize(outputEl) {
   };
 }
 
-async function handleDetections(modelsPath) {
+async function handleDetections(MODELS_PATH) {
   if (videoEl.value === null) return;
-  await faceapi.nets.ssdMobilenetv1.load(modelsPath);
+  await faceapi.nets.ssdMobilenetv1.load(MODELS_PATH);
 
   const canvas = detectionsVideo.value;
   handleFrameFromVideo(canvas);
@@ -153,9 +154,9 @@ async function handleDetections(modelsPath) {
   }
 }
 
-async function handleDetectionsWithLandmarks(modelsPath) {
+async function handleDetectionsWithLandmarks(MODELS_PATH) {
   if (videoEl.value === null) return;
-  await faceapi.loadFaceLandmarkModel(modelsPath);
+  await faceapi.loadFaceLandmarkModel(MODELS_PATH);
 
   const canvas = detectionsWithLandmarksVideo.value;
   handleFrameFromVideo(canvas);
@@ -189,10 +190,10 @@ async function handleDetectionsWithLandmarks(modelsPath) {
   }
 }
 
-async function hadnleDetectionsWithExpressions(modelsPath) {
+async function hadnleDetectionsWithExpressions(MODELS_PATH) {
   if (videoEl.value === null) return;
-  await faceapi.loadFaceLandmarkModel(modelsPath);
-  await faceapi.loadFaceExpressionModel(modelsPath);
+  await faceapi.loadFaceLandmarkModel(MODELS_PATH);
+  await faceapi.loadFaceExpressionModel(MODELS_PATH);
 
   const canvas = detectionsWithExpressionsVideo.value;
   handleFrameFromVideo(canvas);

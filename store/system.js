@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { getLocalLanguage } from '@/utils/get-local-language';
+import { getLocalLanguage } from '@/utils/third-party/get-local-language';
 
 const DIALOG_PROPS = {
   hideTitle: true,

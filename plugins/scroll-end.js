@@ -1,4 +1,4 @@
-import handlePolyfillScrollEnd from '@/utils/scroll-end';
+import handlePolyfillScrollEnd from '@/utils/polyfill/scroll-end';
 
 export const pluginScrollEnd = defineNuxtPlugin((nuxtApp) => {
   const scrollEnd = {
