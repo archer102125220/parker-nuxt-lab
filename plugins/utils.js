@@ -10,6 +10,7 @@ import {
 import { googleGAInit } from '@/utils/third-party/ga';
 import dvhSvhLvhPolyfill from '@/utils/polyfill/large-small-dynamic-viewport-units-polyfill';
 import initializeDoubleTap from '@/utils/helpers/doubleTap';
+import getScrollEndLimit from '@/utils/helpers/get-scroll-end-limit';
 
 if (typeof window !== 'undefined') {
   dvhSvhLvhPolyfill();
@@ -27,6 +28,7 @@ export default defineNuxtPlugin(() => {
       handleDistanceCalculation,
       handleCurrentCalculation,
       googleGAInit,
+      getScrollEndLimit
     },
   };
 });
