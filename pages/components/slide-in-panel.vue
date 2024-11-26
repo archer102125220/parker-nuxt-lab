@@ -2,9 +2,9 @@
   <div class="slide_in_panel_list_page">
     <div class="slide_in_panel_list_page-describe">
       <p>為了避免公司專案上的套件衝突，因此手刻一版訊息佇列</p>
-      <p>（</p>
+      <span>（</span>
       <del>我也想既優雅又輕鬆愜意的使用套件，但事實不允許</del>
-      <p>）</p>
+      <span>）</span>
     </div>
     <form
       class="slide_in_panel_list_page-content"
