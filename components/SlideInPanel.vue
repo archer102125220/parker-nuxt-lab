@@ -220,6 +220,11 @@ function handleMessageEnd(message) {
   }
 }
 function handleUserRemoveStart(e, message, index) {
+  const elIndex = getMessageElIndex(message, index);
+  if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
+    return;
+  }
+
   userRemoveing.value = true;
   userRemoveingId.value = message.timestamp;
 
@@ -242,23 +247,30 @@ function handleUserRemoveing(e, message, index) {
   ) {
     return;
   }
+  const elIndex = getMessageElIndex(message, index);
 
-  const eventX =
-    e.pageX ||
-    e.clientX ||
-    e.offsetX ||
-    e.targetTouches?.[0]?.pageX ||
-    e.targetTouches?.[0]?.clientX ||
-    e.targetTouches?.[0]?.offsetX ||
-    e.changedTouches?.[0]?.pageX ||
-    e.changedTouches?.[0]?.clientX ||
-    e.changedTouches?.[0]?.offsetX;
+  if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
+    userRemoveing.value = false;
+    startX.value = 0;
+    moveX.value = 0;
+  } else {
+    const eventX =
+      e.pageX ||
+      e.clientX ||
+      e.offsetX ||
+      e.targetTouches?.[0]?.pageX ||
+      e.targetTouches?.[0]?.clientX ||
+      e.targetTouches?.[0]?.offsetX ||
+      e.changedTouches?.[0]?.pageX ||
+      e.changedTouches?.[0]?.clientX ||
+      e.changedTouches?.[0]?.offsetX;
 
-  const nextDeltaX = eventX - startX.value;
-  const moveLimit = getMoveLimit(messageEl.value[index]);
+    const nextDeltaX = eventX - startX.value;
+    const moveLimit = getMoveLimit(messageEl.value[index]);
 
-  if (nextDeltaX > 0 || moveLimit.stopDeltaX >= nextDeltaX) return;
-  moveX.value = eventX;
+    if (nextDeltaX > 0 || moveLimit.stopDeltaX >= nextDeltaX) return;
+    moveX.value = eventX;
+  }
 
   nextTick(() =>
     window.requestAnimationFrame(() => {
@@ -289,7 +301,6 @@ function getMoveLimit(element) {
 }
 async function handleUserRemoveEnd(message, index) {
   const elIndex = getMessageElIndex(message, index);
-
   if (
     userRemoveingId.value !== message.timestamp ||
     messageEl.value[elIndex].getAttribute('message-ended') === 'true'
