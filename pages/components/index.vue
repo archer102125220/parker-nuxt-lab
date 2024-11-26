@@ -28,7 +28,8 @@ const linkList = computed(() => [
   { to: '/components/youtube-test', label: 'Youtube測試' },
   { to: '/components/swiper-js-test', label: 'SwiperJs測試' },
   { to: '/components/swiper-test', label: '自製Swiper測試' },
-  { to: '/components/qr-code-test', label: 'QRcode測試' }
+  { to: '/components/qr-code-test', label: 'QRcode測試' },
+  { to: '/components/slide-in-panel', label: '訊息佇列測試' }
 ]);
 </script>
 
