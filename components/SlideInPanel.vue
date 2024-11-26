@@ -37,7 +37,8 @@ const props = defineProps({
   bottom: { type: [Number, String], default: null },
   timeout: { type: Number, default: 5000 },
   removeDeltaX: { type: Number, default: null },
-  maxRow: { type: Number, default: 6 }
+  maxRow: { type: Number, default: 6 },
+  zIndex: { type: Number, default: null }
 });
 const emits = defineEmits(['close', 'remove', 'update:modelValue']);
 
@@ -68,6 +69,10 @@ const cssVariable = computed(() => {
 
   if (typeof props.bottom === 'string' && props.bottom !== '') {
     _cssVariable['--slide_in_panel_list_bottom'] = props.bottom;
+  }
+
+  if (typeof props.zIndex === 'number') {
+    _cssVariable['--slide_in_panel_list_zIndex'] = props.zIndex;
   }
 
   return _cssVariable;
@@ -174,7 +179,7 @@ function handleMessageStyle(message, _index, isEnd = false) {
         typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
         MESSAGE_REMOVE_TIMEOUT_ID > -1
       ) {
-        clearError(MESSAGE_REMOVE_TIMEOUT_ID);
+        clearTimeout(MESSAGE_REMOVE_TIMEOUT_ID);
       }
 
       MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
@@ -354,6 +359,7 @@ async function handleUserRemoveEnd(message, index) {
   top: var(--slide_in_panel_list_top);
   left: -100vw;
   bottom: var(--slide_in_panel_list_bottom);
+  z-index: var(--slide_in_panel_list_zIndex);
   width: 100vw;
 
   &-message {
