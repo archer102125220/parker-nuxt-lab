@@ -40,9 +40,12 @@ function handleUpdateShowMessage() {
   flex-wrap: wrap;
   flex-direction: column;
   &-describe {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+    // display: flex;
+    // flex-wrap: wrap;
+    // flex-direction: row;
+    * {
+      display: inline;
+    }
   }
   &-content {
     flex: 1;
