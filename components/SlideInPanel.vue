@@ -5,8 +5,9 @@
       :key="message.timestamp"
       ref="messageEl"
       :style="messageStyleList[index]"
+      :remove-type="removeType"
       class="slide_in_panel_list-message"
-      @transitionend="handleMessageStyle(message, index, true)"
+      @transitionend="handleTransitionEnd(message, index)"
       @mousedown="handleUserRemoveStart($event, message, index)"
       @mousemove="handleUserRemoveing($event, message, index)"
       @mouseup="handleUserRemoveEnd(message, index)"
@@ -15,7 +16,12 @@
       @touchend="handleUserRemoveEnd(message, index)"
       @touchcancel="handleUserRemoveEnd(message, ndex)"
     >
-      <slot :message="message" :index="index">
+      <slot
+        :message="message"
+        :text="message.text"
+        :index="index"
+        :remove-type="removeType"
+      >
         <p>
           {{ message.text }}
         </p>
@@ -29,16 +35,18 @@ import _cloneDeep from 'lodash/cloneDeep';
 
 const MESSAGE_TIMEOUT_ID_LIST = {};
 let MESSAGE_REMOVE_TIMEOUT_ID = -1;
+let MESSAGE_REMOVE_REQUEST_ANIMATION_ID = -1;
 
 const props = defineProps({
   value: { type: String, default: null },
   modelValue: { type: String, default: null },
   top: { type: [Number, String], default: null },
   bottom: { type: [Number, String], default: null },
-  timeout: { type: Number, default: 5000 },
+  timeout: { type: Number, default: 3000 },
   removeDeltaX: { type: Number, default: null },
   maxRow: { type: Number, default: 6 },
-  zIndex: { type: Number, default: null }
+  zIndex: { type: [Number, String], default: null },
+  userRmove: { type: Boolean, default: false }
 });
 const emits = defineEmits(['close', 'remove', 'update:modelValue']);
 
@@ -46,6 +54,8 @@ const messageEl = useTemplateRef('messageEl');
 
 const messageList = ref([]);
 const messageStyleList = ref([]);
+const moveMessage = ref(null);
+const moveMessageIndex = ref(-1);
 
 const startX = ref(0);
 const moveX = ref(0);
@@ -71,15 +81,20 @@ const cssVariable = computed(() => {
     _cssVariable['--slide_in_panel_list_bottom'] = props.bottom;
   }
 
-  if (typeof props.zIndex === 'number') {
+  if (
+    typeof props.zIndex === 'number' ||
+    (typeof props.zIndex === 'string' && isNaN(props.zIndex) === false)
+  ) {
     _cssVariable['--slide_in_panel_list_zIndex'] = props.zIndex;
   }
 
   return _cssVariable;
 });
-
 const deltaX = computed(() => {
   return moveX.value - startX.value;
+});
+const removeType = computed(() => {
+  return props.userRmove === true ? 'move' : 'opacity';
 });
 
 watch(
@@ -98,28 +113,47 @@ watch(
   async (newMessageList = []) => {
     await nextTick();
     window.requestAnimationFrame(() => {
-      const newMessageStyleList = newMessageList.map((message, index) =>
-        handleMessageStyle(message, index)
-      );
+      const newMessageStyleList = newMessageList.map((message, index) => {
+        const newMessageStyle = handleMessageStyle(message, index);
+        if (
+          typeof props.maxRow === 'number' &&
+          props.maxRow > 0 &&
+          newMessageList.length > props.maxRow &&
+          index < newMessageList.length - props.maxRow
+        ) {
+          clearTimeout(MESSAGE_TIMEOUT_ID_LIST[message.timestamp]);
+          MESSAGE_TIMEOUT_ID_LIST[message.timestamp] = undefined;
+          return {
+            ...handleMessageEnd(message, true, newMessageStyle),
+            ...newMessageStyle
+          };
+        }
+        return newMessageStyle;
+      });
       messageStyleList.value = newMessageStyleList.reverse();
       emits('update:modelValue', null);
-
-      if (
-        typeof props.maxRow === 'number' &&
-        props.maxRow > 0 &&
-        newMessageList.length > props.maxRow
-      ) {
-        for (let i = 0; i < newMessageList.length - props.maxRow; i++) {
-          const message = newMessageList[i];
-
-          clearTimeout(MESSAGE_TIMEOUT_ID_LIST[message.timestamp]);
-          handleMessageEnd(message);
-        }
-      }
     });
   },
   { deep: true }
 );
+
+onMounted(() => {
+  window.addEventListener('mouseout', handleMouseleave);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('mouseout', handleMouseleave);
+});
+
+function handleMouseleave() {
+  if (
+    typeof moveMessage.value === 'object' &&
+    moveMessage.value !== null &&
+    typeof moveMessageIndex.value === 'number' &&
+    moveMessageIndex.value > -1
+  ) {
+    handleUserRemoveEnd(moveMessage.value, moveMessageIndex.value);
+  }
+}
 
 function getMessageIndex(message) {
   return messageList.value.findIndex(
@@ -137,7 +171,7 @@ function getMessageElIndex(message, defaultIndex = 0) {
   return index < 0 ? defaultIndex : index;
 }
 
-function handleMessageStyle(message, _index, isEnd = false) {
+function handleMessageStyle(message, _index) {
   const newMessageStyle = {};
 
   const index = getMessageIndex(message);
@@ -146,59 +180,71 @@ function handleMessageStyle(message, _index, isEnd = false) {
   if (_isElement(messageEl?.value?.[elIndex]) === true) {
     const isMessageStarted =
       messageEl.value[elIndex].getAttribute('message-started') === 'true';
-    const isMessageEnded =
-      messageEl.value[elIndex].getAttribute('message-ended') === 'true';
 
     messageEl.value[elIndex].setAttribute('timestamp', message.timestamp);
-    messageEl.value[elIndex].setAttribute('index', index);
+    // messageEl.value[elIndex].setAttribute('index', index);
 
-    if (isEnd === false) {
-      let messageBottom = 0;
-      for (let i = 0; i < elIndex; i++) {
-        messageBottom += messageEl.value[i].clientHeight;
-      }
-      newMessageStyle['--message_bottom'] = `${messageBottom}px`;
-      if (isMessageEnded === false) {
-        newMessageStyle['--message_left'] = '100%';
-      }
+    let messageBottom = 0;
+    for (let i = 0; i < elIndex; i++) {
+      messageBottom += messageEl.value[i].clientHeight;
     }
+    newMessageStyle['--message_bottom'] = `${messageBottom}px`;
 
-    if (isMessageStarted === false && isEnd === false) {
+    if (isMessageStarted === false) {
       messageEl.value[elIndex].setAttribute('message-started', true);
-    } else if (
-      isEnd === true &&
-      isMessageEnded === false &&
-      typeof MESSAGE_TIMEOUT_ID_LIST[message.timestamp] !== 'number'
-    ) {
-      MESSAGE_TIMEOUT_ID_LIST[message.timestamp] = setTimeout(() => {
-        MESSAGE_TIMEOUT_ID_LIST[message.timestamp] = null;
-        handleMessageEnd(message);
-      }, props.timeout);
-    } else if (isEnd === true && isMessageEnded === true) {
-      if (
-        typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
-        MESSAGE_REMOVE_TIMEOUT_ID > -1
-      ) {
-        clearTimeout(MESSAGE_REMOVE_TIMEOUT_ID);
-      }
-
-      MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
-        MESSAGE_REMOVE_TIMEOUT_ID = -1;
-        messageList.value = messageList.value.filter((message, removeIndex) => {
-          const isRemove =
-            _isElement(messageEl?.value?.[removeIndex]) === false ||
-            messageEl.value[removeIndex].getAttribute('message-ended') !==
-              'true';
-          if (isRemove === true) {
-            emits('remove', message, removeIndex);
-          }
-          return isRemove;
-        });
-      }, 500);
     }
   }
 
   return newMessageStyle;
+}
+function handleTransitionEnd(message, index) {
+  const elIndex = getMessageElIndex(message, index);
+  const isMessageEnded =
+    messageEl.value[elIndex].getAttribute('message-ended') === 'true';
+
+  if (
+    isMessageEnded === false &&
+    typeof MESSAGE_TIMEOUT_ID_LIST[message.timestamp] !== 'number'
+  ) {
+    MESSAGE_TIMEOUT_ID_LIST[message.timestamp] = setTimeout(
+      () => {
+        MESSAGE_TIMEOUT_ID_LIST[message.timestamp] = null;
+        handleMessageEnd(message);
+      },
+      props.timeout * ((index || 0) + 1)
+    );
+  } else if (isMessageEnded === true) {
+    if (
+      typeof MESSAGE_REMOVE_REQUEST_ANIMATION_ID === 'number' &&
+      MESSAGE_REMOVE_REQUEST_ANIMATION_ID > -1
+    ) {
+      window.cancelAnimationFrame(MESSAGE_REMOVE_REQUEST_ANIMATION_ID);
+    }
+    if (
+      typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
+      MESSAGE_REMOVE_TIMEOUT_ID > -1
+    ) {
+      clearTimeout(MESSAGE_REMOVE_TIMEOUT_ID);
+    }
+
+    MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
+      MESSAGE_REMOVE_TIMEOUT_ID = -1;
+
+      MESSAGE_REMOVE_REQUEST_ANIMATION_ID = window.requestAnimationFrame(() => {
+        MESSAGE_REMOVE_REQUEST_ANIMATION_ID = -1;
+        messageList.value = messageList.value.filter((message, removeIndex) => {
+          const isNotRemove =
+            _isElement(messageEl?.value?.[removeIndex]) === false ||
+            messageEl.value[removeIndex].getAttribute('message-ended') !==
+              'true';
+          if (isNotRemove === true) {
+            emits('remove', message, removeIndex);
+          }
+          return isNotRemove;
+        });
+      });
+    }, 300);
+  }
 }
 function handleMessageEnd(message) {
   // 確保index是正確的
@@ -207,24 +253,13 @@ function handleMessageEnd(message) {
 
   if (_isElement(messageEl?.value?.[elIndex]) === true) {
     messageEl.value[elIndex].setAttribute('message-ended', true);
+    messageEl.value[elIndex].removeAttribute('message-started');
     emits('close', message, index, messageEl?.value?.[elIndex]);
-
-    const newMessageStyleList = _cloneDeep(messageStyleList.value);
-    if (
-      typeof newMessageStyleList[index] === 'object' &&
-      typeof newMessageStyleList[index]?.['--message_left'] === 'string'
-    ) {
-      newMessageStyleList[index]['--message_transform'] = null;
-      if (typeof messageEl?.value?.[elIndex]?.clientWidth === 'number') {
-        newMessageStyleList[index]['--message_left'] =
-          `-${messageEl?.value?.[elIndex].clientWidth}px`;
-      }
-
-      messageStyleList.value = newMessageStyleList;
-    }
   }
 }
 function handleUserRemoveStart(e, message, index) {
+  if (props.userRmove === false) return;
+
   const elIndex = getMessageElIndex(message, index);
   if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
     return;
@@ -247,6 +282,7 @@ function handleUserRemoveStart(e, message, index) {
 }
 function handleUserRemoveing(e, message, index) {
   if (
+    props.userRmove === false ||
     userRemoveing.value === false ||
     userRemoveingId.value !== message.timestamp
   ) {
@@ -277,11 +313,14 @@ function handleUserRemoveing(e, message, index) {
     moveX.value = eventX;
   }
 
+  moveMessage.value = message;
+  moveMessageIndex.value = index;
+
   nextTick(() =>
     window.requestAnimationFrame(() => {
       const newMessageStyleList = _cloneDeep(messageStyleList.value);
-      newMessageStyleList[index]['--message_transform'] =
-        `translate3d(${deltaX.value}px, 0, 0)`;
+      newMessageStyleList[index]['--message_left'] =
+        `calc(100% + ${deltaX.value}px)`;
 
       messageStyleList.value = newMessageStyleList;
     })
@@ -304,7 +343,9 @@ function getMoveLimit(element) {
     stopDeltaX
   };
 }
-async function handleUserRemoveEnd(message, index) {
+function handleUserRemoveEnd(message, index) {
+  if (props.userRmove === false) return;
+
   const elIndex = getMessageElIndex(message, index);
   if (
     userRemoveingId.value !== message.timestamp ||
@@ -323,34 +364,17 @@ async function handleUserRemoveEnd(message, index) {
     clearTimeout(MESSAGE_TIMEOUT_ID_LIST[message.timestamp]);
 
     handleMessageEnd(message);
-
-    await nextTick();
-    window.requestAnimationFrame(() => {
-      userRemoveing.value = false;
-      startX.value = 0;
-      moveX.value = 0;
-      const _elIndex = getMessageElIndex(message, index);
-      if (_isElement(messageEl.value[_elIndex]) === true) {
-        const newMessageStyleList = _cloneDeep(messageStyleList.value);
-        newMessageStyleList[index]['--message_transform'] =
-          `translate3d(${deltaX.value}px, 0, 0)`;
-        messageStyleList.value = newMessageStyleList;
-      }
-    });
-  } else {
-    userRemoveing.value = false;
-    startX.value = 0;
-    moveX.value = 0;
-    window.requestAnimationFrame(() => {
-      const _elIndex = getMessageElIndex(message, index);
-      if (_isElement(messageEl.value[_elIndex]) === true) {
-        const newMessageStyleList = _cloneDeep(messageStyleList.value);
-        newMessageStyleList[index]['--message_transform'] =
-          `translate3d(${deltaX.value}px, 0, 0)`;
-        messageStyleList.value = newMessageStyleList;
-      }
-    });
   }
+  userRemoveing.value = false;
+  startX.value = 0;
+  moveX.value = 0;
+
+  moveMessage.value = null;
+  moveMessageIndex.value = -1;
+
+  const newMessageStyleList = _cloneDeep(messageStyleList.value);
+  newMessageStyleList[index]['--message_left'] = undefined;
+  messageStyleList.value = newMessageStyleList;
 }
 </script>
 <style lang="scss" scoped>
@@ -361,18 +385,31 @@ async function handleUserRemoveEnd(message, index) {
   bottom: var(--slide_in_panel_list_bottom);
   z-index: var(--slide_in_panel_list_zIndex);
   width: 100vw;
+  user-select: none;
 
   &-message {
     position: absolute;
     left: var(--message_left, 0px);
-    bottom: var(--message_bottom, 0px);
-    display: var(--message_display);
+    bottom: var(--message_bottom);
+    opacity: 1;
 
-    transform: var(--message_transform);
     transition:
       left 0.5s linear,
-      bottom 0.15s linear,
-      transform 0.1s;
+      bottom 0.15s,
+      opacity 0.4s;
+
+    &[message-started='true'] {
+      left: var(--message_left, 100%);
+    }
+    &[message-ended='true'] {
+      &[remove-type='move'] {
+        left: 0px;
+      }
+      &[remove-type='opacity'] {
+        left: var(--message_left, 100%);
+        opacity: 0;
+      }
+    }
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="slide_in_panel_list_page-describe">
       <p>為了避免公司專案上的套件衝突，因此手刻一版訊息佇列</p>
       <span>（</span>
-      <del>我也想既優雅又輕鬆愜意的使用套件，但事實不允許</del>
+      <del>我也想既優雅又輕鬆愜意的使用套件，但現實不允許</del>
       <span>）</span>
     </div>
     <form
