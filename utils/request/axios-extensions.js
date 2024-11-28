@@ -1,7 +1,7 @@
 import qs from 'qs';
 // https://juejin.cn/post/6974902702400602148
 
-function generateReqKey(config) {
+function defaultGenerateReqKey(config) {
   const { method, url, params, data } = config;
   return [method, url, qs.stringify(params), qs.stringify(data)].join('&');
 }
@@ -19,7 +19,7 @@ function isCacheLike(cache) {
   );
 }
 
-export default function cacheAdapterEnhancer(options, defaultAdapter) {
+export default function cacheAdapterEnhancer(options, defaultAdapter, generateReqKey) {
   if (typeof defaultAdapter !== 'function') {
     throw new TypeError('default defaultAdapter is not function');
   }
@@ -38,7 +38,7 @@ export default function cacheAdapterEnhancer(options, defaultAdapter) {
         : enabledByDefault;
     if (method === 'get' && useCache) {
       const cache = isCacheLike(useCache) ? useCache : defaultCache;
-      const requestKey = generateReqKey(config); // 生成請求Key
+      const requestKey = typeof generateReqKey === 'function' ? generateReqKey(config) : defaultGenerateReqKey(config); // 生成請求Key
       let responsePromise = cache.get(requestKey); // 從快取中取得請求key對應的響應對象
       if (!responsePromise || forceUpdate) {
         // 快取未命中/失效或強制更新時，則重新請求資料
