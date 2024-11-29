@@ -4,15 +4,19 @@
       v-for="(message, index) in messageList"
       :key="message.timestamp"
       ref="messageEl"
-      :style="messageStyleList[index]"
+      :style="{
+        '--message_bottom': `calc(var(--message_item_height)  * ${messageList.length - index - 1})`,
+        ...messageStyleList[index]
+      }"
       :remove-type="removeType"
       class="slide_in_panel_list-message"
       @transitionend="handleTransitionEnd(message, index)"
-      @mousedown.stop="handleUserRemoveStart($event, message, index)"
-      @mousemove.stop="handleUserRemoveing($event, message, index)"
+      @click="handleUserRemoveClick($event, message, index)"
+      @mousedown="handleUserRemoveStart($event, message, index)"
+      @mousemove="handleUserRemoveing($event, message, index)"
       @mouseup="handleUserRemoveEnd(message, index)"
-      @touchstart.stop="handleUserRemoveStart($event, message, index)"
-      @touchmove.stop="handleUserRemoveing($event, message, index)"
+      @touchstart="handleUserRemoveStart($event, message, index)"
+      @touchmove="handleUserRemoveing($event, message, index)"
       @touchend="handleUserRemoveEnd(message, index)"
       @touchcancel="handleUserRemoveEnd(message, ndex)"
     >
@@ -34,19 +38,21 @@ import _isElement from 'lodash/isElement';
 import _cloneDeep from 'lodash/cloneDeep';
 
 const MESSAGE_TIMEOUT_ID_LIST = {};
+let MESSAGE_HIDDEN_TIMEOUT_ID = -1;
+let MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
 let MESSAGE_REMOVE_TIMEOUT_ID = -1;
-let MESSAGE_REMOVE_REQUEST_ANIMATION_ID = -1;
 
 const props = defineProps({
   value: { type: String, default: null },
   modelValue: { type: String, default: null },
   top: { type: [Number, String], default: null },
   bottom: { type: [Number, String], default: null },
+  itemHeight: { type: [Number, String], default: null },
   timeout: { type: Number, default: 3000 },
   removeDeltaX: { type: Number, default: null },
   maxRow: { type: Number, default: 6 },
   zIndex: { type: [Number, String], default: null },
-  userRmove: { type: Boolean, default: false }
+  userRmoveType: { type: String, default: 'none' }
 });
 const emits = defineEmits(['close', 'remove', 'update:modelValue']);
 
@@ -65,7 +71,7 @@ const userRemoveingId = ref(-1);
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
-  if (typeof props.top === 'number' || isNaN(props.top) === false) {
+  if (typeof props.top === 'number' || isNaN(`${props.top}`) === false) {
     _cssVariable['--slide_in_panel_list_top'] = `${Number(props.top)}px`;
   }
 
@@ -73,7 +79,7 @@ const cssVariable = computed(() => {
     _cssVariable['--slide_in_panel_list_top'] = props.top;
   }
 
-  if (typeof props.bottom === 'number' || isNaN(props.bottom) === false) {
+  if (typeof props.bottom === 'number' || isNaN(`${props.bottom}`) === false) {
     _cssVariable['--slide_in_panel_list_bottom'] = `${Number(props.bottom)}px`;
   }
 
@@ -88,13 +94,29 @@ const cssVariable = computed(() => {
     _cssVariable['--slide_in_panel_list_zIndex'] = props.zIndex;
   }
 
+  if (
+    typeof props.itemHeight === 'number' ||
+    isNaN(`${props.itemHeight}`) === false
+  ) {
+    _cssVariable['--message_item_height'] = `${Number(props.itemHeight)}px`;
+  }
+  if (typeof props.itemHeight === 'string' && props.itemHeight !== '') {
+    _cssVariable['--message_item_height'] = props.itemHeight;
+  }
+
   return _cssVariable;
 });
 const deltaX = computed(() => {
   return moveX.value - startX.value;
 });
 const removeType = computed(() => {
-  return props.userRmove === true ? 'move' : 'opacity';
+  let removeType = 'opacity';
+
+  if (props.userRmoveType === 'remove') {
+    removeType = 'move';
+  }
+
+  return removeType;
 });
 
 watch(
@@ -114,7 +136,7 @@ watch(
     await nextTick();
     window.requestAnimationFrame(() => {
       const newMessageStyleList = newMessageList.map((message, index) => {
-        const newMessageStyle = handleMessageStyle(message, index);
+        const newMessageStyle = handleMessageStyle(message);
         if (
           typeof props.maxRow === 'number' &&
           props.maxRow > 0 &&
@@ -138,13 +160,13 @@ watch(
 );
 
 onMounted(() => {
-  window.addEventListener('mouseout', handleMouseleave);
+  window.addEventListener('mouseout', handleMouseOut);
 });
 onBeforeUnmount(() => {
-  window.removeEventListener('mouseout', handleMouseleave);
+  window.removeEventListener('mouseout', handleMouseOut);
 });
 
-function handleMouseleave() {
+function handleMouseOut() {
   if (
     typeof moveMessage.value === 'object' &&
     moveMessage.value !== null &&
@@ -171,7 +193,7 @@ function getMessageElIndex(message, defaultIndex = 0) {
   return index < 0 ? defaultIndex : index;
 }
 
-function handleMessageStyle(message, _index) {
+function handleMessageStyle(message) {
   const newMessageStyle = {};
 
   const index = getMessageIndex(message);
@@ -184,11 +206,13 @@ function handleMessageStyle(message, _index) {
     messageEl.value[elIndex].setAttribute('timestamp', message.timestamp);
     // messageEl.value[elIndex].setAttribute('index', index);
 
-    let messageBottom = 0;
-    for (let i = 0; i < elIndex; i++) {
-      messageBottom += messageEl.value[i].clientHeight;
+    if (typeof cssVariable.value?.['--message_item_height'] !== 'string') {
+      let messageBottom = 0;
+      for (let i = 0; i < elIndex; i++) {
+        messageBottom += messageEl.value[i].clientHeight;
+      }
+      newMessageStyle['--message_bottom'] = `${messageBottom}px`;
     }
-    newMessageStyle['--message_bottom'] = `${messageBottom}px`;
 
     if (isMessageStarted === false) {
       messageEl.value[elIndex].setAttribute('message-started', true);
@@ -214,37 +238,67 @@ function handleTransitionEnd(message, index) {
       props.timeout * ((index || 0) + 1)
     );
   } else if (isMessageEnded === true) {
-    if (
-      typeof MESSAGE_REMOVE_REQUEST_ANIMATION_ID === 'number' &&
-      MESSAGE_REMOVE_REQUEST_ANIMATION_ID > -1
-    ) {
-      window.cancelAnimationFrame(MESSAGE_REMOVE_REQUEST_ANIMATION_ID);
-    }
-    if (
-      typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
-      MESSAGE_REMOVE_TIMEOUT_ID > -1
-    ) {
-      clearTimeout(MESSAGE_REMOVE_TIMEOUT_ID);
-    }
-
-    MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
-      MESSAGE_REMOVE_TIMEOUT_ID = -1;
-
-      MESSAGE_REMOVE_REQUEST_ANIMATION_ID = window.requestAnimationFrame(() => {
-        MESSAGE_REMOVE_REQUEST_ANIMATION_ID = -1;
-        messageList.value = messageList.value.filter((message, removeIndex) => {
-          const isNotRemove =
-            _isElement(messageEl?.value?.[removeIndex]) === false ||
-            messageEl.value[removeIndex].getAttribute('message-ended') !==
-              'true';
-          if (isNotRemove === true) {
-            emits('remove', message, removeIndex);
-          }
-          return isNotRemove;
-        });
-      });
-    }, 300);
+    handleMessageHidden();
   }
+}
+
+function handleMessageHidden() {
+  // 為避免bottom距離計算造成ui抖動，先將會先將元件的z-index設為-1避免遮擋其他ui的使用者交互事件後在以setTimeout移除該訊息
+  if (
+    typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
+    MESSAGE_REMOVE_TIMEOUT_ID > -1
+  ) {
+    clearTimeout(MESSAGE_REMOVE_TIMEOUT_ID);
+  }
+
+  if (
+    typeof MESSAGE_HIDDEN_REQUEST_ANIMATION_ID === 'number' &&
+    MESSAGE_HIDDEN_REQUEST_ANIMATION_ID > -1
+  ) {
+    window.cancelAnimationFrame(MESSAGE_HIDDEN_REQUEST_ANIMATION_ID);
+  }
+
+  if (
+    typeof MESSAGE_HIDDEN_TIMEOUT_ID === 'number' &&
+    MESSAGE_HIDDEN_TIMEOUT_ID > -1
+  ) {
+    clearTimeout(MESSAGE_HIDDEN_TIMEOUT_ID);
+  }
+
+  MESSAGE_HIDDEN_TIMEOUT_ID = setTimeout(() => {
+    MESSAGE_HIDDEN_TIMEOUT_ID = -1;
+
+    MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = window.requestAnimationFrame(
+      async () => {
+        MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
+        messageList.value.forEach((message, index) => {
+          if (messageEl.value[index].getAttribute('message-ended') === 'true') {
+            const newMessageStyleList = _cloneDeep(messageStyleList.value);
+            newMessageStyleList[index]['--message_z_index'] = '-1';
+
+            messageStyleList.value = newMessageStyleList;
+          }
+        });
+
+        await nextTick();
+        MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
+          MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
+          messageList.value = messageList.value.filter(
+            (message, removeIndex) => {
+              const isNotRemove =
+                _isElement(messageEl?.value?.[removeIndex]) === false ||
+                messageEl.value[removeIndex].getAttribute('message-ended') !==
+                  'true';
+              if (isNotRemove === true) {
+                emits('remove', message, removeIndex);
+              }
+              return isNotRemove;
+            }
+          );
+        }, 300);
+      }
+    );
+  }, 300);
 }
 function handleMessageEnd(message) {
   // 確保index是正確的
@@ -257,8 +311,19 @@ function handleMessageEnd(message) {
     emits('close', message, index, messageEl?.value?.[elIndex]);
   }
 }
+function handleUserRemoveClick(e, message, index) {
+  if (props.userRmoveType !== 'click') return;
+  e.stopPropagation();
+
+  const elIndex = getMessageElIndex(message, index);
+  if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
+    return;
+  }
+  handleMessageEnd(message);
+}
 function handleUserRemoveStart(e, message, index) {
-  if (props.userRmove === false) return;
+  if (props.userRmoveType !== 'remove') return;
+  e.stopPropagation();
 
   const elIndex = getMessageElIndex(message, index);
   if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
@@ -282,12 +347,14 @@ function handleUserRemoveStart(e, message, index) {
 }
 function handleUserRemoveing(e, message, index) {
   if (
-    props.userRmove === false ||
+    props.userRmoveType !== 'remove' ||
     userRemoveing.value === false ||
     userRemoveingId.value !== message.timestamp
   ) {
     return;
   }
+  e.stopPropagation();
+
   const elIndex = getMessageElIndex(message, index);
 
   if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
@@ -344,7 +411,7 @@ function getMoveLimit(element) {
   };
 }
 function handleUserRemoveEnd(message, index) {
-  if (props.userRmove === false) return;
+  if (props.userRmoveType !== 'remove') return;
 
   const elIndex = getMessageElIndex(message, index);
   if (
@@ -391,6 +458,8 @@ function handleUserRemoveEnd(message, index) {
     position: absolute;
     left: var(--message_left, 0px);
     bottom: var(--message_bottom);
+    z-index: var(--message_z_index);
+    height: var(--message_item_height);
     opacity: 1;
 
     transition:

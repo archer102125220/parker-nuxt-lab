@@ -21,6 +21,7 @@
         <v-btn color="primary" type="submit">測試彈跳訊息</v-btn>
       </div>
     </form>
+    <!-- <SlideInPanel bottom="10vh" item-height="24px" v-model="showMessage" /> -->
     <SlideInPanel bottom="10vh" v-model="showMessage" />
   </div>
 </template>
