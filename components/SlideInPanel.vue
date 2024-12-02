@@ -41,7 +41,6 @@ import _throttle from 'lodash/throttle';
 
 const MESSAGE_TIMEOUT_ID_LIST = {};
 let MESSAGE_HIDDEN_TIMEOUT_ID = -1;
-let MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
 let MESSAGE_REMOVE_TIMEOUT_ID = -1;
 
 const props = defineProps({
@@ -244,8 +243,15 @@ function handleTransitionEnd(message, index) {
   }
 }
 
-function handleMessageHidden() {
+async function handleMessageHidden() {
   // 為避免bottom距離計算造成ui抖動，先將元件的z-index設為-1避免遮擋其他ui的使用者交互事件後在以setTimeout移除該訊息
+  if (
+    typeof MESSAGE_HIDDEN_TIMEOUT_ID === 'number' &&
+    MESSAGE_HIDDEN_TIMEOUT_ID > -1
+  ) {
+    window.cancelAnimationFrame(MESSAGE_HIDDEN_TIMEOUT_ID);
+  }
+
   if (
     typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
     MESSAGE_REMOVE_TIMEOUT_ID > -1
@@ -253,51 +259,32 @@ function handleMessageHidden() {
     clearTimeout(MESSAGE_REMOVE_TIMEOUT_ID);
   }
 
-  if (
-    typeof MESSAGE_HIDDEN_REQUEST_ANIMATION_ID === 'number' &&
-    MESSAGE_HIDDEN_REQUEST_ANIMATION_ID > -1
-  ) {
-    window.cancelAnimationFrame(MESSAGE_HIDDEN_REQUEST_ANIMATION_ID);
-  }
+  messageList.value.forEach((message, index) => {
+    if (messageEl.value[index].getAttribute('message-ended') === 'true') {
+      const newMessageStyleList = _cloneDeep(messageStyleList.value);
+      newMessageStyleList[index]['--message_z_index'] = '-1';
 
-  if (
-    typeof MESSAGE_HIDDEN_TIMEOUT_ID === 'number' &&
-    MESSAGE_HIDDEN_TIMEOUT_ID > -1
-  ) {
-    clearTimeout(MESSAGE_HIDDEN_TIMEOUT_ID);
-  }
+      messageStyleList.value = newMessageStyleList;
+    }
+  });
+  await nextTick();
 
-  MESSAGE_HIDDEN_TIMEOUT_ID = setTimeout(async () => {
+  MESSAGE_HIDDEN_TIMEOUT_ID = window.requestAnimationFrame(() => {
     MESSAGE_HIDDEN_TIMEOUT_ID = -1;
 
-    messageList.value.forEach((message, index) => {
-      if (messageEl.value[index].getAttribute('message-ended') === 'true') {
-        const newMessageStyleList = _cloneDeep(messageStyleList.value);
-        newMessageStyleList[index]['--message_z_index'] = '-1';
-
-        messageStyleList.value = newMessageStyleList;
-      }
-    });
-    await nextTick();
-
-    MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = window.requestAnimationFrame(() => {
-      MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
-
-      MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
-        MESSAGE_REMOVE_TIMEOUT_ID = -1;
-        messageList.value = messageList.value.filter((message, removeIndex) => {
-          const isNotRemove =
-            _isElement(messageEl?.value?.[removeIndex]) === false ||
-            messageEl.value[removeIndex].getAttribute('message-ended') !==
-              'true';
-          if (isNotRemove === true) {
-            emits('remove', message, removeIndex);
-          }
-          return isNotRemove;
-        });
-      }, 2000);
-    });
-  }, 300);
+    MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
+      MESSAGE_REMOVE_TIMEOUT_ID = -1;
+      messageList.value = messageList.value.filter((message, removeIndex) => {
+        const isNotRemove =
+          _isElement(messageEl?.value?.[removeIndex]) === false ||
+          messageEl.value[removeIndex].getAttribute('message-ended') !== 'true';
+        if (isNotRemove === true) {
+          emits('remove', message, removeIndex);
+        }
+        return isNotRemove;
+      });
+    }, 2000);
+  });
 }
 function handleMessageEnd(message) {
   // 確保index是正確的

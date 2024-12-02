@@ -33,6 +33,11 @@ const showMessage = ref('');
 function handleUpdateShowMessage() {
   showMessage.value = message.value;
 }
+
+onMounted(() => {
+  // 從開發人員區手動模擬WebSocket等伺服端大量且連傳輸資料之狀況用
+  window.___testSildrInPanel__ = (newValue) => (showMessage.value = newValue);
+});
 </script>
 
 <style lang="scss">
