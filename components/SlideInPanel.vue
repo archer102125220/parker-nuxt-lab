@@ -36,6 +36,8 @@
 <script setup>
 import _isElement from 'lodash/isElement';
 import _cloneDeep from 'lodash/cloneDeep';
+import _debounce from 'lodash/debounce';
+import _throttle from 'lodash/throttle';
 
 const MESSAGE_TIMEOUT_ID_LIST = {};
 let MESSAGE_HIDDEN_TIMEOUT_ID = -1;
@@ -235,7 +237,7 @@ function handleTransitionEnd(message, index) {
         MESSAGE_TIMEOUT_ID_LIST[message.timestamp] = null;
         handleMessageEnd(message);
       },
-      props.timeout * ((index || 0) + 1)
+      props.timeout + (index || 0)
     );
   } else if (isMessageEnded === true) {
     handleMessageHidden();
@@ -243,7 +245,7 @@ function handleTransitionEnd(message, index) {
 }
 
 function handleMessageHidden() {
-  // 為避免bottom距離計算造成ui抖動，先將會先將元件的z-index設為-1避免遮擋其他ui的使用者交互事件後在以setTimeout移除該訊息
+  // 為避免bottom距離計算造成ui抖動，先將元件的z-index設為-1避免遮擋其他ui的使用者交互事件後在以setTimeout移除該訊息
   if (
     typeof MESSAGE_REMOVE_TIMEOUT_ID === 'number' &&
     MESSAGE_REMOVE_TIMEOUT_ID > -1
@@ -265,39 +267,36 @@ function handleMessageHidden() {
     clearTimeout(MESSAGE_HIDDEN_TIMEOUT_ID);
   }
 
-  MESSAGE_HIDDEN_TIMEOUT_ID = setTimeout(() => {
+  MESSAGE_HIDDEN_TIMEOUT_ID = setTimeout(async () => {
     MESSAGE_HIDDEN_TIMEOUT_ID = -1;
 
-    MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = window.requestAnimationFrame(
-      async () => {
-        MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
-        messageList.value.forEach((message, index) => {
-          if (messageEl.value[index].getAttribute('message-ended') === 'true') {
-            const newMessageStyleList = _cloneDeep(messageStyleList.value);
-            newMessageStyleList[index]['--message_z_index'] = '-1';
+    messageList.value.forEach((message, index) => {
+      if (messageEl.value[index].getAttribute('message-ended') === 'true') {
+        const newMessageStyleList = _cloneDeep(messageStyleList.value);
+        newMessageStyleList[index]['--message_z_index'] = '-1';
 
-            messageStyleList.value = newMessageStyleList;
-          }
-        });
-
-        await nextTick();
-        MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
-          MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
-          messageList.value = messageList.value.filter(
-            (message, removeIndex) => {
-              const isNotRemove =
-                _isElement(messageEl?.value?.[removeIndex]) === false ||
-                messageEl.value[removeIndex].getAttribute('message-ended') !==
-                  'true';
-              if (isNotRemove === true) {
-                emits('remove', message, removeIndex);
-              }
-              return isNotRemove;
-            }
-          );
-        }, 300);
+        messageStyleList.value = newMessageStyleList;
       }
-    );
+    });
+    await nextTick();
+
+    MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = window.requestAnimationFrame(() => {
+      MESSAGE_HIDDEN_REQUEST_ANIMATION_ID = -1;
+
+      MESSAGE_REMOVE_TIMEOUT_ID = setTimeout(() => {
+        MESSAGE_REMOVE_TIMEOUT_ID = -1;
+        messageList.value = messageList.value.filter((message, removeIndex) => {
+          const isNotRemove =
+            _isElement(messageEl?.value?.[removeIndex]) === false ||
+            messageEl.value[removeIndex].getAttribute('message-ended') !==
+              'true';
+          if (isNotRemove === true) {
+            emits('remove', message, removeIndex);
+          }
+          return isNotRemove;
+        });
+      }, 2000);
+    });
   }, 300);
 }
 function handleMessageEnd(message) {
