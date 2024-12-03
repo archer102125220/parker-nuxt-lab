@@ -92,10 +92,13 @@ async function handleGeneratePublicKeySetting() {
     await nuxtApp.$webAuthn.GET_webAuthnGenerateChallenge();
   const challenge = base64Js.toUint8Array(challengeString);
 
+  const rpId =
+    typeof location?.hostname === 'string' ? location.hostname : undefined;
   const publicKeyCredentialCreationOptions = {
     challenge,
     rp: {
-      name: 'Nuxt Lab'
+      name: 'Nuxt Lab',
+      rpId
       // id: 'techbridge.inc'
     },
 

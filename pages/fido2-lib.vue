@@ -101,12 +101,31 @@ async function handleFido2LibRegister() {
         userDisplayName: registerName.value
       }
     );
+    const rpId =
+      typeof location?.hostname === 'string' ? location.hostname : undefined;
 
-    console.log({ publicKeySetting });
+    console.log({
+      publicKeySetting: {
+        ...publicKeySetting,
+        rp: {
+          id: rpId,
+          ...(publicKeySetting?.rp || {})
+        },
+        challenge: base64Js.toUint8Array(publicKeySetting.challenge),
+        user: {
+          ...publicKeySetting.user,
+          id: base64Js.toUint8Array(publicKeySetting.user.id)
+        }
+      }
+    });
 
     const credential = await navigator.credentials.create({
       publicKey: {
         ...publicKeySetting,
+        rp: {
+          id: rpId,
+          ...(publicKeySetting?.rp || {})
+        },
         challenge: base64Js.toUint8Array(publicKeySetting.challenge),
         user: {
           ...publicKeySetting.user,
