@@ -297,9 +297,9 @@ async function handleWebAuthnLogin() {
     const response = await nuxtApp.$webAuthn.POST_webAuthnVerify({
       userId: loginId.value,
       challengeString,
-      credentialId: credentialId.value,
       credential: credentialJSON,
       base64URLServerSaveData: {
+      credentialId: credentialId.value,
         credentialPublicKeyPem: base64Js.encodeURL(
           credentialPublicKeyPem.value
         ),

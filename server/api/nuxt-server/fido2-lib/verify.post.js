@@ -58,6 +58,8 @@ export default defineEventHandler(async (event) => {
   // 無回傳值，無效直接拋出例外
   await assertionResult.validate();
 
+  // 驗證沒問題後，比對資料庫內的使用者資訊及金鑰資訊，大多還是ArrayBuffer型別，因此需要還原為字串或者json物件
+
   return {
     ...payload,
     assertionResult

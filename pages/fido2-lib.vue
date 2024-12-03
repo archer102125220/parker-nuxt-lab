@@ -230,10 +230,10 @@ async function handleFido2LibLogin() {
     const response = await nuxtApp.$fido2Lib.POST_fido2LibVerify({
       userId,
       challengeString: publicKeySetting.challenge,
-      credentialId: credentialId.value,
       credential: credentialJSON,
       base64URLServerSaveData: {
         // prevCounter,
+        credentialId: credentialId.value,
         credentialPublicKeyPem: base64Js.encodeURL(
           credentialPublicKeyPem.value
         ),
