@@ -33,7 +33,8 @@ export default defineEventHandler(async (event) => {
     payload.credential.response.clientDataJSON
   ));
   const clientDataObj = JSON.parse(decodedClientData);
-  clientDataObj.factor = 'first';
+  // https://webauthn-open-source.github.io/fido2-lib/Fido2Lib.html#assertionOptions
+  clientDataObj.factor = 'second';
   clientDataObj.publicKey = base64Js.decode(payload.base64URLServerSaveData.credentialPublicKeyPem);
   // clientDataObj.prevCounter = signature.byteLength;
   // clientDataObj.prevCounter = 0;

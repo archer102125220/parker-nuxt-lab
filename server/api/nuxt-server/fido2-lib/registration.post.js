@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
     payload.credential.response.clientDataJSON
   ));
   const clientDataObj = JSON.parse(decodedClientData);
+  // https://webauthn-open-source.github.io/fido2-lib/Fido2Lib.html#assertionOptions
   clientDataObj.factor = 'first';
   console.log({ clientDataObj });
 
