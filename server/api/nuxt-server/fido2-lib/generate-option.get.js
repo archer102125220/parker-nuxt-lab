@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   const f2l = new Fido2Lib({
     timeout: 60000,
-    // rpId: "example.com",
+    rp: process.env.NODE_ENV === 'development' ? 'localhost' : 'nuxt-lab.vercel.app',
     rpName: "Nuxt Lab",
     // rpIcon: "https://example.com/logo.png",
     challengeSize: 128,

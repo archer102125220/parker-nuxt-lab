@@ -101,14 +101,14 @@ async function handleFido2LibRegister() {
         userDisplayName: registerName.value
       }
     );
-    const rpId =
-      typeof location?.hostname === 'string' ? location.hostname : undefined;
+    // const rpId =
+    //   typeof location?.hostname === 'string' ? location.hostname : undefined;
 
     console.log({
       publicKeySetting: {
         ...publicKeySetting,
         rp: {
-          id: rpId,
+          // id: rpId,
           ...(publicKeySetting?.rp || {})
         },
         challenge: base64Js.toUint8Array(publicKeySetting.challenge),
@@ -123,7 +123,7 @@ async function handleFido2LibRegister() {
       publicKey: {
         ...publicKeySetting,
         rp: {
-          id: rpId,
+          // id: rpId,
           ...(publicKeySetting?.rp || {})
         },
         challenge: base64Js.toUint8Array(publicKeySetting.challenge),
