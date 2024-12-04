@@ -2,7 +2,6 @@
   <div>
     <div
       v-for="(message, index) in messageList"
-      :id="`message-${message.timeId}`"
       :key="message.timeId"
       class="message"
       :style="{ '--message_top': `${index * 55}px` }"
@@ -12,9 +11,9 @@
         class="message-block"
         :color="message.type"
         :absolute="true"
-        :attach="`message-${message.timeId}`"
+        :attach="true"
         :timeout="(index + 1) * timeout"
-        location="top"
+        location="top center"
         position="absolute"
         variant="outlined"
         @update:model-value="handleClose(message.timeId)"
@@ -94,11 +93,14 @@ watch(
         if (MESSAGE_TIMEOUT_ID_LIST[message.timeId]) {
           clearTimeout(MESSAGE_TIMEOUT_ID_LIST[message.timeId]);
         }
-        MESSAGE_TIMEOUT_ID_LIST[message.timeId] = setTimeout(() => {
-          if (MESSAGE_TIMEOUT_ID_LIST[message.timeId]) {
-            removeMessageTimeId.value = message.timeId;
-          }
-        }, (key + 1) * props.timeout);
+        MESSAGE_TIMEOUT_ID_LIST[message.timeId] = setTimeout(
+          () => {
+            if (MESSAGE_TIMEOUT_ID_LIST[message.timeId]) {
+              removeMessageTimeId.value = message.timeId;
+            }
+          },
+          (key + 1) * props.timeout
+        );
       });
     }
   },
