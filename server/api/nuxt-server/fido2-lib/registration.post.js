@@ -31,21 +31,32 @@ export default defineEventHandler(async (event) => {
   };
   console.log({ expected });
 
-  const attestationResult = await f2l.attestationResult({
-    ...payload.credential,
-    rawId: base64Js.toUint8Array(payload.credential.rawId).buffer,
-    response: {
-      ...payload.credential.response,
-      attestationObject: base64Js.toUint8Array(payload.credential.response.attestationObject).buffer,
-      authenticatorData: base64Js.toUint8Array(payload.credential.response.authenticatorData).buffer,
-      clientDataJSON: base64Js.toUint8Array(payload.credential.response.clientDataJSON).buffer,
-      publicKey: base64Js.toUint8Array(payload.credential.response.publicKey).buffer,
-    }
-  }, expected);
-  console.log({ attestationResult });
+  let attestationResult = {};
 
-  // 無回傳值，無效直接拋出例外
-  await attestationResult.validate();
+  try {
+    const _attestationResult = await f2l.attestationResult({
+      ...payload.credential,
+      rawId: base64Js.toUint8Array(payload.credential.rawId).buffer,
+      response: {
+        ...payload.credential.response,
+        attestationObject: base64Js.toUint8Array(payload.credential.response.attestationObject).buffer,
+        authenticatorData: base64Js.toUint8Array(payload.credential.response.authenticatorData).buffer,
+        clientDataJSON: base64Js.toUint8Array(payload.credential.response.clientDataJSON).buffer,
+        publicKey: base64Js.toUint8Array(payload.credential.response.publicKey).buffer,
+      }
+    }, expected);
+    attestationResult = _attestationResult;
+    console.log({ attestationResult });
+
+    // 可執行可不執行，建立attestationResult實例時會一並檢查是否正確，無回傳值，無效直接拋出例外
+    // await attestationResult.validate();
+  } catch (error) {
+    console.error(error);
+    throw createError({
+      statusCode: 401,
+      statusMessage: error.message,
+    });
+  }
 
   // 驗證沒問題後，要將使用者資訊、金鑰及金鑰id存入資料庫，大多還是ArrayBuffer型別，因此需要特別注意資料庫欄位型態
   // 需要特別注意的是fido2-lib登入時的驗證金鑰方法是用PEM格式的金鑰，因此需要存的是credentialPublicKeyPem，其餘金鑰可是需求儲存

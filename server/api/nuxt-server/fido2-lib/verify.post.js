@@ -40,34 +40,41 @@ export default defineEventHandler(async (event) => {
   };
   console.log({ expected });
 
-  const assertionResult = await f2l.assertionResult({
-    ...payload.credential,
-    rawId: base64Js.toUint8Array(payload.credential.rawId).buffer,
-    response: {
-      ...payload.credential.response,
-      authenticatorData: base64Js.toUint8Array(payload.credential.response.authenticatorData).buffer,
-      clientDataJSON: base64Js.toUint8Array(payload.credential.response.clientDataJSON).buffer,
-      signature,
-      userHandle: base64Js.toUint8Array(payload.credential.response.userHandle).buffer,
+  let output = {
+    ...payload,
+  }
+  try {
+    const assertionResult = await f2l.assertionResult({
+      ...payload.credential,
+      rawId: base64Js.toUint8Array(payload.credential.rawId).buffer,
+      response: {
+        ...payload.credential.response,
+        authenticatorData: base64Js.toUint8Array(payload.credential.response.authenticatorData).buffer,
+        clientDataJSON: base64Js.toUint8Array(payload.credential.response.clientDataJSON).buffer,
+        signature,
+        userHandle: base64Js.toUint8Array(payload.credential.response.userHandle).buffer,
+      }
+    }, expected);
+    console.log({ assertionResult });
+
+    // 可執行可不執行，建立assertionResult實例時會一並檢查是否正確，無回傳值，無效直接拋出例外
+    // await assertionResult.validate();
+
+    output = {
+      ...output,
+      assertionResult
+      // base64URLServerSaveDataCredentialPublicKeyPem,
+      // decodeClientDataObj: clientDataObj,
+      // success: true,
+      // userHandle: credential.userHandle
     }
-  }, expected);
-  console.log({ assertionResult });
-
-  // 無回傳值，無效直接拋出例外
-  await assertionResult.validate();
-
-  // 驗證沒問題後，比對資料庫內的使用者資訊
-  console.log(payload.base64URLServerSaveData.userId, payload.credential.response.userHandle);
-  if (payload.base64URLServerSaveData.userId !== payload.credential.response.userHandle) {
-
+  } catch (error) {
+    console.error(error);
+    throw createError({
+      statusCode: 401,
+      statusMessage: error.message,
+    });
   }
 
-  return {
-    ...payload,
-    assertionResult
-    // base64URLServerSaveDataCredentialPublicKeyPem,
-    // decodeClientDataObj: clientDataObj,
-    // success: true,
-    // userHandle: credential.userHandle
-  };
+  return output;
 });

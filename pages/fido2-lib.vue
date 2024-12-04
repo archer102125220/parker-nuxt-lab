@@ -53,8 +53,9 @@
         />
         <v-checkbox
           v-model="rememberMe"
-          label="模擬啟用”記住我“的登入"
           :value="true"
+          color="primary"
+          label="模擬啟用”記住我“的登入"
         />
         <div class="fido2_lib_page-login-submit">
           <v-btn color="primary" type="submit">驗證</v-btn>
