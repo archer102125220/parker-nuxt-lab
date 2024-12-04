@@ -1,17 +1,13 @@
 import { Base64 as base64Js } from 'js-base64';
 import { Fido2Lib } from 'fido2-lib';
 
-// import { getFido2Lib, reNewFido2Lib } from '@/utils/fido2-lib';
-
 // https://webauthn-open-source.github.io/fido2-lib/index.html
 
+// 前端透過 POST_fido2LibRegistration 呼叫這隻http post的api
 export default defineEventHandler(async (event) => {
   const payload = await readBody(event);
+  const challengeString = payload.challengeString || '';
 
-  // console.log(payload.credential);
-
-  // const f2l = getFido2Lib();
-  // const f2l = reNewFido2Lib();
   const f2l = new Fido2Lib({
     timeout: 60000,
     rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'nuxt-lab.vercel.app',
@@ -25,14 +21,15 @@ export default defineEventHandler(async (event) => {
     // authenticatorUserVerification: "required"
   });
 
-  const utf8Decoder = new TextDecoder('utf-8');
-  const decodedClientData = utf8Decoder.decode(base64Js.toUint8Array(
-    payload.credential.response.clientDataJSON
-  ));
-  const clientDataObj = JSON.parse(decodedClientData);
-  // https://webauthn-open-source.github.io/fido2-lib/Fido2Lib.html#assertionOptions
-  clientDataObj.factor = 'first';
-  console.log({ clientDataObj });
+  // 驗證用物件，大多數資料由後端寫死或透過env做設定，type註冊時固定為webauthn.create
+  const expected = {
+    type: 'webauthn.create',
+    origin: process.env.NODE_ENV === 'development' ? 'https://localhost:3000' : 'https://nuxt-lab.vercel.app',
+    challenge: challengeString,
+    // https://webauthn-open-source.github.io/fido2-lib/Fido2Lib.html#attestationResultＦ
+    factor: 'first'
+  };
+  console.log({ expected });
 
   const attestationResult = await f2l.attestationResult({
     ...payload.credential,
@@ -44,15 +41,25 @@ export default defineEventHandler(async (event) => {
       clientDataJSON: base64Js.toUint8Array(payload.credential.response.clientDataJSON).buffer,
       publicKey: base64Js.toUint8Array(payload.credential.response.publicKey).buffer,
     }
-  }, clientDataObj);
+  }, expected);
   console.log({ attestationResult });
 
   // 無回傳值，無效直接拋出例外
   await attestationResult.validate();
 
+  // 驗證沒問題後，要將使用者資訊、金鑰及金鑰id存入資料庫，大多還是ArrayBuffer型別，因此需要特別注意資料庫欄位型態
+  // 需要特別注意的是fido2-lib登入時的驗證金鑰方法是用PEM格式的金鑰，因此需要存的是credentialPublicKeyPem，其餘金鑰可是需求儲存
+
   const outputClientData = JSON.parse(JSON.stringify(Object.fromEntries(attestationResult.clientData)));
   const outputAuthnrData = JSON.parse(JSON.stringify(Object.fromEntries(attestationResult.authnrData)));
-  // console.log(outputAuthnrData.credentialPublicKeyJwk);
+  console.log({ outputClientData });
+  console.log({ outputAuthnrData });
+
+  const utf8Decoder = new TextDecoder('utf-8');
+  const userId = utf8Decoder.decode(base64Js.toUint8Array(
+    payload.user?.id
+  ));
+  console.log({ userId });
 
   return {
     ...payload,
@@ -95,12 +102,11 @@ export default defineEventHandler(async (event) => {
         credentialPublicKeyPem: base64Js.encodeURL(outputAuthnrData.credentialPublicKeyPem),
       }
     },
-    success: true,
     base64URLServerSaveData: {
       resultId: attestationResult.request.id,
-      publicKey: base64Js.fromUint8Array(new Uint8Array(attestationResult.request.response.publicKey), true),
+      // publicKey: base64Js.fromUint8Array(new Uint8Array(attestationResult.request.response.publicKey), true),
       credentialPublicKeyPem: base64Js.encodeURL(attestationResult.authnrData.get('credentialPublicKeyPem')),
-      credentialPublicKeyJwk: base64Js.encodeURL(JSON.stringify(attestationResult.authnrData.get('credentialPublicKeyJwk'))),
+      userId,
       counter: outputAuthnrData.counter
     }
   };

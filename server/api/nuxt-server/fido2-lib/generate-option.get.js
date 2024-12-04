@@ -5,6 +5,7 @@ import { Fido2Lib } from 'fido2-lib';
 
 // https://webauthn-open-source.github.io/fido2-lib/index.html
 
+// 前端透過 GET_fido2LibGenerateOption 呼叫這隻http get的api
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
@@ -27,31 +28,43 @@ export default defineEventHandler(async (event) => {
     // authenticatorUserVerification: "required"
   });
 
-  const publicKeyCredentialCreationOptions = await f2l.attestationOptions();
+  let output;
+  if (query?.isLogin === true) {
+    const publicKeyCredentialCreationOptions = await f2l.assertionOptions();
+    output = {
+      ...publicKeyCredentialCreationOptions,
+      challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
+      user
+    };
+  } else {
+    // let publicKeyCredentialCreationOptions = {};
+    // if (fido2LibIsInitialized() === false) {
+    //   const f2l = fido2LibInitialize({
+    //     timeout: 60000,
+    //     // rpId: "example.com",
+    //     rpName: "Nuxt Lab",
+    //     // rpIcon: "https://example.com/logo.png",
+    //     challengeSize: 128,
+    //     attestation: "direct",
+    //     cryptoParams: [-7, -257],
+    //     // authenticatorAttachment: "platform",
+    //     // authenticatorRequireResidentKey: false,
+    //     // authenticatorUserVerification: "required"
+    //   });
+    //   publicKeyCredentialCreationOptions = await f2l.attestationOptions();
+    // } else {
+    //   const f2l = getFido2Lib();
+    //   publicKeyCredentialCreationOptions = await f2l.attestationOptions();
+    // }
 
-  // let publicKeyCredentialCreationOptions = {};
-  // if (fido2LibIsInitialized() === false) {
-  //   const f2l = fido2LibInitialize({
-  //     timeout: 60000,
-  //     // rpId: "example.com",
-  //     rpName: "Nuxt Lab",
-  //     // rpIcon: "https://example.com/logo.png",
-  //     challengeSize: 128,
-  //     attestation: "direct",
-  //     cryptoParams: [-7, -257],
-  //     // authenticatorAttachment: "platform",
-  //     // authenticatorRequireResidentKey: false,
-  //     // authenticatorUserVerification: "required"
-  //   });
-  //   publicKeyCredentialCreationOptions = await f2l.attestationOptions();
-  // } else {
-  //   const f2l = getFido2Lib();
-  //   publicKeyCredentialCreationOptions = await f2l.attestationOptions();
-  // }
+    const publicKeyCredentialCreationOptions = await f2l.attestationOptions();
+    output = {
+      ...publicKeyCredentialCreationOptions,
+      challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
+      user
+    };
+  }
 
-  return {
-    ...publicKeyCredentialCreationOptions,
-    challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
-    user
-  };
+
+  return output;
 });

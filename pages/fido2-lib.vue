@@ -39,11 +39,22 @@
     <div class="fido2_lib_page-login">
       <form @submit.prevent="handleFido2LibLogin">
         <p class="fido2_lib_page-login-title">執行身份驗證</p>
-        <v-text-field
+        <!-- <v-text-field
           clearable
           label="帳號"
           class="fido2_lib_page-login-id"
           v-model="loginId"
+        /> -->
+        <v-text-field
+          disabled
+          label="模擬伺服器已儲存的帳號"
+          class="fido2_lib_page-login-id"
+          v-model="serverSaveUserId"
+        />
+        <v-checkbox
+          v-model="rememberMe"
+          label="模擬啟用”記住我“的登入"
+          :value="true"
         />
         <div class="fido2_lib_page-login-submit">
           <v-btn color="primary" type="submit">驗證</v-btn>
@@ -71,16 +82,18 @@ useHead({
 
 const credentialId = ref(null);
 const credentialPublicKeyPem = ref(null);
-const credentialPublicKeyJwk = ref(null);
-const publicKey = ref('');
+// const credentialPublicKeyJwk = ref(null);
+// const publicKey = ref('');
+const serverSaveUserId = ref(null);
 
 const registerId = ref('testId');
 const registerAccount = ref('testAccount');
 const registerName = ref('testName');
+const rememberMe = ref(false);
 const registerWebApiOutput = ref(null);
 const registerOutput = ref(null);
 
-const loginId = ref('testId');
+// const loginId = ref('testId');
 const loginWebApiOutput = ref(null);
 const loginOutput = ref(null);
 
@@ -141,38 +154,40 @@ async function handleFido2LibRegister() {
 
     const response = await nuxtApp.$fido2Lib.POST_fido2LibRegistration({
       challengeString: publicKeySetting.challenge,
-      credential: credentialJSON
+      credential: credentialJSON,
+      user: publicKeySetting.user
     });
     console.log({ response });
 
     const transports = credential.response.getTransports();
     console.log({ transports });
 
-    const _publicKey = base64Js.decode(
-      response.base64URLServerSaveData.publicKey
-    );
+    // const _publicKey = base64Js.decode(
+    //   response.base64URLServerSaveData.publicKey
+    // );
     const _credentialPublicKeyPem = base64Js.decode(
       response.base64URLServerSaveData.credentialPublicKeyPem
     );
-    const _credentialPublicKeyJwk = JSON.parse(
-      base64Js.decode(response.base64URLServerSaveData.credentialPublicKeyJwk)
-    );
+    // const _credentialPublicKeyJwk = JSON.parse(
+    //   base64Js.decode(response.base64URLServerSaveData.credentialPublicKeyJwk)
+    // );
 
     console.log({
       response,
       credentialJSON,
       credentialPublicKeyPem: _credentialPublicKeyPem,
-      credentialPublicKeyJwk: _credentialPublicKeyJwk,
+      // credentialPublicKeyJwk: _credentialPublicKeyJwk,
       credentialId: base64Js.toUint8Array(
         response?.base64URLServerSaveData?.resultId
       )
     });
     registerOutput.value = response;
     credentialId.value = response?.base64URLServerSaveData?.resultId;
+    serverSaveUserId.value = response?.base64URLServerSaveData?.userId;
 
     credentialPublicKeyPem.value = _credentialPublicKeyPem;
-    credentialPublicKeyJwk.value = _credentialPublicKeyJwk;
-    publicKey.value = _publicKey;
+    // credentialPublicKeyJwk.value = _credentialPublicKeyJwk;
+    // publicKey.value = _publicKey;
 
     nuxtApp.$successMessage('憑證註冊成功');
   } catch (error) {
@@ -193,27 +208,29 @@ async function handleFido2LibLogin() {
     //   loginId: loginId.value,
     //   credentialId: base64Js.toUint8Array(credentialId.value)
     // });
-    const publicKeySetting =
-      await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption();
+    const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
+      { isLogin: true }
+    );
 
     console.log(publicKeySetting);
 
-    const allowCredentials = [
-      {
-        // id, // from registration
-        // id: base64Js.toUint8Array(credentialId.value), // from registration
-        id: credentialId.value, // from registration
-        type: 'public-key',
-        transports: ['internal', 'usb', 'ble', 'nfc']
-      }
-    ];
+    let allowCredentials;
+    if (rememberMe.value === true) {
+      allowCredentials = [
+        {
+          id: base64Js.toUint8Array(credentialId.value).buffer, // from registration
+          type: 'public-key',
+          transports: ['internal', 'usb', 'ble', 'nfc']
+        }
+      ];
+    }
 
     const credential = await navigator.credentials.get({
       publicKey: {
         ...publicKeySetting,
-        challenge: base64Js.toUint8Array(publicKeySetting.challenge)
-      },
-      allowCredentials
+        challenge: base64Js.toUint8Array(publicKeySetting.challenge),
+        allowCredentials
+      }
     });
     console.log(credential);
     loginWebApiOutput.value = credential;
@@ -223,12 +240,11 @@ async function handleFido2LibLogin() {
     console.log({ credentialJSON });
 
     const userId = base64Js.fromUint8Array(
-      Uint8Array.from(loginId.value, (c) => c.charCodeAt(0)),
+      Uint8Array.from(serverSaveUserId.value, (c) => c.charCodeAt(0)),
       true
     );
     console.log(registerOutput.value);
     const response = await nuxtApp.$fido2Lib.POST_fido2LibVerify({
-      userId,
       challengeString: publicKeySetting.challenge,
       credential: credentialJSON,
       base64URLServerSaveData: {
@@ -237,11 +253,12 @@ async function handleFido2LibLogin() {
         credentialPublicKeyPem: base64Js.encodeURL(
           credentialPublicKeyPem.value
         ),
-        credentialPublicKeyJwk: base64Js.encodeURL(
-          JSON.stringify(credentialPublicKeyJwk.value)
-        ),
-        publicKey: base64Js.encodeURL(JSON.stringify(publicKey.value)),
-        counter: registerOutput.value?.base64URLServerSaveData?.counter || 0
+        // credentialPublicKeyJwk: base64Js.encodeURL(
+        //   JSON.stringify(credentialPublicKeyJwk.value)
+        // ),
+        // publicKey: base64Js.encodeURL(JSON.stringify(publicKey.value)),
+        counter: registerOutput.value?.base64URLServerSaveData?.counter || 0,
+        userId
       }
     });
     console.log(response);
