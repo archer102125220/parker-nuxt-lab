@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
     challengeSize: 128,
     attestation: "direct",
     cryptoParams: [-7, -257],
+    authenticatorRequireResidentKey: true,
     // authenticatorAttachment: "platform",
     // authenticatorRequireResidentKey: false,
     // authenticatorUserVerification: "required"

@@ -247,8 +247,7 @@ async function handleFido2LibLogin() {
         {
           id: base64Js.toUint8Array(credentialId.value), // from registration
           type: 'public-key',
-          // transports: ['internal', 'usb', 'ble', 'nfc'],
-          transports: ['internal']
+          transports: ['internal', 'usb', 'ble', 'nfc'],
         }
       ];
     }
