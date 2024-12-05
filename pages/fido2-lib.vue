@@ -164,7 +164,7 @@ async function handleFido2LibRegister() {
     // const credentialJSON = credential.toJSON(); // ios safari 的憑證沒有toJSON方法
     const credentialJSON = {
       authenticatorAttachment: credential.authenticatorAttachment,
-      id: credential.id,
+      id: credential.id, // 前端要存
       rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
       response: {
         originalAttestationObject: credential.response.attestationObject,
@@ -187,10 +187,10 @@ async function handleFido2LibRegister() {
           new Uint8Array(credential.response.getPublicKey()),
           true
         ),
-        publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(),
-        transports: credential.response.getTransports()
+        publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(), // 前端要存
+        transports: credential.response.getTransports() // 前端要存
       },
-      type: credential.type
+      type: credential.type // 前端要存
     };
     console.log({ credentialJSON });
 
@@ -257,12 +257,7 @@ async function handleFido2LibLogin() {
     );
 
     const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
-      {
-        isLogin: true
-        // userId,
-        // userName: registerAccount.value,
-        // userDisplayName: registerName.value
-      }
+      { isLogin: true }
     );
 
     console.log(publicKeySetting);
@@ -270,6 +265,7 @@ async function handleFido2LibLogin() {
     let allowCredentials;
     if (rememberMe.value === true) {
       allowCredentials = [
+        // 使用前端儲存的金鑰識別id、金鑰type、無密碼驗證方式
         {
           id: base64Js.toUint8Array(credentialId.value), // from registration
           type: 'public-key',
