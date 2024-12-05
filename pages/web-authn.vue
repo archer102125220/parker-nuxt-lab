@@ -115,9 +115,10 @@ async function handleGeneratePublicKeySetting() {
       }
     ],
 
-    // authenticatorSelection: {
-    //   authenticatorAttachment: 'platform'
-    // },
+    authenticatorSelection: {
+      // authenticatorAttachment: 'platform'
+      requireResidentKey: true
+    },
     timeout: 60000,
     attestation: 'direct'
   };
@@ -156,34 +157,37 @@ async function handleWebAuthnRegister() {
     registerWebApiOutput.value = credential;
     console.log(credential);
 
-    // const credentialJSON = {
-    //   authenticatorAttachment: credential.authenticatorAttachment,
-    //   id: credential.id,
-    //   // rawId: credential.rawId,
-    //   response: {
-    //     originalAttestationObject: credential.response.attestationObject,
-    //     attestationObject: base64Js.fromUint8Array(
-    //       new Uint8Array(credential.response.attestationObject),
-    //       true
-    //     ),
-    //     originalClientDataJSON: credential.response.clientDataJSON,
-    //     clientDataJSON: base64Js.fromUint8Array(
-    //       new Uint8Array(credential.response.clientDataJSON),
-    //       true
-    //     )
-    //   },
-    //   rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
-    //   attestationObject: base64Js.fromUint8Array(
-    //     new Uint8Array(credential.response.attestationObject),
-    //     true
-    //   ),
-    //   clientDataJSON: base64Js.fromUint8Array(
-    //     new Uint8Array(credential.response.clientDataJSON),
-    //     true
-    //   ),
-    //   type: credential.type
-    // };
-    const credentialJSON = credential.toJSON();
+    // const credentialJSON = credential.toJSON(); // ios safari 的憑證沒有toJSON方法
+    const credentialJSON = {
+      authenticatorAttachment: credential.authenticatorAttachment,
+      id: credential.id,
+      rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
+      response: {
+        originalAttestationObject: credential.response.attestationObject,
+        attestationObject: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.attestationObject),
+          true
+        ),
+        originalAuthenticatorData: credential.response.getAuthenticatorData(),
+        authenticatorData: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.getAuthenticatorData()),
+          true
+        ),
+        originalClientDataJSON: credential.response.clientDataJSON,
+        clientDataJSON: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.clientDataJSON),
+          true
+        ),
+        originalPublicKey: credential.response.getPublicKey(),
+        publicKey: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.getPublicKey()),
+          true
+        ),
+        publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(),
+        transports: credential.response.getTransports()
+      },
+      type: credential.type
+    };
     console.log({ credentialJSON });
 
     const response = await nuxtApp.$webAuthn.POST_webAuthnRegistration({
@@ -263,35 +267,35 @@ async function handleWebAuthnLogin() {
 
     console.log(new Uint8Array(credential.response.userHandle));
 
+    // const credentialJSON = credential.toJSON(); // ios safari 的憑證沒有toJSON方法
     const credentialJSON = {
       authenticatorAttachment: credential.authenticatorAttachment,
       id: credential.id,
-      // rawId: credential.rawId,
-      response: {
-        userHandle: credential.response.userHandle,
-        signature: credential.response.signature,
-        clientDataJSON: credential.response.clientDataJSON,
-        authenticatorData: credential.response.authenticatorData
-      },
       rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
-      clientDataJSON: base64Js.fromUint8Array(
-        new Uint8Array(credential.response.clientDataJSON),
-        true
-      ),
-      userHandle: base64Js.fromUint8Array(
-        // utf8Decoder.decode(credential.response.userHandle)
-        new Uint8Array(credential.response.userHandle),
-        true
-      ),
-      signature: base64Js.encodeURL(
-        new Uint8Array(credential.response.signature)
-      ),
-      authenticatorData: base64Js.encodeURL(
-        new Uint8Array(credential.response.authenticatorData)
-      ),
+      response: {
+        originalAuthenticatorData: credential.response.authenticatorData,
+        authenticatorData: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.authenticatorData),
+          true
+        ),
+        originalClientDataJSON: credential.response.clientDataJSON,
+        clientDataJSON: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.clientDataJSON),
+          true
+        ),
+        originalSignature: credential.response.signature,
+        signature: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.signature),
+          true
+        ),
+        originalUserHandle: credential.response.userHandle,
+        userHandle: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.userHandle),
+          true
+        )
+      },
       type: credential.type
     };
-
     console.log({ credentialJSON });
 
     const response = await nuxtApp.$webAuthn.POST_webAuthnVerify({
@@ -299,7 +303,7 @@ async function handleWebAuthnLogin() {
       challengeString,
       credential: credentialJSON,
       base64URLServerSaveData: {
-      credentialId: credentialId.value,
+        credentialId: credentialId.value,
         credentialPublicKeyPem: base64Js.encodeURL(
           credentialPublicKeyPem.value
         ),

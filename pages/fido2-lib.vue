@@ -76,10 +76,6 @@
 
 <script setup>
 import { Base64 as base64Js } from 'js-base64';
-import { Fido2Lib } from 'fido2-lib';
-if (typeof window === 'object') {
-  window.Fido2Lib = Fido2Lib;
-}
 
 const nuxtApp = useNuxtApp();
 const system = nuxtApp.$store?.system;
@@ -165,7 +161,37 @@ async function handleFido2LibRegister() {
     registerWebApiOutput.value = credential;
     console.log(credential);
 
-    const credentialJSON = credential.toJSON();
+    // const credentialJSON = credential.toJSON(); // ios safari 的憑證沒有toJSON方法
+    const credentialJSON = {
+      authenticatorAttachment: credential.authenticatorAttachment,
+      id: credential.id,
+      rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
+      response: {
+        originalAttestationObject: credential.response.attestationObject,
+        attestationObject: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.attestationObject),
+          true
+        ),
+        originalAuthenticatorData: credential.response.getAuthenticatorData(),
+        authenticatorData: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.getAuthenticatorData()),
+          true
+        ),
+        originalClientDataJSON: credential.response.clientDataJSON,
+        clientDataJSON: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.clientDataJSON),
+          true
+        ),
+        originalPublicKey: credential.response.getPublicKey(),
+        publicKey: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.getPublicKey()),
+          true
+        ),
+        publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(),
+        transports: credential.response.getTransports()
+      },
+      type: credential.type
+    };
     console.log({ credentialJSON });
 
     const response = await nuxtApp.$fido2Lib.POST_fido2LibRegistration({
@@ -232,10 +258,10 @@ async function handleFido2LibLogin() {
 
     const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
       {
-        isLogin: true,
-        userId,
-        userName: registerAccount.value,
-        userDisplayName: registerName.value
+        isLogin: true
+        // userId,
+        // userName: registerAccount.value,
+        // userDisplayName: registerName.value
       }
     );
 
@@ -247,7 +273,7 @@ async function handleFido2LibLogin() {
         {
           id: base64Js.toUint8Array(credentialId.value), // from registration
           type: 'public-key',
-          transports: ['internal', 'usb', 'ble', 'nfc'],
+          transports: ['internal', 'usb', 'ble', 'nfc']
         }
       ];
     }
@@ -262,8 +288,35 @@ async function handleFido2LibLogin() {
     console.log(credential);
     loginWebApiOutput.value = credential;
 
-    const credentialJSON = credential.toJSON();
-
+    // const credentialJSON = credential.toJSON(); // ios safari 的憑證沒有toJSON方法
+    const credentialJSON = {
+      authenticatorAttachment: credential.authenticatorAttachment,
+      id: credential.id,
+      rawId: base64Js.fromUint8Array(new Uint8Array(credential.rawId), true),
+      response: {
+        originalAuthenticatorData: credential.response.authenticatorData,
+        authenticatorData: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.authenticatorData),
+          true
+        ),
+        originalClientDataJSON: credential.response.clientDataJSON,
+        clientDataJSON: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.clientDataJSON),
+          true
+        ),
+        originalSignature: credential.response.signature,
+        signature: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.signature),
+          true
+        ),
+        originalUserHandle: credential.response.userHandle,
+        userHandle: base64Js.fromUint8Array(
+          new Uint8Array(credential.response.userHandle),
+          true
+        )
+      },
+      type: credential.type
+    };
     console.log({ credentialJSON });
 
     console.log(registerOutput.value);
