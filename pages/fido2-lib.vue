@@ -76,6 +76,10 @@
 
 <script setup>
 import { Base64 as base64Js } from 'js-base64';
+import { Fido2Lib } from 'fido2-lib';
+if (typeof window === 'object') {
+  window.Fido2Lib = Fido2Lib;
+}
 
 const nuxtApp = useNuxtApp();
 const system = nuxtApp.$store?.system;
@@ -241,9 +245,10 @@ async function handleFido2LibLogin() {
     if (rememberMe.value === true) {
       allowCredentials = [
         {
-          id: base64Js.toUint8Array(credentialId.value).buffer, // from registration
+          id: base64Js.toUint8Array(credentialId.value), // from registration
           type: 'public-key',
-          transports: ['internal', 'usb', 'ble', 'nfc']
+          // transports: ['internal', 'usb', 'ble', 'nfc'],
+          transports: ['internal']
         }
       ];
     }
