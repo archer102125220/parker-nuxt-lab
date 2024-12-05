@@ -135,6 +135,7 @@ export const useSystemStore = defineStore('system', {
         isIphone: false,
         isIpad: false,
         isStandalone: false,
+        isDesktop: false,
         notBroswer: typeof window === 'undefined',
       };
       if (typeof window === 'undefined') {
@@ -142,10 +143,10 @@ export const useSystemStore = defineStore('system', {
       }
       const userAgent = (window?.navigator?.userAgent || '').toLowerCase();
 
-      broswerInfo.isAndroid =
-        userAgent.includes('Android') || userAgent.includes('android');
-      broswerInfo.isIphone = userAgent.includes('iPhone');
-      broswerInfo.isIpad = userAgent.includes('iPad');
+      broswerInfo.isDesktop = ['windows nt', 'macintosh', 'x11'].some(keyword => userAgent.includes(keyword));
+      broswerInfo.isAndroid = userAgent.includes('android');
+      broswerInfo.isIphone = userAgent.includes('iphone');
+      broswerInfo.isIpad = userAgent.includes('ipad');
       broswerInfo.isIos = broswerInfo.isIphone || broswerInfo.isIpad;
       broswerInfo.isStandalone = window.navigator?.standalone === true || window.matchMedia?.('(display-mode: standalone)')?.matches === true;
 

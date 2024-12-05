@@ -55,7 +55,8 @@
           v-model="rememberMe"
           :value="true"
           color="primary"
-          label="模擬啟用”記住我“的登入"
+          label="模擬啟用”記住我“的登入(手機強制啟用)"
+          :disabled="rememberMeDisable"
         />
         <div class="fido2_lib_page-login-submit">
           <v-btn color="primary" type="submit">驗證</v-btn>
@@ -77,6 +78,7 @@
 import { Base64 as base64Js } from 'js-base64';
 
 const nuxtApp = useNuxtApp();
+const system = nuxtApp.$store?.system;
 useHead({
   title: '生物辨識測試(fido2-lib)'
 });
@@ -90,13 +92,22 @@ const serverSaveUserId = ref(null);
 const registerId = ref('testId');
 const registerAccount = ref('testAccount');
 const registerName = ref('testName');
-const rememberMe = ref(false);
 const registerWebApiOutput = ref(null);
 const registerOutput = ref(null);
 
 // const loginId = ref('testId');
 const loginWebApiOutput = ref(null);
 const loginOutput = ref(null);
+const rememberMe = ref(false);
+const rememberMeDisable = ref(false);
+
+onMounted(() => {
+  const { isAndroid, isIphone } = system.broswerInfo;
+  if (isAndroid === true || isIphone === true) {
+    rememberMe.value = true;
+    rememberMeDisable.value = true;
+  }
+});
 
 async function handleFido2LibRegister() {
   if (nuxtApp.$store.system.loading === true) return;
@@ -209,8 +220,14 @@ async function handleFido2LibLogin() {
     //   loginId: loginId.value,
     //   credentialId: base64Js.toUint8Array(credentialId.value)
     // });
+
+    const userId = base64Js.fromUint8Array(
+      Uint8Array.from(serverSaveUserId.value, (c) => c.charCodeAt(0)),
+      true
+    );
+
     const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
-      { isLogin: true }
+      { isLogin: true, userId }
     );
 
     console.log(publicKeySetting);
@@ -240,10 +257,6 @@ async function handleFido2LibLogin() {
 
     console.log({ credentialJSON });
 
-    const userId = base64Js.fromUint8Array(
-      Uint8Array.from(serverSaveUserId.value, (c) => c.charCodeAt(0)),
-      true
-    );
     console.log(registerOutput.value);
     const response = await nuxtApp.$fido2Lib.POST_fido2LibVerify({
       challengeString: publicKeySetting.challenge,
