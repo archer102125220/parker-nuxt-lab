@@ -227,7 +227,12 @@ async function handleFido2LibLogin() {
     );
 
     const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
-      { isLogin: true, userId }
+      {
+        isLogin: true,
+        userId,
+        userName: registerAccount.value,
+        userDisplayName: registerName.value
+      }
     );
 
     console.log(publicKeySetting);
