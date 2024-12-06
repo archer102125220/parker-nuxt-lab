@@ -6,6 +6,7 @@
       ref="messageEl"
       :style="{
         '--message_bottom': `calc(var(--message_item_height)  * ${messageList.length - index - 1})`,
+        '--message_item_spacing': `calc(var(--slide_in_panel_list_item_spacing, 0px)  * ${messageList.length - index})`,
         ...messageStyleList[index]
       }"
       :remove-type="removeType"
@@ -22,12 +23,12 @@
     >
       <slot
         :message="message"
-        :text="message.text"
+        :content="message.content"
         :index="index"
         :remove-type="removeType"
       >
         <p>
-          {{ message.text }}
+          {{ message.content }}
         </p>
       </slot>
     </div>
@@ -53,7 +54,8 @@ const props = defineProps({
   removeDeltaX: { type: Number, default: null },
   maxRow: { type: Number, default: 6 },
   zIndex: { type: [Number, String], default: null },
-  userRmoveType: { type: String, default: 'none' }
+  userRmoveType: { type: String, default: 'none' },
+  itemSpacing: { type: [Number, String], default: null }
 });
 const emits = defineEmits(['close', 'remove', 'update:modelValue']);
 
@@ -74,17 +76,13 @@ const cssVariable = computed(() => {
 
   if (typeof props.top === 'number' || isNaN(`${props.top}`) === false) {
     _cssVariable['--slide_in_panel_list_top'] = `${Number(props.top)}px`;
-  }
-
-  if (typeof props.top === 'string' && props.top !== '') {
+  } else if (typeof props.top === 'string' && props.top !== '') {
     _cssVariable['--slide_in_panel_list_top'] = props.top;
   }
 
   if (typeof props.bottom === 'number' || isNaN(`${props.bottom}`) === false) {
     _cssVariable['--slide_in_panel_list_bottom'] = `${Number(props.bottom)}px`;
-  }
-
-  if (typeof props.bottom === 'string' && props.bottom !== '') {
+  } else if (typeof props.bottom === 'string' && props.bottom !== '') {
     _cssVariable['--slide_in_panel_list_bottom'] = props.bottom;
   }
 
@@ -100,9 +98,21 @@ const cssVariable = computed(() => {
     isNaN(`${props.itemHeight}`) === false
   ) {
     _cssVariable['--message_item_height'] = `${Number(props.itemHeight)}px`;
-  }
-  if (typeof props.itemHeight === 'string' && props.itemHeight !== '') {
+  } else if (typeof props.itemHeight === 'string' && props.itemHeight !== '') {
     _cssVariable['--message_item_height'] = props.itemHeight;
+  }
+
+  if (
+    typeof props.itemSpacing === 'number' ||
+    isNaN(`${props.itemSpacing}`) === false
+  ) {
+    _cssVariable['--slide_in_panel_list_item_spacing'] =
+      `${Number(props.itemSpacing)}px`;
+  } else if (
+    typeof props.itemSpacing === 'string' &&
+    props.itemSpacing !== ''
+  ) {
+    _cssVariable['--slide_in_panel_list_item_spacing'] = props.itemSpacing;
   }
 
   return _cssVariable;
@@ -126,7 +136,7 @@ watch(
     const value = newModelValue || newValue;
     if (value !== '' && value !== null) {
       const timestamp = Date.now();
-      messageList.value.push({ text: value, timestamp });
+      messageList.value.push({ content: value, timestamp });
       MESSAGE_TIMEOUT_ID_LIST[timestamp] = null;
     }
   }
@@ -443,7 +453,7 @@ function handleUserRemoveEnd(message, index) {
   &-message {
     position: absolute;
     left: var(--message_left, 0px);
-    bottom: var(--message_bottom);
+    bottom: calc(var(--message_bottom) + var(--message_item_spacing, 0px));
     z-index: var(--message_z_index);
     height: var(--message_item_height);
     opacity: 1;
@@ -452,6 +462,8 @@ function handleUserRemoveEnd(message, index) {
       left 0.5s linear,
       bottom 0.15s,
       opacity 0.4s;
+
+    word-break: keep-all;
 
     &[message-started='true'] {
       left: var(--message_left, 100%);
