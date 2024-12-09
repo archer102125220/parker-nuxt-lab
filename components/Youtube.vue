@@ -115,7 +115,7 @@ watch(
 );
 onMounted(async () => {
   await nextTick();
-  if (process.client) {
+  if (import.meta.client) {
     if (document.getElementById('youtube-script') === null) {
       const el = document.createElement('script');
       el.setAttribute('id', 'youtube-script');

@@ -24,7 +24,7 @@ export function useAsyncDataError(error = { value: null }) {
           targetPath: route.path + `?${qs.stringify(route.query)}`
         };
         if (errorStatus === 401) {
-          if (process.client) {
+          if (import.meta.client) {
             $store.system.setMessageState({
               text: '登入超時，或權限被修改，請重新登入',
               type: 'error'
