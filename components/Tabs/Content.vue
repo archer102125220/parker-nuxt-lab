@@ -5,7 +5,7 @@
     @mouseover="resetRefreshDisable"
     @touchend="resetRefreshDisable"
   >
-    <slot v-if="slotNameKey !== 'default'" />
+    <slot v-if="slotNameKey !== 'default' && slotNameIsDefault === false" />
     <slot name="loading">
       <LoadingBar :loading="loading" />
     </slot>
@@ -17,15 +17,16 @@
       :slide-list="tabList"
       :overflow="scrollFetch === false"
       :slot-name-key="slotNameKey || valueKey"
+      :slot-name-is-default="slotNameIsDefault"
       :should-fill-height="scrollFetch === true"
       @update:model-value="change"
       @sliderMove="sliderMove"
     >
-      <template v-for="_slot in slots" #[_slot]="{ ...arg }">
+      <template v-for="_slot of slots" #[_slot]="{ ...arg }">
         <slot :name="_slot" v-bind="arg" :is-tab-moveing="isTabMoveing" />
       </template>
 
-      <template v-for="(slotName, index) in slotsList" #[slotName]="{ ...arg }">
+      <template v-for="(slotName, index) of slotsList" #[slotName]="{ ...arg }">
         <slot
           v-if="scrollFetch === false"
           :name="slotName"
@@ -83,6 +84,10 @@ const props = defineProps({
   slotNameKey: {
     type: [Number, String],
     default: null
+  },
+  slotNameIsDefault: {
+    type: Boolean,
+    default: false
   },
   loading: {
     type: Boolean,

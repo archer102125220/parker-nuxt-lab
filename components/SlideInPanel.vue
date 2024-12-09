@@ -55,7 +55,8 @@ const props = defineProps({
   maxRow: { type: Number, default: 6 },
   zIndex: { type: [Number, String], default: null },
   userRmoveType: { type: String, default: 'none' },
-  itemSpacing: { type: [Number, String], default: null }
+  itemSpacing: { type: [Number, String], default: null },
+  containerPosition: { type: String, default: 'fixed' }
 });
 const emits = defineEmits(['close', 'remove', 'update:modelValue']);
 
@@ -114,7 +115,17 @@ const cssVariable = computed(() => {
   ) {
     _cssVariable['--slide_in_panel_list_item_spacing'] = props.itemSpacing;
   }
+  if (typeof props.containerPosition === 'string' && props.containerPosition !== '') {
+    _cssVariable['--slide_in_panel_list_container_position'] = props.containerPosition;
 
+    if (props.containerPosition === 'fixed') {
+      _cssVariable['--slide_in_panel_list_left'] = '-100vw';
+      _cssVariable['--slide_in_panel_list_width'] = '100vw';
+    } else {
+      _cssVariable['--slide_in_panel_list_left'] = '-100%';
+      _cssVariable['--slide_in_panel_list_width'] = '100%';
+    }
+  }
   return _cssVariable;
 });
 const deltaX = computed(() => {
@@ -442,12 +453,12 @@ function handleUserRemoveEnd(message, index) {
 </script>
 <style lang="scss" scoped>
 .slide_in_panel_list {
-  position: fixed;
+  position: var(--slide_in_panel_list_container_position, fixed);
   top: var(--slide_in_panel_list_top);
-  left: -100vw;
+  left: var(--slide_in_panel_list_left, -100vw);
   bottom: var(--slide_in_panel_list_bottom);
   z-index: var(--slide_in_panel_list_zIndex);
-  width: 100vw;
+  width: var(--slide_in_panel_list_width, 100vw);
   user-select: none;
 
   &-message {

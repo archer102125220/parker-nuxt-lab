@@ -13,22 +13,62 @@
       <v-text-field
         clearable
         label="新增彈跳訊息"
-        class="slide_in_panel_list_page-message"
+        class="slide_in_panel_list_page-content-message"
         v-model="message"
       />
 
-      <div class="slide_in_panel_list_page-message-submit">
+      <div class="slide_in_panel_list_page-content-message-submit">
         <v-btn color="primary" type="submit">測試彈跳訊息</v-btn>
       </div>
+
+      <TabsBar
+        class="slide_in_panel_list_page-content-tab_bar"
+        v-model="tab"
+        gap="16px"
+        bottom-line-height="2px"
+        bottom-line-width="30px"
+        bottom-line-color="#27C5C3"
+        :tab-list="tabList"
+      />
+      <TabsContent
+        class="slide_in_panel_list_page-content-tab_content"
+        height="100%"
+        v-model="tab"
+        :tab-list="tabList"
+        :slot-name-is-default="true"
+      >
+        <template #default="{ item }">
+          <div
+            class="slide_in_panel_list_page-content-tab_content-item"
+            :item="item"
+          >
+            <p>{{ item }}</p>
+            <SlideInPanel
+              bottom="0px"
+              container-position="absolute"
+              v-model="showMessage"
+            />
+          </div>
+        </template>
+      </TabsContent>
     </form>
     <!-- <SlideInPanel bottom="10vh" item-height="24px" v-model="showMessage" /> -->
-    <SlideInPanel bottom="10vh" v-model="showMessage" />
+    <!-- <SlideInPanel bottom="10vh" v-model="showMessage" /> -->
   </div>
 </template>
 
 <script setup>
 const message = ref('');
 const showMessage = ref('');
+
+const tab = ref('');
+const tabList = computed(() => {
+  const _tabList = [];
+  for (let i = 0; i <= 20; i++) {
+    _tabList.push(i);
+  }
+  return _tabList;
+});
 
 function handleUpdateShowMessage() {
   showMessage.value = message.value;
@@ -43,8 +83,9 @@ onMounted(() => {
 <style lang="scss">
 .slide_in_panel_list_page {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
+  overflow-x: hidden;
+
   &-describe {
     // display: flex;
     // flex-wrap: wrap;
@@ -56,6 +97,15 @@ onMounted(() => {
   &-content {
     flex: 1;
     flex-basis: 400px;
+
+    &-tab_content {
+      // height: 30%;
+      &-item {
+        position: relative;
+        height: 80%;
+        overflow: hidden;
+      }
+    }
   }
 }
 </style>
