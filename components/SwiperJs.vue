@@ -24,6 +24,7 @@
           v-for="(slide, index) in slideList"
           :key="slide[slotNameKey] || slide.slotName || index"
           class="swiper_js-content-wrapper-slide swiper-slide"
+          :swiper-loop-value="slide[modelValueKey] || slide.value || index"
         >
           <slot
             v-if="slotNameIsDefault === false"
@@ -147,7 +148,7 @@ const props = defineProps({
   },
   slotNameIsDefault: {
     type: Boolean,
-    default: false
+    default: true
   },
   centeredSlides: {
     type: Boolean,
@@ -212,12 +213,14 @@ const emit = defineEmits([
   'destroy',
   'beforeSlideChangeStart',
   'slideChange',
+  'slideChangeTransitionEnd',
   'sliderMove',
   'reachBeginning',
   'reachEnd',
   'fromEdge',
   'activeIndexChange',
-  'beforeTransitionStart'
+  'beforeTransitionStart',
+  'realIndexChange'
 ]);
 
 const nextRef = ref(null);
@@ -251,9 +254,20 @@ watch(
     await nextTick();
     window.requestAnimationFrame(() => {
       handleSwiperUpdata(newProps);
-      syncSlideList(newProps.slideList, swiperObj.value);
-      if (newProps.modelValue !== oldProps.modelValue) {
-        syncSlide(newProps.modelValue, swiperObj.value);
+      if (
+        JSON.stringify(newProps.slideList) !==
+        JSON.stringify(oldProps.slideList)
+      ) {
+        syncSlideList(newProps.slideList, swiperObj.value);
+      }
+
+      const newModelValue =
+        newProps.loop === true ? `${newProps.modelValue}` : props.modelValue;
+      const oldModelValue =
+        newProps.loop === true ? `${oldProps.modelValue}` : oldProps.modelValue;
+
+      if (newModelValue !== oldModelValue) {
+        syncSlide(newModelValue, swiperObj.value);
       }
     });
   },
@@ -304,7 +318,9 @@ function handleSwiperInit() {
       reachEnd,
       fromEdge,
       activeIndexChange,
-      beforeTransitionStart
+      beforeTransitionStart,
+      realIndexChange,
+      slideChangeTransitionEnd
     }
   };
   if (props.hasNavigation === true) {
@@ -410,11 +426,15 @@ function syncSlide(value, swiper) {
     return;
   }
   const _slideIndex = props.slideList.findIndex(
-    (slide) => slide?.[props.modelValueKey] === value || slide?.value === value
+    (slide) =>
+      (props.loop === true &&
+        (`${slide?.[props.modelValueKey]}` === value ||
+          `${slide?.value}` === value)) ||
+      (props.loop === false &&
+        (slide?.[props.modelValueKey] === value || slide?.value === value))
   );
   const slideIndex =
     typeof _slideIndex === 'number' && _slideIndex > -1 ? _slideIndex : value;
-  console.log({ slideIndex });
   swiper.slideTo(slideIndex || 0);
 }
 function syncSlideList(newSlideList = [], swiper) {
@@ -451,16 +471,6 @@ function beforeSlideChangeStart(swiper) {
   emit('beforeSlideChangeStart', swiper);
 }
 function slideChange(swiper) {
-  const slideData = props.slideList[swiper.activeIndex];
-  const slideValue =
-    slideData?.[props.modelValueKey] || slideData?.value || swiper.activeIndex;
-
-  console.log({ slideValue });
-
-  if (props.modelValue !== slideValue) {
-    emit('update:modelValue', slideValue);
-    emit('change', slideValue);
-  }
   emit('slideChange', swiper);
 }
 function sliderMove(swiper) {
@@ -480,6 +490,32 @@ function activeIndexChange(swiper) {
 }
 function beforeTransitionStart(swiper) {
   emit('beforeTransitionStart', swiper);
+}
+function realIndexChange(swiper) {
+  emit('realIndexChange', swiper);
+}
+function slideChangeTransitionEnd(swiper) {
+  if (props.loop === true) {
+    const slideValueEl = swiper.slides[swiper.activeIndex];
+    const slideValue = slideValueEl?.getAttribute('swiper-loop-value');
+
+    if (`${props.modelValue}` !== slideValue) {
+      emit('update:modelValue', slideValue);
+      emit('change', slideValue);
+    }
+  } else {
+    const slideData = props.slideList[swiper.activeIndex];
+    const slideValue =
+      slideData?.[props.modelValueKey] ||
+      slideData?.value ||
+      swiper.activeIndex;
+
+    if (props.modelValue !== slideValue) {
+      emit('update:modelValue', slideValue);
+      emit('change', slideValue);
+    }
+  }
+  emit('slideChangeTransitionEnd', swiper);
 }
 </script>
 
