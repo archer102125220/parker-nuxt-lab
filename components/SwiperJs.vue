@@ -263,12 +263,14 @@ watch(
 
       const newModelValue =
         newProps.loop === true ? `${newProps.modelValue}` : props.modelValue;
-      const oldModelValue =
-        newProps.loop === true ? `${oldProps.modelValue}` : oldProps.modelValue;
+      // const oldModelValue =
+      //   newProps.loop === true ? `${oldProps.modelValue}` : oldProps.modelValue;
 
-      if (newModelValue !== oldModelValue) {
-        syncSlide(newModelValue, swiperObj.value);
-      }
+      // if (newModelValue !== oldModelValue) {
+      //   syncSlide(newModelValue, swiperObj.value);
+      // }
+
+      syncSlide(newModelValue, swiperObj.value);
     });
   },
   {

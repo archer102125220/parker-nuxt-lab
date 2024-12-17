@@ -128,13 +128,6 @@ const slots = computed(() => {
   return _slots;
 });
 
-watch(
-  () => props.modelValue,
-  (newModelValue) => {
-    console.log({ newModelValue });
-  }
-);
-
 function getSlotsKey(tab, index) {
   return tab?.[props.valueKey] || tab?.slotName || index;
 }
@@ -157,7 +150,6 @@ function getRefreshDisable(tab) {
   return tab.refreshDisable || props.refreshDisable || isTabMoveing.value;
 }
 function change(...arg) {
-  console.log('change');
   emits('update:modelValue', ...arg);
   emits('change', ...arg);
 }
