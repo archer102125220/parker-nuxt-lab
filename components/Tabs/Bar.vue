@@ -96,6 +96,7 @@ const SELECTED_TRANSITION =
   'left 0.4s ease-in-out, top 0.4s ease-in-out, width 0.4s 0.1s';
 const IS_KEEP_SCROLL_LIMIT = 50;
 const LIMIT_SHADOW_SIZE = 60;
+const SELECTED_TYPE_LIST = ['borderSide', 'mask'];
 
 const props = defineProps({
   loading: {
@@ -168,7 +169,7 @@ const props = defineProps({
   },
   selectedType: {
     type: String,
-    default: 'underLine'
+    default: 'borderSide'
   },
   borderSideColor: {
     type: String,
@@ -177,6 +178,10 @@ const props = defineProps({
   selectedColor: {
     type: String,
     default: ''
+  },
+  borderSideFullWidth: {
+    type: Boolean,
+    default: false
   },
   borderSideWidth: {
     type: [Number, String],
@@ -268,7 +273,7 @@ const computedMoveTransition = computed(() => {
   return props.moveTransition;
 });
 const validSelectedType = computed(() => {
-  return typeof props.selectedType === 'string' && props.selectedType !== '';
+  return SELECTED_TYPE_LIST.includes(props.selectedType);
 });
 const cssVariable = computed(() => {
   const _cssVariable = {
@@ -290,7 +295,7 @@ const cssVariable = computed(() => {
         `${props.lineBorderRadius}px`;
     }
 
-    if (props.selectedType === 'underLine') {
+    if (props.selectedType === 'borderSide') {
       _cssVariable['--tab_border_side_bottom'] = '0px';
       if (Array(props.tabList) && props.tabList.length > 0) {
         if (props.vertical === false) {
@@ -303,16 +308,21 @@ const cssVariable = computed(() => {
           ) {
             _cssVariable['--tab_border_side_height'] = props.borderSideHeight;
           }
+        } else {
+          _cssVariable['--tab_bar_min_width'] = '100%';
         }
 
-        if (typeof props.borderSideWidth === 'number') {
-          _cssVariable['--tab_border_side_width'] =
-            `${props.borderSideWidth}px`;
-        } else if (
-          typeof props.borderSideWidth === 'string' &&
-          props.borderSideWidth !== ''
-        ) {
-          _cssVariable['--tab_border_side_width'] = props.borderSideWidth;
+        if (props.borderSideFullWidth !== true) {
+          if (typeof props.borderSideWidth === 'number') {
+            _cssVariable['--tab_border_side_width'] =
+              `${props.borderSideWidth}px`;
+          } else if (
+            typeof props.borderSideWidth === 'string' &&
+            props.borderSideWidth !== '' &&
+            props.borderSideWidth !== '100%'
+          ) {
+            _cssVariable['--tab_border_side_width'] = props.borderSideWidth;
+          }
         }
       } else {
         _cssVariable['--tab_border_side_width'] = '0px';
@@ -864,38 +874,49 @@ function handleNavigationShow() {
 }
 
 function getBottomeStyle(tab) {
-  const bottomeStyle = {};
+  const borderSideStyle = {};
 
   if (typeof tab === 'object' && tab !== null) {
     if (props.vertical === true) {
-      bottomeStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
+      borderSideStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
     }
 
     if (props.vertical === false) {
-      bottomeStyle['--tab_border_side_top'] = 'unset';
+      borderSideStyle['--tab_border_side_top'] = 'unset';
       if (
+        props.selectedType === 'mask' ||
         (typeof props.borderSideWidth !== 'number' &&
           typeof props.borderSideWidth !== 'string') ||
         props.borderSideWidth === ''
       ) {
-        bottomeStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
-        bottomeStyle['--tab_border_side_left'] = `${tab.offsetLeft}px`;
+        borderSideStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
+        borderSideStyle['--tab_border_side_left'] = `${tab.offsetLeft}px`;
       } else {
-        bottomeStyle['--tab_border_side_left'] = `calc(${
+        borderSideStyle['--tab_border_side_left'] = `calc(${
           tab.offsetLeft + tab.clientWidth / 2
         }px - var(--tab_border_side_width, 0px) / 2)`;
+
+        if (
+          (typeof props.borderSideWidth !== 'number' &&
+            typeof props.borderSideWidth !== 'string') ||
+          props.borderSideWidth === '' ||
+          props.borderSideWidth === '100%' ||
+          props.borderSideFullWidth === true
+        ) {
+          borderSideStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
+        }
       }
     } else {
-      bottomeStyle['--tab_border_side_left'] = '0px';
+      borderSideStyle['--tab_border_side_left'] = '0px';
       if (
         (typeof props.borderSideHeight !== 'number' &&
           typeof props.borderSideHeight !== 'string') ||
         props.borderSideHeight === ''
       ) {
-        bottomeStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
-        bottomeStyle['--tab_border_side_top'] = `${tab.offsetTop}px`;
+        borderSideStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
+        borderSideStyle['--tab_border_side_top'] = `${tab.offsetTop}px`;
       } else {
-        bottomeStyle['--tab_border_side_top'] = `calc(${
+        borderSideStyle['--tab_border_side_top'] = `calc(${
           tab.offsetTop + tab.clientHeight / 2
         }px - var(--tab_border_side_height, 0px) / 2)`;
       }
@@ -903,14 +924,14 @@ function getBottomeStyle(tab) {
 
     if (props.selectedType === 'mask') {
       if (props.vertical === true) {
-        bottomeStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
+        borderSideStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
       } else {
-        bottomeStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
+        borderSideStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
       }
     }
   }
 
-  return bottomeStyle;
+  return borderSideStyle;
 }
 
 function handleBottomeStyle(tab) {
@@ -1441,6 +1462,7 @@ function handleCustomKeepScrollStep(
 
   &-option_list {
     flex: 1;
+    min-width: var(--tab_bar_min_width);
     position: relative;
     display: flex;
     // flex-direction: row;
