@@ -4,9 +4,9 @@
       class="tab_test_page-bar"
       v-model="tab"
       gap="16px"
-      bottom-line-height="2px"
-      bottom-line-width="30px"
-      bottom-line-color="#27C5C3"
+      border-side-height="2px"
+      border-side-width="30px"
+      border-side-color="#27C5C3"
       :tab-list="tabList"
     />
     <TabsBar
@@ -14,9 +14,9 @@
       v-model="tab"
       gap="16px"
       limit-shadow
-      bottom-line-height="2px"
-      bottom-line-width="30px"
-      bottom-line-color="#27C5C3"
+      border-side-height="2px"
+      border-side-width="30px"
+      border-side-color="#27C5C3"
       :tab-list="tabList"
     />
     <TabsBar
@@ -24,18 +24,18 @@
       v-model="tab"
       gap="16px"
       is-navigation-absolute
-      bottom-line-height="2px"
-      bottom-line-width="30px"
-      bottom-line-color="#27C5C3"
+      border-side-height="2px"
+      border-side-width="30px"
+      border-side-color="#27C5C3"
       :tab-list="tabList"
     />
     <TabsBar
       class="tab_test_page-bar"
       v-model="tab"
       gap="16px"
-      bottom-line-height="2px"
-      bottom-line-width="30px"
-      bottom-line-color="#27C5C3"
+      border-side-height="2px"
+      border-side-width="30px"
+      border-side-color="#27C5C3"
       :tab-list="tabList"
     >
       <template #prev="{ ...arg }">
@@ -61,8 +61,8 @@
           vertical
           gap="16px"
           tab-item-width="100%"
-          bottom-line-width="5px"
-          bottom-line-color="#27C5C3"
+          border-side-width="5px"
+          border-side-color="#27C5C3"
           :tab-list="tabList"
         />
       </div>
@@ -81,9 +81,9 @@
           <TabsBar
             v-model="tab"
             gap="16px"
-            bottom-line-height="2px"
-            bottom-line-width="30px"
-            bottom-line-color="#27C5C3"
+            border-side-height="2px"
+            border-side-width="30px"
+            border-side-color="#27C5C3"
             :tab-list="tabList"
           />
         </div>

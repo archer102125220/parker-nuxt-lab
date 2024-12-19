@@ -25,9 +25,9 @@
         class="slide_in_panel_list_page-content-tab_bar"
         v-model="tab"
         gap="16px"
-        bottom-line-height="2px"
-        bottom-line-width="30px"
-        bottom-line-color="#27C5C3"
+        border-side-height="2px"
+        border-side-width="30px"
+        border-side-color="#27C5C3"
         :tab-list="tabList"
       />
       <TabsContent

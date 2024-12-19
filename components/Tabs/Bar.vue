@@ -146,7 +146,7 @@ const props = defineProps({
     type: [Number, String],
     default: null
   },
-  bottomLineDistance: {
+  borderSideDistance: {
     type: [Number, String],
     default: null
   },
@@ -170,7 +170,7 @@ const props = defineProps({
     type: String,
     default: 'underLine'
   },
-  bottomLineColor: {
+  borderSideColor: {
     type: String,
     default: ''
   },
@@ -178,11 +178,11 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  bottomLineWidth: {
+  borderSideWidth: {
     type: [Number, String],
     default: 30
   },
-  bottomLineHeight: {
+  borderSideHeight: {
     type: [Number, String],
     default: 10
   },
@@ -252,8 +252,8 @@ const firstLimitShadowSize = ref(0);
 const lastLimitShadowSize = ref(0);
 const resetLimitShadowSizeTimer = ref(-1);
 
-const bottomLineStyle = ref({});
-const bottomLineStyleTemp = ref(null);
+const borderSideStyle = ref({});
+const borderSideStyleTemp = ref(null);
 
 const computedLimitShadow = computed(() => {
   if (typeof props.limitShadow !== 'boolean') {
@@ -272,7 +272,7 @@ const validSelectedType = computed(() => {
 });
 const cssVariable = computed(() => {
   const _cssVariable = {
-    ...(bottomLineStyleTemp.value || bottomLineStyle.value),
+    ...(borderSideStyleTemp.value || borderSideStyle.value),
     '--prev_opacity': prevOpacity.value,
     '--next_opacity': nextOpacity.value,
     '--selected_transition':
@@ -284,54 +284,54 @@ const cssVariable = computed(() => {
       typeof props.lineBorderRadius === 'string' &&
       props.lineBorderRadius !== ''
     ) {
-      _cssVariable['--tab_bottom_line_border_radius'] = props.lineBorderRadius;
+      _cssVariable['--tab_border_side_border_radius'] = props.lineBorderRadius;
     } else if (typeof props.lineBorderRadius === 'number') {
-      _cssVariable['--tab_bottom_line_border_radius'] =
+      _cssVariable['--tab_border_side_border_radius'] =
         `${props.lineBorderRadius}px`;
     }
 
     if (props.selectedType === 'underLine') {
-      _cssVariable['--tab_bottom_line_bottom'] = '0px';
+      _cssVariable['--tab_border_side_bottom'] = '0px';
       if (Array(props.tabList) && props.tabList.length > 0) {
         if (props.vertical === false) {
-          if (typeof props.bottomLineHeight === 'number') {
-            _cssVariable['--tab_bottom_line_height'] =
-              `${props.bottomLineHeight}px`;
+          if (typeof props.borderSideHeight === 'number') {
+            _cssVariable['--tab_border_side_height'] =
+              `${props.borderSideHeight}px`;
           } else if (
-            typeof props.bottomLineHeight === 'string' &&
-            props.bottomLineHeight !== ''
+            typeof props.borderSideHeight === 'string' &&
+            props.borderSideHeight !== ''
           ) {
-            _cssVariable['--tab_bottom_line_height'] = props.bottomLineHeight;
+            _cssVariable['--tab_border_side_height'] = props.borderSideHeight;
           }
         }
 
-        if (typeof props.bottomLineWidth === 'number') {
-          _cssVariable['--tab_bottom_line_width'] =
-            `${props.bottomLineWidth}px`;
+        if (typeof props.borderSideWidth === 'number') {
+          _cssVariable['--tab_border_side_width'] =
+            `${props.borderSideWidth}px`;
         } else if (
-          typeof props.bottomLineWidth === 'string' &&
-          props.bottomLineWidth !== ''
+          typeof props.borderSideWidth === 'string' &&
+          props.borderSideWidth !== ''
         ) {
-          _cssVariable['--tab_bottom_line_width'] = props.bottomLineWidth;
+          _cssVariable['--tab_border_side_width'] = props.borderSideWidth;
         }
       } else {
-        _cssVariable['--tab_bottom_line_width'] = '0px';
-        _cssVariable['--tab_bottom_line_height'] = '0px';
+        _cssVariable['--tab_border_side_width'] = '0px';
+        _cssVariable['--tab_border_side_height'] = '0px';
         _cssVariable['--tab_bar_min_width'] = '100%';
       }
     } else if (props.selectedType === 'mask') {
-      // _cssVariable['--tab_bottom_line_height'] = '100%';
-      _cssVariable['--tab_bottom_line_opacity'] = '0.1';
+      // _cssVariable['--tab_border_side_height'] = '100%';
+      _cssVariable['--tab_border_side_opacity'] = '0.1';
     }
   } else {
     _cssVariable['--tab_bar_min_width'] = '100%';
   }
 
   if (
-    typeof props.bottomLineColor === 'string' &&
-    props.bottomLineColor !== ''
+    typeof props.borderSideColor === 'string' &&
+    props.borderSideColor !== ''
   ) {
-    _cssVariable['--tab_bottom_line_color'] = props.bottomLineColor;
+    _cssVariable['--tab_border_side_color'] = props.borderSideColor;
   }
 
   if (typeof props.selectedColor === 'string' && props.selectedColor !== '') {
@@ -352,14 +352,14 @@ const cssVariable = computed(() => {
     _cssVariable['--tab_gap'] = props.gap;
   }
 
-  if (typeof props.bottomLineDistance === 'number') {
-    _cssVariable['--tab_bar_bottom_line_distance'] =
-      `${props.bottomLineDistance}px`;
+  if (typeof props.borderSideDistance === 'number') {
+    _cssVariable['--tab_bar_border_side_distance'] =
+      `${props.borderSideDistance}px`;
   } else if (
-    typeof props.bottomLineDistance === 'string' &&
-    props.bottomLineDistance !== ''
+    typeof props.borderSideDistance === 'string' &&
+    props.borderSideDistance !== ''
   ) {
-    _cssVariable['--tab_bar_bottom_line_distance'] = props.bottomLineDistance;
+    _cssVariable['--tab_bar_border_side_distance'] = props.borderSideDistance;
   }
 
   if (typeof props.leftLineDistance === 'number') {
@@ -384,7 +384,7 @@ const cssVariable = computed(() => {
   }
 
   if (props.vertical === true) {
-    _cssVariable['--tab_bottom_line_bottom'] = 'unset';
+    _cssVariable['--tab_border_side_bottom'] = 'unset';
     _cssVariable['--tab_flex_direction'] = 'column';
     _cssVariable['--navigation_width'] = '100%';
     _cssVariable['--navigation_img_size'] = '24px';
@@ -450,12 +450,12 @@ const cssVariable = computed(() => {
     //   tabBarRootRef.value !== null
     // ) {
     //   const tabBarRootStyle = window.getComputedStyle(tabBarRootRef.value);
-    //   _cssVariable['--tab_bottom_line_bottom'] =
-    //     `-${tabBarRootStyle.bottomLineDistance}`;
+    //   _cssVariable['--tab_border_side_bottom'] =
+    //     `-${tabBarRootStyle.borderSideDistance}`;
     // } else {
-    //   _cssVariable['--tab_bottom_line_bottom'] = '0px';
+    //   _cssVariable['--tab_border_side_bottom'] = '0px';
     // }
-    _cssVariable['--tab_bottom_line_bottom'] = '0px';
+    _cssVariable['--tab_border_side_bottom'] = '0px';
 
     _cssVariable['--tab_flex_direction'] = 'row';
     _cssVariable['--navigation_width'] = '24px';
@@ -504,7 +504,7 @@ const cssVariable = computed(() => {
 
   if (props.blankAtTheEnd === true) {
     if (props.vertical === true) {
-      _cssVariable['--tab_bar_bottom_line_distance'] = '40px';
+      _cssVariable['--tab_bar_border_side_distance'] = '40px';
     } else {
       _cssVariable['--tab_bar_right_line_distance'] = '20px';
     }
@@ -868,44 +868,44 @@ function getBottomeStyle(tab) {
 
   if (typeof tab === 'object' && tab !== null) {
     if (props.vertical === true) {
-      bottomeStyle['--tab_bottom_line_height'] = `${tab.clientHeight}px`;
+      bottomeStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
     }
 
     if (props.vertical === false) {
-      bottomeStyle['--tab_bottom_line_top'] = 'unset';
+      bottomeStyle['--tab_border_side_top'] = 'unset';
       if (
-        (typeof props.bottomLineWidth !== 'number' &&
-          typeof props.bottomLineWidth !== 'string') ||
-        props.bottomLineWidth === ''
+        (typeof props.borderSideWidth !== 'number' &&
+          typeof props.borderSideWidth !== 'string') ||
+        props.borderSideWidth === ''
       ) {
-        bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
-        bottomeStyle['--tab_bottom_line_left'] = `${tab.offsetLeft}px`;
+        bottomeStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
+        bottomeStyle['--tab_border_side_left'] = `${tab.offsetLeft}px`;
       } else {
-        bottomeStyle['--tab_bottom_line_left'] = `calc(${
+        bottomeStyle['--tab_border_side_left'] = `calc(${
           tab.offsetLeft + tab.clientWidth / 2
-        }px - var(--tab_bottom_line_width, 0px) / 2)`;
+        }px - var(--tab_border_side_width, 0px) / 2)`;
       }
     } else {
-      bottomeStyle['--tab_bottom_line_left'] = '0px';
+      bottomeStyle['--tab_border_side_left'] = '0px';
       if (
-        (typeof props.bottomLineHeight !== 'number' &&
-          typeof props.bottomLineHeight !== 'string') ||
-        props.bottomLineHeight === ''
+        (typeof props.borderSideHeight !== 'number' &&
+          typeof props.borderSideHeight !== 'string') ||
+        props.borderSideHeight === ''
       ) {
-        bottomeStyle['--tab_bottom_line_height'] = `${tab.clientHeight}px`;
-        bottomeStyle['--tab_bottom_line_top'] = `${tab.offsetTop}px`;
+        bottomeStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
+        bottomeStyle['--tab_border_side_top'] = `${tab.offsetTop}px`;
       } else {
-        bottomeStyle['--tab_bottom_line_top'] = `calc(${
+        bottomeStyle['--tab_border_side_top'] = `calc(${
           tab.offsetTop + tab.clientHeight / 2
-        }px - var(--tab_bottom_line_height, 0px) / 2)`;
+        }px - var(--tab_border_side_height, 0px) / 2)`;
       }
     }
 
     if (props.selectedType === 'mask') {
       if (props.vertical === true) {
-        bottomeStyle['--tab_bottom_line_width'] = `${tab.clientWidth}px`;
+        bottomeStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
       } else {
-        bottomeStyle['--tab_bottom_line_height'] = `${tab.clientHeight}px`;
+        bottomeStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
       }
     }
   }
@@ -914,17 +914,17 @@ function getBottomeStyle(tab) {
 }
 
 function handleBottomeStyle(tab) {
-  bottomLineStyle.value = getBottomeStyle(tab);
+  borderSideStyle.value = getBottomeStyle(tab);
 }
 
 function handleBottomeStyleTemp(_tab) {
   if (props.hover === false) return;
   const tab = _tab?.target || _tab;
-  bottomLineStyleTemp.value = getBottomeStyle(tab);
+  borderSideStyleTemp.value = getBottomeStyle(tab);
 }
 function handleResetBottomeStyleTemp() {
   if (props.hover === false) return;
-  bottomLineStyleTemp.value = null;
+  borderSideStyleTemp.value = null;
 }
 function handleCheckTab(tabListRef) {
   if (animationFrameTimer.value !== -1) {
@@ -1452,7 +1452,7 @@ function handleCustomKeepScrollStep(
     align-items: var(--tab_bar_align_items, cneter);
     max-width: 100%;
     max-height: 100%;
-    padding-bottom: var(--tab_bar_bottom_line_distance);
+    padding-bottom: var(--tab_bar_border_side_distance);
     padding-left: var(--tab_bar_left_line_distance);
     padding-right: var(--tab_bar_right_line_distance);
     overflow: hidden;
@@ -1529,21 +1529,21 @@ function handleCustomKeepScrollStep(
       content: '';
       position: absolute;
       // bottom: 0px;
-      top: var(--tab_bottom_line_top);
-      bottom: var(--tab_bottom_line_bottom);
-      // left: var(--tab_bottom_line_left, 0px);
-      left: var(--tab_bottom_line_left);
-      // height: var(--tab_bottom_line_height, 3px);
-      // width: var(--tab_bottom_line_width, 69px);
-      // width: var(--tab_bottom_line_width, 0px);
-      height: var(--tab_bottom_line_height);
-      width: var(--tab_bottom_line_width);
+      top: var(--tab_border_side_top);
+      bottom: var(--tab_border_side_bottom);
+      // left: var(--tab_border_side_left, 0px);
+      left: var(--tab_border_side_left);
+      // height: var(--tab_border_side_height, 3px);
+      // width: var(--tab_border_side_width, 69px);
+      // width: var(--tab_border_side_width, 0px);
+      height: var(--tab_border_side_height);
+      width: var(--tab_border_side_width);
       // border-radius: 5px;
-      border-radius: var(--tab_bottom_line_border_radius);
-      opacity: var(--tab_bottom_line_opacity);
+      border-radius: var(--tab_border_side_border_radius);
+      opacity: var(--tab_border_side_opacity);
       background-color: var(
         --tab_item_selected_color,
-        var(--tab_bottom_line_color, blue)
+        var(--tab_border_side_color, blue)
       );
       // transition:
       //   left 0.4s ease-in-out,

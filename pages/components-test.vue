@@ -4,9 +4,9 @@
       class="components_test_page-bar"
       v-model="tab"
       gap="16px"
-      bottom-line-height="2px"
-      bottom-line-width="30px"
-      bottom-line-color="#27C5C3"
+      border-side-height="2px"
+      border-side-width="30px"
+      border-side-color="#27C5C3"
       :tab-list="tabList"
     />
     <div class="components_test_page-menu">
@@ -15,8 +15,8 @@
         vertical
         gap="16px"
         tab-item-width="100%"
-        bottom-line-width="5px"
-        bottom-line-color="#27C5C3"
+        border-side-width="5px"
+        border-side-color="#27C5C3"
         :tab-list="tabList"
       />
     </div>
@@ -35,9 +35,9 @@
         <TabsBar
           v-model="tab"
           gap="16px"
-          bottom-line-height="2px"
-          bottom-line-width="30px"
-          bottom-line-color="#27C5C3"
+          border-side-height="2px"
+          border-side-width="30px"
+          border-side-color="#27C5C3"
           :tab-list="tabList"
         />
         <p class="components_test_page-content-scroll_fetch-text">12343</p>
