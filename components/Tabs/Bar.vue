@@ -268,7 +268,7 @@ const computedLimitShadow = computed(() => {
 });
 const computedMoveTransition = computed(() => {
   if (typeof props.moveTransition !== 'boolean') {
-    return props.vertical;
+    return props.vertical === false;
   }
   return props.moveTransition;
 });
