@@ -86,6 +86,7 @@ useHead({
 const credentialId = ref(null);
 const credentialPublicKeyPem = ref(null);
 const credentialTransports = ref(null);
+const credentialType = ref(null);
 // const credentialPublicKeyJwk = ref(null);
 // const publicKey = ref('');
 const serverSaveUserId = ref(null);
@@ -191,7 +192,7 @@ async function handleFido2LibRegister() {
         publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(),
         transports: credential.response.getTransports() // 前端要存
       },
-      type: credential.type
+      type: credential.type // 前端要存
     };
     console.log({ credentialJSON });
 
@@ -230,8 +231,10 @@ async function handleFido2LibRegister() {
     //   'fido2_lib_transports',
     //   JSON.stringify(credential.response.getTransports())
     // );
+    // localStorage.setItem('fido2_lib_type', credential.type);
     credentialId.value = response?.base64URLServerSaveData?.resultId;
     credentialTransports.value = credential.response.getTransports();
+    credentialType.value = credential.type;
     serverSaveUserId.value = response?.base64URLServerSaveData?.userId;
 
     credentialPublicKeyPem.value = _credentialPublicKeyPem;
@@ -277,7 +280,11 @@ async function handleFido2LibLogin() {
           //   localStorage.getItem('fido2_lib_credential_id')
           // ), // from registration
           id: base64Js.toUint8Array(credentialId.value), // from registration
-          type: 'public-key',
+
+          // type: 'public-key',
+          // type: localStorage.getItem('fido2_lib_type'),
+          type: credentialType.value,
+
           // transports: ['internal', 'usb', 'ble', 'nfc'],
           // transports: JSON.parse(localStorage.getItem('fido2_lib_transports')),
           transports: credentialTransports.value
