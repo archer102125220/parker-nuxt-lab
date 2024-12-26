@@ -9,12 +9,6 @@ import { Fido2Lib } from 'fido2-lib';
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
-  const user = {
-    id: query.userId,
-    name: query.userName,
-    displayName: query.userDisplayName
-  }
-
   const f2l = new Fido2Lib({
     timeout: 60000,
     rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'nuxt-lab.vercel.app',
@@ -31,11 +25,11 @@ export default defineEventHandler(async (event) => {
 
   let output;
   if (query?.isLogin === true) {
+    // query?.credentialId 檢查資料庫裡使否存在，想不到模擬的方法
     const publicKeyCredentialCreationOptions = await f2l.assertionOptions();
     output = {
       ...publicKeyCredentialCreationOptions,
       challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
-      user
     };
   } else {
     // let publicKeyCredentialCreationOptions = {};
@@ -62,7 +56,11 @@ export default defineEventHandler(async (event) => {
     output = {
       ...publicKeyCredentialCreationOptions,
       challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
-      user
+      user: {
+        id: query.userId,
+        name: query.userName,
+        displayName: query.userDisplayName
+      }
     };
   }
 

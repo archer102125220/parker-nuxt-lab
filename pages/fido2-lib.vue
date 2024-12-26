@@ -264,7 +264,11 @@ async function handleFido2LibLogin() {
     );
 
     const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
-      { isLogin: true }
+      {
+        isLogin: true,
+        // credentialId: localStorage.getItem('fido2_lib_credential_id'),
+        credentialId: credentialId.value
+      }
     );
 
     console.log(publicKeySetting);
