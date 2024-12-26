@@ -258,11 +258,6 @@ async function handleFido2LibLogin() {
     //   credentialId: base64Js.toUint8Array(credentialId.value)
     // });
 
-    const userId = base64Js.fromUint8Array(
-      Uint8Array.from(serverSaveUserId.value, (c) => c.charCodeAt(0)),
-      true
-    );
-
     const publicKeySetting = await nuxtApp.$fido2Lib.GET_fido2LibGenerateOption(
       {
         isLogin: true,
@@ -330,6 +325,11 @@ async function handleFido2LibLogin() {
       type: credential.type
     };
     console.log({ credentialJSON });
+
+    const userId = base64Js.fromUint8Array(
+      Uint8Array.from(serverSaveUserId.value, (c) => c.charCodeAt(0)),
+      true
+    );
 
     console.log(registerOutput.value);
     const response = await nuxtApp.$fido2Lib.POST_fido2LibVerify({
