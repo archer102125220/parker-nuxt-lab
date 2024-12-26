@@ -85,6 +85,7 @@ useHead({
 
 const credentialId = ref(null);
 const credentialPublicKeyPem = ref(null);
+const credentialTransports = ref(null);
 // const credentialPublicKeyJwk = ref(null);
 // const publicKey = ref('');
 const serverSaveUserId = ref(null);
@@ -187,10 +188,10 @@ async function handleFido2LibRegister() {
           new Uint8Array(credential.response.getPublicKey()),
           true
         ),
-        publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(), // 前端要存
+        publicKeyAlgorithm: credential.response.getPublicKeyAlgorithm(),
         transports: credential.response.getTransports() // 前端要存
       },
-      type: credential.type // 前端要存
+      type: credential.type
     };
     console.log({ credentialJSON });
 
@@ -224,7 +225,13 @@ async function handleFido2LibRegister() {
       )
     });
     registerOutput.value = response;
+    // localStorage.setItem('fido2_lib_credential_id', credential.id);
+    // localStorage.setItem(
+    //   'fido2_lib_transports',
+    //   JSON.stringify(credential.response.getTransports())
+    // );
     credentialId.value = response?.base64URLServerSaveData?.resultId;
+    credentialTransports.value = credential.response.getTransports();
     serverSaveUserId.value = response?.base64URLServerSaveData?.userId;
 
     credentialPublicKeyPem.value = _credentialPublicKeyPem;
@@ -267,9 +274,14 @@ async function handleFido2LibLogin() {
       allowCredentials = [
         // 使用前端儲存的金鑰識別id、金鑰type、無密碼驗證方式
         {
+          // id: base64Js.toUint8Array(
+          //   localStorage.getItem('fido2_lib_credential_id')
+          // ), // from registration
           id: base64Js.toUint8Array(credentialId.value), // from registration
           type: 'public-key',
-          transports: ['internal', 'usb', 'ble', 'nfc']
+          // transports: ['internal', 'usb', 'ble', 'nfc'],
+          // transports: JSON.parse(localStorage.getItem('fido2_lib_transports')),
+          transports: credentialTransports.value
         }
       ];
     }
