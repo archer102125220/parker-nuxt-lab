@@ -31,12 +31,14 @@ export default function cacheAdapterEnhancer(options, defaultAdapter, generateRe
   } = options;
 
   return config => {
-    const { method, forceUpdate } = config;
+    // const { method, forceUpdate } = config;
+    const { forceUpdate } = config;
     const useCache =
       config[cacheFlag] !== undefined && config[cacheFlag] !== null
         ? config[cacheFlag]
         : enabledByDefault;
-    if (method === 'get' && useCache) {
+
+    if (useCache === true) {
       const cache = isCacheLike(useCache) ? useCache : defaultCache;
       const requestKey = typeof generateReqKey === 'function' ? generateReqKey(config) : defaultGenerateReqKey(config); // 生成請求Key
       let responsePromise = cache.get(requestKey); // 從快取中取得請求key對應的響應對象

@@ -343,7 +343,8 @@ async function handleFido2LibLogin() {
       challengeString: publicKeySetting.challenge,
       credential: credentialJSON,
       base64URLServerSaveData: {
-        // prevCounter,
+        prevCounter:
+          (registerOutput.value?.base64URLServerSaveData?.counter || 0) + 1,
         credentialId: credentialId.value,
         credentialPublicKeyPem: base64Js.encodeURL(
           credentialPublicKeyPem.value
