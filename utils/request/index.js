@@ -73,7 +73,9 @@ export function axiosInit(baseURL, errorAdapter, defaultExtendOption) {
       {
         enabledByDefault: false,
         cacheFlag: 'useCache',
-        defaultCache: cacheCfg
+        getCache: (requestKey) => cacheCfg.get(requestKey),
+        setCache: (requestKey, response) => cacheCfg.set(requestKey, response),
+        deleteCache: (requestKey) => cacheCfg.delete(requestKey)
       },
       function defaultAdapter(config) {
         delete config.adapter;
