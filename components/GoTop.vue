@@ -5,16 +5,44 @@
     aria-label="go_to_top"
     color="primary"
     variant="text"
-    :class="['go_top', isShow ? 'go_top-show' : '']"
+    :class="['go_top', isShow ? 'go_top_show' : '']"
+    :style="cssVariable"
     @click="goTop"
   />
 </template>
 <script setup>
 const props = defineProps({
-  limit: { type: Number, default: 100 }
+  limit: { type: Number, default: 100 },
+  heddinBottom: { type: [Number, String], default: '-50px' },
+  showBottom: { type: [Number, String], default: '25px' },
+  right: { type: [Number, String], default: '25px' }
 });
 const el = useTemplateRef('el');
 const isShow = ref(false);
+
+const cssVariable = computed(() => {
+  const _cssVariable = {};
+
+  if (typeof props.right === 'string' && props.right !== '') {
+    _cssVariable['--go_top_right'] = props.right;
+  } else if (typeof props.right === 'number') {
+    _cssVariable['--go_top_right'] = `${props.right}px`;
+  }
+
+  if (typeof props.heddinBottom === 'string' && props.heddinBottom !== '') {
+    _cssVariable['--go_top_hidden_bottom'] = props.heddinBottom;
+  } else if (typeof props.heddinBottom === 'number') {
+    _cssVariable['--go_top_hidden_bottom'] = `${props.heddinBottom}px`;
+  }
+
+  if (typeof props.showBottom === 'string' && props.showBottom !== '') {
+    _cssVariable['--go_top_show_bottom'] = props.showBottom;
+  } else if (typeof props.showBottom === 'number') {
+    _cssVariable['--go_top_show_bottom'] = `${props.showBottom}px`;
+  }
+
+  return _cssVariable;
+});
 
 function goTop() {
   if (
@@ -68,27 +96,31 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .go_top {
   position: fixed;
-  // bottom: 25px;
-  bottom: -50px;
-  right: 25px;
+  // bottom: -50px;
+  bottom: var(--go_top_hidden_bottom);
+  // right: 25px;
+  right: var(--go_top_right);
   z-index: 10;
-  opacity: 0;
-  width: 60px;
-  height: 60px;
-  font-size: 60px;
-  transition: 0.3s;
-  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 60px;
+  height: 60px;
+  font-size: 60px;
+
+  opacity: 0;
+  background-color: #fff;
+  transition: 0.3s;
+
   @include tablet {
     width: 30px;
     height: 30px;
     font-size: 30px;
   }
-  &-show {
-    opacity: 1;
-    bottom: 25px;
-  }
+}
+.go_top_show {
+  opacity: 1;
+  // bottom: 25px;
+  bottom: var(--go_top_show_bottom);
 }
 </style>
