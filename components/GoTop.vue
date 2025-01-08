@@ -34,7 +34,7 @@ onMounted(() => {
   window.onscroll = handleScroll;
   window.addEventListener('scroll', handleScroll);
 });
-onBeforeMount(() => {
+onBeforeUnmount(() => {
   window.onscroll = null;
   window.removeEventListener('scroll', handleScroll);
 });
