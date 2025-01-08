@@ -11,8 +11,9 @@
     <div ref="iconRef" class="switch_button-icon">
       <slot
         name="icon"
-        :show-icon="showIcon"
         :icon="icon"
+        :value="modelValue"
+        :show-icon="showIcon"
         :checked-icon="checkedIcon"
       >
         <img v-if="typeof showIcon === 'string'" :src="showIcon" />
@@ -21,8 +22,9 @@
 
     <div class="switch_button-label">
       <slot
-        :show-label="showLabel"
         :label="label"
+        :value="modelValue"
+        :show-label="showLabel"
         :checked-label="checkedLabel"
       >
         <p>{{ showLabel }}</p>
@@ -37,6 +39,7 @@ const props = defineProps({
   label: { type: String, default: '' },
   checkedLabel: { type: String, default: '' },
   icon: { type: String, default: null },
+  radius: { type: String, default: '999px' },
   checkedIcon: { type: String, default: null },
   disabled: { type: Boolean, default: false },
   color: { type: String, default: null },
@@ -44,7 +47,7 @@ const props = defineProps({
   checkedColor: { type: String, default: null },
   checkedBgColor: { type: String, default: null }
 });
-const emits = defineEmits('change', 'update:modelValue');
+const emits = defineEmits(['change', 'update:modelValue']);
 
 const iconRef = useTemplateRef('iconRef');
 
@@ -81,6 +84,10 @@ const cssVariable = computed(() => {
     _cssVariable['--switch_button_bg_color'] = bgColor;
   }
 
+  if (typeof props.radius === 'string' && props.radius !== '') {
+    _cssVariable['--switch_button_radius'] = props.radius;
+  }
+
   return _cssVariable;
 });
 const showLabel = computed(() => {
@@ -114,7 +121,7 @@ const showIcon = computed(() => {
 function handleValueChange(e) {
   const newValue = e?.target?.value === 'true';
 
-  // emits('change', !newValue);
+  emits('change', !newValue);
   emits('update:modelValue', !newValue);
 }
 </script>
@@ -122,17 +129,24 @@ function handleValueChange(e) {
 <style lang="scss" scoped>
 .switch_button {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
   padding: 12px 18px;
-  border-radius: 999px;
+  // border-radius: 999px;
+  border-radius: var(--switch_button_radius);
 
   color: var(--switch_button_color);
   background-color: var(--switch_button_bg_color);
+  opacity: var(--switch_button_opacity);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset;
 
+  overflow: hidden;
+  cursor: pointer;
   transition:
     color 0.2s,
-    background-color 0.2s;
+    background-color 0.2s,
+    opacity 0.2s;
 
   &-check {
     position: absolute;
@@ -144,6 +158,7 @@ function handleValueChange(e) {
     // display: none;
 
     opacity: 0;
+    cursor: pointer;
   }
   &-icon {
     position: absolute;
@@ -151,6 +166,13 @@ function handleValueChange(e) {
     bottom: 8px;
     left: var(--switch_button_icon_left);
     right: var(--switch_button_icon_right);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
     // height: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 100%;

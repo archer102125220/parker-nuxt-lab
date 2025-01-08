@@ -4,8 +4,8 @@
     <SwitchButton
       v-model="value"
       label="僅直播"
-      color="rgba(144, 144, 144, 1)"
-      bg-color="rgba(242, 243, 244, 1)"
+      color="#909090"
+      bg-color="#f2f3f4"
       checked-color="rgba(227, 151, 83, 1)"
       checked-bg-color="rgba(253, 244, 239, 1)"
     />
