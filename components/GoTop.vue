@@ -1,5 +1,6 @@
 <template>
   <v-btn
+    ref="el"
     icon="mdi mdi-chevron-up-circle"
     aria-label="go_to_top"
     color="primary"
@@ -10,19 +11,37 @@
 </template>
 <script setup>
 const props = defineProps({
-  px: { type: Number, default: 100 }
+  limit: { type: Number, default: 100 }
 });
+const el = useTemplateRef('el');
 const isShow = ref(false);
 
 function goTop() {
-  // document.body.scrollTop = 0; // For Safari
-  // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (
+    document.body.scrollTop > props.limit ||
+    document.documentElement.scrollTop > props.limit
+  ) {
+    if (typeof window.scrollTo === 'function') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  }
+
+  if (el.value?.$el?.parentElement?.scrollTop > props.limit) {
+    if (typeof el.value?.$el?.parentElement?.scrollTo === 'function') {
+      el.value.$el.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      el.value.$el.parentElement.scrollTop = 0;
+    }
+  }
 }
 function handleScroll() {
   if (
-    document.body.scrollTop > props.px ||
-    document.documentElement.scrollTop > props.px
+    document.body.scrollTop > props.limit ||
+    document.documentElement.scrollTop > props.limit ||
+    el.value?.$el?.parentElement?.scrollTop > props.limit
   ) {
     isShow.value = true;
   } else {
@@ -33,10 +52,16 @@ function handleScroll() {
 onMounted(() => {
   window.onscroll = handleScroll;
   window.addEventListener('scroll', handleScroll);
+  if (typeof el.value?.$el?.parentElement?.addEventListener === 'function') {
+    el.value.$el.parentElement.addEventListener('scroll', handleScroll);
+  }
 });
 onBeforeUnmount(() => {
   window.onscroll = null;
   window.removeEventListener('scroll', handleScroll);
+  if (typeof el.value?.$el?.parentElement?.removeEventListener === 'function') {
+    el.value.$el.parentElement.removeEventListener('scroll', handleScroll);
+  }
 });
 </script>
 
