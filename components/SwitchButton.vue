@@ -51,8 +51,12 @@ const emits = defineEmits(['change', 'update:modelValue']);
 
 const iconRef = useTemplateRef('iconRef');
 
+const iconClientWidth = ref(0);
+
 const cssVariable = computed(() => {
-  const _cssVariable = {};
+  const _cssVariable = {
+    '--switch_button_cursor': 'pointer'
+  };
 
   const color =
     (modelValue.value === true ? props.checkedColor : props.color) ||
@@ -63,17 +67,18 @@ const cssVariable = computed(() => {
 
   if (props.disabled === true) {
     _cssVariable['--switch_button_opacity'] = '0.3';
+    _cssVariable['--switch_button_cursor'] = 'not-allowed';
   }
 
   if (modelValue.value !== true) {
     // _cssVariable['--switch_button_icon_right'] = '8px';
     _cssVariable['--switch_button_icon_left'] = 'calc(100% - 39px)';
     _cssVariable['--switch_button_label_padding_right'] =
-      `${iconRef.value?.clientWidth || 0}px`;
+      `${iconRef.value?.clientWidth || iconClientWidth.value || 0}px`;
   } else {
     _cssVariable['--switch_button_icon_left'] = '8px';
     _cssVariable['--switch_button_label_padding_left'] =
-      `${iconRef.value?.clientWidth || 0}px`;
+      `${iconRef.value?.clientWidth || iconClientWidth.value || 0}px`;
   }
 
   if (typeof color === 'string' && color !== '') {
@@ -118,6 +123,10 @@ const showIcon = computed(() => {
   return null;
 });
 
+onMounted(() => {
+  iconClientWidth.value = iconRef.value?.clientWidth || 0;
+});
+
 function handleValueChange(e) {
   const newValue = e?.target?.value === 'true';
 
@@ -158,7 +167,8 @@ function handleValueChange(e) {
     // display: none;
 
     opacity: 0;
-    cursor: pointer;
+    // cursor: pointer;
+    cursor: var(--switch_button_cursor);
   }
   &-icon {
     position: absolute;
