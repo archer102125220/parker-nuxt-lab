@@ -136,6 +136,7 @@ export const useSystemStore = defineStore('system', {
         isIpad: false,
         isStandalone: false,
         isDesktop: false,
+        isWeiXin: false, // 微信瀏覽器
         notBroswer: typeof window === 'undefined',
       };
       if (typeof window === 'undefined') {
@@ -149,6 +150,9 @@ export const useSystemStore = defineStore('system', {
       broswerInfo.isIpad = userAgent.includes('ipad');
       broswerInfo.isIos = broswerInfo.isIphone || broswerInfo.isIpad;
       broswerInfo.isStandalone = window.navigator?.standalone === true || window.matchMedia?.('(display-mode: standalone)')?.matches === true;
+
+      // /MicroMessenger/i.test
+      broswerInfo.isWeiXin = userAgent.includes('micromessenger');
 
       if (userAgent.match(/edge\/([\d.]+)/)) {
         broswerInfo.type = 'Edge';

@@ -31,7 +31,8 @@ const linkList = computed(() => [
   { to: '/components/qr-code-test', label: 'QRcode測試' },
   { to: '/components/slide-in-panel', label: '訊息佇列測試' },
   { to: '/components/switch-button', label: 'switch組件測試' },
-  { to: '/components/go-top', label: '返回置頂組件測試' }
+  { to: '/components/go-top', label: '返回置頂組件測試' },
+  { to: '/components/virtual-scroller', label: 'virtual-scroller組件測試' }
 ]);
 </script>
 

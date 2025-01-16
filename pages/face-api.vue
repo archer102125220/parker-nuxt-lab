@@ -1,63 +1,77 @@
 <template>
   <div class="face_api_page">
-    <video
-      ref="videoEl"
-      class="face_api_page-video"
-      width="480"
-      height="360"
-      autoplay
-      controls
-      :srcObject="streamObj"
-    />
+    <div class="face_api_page-origin_video_output">
+      <video
+        ref="videoEl"
+        class="face_api_page-origin_video_output-video"
+        width="480"
+        height="360"
+        autoplay
+        controls
+        :srcObject="streamObj"
+      />
+      <canvas
+        ref="canvasVideo"
+        class="face_api_page-origin_video_output-canvas"
+        width="480"
+        height="360"
+      />
+    </div>
 
     <p>Display detected face bounding boxes</p>
-    <div class="face_api_page-video_output">
-      <canvas
-        ref="detectionsVideo"
-        class="face_api_page-video_output-canvas"
-        width="480"
-        height="360"
-      />
-      <canvas
-        ref="detectionsOutput"
-        class="face_api_page-video_output-face_output"
-        width="480"
-        height="360"
-      />
+    <div class="face_api_page-origin_video_output">
+      <div class="face_api_page-origin_video_output-video_output">
+        <canvas
+          ref="detectionsVideo"
+          class="face_api_page-origin_video_output-video_output-canvas"
+          width="480"
+          height="360"
+        />
+        <canvas
+          ref="detectionsOutput"
+          class="face_api_page-origin_video_output-video_output-face_output"
+          width="480"
+          height="360"
+        />
+      </div>
     </div>
 
     <p>Display face landmarks</p>
-    <div class="face_api_page-video_output">
-      <canvas
-        ref="detectionsWithLandmarksVideo"
-        class="face_api_page-video_output-canvas"
-        width="480"
-        height="360"
-      />
+    <div class="face_api_page-origin_video_output">
+      <div class="face_api_page-origin_video_output-video_output">
+        <canvas
+          ref="detectionsWithLandmarksVideo"
+          class="face_api_page-origin_video_output-video_output-canvas"
+          width="480"
+          height="360"
+        />
 
-      <canvas
-        ref="detectionsWithLandmarksOutput"
-        class="face_api_page-video_output-face_output"
-        width="480"
-        height="360"
-      />
+        <canvas
+          ref="detectionsWithLandmarksOutput"
+          class="face_api_page-origin_video_output-video_output-face_output"
+          width="480"
+          height="360"
+        />
+      </div>
     </div>
 
     <p>Display face expression results</p>
-    <div class="face_api_page-video_output">
-      <canvas
-        ref="detectionsWithExpressionsVideo"
-        class="face_api_page-video_output-canvas"
-        width="480"
-        height="360"
-      />
+    <div class="face_api_page-origin_video_output">
+      <div class="face_api_page-origin_video_output-video_output">
+        <canvas
+          ref="detectionsWithExpressionsVideo"
+          class="face_api_page-origin_video_output-video_output-canvas"
+          width="480"
+          height="360"
+        />
 
-      <canvas
-        ref="detectionsWithExpressionsOutput"
-        class="face_api_page-video_output-face_output"
-        width="480"
-        height="360"
-      />
+        <canvas
+          ref="detectionsWithExpressionsOutput"
+          class="face_api_page-origin_video_output-video_output-face_output"
+          width="480"
+          height="360"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -67,6 +81,7 @@
 const MODELS_PATH = '/models';
 
 const videoEl = useTemplateRef('videoEl');
+const canvasVideo = useTemplateRef('canvasVideo');
 const detectionsVideo = useTemplateRef('detectionsVideo');
 const detectionsOutput = useTemplateRef('detectionsOutput');
 const detectionsWithLandmarksVideo = useTemplateRef(
@@ -106,6 +121,7 @@ function handleFrameFromVideo(canvas) {
 
 async function handleFaceApi() {
   if (videoEl.value === null) return;
+  handleFrameFromVideo(canvasVideo.value);
 
   await faceapiInit(MODELS_PATH);
   await handleDetections(MODELS_PATH);
@@ -233,31 +249,43 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
 <style lang="scss">
 .face_api_page {
   font-family: sans-serif;
-  &-video {
-    display: none;
-    width: 480px;
-    height: 360px;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-  &-video_output {
-    @extend .face_api_page-video;
-    position: relative;
-    display: block;
-    border: 1px solid;
-    margin-bottom: 8px;
 
-    &-canvas {
-      @extend .face_api_page-video;
-      display: block;
+  &-origin_video_output {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    &-video {
+      // display: none;
+      width: 480px;
+      height: 360px;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
-    &-face_output {
-      @extend .face_api_page-video;
+    &-canvas {
+      @extend .face_api_page-origin_video_output-video;
+      // display: block;
+    }
+
+    &-video_output {
+      @extend .face_api_page-origin_video_output-video;
+      position: relative;
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
+      border: 1px solid;
+      margin-bottom: 8px;
+
+      &-canvas {
+        @extend .face_api_page-origin_video_output-video;
+        // display: block;
+      }
+      &-face_output {
+        @extend .face_api_page-origin_video_output-video;
+        position: absolute;
+        top: 0;
+        left: 0;
+        // display: block;
+      }
     }
   }
 }

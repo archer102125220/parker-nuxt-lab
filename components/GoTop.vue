@@ -1,23 +1,30 @@
 <template>
-  <v-btn
+  <div
     ref="el"
-    icon="mdi mdi-chevron-up-circle"
-    aria-label="go_to_top"
-    color="primary"
-    variant="text"
-    :class="['go_top', isShow ? 'go_top_show' : '']"
     :style="cssVariable"
-    @click="goTop"
-  />
+    :class="['go_top', isShow ? 'go_top_show' : '']"
+  >
+    <slot :is-show="isShow">
+      <v-btn
+        class="go_top-btn"
+        icon="mdi mdi-chevron-up-circle"
+        aria-label="go_to_top"
+        color="primary"
+        variant="text"
+        @click="goTop"
+      />
+    </slot>
+  </div>
 </template>
 <script setup>
+const el = useTemplateRef('el');
+
 const props = defineProps({
   limit: { type: Number, default: 100 },
   heddinBottom: { type: [Number, String], default: '-50px' },
   showBottom: { type: [Number, String], default: '25px' },
   right: { type: [Number, String], default: '25px' }
 });
-const el = useTemplateRef('el');
 const isShow = ref(false);
 
 const cssVariable = computed(() => {
@@ -45,6 +52,8 @@ const cssVariable = computed(() => {
 });
 
 function goTop() {
+  if (isShow.value === false) return;
+
   if (
     document.body.scrollTop > props.limit ||
     document.documentElement.scrollTop > props.limit
@@ -57,11 +66,11 @@ function goTop() {
     }
   }
 
-  if (el.value?.$el?.parentElement?.scrollTop > props.limit) {
-    if (typeof el.value?.$el?.parentElement?.scrollTo === 'function') {
-      el.value.$el.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
+  if (el.value?.parentElement?.scrollTop > props.limit) {
+    if (typeof el.value?.parentElement?.scrollTo === 'function') {
+      el.value.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      el.value.$el.parentElement.scrollTop = 0;
+      el.value.parentElement.scrollTop = 0;
     }
   }
 }
@@ -69,7 +78,7 @@ function handleScroll() {
   if (
     document.body.scrollTop > props.limit ||
     document.documentElement.scrollTop > props.limit ||
-    el.value?.$el?.parentElement?.scrollTop > props.limit
+    el.value?.parentElement?.scrollTop > props.limit
   ) {
     isShow.value = true;
   } else {
@@ -80,15 +89,15 @@ function handleScroll() {
 onMounted(() => {
   window.onscroll = handleScroll;
   window.addEventListener('scroll', handleScroll);
-  if (typeof el.value?.$el?.parentElement?.addEventListener === 'function') {
-    el.value.$el.parentElement.addEventListener('scroll', handleScroll);
+  if (typeof el.value?.parentElement?.addEventListener === 'function') {
+    el.value.parentElement.addEventListener('scroll', handleScroll);
   }
 });
 onBeforeUnmount(() => {
   window.onscroll = null;
   window.removeEventListener('scroll', handleScroll);
-  if (typeof el.value?.$el?.parentElement?.removeEventListener === 'function') {
-    el.value.$el.parentElement.removeEventListener('scroll', handleScroll);
+  if (typeof el.value?.parentElement?.removeEventListener === 'function') {
+    el.value.parentElement.removeEventListener('scroll', handleScroll);
   }
 });
 </script>
@@ -116,6 +125,11 @@ onBeforeUnmount(() => {
     width: 30px;
     height: 30px;
     font-size: 30px;
+  }
+
+  &-btn {
+    width: 100%;
+    height: 100%;
   }
 }
 .go_top_show {
