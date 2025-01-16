@@ -3,6 +3,7 @@
     ref="el"
     :style="cssVariable"
     :class="['go_top', isShow ? 'go_top_show' : '']"
+    @click="goTop"
   >
     <slot :is-show="isShow">
       <v-btn
@@ -11,7 +12,6 @@
         aria-label="go_to_top"
         color="primary"
         variant="text"
-        @click="goTop"
       />
     </slot>
   </div>
