@@ -1,5 +1,6 @@
 const LAYOUT_SETTING = [
-  { name: 'index', layout: 'index' },
+  { name: 'index', layout: 'home' },
+  { name: 'home', layout: 'home' },
   { path: '/css-drawing/triangle-full-test', layout: 'full-screen' },
   { path: '/css-drawing/triangle-full-test', layout: 'full-screen' }
 ];

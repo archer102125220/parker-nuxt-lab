@@ -1,9 +1,14 @@
 <template>
-  <div ref="triangleEl" class="triangle" :style="cssVariable" />
+  <div ref="triangleEl" class="triangle" :style="cssVariable">
+    <slot>
+      <p>{{ label }}</p>
+    </slot>
+  </div>
 </template>
 
 <script setup>
 const props = defineProps({
+  label: { type: String, default: '' },
   height: { type: [String, Number], default: null },
   width: { type: [String, Number], default: null },
   size: { type: [String, Number], default: null },
@@ -77,10 +82,14 @@ defineExpose({
 // https://www.cnblogs.com/weiqinl/p/7048205.html
 // http://tool.uis.cc/sjmaker/
 .triangle {
+  position: relative;
+
   width: 0px;
   height: 0px;
   border-color: var(--triangle_color);
   border-width: var(--triangle_border_width);
   border-style: solid;
+
+  overflow: visible;
 }
 </style>
