@@ -99,6 +99,9 @@ const detectionsWithExpressionsOutput = useTemplateRef(
 
 const [faceapi, faceapiInit] = useFaceapi(MODELS_PATH);
 const streamObj = useCameraStream(handleFaceApi);
+// const faceapi = ref({});
+// function faceapiInit() {}
+// const streamObj = ref({});
 
 function handleFrameFromVideo(canvas) {
   const video = videoEl.value;
@@ -157,6 +160,7 @@ async function handleDetections(MODELS_PATH) {
 
     /* Display detected face bounding boxes */
     const detections = await faceapi.detectAllFaces(videoEl.value);
+    console.log({ detections });
 
     faceapi.matchDimensions(detectionsOutput.value, displaySize);
 
@@ -191,6 +195,7 @@ async function handleDetectionsWithLandmarks(MODELS_PATH) {
       detectionsWithLandmarks,
       displaySize
     );
+    console.log({ detectionsWithLandmarks, resizedResults });
     // draw detections into the canvas
     faceapi.draw.drawDetections(
       detectionsWithLandmarksOutput.value,
@@ -230,6 +235,7 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
       displaySize
     );
     // draw detections into the canvas
+    console.log({ detectionsWithExpressions, resizedResults });
     faceapi.draw.drawDetections(
       detectionsWithExpressionsOutput.value,
       resizedResults
@@ -253,6 +259,7 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
   &-origin_video_output {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
 
     &-video {
