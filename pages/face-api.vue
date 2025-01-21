@@ -20,63 +20,88 @@
 
     <p>Display detected face bounding boxes</p>
     <div class="face_api_page-video_output">
-      <div class="face_api_page-video_output-video_output">
+      <div class="face_api_page-video_output-face_output">
         <canvas
           ref="detectionsVideo"
-          class="face_api_page-video_output-video_output-canvas"
+          class="face_api_page-video_output-face_output-canvas"
           width="480"
           height="360"
         />
         <canvas
           ref="detectionsOutput"
-          class="face_api_page-video_output-video_output-face_output"
+          class="face_api_page-video_output-face_output-face_video"
           width="480"
           height="360"
         />
+      </div>
+      <div class="face_api_page-video_output-data_output">
+        <p class="face_api_page-video_output-data_output-title">
+          faceBoundingBoxesData:
+        </p>
+        <p class="face_api_page-video_output-data_output-content">
+          {{ faceBoundingBoxesData }}
+        </p>
       </div>
     </div>
 
     <p>Display face landmarks</p>
     <div class="face_api_page-video_output">
-      <div class="face_api_page-video_output-video_output">
+      <div class="face_api_page-video_output-face_output">
         <canvas
           ref="detectionsWithLandmarksVideo"
-          class="face_api_page-video_output-video_output-canvas"
+          class="face_api_page-video_output-face_output-canvas"
           width="480"
           height="360"
         />
 
         <canvas
           ref="detectionsWithLandmarksOutput"
-          class="face_api_page-video_output-video_output-face_output"
+          class="face_api_page-video_output-face_output-face_video"
           width="480"
           height="360"
         />
+      </div>
+      <div class="face_api_page-video_output-data_output">
+        <p class="face_api_page-video_output-data_output-title">
+          faceLandmarksData:
+        </p>
+        <p class="face_api_page-video_output-data_output-content">
+          {{ faceLandmarksData }}
+        </p>
       </div>
     </div>
 
     <p>Display face expression results</p>
     <div class="face_api_page-video_output">
-      <div class="face_api_page-video_output-video_output">
+      <div class="face_api_page-video_output-face_output">
         <canvas
           ref="detectionsWithExpressionsVideo"
-          class="face_api_page-video_output-video_output-canvas"
+          class="face_api_page-video_output-face_output-canvas"
           width="480"
           height="360"
         />
 
         <canvas
           ref="detectionsWithExpressionsOutput"
-          class="face_api_page-video_output-video_output-face_output"
+          class="face_api_page-video_output-face_output-face_video"
           width="480"
           height="360"
         />
+      </div>
+      <div class="face_api_page-video_output-data_output">
+        <p class="face_api_page-video_output-data_output-title">
+          faceExpressionResultsData:
+        </p>
+        <p class="face_api_page-video_output-data_output-content">
+          {{ faceExpressionResultsData }}
+        </p>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 // https://github.com/justadudewhohacks/face-api.js/tree/master
+// https://justadudewhohacks.github.io/face-api.js/docs/globals.html
 
 const MODELS_PATH = '/models';
 
@@ -99,9 +124,10 @@ const detectionsWithExpressionsOutput = useTemplateRef(
 
 const [faceapi, faceapiInit] = useFaceapi(MODELS_PATH);
 const streamObj = useCameraStream(handleFaceApi);
-// const faceapi = ref({});
-// function faceapiInit() {}
-// const streamObj = ref({});
+
+const faceBoundingBoxesData = ref(null);
+const faceLandmarksData = ref(null);
+const faceExpressionResultsData = ref(null);
 
 function handleFrameFromVideo(canvas) {
   const video = videoEl.value;
@@ -140,7 +166,6 @@ async function handleFaceApi() {
 
 function getDisplaySize(outputEl) {
   const outputStyle = window.getComputedStyle(outputEl);
-  console.log(outputStyle.width, outputEl.width);
 
   return {
     width: outputEl.width || Number(outputStyle.width.replace('px', '')),
@@ -160,12 +185,20 @@ async function handleDetections(MODELS_PATH) {
 
     /* Display detected face bounding boxes */
     const detections = await faceapi.detectAllFaces(videoEl.value);
-    console.log({ detections });
 
     faceapi.matchDimensions(detectionsOutput.value, displaySize);
 
+    const _faceBoundingBoxesData = [];
+    if (Array.isArray(detections)) {
+      detections.forEach((detection) => {
+        _faceBoundingBoxesData.push(detection.score);
+      });
+    }
+    faceBoundingBoxesData.value = _faceBoundingBoxesData;
+
     // resize the detected boxes in case your displayed image has a different size than the original
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    // console.log({ detections, resizedDetections });
 
     // draw detections into the canvas
     faceapi.draw.drawDetections(detectionsOutput.value, resizedDetections);
@@ -190,12 +223,24 @@ async function handleDetectionsWithLandmarks(MODELS_PATH) {
     const detectionsWithLandmarks = await faceapi
       .detectAllFaces(videoEl.value)
       .withFaceLandmarks();
+
+    const _faceLandmarksData = [];
+    if (Array.isArray(detectionsWithLandmarks)) {
+      detectionsWithLandmarks.forEach((detectionsWithLandmark) => {
+        if (typeof detectionsWithLandmark === 'object') {
+          _faceLandmarksData.push(detectionsWithLandmark);
+        }
+      });
+    }
+    faceLandmarksData.value = _faceLandmarksData;
+
     // resize the detected boxes and landmarks in case your displayed image has a different size than the original
     const resizedResults = faceapi.resizeResults(
       detectionsWithLandmarks,
       displaySize
     );
-    console.log({ detectionsWithLandmarks, resizedResults });
+    // console.log({ detectionsWithLandmarks, resizedResults });
+
     // draw detections into the canvas
     faceapi.draw.drawDetections(
       detectionsWithLandmarksOutput.value,
@@ -229,13 +274,25 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
       .detectAllFaces(videoEl.value)
       .withFaceLandmarks()
       .withFaceExpressions();
+
+    const _faceExpressionResultsData = [];
+    if (Array.isArray(detectionsWithExpressions)) {
+      detectionsWithExpressions.forEach((detectionsWithExpression) => {
+        if (typeof detectionsWithExpression?.expressions === 'object') {
+          _faceExpressionResultsData.push(detectionsWithExpression.expressions);
+        }
+      });
+    }
+    faceExpressionResultsData.value = _faceExpressionResultsData;
+
     // resize the detected boxes and landmarks in case your displayed image has a different size than the original
     const resizedResults = faceapi.resizeResults(
       detectionsWithExpressions,
       displaySize
     );
     // draw detections into the canvas
-    console.log({ detectionsWithExpressions, resizedResults });
+    // console.log({ detectionsWithExpressions, resizedResults });
+
     faceapi.draw.drawDetections(
       detectionsWithExpressionsOutput.value,
       resizedResults
@@ -261,6 +318,7 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
+    margin-bottom: 16px;
 
     &-origin_video {
       // display: none;
@@ -275,7 +333,7 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
       // display: block;
     }
 
-    &-video_output {
+    &-face_output {
       @extend .face_api_page-video_output-origin_video;
       position: relative;
       display: block;
@@ -286,12 +344,26 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
         @extend .face_api_page-video_output-origin_video;
         // display: block;
       }
-      &-face_output {
+      &-face_video {
         @extend .face_api_page-video_output-origin_video;
         position: absolute;
         top: 0;
         left: 0;
         // display: block;
+      }
+    }
+    &-data_output {
+      flex: 1;
+      width: 100%;
+
+      &-title {
+        font-size: 24px;
+      }
+      &-content {
+        width: 480px;
+        max-width: 100%;
+        height: 360px;
+        overflow: auto;
       }
     }
   }
