@@ -1,9 +1,9 @@
 <template>
   <div class="face_api_page">
-    <div class="face_api_page-origin_video_output">
+    <div class="face_api_page-video_output">
       <video
         ref="videoEl"
-        class="face_api_page-origin_video_output-video"
+        class="face_api_page-video_output-origin_video"
         width="480"
         height="360"
         autoplay
@@ -12,24 +12,24 @@
       />
       <canvas
         ref="canvasVideo"
-        class="face_api_page-origin_video_output-canvas"
+        class="face_api_page-video_output-canvas"
         width="480"
         height="360"
       />
     </div>
 
     <p>Display detected face bounding boxes</p>
-    <div class="face_api_page-origin_video_output">
-      <div class="face_api_page-origin_video_output-video_output">
+    <div class="face_api_page-video_output">
+      <div class="face_api_page-video_output-video_output">
         <canvas
           ref="detectionsVideo"
-          class="face_api_page-origin_video_output-video_output-canvas"
+          class="face_api_page-video_output-video_output-canvas"
           width="480"
           height="360"
         />
         <canvas
           ref="detectionsOutput"
-          class="face_api_page-origin_video_output-video_output-face_output"
+          class="face_api_page-video_output-video_output-face_output"
           width="480"
           height="360"
         />
@@ -37,18 +37,18 @@
     </div>
 
     <p>Display face landmarks</p>
-    <div class="face_api_page-origin_video_output">
-      <div class="face_api_page-origin_video_output-video_output">
+    <div class="face_api_page-video_output">
+      <div class="face_api_page-video_output-video_output">
         <canvas
           ref="detectionsWithLandmarksVideo"
-          class="face_api_page-origin_video_output-video_output-canvas"
+          class="face_api_page-video_output-video_output-canvas"
           width="480"
           height="360"
         />
 
         <canvas
           ref="detectionsWithLandmarksOutput"
-          class="face_api_page-origin_video_output-video_output-face_output"
+          class="face_api_page-video_output-video_output-face_output"
           width="480"
           height="360"
         />
@@ -56,18 +56,18 @@
     </div>
 
     <p>Display face expression results</p>
-    <div class="face_api_page-origin_video_output">
-      <div class="face_api_page-origin_video_output-video_output">
+    <div class="face_api_page-video_output">
+      <div class="face_api_page-video_output-video_output">
         <canvas
           ref="detectionsWithExpressionsVideo"
-          class="face_api_page-origin_video_output-video_output-canvas"
+          class="face_api_page-video_output-video_output-canvas"
           width="480"
           height="360"
         />
 
         <canvas
           ref="detectionsWithExpressionsOutput"
-          class="face_api_page-origin_video_output-video_output-face_output"
+          class="face_api_page-video_output-video_output-face_output"
           width="480"
           height="360"
         />
@@ -256,13 +256,13 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
 .face_api_page {
   font-family: sans-serif;
 
-  &-origin_video_output {
+  &-video_output {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
 
-    &-video {
+    &-origin_video {
       // display: none;
       width: 480px;
       height: 360px;
@@ -271,23 +271,23 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
       object-fit: contain;
     }
     &-canvas {
-      @extend .face_api_page-origin_video_output-video;
+      @extend .face_api_page-video_output-origin_video;
       // display: block;
     }
 
     &-video_output {
-      @extend .face_api_page-origin_video_output-video;
+      @extend .face_api_page-video_output-origin_video;
       position: relative;
       display: block;
       border: 1px solid;
       margin-bottom: 8px;
 
       &-canvas {
-        @extend .face_api_page-origin_video_output-video;
+        @extend .face_api_page-video_output-origin_video;
         // display: block;
       }
       &-face_output {
-        @extend .face_api_page-origin_video_output-video;
+        @extend .face_api_page-video_output-origin_video;
         position: absolute;
         top: 0;
         left: 0;
