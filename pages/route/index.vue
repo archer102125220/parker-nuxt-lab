@@ -1,15 +1,17 @@
 <template>
-  <div class="route_test_page">
+  <section class="route_test_page">
     <p>主要用作複現狀況，篇筆記用途的測試</p>
-    <NuxtLink
-      v-for="link in linkList"
-      :key="link.to"
-      class="route_test_page-content"
-      :to="link.to"
-    >
-      {{ link.label }}
-    </NuxtLink>
-  </div>
+    <nav class="route_test_page-content">
+      <NuxtLink
+        v-for="link in linkList"
+        :key="link.to"
+        class="route_test_page-content-link"
+        :to="link.to"
+      >
+        {{ link.label }}
+      </NuxtLink>
+    </nav>
+  </section>
 </template>
 
 <script setup>
@@ -24,12 +26,16 @@ const linkList = computed(() => [
 
 <style lang="scss">
 .route_test_page {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
   &-content {
-    flex: 1;
-    flex-basis: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 8px;
+
+    &-link {
+      flex: 1;
+      flex-basis: 400px;
+    }
   }
 }
 </style>

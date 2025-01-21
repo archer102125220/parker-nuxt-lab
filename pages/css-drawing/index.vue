@@ -1,15 +1,17 @@
 <template>
-  <div class="css_triangle_page">
+  <section class="css_animejs_page">
     <p>主要以css繪圖及anime.js整合測試為主</p>
-    <NuxtLink
-      v-for="link in linkList"
-      :key="link.to"
-      class="css_triangle_page-content"
-      :to="link.to"
-    >
-      {{ link.label }}
-    </NuxtLink>
-  </div>
+    <nav class="css_animejs_page-content">
+      <NuxtLink
+        v-for="link in linkList"
+        :key="link.to"
+        class="css_animejs_page-content-link"
+        :to="link.to"
+      >
+        {{ link.label }}
+      </NuxtLink>
+    </nav>
+  </section>
 </template>
 
 <script setup>
@@ -25,13 +27,17 @@ const linkList = computed(() => [
 </script>
 
 <style lang="scss">
-.css_triangle_page {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+.css_animejs_page {
   &-content {
-    flex: 1;
-    flex-basis: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 8px;
+
+    &-link {
+      flex: 1;
+      flex-basis: 400px;
+    }
   }
 }
 </style>

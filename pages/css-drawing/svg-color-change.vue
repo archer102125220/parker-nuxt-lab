@@ -14,7 +14,7 @@
 useHead({
   title: 'svg替換顏色測試'
 });
-const color = ref('');
+const color = ref('#000000');
 </script>
 
 <style lang="scss">

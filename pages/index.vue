@@ -100,6 +100,7 @@ function handleAnimationFinish() {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    gap: 8px;
     // width: 80%;
     // margin: auto;
 
