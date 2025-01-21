@@ -69,7 +69,7 @@ function handleAnimationFinish() {
   setTimeout(
     () =>
       window.requestAnimationFrame(() => {
-        router.push('/home');
+        router.replace('/home');
       }),
     200
   );
