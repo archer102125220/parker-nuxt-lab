@@ -102,6 +102,7 @@
 <script setup>
 // https://github.com/justadudewhohacks/face-api.js/tree/master
 // https://justadudewhohacks.github.io/face-api.js/docs/globals.html
+// https://gitee.com/tongjh/face-api-demo
 
 const MODELS_PATH = '/models';
 
