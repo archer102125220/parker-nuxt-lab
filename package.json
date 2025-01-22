@@ -9,13 +9,14 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "analyze": "npx nuxi analyze ",
-    "start": "node ./.output/server/index.mjs",
+    "start": "cross-env NITRO_PORT=3001 node ./.output/server/index.mjs",
     "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@tensorflow/tfjs-node": "^4.22.0",
+    "@vite-pwa/nuxt": "^0.10.6",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "animejs": "^3.2.2",

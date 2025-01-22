@@ -1,13 +1,15 @@
 <template>
   <div class="home_page">
-    <NuxtLink
-      v-for="link in linkList"
-      :key="link.to"
-      class="home_page-content"
-      :to="link.to"
-    >
-      {{ link.label }}
-    </NuxtLink>
+    <nav class="home_page-content">
+      <NuxtLink
+        v-for="link in linkList"
+        :key="link.to"
+        class="home_page-content-link"
+        :to="link.to"
+      >
+        {{ link.label }}
+      </NuxtLink>
+    </nav>
   </div>
 </template>
 
@@ -31,12 +33,18 @@ const linkList = computed(() => [
 
 <style lang="scss">
 .home_page {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
   &-content {
-    flex: 1;
-    flex-basis: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 8px;
+    // width: 80%;
+    // margin: auto;
+
+    &-link {
+      flex: 1;
+      flex-basis: 400px;
+    }
   }
 }
 </style>

@@ -7,7 +7,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const { $pwa } = useNuxtApp();
+onMounted(() => {
+  console.log({ $pwa });
+});
+</script>
 
 <style lang="scss" scoped>
 .home_layout {

@@ -1,5 +1,6 @@
 <template>
   <div :style="$store.system.loading === true ? 'cursor: wait;' : ''">
+    <NuxtPwaManifest />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -101,36 +102,24 @@ onMounted(async () => {
   const query = route.query || {};
   const errorMsg = query.errorMsg;
   if (typeof errorMsg === 'string' && errorMsg !== '') {
-    $store.system.setMessageState({
-      text: errorMsg,
-      type: 'error'
-    });
+    nuxtApp.$errorMessage(errorMsg);
   }
   const infoMsg = query.infoMsg;
   if (typeof infoMsg === 'string' && infoMsg !== '') {
-    $store.system.setMessageState({
-      text: infoMsg,
-      type: 'info'
-    });
+    nuxtApp.$infoMessage(infoMsg);
   }
   const warnMsg = query.warnMsg;
   if (typeof warnMsg === 'string' && warnMsg !== '') {
-    $store.system.setMessageState({
-      text: warnMsg,
-      type: 'warning'
-    });
+    nuxtApp.$warningMessage(warnMsg);
   }
   const successMsg = query.successMsg;
   if (typeof successMsg === 'string' && successMsg !== '') {
-    $store.system.setMessageState({
-      text: successMsg,
-      type: 'success'
-    });
+    nuxtApp.$successMessage(successMsg);
   }
   if (typeof $store.clientInit === 'function') {
     await $store.clientInit();
   }
-  router.push({
+  router.replace({
     query: {
       ...query,
       errorMsg: undefined,

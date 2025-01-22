@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// https://nuxt.com/docs/getting-started/deployment
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
@@ -12,9 +12,12 @@ import {
   detectBrowserLanguage
 } from './i18n';
 
+const IS_DEV = process.env.NODE_ENV !== 'production';
+
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+  devtools: { enabled: IS_DEV },
   vite: {
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
@@ -55,10 +58,11 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      // htmlAttrs: {
-      //   lang: defaultLang || 'zh-TW',
-      // },
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/favicon.ico' }]
+      htmlAttrs: {
+        lang: defaultLang || 'zh-TW',
+      },
+      // https://realfavicongenerator.net/
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/ico/favicon.ico' }]
     }
   },
   css: ['@/style/global.scss', '@/style/animation.scss'],
@@ -73,13 +77,14 @@ export default defineNuxtConfig({
     ]
   },
   modules: [
-    '@nuxtjs/i18n',
     '@pinia/nuxt',
     (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) =>
         config.plugins.push(vuetify())
       );
-    }
+    },
+    '@nuxtjs/i18n',
+    '@vite-pwa/nuxt'
   ],
   i18n: {
     strategy,
@@ -89,6 +94,60 @@ export default defineNuxtConfig({
     fallbackLocale,
     detectBrowserLanguage
   },
+  // https://vite-pwa-org-zh.netlify.app/guide/
+  pwa: {
+    injectRegister: 'script-defer',
+    manifest: {
+      name: 'Parker的Nuxt實驗室',
+      short_name: 'Nuxt Lab',
+      icons: [
+        {
+          src: '/img/ico/apple-touch-icon.png',
+          sizes: '180x180',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any',
+        },
+        {
+          src: '/img/ico/favicon.ico',
+          sizes: '48x48',
+          type: 'image/png',
+          purpose: 'monochrome'
+        }
+      ],
+      theme_color: '#2c64e3',
+      background_color: '#2c64e3',
+      display: 'standalone'
+    },
+    // https://github.com/vite-pwa/nuxt/issues/53#issuecomment-1615266204
+    workbox: {
+      // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
+      // https://www.elecfans.com/tools/zijiehuansuan.html
+      maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
+      // Only precache these files - html should be excluded
+      globPatterns: ['**/*'],
+      // Don't fallback on document based (e.g. `/some-page`) requests
+      // Even though this says `null` by default, I had to set this specifically to `null` to make it work
+      navigateFallback: null,
+    }
+  },
 
   build: {
     transpile: ['vuetify', 'date-fns']
@@ -96,13 +155,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      // apiBaseUrl: 'https://dev-zack.jiapin.online',
       API_BASE: process.env.API_BASE || '/api',
-      // websocketBaseUrl:
-      //   'wss://dev-zack2.jiapin.online:3000/ws?role=STORE&cid=',
       WEBSOCKET_BASE_URL:
-        process.env.WEBSOCKET_BASE_URL ||
-        'wss://dev-zack2.jiapin.online:3000/ws?role=STORE&cid=',
+        process.env.WEBSOCKET_BASE_URL || 'wss://url',
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
       FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
       FACEBOOK_API_VERSION: process.env.FACEBOOK_API_VERSION,
@@ -111,7 +166,7 @@ export default defineNuxtConfig({
       LINE_CALLBACK_URI: process.env.LINE_CALLBACK_URI,
       HTTPS:
         process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
-      isDev: process.env.NODE_ENV !== 'production'
+      isDev: IS_DEV
     }
   }
 });

@@ -14,6 +14,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
       errorMessage(text) {
         system.setMessageState({ text, type: 'error' });
       },
+      infoMessage(text) {
+        system.setMessageState({ text, type: 'info' });
+      },
       store: {
         system,
         clientInit() {
@@ -36,6 +39,19 @@ export default defineNuxtPlugin(({ $pinia }) => {
             _pluginwareHandleResize_();
             window.addEventListener('resize', window._pluginwareHandleResize_);
           }
+
+          const { $pwa } = useNuxtApp();
+          // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
+          watchEffect(async () => {
+            if ($pwa.needRefresh === true) {
+              await $pwa.updateServiceWorker();
+            }
+          });
+          watchEffect(() => {
+            if ($pwa.offlineReady === true) {
+              system.setMessageState({ text: 'App ready to work offline', type: 'success' });
+            }
+          });
         }
       }
     }
