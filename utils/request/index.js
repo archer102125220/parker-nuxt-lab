@@ -179,6 +179,16 @@ export function request(
       break;
   }
 
+  if (extendOption.useServiceWorkerCache === true) {
+    if (typeof extendOption.headers === 'object' && extendOption.headers !== null) {
+      extendOption.headers['X-Is-Cacheable'] = 'true';
+      extendOption.headers['Cache-Control'] = 'max-age=604800';
+    } else {
+      extendOption.headers = { 'X-Is-Cacheable': 'true', 'Cache-Control': 'max-age=604800' };
+    }
+  }
+  console.log({ headers: extendOption.headers, extendOption });
+
   const _ax = ax || axios;
 
   return _ax

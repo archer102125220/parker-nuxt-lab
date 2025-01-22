@@ -97,6 +97,7 @@ export default defineNuxtConfig({
   // https://vite-pwa-org-zh.netlify.app/guide/
   pwa: {
     injectRegister: 'script-defer',
+
     manifest: {
       name: 'Parker的Nuxt實驗室',
       short_name: 'Nuxt Lab',
@@ -136,8 +137,72 @@ export default defineNuxtConfig({
       background_color: '#2c64e3',
       display: 'standalone'
     },
+
     // https://github.com/vite-pwa/nuxt/issues/53#issuecomment-1615266204
     workbox: {
+      runtimeCaching: [
+        // {
+        //   urlPattern: new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
+        //   handler: 'CacheFirst',
+        // // POST做快取會因為Service Workers會再後台再叫一次api，而瀏覽器並不允許這種呼叫兩次同隻POST API的行為，
+        // // 因此會出現error並無法有效將資料做快取
+        //   method: 'POST',
+        //   options: {
+        //     cacheName: 'api-cache',
+        //     expiration: {
+        //       maxEntries: 10,
+        //       maxAgeSeconds: 60 * 2
+        //     },
+        //     cacheableResponse: {
+        //       statuses: [0, 200]
+        //     }
+        //   }
+        // },
+        {
+          urlPattern: new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
+          handler: 'CacheFirst',
+          method: 'GET',
+          options: {
+            cacheName: 'api-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 2
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'gstatic-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            },
+          }
+        }
+      ],
+
       // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
       // https://www.elecfans.com/tools/zijiehuansuan.html
       maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
