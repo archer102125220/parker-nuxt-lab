@@ -56,6 +56,11 @@ export default defineNuxtConfig({
       }
     }
   },
+  // nitro: {
+  //   prerender: {
+  //     routes: ['/']
+  //   }
+  // },
   app: {
     head: {
       htmlAttrs: {

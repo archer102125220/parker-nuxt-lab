@@ -189,7 +189,7 @@ export const useSystemStore = defineStore('system', {
 
       return broswerInfo;
     },
-    localLanguage: () => {
+    localLanguage() {
       const { $i18n } = useNuxtApp();
       return getLocalLanguage($i18n?.local?.value);
     },

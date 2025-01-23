@@ -34,7 +34,7 @@
       />
       <v-checkbox
         class="frontend_api_cach_test_page-from-checkbox"
-        label="啟用ServiceWorker快取(只適用HTTP GET方法)"
+        label="啟用ServiceWorker快取(只適用HTTP GET方法，呼叫過後需重新整理才會生效)"
         color="primary"
         :value="true"
         v-model="useServiceWorkerCache"

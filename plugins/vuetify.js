@@ -13,7 +13,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const i18n = { global: nuxtApp.$i18n };
 
   const vuetify = createVuetify({
-    ssr: false,
+    ssr: true,
     icons: {
       defaultSet: 'mdi',
       aliases,
