@@ -1,26 +1,46 @@
 <template>
   <div class="frontend_api_cach_test_page">
-    <v-btn color="primary" @click="handleSubmit">測試</v-btn>
-    <v-checkbox
-      class="frontend_api_cach_test_page-checkbox"
-      label="啟用快取(同時使用情況下優先生效)"
-      color="primary"
-      :value="true"
-      v-model="useCache"
-    />
-    <v-checkbox
-      class="frontend_api_cach_test_page-checkbox"
-      label="啟用ServiceWorker快取(只適用HTTP GET方法)"
-      color="primary"
-      :value="true"
-      v-model="useServiceWorkerCache"
-    />
+    <form
+      class="frontend_api_cach_test_page-form"
+      @submit.prevent="handleSubmit"
+    >
+      <v-text-field
+        clearable
+        label="GET參數"
+        class="frontend_api_cach_test_page-form-query"
+        v-model="queryData"
+      />
+      <v-text-field
+        clearable
+        label="POST參數"
+        class="frontend_api_cach_test_page-form-payload"
+        v-model="payloadData"
+      />
+
+      <v-checkbox
+        class="frontend_api_cach_test_page-form-checkbox"
+        label="啟用快取(同時使用情況下優先生效)"
+        color="primary"
+        :value="true"
+        v-model="useCache"
+      />
+      <v-checkbox
+        class="frontend_api_cach_test_page-from-checkbox"
+        label="啟用ServiceWorker快取(只適用HTTP GET方法)"
+        color="primary"
+        :value="true"
+        v-model="useServiceWorkerCache"
+      />
+
+      <v-btn color="primary" type="submit">測試</v-btn>
+    </form>
 
     <div class="frontend_api_cach_test_page-content">
       <p>耗時約：</p>
       <p>{{ timeConsuming }}</p>
-      <p>s</p>
+      <p>ms</p>
     </div>
+
     <p>回傳值：</p>
     <p>{{ JSON.stringify(response) }}</p>
   </div>
@@ -30,6 +50,8 @@
 const nuxtApp = useNuxtApp();
 const { $store } = nuxtApp;
 
+const queryData = ref('queryTest');
+const payloadData = ref('payloadTest');
 const timeConsuming = ref('');
 const useCache = ref(false);
 const useServiceWorkerCache = ref(false);
@@ -52,8 +74,8 @@ async function handlePostApi() {
   try {
     const _response = await nuxtApp.$nuxtServer.POST_frontendApiCachTest(
       {
-        query: { data: 'queryTest' },
-        payload: { data: 'payloadTest' }
+        query: { data: queryData.value },
+        payload: { data: payloadData.value }
       },
       {
         useCache: useCache.value
@@ -79,7 +101,7 @@ async function handleGetApi() {
   try {
     const _response = await nuxtApp.$nuxtServer.GET_frontendApiCachTest(
       {
-        query: { data: 'queryTest' }
+        query: { data: queryData.value }
       },
       {
         useCache: useCache.value,
@@ -100,11 +122,18 @@ async function handleGetApi() {
 
 <style lang="scss" scoped>
 .frontend_api_cach_test_page {
-  &-checkbox {
-    :deep(.v-input__details) {
-      display: none;
+  &-form {
+    &-query {
+    }
+    &-payload {
+    }
+    &-checkbox {
+      :deep(.v-input__details) {
+        display: none;
+      }
     }
   }
+
   &-content {
     display: flex;
     flex-direction: row;

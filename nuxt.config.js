@@ -144,8 +144,9 @@ export default defineNuxtConfig({
         // {
         //   urlPattern: new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
         //   handler: 'CacheFirst',
-        // // POST做快取會因為Service Workers會再後台再叫一次api，而瀏覽器並不允許這種呼叫兩次同隻POST API的行為，
-        // // 因此會出現error並無法有效將資料做快取
+        // // POST做快取會因為Service Workers會再背景再叫一次api，而瀏覽器並不允許這種呼叫兩次同隻POST API的行為，
+        // // 因此會出現error並無法有效將資料做快取，經查找資料疑似與幕等性有關
+        // // 關於http的冪等性：https://medium.com/willhanchen/%E9%97%9C%E6%96%BChttp%E7%9A%84%E5%86%AA%E7%AD%89%E6%80%A7-4438381d0a70
         //   method: 'POST',
         //   options: {
         //     cacheName: 'api-cache',
