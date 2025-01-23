@@ -17,6 +17,14 @@
         v-model="payloadData"
       />
 
+      <v-radio-group
+        class="frontend_api_cach_test_page-form-http_method"
+        v-model="isPost"
+      >
+        <v-radio color="primary" label="使用HTTP POST" :value="true" />
+        <v-radio color="primary" label="使用HTTP GET" :value="false" />
+      </v-radio-group>
+
       <v-checkbox
         class="frontend_api_cach_test_page-form-checkbox"
         label="啟用快取(同時使用情況下優先生效)"
@@ -52,13 +60,14 @@ const { $store } = nuxtApp;
 
 const queryData = ref('queryTest');
 const payloadData = ref('payloadTest');
+const isPost = ref(true);
 const timeConsuming = ref('');
 const useCache = ref(false);
 const useServiceWorkerCache = ref(false);
 const response = ref(null);
 
 function handleSubmit() {
-  if (useServiceWorkerCache.value === true) {
+  if (isPost.value !== true) {
     handleGetApi();
   } else {
     handlePostApi();
@@ -125,8 +134,13 @@ async function handleGetApi() {
   &-form {
     &-query {
     }
+
     &-payload {
     }
+
+    &-http_method {
+    }
+
     &-checkbox {
       :deep(.v-input__details) {
         display: none;

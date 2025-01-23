@@ -99,6 +99,7 @@ onMounted(async () => {
   //   trigger: true,
   //   content: 'Profile/Birthday',
   // });
+
   const query = route.query || {};
   const errorMsg = query.errorMsg;
   if (typeof errorMsg === 'string' && errorMsg !== '') {
