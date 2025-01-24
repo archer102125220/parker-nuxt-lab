@@ -1,6 +1,6 @@
-@import 'vuetify/styles';
+@use 'vuetify/styles';
+@use '~/node_modules/flag-icons/css/flag-icons.min.css';
 @import url('https://fonts.googleapis.com/earlyaccess/notosanstc.css');
-@import '/node_modules/flag-icons/css/flag-icons.min.css';
 
 @font-face {
   font-family: TaipeiSansTCBeta-Bold;

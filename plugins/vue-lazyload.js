@@ -1,4 +1,4 @@
-import VueLazyload from '@/node_modules/vue-lazyload';
+import VueLazyload from 'vue-lazyload';
 
 // https://www.jianshu.com/p/d0aadf5cdf57
 export default defineNuxtPlugin((nuxtApp) => {

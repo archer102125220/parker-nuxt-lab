@@ -14,10 +14,13 @@ import {
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
+const alias = IS_DEV ? { '@': new URL('./', import.meta.url).href } : undefined;
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: IS_DEV },
+  alias,
   vite: {
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
@@ -32,7 +35,7 @@ export default defineNuxtConfig({
         scss: {
           api: 'modern-compiler', // or "modern", "legacy"
           additionalData:
-            '@import "@/style/variable.scss"; @import "@/style/mixin.scss";'
+            '@use "~/style/variable.scss" as *; @use "~/style/mixin.scss" as *;'
         }
       },
       postcss: {

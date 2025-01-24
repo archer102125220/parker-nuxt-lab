@@ -19,8 +19,10 @@
 
 <script setup>
 const modules = {
-  ...import.meta.glob('@/components/Dialog/*.vue'),
-  ...import.meta.glob('@/components/Dialog/*/*.vue')
+  // ...import.meta.glob('@/components/Dialog/*.vue'),
+  // ...import.meta.glob('@/components/Dialog/*/*.vue')
+  ...import.meta.glob('./*.vue'),
+  ...import.meta.glob('./*/*.vue')
 };
 
 const props = defineProps({

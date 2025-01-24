@@ -1,7 +1,7 @@
 <template>
   <div :style="$store.system.loading === true ? 'cursor: wait;' : ''">
     <!-- <NuxtPwaManifest /> -->
-    <NuxtPwaAssets />
+    <NuxtPwaAssets /> 
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
