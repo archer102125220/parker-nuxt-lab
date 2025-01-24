@@ -12,8 +12,7 @@ export function useCameraStream(afterInit = () => { }, onError = () => { }) {
           facingMode: 'user'
         }
       });
-      console.log({ stream });
-      // videoRef.value.srcObject = stream;
+      // console.log({ stream });
       streamObj.value = stream;
 
       if (typeof afterInit === 'function') {

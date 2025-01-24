@@ -14,13 +14,15 @@ import {
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
-const alias = IS_DEV ? { '@': new URL('./', import.meta.url).href } : undefined;
+const windowsAlias = IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: IS_DEV },
-  alias,
+  alias: {
+    ...windowsAlias
+  },
   vite: {
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false

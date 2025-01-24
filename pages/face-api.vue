@@ -1,9 +1,20 @@
 <template>
   <div class="face_api_page">
-    <div class="face_api_page-video_output">
+    <form class="face_api_page-form" @submit.prevent="handleDiscern">
+      <ImageUpload
+        v-model="identifyImage"
+        btn-label="選取辨識照片"
+        label="點擊或拖拉識別照片到此區塊"
+        mask-label="拖拉識別照片到此區塊"
+        @update:model-value="identifyImage = $event"
+      />
+      <v-btn color="primary">辨識</v-btn>
+    </form>
+
+    <div class="face_api_page-row">
       <video
         ref="videoEl"
-        class="face_api_page-video_output-origin_video"
+        class="face_api_page-row-origin_video"
         width="480"
         height="360"
         autoplay
@@ -12,87 +23,85 @@
       />
       <canvas
         ref="canvasVideo"
-        class="face_api_page-video_output-canvas"
+        class="face_api_page-row-canvas"
         width="480"
         height="360"
       />
     </div>
 
     <p>Display detected face bounding boxes</p>
-    <div class="face_api_page-video_output">
-      <div class="face_api_page-video_output-face_output">
+    <div class="face_api_page-row">
+      <div class="face_api_page-row-face_output">
         <canvas
           ref="detectionsVideo"
-          class="face_api_page-video_output-face_output-canvas"
+          class="face_api_page-row-face_output-canvas"
           width="480"
           height="360"
         />
         <canvas
           ref="detectionsOutput"
-          class="face_api_page-video_output-face_output-face_video"
+          class="face_api_page-row-face_output-face_video"
           width="480"
           height="360"
         />
       </div>
-      <div class="face_api_page-video_output-data_output">
-        <p class="face_api_page-video_output-data_output-title">
+      <div class="face_api_page-row-data_output">
+        <p class="face_api_page-row-data_output-title">
           faceBoundingBoxesData:
         </p>
-        <p class="face_api_page-video_output-data_output-content">
+        <p class="face_api_page-row-data_output-content">
           {{ faceBoundingBoxesData }}
         </p>
       </div>
     </div>
 
     <p>Display face landmarks</p>
-    <div class="face_api_page-video_output">
-      <div class="face_api_page-video_output-face_output">
+    <div class="face_api_page-row">
+      <div class="face_api_page-row-face_output">
         <canvas
           ref="detectionsWithLandmarksVideo"
-          class="face_api_page-video_output-face_output-canvas"
+          class="face_api_page-row-face_output-canvas"
           width="480"
           height="360"
         />
 
         <canvas
           ref="detectionsWithLandmarksOutput"
-          class="face_api_page-video_output-face_output-face_video"
+          class="face_api_page-row-face_output-face_video"
           width="480"
           height="360"
         />
       </div>
-      <div class="face_api_page-video_output-data_output">
-        <p class="face_api_page-video_output-data_output-title">
-          faceLandmarksData:
-        </p>
-        <p class="face_api_page-video_output-data_output-content">
+      <div class="face_api_page-row-data_output">
+        <p class="face_api_page-row-data_output-title">faceLandmarksData:</p>
+        <p class="face_api_page-row-data_output-content">
           {{ faceLandmarksData }}
         </p>
       </div>
     </div>
 
     <p>Display face expression results</p>
-    <div class="face_api_page-video_output">
-      <div class="face_api_page-video_output-face_output">
+    <div class="face_api_page-row">
+      <div class="face_api_page-row-face_output">
         <canvas
           ref="detectionsWithExpressionsVideo"
-          class="face_api_page-video_output-face_output-canvas"
+          class="face_api_page-row-face_output-canvas"
           width="480"
           height="360"
         />
 
         <canvas
           ref="detectionsWithExpressionsOutput"
-          class="face_api_page-video_output-face_output-face_video"
+          class="face_api_page-row-face_output-face_video"
           width="480"
           height="360"
         />
       </div>
-      <div class="face_api_page-video_output-data_output">
-        <p class="face_api_page-video_output-data_output-title">
+      <div class="face_api_page-row-data_output">
+        <p class="face_api_page-row-data_output-title">
           faceExpressionResultsData:
         </p>
-        <p class="face_api_page-video_output-data_output-content">
+        <p class="face_api_page-row-data_output-content">
           {{ faceExpressionResultsData }}
         </p>
       </div>
@@ -129,6 +138,7 @@ const streamObj = useCameraStream(handleFaceApi);
 const faceBoundingBoxesData = ref(null);
 const faceLandmarksData = ref(null);
 const faceExpressionResultsData = ref(null);
+const identifyImage = ref('');
 
 function handleFrameFromVideo(canvas) {
   const video = videoEl.value;
@@ -172,6 +182,12 @@ function getDisplaySize(outputEl) {
     width: outputEl.width || Number(outputStyle.width.replace('px', '')),
     height: outputEl.height || Number(outputStyle.height.replace('px', ''))
   };
+}
+
+// https://justadudewhohacks.github.io/face-api.js/docs/index.html
+// https://www.cnblogs.com/keatkeat/p/15106226.html
+function handleDiscern() {
+  console.log(identifyImage.value);
 }
 
 async function handleDetections(MODELS_PATH) {
@@ -314,7 +330,11 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
 .face_api_page {
   font-family: sans-serif;
 
-  &-video_output {
+  &-form {
+    margin-bottom: 16px;
+  }
+
+  &-row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -330,23 +350,23 @@ async function hadnleDetectionsWithExpressions(MODELS_PATH) {
       object-fit: contain;
     }
     &-canvas {
-      @extend .face_api_page-video_output-origin_video;
+      @extend .face_api_page-row-origin_video;
       // display: block;
     }
 
     &-face_output {
-      @extend .face_api_page-video_output-origin_video;
+      @extend .face_api_page-row-origin_video;
       position: relative;
       display: block;
       border: 1px solid;
       margin-bottom: 8px;
 
       &-canvas {
-        @extend .face_api_page-video_output-origin_video;
+        @extend .face_api_page-row-origin_video;
         // display: block;
       }
       &-face_video {
-        @extend .face_api_page-video_output-origin_video;
+        @extend .face_api_page-row-origin_video;
         position: absolute;
         top: 0;
         left: 0;
