@@ -61,11 +61,11 @@ export default defineNuxtConfig({
       }
     }
   },
-  // nitro: {
-  //   prerender: {
-  //     routes: ['/']
-  //   }
-  // },
+  nitro: {
+    prerender: {
+      routes: ['/']
+    }
+  },
   app: {
     head: {
       htmlAttrs: {

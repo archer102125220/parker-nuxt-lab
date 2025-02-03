@@ -29,13 +29,15 @@
         class="frontend_api_cach_test_page-form-checkbox"
         label="啟用快取(同時使用情況下優先生效)"
         color="primary"
+        hide-details
         :value="true"
         v-model="useCache"
       />
       <v-checkbox
         class="frontend_api_cach_test_page-from-checkbox"
-        label="啟用ServiceWorker快取(只適用HTTP GET方法，呼叫過後需重新整理才會生效)"
+        label="啟用ServiceWorker快取(只適用production模式底下的HTTP GET方法，呼叫過後需重新整理才會生效)"
         color="primary"
+        hide-details
         :value="true"
         v-model="useServiceWorkerCache"
       />
@@ -142,9 +144,9 @@ async function handleGetApi() {
     }
 
     &-checkbox {
-      :deep(.v-input__details) {
-        display: none;
-      }
+      // :deep(.v-input__details) {
+      //   display: none;
+      // }
     }
   }
 

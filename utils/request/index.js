@@ -187,7 +187,7 @@ export function request(
       extendOption.headers = { 'X-Is-Cacheable': 'true', 'Cache-Control': 'max-age=604800' };
     }
   }
-  console.log({ headers: extendOption.headers, extendOption });
+  // console.log({ headers: extendOption.headers, extendOption });
 
   const _ax = ax || axios;
 

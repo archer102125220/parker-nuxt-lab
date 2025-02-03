@@ -3,7 +3,8 @@ import zhTw from './locales/zh-tw.json';
 
 export const debug = process.env.NODE_ENV === 'development';
 export const defaultLang = 'zh';
-export const fallbackLocale = 'en';
+// export const fallbackLocale = 'en';
+export const fallbackLocale = 'zh';
 export const strategy = 'prefix_and_default';
 export const locales = [
   {
