@@ -153,20 +153,88 @@ export default defineNuxtConfig({
       runtimeCaching: [
         // {
         //   urlPattern: new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
-        //   handler: 'CacheFirst',
-        // // POST做快取會因為Service Workers會再背景再叫一次api，而瀏覽器並不允許這種呼叫兩次同隻POST API的行為，
-        // // 因此會出現error並無法有效將資料做快取，經查找資料疑似與幕等性有關
-        // // 關於http的冪等性：https://medium.com/willhanchen/%E9%97%9C%E6%96%BChttp%E7%9A%84%E5%86%AA%E7%AD%89%E6%80%A7-4438381d0a70
+        //   handler: 'StaleWhileRevalidate',
+        //   // POST做快取會因為Service Workers會再背景再叫一次api，而瀏覽器並不允許這種呼叫兩次同隻POST API的行為，
+        //   // 因此會出現error並無法有效將資料做快取，經查找資料疑似與幕等性有關
+        //   // 關於http的冪等性：https://medium.com/willhanchen/%E9%97%9C%E6%96%BChttp%E7%9A%84%E5%86%AA%E7%AD%89%E6%80%A7-4438381d0a70
+        //   // Service Workers 的 Cache API 不能快取 POST https://stackoverflow.com/questions/53639134/request-method-post-is-unsupported
         //   method: 'POST',
         //   options: {
-        //     cacheName: 'api-cache',
+        //     cacheName: 'post-api-cache',
         //     expiration: {
         //       maxEntries: 10,
         //       maxAgeSeconds: 60 * 2
         //     },
-        //     cacheableResponse: {
-        //       statuses: [0, 200]
-        //     }
+        //     plugins: [
+        //       {
+        //         handlerWillStart: async (willStartResponse, ...arg) => {
+        //           console.log({ willStartResponse, arg });
+        //         },
+        //         requestWillFetch: async (willFetchResponse, ...arg) => {
+        //           console.log({ willFetchResponse, arg });
+
+        //           return willFetchResponse.request;
+        //         },
+        //         // handlerDidRespond 之後還會再執行一次 cacheKeyWillBeUsed
+        //         cacheKeyWillBeUsed: async (cacheKeyResponse, ...arg) => {
+        //           console.log({ cacheKeyResponse, arg });
+
+        //           return cacheKeyResponse.request;
+        //         },
+        //         cachedResponseWillBeUsed: async (response, ...arg) => {
+        //           console.log({ response, arg });
+        //           const { cachedResponse } = response;
+
+        //           if (typeof cachedResponse?.clone === 'function') {
+        //             const responseClone = cachedResponse.clone();
+        //             console.log({ response, responseClone });
+        //             return responseClone;
+        //           }
+
+        //           // return response;
+        //         },
+        //         fetchDidSucceed: async (fetchResponse, ...arg) => {
+        //           console.log({ fetchResponse, arg });
+        //           const { response } = fetchResponse
+
+        //           if (typeof response?.clone === 'function') {
+        //             const responseClone = response.clone();
+        //             console.log({ response, responseClone });
+        //             return responseClone;
+        //           }
+
+        //           return response;
+        //         },
+        //         handlerWillRespond: async (willResponse, ...arg) => {
+        //           console.log({ willResponse, arg });
+
+        //           return willResponse.response;
+        //         },
+        //         handlerDidRespond: async (didResponse, ...arg) => {
+        //           console.log({ didResponse, arg });
+        //         },
+        //         cacheWillUpdate: async (cacheWillUpdate, ...arg) => {
+        //           console.log({ cacheWillUpdate, arg });
+
+        //           return cacheWillUpdate.response;
+        //         },
+        //         handlerDidComplete: async (didCompleteResponse, ...arg) => {
+        //           console.log({ didCompleteResponse, arg });
+        //         },
+
+        //         cacheDidUpdate: async (cacheDidUpdate, ...arg) => {
+        //           console.log({ cacheDidUpdate, arg });
+
+        //           return cacheDidUpdate.response;
+        //         },
+        //         fetchDidFail: async (fetchFailResponse, ...arg) => {
+        //           console.log({ fetchFailResponse, arg });
+        //         },
+        //         handlerDidError: async (didErrorResponse, ...arg) => {
+        //           console.log({ didErrorResponse, arg });
+        //         },
+        //       },
+        //     ],
         //   }
         // },
         {
@@ -186,7 +254,7 @@ export default defineNuxtConfig({
         },
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-          handler: 'CacheFirst',
+          handler: 'StaleWhileRevalidate',
           options: {
             cacheName: 'google-fonts-cache',
             expiration: {
@@ -200,7 +268,7 @@ export default defineNuxtConfig({
         },
         {
           urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-          handler: 'CacheFirst',
+          handler: 'StaleWhileRevalidate',
           options: {
             cacheName: 'gstatic-fonts-cache',
             expiration: {
