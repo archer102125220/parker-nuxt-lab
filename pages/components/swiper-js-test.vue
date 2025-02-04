@@ -6,6 +6,15 @@
       :slide-list="slideList"
       class="swiper_js_test_page-content"
     />
+    <SwiperJs
+      v-model="slideLoop"
+      loop
+      overflow
+      has-pagination
+      :autoplay-delay="3000"
+      :slide-list="slideList"
+      class="swiper_js_test_page-content"
+    />
   </div>
 </template>
 
@@ -16,6 +25,7 @@ useHead({
 });
 
 const slide = ref(0);
+const slideLoop = ref(0);
 
 const slideList = computed(() => {
   const _tabList = [];

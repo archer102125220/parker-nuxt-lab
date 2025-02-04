@@ -273,9 +273,7 @@ watch(
       syncSlide(newModelValue, swiperObj.value);
     });
   },
-  {
-    deep: true
-  }
+  { deep: true }
 );
 // watch(
 //   () => props.modelValue,
@@ -437,7 +435,10 @@ function syncSlide(value, swiper) {
   );
   const slideIndex =
     typeof _slideIndex === 'number' && _slideIndex > -1 ? _slideIndex : value;
-  swiper.slideTo(slideIndex || 0);
+
+  if (Number(slideIndex) !== swiper.previousRealIndex) {
+    swiper.slideTo(slideIndex || 0);
+  }
 }
 function syncSlideList(newSlideList = [], swiper) {
   if (
