@@ -24,7 +24,7 @@
           v-for="(slide, index) in slideList"
           :key="slide[slotNameKey] || slide.slotName || index"
           class="swiper_js-content-wrapper-slide swiper-slide"
-          :swiper-loop-value="slide[modelValueKey] || slide.value || index"
+          :swiper-loop-value="slide[valueKey] || slide.value || index"
         >
           <slot
             v-if="slotNameIsDefault === false"
@@ -130,7 +130,7 @@ const props = defineProps({
     type: [Number, String, Object],
     default: 0
   },
-  modelValueKey: {
+  valueKey: {
     type: [Number, String],
     default: null
   },
@@ -273,7 +273,9 @@ watch(
       syncSlide(newModelValue, swiperObj.value);
     });
   },
-  { deep: true }
+  {
+    deep: true
+  }
 );
 // watch(
 //   () => props.modelValue,
@@ -428,16 +430,20 @@ function syncSlide(value, swiper) {
   const _slideIndex = props.slideList.findIndex(
     (slide) =>
       (props.loop === true &&
-        (`${slide?.[props.modelValueKey]}` === value ||
+        (`${slide?.[props.valueKey]}` === value ||
           `${slide?.value}` === value)) ||
       (props.loop === false &&
-        (slide?.[props.modelValueKey] === value || slide?.value === value))
+        (slide?.[props.valueKey] === value || slide?.value === value))
   );
   const slideIndex =
     typeof _slideIndex === 'number' && _slideIndex > -1 ? _slideIndex : value;
 
-  if (Number(slideIndex) !== swiper.previousRealIndex) {
-    swiper.slideTo(slideIndex || 0);
+  if (Number(slideIndex) !== swiper.realIndex) {
+    if (props.loop === true) {
+      swiper.slideToLoop(slideIndex || 0);
+    } else {
+      swiper.slideTo(slideIndex || 0);
+    }
   }
 }
 function syncSlideList(newSlideList = [], swiper) {
@@ -450,7 +456,7 @@ function syncSlideList(newSlideList = [], swiper) {
   }
   const _slideIndex = newSlideList.findIndex(
     (slide) =>
-      slide?.[props.modelValueKey] === props.modelValue ||
+      slide?.[props.valueKey] === props.modelValue ||
       slide?.value === props.modelValue
   );
   const slideIndex =
@@ -474,6 +480,33 @@ function beforeSlideChangeStart(swiper) {
   emit('beforeSlideChangeStart', swiper);
 }
 function slideChange(swiper) {
+  if (props.loop === true) {
+    const slideValueEl = swiper.slides[swiper.activeIndex];
+    const slideValue = slideValueEl?.getAttribute('swiper-loop-value');
+
+    if (`${props.modelValue}` !== slideValue) {
+      emit(
+        'update:modelValue',
+        isNaN(slideValue) ? slideValue : Number(slideValue)
+      );
+      emit('change', isNaN(slideValue) ? slideValue : Number(slideValue));
+    }
+  } else {
+    // const slideData = props.slideList[swiper.activeIndex];
+    // const slideValue =
+    //   slideData?.[props.valueKey] || slideData?.value || swiper.activeIndex;
+    const slideData = props.slideList[swiper.realIndex];
+    const slideValue =
+      slideData?.[props.valueKey] || slideData?.value || swiper.realIndex;
+
+    if (props.modelValue !== slideValue) {
+      emit(
+        'update:modelValue',
+        isNaN(slideValue) ? slideValue : Number(slideValue)
+      );
+      emit('change', isNaN(slideValue) ? slideValue : Number(slideValue));
+    }
+  }
   emit('slideChange', swiper);
 }
 function sliderMove(swiper) {
@@ -498,26 +531,6 @@ function realIndexChange(swiper) {
   emit('realIndexChange', swiper);
 }
 function slideChangeTransitionEnd(swiper) {
-  if (props.loop === true) {
-    const slideValueEl = swiper.slides[swiper.activeIndex];
-    const slideValue = slideValueEl?.getAttribute('swiper-loop-value');
-
-    if (`${props.modelValue}` !== slideValue) {
-      emit('update:modelValue', slideValue);
-      emit('change', slideValue);
-    }
-  } else {
-    const slideData = props.slideList[swiper.activeIndex];
-    const slideValue =
-      slideData?.[props.modelValueKey] ||
-      slideData?.value ||
-      swiper.activeIndex;
-
-    if (props.modelValue !== slideValue) {
-      emit('update:modelValue', slideValue);
-      emit('change', slideValue);
-    }
-  }
   emit('slideChangeTransitionEnd', swiper);
 }
 </script>

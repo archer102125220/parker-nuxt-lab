@@ -6,7 +6,6 @@
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
     @mouseup="handlePullEnd"
-    @mouseover="handlePullEnd"
     @touchstart="handlePullStart"
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
@@ -81,6 +80,7 @@
     <div
       v-if="isEmpty === false"
       class="scroll_fetch-container"
+      @mouseover="handlePullEnd"
       @transitionend="handleRefreshIcon"
     >
       <slot />
@@ -256,6 +256,7 @@ onUnmounted(() => {
   }
 
   if (
+    typeof observer.value?.unobserve === 'function' &&
     typeof infinityTriggerRef.value === 'object' &&
     infinityTriggerRef.value !== null
   ) {

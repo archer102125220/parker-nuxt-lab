@@ -115,7 +115,7 @@ const props = defineProps({
     type: [Number, String, Object],
     default: 0
   },
-  modelValueKey: {
+  valueKey: {
     type: [Number, String],
     default: null
   },
@@ -264,7 +264,7 @@ watch(
 function getCurrentSwiperIndex(slide, slideList = []) {
   const _slideIndex = slideList.findIndex(
     (_slide) =>
-      _slide?.[props.modelValueKey] === slide ||
+      _slide?.[props.valueKey] === slide ||
       _slide?.value === slide ||
       _slide === slide
   );
@@ -278,7 +278,7 @@ function handlePrev() {
     const newSliderActiveIndex = sliderActiveIndex.value - 1;
     const newSlide = props.slideList[newSliderActiveIndex] || {};
     const newValue =
-      newSlide[props.modelValueKey] || newSlide.value || newSlide;
+      newSlide[props.valueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -292,7 +292,7 @@ function handleNext() {
     const newSliderActiveIndex = sliderActiveIndex.value + 1;
     const newSlide = props.slideList[newSliderActiveIndex] || {};
     const newValue =
-      newSlide[props.modelValueKey] || newSlide.value || newSlide;
+      newSlide[props.valueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -391,7 +391,7 @@ function handleChanging(e) {
   if (newSliderActiveIndex >= 0) {
     const newSlide = props.slideList[newSliderActiveIndex] || {};
     const newValue =
-      newSlide[props.modelValueKey] || newSlide.value || newSlide;
+      newSlide[props.valueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 

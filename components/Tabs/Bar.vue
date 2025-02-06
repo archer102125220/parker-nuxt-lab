@@ -91,7 +91,7 @@
   </div>
 </template>
 <script setup>
-const SCROLL_STEP = 100;
+const SCROLL_STEP = 150;
 const SELECTED_TRANSITION =
   'left 0.4s ease-in-out, top 0.4s ease-in-out, width 0.4s 0.1s';
 const IS_KEEP_SCROLL_LIMIT = 50;
@@ -873,15 +873,32 @@ function handleNavigationShow() {
   }
 }
 
-function getBottomeStyle(tab) {
+function getSelectedStyle(tab) {
   const borderSideStyle = {};
 
-  if (typeof tab === 'object' && tab !== null) {
+  if (
+    validSelectedType.value === true &&
+    typeof tab === 'object' &&
+    tab !== null
+  ) {
     if (props.vertical === true) {
       borderSideStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
-    }
 
-    if (props.vertical === false) {
+      borderSideStyle['--tab_border_side_left'] = '0px';
+      if (
+        props.selectedType === 'mask' ||
+        (typeof props.borderSideHeight !== 'number' &&
+          typeof props.borderSideHeight !== 'string') ||
+        props.borderSideHeight === ''
+      ) {
+        borderSideStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
+        borderSideStyle['--tab_border_side_top'] = `${tab.offsetTop}px`;
+      } else {
+        borderSideStyle['--tab_border_side_top'] = `calc(${
+          tab.offsetTop + tab.clientHeight / 2
+        }px - var(--tab_border_side_height, 0px) / 2)`;
+      }
+    } else if (props.vertical === false) {
       borderSideStyle['--tab_border_side_top'] = 'unset';
       if (
         props.selectedType === 'mask' ||
@@ -906,20 +923,6 @@ function getBottomeStyle(tab) {
           borderSideStyle['--tab_border_side_width'] = `${tab.clientWidth}px`;
         }
       }
-    } else {
-      borderSideStyle['--tab_border_side_left'] = '0px';
-      if (
-        (typeof props.borderSideHeight !== 'number' &&
-          typeof props.borderSideHeight !== 'string') ||
-        props.borderSideHeight === ''
-      ) {
-        borderSideStyle['--tab_border_side_height'] = `${tab.clientHeight}px`;
-        borderSideStyle['--tab_border_side_top'] = `${tab.offsetTop}px`;
-      } else {
-        borderSideStyle['--tab_border_side_top'] = `calc(${
-          tab.offsetTop + tab.clientHeight / 2
-        }px - var(--tab_border_side_height, 0px) / 2)`;
-      }
     }
 
     if (props.selectedType === 'mask') {
@@ -935,13 +938,13 @@ function getBottomeStyle(tab) {
 }
 
 function handleBottomeStyle(tab) {
-  borderSideStyle.value = getBottomeStyle(tab);
+  borderSideStyle.value = getSelectedStyle(tab);
 }
 
 function handleBottomeStyleTemp(_tab) {
   if (props.hover === false) return;
   const tab = _tab?.target || _tab;
-  borderSideStyleTemp.value = getBottomeStyle(tab);
+  borderSideStyleTemp.value = getSelectedStyle(tab);
 }
 function handleResetBottomeStyleTemp() {
   if (props.hover === false) return;
