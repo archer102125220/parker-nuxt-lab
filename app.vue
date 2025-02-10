@@ -1,7 +1,7 @@
 <template>
-  <div :style="$store.system.loading === true ? 'cursor: wait;' : ''">
+  <div class="root_style" :style="cssVariable">
     <!-- <NuxtPwaManifest /> -->
-    <NuxtPwaAssets /> 
+    <NuxtPwaAssets />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -61,6 +61,16 @@ nuxtApp.hook('page:finish', () => {
 
 const goTopPx = ref(100);
 const loading = computed(() => $store.system.loading);
+const cssVariable = computed(() => {
+  const _cssVariable = {};
+
+  if (loading.value === true) {
+    // _cssVariable['--root_cursor'] = 'wait';
+    _cssVariable['--root_cursor'] = 'url(/img/icon/loadcat.gif), auto';
+  }
+
+  return _cssVariable;
+});
 const messageState = computed(() => $store.system.messageState || {});
 const needGoTop = computed(() => {
   const routeName = getRouteBaseName(route);
@@ -136,7 +146,14 @@ onUnmounted(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
+.root_style {
+  --loading_cursor: var(--root_cursor);
+  cursor: var(--root_cursor);
+  // * {
+  //   cursor: var(--root_cursor);
+  // }
+}
 .page-enter-active,
 .page-leave-active,
 .layout-enter-active,
