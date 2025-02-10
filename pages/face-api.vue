@@ -2,13 +2,15 @@
   <div class="face_api_page">
     <form class="face_api_page-form" @submit.prevent="handleDiscern">
       <ImageUpload
+        ref="imgSelectorEl"
         v-model="identifyImage"
         btn-label="選取辨識照片"
         label="點擊或拖拉識別照片到此區塊"
         mask-label="拖拉識別照片到此區塊"
         @update:model-value="identifyImage = $event"
       />
-      <v-btn color="primary">辨識</v-btn>
+      <v-btn color="primary" type="submit">辨識</v-btn>
+      <p>相似度：{{ similarity }}</p>
     </form>
 
     <div class="face_api_page-row">
@@ -108,6 +110,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 // https://github.com/justadudewhohacks/face-api.js/tree/master
 // https://justadudewhohacks.github.io/face-api.js/docs/globals.html
@@ -115,6 +118,9 @@
 
 const MODELS_PATH = '/models';
 
+const { $store } = useNuxtApp();
+
+const imgSelectorEl = useTemplateRef('imgSelectorEl');
 const videoEl = useTemplateRef('videoEl');
 const canvasVideo = useTemplateRef('canvasVideo');
 const detectionsVideo = useTemplateRef('detectionsVideo');
@@ -139,6 +145,7 @@ const faceBoundingBoxesData = ref(null);
 const faceLandmarksData = ref(null);
 const faceExpressionResultsData = ref(null);
 const identifyImage = ref('');
+const similarity = ref(0);
 
 function handleFrameFromVideo(canvas) {
   const video = videoEl.value;
@@ -186,13 +193,65 @@ function getDisplaySize(outputEl) {
 
 // https://justadudewhohacks.github.io/face-api.js/docs/index.html
 // https://www.cnblogs.com/keatkeat/p/15106226.html
-function handleDiscern() {
-  console.log(identifyImage.value);
+async function handleDiscern() {
+  if (
+    (typeof identifyImage.value !== 'object' &&
+      typeof identifyImage.value !== 'string') ||
+    identifyImage.value === '' ||
+    identifyImage.value === null
+  ) {
+    return;
+  }
+  $store.system.setLoading(true);
+
+  console.log(imgSelectorEl.value?.previewEl);
+  console.log(identifyImage.value, typeof identifyImage.value);
+
+  try {
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODELS_PATH),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_PATH),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_PATH),
+      faceapi.nets.faceExpressionNet.loadFromUri(MODELS_PATH),
+      faceapi.nets.ageGenderNet.loadFromUri(MODELS_PATH)
+    ]);
+
+    const videoDetections = await faceapi
+      .detectAllFaces(videoEl.value, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceDescriptors()
+      .withFaceExpressions()
+      .withAgeAndGender();
+    const imgDetections = await faceapi
+      .detectAllFaces(
+        imgSelectorEl.value?.previewEl,
+        new faceapi.TinyFaceDetectorOptions()
+      )
+      .withFaceLandmarks()
+      .withFaceDescriptors()
+      .withFaceExpressions()
+      .withAgeAndGender();
+
+    const distance = faceapi.euclideanDistance(
+      videoDetections[0].descriptor,
+      imgDetections[0].descriptor
+    );
+
+    console.log({ distance });
+
+    similarity.value = distance;
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log(similarity.value);
+
+  $store.system.setLoading(false);
 }
 
-async function handleDetections(MODELS_PATH) {
+async function handleDetections(modelsPath = MODELS_PATH) {
   if (videoEl.value === null) return;
-  await faceapi.nets.ssdMobilenetv1.load(MODELS_PATH);
+  await faceapi.nets.ssdMobilenetv1.load(modelsPath);
 
   const canvas = detectionsVideo.value;
   handleFrameFromVideo(canvas);
@@ -201,7 +260,10 @@ async function handleDetections(MODELS_PATH) {
     const displaySize = getDisplaySize(videoEl.value);
 
     /* Display detected face bounding boxes */
-    const detections = await faceapi.detectAllFaces(videoEl.value);
+    const detections = await faceapi.detectAllFaces(
+      videoEl.value
+      // new faceapi.TinyFaceDetectorOptions()
+    );
 
     faceapi.matchDimensions(detectionsOutput.value, displaySize);
 
@@ -224,9 +286,9 @@ async function handleDetections(MODELS_PATH) {
   }
 }
 
-async function handleDetectionsWithLandmarks(MODELS_PATH) {
+async function handleDetectionsWithLandmarks(modelsPath = MODELS_PATH) {
   if (videoEl.value === null) return;
-  await faceapi.loadFaceLandmarkModel(MODELS_PATH);
+  await faceapi.loadFaceLandmarkModel(modelsPath);
 
   const canvas = detectionsWithLandmarksVideo.value;
   handleFrameFromVideo(canvas);
@@ -273,10 +335,10 @@ async function handleDetectionsWithLandmarks(MODELS_PATH) {
   }
 }
 
-async function hadnleDetectionsWithExpressions(MODELS_PATH) {
+async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
   if (videoEl.value === null) return;
-  await faceapi.loadFaceLandmarkModel(MODELS_PATH);
-  await faceapi.loadFaceExpressionModel(MODELS_PATH);
+  await faceapi.loadFaceLandmarkModel(modelsPath);
+  await faceapi.loadFaceExpressionModel(modelsPath);
 
   const canvas = detectionsWithExpressionsVideo.value;
   handleFrameFromVideo(canvas);

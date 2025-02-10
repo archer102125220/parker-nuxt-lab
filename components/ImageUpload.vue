@@ -1,7 +1,7 @@
 <template>
   <div
-    v-ripple.value="disable === false"
     class="image_upload"
+    v-ripple.value="disable === false"
     :style="cssVariable"
     @click="handeChange"
     @dragenter.stop.prevent="dragenter"
@@ -29,7 +29,12 @@
 
     <div class="image_upload-preview">
       <slot name="preview" :src="previewImg">
-        <img v-ripple class="image_upload-preview-img" :src="previewImg" />
+        <img
+          ref="previewEl"
+          class="image_upload-preview-img"
+          v-ripple
+          :src="previewImg"
+        />
       </slot>
     </div>
 
@@ -66,6 +71,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change', 'fileTypeError']);
 
+const previewEl = useTemplateRef('previewEl');
 const showMask = ref(false);
 const previewImg = ref('');
 
@@ -191,6 +197,22 @@ function drop(e) {
 
   showMask.value = false;
 }
+
+defineExpose({
+  get previewEl() {
+    return previewEl.value;
+  },
+  get previewImg() {
+    return previewImg.value;
+  },
+  get showMask() {
+    return showMask.value;
+  },
+  src: props.src,
+  maxSize: props.maxSize,
+  disable: props.disable,
+  fileCheck: props.fileCheck
+});
 </script>
 
 <style lang="scss" scoped>
