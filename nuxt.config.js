@@ -171,22 +171,22 @@ export default defineNuxtConfig({
         //     },
         //     plugins: [
         //       {
-        //         handlerWillStart: async (willStartResponse, ...arg) => {
-        //           console.log({ willStartResponse, arg });
+        //         handlerWillStart: async (willStartResponse) => {
+        //           console.log({ willStartResponse });
         //         },
-        //         requestWillFetch: async (willFetchResponse, ...arg) => {
-        //           console.log({ willFetchResponse, arg });
+        //         requestWillFetch: async (willFetchResponse) => {
+        //           console.log({ willFetchResponse });
 
         //           return willFetchResponse.request;
         //         },
         //         // handlerDidRespond 之後還會再執行一次 cacheKeyWillBeUsed
-        //         cacheKeyWillBeUsed: async (cacheKeyResponse, ...arg) => {
-        //           console.log({ cacheKeyResponse, arg });
+        //         cacheKeyWillBeUsed: async (cacheKeyResponse) => {
+        //           console.log({ cacheKeyResponse });
 
         //           return cacheKeyResponse.request;
         //         },
-        //         cachedResponseWillBeUsed: async (response, ...arg) => {
-        //           console.log({ response, arg });
+        //         cachedResponseWillBeUsed: async (response) => {
+        //           console.log({ response });
         //           const { cachedResponse } = response;
 
         //           if (typeof cachedResponse?.clone === 'function') {
@@ -197,8 +197,8 @@ export default defineNuxtConfig({
 
         //           // return response;
         //         },
-        //         fetchDidSucceed: async (fetchResponse, ...arg) => {
-        //           console.log({ fetchResponse, arg });
+        //         fetchDidSucceed: async (fetchResponse) => {
+        //           console.log({ fetchResponse });
         //           const { response } = fetchResponse
 
         //           if (typeof response?.clone === 'function') {
@@ -209,33 +209,33 @@ export default defineNuxtConfig({
 
         //           return response;
         //         },
-        //         handlerWillRespond: async (willResponse, ...arg) => {
-        //           console.log({ willResponse, arg });
+        //         handlerWillRespond: async (willResponse) => {
+        //           console.log({ willResponse });
 
         //           return willResponse.response;
         //         },
-        //         handlerDidRespond: async (didResponse, ...arg) => {
-        //           console.log({ didResponse, arg });
+        //         handlerDidRespond: async (didResponse) => {
+        //           console.log({ didResponse });
         //         },
-        //         cacheWillUpdate: async (cacheWillUpdate, ...arg) => {
-        //           console.log({ cacheWillUpdate, arg });
+        //         cacheWillUpdate: async (cacheWillUpdate) => {
+        //           console.log({ cacheWillUpdate });
 
         //           return cacheWillUpdate.response;
         //         },
-        //         handlerDidComplete: async (didCompleteResponse, ...arg) => {
-        //           console.log({ didCompleteResponse, arg });
+        //         handlerDidComplete: async (didCompleteResponse) => {
+        //           console.log({ didCompleteResponse });
         //         },
 
-        //         cacheDidUpdate: async (cacheDidUpdate, ...arg) => {
-        //           console.log({ cacheDidUpdate, arg });
+        //         cacheDidUpdate: async (cacheDidUpdate) => {
+        //           console.log({ cacheDidUpdate });
 
         //           return cacheDidUpdate.response;
         //         },
-        //         fetchDidFail: async (fetchFailResponse, ...arg) => {
-        //           console.log({ fetchFailResponse, arg });
+        //         fetchDidFail: async (fetchFailResponse) => {
+        //           console.log({ fetchFailResponse });
         //         },
-        //         handlerDidError: async (didErrorResponse, ...arg) => {
-        //           console.log({ didErrorResponse, arg });
+        //         handlerDidError: async (didErrorResponse) => {
+        //           console.log({ didErrorResponse });
         //         },
         //       },
         //     ],
@@ -253,7 +253,21 @@ export default defineNuxtConfig({
             },
             cacheableResponse: {
               statuses: [0, 200]
-            }
+            },
+            plugins: [
+              {
+                cacheKeyWillBeUsed: (cacheKeyResponse) => {
+                  const request = cacheKeyResponse.request;
+                  if (
+                    cacheKeyResponse.mode === 'write' ||
+                    (typeof request?.headers?.get === 'function' && request.headers.get('X-Is-Cacheable') === 'true')
+                  ) {
+
+                    return cacheKeyResponse.request;
+                  }
+                }
+              },
+            ],
           }
         },
         {
