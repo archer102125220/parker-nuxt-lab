@@ -1,9 +1,6 @@
 <template>
   <div class="image_upload_test_page">
-    <ImageUpload
-      v-model="identifyImage"
-      @update:model-value="identifyImage = $event"
-    />
+    <ImageUpload v-model="identifyImage" />
   </div>
 </template>
 

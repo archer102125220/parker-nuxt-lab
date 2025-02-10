@@ -165,7 +165,7 @@ function dragenter() {
 }
 function dragover() {
   if (props.disable === true) return;
-  console.log('dragover');
+  // console.log('dragover');
 }
 function dragleave() {
   if (props.disable === true) return;

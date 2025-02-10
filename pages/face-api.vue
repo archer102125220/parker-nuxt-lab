@@ -7,10 +7,9 @@
         btn-label="選取辨識照片"
         label="點擊或拖拉識別照片到此區塊"
         mask-label="拖拉識別照片到此區塊"
-        @update:model-value="identifyImage = $event"
       />
       <v-btn color="primary" type="submit">辨識</v-btn>
-      <p>相似度：{{ similarity }}</p>
+      <p>近似值：{{ distance }}，{{ distance < 0.6 ? '相同人' : '不同人' }}</p>
     </form>
 
     <div class="face_api_page-row">
@@ -145,7 +144,7 @@ const faceBoundingBoxesData = ref(null);
 const faceLandmarksData = ref(null);
 const faceExpressionResultsData = ref(null);
 const identifyImage = ref('');
-const similarity = ref(0);
+const distance = ref(100);
 
 function handleFrameFromVideo(canvas) {
   const video = videoEl.value;
@@ -213,31 +212,38 @@ async function handleDiscern() {
       faceapi.nets.ageGenderNet.loadFromUri(MODELS_PATH)
     ]);
 
-    const videoDetections = await faceapi
-      .detectAllFaces(videoEl.value, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks()
-      .withFaceDescriptors()
-      .withFaceExpressions()
-      .withAgeAndGender();
-    const imgDetections = await faceapi
-      .detectAllFaces(
-        imgSelectorEl.value?.previewEl,
-        new faceapi.TinyFaceDetectorOptions()
-      )
-      .withFaceLandmarks()
-      .withFaceDescriptors()
-      .withFaceExpressions()
-      .withAgeAndGender();
+    const [videoDetections, imgDetections] = await Promise.all([
+      faceapi
+        .detectAllFaces(videoEl.value, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptors()
+        .withFaceExpressions()
+        .withAgeAndGender(),
+      faceapi
+        .detectAllFaces(
+          imgSelectorEl.value?.previewEl,
+          new faceapi.TinyFaceDetectorOptions()
+        )
+        .withFaceLandmarks()
+        .withFaceDescriptors()
+        .withFaceExpressions()
+        .withAgeAndGender()
+    ]);
+    if (videoDetections === undefined) {
+      throw new Error('video is no faces detected');
+    }
+    if (imgDetections === undefined) {
+      throw new Error('image is no faces detected');
+    }
 
-    const distance = faceapi.euclideanDistance(
+    const _distance = faceapi.euclideanDistance(
       videoDetections?.[0]?.descriptor,
       imgDetections?.[0]?.descriptor
     );
 
-    console.log({ distance });
-
-    similarity.value = distance;
+    distance.value = _distance;
   } catch (error) {
+    distance.value = 100;
     console.error(error);
   }
 
