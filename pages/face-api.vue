@@ -118,7 +118,7 @@
 
 const MODELS_PATH = '/models';
 
-const { $store } = useNuxtApp();
+const system = useSystemStore();
 
 const imgSelectorEl = useTemplateRef('imgSelectorEl');
 const videoEl = useTemplateRef('videoEl');
@@ -202,10 +202,7 @@ async function handleDiscern() {
   ) {
     return;
   }
-  $store.system.setLoading(true);
-
-  console.log(imgSelectorEl.value?.previewEl);
-  console.log(identifyImage.value, typeof identifyImage.value);
+  system.setLoading(true);
 
   try {
     await Promise.all([
@@ -233,8 +230,8 @@ async function handleDiscern() {
       .withAgeAndGender();
 
     const distance = faceapi.euclideanDistance(
-      videoDetections[0].descriptor,
-      imgDetections[0].descriptor
+      videoDetections?.[0]?.descriptor,
+      imgDetections?.[0]?.descriptor
     );
 
     console.log({ distance });
@@ -244,9 +241,7 @@ async function handleDiscern() {
     console.error(error);
   }
 
-  console.log(similarity.value);
-
-  $store.system.setLoading(false);
+  system.setLoading(false);
 }
 
 async function handleDetections(modelsPath = MODELS_PATH) {

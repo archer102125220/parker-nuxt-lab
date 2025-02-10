@@ -208,6 +208,9 @@ defineExpose({
   get showMask() {
     return showMask.value;
   },
+  get modelValue() {
+    return modelValue.value;
+  },
   src: props.src,
   maxSize: props.maxSize,
   disable: props.disable,
