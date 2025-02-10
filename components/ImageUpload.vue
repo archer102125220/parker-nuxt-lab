@@ -95,7 +95,6 @@ watch(
   () => [props.src, modelValue.value],
   ([newSrc, newModelValue]) => {
     const newValue = newSrc || newModelValue;
-    console.log({ newValue });
     if (typeof newValue === 'string' && newValue !== '') {
       previewImg.value = newValue;
     } else if (typeof newValue === 'object' && newValue !== null) {
