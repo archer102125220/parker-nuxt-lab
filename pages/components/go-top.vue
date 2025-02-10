@@ -4,7 +4,11 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+useHead({
+  title: '返回置頂組件測試'
+});
+</script>
 
 <style lang="scss" scoped>
 .go_top_page {

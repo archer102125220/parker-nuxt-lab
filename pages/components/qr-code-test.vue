@@ -11,6 +11,9 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'QRcode測試'
+});
 const qrCodeValue = ref('QRcodeTest');
 </script>
 

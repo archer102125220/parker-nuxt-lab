@@ -20,6 +20,9 @@
 </template>
 
 <script setup>
+useHead({
+  title: '自製組件及第三方整合組件'
+});
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
@@ -35,7 +38,8 @@ const linkList = computed(() => [
   { to: '/components/switch-button', label: 'switch組件測試' },
   { to: '/components/go-top', label: '返回置頂組件測試' },
   { to: '/components/virtual-scroller', label: 'virtual-scroller組件測試' },
-  { to: '/components/enter-label', label: '文字特效測試測試' }
+  { to: '/components/enter-label', label: '文字特效測試' },
+  { to: '/components/image-upload-test', label: '選擇圖片組件測試' }
 ]);
 </script>
 

@@ -2,7 +2,7 @@
   <div
     v-ripple.value="disable === false"
     class="image_upload"
-    :style="{ '--preview_bg_color': previewBgColor }"
+    :style="cssVariable"
     @click="handeChange"
     @dragenter.stop.prevent="dragenter"
     @dragover.stop.prevent="dragover"
@@ -29,12 +29,7 @@
 
     <div class="image_upload-preview">
       <slot name="preview" :src="previewImg">
-        <img
-          v-ripple
-          class="image_upload-preview-img"
-          :src="previewImg"
-          :style="previewImg !== '' ? '--preview_opacity: 1;' : ''"
-        />
+        <img v-ripple class="image_upload-preview-img" :src="previewImg" />
       </slot>
     </div>
 
@@ -73,6 +68,28 @@ const emit = defineEmits(['update:modelValue', 'change', 'fileTypeError']);
 
 const showMask = ref(false);
 const previewImg = ref('');
+
+const cssVariable = computed(() => {
+  const _cssVariable = { '--preview_bg_color': props.previewBgColor };
+
+  if (previewImg.value !== '') {
+    _cssVariable['--preview_opacity'] = 1;
+  } else {
+    _cssVariable['--preview_opacity'] = 0;
+  }
+
+  if (showMask.value === true) {
+    _cssVariable['--mask_opacity'] = 0.8;
+  } else {
+    _cssVariable['--mask_opacity'] = 0;
+  }
+
+  if (props.disable === true) {
+    _cssVariable['--image_upload_cursor'] = 'not-allowed';
+  }
+
+  return _cssVariable;
+});
 
 watch(
   () => [props.src, modelValue.value],
@@ -179,9 +196,6 @@ function drop(e) {
 
 <style lang="scss" scoped>
 .image_upload {
-  --mask_opacity: 0;
-  --preview_opacity: 0;
-
   position: relative;
   width: 100%;
   height: 100%;
@@ -255,6 +269,8 @@ function drop(e) {
     background-color: #fff;
     // opacity: 0.8;
     opacity: var(--mask_opacity);
+
+    cursor: var(--image_upload_cursor);
   }
 }
 </style>

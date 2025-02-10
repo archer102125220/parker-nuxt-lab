@@ -58,6 +58,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: '訊息佇列測試'
+});
+
 const message = ref('');
 const showMessage = ref('');
 

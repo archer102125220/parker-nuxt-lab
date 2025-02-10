@@ -19,6 +19,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'virtual-scroller組件測試'
+});
+
 const itemList = computed(() => {
   return [
     '1',
