@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/getting-started/deployment
+import os from 'os';
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
@@ -14,7 +15,8 @@ import {
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
-const windowsAlias = IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
+const osType = os.type().toLocaleLowerCase();
+const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -182,8 +184,15 @@ export default defineNuxtConfig({
         //         // handlerDidRespond 之後還會再執行一次 cacheKeyWillBeUsed
         //         cacheKeyWillBeUsed: async (cacheKeyResponse) => {
         //           console.log({ cacheKeyResponse });
+        //           const request = cacheKeyResponse.request;
 
-        //           return cacheKeyResponse.request;
+        //           if (
+        //             cacheKeyResponse.mode === 'write' ||
+        //             (typeof request?.headers?.get === 'function' && request.headers.get('X-Is-Cacheable') === 'true')
+        //           ) {
+
+        //             return cacheKeyResponse.request;
+        //           }
         //         },
         //         cachedResponseWillBeUsed: async (response) => {
         //           console.log({ response });

@@ -1,3 +1,7 @@
+:root {
+  --__ripple_color__: rgba(0, 0, 0, 0.3);
+}
+
 .customize_ripple {
   position: relative;
   cursor: pointer;
@@ -9,11 +13,13 @@
     height: 100%;
     top: 0px;
     left: 0px;
+
     &-content {
       position: absolute;
       border-radius: 50%;
       /* To make it round */
-      background-color: rgba(0, 0, 0, 0.3);
+      // background-color: rgba(0, 0, 0, 0.3);
+      background-color: var(--__ripple_color__);
 
       width: 100px;
       height: 100px;

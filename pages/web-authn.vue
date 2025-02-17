@@ -1,6 +1,15 @@
 <template>
   <div class="web_authn_page">
     <h1>原生方式為主，套件用來編碼、解碼的方式實作</h1>
+    <div class="web_authn_page-outbound_link">
+      <p>記錄筆記：</p>
+      <a
+        href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
+        target="_blank"
+      >
+        notion筆記連結
+      </a>
+    </div>
     <div class="web_authn_page-register">
       <form @submit.prevent="handleWebAuthnRegister">
         <p class="web_authn_page-register-title">向伺服器註冊生物辨識資料</p>
@@ -328,6 +337,13 @@ async function handleWebAuthnLogin() {
 
 <style lang="scss" scoped>
 .web_authn_page {
+  &-outbound_link {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
   &-register {
     margin-bottom: 16px;
     &-title {

@@ -1,24 +1,30 @@
 import '@/style/customize-ripple.scss';
 
+// 可以直接傳入boolean來控制是否啟用，也可傳入{ enabled: boolean }的方式來控制，顏色則可透過{ color: string }的方式做客製化
 export default defineNuxtPlugin((nuxtApp) => {
   const customizeRipple = {
     // inserted(el) { // 直接使用vue時使用的掛載生命週期
     //   console.log(el);
     // },
     mounted(el, binding) {  // 使用nuxt時使用的客戶端掛載生命週期
-      let enabledRipple = binding.value;
+      let enabledRipple = binding.value?.enabled || binding.value;
       if (typeof enabledRipple !== 'boolean') {
-        enabledRipple = true
+        enabledRipple = true;
       }
       el.setAttribute('enabled-ripple', enabledRipple);
 
-      function handleRippleStart(e) {
-        const enabledRipple = el.getAttribute('enabled-ripple') === 'true';
+      const color = binding.value?.color;
+      if (typeof color === 'string' && color !== '') {
+        el.style.setProperty('--__ripple_color__', color);
+      }
 
-        if (enabledRipple === false) return;
+      function handleRippleStart(e) {
+        const _enabledRipple = el.getAttribute('enabled-ripple') === 'true';
+
+        if (_enabledRipple === false) return;
         const elementStyle = window.getComputedStyle(el);
         if (elementStyle.position === 'static') {
-          el.classList.add('customize_ripple');  // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
+          el.classList.add('customize_ripple'); // 若綁定的元素上有對className進行判斷調整，則可能會無法將className新增進去
           el.style.position = 'relative';
           el.setAttribute('isSetPosition', true);
         }
@@ -68,11 +74,22 @@ export default defineNuxtPlugin((nuxtApp) => {
       el.addEventListener('pointerdown', handleRippleStart);
     },
     updated(el, binding) {
-      let enabledRipple = binding.value;
+      let enabledRipple = binding.value?.enabled || binding.value;
       if (typeof enabledRipple !== 'boolean') {
-        enabledRipple = true
+        enabledRipple = true;
       }
       el.setAttribute('enabled-ripple', enabledRipple);
+
+      const color = binding.value?.color;
+
+      if (typeof color === 'string' && color !== '') {
+        el.style.setProperty('--__ripple_color__', color);
+      } else {
+        const rippleColor = el.style.getPropertyValue('--__ripple_color__');
+        if (typeof rippleColor === 'string' && rippleColor !== '') {
+          el.style.removeProperty('--__ripple_color__');
+        }
+      }
     },
     // getSSRProps(binding, vnode) { // 使用nuxt時使用的伺服器端掛載生命週期
     //   // you can provide SSR-specific props here

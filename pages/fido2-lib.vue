@@ -1,6 +1,15 @@
 <template>
   <div class="fido2_lib_page">
     <h1>fido2-lib套件的方式為主的方式實作</h1>
+    <div class="fido2_lib_page-outbound_link">
+      <p>記錄筆記：</p>
+      <a
+        href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
+        target="_blank"
+      >
+        notion筆記連結
+      </a>
+    </div>
     <div class="fido2_lib_page-register">
       <form @submit.prevent="handleFido2LibRegister">
         <p class="fido2_lib_page-register-title">向伺服器註冊生物辨識資料</p>
@@ -373,6 +382,13 @@ async function handleFido2LibLogin() {
 
 <style lang="scss" scoped>
 .fido2_lib_page {
+  &-outbound_link {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
   &-register {
     margin-bottom: 16px;
     &-title {
