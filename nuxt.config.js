@@ -117,6 +117,8 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Parker的Nuxt實驗室',
       short_name: 'Nuxt Lab',
+      // lang: 'zh-tw',
+      lang: defaultLang,
       icons: [
         {
           src: '/img/ico/apple-touch-icon.png',
