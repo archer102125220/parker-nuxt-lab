@@ -32,7 +32,8 @@
 const NO_GO_TOP = [];
 
 const nuxtApp = useNuxtApp();
-const { $i18n, $dayjs, $store } = nuxtApp;
+const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
+const i18nLocale = useCookie('___i18n_locale');
 
 const router = useRouter();
 const route = useRoute();
@@ -87,6 +88,8 @@ function resetMessageState() {
 watch(
   () => $i18n.locale.value,
   (newLocale) => {
+    $setLocalLanguage(newLocale);
+
     $dayjs.locale(newLocale.includes('en') ? 'en' : 'zh-tw');
     const _newLocale = newLocale || 'zh';
     useHead({

@@ -18,11 +18,18 @@
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
+const localePath = useLocalePath();
 const linkList = computed(() => [
-  { to: '/css-drawing/triangle-test', label: 'css三角形測試' },
-  { to: '/css-drawing/triangle-full-test', label: 'css三角形滿版測試' },
-  { to: '/css-drawing/triangle-anime-test', label: 'css三角形滿版動畫測試' },
-  { to: '/css-drawing/svg-color-change', label: 'svg替換顏色測試' }
+  { to: localePath('/css-drawing/triangle-test'), label: 'css三角形測試' },
+  {
+    to: localePath('/css-drawing/triangle-full-test'),
+    label: 'css三角形滿版測試'
+  },
+  {
+    to: localePath('/css-drawing/triangle-anime-test'),
+    label: 'css三角形滿版動畫測試'
+  },
+  { to: localePath('/css-drawing/svg-color-change'), label: 'svg替換顏色測試' }
 ]);
 </script>
 

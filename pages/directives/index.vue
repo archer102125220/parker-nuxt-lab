@@ -20,13 +20,14 @@
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
+const localePath = useLocalePath();
 const linkList = computed(() => [
   {
-    to: '/directives/customize-ripple-test',
+    to: localePath('/directives/customize-ripple-test'),
     label: '自製ripple directive測試'
   },
   {
-    to: '/directives/customize-lazyload-test',
+    to: localePath('/directives/customize-lazyload-test'),
     label: '自製lazyload directive測試'
   }
 ]);

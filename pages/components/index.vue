@@ -26,20 +26,30 @@ useHead({
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
+const localePath = useLocalePath();
 const linkList = computed(() => [
-  { to: '/components/tab-test', label: 'Tabs組件測試' },
-  { to: '/components/scroll-fetch-test', label: '下拉重載/無限滾動測試' },
-  { to: '/components/wang-editor-test', label: 'WangEditor（HTML編輯器）測試' },
-  { to: '/components/youtube-test', label: 'Youtube測試' },
-  { to: '/components/swiper-js-test', label: 'SwiperJs測試' },
-  { to: '/components/swiper-test', label: '自製Swiper測試' },
-  { to: '/components/qr-code-test', label: 'QRcode測試' },
-  { to: '/components/slide-in-panel', label: '訊息佇列測試' },
-  { to: '/components/switch-button', label: 'switch組件測試' },
-  { to: '/components/go-top', label: '返回置頂組件測試' },
-  { to: '/components/virtual-scroller', label: 'virtual-scroller組件測試' },
-  { to: '/components/enter-label', label: '文字特效測試' },
-  { to: '/components/image-upload-test', label: '選擇圖片組件測試' }
+  { to: localePath('/components/tab-test'), label: 'Tabs組件測試' },
+  {
+    to: localePath('/components/scroll-fetch-test'),
+    label: '下拉重載/無限滾動測試'
+  },
+  {
+    to: localePath('/components/wang-editor-test'),
+    label: 'WangEditor（HTML編輯器）測試'
+  },
+  { to: localePath('/components/youtube-test'), label: 'Youtube測試' },
+  { to: localePath('/components/swiper-js-test'), label: 'SwiperJs測試' },
+  { to: localePath('/components/swiper-test'), label: '自製Swiper測試' },
+  { to: localePath('/components/qr-code-test'), label: 'QRcode測試' },
+  { to: localePath('/components/slide-in-panel'), label: '訊息佇列測試' },
+  { to: localePath('/components/switch-button'), label: 'switch組件測試' },
+  { to: localePath('/components/go-top'), label: '返回置頂組件測試' },
+  {
+    to: localePath('/components/virtual-scroller'),
+    label: 'virtual-scroller組件測試'
+  },
+  { to: localePath('/components/enter-label'), label: '文字特效測試' },
+  { to: localePath('/components/image-upload-test'), label: '選擇圖片組件測試' }
 ]);
 </script>
 

@@ -32,20 +32,21 @@
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
+const localePath = useLocalePath();
 const router = useRouter();
 const animationInited = ref(false);
 
 const linkList = computed(() => [
-  { to: '/components', label: '自製組件及第三方整合組件' },
-  { to: '/components-test', label: '組件綜合測試' },
-  { to: '/directives', label: '自製vue指令' },
-  { to: '/route', label: 'route相關測試' },
-  { to: '/css-drawing', label: 'css繪圖相關測試' },
-  { to: '/web-authn', label: '生物辨識測試（原生）' },
-  { to: '/fido2-lib', label: '生物辨識測試（fido2-lib）' },
-  { to: '/web-cam', label: 'WebCam測試' },
-  { to: '/face-api', label: 'face-api測試' },
-  { to: '/frontend-api-cach-test', label: '前端api快取測試' }
+  { to: localePath('/components'), label: '自製組件及第三方整合組件' },
+  { to: localePath('/components-test'), label: '組件綜合測試' },
+  { to: localePath('/directives'), label: '自製vue指令' },
+  { to: localePath('/route'), label: 'route相關測試' },
+  { to: localePath('/css-drawing'), label: 'css繪圖相關測試' },
+  { to: localePath('/web-authn'), label: '生物辨識測試（原生）' },
+  { to: localePath('/fido2-lib'), label: '生物辨識測試（fido2-lib）' },
+  { to: localePath('/web-cam'), label: 'WebCam測試' },
+  { to: localePath('/face-api'), label: 'face-api測試' },
+  { to: localePath('/frontend-api-cach-test'), label: '前端api快取測試' }
 ]);
 const cssVariable = computed(() => {
   const _cssVariable = {
@@ -69,7 +70,7 @@ function handleAnimationFinish() {
   setTimeout(
     () =>
       window.requestAnimationFrame(() => {
-        router.replace('/home');
+        router.replace(localePath('/home'));
       }),
     200
   );

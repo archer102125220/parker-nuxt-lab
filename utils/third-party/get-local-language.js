@@ -24,7 +24,7 @@ export function getLocalLanguage(defaultLanguag = defaultLang) {
     default: () => ''
   });
   if (locale !== '') {
-    return locale;
+    return locale.value;
   }
   return defaultLanguag;
 }

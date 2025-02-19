@@ -18,9 +18,13 @@
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 
+const localePath = useLocalePath();
 const linkList = computed(() => [
-  { to: '/route/query-back-test', label: '路由query與上一頁測試' },
-  { to: '/route/params-back-test/0', label: '路由參數與上一頁測試' }
+  { to: localePath('/route/query-back-test'), label: '路由query與上一頁測試' },
+  {
+    to: localePath('/route/params-back-test/0'),
+    label: '路由參數與上一頁測試'
+  }
 ]);
 </script>
 
