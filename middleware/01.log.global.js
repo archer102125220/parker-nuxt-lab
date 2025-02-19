@@ -17,7 +17,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const headersLocale = acceptLanguage?.includes?.('zh-TW') ? 'zh' : 'en';
   const localeCodes = nuxtApp.$i18n?.localeCodes?.value || [];
   const hrefArray = to?.href?.split?.('/');
-  console.log({ hrefArray, localeCodes });
+  // console.log({ hrefArray, localeCodes });
 
   if (
     typeof acceptLanguage === 'string' &&
@@ -29,17 +29,17 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const locale = i18nLocale || headersLocale;
     const localePath = useLocalePath();
     const localeHref = localePath(to.href, locale);
-    console.log({
-      pathname: url.pathname,
-      href: to.href,
-      localeHref,
-      locales: nuxtApp.$i18n?.locales?.value,
-      localeCodes,
-      headersLocale,
-      i18nLocale,
-      cookieLocale: cookieLocale.value,
-      hrefArray
-    });
+    // console.log({
+    //   pathname: url.pathname,
+    //   href: to.href,
+    //   localeHref,
+    //   locales: nuxtApp.$i18n?.locales?.value,
+    //   localeCodes,
+    //   headersLocale,
+    //   i18nLocale,
+    //   cookieLocale: cookieLocale.value,
+    //   hrefArray
+    // });
 
     if (url.pathname !== localeHref) {
       // nuxtApp.$setLocalLanguage(locale);
