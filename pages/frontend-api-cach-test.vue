@@ -1,5 +1,14 @@
 <template>
   <div class="frontend_api_cach_test_page">
+    <div class="frontend_api_cach_test_page-outbound_link">
+      <p>漸進式網頁（Progressive Web Apps，PWA）記錄筆記：</p>
+      <a
+        href="https://valley-hortensia-084.notion.site/Nuxt3-Progressive-Web-Apps-PWA-1906dcd96fa280acaafbeaec0828cfad"
+        target="_blank"
+      >
+        notion筆記連結
+      </a>
+    </div>
     <form
       class="frontend_api_cach_test_page-form"
       @submit.prevent="handleSubmit"
@@ -133,6 +142,13 @@ async function handleGetApi() {
 
 <style lang="scss" scoped>
 .frontend_api_cach_test_page {
+  &-outbound_link {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
   &-form {
     &-query {
     }
