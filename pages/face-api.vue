@@ -235,6 +235,12 @@ async function handleDiscern() {
     if (imgDetections === undefined) {
       throw new Error('image is no faces detected');
     }
+    if (videoDetections?.[0] === undefined) {
+      throw new Error('The video does not have any faces');
+    }
+    if (imgDetections?.[0] === undefined) {
+      throw new Error('The image does not have any faces');
+    }
 
     const _distance = faceapi.euclideanDistance(
       videoDetections?.[0]?.descriptor,

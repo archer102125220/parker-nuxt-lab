@@ -140,7 +140,7 @@ function handleFileReader(e, _file, needAsync = true) {
       return;
     }
     if (needAsync === true) {
-      console.log({ file });
+      // console.log({ file });
       emit('change', file);
       modelValue.value = file;
     }
