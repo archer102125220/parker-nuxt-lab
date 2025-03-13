@@ -9,6 +9,7 @@
     @touchstart="handlePullStart"
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
+    @wheel="handleWheel"
     @scroll="handleScroll"
   >
     <div v-if="refreshDisable === false" class="scroll_fetch-trigger">
@@ -136,7 +137,7 @@ const props = defineProps({
   infinityEnd: { type: Boolean, default: true },
   infinityFetch: { type: Function, default: null }
 });
-const emit = defineEmits(['refresh', 'infinityFetch', 'scroll']);
+const emit = defineEmits(['refresh', 'infinityFetch', 'wheel', 'scroll']);
 
 const scrollFetchRef = ref(null);
 const infinityTriggerRef = ref(null);
@@ -432,6 +433,9 @@ function handleRefreshIcon() {
       isShowRefreshIcon.value = false;
     });
   }
+}
+function handleWheel(e) {
+  emit('wheel', e);
 }
 function handleScroll(e) {
   emit('scroll', e);
