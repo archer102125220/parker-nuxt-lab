@@ -6,6 +6,7 @@
       <del>我也想既優雅又輕鬆愜意的使用套件，但現實不允許</del>
       <span>）</span>
     </div>
+
     <form
       class="slide_in_panel_list_page-content"
       @submit.prevent="handleUpdateShowMessage"
@@ -15,6 +16,15 @@
         label="新增彈跳訊息"
         class="slide_in_panel_list_page-content-message"
         v-model="message"
+      />
+
+      <v-checkbox
+        class="slide_in_panel_list_page-conten-checkbox"
+        label="從左側進入通知訊息"
+        color="primary"
+        hide-details
+        :value="true"
+        v-model="leftEnter"
       />
 
       <div class="slide_in_panel_list_page-content-message-submit">
@@ -47,6 +57,7 @@
               bottom="0px"
               container-position="absolute"
               v-model="showMessage"
+              :left-enter="leftEnter"
             />
           </div>
         </template>
@@ -64,6 +75,7 @@ useHead({
 
 const message = ref('');
 const showMessage = ref('');
+const leftEnter = ref(true);
 
 const tab = ref('');
 const tabList = computed(() => {
