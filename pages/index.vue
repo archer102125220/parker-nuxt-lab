@@ -115,7 +115,8 @@ function handleAnimationFinish() {
     position: absolute;
     // top: 50vh;
     top: 53vh;
-    right: 53vw;
+    // right: 53vw;
+    right: 54vw;
     width: 85px;
 
     // animation: labelAnimation 1s;
