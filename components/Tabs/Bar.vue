@@ -974,6 +974,11 @@ function handleCheckTab(tabListRef) {
       left: tabListRef.offsetLeft,
       behavior: 'smooth'
     });
+  } else if (isNeedScroll.horizontalBufferScroll === true) {
+    tabBarRef.value.scrollTo({
+      left: tabListRef.offsetLeft - tabBarRef.value.clientWidth * 0.8,
+      behavior: 'smooth'
+    });
   }
 }
 
@@ -999,9 +1004,10 @@ function handleIsNeedScroll(tabRef) {
   const tabBarRefClientHeight = _tabBarRef?.clientHeight;
   const tabBarRefTop = tabBarRefBoundingClientRect.top;
 
-  const tabRefRight = boundingClientRect?.x + tabRef?.clientWidth;
-  const tabBarRefClientWidth = _tabBarRef?.clientWidth;
-  const tabBarRefRight = tabBarRefBoundingClientRect.right;
+  const tabRefClientWidth = tabRef?.clientWidth || 0;
+  const tabRefLeft = boundingClientRect?.x + tabRefClientWidth;
+  const tabBarRefClientWidth = tabBarRef?.clientWidth;
+  const tabBarRefLeft = tabBarRefBoundingClientRect.left;
 
   const verticalBufferScroll =
     props.vertical === true &&
@@ -1013,10 +1019,19 @@ function handleIsNeedScroll(tabRef) {
       tabRefTop - tabBarRefTop > tabBarRefClientHeight);
   const horizontalScroll =
     props.vertical === false &&
-    (tabBarRefRight - tabRefRight <= 0 ||
-      tabBarRefRight - tabRefRight > tabBarRefClientWidth);
+    (tabRefLeft - tabBarRefLeft <= 0 ||
+      tabRefLeft - tabBarRefLeft > tabBarRefClientWidth);
+  const horizontalBufferScroll =
+    props.vertical === false &&
+    (tabRefLeft - tabBarRefLeft <= tabRefClientWidth / 2 ||
+      tabRefLeft - tabBarRefLeft > tabBarRefClientWidth + 50);
 
-  return { verticalBufferScroll, verticalScroll, horizontalScroll };
+  return {
+    verticalBufferScroll,
+    verticalScroll,
+    horizontalBufferScroll,
+    horizontalScroll
+  };
 }
 function handleVerticalStartTabBarScroll(e) {
   const eventY =

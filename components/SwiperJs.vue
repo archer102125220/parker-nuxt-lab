@@ -201,6 +201,10 @@ const props = defineProps({
   shouldFillHeight: {
     type: Boolean,
     default: false
+  },
+  swiperHeight: {
+    type: [String, Number],
+    default: ''
   }
 });
 const emit = defineEmits([
@@ -233,17 +237,39 @@ const swiperObj = ref(null);
 const params = ref(null);
 const cssVariable = computed(() => {
   const _cssVariable = {};
+
+  if (typeof props.overflow === 'boolean' && props.overflow === true) {
+    _cssVariable['--content_wrapper_slide_height'] = '100%';
+    _cssVariable['--slide_height'] = '100%';
+    _cssVariable['--slide_overflow_y'] = 'auto';
+    _cssVariable['--slide_overflow_x'] = 'hidden';
+  }
+
   if (
     typeof props.shouldFillHeight === 'boolean' &&
     props.shouldFillHeight === true
   ) {
     _cssVariable['--content_wrapper_slide_height'] = '100%';
+    _cssVariable['--slide_height'] = '100%';
+    _cssVariable['--slide_display'] = 'flex';
+    _cssVariable['--slide_flex_direction'] = 'column';
+    _cssVariable['--center_flex'] = 1;
   }
-  if (typeof props.overflow === 'boolean' && props.overflow === true) {
-    _cssVariable['--content_wrapper_slide_height'] = '100%';
-    _cssVariable['--slide_overflow_y'] = 'auto';
-    _cssVariable['--slide_overflow_x'] = 'hidden';
+
+  if (typeof props.swiperHeight === 'string' && props.swiperHeight !== '') {
+    _cssVariable['--content_wrapper_slide_height'] = props.swiperHeight;
+    _cssVariable['--slide_height'] = props.swiperHeight;
+  } else if (
+    props.swiperHeight !== '' &&
+    isNaN(Number(props.swiperHeight)) === false
+  ) {
+    _cssVariable['--content_wrapper_slide_height'] = `${props.swiperHeight}px`;
+    _cssVariable['--slide_height'] = `${props.swiperHeight}px`;
+  } else {
+    // _cssVariable["--content_wrapper_slide_height"] = "";
+    _cssVariable['--slide_height'] = '';
   }
+
   return _cssVariable;
 });
 
@@ -565,24 +591,32 @@ function slideChangeTransitionEnd(swiper) {
       @extend .swiper_js-prev-btn;
     }
   }
+
   &-content {
     // height: 100%;
     height: var(--content_wrapper_slide_height);
+
     &-wrapper {
       // height: 100%;
       height: var(--content_wrapper_slide_height);
+
       &-slide {
         // height: 100%;
         // overflow-y: auto;
         // overflow-x: hidden;
-        position: relative;
-        height: var(--content_wrapper_slide_height);
-        overflow-y: var(--slide_overflow_y);
-        overflow-x: var(--slide_overflow_x);
+        display: var(--slide_display);
+        flex-direction: var(--slide_flex_direction);
+
+        // height: var(--content_wrapper_slide_height);
+        height: var(--slide_height);
+
         &-center {
           position: relative;
+          flex: var(--center_flex);
           display: flex;
           height: var(--content_wrapper_slide_height);
+          max-height: var(--content_wrapper_slide_height);
+
           &-middle {
             flex: 1;
             position: relative;
