@@ -21,9 +21,9 @@
         ]"
         @click.prevent=""
       >
-        <slot name="container">
+        <slot name="container" :close="handleClose">
           <div class="drawer_root-wrapping-drawer-container">
-            <slot>
+            <slot :close="handleClose">
               <p>抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容</p>
               <p>抽屜內容</p>
               <p>抽屜內容</p>
