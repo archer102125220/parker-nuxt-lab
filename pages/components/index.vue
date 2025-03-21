@@ -49,7 +49,9 @@ const linkList = computed(() => [
     label: 'virtual-scroller組件測試'
   },
   { to: localePath('/components/enter-label'), label: '文字特效測試' },
-  { to: localePath('/components/image-upload-test'), label: '選擇圖片組件測試' }
+  { to: localePath('/components/image-upload-test'), label: '選擇圖片組件測試' },
+  { to: localePath('/components/dialog'), label: '彈窗組件' },
+  { to: localePath('/components/drawer'), label: '抽屜收展組件' }
 ]);
 </script>
 
