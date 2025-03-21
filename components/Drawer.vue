@@ -7,7 +7,20 @@
       @transitionend="handleTransitionEnd"
     >
       <div class="drawer_root-wrapping-mask" />
-      <div class="drawer_root-wrapping-drawer" @click.prevent="">
+      <div
+        :class="[
+          'drawer_root-wrapping-drawer',
+          {
+            'drawer_root-wrapping-drawer_anchor_top': computedAnchor === 'top',
+            'drawer_root-wrapping-drawer_anchor_bottom':
+              computedAnchor === 'bottom',
+            'drawer_root-wrapping-drawer_anchor_right':
+              computedAnchor === 'right',
+            'drawer_root-wrapping-drawer_anchor_left': computedAnchor === 'left'
+          }
+        ]"
+        @click.prevent=""
+      >
         <slot name="container">
           <div class="drawer_root-wrapping-drawer-container">
             <slot>
@@ -44,6 +57,10 @@ const emits = defineEmits(['update:modelValue', 'change', 'close']);
 const opacityTrigger = ref(false);
 const animationReverse = ref(false);
 
+const computedAnchor = computed(() => {
+  const anchor = typeof props.anchor === 'string' ? props.anchor : '';
+  return anchor.toLocaleLowerCase().trim() || 'left';
+});
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
@@ -102,42 +119,33 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_z_index'] = props.zIndex;
   }
 
-  const anchor = typeof props.anchor === 'string' ? props.anchor : '';
-  const _anchor = anchor.toLocaleLowerCase().trim();
-
-  let drawerAnimation = '';
-  if (_anchor === 'right') {
+  if (computedAnchor.value === 'right') {
     _cssVariable['--drawer_top'] = '0px';
     _cssVariable['--drawer_bottom'] = '0px';
     _cssVariable['--drawer_right'] = '0px';
-    drawerAnimation = 'drawer_content_anchor_right';
-  } else if (_anchor === 'top') {
+  } else if (computedAnchor.value === 'top') {
     _cssVariable['--drawer_top'] = '0px';
     _cssVariable['--drawer_left'] = '0px';
     _cssVariable['--drawer_right'] = '0px';
-    drawerAnimation = 'drawer_content_anchor_top';
-  } else if (_anchor === 'bottom') {
+  } else if (computedAnchor.value === 'bottom') {
     _cssVariable['--drawer_bottom'] = '0px';
     _cssVariable['--drawer_left'] = '0px';
     _cssVariable['--drawer_right'] = '0px';
-    drawerAnimation = 'drawer_content_anchor_bottom';
   } else {
     // _anchor === 'left'
     _cssVariable['--drawer_top'] = '0px';
     _cssVariable['--drawer_bottom'] = '0px';
     _cssVariable['--drawer_left'] = '0px';
-    drawerAnimation = 'drawer_content_anchor_left';
   }
 
-  if (typeof drawerAnimation === 'string' && drawerAnimation !== '') {
-    if (animationReverse.value === true) {
-      drawerAnimation = drawerAnimation + ' 0.6s ease-out infinite reverse';
-    } else {
-      drawerAnimation = drawerAnimation + ' 0.3s';
-    }
-    // drawerAnimation = drawerAnimation + ' ease 1 reverse';
-
-    _cssVariable['--drawer_animation'] = drawerAnimation;
+  if (animationReverse.value === true) {
+    _cssVariable['--drawer_animation_duration'] = '0.6s';
+    _cssVariable['--drawer_animation_count'] = 'infinite';
+    _cssVariable['--drawer_animation_direction'] = 'reverse';
+  } else {
+    _cssVariable['--drawer_animation_duration'] = '0.3s';
+    _cssVariable['--drawer_animation_count'] = '1';
+    _cssVariable['--drawer_animation_direction'] = 'normal';
   }
 
   return _cssVariable;
@@ -237,6 +245,8 @@ function handleClose() {
 
     opacity: var(--drawer_opacity);
 
+    transition: opacity 0.2s;
+
     &-mask {
       position: var(--drawer_mask_position, absolute);
       top: 0px;
@@ -252,6 +262,18 @@ function handleClose() {
       animation-duration: 0.3s;
     }
 
+    &-drawer_anchor_top {
+      animation-name: drawer_content_anchor_top;
+    }
+    &-drawer_anchor_bottom {
+      animation-name: drawer_content_anchor_bottom;
+    }
+    &-drawer_anchor_left {
+      animation-name: drawer_content_anchor_left;
+    }
+    &-drawer_anchor_right {
+      animation-name: drawer_content_anchor_right;
+    }
     &-drawer {
       position: var(--drawer_position, absolute);
       top: var(--drawer_top);
@@ -260,10 +282,10 @@ function handleClose() {
       left: var(--drawer_left);
       z-index: var(--drawer_z_index, 2);
 
-      // animation-name: var(--drawer_animation);
-      // animation-duration: 0.3s;
-      // animation-direction: var(--drawer_animation_direction);
-      animation: var(--drawer_animation);
+      // animation: var(--drawer_animation);
+      animation-duration: var(--drawer_animation_duration);
+      animation-iteration-count: var(--drawer_animation_count);
+      animation-direction: var(--drawer_animation_direction);
 
       &-container {
         width: var(--drawer_width);
