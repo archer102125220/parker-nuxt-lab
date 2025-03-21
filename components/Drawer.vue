@@ -10,17 +10,19 @@
       <div class="drawer_root-wrapping-drawer" @click.prevent="">
         <slot name="container">
           <div class="drawer_root-wrapping-drawer-container">
-            <p>抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
-            <p>抽屜內容</p>
+            <slot>
+              <p>抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+            </slot>
           </div>
         </slot>
       </div>
