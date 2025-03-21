@@ -103,7 +103,7 @@ const cssVariable = computed(() => {
   }
 
   const anchor = typeof props.anchor === 'string' ? props.anchor : '';
-  const _anchor = anchor.toLocaleLowerCase();
+  const _anchor = anchor.toLocaleLowerCase().trim();
 
   let drawerAnimation = '';
   if (_anchor === 'right') {
