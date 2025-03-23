@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const f2l = new Fido2Lib({
     timeout: 60000,
-    rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'nuxt-lab.vercel.app',
+    rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'parker-nuxt-lab.vercel.app',
     rpName: "Nuxt Lab",
     // rpIcon: "https://example.com/logo.png",
     challengeSize: 128,
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
   // 驗證用物件，大多數資料由後端寫死或透過env做設定，type註冊時固定為webauthn.create
   const expected = {
     type: 'webauthn.create',
-    origin: process.env.NODE_ENV === 'development' ? 'https://localhost:3000' : 'https://nuxt-lab.vercel.app',
+    origin: process.env.NODE_ENV === 'development' ? 'https://localhost:3000' : 'https://parker-nuxt-lab.vercel.app',
     challenge: challengeString,
     // https://webauthn-open-source.github.io/fido2-lib/Fido2Lib.html#attestationResultＦ
     factor: 'first'

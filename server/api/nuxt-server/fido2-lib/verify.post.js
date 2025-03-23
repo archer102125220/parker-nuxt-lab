@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   const f2l = new Fido2Lib({
     timeout: 60000,
     // rpId: "example.com",
-    rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'nuxt-lab.vercel.app',
+    rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'parker-nuxt-lab.vercel.app',
     rpName: "Nuxt Lab",
     // rpIcon: "https://example.com/logo.png",
     challengeSize: 128,
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
   // type登入時固定為webauthn.get
   const expected = {
     type: 'webauthn.get',
-    origin: process.env.NODE_ENV === 'development' ? 'https://localhost:3000' : 'https://nuxt-lab.vercel.app',
+    origin: process.env.NODE_ENV === 'development' ? 'https://localhost:3000' : 'https://parker-nuxt-lab.vercel.app',
     // https://webauthn-open-source.github.io/fido2-lib/Fido2Lib.html#assertionResult
     factor: 'second',
     challenge: challengeString,
