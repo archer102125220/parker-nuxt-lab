@@ -2,8 +2,13 @@
   <div class="drawer_root" :style="cssVariable">
     <slot
       name="openBtn"
-      :close="handleClose"
       :open="handleOpen"
+      :value="modelValue"
+      :anchor="anchor"
+    />
+    <slot
+      name="closeBtn"
+      :close="handleClose"
       :value="modelValue"
       :anchor="anchor"
     />
@@ -14,7 +19,7 @@
       @click="handleClose"
       @transitionend="handleTransitionEnd"
     >
-      <div class="drawer_root-wrapping-mask" />
+      <div v-if="hasMask === true" class="drawer_root-wrapping-mask" />
       <div
         :class="[
           'drawer_root-wrapping-drawer',
@@ -58,6 +63,7 @@ const props = defineProps({
   rootPosition: { type: String, default: null },
   wrappingPosition: { type: String, default: 'fixed' },
   position: { type: String, default: 'absolute' },
+  hasMask: { type: Boolean, default: true },
   maskPosition: { type: String, default: 'absolute' }
 });
 const emits = defineEmits(['update:modelValue', 'change', 'close', 'open']);
@@ -88,7 +94,11 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_wrapping_position'] = props.wrappingPosition;
   }
 
-  if (typeof props.maskPosition === 'string' && props.maskPosition !== '') {
+  if (
+    props.hasMask === true &&
+    typeof props.maskPosition === 'string' &&
+    props.maskPosition !== ''
+  ) {
     _cssVariable['--drawer_mask_position'] = props.maskPosition;
   }
 
