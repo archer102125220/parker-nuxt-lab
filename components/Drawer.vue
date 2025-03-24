@@ -62,9 +62,15 @@ const props = defineProps({
   anchor: { type: String, default: 'left' },
   rootPosition: { type: String, default: null },
   wrappingPosition: { type: String, default: 'fixed' },
-  position: { type: String, default: 'absolute' },
   hasMask: { type: Boolean, default: true },
-  maskPosition: { type: String, default: 'absolute' }
+  maskPosition: { type: String, default: 'absolute' },
+  position: { type: String, default: 'absolute' },
+  width: { type: [Number, String], default: null },
+  minWidth: { type: [Number, String], default: null },
+  maxWidth: { type: [Number, String], default: null },
+  height: { type: [Number, String], default: null },
+  minHeight: { type: [Number, String], default: null },
+  maxHeight: { type: [Number, String], default: null }
 });
 const emits = defineEmits(['update:modelValue', 'change', 'close', 'open']);
 
@@ -106,6 +112,13 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_position'] = props.position;
   }
 
+  if (
+    typeof props.zIndex === 'number' ||
+    (typeof props.zIndex === 'string' && props.zIndex !== '')
+  ) {
+    _cssVariable['--drawer_z_index'] = props.zIndex;
+  }
+
   if (typeof props.width === 'number') {
     _cssVariable['--drawer_width'] = `${props.width}px`;
   } else if (typeof props.width === 'string' && props.width !== '') {
@@ -118,47 +131,85 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_height'] = props.height;
   }
 
+  let containerMinWidth = '';
+  let containerMaxWidth = '';
+  let containerMinHeight = '';
+  let containerMaxHeight = '';
   if (typeof props.minWidth === 'number') {
-    _cssVariable['--drawer_min_width'] = `${props.minWidth}px`;
+    containerMinWidth = `${props.minWidth}px`;
   } else if (typeof props.minWidth === 'string' && props.minWidth !== '') {
-    _cssVariable['--drawer_min_width'] = props.minWidth;
+    containerMinWidth = props.minWidth;
   }
-
-  if (typeof props.minHeight === 'number') {
-    _cssVariable['--drawer_min_height'] = `${props.minHeight}px`;
-  } else if (typeof props.minHeight === 'string' && props.minHeight !== '') {
-    _cssVariable['--drawer_min_height'] = props.minHeight;
+  if (typeof props.maxWidth === 'number') {
+    containerMaxWidth = `${props.minWidth}px`;
+  } else if (typeof props.maxWidth === 'string' && props.maxWidth !== '') {
+    containerMaxWidth = props.maxWidth;
   }
-
-  if (
-    typeof props.zIndex === 'number' ||
-    (typeof props.zIndex === 'string' && props.zIndex !== '')
-  ) {
-    _cssVariable['--drawer_z_index'] = props.zIndex;
+  if (typeof props.maxHeight === 'number') {
+    containerMaxHeight = `${props.maxHeight}px`;
+  } else if (typeof props.maxHeight === 'string' && props.maxHeight !== '') {
+    containerMaxHeight = props.maxHeight;
   }
 
   if (computedAnchor.value === 'right') {
     _cssVariable['--drawer_top'] = '0px';
     _cssVariable['--drawer_bottom'] = '0px';
     _cssVariable['--drawer_right'] = '0px';
+    if (containerMaxWidth === '') {
+      containerMaxWidth = '90%';
+    }
+    if (containerMinHeight === '') {
+      containerMinHeight = '100%';
+    }
   } else if (computedAnchor.value === 'top') {
     _cssVariable['--drawer_top'] = '0px';
     _cssVariable['--drawer_left'] = '0px';
     _cssVariable['--drawer_right'] = '0px';
+    if (containerMaxHeight === '') {
+      containerMaxHeight = '90%';
+    }
+    if (containerMinWidth === '') {
+      containerMinWidth = '100%';
+    }
   } else if (computedAnchor.value === 'bottom') {
     _cssVariable['--drawer_bottom'] = '0px';
     _cssVariable['--drawer_left'] = '0px';
     _cssVariable['--drawer_right'] = '0px';
+    if (containerMaxHeight === '') {
+      containerMaxHeight = '90%';
+    }
+    if (containerMinWidth === '') {
+      containerMinWidth = '100%';
+    }
   } else {
-    // _anchor === 'left'
+    // computedAnchor.value === 'left'
     _cssVariable['--drawer_top'] = '0px';
     _cssVariable['--drawer_bottom'] = '0px';
     _cssVariable['--drawer_left'] = '0px';
+    if (containerMaxWidth === '') {
+      containerMaxWidth = '90%';
+    }
+    if (containerMinHeight === '') {
+      containerMinHeight = '100%';
+    }
+  }
+
+  if (containerMinWidth !== '') {
+    _cssVariable['--drawer_min_width'] = containerMinWidth;
+  }
+  if (containerMinHeight !== '') {
+    _cssVariable['--drawer_min_height'] = containerMinHeight;
+  }
+  if (containerMaxWidth !== '') {
+    _cssVariable['--drawer_max_width'] = containerMaxWidth;
+  }
+  if (containerMaxHeight !== '') {
+    _cssVariable['--drawer_max_height'] = containerMaxHeight;
   }
 
   if (animationReverse.value === true) {
     _cssVariable['--drawer_animation_duration'] = '0.6s';
-    _cssVariable['--drawer_animation_count'] = 'infinite';
+    _cssVariable['--drawer_animation_count'] = '2';
     _cssVariable['--drawer_animation_direction'] = 'reverse';
   } else {
     _cssVariable['--drawer_animation_duration'] = '0.3s';
@@ -203,19 +254,19 @@ function handleTransitionEnd() {
 }
 
 function handleOpen() {
+  emits('open');
   opacityTrigger.value = true;
   animationReverse.value = false;
-  emits('open');
 }
 
 function handleClose() {
+  emits('close');
   opacityTrigger.value = false;
   animationReverse.value = true;
-  emits('close');
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @keyframes drawer_open {
   from {
     opacity: 0;
@@ -226,7 +277,7 @@ function handleClose() {
 }
 @keyframes drawer_content_anchor_top {
   from {
-    transform: translate(0px, -100vh);
+    transform: translate(0px, -200vh);
   }
   to {
     transform: translate(0px, 0px);
@@ -234,7 +285,7 @@ function handleClose() {
 }
 @keyframes drawer_content_anchor_bottom {
   from {
-    transform: translate(0px, 100vh);
+    transform: translate(0px, 200vh);
   }
   to {
     transform: translate(0px, 0px);
@@ -242,7 +293,7 @@ function handleClose() {
 }
 @keyframes drawer_content_anchor_left {
   from {
-    transform: translate(-100vh, 0px);
+    transform: translate(-200vh, 0px);
   }
   to {
     transform: translate(0px, 0px);
@@ -250,7 +301,7 @@ function handleClose() {
 }
 @keyframes drawer_content_anchor_right {
   from {
-    transform: translate(100vh, 0px);
+    transform: translate(200vh, 0px);
   }
   to {
     transform: translate(0px, 0px);
@@ -306,18 +357,21 @@ function handleClose() {
       left: var(--drawer_left);
       z-index: var(--drawer_z_index, 2);
 
+      max-width: var(--drawer_max_width, 100vw);
+      max-height: var(--drawer_max_height, 100vh);
+
       // animation: var(--drawer_animation);
+      animation-direction: var(--drawer_animation_direction);
       animation-duration: var(--drawer_animation_duration);
       animation-iteration-count: var(--drawer_animation_count);
-      animation-direction: var(--drawer_animation_direction);
 
       &-container {
         width: var(--drawer_width);
         height: var(--drawer_height);
         min-width: var(--drawer_min_width);
         min-height: var(--drawer_min_height);
-        max-width: 100vw;
-        max-height: 100vh;
+        max-width: 100%;
+        max-height: 100%;
 
         overflow: auto;
         background-color: #fff;
