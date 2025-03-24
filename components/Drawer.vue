@@ -1,5 +1,13 @@
 <template>
   <div class="drawer_root" :style="cssVariable">
+    <slot
+      name="openBtn"
+      :close="handleClose"
+      :open="handleOpen"
+      :value="modelValue"
+      :anchor="anchor"
+    />
+
     <div
       v-if="modelValue === true"
       class="drawer_root-wrapping"
@@ -19,7 +27,7 @@
             'drawer_root-wrapping-drawer_anchor_left': computedAnchor === 'left'
           }
         ]"
-        @click.prevent=""
+        @click.stop=""
       >
         <slot name="container" :close="handleClose">
           <div class="drawer_root-wrapping-drawer-container">
@@ -52,7 +60,7 @@ const props = defineProps({
   position: { type: String, default: 'absolute' },
   maskPosition: { type: String, default: 'absolute' }
 });
-const emits = defineEmits(['update:modelValue', 'change', 'close']);
+const emits = defineEmits(['update:modelValue', 'change', 'close', 'open']);
 
 const opacityTrigger = ref(false);
 const animationReverse = ref(false);
@@ -182,6 +190,12 @@ function handleTransitionEnd() {
     emits('change', false);
     emits('update:modelValue', false);
   }
+}
+
+function handleOpen() {
+  opacityTrigger.value = true;
+  animationReverse.value = false;
+  emits('open');
 }
 
 function handleClose() {
