@@ -1006,7 +1006,7 @@ function handleIsNeedScroll(tabRef) {
 
   const tabRefClientWidth = tabRef?.clientWidth || 0;
   const tabRefLeft = boundingClientRect?.x + tabRefClientWidth;
-  const tabBarRefClientWidth = tabBarRef?.clientWidth;
+  const tabBarRefClientWidth = _tabBarRef?.clientWidth;
   const tabBarRefLeft = tabBarRefBoundingClientRect.left;
 
   const verticalBufferScroll =
