@@ -22,6 +22,11 @@ const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./',
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: IS_DEV },
+  routeRules: {
+    '/': { isr: true },
+    '/**': { isr: 60 * 60 * 24 },
+    // '/admin/**': { ssr: false }
+  },
   alias: {
     ...windowsAlias
   },
