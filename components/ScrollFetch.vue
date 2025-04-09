@@ -163,6 +163,10 @@ const parentScrollIsTop = ref(false);
 const parentIsScrollIng = ref(false);
 const removeParentScrollEnd = ref(() => {});
 
+const windowScrollIsTop = ref(false);
+const windowIsScrollIng = ref(false);
+const removeWindowScrollEnd = ref(() => {});
+
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
@@ -229,10 +233,20 @@ watch(
 );
 
 onMounted(() => {
+  if (
+    typeof scrollFetchRef.value?.parentElement?.addEventListener === 'function'
+  ) {
+    scrollFetchRef.value.parentElement.addEventListener('scroll', parentScroll);
+    removeParentScrollEnd.value = $polyfillScrollEnd(
+      scrollFetchRef.value.parentElement,
+      parentScrollEnd
+    );
+  }
+
   window.addEventListener('contextmenu', handlePullEnd);
   window.addEventListener('scroll', windowScroll);
 
-  removeParentScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
+  removeWindowScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
 
   observer.value = new IntersectionObserver((entries) => {
     if (
@@ -252,8 +266,8 @@ onUnmounted(() => {
   window.removeEventListener('contextmenu', handlePullEnd);
   window.removeEventListener('scroll', windowScroll);
 
-  if (typeof removeParentScrollEnd.value === 'function') {
-    removeParentScrollEnd.value();
+  if (typeof removeWindowScrollEnd.value === 'function') {
+    removeWindowScrollEnd.value();
   }
 
   if (
@@ -282,6 +296,7 @@ async function handleInfinityFetch() {
 
 function handlePullStart(e) {
   if (
+    (windowIsScrollIng.value === true && windowScrollIsTop.value === false) ||
     (parentIsScrollIng.value === true && parentScrollIsTop.value === false) ||
     props.refreshDisable === true ||
     infinityLoading.value === true ||
@@ -314,13 +329,16 @@ function handlePullStart(e) {
     e.offsetY;
 }
 function handlePulling(e) {
-  if (parentIsScrollIng.value === true && parentScrollIsTop.value === false) {
+  if (
+    (parentIsScrollIng.value === true && parentScrollIsTop.value === false) ||
+    (windowIsScrollIng.value === true && windowScrollIsTop.value === false)
+  ) {
     moveDistance.value = 20;
     handlePullEnd(e);
   } else if (
     isPullStart.value === false &&
-    parentIsScrollIng.value === true &&
-    parentScrollIsTop.value === true
+    ((parentIsScrollIng.value === true && parentScrollIsTop.value === true) ||
+      (windowIsScrollIng.value === true && windowScrollIsTop.value === true))
   ) {
     handlePullStart(e);
   }
@@ -440,30 +458,52 @@ function handleWheel(e) {
 function handleScroll(e) {
   emit('scroll', e);
 }
-function windowScroll(e) {
-  if (e.target === scrollFetchRef.value) {
-    parentScrollIsTop.value = false;
-    parentIsScrollIng.value = false;
+function parentScroll(e) {
+  if (e.target === scrollFetchRef.value || e.target === window) {
+    if (e.target === scrollFetchRef.value) {
+      parentScrollIsTop.value = false;
+      parentIsScrollIng.value = false;
+    }
     return;
   }
 
   parentIsScrollIng.value = true;
 
-  const scrollElement = e.target?.body || e.target?.document?.body || e.target;
-  const scrollElementBoundingClientReact =
-    scrollElement?.getBoundingClientRect?.();
-
-  parentScrollIsTop.value = scrollElementBoundingClientReact?.y === 0;
+  parentScrollIsTop.value = scrollFetchRef.value?.parentElement?.scrollTop <= 0;
 }
-function windowScrollEnd(e) {
-  // parentScrollIsTop.value = false;
+function parentScrollEnd(e) {
+  if (e.target === scrollFetchRef.value || e.target === window) {
+    return;
+  }
+
   parentIsScrollIng.value = false;
 
+  parentScrollIsTop.value = scrollFetchRef.value?.parentElement.scrollTop <= 0;
+}
+function windowScroll(e) {
+  if (e.target === scrollFetchRef.value) {
+    windowScrollIsTop.value = false;
+    windowIsScrollIng.value = false;
+    return;
+  }
+
+  windowIsScrollIng.value = true;
+
+  const scrollTriggerElement =
+    e.target?.body || e.target?.document?.body || e.target;
+  const scrollTriggerElementBoundingClientReact =
+    scrollTriggerElement?.getBoundingClientRect?.();
+
+  windowScrollIsTop.value = scrollTriggerElementBoundingClientReact?.y <= 0;
+}
+function windowScrollEnd(e) {
+  windowIsScrollIng.value = false;
+
   const scrollElement = e.target?.body || e.target?.document?.body || e.target;
   const scrollElementBoundingClientReact =
     scrollElement?.getBoundingClientRect?.();
 
-  parentScrollIsTop.value = scrollElementBoundingClientReact?.y === 0;
+  windowScrollIsTop.value = scrollElementBoundingClientReact?.y <= 0;
 }
 </script>
 
