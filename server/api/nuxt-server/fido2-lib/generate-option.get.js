@@ -30,6 +30,11 @@ export default defineEventHandler(async (event) => {
     output = {
       ...publicKeyCredentialCreationOptions,
       challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
+      user: {
+        id: query.userId,
+        name: query.userName,
+        displayName: query.userDisplayName
+      }
     };
   } else {
     // let publicKeyCredentialCreationOptions = {};
@@ -56,11 +61,11 @@ export default defineEventHandler(async (event) => {
     output = {
       ...publicKeyCredentialCreationOptions,
       challenge: base64Js.fromUint8Array(publicKeyCredentialCreationOptions.challenge, true),
-      user: {
-        id: query.userId,
-        name: query.userName,
-        displayName: query.userDisplayName
-      }
+      // user: {
+      //   id: query.userId,
+      //   name: query.userName,
+      //   displayName: query.userDisplayName
+      // }
     };
   }
 
