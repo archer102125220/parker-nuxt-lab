@@ -22,16 +22,37 @@ const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./',
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: IS_DEV },
-  // routeRules: {
-  //   // '/': { isr: true },
-  //   // '/en': { isr: true },
-  //   // '/': { prerender: true },
-  //   // '/en': { prerender: true },
-  //   // '/components/**': { prerender: true },
-  //   // '/components/**': { isr: true },
-  //   '/**': { prerender: true, isr: 60 * 60 * 24 },
-  //   // '/admin/**': { ssr: false }
-  // },
+  routeRules: {
+    // '/': { isr: true },
+    // '/en': { isr: true },
+    // '/': { prerender: true },
+    // '/en': { prerender: true },
+    // '/components/**': { prerender: true },
+    // '/components/**': { isr: true },
+
+    // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
+    '/**': { prerender: true },
+    '/': { isr: true },
+    '/en': { isr: true },
+    '/en/**': { isr: true },
+    '/components': { isr: true },
+    '/components/**': { isr: true },
+    '/directives': { isr: true },
+    '/directives/**': { isr: true },
+    '/css-drawing': { isr: true },
+    '/css-drawing/**': { isr: true },
+    '/route': { isr: true },
+    '/route/**': { isr: true },
+    '/components-test': { isr: true },
+    '/face-api': { isr: true },
+    '/fido2-lib': { isr: true },
+    '/frontend-api-cach-test': { isr: true },
+    '/home': { isr: true },
+    '/web-authn': { isr: true },
+    '/web-cam': { isr: true },
+
+    // '/admin/**': { ssr: false }
+  },
   alias: {
     ...windowsAlias
   },
