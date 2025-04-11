@@ -114,7 +114,7 @@ function handleAnimationFinish() {
   &-left_label {
     position: absolute;
     // top: 50vh;
-    top: 53vh;
+    top: 53dvh;
     // right: 53vw;
     right: 54vw;
     width: 85px;
@@ -123,6 +123,7 @@ function handleAnimationFinish() {
     animation: var(--label_animation);
     opacity: var(--label_opacity, 0);
     @include mobile {
+      top: 49dvh;
       right: 52vw;
     }
   }
