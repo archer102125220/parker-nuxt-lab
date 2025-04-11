@@ -9,6 +9,8 @@ import { Fido2Lib } from 'fido2-lib';
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
+  console.log({ query })
+
   const f2l = new Fido2Lib({
     timeout: 60000,
     rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'parker-nuxt-lab.vercel.app',
