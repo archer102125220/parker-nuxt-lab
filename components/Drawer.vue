@@ -365,6 +365,8 @@ function handleClose() {
       animation-duration: var(--drawer_animation_duration);
       animation-iteration-count: var(--drawer_animation_count);
 
+      overflow: auto;
+
       &-container {
         width: var(--drawer_width);
         height: var(--drawer_height);
