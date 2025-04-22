@@ -19,6 +19,7 @@ const nuxtApp = useNuxtApp();
 
 const localePath = useLocalePath();
 const linkList = computed(() => [
+  { to: localePath('/about'), label: '關於本站' },
   { to: localePath('/components'), label: '自製組件及第三方整合組件' },
   { to: localePath('/components-test'), label: '組件綜合測試' },
   { to: localePath('/directives'), label: '自製vue指令' },
