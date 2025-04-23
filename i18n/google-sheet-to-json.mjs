@@ -38,13 +38,13 @@ const sheetsToExtract = [
 async function googleSheetToJson() {
   const en = {
     system: {
-      titleTemplate: 'Nuxt lab'
+      titleTemplate: "Parker's Nuxt lab"
     },
     $vuetify: vuetifyEn,
   };
   const zhTw = {
     system: {
-      titleTemplate: 'Nuxt 實驗室'
+      titleTemplate: 'Parker 的 Nuxt 實驗室'
     },
     $vuetify: vuetifyZhHant,
   };
