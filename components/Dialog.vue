@@ -2,11 +2,19 @@
   <div class="dialog_root" :style="cssVariable">
     <div
       v-if="modelValue === true"
-      class="dialog_root-dialog"
+      :class="[
+        'dialog_root-dialog',
+        { 'dialog_root-dialog_animation_transition': hasAnimation === true }
+      ]"
       @click.self="handleClose"
       @transitionend="handleTransitionEnd"
     >
-      <div class="dialog_root-dialog-center">
+      <div
+        :class="[
+          'dialog_root-dialog-center',
+          { 'dialog_root-dialog-center_animation': hasAnimation === true }
+        ]"
+      >
         <slot
           name="container"
           :is-show="modelValue"
@@ -81,6 +89,7 @@
 <script setup>
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
+  hasAnimation: { type: Boolean, default: true },
   position: { type: String, default: 'fixed' },
   rootPosition: { type: String, default: null },
   width: { type: [Number, String], default: null },
@@ -223,16 +232,10 @@ function handleClose() {
 
     opacity: var(--dialog_opacity);
 
-    transition: opacity 0.15s;
-
-    animation-name: dialog_open;
-    animation-duration: 0.3s;
+    transition: opacity 0.01s;
 
     &-center {
       margin: auto;
-
-      animation-name: dialog_content;
-      animation-duration: 0.3s;
 
       &-container {
         display: flex;
@@ -292,6 +295,18 @@ function handleClose() {
         }
       }
     }
+
+    &-center_animation {
+      animation-name: dialog_content;
+      animation-duration: 0.3s;
+    }
+  }
+
+  &-dialog_animation_transition {
+    transition: opacity 0.15s;
+
+    animation-name: dialog_open;
+    animation-duration: 0.3s;
   }
 }
 </style>

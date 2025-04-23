@@ -15,21 +15,32 @@
 
     <div
       v-if="modelValue === true"
-      class="drawer_root-wrapping"
+      :class="[
+        'drawer_root-wrapping',
+        { 'drawer_root-wrapping_animation_transition': hasAnimation === true }
+      ]"
       @click="handleClose"
       @transitionend="handleTransitionEnd"
     >
-      <div v-if="hasMask === true" class="drawer_root-wrapping-mask" />
+      <div
+        v-if="hasMask === true"
+        :class="[
+          'drawer_root-wrapping-mask',
+          { 'drawer_root-wrapping-mask_animation': hasAnimation === true }
+        ]"
+      />
       <div
         :class="[
           'drawer_root-wrapping-drawer',
           {
-            'drawer_root-wrapping-drawer_anchor_top': computedAnchor === 'top',
+            'drawer_root-wrapping-drawer_anchor_top':
+              hasAnimation === true && computedAnchor === 'top',
             'drawer_root-wrapping-drawer_anchor_bottom':
-              computedAnchor === 'bottom',
+              hasAnimation === true && computedAnchor === 'bottom',
             'drawer_root-wrapping-drawer_anchor_right':
-              computedAnchor === 'right',
-            'drawer_root-wrapping-drawer_anchor_left': computedAnchor === 'left'
+              hasAnimation === true && computedAnchor === 'right',
+            'drawer_root-wrapping-drawer_anchor_left':
+              hasAnimation === true && computedAnchor === 'left'
           }
         ]"
         @click.stop=""
@@ -59,6 +70,7 @@
 <script setup>
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
+  hasAnimation: { type: Boolean, default: true },
   anchor: { type: String, default: 'left' },
   rootPosition: { type: String, default: null },
   wrappingPosition: { type: String, default: 'fixed' },
@@ -320,7 +332,7 @@ function handleClose() {
 
     opacity: var(--drawer_opacity);
 
-    transition: opacity 0.2s;
+    transition: opacity 0.01s;
 
     &-mask {
       position: var(--drawer_mask_position, absolute);
@@ -330,9 +342,8 @@ function handleClose() {
       left: 0px;
 
       background-color: #00000080;
-
-      transition: opacity 0.15s;
-
+    }
+    &-mask_animation {
       animation-name: drawer_open;
       animation-duration: 0.3s;
     }
@@ -379,6 +390,10 @@ function handleClose() {
         background-color: #fff;
       }
     }
+  }
+
+  &-wrapping_animation_transition {
+    transition: opacity 0.2s;
   }
 }
 </style>
