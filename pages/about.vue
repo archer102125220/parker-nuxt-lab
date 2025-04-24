@@ -1,48 +1,49 @@
 <template>
   <div class="about_page">
-    <div v-if="pending" class="pa-4">
+    <div class="about_page-content">
       <v-skeleton-loader
+        v-if="pending"
         class="mx-auto"
         type="heading, subtitle, paragraph, list-item-three-line@3, divider, subtitle, text@2, list-item-three-line@4, divider, subtitle, list-item-three-line@2"
         boilerplate
       />
-    </div>
-    <p v-else-if="error">無法載入內容：{{ error.message }}</p>
-    <div v-else-if="data" class="about_page-content">
-      <h1 class="about_page-content-title">{{ pageTitle }}</h1>
-      <section
-        v-for="(section, index) in sectionList"
-        :key="index"
-        class="about_page-content-section"
-      >
-        <h2 class="about_page-content-section-sub_title">
-          {{ section.title }}
-        </h2>
-        <div
-          v-if="section.description"
-          class="about_page-content-section-description"
+      <p v-else-if="error">無法載入內容：{{ error.message }}</p>
+      <template v-else-if="data">
+        <h1 class="about_page-content-title">關於本站</h1>
+        <section
+          v-for="(section, index) in sectionList"
+          :key="index"
+          class="about_page-content-section"
         >
-          <template
-            v-for="(descItem, descIndex) in section.description"
-            :key="descIndex"
+          <h2 class="about_page-content-section-sub_title">
+            {{ section.title }}
+          </h2>
+          <div
+            v-if="section.description"
+            class="about_page-content-section-description"
           >
-            <del v-if="descItem.isDel">{{ descItem.text }}</del>
-            <p v-else>{{ descItem.text }}</p>
-          </template>
-        </div>
-        <ul
-          v-if="Array.isArray(section.listItemList)"
-          class="about_page-content-section-list"
-        >
-          <li
-            v-for="(item, itemIndex) in section.listItemList"
-            :key="itemIndex"
-            class="about_page-content-section-list-item"
+            <template
+              v-for="(descItem, descIndex) in section.description"
+              :key="descIndex"
+            >
+              <del v-if="descItem.isDel">{{ descItem.text }}</del>
+              <p v-else>{{ descItem.text }}</p>
+            </template>
+          </div>
+          <ul
+            v-if="Array.isArray(section.listItemList)"
+            class="about_page-content-section-list"
           >
-            {{ item }}
-          </li>
-        </ul>
-      </section>
+            <li
+              v-for="(item, itemIndex) in section.listItemList"
+              :key="itemIndex"
+              class="about_page-content-section-list-item"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </section>
+      </template>
     </div>
   </div>
 </template>
@@ -55,15 +56,8 @@ const { data, pending, error } = await useAsyncData('about-content', () =>
   $nuxtServer.GET_aboutContent()
 );
 
-const pageTitle = computed(() => {
-  const _pageTitle = data.value?.pageTitle;
-  return typeof _pageTitle === 'string' && _pageTitle.trim() !== ''
-    ? _pageTitle
-    : '預設標題';
-});
-
 const sectionList = computed(() => {
-  const _sectionList = data.value?.sectionList;
+  const _sectionList = data.value;
   return Array.isArray(_sectionList) ? _sectionList : [];
 });
 
