@@ -15,6 +15,7 @@
 
     <div
       v-if="modelValue === true"
+      ref="drawerWrappingRef"
       :class="[
         'drawer_root-wrapping',
         { 'drawer_root-wrapping_animation_transition': hasAnimation === true }
@@ -45,6 +46,25 @@
         ]"
         @click.stop=""
       >
+        <slot
+          name="drag"
+          :click="handleDragBarClick"
+          :dragStart="handleDragStart"
+          :draging="handleDraging"
+          :dragEnd="handleDragEnd"
+        >
+          <div
+            class="drawer_root-wrapping-drawer-drag_bar"
+            @click="handleDragBarClick"
+            @mousedown="handleDragStart"
+            @mousemove="handleDraging"
+            @mouseup="handleDragEnd"
+            @touchstart="handleDragStart"
+            @touchmove="handleDraging"
+            @touchend="handleDragEnd"
+          />
+        </slot>
+
         <slot name="container" :close="handleClose">
           <div class="drawer_root-wrapping-drawer-container">
             <slot :close="handleClose">
@@ -68,9 +88,14 @@
 </template>
 
 <script setup>
+const INIT_DRAG_DURATION = 50;
+const IS_VERTICAL = ['top', 'bottom'];
+const IS_HORIZONTAL = ['right', 'left'];
+
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   hasAnimation: { type: Boolean, default: true },
+  dragCloseDisabled: { type: Boolean, default: false },
   anchor: { type: String, default: 'left' },
   rootPosition: { type: String, default: null },
   wrappingPosition: { type: String, default: 'fixed' },
@@ -82,12 +107,22 @@ const props = defineProps({
   maxWidth: { type: [Number, String], default: null },
   height: { type: [Number, String], default: null },
   minHeight: { type: [Number, String], default: null },
-  maxHeight: { type: [Number, String], default: null }
+  maxHeight: { type: [Number, String], default: null },
+  triggerPercentage: { type: [Number, String], default: 0.25 }
 });
 const emits = defineEmits(['update:modelValue', 'change', 'close', 'open']);
 
+const drawerWrappingRef = useTemplateRef('drawerWrappingRef');
+
 const opacityTrigger = ref(false);
 const animationReverse = ref(false);
+
+const isDragStart = ref(false);
+const isDraging = ref(false);
+const dragMoveDistance = ref(0);
+const dragStartX = ref(0);
+const dragStartY = ref(0);
+const dragDuration = ref(300);
 
 const computedAnchor = computed(() => {
   const anchor = typeof props.anchor === 'string' ? props.anchor : '';
@@ -100,6 +135,19 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_opacity'] = '0';
   } else {
     _cssVariable['--drawer_opacity'] = '1';
+  }
+
+  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+    _cssVariable['--drawer_drag_transform'] =
+      `translate3d(0, ${dragMoveDistance.value}px, 0)`;
+  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+    _cssVariable['--drawer_drag_transform'] =
+      `translate3d(${dragMoveDistance.value}px, 0, 0)`;
+  }
+
+  if (props.hasAnimation === true) {
+    _cssVariable['--drawer_drag_transition'] =
+      `transform ${dragDuration.value}ms`;
   }
 
   if (typeof props.rootPosition === 'string' && props.rootPosition !== '') {
@@ -262,6 +310,9 @@ function handleTransitionEnd() {
   if (opacityTrigger.value === false && props.modelValue === true) {
     emits('change', false);
     emits('update:modelValue', false);
+
+    dragDuration.value = 300;
+    dragMoveDistance.value = 0;
   }
 }
 
@@ -275,6 +326,112 @@ function handleClose() {
   emits('close');
   opacityTrigger.value = false;
   animationReverse.value = true;
+}
+
+function handleDragBarClick() {
+  if (props.dragCloseDisabled === false) return;
+  handleClose();
+}
+
+function handleDragStart(e) {
+  if (props.dragCloseDisabled === true) return;
+
+  isDragStart.value = true;
+  dragDuration.value = INIT_DRAG_DURATION;
+  dragMoveDistance.value = 0;
+
+  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+    dragStartY.value =
+      e.targetTouches?.[0]?.clientY ||
+      e.targetTouches?.[0]?.pageY ||
+      e.targetTouches?.[0]?.offsetY ||
+      e.changedTouches?.[0]?.clientY ||
+      e.changedTouches?.[0]?.pageY ||
+      e.changedTouches?.[0]?.offsetY ||
+      e.clientY ||
+      e.pageY ||
+      e.offsetY;
+  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+    dragStartX.value =
+      e.targetTouches?.[0]?.clientX ||
+      e.targetTouches?.[0]?.pageX ||
+      e.targetTouches?.[0]?.offsetX ||
+      e.changedTouches?.[0]?.clientX ||
+      e.changedTouches?.[0]?.pageX ||
+      e.changedTouches?.[0]?.offsetX ||
+      e.clientX ||
+      e.pageX ||
+      e.offsetX;
+  }
+}
+
+function handleDraging(e) {
+  if (props.dragCloseDisabled === true || isDragStart.value === false) return;
+
+  let move = 0;
+  let dragStart = 0;
+
+  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+    dragStart = dragStartY.value;
+
+    const currentClientY =
+      e.targetTouches?.[0]?.clientY ||
+      e.targetTouches?.[0]?.pageY ||
+      e.targetTouches?.[0]?.offsetY ||
+      e.changedTouches?.[0]?.clientY ||
+      e.changedTouches?.[0]?.pageY ||
+      e.changedTouches?.[0]?.offsetY ||
+      e.clientY ||
+      e.pageY ||
+      e.offsetY;
+    move = currentClientY - dragStartY.value;
+  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+    dragStart = dragStartX.value;
+
+    const currentClientX =
+      e.targetTouches?.[0]?.clientX ||
+      e.targetTouches?.[0]?.pageX ||
+      e.targetTouches?.[0]?.offsetX ||
+      e.changedTouches?.[0]?.clientX ||
+      e.changedTouches?.[0]?.pageX ||
+      e.changedTouches?.[0]?.offsetX ||
+      e.clientX ||
+      e.pageX ||
+      e.offsetX;
+    move = currentClientX - dragStartX.value;
+  }
+
+  if (dragStart > 0) {
+    dragMoveDistance.value = move > 0 ? move : 0;
+
+    isDraging.value = true;
+  } else {
+    isDraging.value = false;
+  }
+}
+
+function handleDragEnd(e) {
+  isDragStart.value = false;
+  dragStartY.value = 0;
+  dragStartX.value = 0;
+
+  let triggerNumber = 0;
+  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+    triggerNumber =
+      (drawerWrappingRef.value?.offsetHeight || 0) *
+      Number(props.triggerPercentage);
+  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+    triggerNumber =
+      (drawerWrappingRef.value?.offsetWidth || 0) *
+      Number(props.triggerPercentage);
+  }
+
+  if (dragMoveDistance.value >= triggerNumber) {
+    handleClose();
+  } else {
+    dragDuration.value = 300;
+    dragMoveDistance.value = 0;
+  }
 }
 </script>
 
@@ -377,6 +534,35 @@ function handleClose() {
       animation-iteration-count: var(--drawer_animation_count);
 
       overflow: auto;
+
+      transform: var(--drawer_drag_transform);
+      transition: var(--drawer_drag_transition);
+
+      &-drag_bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        // align-items: center;
+
+        padding-top: 5px;
+
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+        background-color: #fff;
+
+        box-sizing: border-box;
+
+        &:after {
+          content: '';
+
+          width: 31px;
+          height: 3px;
+          border-radius: 8px;
+
+          background-color: #e4e4e4;
+        }
+      }
 
       &-container {
         width: var(--drawer_width);
