@@ -119,10 +119,10 @@ const animationReverse = ref(false);
 
 const isDragStart = ref(false);
 const isDraging = ref(false);
+const dragDuration = ref(INIT_DRAG_DURATION);
 const dragMoveDistance = ref(0);
-const dragStartX = ref(0);
 const dragStartY = ref(0);
-const dragDuration = ref(300);
+const dragStartX = ref(0);
 
 const computedAnchor = computed(() => {
   const anchor = typeof props.anchor === 'string' ? props.anchor : '';
@@ -542,16 +542,10 @@ function handleDragEnd(e) {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        // align-items: center;
 
         padding-top: 5px;
 
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-
         background-color: #fff;
-
-        box-sizing: border-box;
 
         &:after {
           content: '';
