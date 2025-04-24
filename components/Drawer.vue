@@ -31,6 +31,7 @@
         ]"
       />
       <div
+        ref="drawerRef"
         :class="[
           'drawer_root-wrapping-drawer',
           {
@@ -48,6 +49,9 @@
       >
         <slot
           name="drag"
+          :anchor="computedAnchor"
+          :is-vertical="isVertical"
+          :is-horizontal="isHorizontal"
           :click="handleDragBarClick"
           :dragStart="handleDragStart"
           :draging="handleDraging"
@@ -55,6 +59,9 @@
         >
           <div
             class="drawer_root-wrapping-drawer-drag_bar"
+            :anchor="computedAnchor"
+            :is-vertical="isVertical"
+            :is-horizontal="isHorizontal"
             @click="handleDragBarClick"
             @mousedown="handleDragStart"
             @mousemove="handleDraging"
@@ -118,6 +125,7 @@ const props = defineProps({
 const emits = defineEmits(['update:modelValue', 'change', 'close', 'open']);
 
 const drawerWrappingRef = useTemplateRef('drawerWrappingRef');
+const drawerRef = useTemplateRef('drawerRef');
 
 const opacityTrigger = ref(false);
 const animationReverse = ref(false);
@@ -133,6 +141,12 @@ const computedAnchor = computed(() => {
   const anchor = typeof props.anchor === 'string' ? props.anchor : '';
   return anchor.toLocaleLowerCase().trim() || 'left';
 });
+const isVertical = computed(() => {
+  return IS_VERTICAL.includes(computedAnchor.value);
+});
+const isHorizontal = computed(() => {
+  return IS_HORIZONTAL.includes(computedAnchor.value);
+});
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
@@ -142,10 +156,10 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_opacity'] = '1';
   }
 
-  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+  if (isVertical.value === true) {
     _cssVariable['--drawer_drag_transform'] =
       `translate3d(0, ${dragMoveDistance.value}px, 0)`;
-  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+  } else if (isHorizontal.value === true) {
     _cssVariable['--drawer_drag_transform'] =
       `translate3d(${dragMoveDistance.value}px, 0, 0)`;
   }
@@ -322,9 +336,9 @@ watch(
     opacityTrigger.value = newModelValue;
     if (newModelValue === false) {
       animationReverse.value = false;
-      document.body.style.overflow = '';
+      document.querySelector('html').classList.remove('drawer_open');
     } else {
-      document.body.style.overflow = 'hidden';
+      document.querySelector('html').classList.add('drawer_open');
     }
   }
 );
@@ -354,12 +368,14 @@ function handleTransitionEnd() {
 
 function handleOpen() {
   emits('open');
+  document.querySelector('html').classList.add('drawer_open');
   opacityTrigger.value = true;
   animationReverse.value = false;
 }
 
 function handleClose() {
   emits('close');
+  document.querySelector('html').classList.remove('drawer_open');
   opacityTrigger.value = false;
   animationReverse.value = true;
 }
@@ -376,7 +392,7 @@ function handleDragStart(e) {
   dragDuration.value = INIT_DRAG_DURATION;
   dragMoveDistance.value = 0;
 
-  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+  if (isVertical.value === true) {
     dragStartY.value =
       e.targetTouches?.[0]?.clientY ||
       e.targetTouches?.[0]?.pageY ||
@@ -387,7 +403,7 @@ function handleDragStart(e) {
       e.clientY ||
       e.pageY ||
       e.offsetY;
-  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+  } else if (isHorizontal.value === true) {
     dragStartX.value =
       e.targetTouches?.[0]?.clientX ||
       e.targetTouches?.[0]?.pageX ||
@@ -407,7 +423,7 @@ function handleDraging(e) {
   let move = 0;
   let dragStart = 0;
 
-  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+  if (isVertical.value === true) {
     dragStart = dragStartY.value;
 
     const currentClientY =
@@ -421,7 +437,7 @@ function handleDraging(e) {
       e.pageY ||
       e.offsetY;
     move = currentClientY - dragStartY.value;
-  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+  } else if (isHorizontal.value === true) {
     dragStart = dragStartX.value;
 
     const currentClientX =
@@ -437,8 +453,24 @@ function handleDraging(e) {
     move = currentClientX - dragStartX.value;
   }
 
+  const drawerRect = drawerRef.value.getBoundingClientRect();
+  const drawerWrapperRect = drawerWrappingRef.value.getBoundingClientRect();
+
   if (dragStart > 0) {
-    dragMoveDistance.value = move > 0 ? move : 0;
+    if (
+      (computedAnchor.value === 'right' &&
+        drawerRect.right + move >= drawerWrapperRect.right) ||
+      (computedAnchor.value === 'bottom' &&
+        drawerRect.bottom + move >= drawerWrapperRect.bottom) ||
+      (computedAnchor.value === 'left' &&
+        drawerRect.left + move <= drawerWrapperRect.left) ||
+      (computedAnchor.value === 'top' &&
+        drawerRect.top + move <= drawerWrapperRect.top)
+    ) {
+      dragMoveDistance.value = move;
+    } else {
+      dragMoveDistance.value = 0;
+    }
 
     isDraging.value = true;
   } else {
@@ -452,17 +484,18 @@ function handleDragEnd(e) {
   dragStartX.value = 0;
 
   let triggerNumber = 0;
-  if (IS_VERTICAL.includes(computedAnchor.value) === true) {
+  if (isVertical.value === true) {
     triggerNumber =
       (drawerWrappingRef.value?.offsetHeight || 0) *
       Number(props.triggerPercentage);
-  } else if (IS_HORIZONTAL.includes(computedAnchor.value) === true) {
+  } else if (isHorizontal.value === true) {
     triggerNumber =
       (drawerWrappingRef.value?.offsetWidth || 0) *
       Number(props.triggerPercentage);
   }
 
-  if (dragMoveDistance.value >= triggerNumber) {
+  const _dragMoveDistance = Math.abs(dragMoveDistance.value);
+  if (_dragMoveDistance >= triggerNumber) {
     handleClose();
   } else {
     dragDuration.value = 300;
@@ -470,6 +503,16 @@ function handleDragEnd(e) {
   }
 }
 </script>
+
+<style lang="scss">
+.drawer_open {
+  overflow: hidden;
+
+  *:not(.drawer_root) {
+    overflow: hidden;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 @keyframes drawer_open {
@@ -580,6 +623,8 @@ function handleDragEnd(e) {
       transition: var(--drawer_drag_transition);
 
       &-drag_bar {
+        position: absolute;
+
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -588,14 +633,49 @@ function handleDragEnd(e) {
 
         background-color: #fff;
 
-        &:after {
-          content: '';
+        &[is-vertical='true'] {
+          width: 100%;
+          height: 20px;
 
-          width: 31px;
-          height: 3px;
-          border-radius: 8px;
+          &[anchor='top'] {
+            bottom: 0px;
+          }
+          &[anchor='bottom'] {
+            top: 0px;
+          }
+          &:after {
+            content: '';
 
-          background-color: #e4e4e4;
+            width: 31px;
+            height: 3px;
+            border-radius: 8px;
+
+            background-color: #e4e4e4;
+          }
+        }
+        &[is-horizontal='true'] {
+          width: 20px;
+          // height: 100%;
+          top: 0px;
+          bottom: 0px;
+
+          align-items: center;
+
+          &[anchor='left'] {
+            right: 0px;
+          }
+          &[anchor='right'] {
+            left: 0px;
+          }
+          &:after {
+            content: '';
+
+            width: 3px;
+            height: 31px;
+            border-radius: 8px;
+
+            background-color: #e4e4e4;
+          }
         }
       }
 
