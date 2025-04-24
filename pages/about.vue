@@ -1,90 +1,45 @@
 <template>
   <div class="about_page">
-    <div class="about_page-content">
-      <h1 class="about_page-content-title">關於本站</h1>
-      <section class="about_page-content-section">
-        <h2 class="about_page-content-section-sub_title">專案目的</h2>
-        <div class="about_page-content-section-description">
-          <p>這是一個用於測試和實驗的專案</p>
-          <del>， 原本沒有打算上線，不過礙於PWA實驗，故將此專案上線</del>
-          <p>，主要聚焦於以下幾個方面：</p>
+    <div v-if="pending" class="pa-4">
+      <v-skeleton-loader
+        class="mx-auto"
+        type="heading, subtitle, paragraph, list-item-three-line@3, divider, subtitle, text@2, list-item-three-line@4, divider, subtitle, list-item-three-line@2"
+        boilerplate
+      />
+    </div>
+    <p v-else-if="error">無法載入內容：{{ error.message }}</p>
+    <div v-else-if="data" class="about_page-content">
+      <h1 class="about_page-content-title">{{ pageTitle }}</h1>
+      <section
+        v-for="(section, index) in sectionList"
+        :key="index"
+        class="about_page-content-section"
+      >
+        <h2 class="about_page-content-section-sub_title">
+          {{ section.title }}
+        </h2>
+        <div
+          v-if="section.description"
+          class="about_page-content-section-description"
+        >
+          <template
+            v-for="(descItem, descIndex) in section.description"
+            :key="descIndex"
+          >
+            <del v-if="descItem.isDel">{{ descItem.text }}</del>
+            <p v-else>{{ descItem.text }}</p>
+          </template>
         </div>
-        <ul class="about_page-content-section-list">
-          <li class="about_page-content-section-list-item">
-            客製化 Vue 組件的開發與測試
-          </li>
-          <li class="about_page-content-section-list-item">
-            Nuxt3 框架的相關套件整合與應用
-          </li>
-          <li class="about_page-content-section-list-item">
-            PWA (Progressive Web App) 的實驗與實作
-          </li>
-        </ul>
-      </section>
-
-      <section class="about_page-content-section">
-        <h2 class="about_page-content-section-sub_title">主要測試項目</h2>
-        <ul class="about_page-content-section-list">
-          <li class="about_page-content-section-list-item">
-            nuxt-i18n 多語言功能實作方式記錄(尚未添加完成語系包)
-          </li>
-          <li class="about_page-content-section-list-item">
-            自製組件及第三方整合組件
-          </li>
-          <li class="about_page-content-section-list-item">
-            Vue 指令的開發與應用
-          </li>
-          <li class="about_page-content-section-list-item">
-            路由系統的紀錄與實作
-          </li>
-          <li class="about_page-content-section-list-item">
-            CSS 繪圖技術的實驗
-          </li>
-          <li class="about_page-content-section-list-item">
-            生物辨識技術的整合（WebAuthn、FIDO2）
-          </li>
-          <li class="about_page-content-section-list-item">
-            WebCam 與臉部識別 API 的應用
-          </li>
-          <li class="about_page-content-section-list-item">
-            前端 API 快取機制的實作
-          </li>
-        </ul>
-      </section>
-
-      <section class="about_page-content-section">
-        <h2 class="about_page-content-section-sub_title">技術棧</h2>
-        <ul class="about_page-content-section-list">
-          <li class="about_page-content-section-list-item">
-            Nuxt3 - Vue.js 伺服渲染框架
-          </li>
-          <li class="about_page-content-section-list-item">Vue3 - 前端框架</li>
-          <li class="about_page-content-section-list-item">
-            SCSS - CSS 預處理器
-          </li>
-          <li class="about_page-content-section-list-item">
-            PWA - 漸進式網頁應用
-          </li>
-        </ul>
-      </section>
-
-      <section class="about_page-content-section">
-        <h2 class="about_page-content-section-sub_title">ISR 技術測試</h2>
-        <div class="about_page-content-section-description">
-          <p>本專案也包含了 Nuxt3 的 ISR (Incremental Static Regeneration) 技術測試，這是一種混合渲染策略，結合了靜態生成和動態更新的優點：</p>
-        </div>
-        <ul class="about_page-content-section-list">
-          <li class="about_page-content-section-list-item">
-            實現頁面的靜態生成，提供更快的首次載入速度
-          </li>
-          <li class="about_page-content-section-list-item">
-            設定自動重新驗證時間，確保內容的即時性
-          </li>
-          <li class="about_page-content-section-list-item">
-            在後台自動更新過期內容，無需等待用戶請求
-          </li>
-          <li class="about_page-content-section-list-item">
-            優化 SEO 表現，同時保持內容的新鮮度
+        <ul
+          v-if="Array.isArray(section.listItemList)"
+          class="about_page-content-section-list"
+        >
+          <li
+            v-for="(item, itemIndex) in section.listItemList"
+            :key="itemIndex"
+            class="about_page-content-section-list-item"
+          >
+            {{ item }}
           </li>
         </ul>
       </section>
@@ -93,6 +48,29 @@
 </template>
 
 <script setup>
+const systemStore = useSystemStore();
+const { $nuxtServer } = useNuxtApp();
+
+const { data, pending, error } = await useAsyncData('about-content', () =>
+  $nuxtServer.GET_aboutContent()
+);
+
+const pageTitle = computed(() => {
+  const _pageTitle = data.value?.pageTitle;
+  return typeof _pageTitle === 'string' && _pageTitle.trim() !== ''
+    ? _pageTitle
+    : '預設標題';
+});
+
+const sectionList = computed(() => {
+  const _sectionList = data.value?.sectionList;
+  return Array.isArray(_sectionList) ? _sectionList : [];
+});
+
+watchEffect(() => {
+  systemStore.setLoading(pending.value);
+});
+
 useHead({
   title: '關於本站 - Nuxt實驗室',
   meta: [
@@ -107,14 +85,14 @@ useHead({
 
 <style lang="scss">
 .about_page {
-  padding: 2rem;
+  // padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 
   &-content {
-    background: white;
     padding: 2rem;
     border-radius: 8px;
+    background: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     &-title {
@@ -135,11 +113,12 @@ useHead({
       &-description {
         display: flex;
         align-items: center;
-        // justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: wrap;
 
         margin-bottom: 1rem;
-        line-height: 1.6;
         color: #666;
+        line-height: 1.6;
       }
 
       &-list {
