@@ -108,6 +108,11 @@ const props = defineProps({
   height: { type: [Number, String], default: null },
   minHeight: { type: [Number, String], default: null },
   maxHeight: { type: [Number, String], default: null },
+  top: { type: [Number, String], default: '0px' },
+  right: { type: [Number, String], default: '0px' },
+  bottom: { type: [Number, String], default: '0px' },
+  left: { type: [Number, String], default: '0px' },
+  zIndex: { type: [Number, String], default: '1' },
   triggerPercentage: { type: [Number, String], default: 0.25 }
 });
 const emits = defineEmits(['update:modelValue', 'change', 'close', 'open']);
@@ -189,6 +194,37 @@ const cssVariable = computed(() => {
     _cssVariable['--drawer_height'] = `${props.height}px`;
   } else if (typeof props.height === 'string' && props.height !== '') {
     _cssVariable['--drawer_height'] = props.height;
+  }
+
+  if (typeof props.top === 'number') {
+    _cssVariable['--drawers_wrapping_top'] = `${props.top}px`;
+  } else if (typeof props.top === 'string' && props.top !== '') {
+    _cssVariable['--drawers_wrapping_top'] = props.top;
+  }
+
+  if (typeof props.right === 'number') {
+    _cssVariable['--drawers_wrapping_right'] = `${props.right}px`;
+  } else if (typeof props.right === 'string' && props.right !== '') {
+    _cssVariable['--drawers_wrapping_right'] = props.right;
+  }
+
+  if (typeof props.bottom === 'number') {
+    _cssVariable['--drawers_wrapping_bottom'] = `${props.bottom}px`;
+  } else if (typeof props.bottom === 'string' && props.bottom !== '') {
+    _cssVariable['--drawers_wrapping_bottom'] = props.bottom;
+  }
+
+  if (typeof props.left === 'number') {
+    _cssVariable['--drawers_wrapping_left'] = `${props.left}px`;
+  } else if (typeof props.left === 'string' && props.left !== '') {
+    _cssVariable['--drawers_wrapping_left'] = props.left;
+  }
+
+  if (
+    typeof props.zIndex === 'number' ||
+    (typeof props.zIndex === 'string' && props.zIndex !== '')
+  ) {
+    _cssVariable['--drawers_wrapping_z_index'] = props.zIndex;
   }
 
   let containerMinWidth = '';
@@ -481,11 +517,16 @@ function handleDragEnd(e) {
 
   &-wrapping {
     position: var(--drawer_wrapping_position, fixed);
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    z-index: 1;
+    // top: 0px;
+    // right: 0px;
+    // bottom: 0px;
+    // left: 0px;
+    // z-index: 1;
+    top: var(--drawer_wrapping_top, 0px);
+    right: var(--drawer_wrapping_right, 0px);
+    bottom: var(--drawer_wrapping_bottom, 0px);
+    left: var(--drawer_wrapping_left, 0px);
+    z-index: var(--drawer_wrapping_z_index, 1);
 
     opacity: var(--drawer_opacity);
 
