@@ -348,12 +348,27 @@ onMounted(() => {
   if (props.modelValue === false) {
     animationReverse.value = false;
   }
+  window.addEventListener('keydown', handleWindowClose);
+});
+onActivated(() => {
+  opacityTrigger.value = props.modelValue;
+  if (props.modelValue === false) {
+    animationReverse.value = false;
+  }
+  window.addEventListener('keydown', handleWindowClose);
 });
 
+onDeactivated(() => {
+  emits('change', false);
+  emits('update:modelValue', false);
+  handleClose();
+  window.removeEventListener('keydown', handleWindowClose);
+});
 onBeforeUnmount(() => {
   emits('change', false);
   emits('update:modelValue', false);
   handleClose();
+  window.removeEventListener('keydown', handleWindowClose);
 });
 
 function handleTransitionEnd() {
@@ -378,6 +393,12 @@ function handleClose() {
   document.querySelector('html').classList.remove('drawer_open');
   opacityTrigger.value = false;
   animationReverse.value = true;
+}
+
+function handleWindowClose(e) {
+  if (e?.keyCode === 27) {
+    handleClose();
+  }
 }
 
 function handleDragBarClick() {
