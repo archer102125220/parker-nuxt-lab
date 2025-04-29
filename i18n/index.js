@@ -20,7 +20,7 @@ export const locales = [
   // 'zh',
   // 'en'
 ];
-export const langDir = 'i18n/locales';
+export const langDir = './locales';
 export const detectBrowserLanguage = {
   fallbackLocale,
   useCookie: true,

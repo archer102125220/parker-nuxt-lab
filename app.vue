@@ -46,7 +46,7 @@ useHead({
       : $i18n.t('system.titleTemplate');
   },
   meta: [
-    { id: 'meta-lang', language: $i18n.locale.value },
+    { id: 'meta-lang', language: $i18n?.locale?.value },
     {
       copyright: `Copyright © ${$dayjs().year()} Parker Chen. All rights reserved.`
     }
@@ -75,6 +75,7 @@ const cssVariable = computed(() => {
 const messageState = computed(() => $store.system.messageState || {});
 const needGoTop = computed(() => {
   const routeName = getRouteBaseName(route);
+  // const routeName = route.name;
   if (NO_GO_TOP.includes(routeName)) {
     return false;
   }

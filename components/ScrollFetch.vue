@@ -200,12 +200,16 @@ const cssVariable = computed(() => {
 
   if (moveDistance.value > 0) {
     _cssVariable['--refresh_overflow'] = 'hidden';
-    document.querySelector('html').classList.add('scroll_fetching');
+    if (typeof document?.querySelector === 'function') {
+      document.querySelector('html').classList.add('scroll_fetching');
+    }
 
     // _cssVariable['--refresh_trigger_z_index'] = 2;
   } else {
     _cssVariable['--refresh_overflow'] = 'auto';
-    document.querySelector('html').classList.remove('scroll_fetching');
+    if (typeof document?.querySelector === 'function') {
+      document.querySelector('html').classList.remove('scroll_fetching');
+    }
 
     // _cssVariable['--refresh_trigger_z_index'] = -1;
   }

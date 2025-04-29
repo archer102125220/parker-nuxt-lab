@@ -334,11 +334,13 @@ watch(
   () => props.modelValue,
   (newModelValue) => {
     opacityTrigger.value = newModelValue;
-    if (newModelValue === false) {
-      animationReverse.value = false;
-      document.querySelector('html').classList.remove('drawer_open');
-    } else {
-      document.querySelector('html').classList.add('drawer_open');
+    if (typeof document?.querySelector === 'function') {
+      if (newModelValue === false) {
+        animationReverse.value = false;
+        document.querySelector('html').classList.remove('drawer_open');
+      } else {
+        document.querySelector('html').classList.add('drawer_open');
+      }
     }
   }
 );
@@ -383,14 +385,18 @@ function handleTransitionEnd() {
 
 function handleOpen() {
   emits('open');
-  document.querySelector('html').classList.add('drawer_open');
+  if (typeof document?.querySelector === 'function') {
+    document.querySelector('html').classList.add('drawer_open');
+  }
   opacityTrigger.value = true;
   animationReverse.value = false;
 }
 
 function handleClose() {
   emits('close');
-  document.querySelector('html').classList.remove('drawer_open');
+  if (typeof document?.querySelector === 'function') {
+    document.querySelector('html').classList.remove('drawer_open');
+  }
   opacityTrigger.value = false;
   animationReverse.value = true;
 }

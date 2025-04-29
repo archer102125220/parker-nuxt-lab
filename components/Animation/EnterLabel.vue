@@ -15,7 +15,7 @@ const props = defineProps({
   randomLen: { type: String, default: 'en' },
   autoStart: { type: Boolean, default: true },
   label: { type: String, default: '' },
-  speed: { type: Number, default: 100 }
+  speed: { type: Number, default: 50 }
 });
 const emits = defineEmits([
   'change',
