@@ -174,18 +174,37 @@ watch(
   }
 );
 
+onBeforeRouteLeave(() => {
+  if (opacityTrigger.value === true) {
+    handleClose();
+    return false;
+  }
+
+  return true;
+});
+
 onMounted(() => {
   opacityTrigger.value = props.modelValue;
 });
+onActivated(() => {
+  opacityTrigger.value = props.modelValue;
+});
 
+onDeactivated(() => {
+  handleBeforeUnmount();
+});
 onBeforeUnmount(() => {
+  handleBeforeUnmount();
+});
+
+function handleBeforeUnmount() {
   emits('change', false);
   emits('update:modelValue', false);
   if (typeof document?.querySelector === 'function') {
     document.querySelector('html').classList.remove('dialog_open');
   }
   handleClose();
-});
+}
 
 function handleTransitionEnd() {
   if (opacityTrigger.value === false && props.modelValue === true) {

@@ -345,33 +345,43 @@ watch(
   }
 );
 
-onMounted(() => {
-  opacityTrigger.value = props.modelValue;
-  if (props.modelValue === false) {
-    animationReverse.value = false;
+onBeforeRouteLeave(() => {
+  if (opacityTrigger.value === true) {
+    handleClose();
+    return false;
   }
-  window.addEventListener('keydown', handleWindowClose);
+
+  return true;
+});
+
+onMounted(() => {
+  handleInit();
 });
 onActivated(() => {
-  opacityTrigger.value = props.modelValue;
-  if (props.modelValue === false) {
-    animationReverse.value = false;
-  }
-  window.addEventListener('keydown', handleWindowClose);
+  handleInit();
 });
 
 onDeactivated(() => {
-  emits('change', false);
-  emits('update:modelValue', false);
-  handleClose();
-  window.removeEventListener('keydown', handleWindowClose);
+  handleBeforeUnmount();
 });
 onBeforeUnmount(() => {
+  handleBeforeUnmount();
+});
+
+function handleInit() {
+  opacityTrigger.value = props.modelValue;
+  if (props.modelValue === false) {
+    animationReverse.value = false;
+  }
+  window.addEventListener('keydown', handleWindowClose);
+}
+
+function handleBeforeUnmount() {
   emits('change', false);
   emits('update:modelValue', false);
   handleClose();
   window.removeEventListener('keydown', handleWindowClose);
-});
+}
 
 function handleTransitionEnd() {
   if (opacityTrigger.value === false && props.modelValue === true) {
