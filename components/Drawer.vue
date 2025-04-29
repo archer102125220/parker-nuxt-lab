@@ -529,7 +529,7 @@ function handleDragEnd(e) {
 .drawer_open {
   overflow: hidden;
 
-  *:not(.drawer_root) {
+  *:not(.drawer_root):not(.drawer_root *) {
     overflow: hidden;
   }
 }

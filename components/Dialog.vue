@@ -164,6 +164,11 @@ watch(
   () => props.modelValue,
   (newIsShow) => {
     opacityTrigger.value = newIsShow;
+    if (newIsShow === false) {
+      document.querySelector('html').classList.remove('dialog_open');
+    } else {
+      document.querySelector('html').classList.add('dialog_open');
+    }
   }
 );
 
@@ -174,6 +179,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   emits('change', false);
   emits('update:modelValue', false);
+  document.querySelector('html').classList.remove('dialog_open');
   handleClose();
 });
 
@@ -181,6 +187,7 @@ function handleTransitionEnd() {
   if (opacityTrigger.value === false && props.modelValue === true) {
     emits('change', false);
     emits('update:modelValue', false);
+    document.querySelector('html').classList.remove('dialog_open');
   }
 }
 
@@ -194,6 +201,16 @@ function handleClose() {
   opacityTrigger.value = false;
 }
 </script>
+
+<style lang="scss">
+.dialog_open {
+  overflow: hidden;
+
+  *:not(.dialog_root):not(.dialog_root *) {
+    overflow: hidden;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 @keyframes dialog_open {

@@ -200,9 +200,13 @@ const cssVariable = computed(() => {
 
   if (moveDistance.value > 0) {
     _cssVariable['--refresh_overflow'] = 'hidden';
+    document.querySelector('html').classList.add('scroll_fetching');
+
     // _cssVariable['--refresh_trigger_z_index'] = 2;
   } else {
     _cssVariable['--refresh_overflow'] = 'auto';
+    document.querySelector('html').classList.remove('scroll_fetching');
+
     // _cssVariable['--refresh_trigger_z_index'] = -1;
   }
   _cssVariable['--refresh_trigger_z_index'] = refreshTriggerZIndex.value;
@@ -507,11 +511,22 @@ function windowScrollEnd(e) {
 }
 </script>
 
+<style lang="scss">
+.scroll_fetching {
+  overflow: hidden;
+
+  *:not(.scroll_fetch):not(.scroll_fetch *) {
+    overflow: hidden;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .scroll_fetch {
   position: relative;
   height: var(--refresh_height);
   overflow: var(--refresh_overflow);
+
   &-trigger {
     position: absolute;
     top: 0;
