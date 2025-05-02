@@ -1,6 +1,6 @@
 // https://www.jianshu.com/p/d0aadf5cdf57
 export default defineNuxtPlugin(async (nuxtApp) => {
-  if (typeof window !== 'object') {
+  if (import.meta.server === true) {
     nuxtApp.vueApp.directive('lazy', {});
     return;
   }
