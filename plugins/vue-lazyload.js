@@ -1,7 +1,11 @@
-import VueLazyload from 'vue-lazyload';
-
 // https://www.jianshu.com/p/d0aadf5cdf57
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
+  if (typeof window !== 'object') {
+    nuxtApp.vueApp.directive('lazy', {});
+    return;
+  }
+  const { default: VueLazyload } = await import('vue-lazyload');
+
   nuxtApp.vueApp.use(VueLazyload, {
     // preLoad: 1.33, // 預加載寬高比例
     // error: errorimage, // 加載失敗圖片的src
