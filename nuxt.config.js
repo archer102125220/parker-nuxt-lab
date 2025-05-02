@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/getting-started/deployment
 import os from 'os';
+import fs from 'fs-extra';
+import path from 'path';
+
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
@@ -17,6 +20,21 @@ const IS_DEV = process.env.NODE_ENV !== 'production';
 
 const osType = os.type().toLocaleLowerCase();
 const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
+
+if (osType.includes('windows') === true) {
+  const targetDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v8');
+  const sourceDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v9/tensorflow.dll');
+
+  if (fs.existsSync(targetDir) === false) {
+    fs.ensureDirSync(targetDir);
+  }
+
+  if (fs.existsSync(sourceDir) === true) {
+    fs.copySync(sourceDir, path.join(targetDir, '/tensorflow.dll'), { overwrite: true });
+  } else {
+    console.warn('Source models directory not found:', sourceDir);
+  }
+}
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
