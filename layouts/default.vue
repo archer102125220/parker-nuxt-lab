@@ -4,7 +4,7 @@
     <main class="defalut_layout-content">
       <slot />
     </main>
-    <!-- <LayoutFooter /> -->
+    <LayoutFooter />
   </div>
 </template>
 
@@ -22,9 +22,14 @@
 
 <style lang="scss" scoped>
 .defalut_layout {
-  // width: 100vw;
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100dvh;
+
   &-content {
-    min-height: 100vh;
+    flex: 1;
+    // min-height: 100vh;
     width: 80%;
     margin: auto;
   }

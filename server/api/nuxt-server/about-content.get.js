@@ -1,4 +1,3 @@
-
 const ABOUT_CONTENT_DATA = [
   {
     title: '專案目的',
@@ -51,6 +50,12 @@ const ABOUT_CONTENT_DATA = [
       '設定自動重新驗證時間，確保內容的即時性',
       '在後台自動更新過期內容，無需等待用戶請求',
       '優化 SEO 表現，同時保持內容的新鮮度'
+    ]
+  },
+  {
+    title: '設計與資源',
+    listItemList: [
+      '本站圖示 (Favicon) 採用 Google Gemini 輔助設計生成'
     ]
   }
 ];

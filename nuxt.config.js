@@ -152,7 +152,7 @@ export default defineNuxtConfig({
     // https://www.freeconvert.com/image-converter
     // https://realfavicongenerator.net/
     manifest: {
-      name: 'Parker的Nuxt實驗室',
+      name: 'Parker Chen 的Nuxt實驗室',
       short_name: 'Nuxt Lab',
       // lang: 'zh-tw',
       lang: defaultLang,

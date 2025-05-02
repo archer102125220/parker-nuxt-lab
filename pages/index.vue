@@ -1,7 +1,8 @@
 <template>
   <AnimationTriangleEnter
     class="index_page"
-    label="Parker的Nuxt實驗室"
+    left-label="Parker Chen"
+    right-label=" 的Nuxt實驗室"
     :style="cssVariable"
     :is-mobile="$store.system.isMobile"
     @animation-inited="handleAnimationInited"
@@ -11,16 +12,7 @@
       <p class="index_page-left_label">{{ label }}</p>
     </template>
 
-    <nav class="index_page-content">
-      <NuxtLink
-        v-for="link in linkList"
-        :key="link.to"
-        class="index_page-content-link"
-        :to="link.to"
-      >
-        {{ link.label }}
-      </NuxtLink>
-    </nav>
+    <HomeContent />
 
     <template #rightLabel="{ label }">
       <p class="index_page-right_label">{{ label }}</p>
@@ -37,6 +29,7 @@ const router = useRouter();
 const animationInited = ref(false);
 
 const linkList = computed(() => [
+  { to: localePath('/about'), label: '關於本站' },
   { to: localePath('/components'), label: '自製組件及第三方整合組件' },
   { to: localePath('/components-test'), label: '組件綜合測試' },
   { to: localePath('/directives'), label: '自製vue指令' },
@@ -80,14 +73,14 @@ function handleAnimationFinish() {
 <style lang="scss">
 @keyframes labelAnimation {
   0% {
-    width: 110px;
+    // width: 110px;
     height: fit-content;
     font-size: 20px;
     opacity: 0;
   }
 
   100% {
-    width: 85px;
+    // width: 85px;
     height: fit-content;
     font-size: 16px;
     opacity: 1;
@@ -97,34 +90,23 @@ function handleAnimationFinish() {
   --key_label_animation: labelAnimation 0.5s;
   // width: 100vw;
 
-  &-content {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    gap: 8px;
-    // width: 80%;
-    // margin: auto;
-
-    &-link {
-      flex: 1;
-      flex-basis: 400px;
-    }
-  }
-
   &-left_label {
     position: absolute;
     // top: 50vh;
     top: 53dvh;
     // right: 53vw;
     right: 54vw;
-    width: 85px;
+    // width: 85px;
+    width: 110px;
 
     // animation: labelAnimation 1s;
     animation: var(--label_animation);
     opacity: var(--label_opacity, 0);
     @include mobile {
-      top: 49dvh;
-      right: 52vw;
+      // top: 49dvh;
+      // right: 52vw;
+      top: 52dvh;
+      right: 51vw;
     }
   }
 
@@ -132,7 +114,8 @@ function handleAnimationFinish() {
     position: absolute;
     top: -50vh;
     left: 50vw;
-    width: 85px;
+    // width: 85px;
+    width: 110px;
 
     // animation: labelAnimation 1s;
     animation: var(--label_animation);

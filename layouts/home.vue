@@ -1,9 +1,10 @@
 <template>
   <div class="home_layout">
+    <LayoutHeader :has-back="false" />
     <main class="home_layout-content">
       <slot />
     </main>
-    <!-- <LayoutFooter /> -->
+    <LayoutFooter />
   </div>
 </template>
 
@@ -16,8 +17,14 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .home_layout {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100dvh;
+
   &-content {
-    min-height: 100vh;
+    flex: 1;
+    // min-height: 100vh;
     width: 80%;
     margin: auto;
   }

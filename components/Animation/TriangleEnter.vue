@@ -15,10 +15,10 @@
       width="100vw"
       angle-upper-left
       :color="leftColor"
-      :label="leftLabel"
+      :label="computedLeftLabel"
     >
-      <slot name="leftLabel" :label="leftLabel">
-        <p>{{ leftLabel }}</p>
+      <slot name="leftLabel" :label="computedLeftLabel">
+        <p>{{ computedLeftLabel }}</p>
       </slot>
     </Triangle>
 
@@ -39,10 +39,10 @@
       width="100vw"
       angle-lower-right
       :color="rightColor"
-      :label="rightLabel"
+      :label="computedRightLabel"
     >
-      <slot name="rightLabel" :label="rightLabel">
-        <p>{{ rightLabel }}</p>
+      <slot name="rightLabel" :label="computedRightLabel">
+        <p>{{ computedRightLabel }}</p>
       </slot>
     </Triangle>
   </div>
@@ -59,7 +59,9 @@ const triangleBgRight = useTemplateRef('triangleBgRight');
 
 const props = defineProps({
   isMobile: { type: Boolean, default: null },
+  leftLabel: { type: String, default: '' },
   label: { type: String, default: '' },
+  rightLabel: { type: String, default: '' },
   leftColor: { type: String, default: '#89afff' },
   leftBgColor: { type: String, default: '#fff' },
   rightColor: { type: String, default: '#89afff' },
@@ -69,11 +71,19 @@ const emit = defineEmits(['animationInited', 'animationFinish']);
 
 const isInited = ref(false);
 const isOpened = ref(false);
-const leftLabel = computed(() => {
+const computedLeftLabel = computed(() => {
+  if (typeof props.leftLabel === 'string' && props.leftLabel !== '') {
+    return props.leftLabel;
+  }
+
   const label = props.label || '';
   return label.substring(0, label.length / 2);
 });
-const rightLabel = computed(() => {
+const computedRightLabel = computed(() => {
+  if (typeof props.rightLabel === 'string' && props.rightLabel !== '') {
+    return props.rightLabel;
+  }
+
   const label = props.label || '';
   return label.substring(label.length / 2, label.length);
 });

@@ -24,8 +24,10 @@ useHead({
   title: '文字特效測試'
 });
 
-const demoLabel = ref('Parker的Nuxt實驗室');
-const demoInput = ref('Parker的Nuxt實驗室');
+const DEMO_TEXT = 'Parker Chen 的Nuxt實驗室';
+
+const demoLabel = ref(DEMO_TEXT);
+const demoInput = ref(DEMO_TEXT);
 
 function handleDemoLabel() {
   demoLabel.value = demoInput.value;
