@@ -166,6 +166,8 @@ export default defineNuxtConfig({
   pwa: {
     injectRegister: 'script-defer',
 
+    registerType: 'autoUpdate',
+
     // https://remove-white-background.imageonline.co/cn/
     // https://www.freeconvert.com/image-converter
     // https://realfavicongenerator.net/

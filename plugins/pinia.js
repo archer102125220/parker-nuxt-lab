@@ -42,11 +42,11 @@ export default defineNuxtPlugin(({ $pinia }) => {
 
           const { $pwa } = useNuxtApp();
           // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
-          watchEffect(async () => {
-            if ($pwa.needRefresh === true) {
-              await $pwa.updateServiceWorker();
-            }
-          });
+          // watchEffect(async () => {
+          //   if ($pwa.needRefresh === true) {
+          //     await $pwa.updateServiceWorker();
+          //   }
+          // });
           watchEffect(() => {
             if ($pwa.offlineReady === true) {
               system.setMessageState({ text: 'App ready to work offline', type: 'success' });
