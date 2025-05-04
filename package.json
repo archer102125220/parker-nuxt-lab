@@ -9,6 +9,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "analyze": "npx nuxi analyze ",
+    "pretest": "yarn build && yarn start",
+    "test:codegen": "playwright codegen http://localhost:3001",
+    "test:e2e-ui": "playwright test --ui",
     "start": "cross-env NITRO_PORT=3001 node ./.output/server/index.mjs",
     "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs",
     "postinstall": "nuxt prepare"
