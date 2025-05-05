@@ -1,5 +1,6 @@
 <template>
   <div class="root_style" :style="cssVariable">
+    <SpeedInsights />
     <!-- <NuxtPwaManifest /> -->
     <NuxtPwaAssets />
     <NuxtLayout>
@@ -29,6 +30,8 @@
 </template>
 
 <script setup>
+import { SpeedInsights } from '@vercel/speed-insights/nuxt';
+
 const NO_GO_TOP = [];
 
 const nuxtApp = useNuxtApp();
