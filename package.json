@@ -9,7 +9,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "analyze": "npx nuxi analyze ",
-    "pretest": "yarn build && yarn start",
+    "pretest": "yarn build --dotenv .env.e2e && yarn start",
     "test:codegen": "playwright codegen http://localhost:3001",
     "test:e2e": "playwright test",
     "test:e2e-ui": "playwright test --ui",
