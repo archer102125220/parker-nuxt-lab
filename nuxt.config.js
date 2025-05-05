@@ -168,12 +168,13 @@ export default defineNuxtConfig({
 
     registerType: 'autoUpdate',
 
+    // https://www.photoroom.com/zh-tw/tools/background-remover
     // https://remove-white-background.imageonline.co/cn/
     // https://www.freeconvert.com/image-converter
     // https://realfavicongenerator.net/
     manifest: {
       name: 'Parker Chen 的Nuxt實驗室',
-      short_name: 'Nuxt Lab',
+      short_name: 'Parker Chen\'s Nuxt Lab',
       // lang: 'zh-tw',
       lang: defaultLang,
       icons: [

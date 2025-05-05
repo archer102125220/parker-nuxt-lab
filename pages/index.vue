@@ -6,7 +6,7 @@
     :style="cssVariable"
     :is-mobile="$store.system.isMobile"
     @animation-inited="handleAnimationInited"
-    @animationFinish="handleAnimationFinish"
+    @animation-finish="handleAnimationFinish"
   >
     <template #leftLabel="{ label }">
       <p class="index_page-left_label">{{ label }}</p>
@@ -28,19 +28,6 @@ const localePath = useLocalePath();
 const router = useRouter();
 const animationInited = ref(false);
 
-const linkList = computed(() => [
-  { to: localePath('/about'), label: '關於本站' },
-  { to: localePath('/components'), label: '自製組件及第三方整合組件' },
-  { to: localePath('/components-test'), label: '組件綜合測試' },
-  { to: localePath('/directives'), label: '自製vue指令' },
-  { to: localePath('/route'), label: 'route相關測試' },
-  { to: localePath('/css-drawing'), label: 'css繪圖相關測試' },
-  { to: localePath('/web-authn'), label: '生物辨識測試（原生）' },
-  { to: localePath('/fido2-lib'), label: '生物辨識測試（fido2-lib）' },
-  { to: localePath('/web-cam'), label: 'WebCam測試' },
-  { to: localePath('/face-api'), label: 'face-api測試' },
-  { to: localePath('/frontend-api-cach-test'), label: '前端api快取測試' }
-]);
 const cssVariable = computed(() => {
   const _cssVariable = {
     ['--label_opacity']: 0
