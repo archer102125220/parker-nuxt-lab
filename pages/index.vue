@@ -74,14 +74,14 @@ function handleAnimationFinish() {
 @keyframes labelAnimation {
   0% {
     // width: 110px;
-    height: fit-content;
+    width: 125px;
     font-size: 20px;
     opacity: 0;
   }
 
   100% {
     // width: 85px;
-    height: fit-content;
+    width: 110px;
     font-size: 16px;
     opacity: 1;
   }
@@ -93,27 +93,47 @@ function handleAnimationFinish() {
   &-left_label {
     position: absolute;
     // top: 50vh;
-    top: 53dvh;
+    // top: 53dvh;
+    top: 0dvh;
+    bottom: -100dvh;
     // right: 53vw;
-    right: 54vw;
+    right: 54dvw;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
     // width: 85px;
-    width: 110px;
+    // width: 110px;
+    width: 95px;
+
+    padding-top: 16px;
 
     // animation: labelAnimation 1s;
     animation: var(--label_animation);
     opacity: var(--label_opacity, 0);
-    @include mobile {
-      // top: 49dvh;
-      // right: 52vw;
-      top: 52dvh;
-      right: 51vw;
-    }
+    // @include mobile {
+    //   // top: 49dvh;
+    //   // right: 52vw;
+    //   top: 52dvh;
+    //   right: 51vw;
+    // }
   }
 
   &-right_label {
     position: absolute;
-    top: -50vh;
-    left: 50vw;
+    // top: -50vh;
+    top: -100dvh;
+    bottom: 0dvh;
+    // left: 50vw;
+    left: 50dvw;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
     // width: 85px;
     width: 110px;
 
