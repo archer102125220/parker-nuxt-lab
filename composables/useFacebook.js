@@ -32,6 +32,8 @@ export function useFacebook(initFn = () => { }) {
       script.crossorigin = 'anonymous';
       script.setAttribute('crossorigin', 'anonymous');
       document.head.append(script);
+    } else if (typeof window.FB === 'object') {
+      facebook.value = window.FB;
     }
   });
 
