@@ -22,7 +22,7 @@
           :isShowRefreshIcon="isShowRefreshIcon"
         >
           <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-label">
-            {{ isPulling === true ? label : pullingLabel }}
+            {{ isPulling === true ? pullingLabel : label }}
           </p>
         </slot>
         <slot v-else name="refreshing">
@@ -96,7 +96,7 @@
     <div ref="infinityTriggerRef" />
     <slot
       v-if="infinityDisable === false"
-      name="infinityLbael"
+      name="infinityLabel"
       :loading="infinityLoading"
       :infinity-end="infinityEnd"
     >
@@ -293,7 +293,9 @@ async function handleInfinityFetch() {
 
   infinityLoading.value = true;
   if (typeof props.infinityFetch === 'function') {
-    await props.infinityFetch();
+    await props.infinityFetch(() => {
+      infinityLoading.value = false;
+    });
     infinityLoading.value = false;
   } else {
     emit('infinityFetch', () => {
@@ -440,16 +442,25 @@ async function handlePullEnd(e) {
       moveDistance.value = 50;
     }
     if (typeof props.refresh === 'function') {
-      await props.refresh();
-      refreshing.value = false;
+      await props.refresh(handleRefreshDone);
+      handleRefreshDone();
     } else {
-      emit('refresh', () => {
-        refreshing.value = false;
-      });
+      emit('refresh', handleRefreshDone);
     }
   } else {
     moveDistance.value = 0;
     refreshIconRotate.value = 0;
+  }
+}
+async function handleRefreshDone() {
+  refreshing.value = false;
+
+  if (props.iosType === true) {
+    await nextTick();
+
+    moveDistance.value = 0;
+    refreshIconRotate.value = 0;
+    isPulling.value = false;
   }
 }
 function handleRefreshIcon() {

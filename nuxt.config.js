@@ -152,7 +152,8 @@ export default defineNuxtConfig({
       );
     },
     '@nuxtjs/i18n',
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    'nuxt-security'
   ],
   i18n: {
     strategy,
@@ -377,6 +378,30 @@ export default defineNuxtConfig({
       // Don't fallback on document based (e.g. `/some-page`) requests
       // Even though this says `null` by default, I had to set this specifically to `null` to make it work
       navigateFallback: undefined,
+    },
+    devOptions: {
+      enabled: IS_DEV,
+      suppressWarnings: true,
+      navigateFallback: '/',
+      navigateFallbackAllowlist: [/^[\/api\/_nuxt\/]/]
+    }
+  },
+
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        'base-uri': ["'self'"],
+        'font-src': ["'self'", 'https:', 'data:'],
+        'form-action': ["'self'"],
+        'frame-ancestors': ["'self'"],
+        'img-src': ["'self'", 'data:'],
+        'object-src': ["'none'"],
+        'script-src-attr': ["'none'"],
+        'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'"],
+        'upgrade-insecure-requests': true
+      }
+      // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
     }
   },
 
