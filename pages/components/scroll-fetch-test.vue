@@ -1,7 +1,7 @@
 <template>
   <div class="scroll_fetch_test_page">
     <ScrollFetch
-      :ios-type="false"
+      :ios-style="false"
       :refresh-disable="false"
       height="90dvh"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"

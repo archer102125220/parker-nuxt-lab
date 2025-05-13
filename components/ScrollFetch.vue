@@ -13,7 +13,7 @@
     @scroll="handleScroll"
   >
     <div v-if="refreshDisable === false" class="scroll_fetch-trigger">
-      <template v-if="iosType === true">
+      <template v-if="iosStyle === true">
         <slot
           v-if="refreshing === false"
           name="refresh"
@@ -126,7 +126,7 @@ const props = defineProps({
   refreshingIcon: { type: String, default: null },
   refreshDisable: { type: Boolean, default: true },
   loading: { type: Boolean, default: false },
-  iosType: { type: Boolean, default: false },
+  iosStyle: { type: Boolean, default: false },
   iosTypeIconSize: { type: [String, Number], default: 10 },
   iosTypeIconStrokeWidth: { type: [String, Number], default: 2 },
   isEmpty: { type: Boolean, default: false },
@@ -172,7 +172,7 @@ const removeWindowScrollEnd = ref(() => {});
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
-  if (props.iosType === true) {
+  if (props.iosStyle === true) {
     _cssVariable['--refresh_transition'] = `${duration.value}ms`;
     _cssVariable['--refresh_transform'] =
       `translate3d(0, ${moveDistance.value}px, 0)`;
@@ -417,7 +417,7 @@ function handlePulling(e) {
 
   if (startY.value > 0 && move > 0) {
     isShowRefreshIcon.value = true;
-    if (props.iosType === false) {
+    if (props.iosStyle === false) {
       refreshTriggerZIndex.value = 2;
     }
 
@@ -435,7 +435,7 @@ function handlePulling(e) {
     }
     isPulling.value = _moveDistance > MOVE_DISTANCE_LIMIT;
 
-    if (props.iosType === false) {
+    if (props.iosStyle === false) {
       refreshIconAnimation.value = _moveDistance > MOVE_DISTANCE_LIMIT;
     }
   }
@@ -471,7 +471,7 @@ async function handlePullEnd(e) {
   if (moveDistance.value > MOVE_DISTANCE_LIMIT && isPulling.value === true) {
     refreshing.value = true;
     isPulling.value = false;
-    if (props.iosType === true) {
+    if (props.iosStyle === true) {
       moveDistance.value = 50;
     }
     if (typeof props.refresh === 'function') {
@@ -488,7 +488,7 @@ async function handlePullEnd(e) {
 async function handleRefreshDone() {
   refreshing.value = false;
 
-  if (props.iosType === true) {
+  if (props.iosStyle === true) {
     await nextTick();
 
     moveDistance.value = 0;

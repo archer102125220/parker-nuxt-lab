@@ -22,7 +22,7 @@
     </div>
     <ScrollFetch
       class="components_test_page-content"
-      :ios-type="false"
+      :ios-style="false"
       :refresh-disable="false"
       height="100dvh"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"

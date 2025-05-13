@@ -41,7 +41,7 @@
           :height="height"
           :refresh="refresh"
           :loading="loading"
-          :ios-type="iosType"
+          :ios-style="iosStyle"
           :refresh-icon="refreshIcon"
           :pullingLabel="pullingLabel"
           :loadingLabel="loadingLabel"
@@ -105,7 +105,7 @@ const props = defineProps({
   refreshIcon: { type: String, default: undefined },
   refreshingIcon: { type: String, default: undefined },
   refreshDisable: { type: Boolean, default: undefined },
-  iosType: { type: Boolean, default: undefined },
+  iosStyle: { type: Boolean, default: undefined },
   infinityLabel: { type: String, default: undefined },
   infinityEndLabel: { type: String, default: undefined },
   infinityBuffer: { type: Number, default: undefined },

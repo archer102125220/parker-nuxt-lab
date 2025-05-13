@@ -68,7 +68,7 @@
       </div>
       <ScrollFetch
         class="tab_test_page-complex-content"
-        :ios-type="false"
+        :ios-style="false"
         :refresh-disable="false"
         height="100dvh"
         refresh-icon="/img/icon/refresh/refresh-icon.svg"
