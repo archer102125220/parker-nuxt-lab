@@ -127,6 +127,8 @@ const props = defineProps({
   refreshDisable: { type: Boolean, default: true },
   loading: { type: Boolean, default: false },
   iosType: { type: Boolean, default: false },
+  iosTypeIconSize: { type: [String, Number], default: 10 },
+  iosTypeIconStrokeWidth: { type: [String, Number], default: 2 },
   isEmpty: { type: Boolean, default: false },
   emptyLabel: { type: String, default: '暂无资料' },
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
@@ -174,6 +176,21 @@ const cssVariable = computed(() => {
     _cssVariable['--refresh_transition'] = `${duration.value}ms`;
     _cssVariable['--refresh_transform'] =
       `translate3d(0, ${moveDistance.value}px, 0)`;
+
+    if (typeof props.iosTypeIconSize === 'string') {
+      _cssVariable['--refresh_ios_type_icon_size'] = props.iosTypeIconSize;
+    } else if (typeof props.iosTypeIconSize === 'number') {
+      _cssVariable['--refresh_ios_type_icon_size'] =
+        `${props.iosTypeIconSize}px`;
+    }
+
+    if (typeof props.iosTypeIconStrokeWidth === 'string') {
+      _cssVariable['--refresh_ios_type_icon_stroke_width'] =
+        props.iosTypeIconStrokeWidth;
+    } else if (typeof props.iosTypeIconStrokeWidth === 'number') {
+      _cssVariable['--refresh_ios_type_icon_stroke_width'] =
+        `${props.iosTypeIconStrokeWidth}px`;
+    }
   } else {
     _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
     _cssVariable['--refresh_icon_transform'] = `translate3d(0, ${
@@ -236,6 +253,22 @@ watch(
       moveDistance.value = 0;
       refreshIconRotate.value = 0;
       isPulling.value = false;
+    }
+  }
+);
+watch(
+  () => props.loading,
+  async (newLoading) => {
+    if (newLoading === false) {
+      duration.value = 300;
+      await nextTick();
+
+      setTimeout(() => {
+        isShowRefreshIcon.value = false;
+        moveDistance.value = 0;
+        refreshIconRotate.value = 0;
+        isPulling.value = false;
+      }, 300);
     }
   }
 );
@@ -565,10 +598,16 @@ function windowScrollEnd(e) {
       margin-top: 10px;
       margin-bottom: 20px;
       &-loading_icon {
-        width: 23px;
-        height: 23px;
-        border: 4px solid lightgray;
-        border-top: 4px solid $primary;
+        // width: 23px;
+        // height: 23px;
+        // border: 4px solid lightgray;
+        // border-top: 4px solid $primary;
+
+        width: var(--refresh_ios_type_icon_size);
+        height: var(--refresh_ios_type_icon_size);
+        border: var(--refresh_ios_type_icon_stroke_width) solid lightgray;
+        border-top: var(--refresh_ios_type_icon_stroke_width) solid $primary;
+
         border-radius: 50%;
       }
       &-label {
