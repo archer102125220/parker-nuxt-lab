@@ -556,11 +556,8 @@ function slideChange(swiper) {
     const slideValue = slideValueEl?.getAttribute('swiper-loop-value');
 
     if (`${props.modelValue}` !== slideValue) {
-      emit(
-        'update:modelValue',
-        isNaN(slideValue) ? slideValue : Number(slideValue)
-      );
-      emit('change', isNaN(slideValue) ? slideValue : Number(slideValue));
+      emit('update:modelValue', slideValue, swiper.activeIndex);
+      emit('change', slideValue, swiper.activeIndex);
     }
   } else {
     // const slideData = props.slideList[swiper.activeIndex];
