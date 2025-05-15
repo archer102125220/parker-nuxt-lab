@@ -218,6 +218,10 @@ const props = defineProps({
   ripple: {
     type: Boolean,
     default: true
+  },
+  tabListUpdateCurrentFocus: {
+    type: Boolean,
+    default: true
   }
 });
 const emits = defineEmits([
@@ -543,7 +547,14 @@ watch(
 );
 watch(
   () => props.tabList,
-  async (newTabList, oldTabList) => {
+  async (newTabList = [], oldTabList = []) => {
+    if (
+      props.tabListUpdateCurrentFocus === false &&
+      newTabList.length === oldTabList.length
+    ) {
+      return;
+    }
+
     if (
       JSON.stringify(newTabList) !== JSON.stringify(oldTabList) &&
       Array.isArray(tabListRef.value) === true
