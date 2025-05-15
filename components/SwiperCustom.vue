@@ -1,5 +1,11 @@
 <template>
-  <div ref="swiper" class="swiper" :style="cssVariable">
+  <div
+    ref="swiper"
+    class="swiper"
+    :style="cssVariable"
+    @mouseup="resetMoveingStatus"
+    @touchend="resetMoveingStatus"
+  >
     <div v-if="hasNavigation" class="swiper-prev" @click="handlePrev">
       <slot name="prev">
         <p v-ripple class="swiper-prev-btn">
@@ -31,6 +37,7 @@
             :name="`${slide[slotNameKey] || slide.slotName || index}-top`"
             :item="slide"
             :index="index"
+            :is-slider-moveing="isSliderMoveing"
           />
           <slot v-else name="default-top" :item="slide" :index="index" />
 
@@ -40,8 +47,15 @@
               :name="`${slide[slotNameKey] || slide.slotName || index}-left`"
               :item="slide"
               :index="index"
+              :is-slider-moveing="isSliderMoveing"
             />
-            <slot v-else name="default-left" :item="slide" :index="index" />
+            <slot
+              v-else
+              name="default-left"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
 
             <div class="swiper-content-wrapper-slide-center-middle">
               <slot
@@ -51,12 +65,14 @@
                 }-middle_top`"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
               <slot
                 v-else
                 name="default-middle_top"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
 
               <slot
@@ -64,10 +80,16 @@
                 :name="slide[slotNameKey] || slide.slotName || index"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               >
                 <p>{{ slide.content || slide }}</p>
               </slot>
-              <slot v-else :item="slide" :index="index">
+              <slot
+                v-else
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              >
                 <p>{{ slide.content || slide }}</p>
               </slot>
 
@@ -78,12 +100,14 @@
                 }-middle_bottom`"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
               <slot
                 v-else
                 name="default-middle_bottom"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
             </div>
 
@@ -92,8 +116,15 @@
               :name="`${slide[slotNameKey] || slide.slotName || index}-right`"
               :item="slide"
               :index="index"
+              :is-slider-moveing="isSliderMoveing"
             />
-            <slot v-else name="default-right" :item="slide" :index="index" />
+            <slot
+              v-else
+              name="default-right"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
           </div>
 
           <slot
@@ -101,8 +132,15 @@
             :name="`${slide[slotNameKey] || slide.slotName || index}-bottom`"
             :item="slide"
             :index="index"
+            :is-slider-moveing="isSliderMoveing"
           />
-          <slot v-else name="default-bottom" :item="slide" :index="index" />
+          <slot
+            v-else
+            name="default-bottom"
+            :item="slide"
+            :index="index"
+            :is-slider-moveing="isSliderMoveing"
+          />
         </div>
       </div>
     </div>
@@ -174,6 +212,8 @@ const canCancel = ref(false);
 const startX = ref(null);
 const startY = ref(null);
 const moveX = ref(null);
+
+const isSliderMoveing = ref(false);
 
 const cssVariable = computed(() => {
   const _cssVariable = {
@@ -277,8 +317,7 @@ function handlePrev() {
   if (sliderActiveIndex.value > 0) {
     const newSliderActiveIndex = sliderActiveIndex.value - 1;
     const newSlide = props.slideList[newSliderActiveIndex] || {};
-    const newValue =
-      newSlide[props.valueKey] || newSlide.value || newSlide;
+    const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -291,8 +330,7 @@ function handleNext() {
   if (sliderActiveIndex.value < _slideList.length) {
     const newSliderActiveIndex = sliderActiveIndex.value + 1;
     const newSlide = props.slideList[newSliderActiveIndex] || {};
-    const newValue =
-      newSlide[props.valueKey] || newSlide.value || newSlide;
+    const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -390,8 +428,7 @@ function handleChanging(e) {
 
   if (newSliderActiveIndex >= 0) {
     const newSlide = props.slideList[newSliderActiveIndex] || {};
-    const newValue =
-      newSlide[props.valueKey] || newSlide.value || newSlide;
+    const newValue = newSlide[props.valueKey] || newSlide.value || newSlide;
     emit('change', newValue);
     emit('update:modelValue', newValue);
 
@@ -420,6 +457,9 @@ function handleSlideXFindLast(slideX) {
     (deltaX.value >= 0 && slideX === 0) ||
     (difference >= 0 && difference <= sliderContentWidth * _longSwipesRatio)
   );
+}
+function resetMoveingStatus() {
+  isSliderMoveing.value = false;
 }
 </script>
 

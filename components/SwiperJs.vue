@@ -1,5 +1,10 @@
 <template>
-  <div class="swiper_js" :style="cssVariable">
+  <div
+    class="swiper_js"
+    :style="cssVariable"
+    @mouseup="resetMoveingStatus"
+    @touchend="resetMoveingStatus"
+  >
     <!-- If we need navigation buttons -->
     <div v-if="hasNavigation" ref="prevRef" class="swiper_js-prev">
       <slot name="prev">
@@ -31,8 +36,15 @@
             :name="`${slide[slotNameKey] || slide.slotName || index}-top`"
             :item="slide"
             :index="index"
+            :is-slider-moveing="isSliderMoveing"
           />
-          <slot v-else name="default-top" :item="slide" :index="index" />
+          <slot
+            v-else
+            name="default-top"
+            :item="slide"
+            :index="index"
+            :is-slider-moveing="isSliderMoveing"
+          />
 
           <div class="swiper_js-content-wrapper-slide-center">
             <slot
@@ -40,8 +52,15 @@
               :name="`${slide[slotNameKey] || slide.slotName || index}-left`"
               :item="slide"
               :index="index"
+              :is-slider-moveing="isSliderMoveing"
             />
-            <slot v-else name="default-left" :item="slide" :index="index" />
+            <slot
+              v-else
+              name="default-left"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
 
             <div class="swiper_js-content-wrapper-slide-center-middle">
               <slot
@@ -51,12 +70,14 @@
                 }-middle_top`"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
               <slot
                 v-else
                 name="default-middle_top"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
 
               <slot
@@ -64,10 +85,16 @@
                 :name="slide[slotNameKey] || slide.slotName || index"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               >
                 <p>{{ slide.content || slide }}</p>
               </slot>
-              <slot v-else :item="slide" :index="index">
+              <slot
+                v-else
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              >
                 <p>{{ slide.content || slide }}</p>
               </slot>
 
@@ -78,12 +105,14 @@
                 }-middle_bottom`"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
               <slot
                 v-else
                 name="default-middle_bottom"
                 :item="slide"
                 :index="index"
+                :is-slider-moveing="isSliderMoveing"
               />
             </div>
 
@@ -92,8 +121,15 @@
               :name="`${slide[slotNameKey] || slide.slotName || index}-right`"
               :item="slide"
               :index="index"
+              :is-slider-moveing="isSliderMoveing"
             />
-            <slot v-else name="default-right" :item="slide" :index="index" />
+            <slot
+              v-else
+              name="default-right"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
           </div>
 
           <slot
@@ -101,8 +137,15 @@
             :name="`${slide[slotNameKey] || slide.slotName || index}-bottom`"
             :item="slide"
             :index="index"
+            :is-slider-moveing="isSliderMoveing"
           />
-          <slot v-else name="default-bottom" :item="slide" :index="index" />
+          <slot
+            v-else
+            name="default-bottom"
+            :item="slide"
+            :index="index"
+            :is-slider-moveing="isSliderMoveing"
+          />
         </div>
       </div>
     </div>
@@ -235,6 +278,8 @@ const swiperRef = ref(null);
 
 const swiperObj = ref(null);
 const params = ref(null);
+const isSliderMoveing = ref(false);
+
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
@@ -558,6 +603,9 @@ function realIndexChange(swiper) {
 }
 function slideChangeTransitionEnd(swiper) {
   emit('slideChangeTransitionEnd', swiper);
+}
+function resetMoveingStatus() {
+  isSliderMoveing.value = false;
 }
 </script>
 
