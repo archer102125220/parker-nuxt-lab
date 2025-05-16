@@ -19,18 +19,19 @@ import {
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
 const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
-  'default-src': ["'self'", 'https://fonts.googleapis.com https://fonts.gstatic.com', 'https://www.youtube.com', 'https://connect.facebook.net', 'https://www.googletagmanager.com'],
+  'default-src': ["'self'", 'https://fonts.googleapis.com https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://www.googletagmanager.com'],
   'base-uri': ["'self'"],
   'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
   'form-action': ["'self'"],
   'frame-ancestors': ["'self'"],
-  'img-src': ["'self'", 'data:'],
+  'img-src': ["'self'", 'data:', 'https://*.ytimg.com', 'https://*.youtube.com'],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
-  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://connect.facebook.net', 'https://www.googletagmanager.com'],
-  'style-src': ["'self'", "'unsafe-inline'", ' https://fonts.googleapis.com'],
-  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
-  'frame-src': ["'self'", 'https://www.youtube.com', 'https://www.googletagmanager.com'],
+  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://connect.facebook.net', 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com'],
+  'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com'],
+  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com'],
+  'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com'],
+  'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com'],
   'upgrade-insecure-requests': true
 } : null;
 
