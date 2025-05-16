@@ -408,8 +408,9 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: CONTENT_SECURITY_POLICY,
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
+      crossOriginEmbedderPolicy: false,
       // crossOriginEmbedderPolicy: 'credentialless',
-      crossOriginEmbedderPolicy: 'require-corp',
+      // crossOriginEmbedderPolicy: 'require-corp',
       // crossOriginOpenerPolicy: 'same-origin',
       // crossOriginResourcePolicy: 'cross-origin',
       permissionsPolicy: {
