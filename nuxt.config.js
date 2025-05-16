@@ -19,15 +19,18 @@ import {
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
 const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
+  'default-src': ["'self'", 'https://fonts.googleapis.com https://fonts.gstatic.com', 'https://www.youtube.com', 'https://connect.facebook.net', 'https://www.googletagmanager.com'],
   'base-uri': ["'self'"],
-  'font-src': ["'self'", 'https:', 'data:'],
+  'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
   'form-action': ["'self'"],
   'frame-ancestors': ["'self'"],
   'img-src': ["'self'", 'data:'],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
-  'style-src': ["'self'", 'https:', "'unsafe-inline'"],
-  'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'"],
+  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://connect.facebook.net', 'https://www.googletagmanager.com'],
+  'style-src': ["'self'", "'unsafe-inline'", ' https://fonts.googleapis.com'],
+  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+  'frame-src': ["'self'", 'https://www.youtube.com', 'https://www.googletagmanager.com'],
   'upgrade-insecure-requests': true
 } : null;
 
