@@ -409,18 +409,18 @@ export default defineNuxtConfig({
       contentSecurityPolicy: CONTENT_SECURITY_POLICY,
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
       permissionsPolicy: {
-        accelerometer: ["'self'"], // 允許同源使用加速計
-        autoplay: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],      // 允許同源自動播放媒體
-        camera: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],       // 允許同源使用攝影機
+        accelerometer: ["self"], // 允許同源使用加速計
+        autoplay: ["self", "https://*.youtube.com"],      // 允許同源和YouTube自動播放媒體
+        camera: ["self"],       // 允許同源使用攝影機
         // 'cross-origin-isolated': [], // 根據需求設定
         // displaycapture: [],      // 螢幕截取，謹慎使用
-        fullscreen: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],    // 允許同源使用全螢幕
-        geolocation: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
-        // gyroscope: ["'self'"],     // 允許同源使用陀螺儀
-        // magnetometer: ["'self'"],  // 允許同源使用磁力計
-        microphone: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],   // 允許同源使用麥克風
+        fullscreen: ["self", "https://*.youtube.com"],    // 允許同源和YouTube使用全螢幕
+        geolocation: ["self"],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
+        // gyroscope: ["self"],     // 允許同源使用陀螺儀
+        // magnetometer: ["self"],  // 允許同源使用磁力計
+        microphone: ["self"],   // 允許同源使用麥克風
         // midi: [],                // MIDI 裝置
-        // payment: ["'self'"],       // 允許同源使用支付請求 API
+        // payment: ["self"],       // 允許同源使用支付請求 API
         // usb: [],                 // USB 裝置
         // xrspatialtracking: [],   // XR 空間追蹤
       },
