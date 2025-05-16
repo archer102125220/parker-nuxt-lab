@@ -29,8 +29,8 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com'],
-  'frame-ancestors': ["'self'", 'https://www.youtube.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
-  'frame-src': ["'self'", 'https://www.youtube.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
+  'frame-ancestors': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
+  'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
   'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'upgrade-insecure-requests': true
 } : null;
@@ -408,17 +408,17 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: CONTENT_SECURITY_POLICY,
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
-      // crossOriginEmbedderPolicy: 'credentialless',
-      crossOriginEmbedderPolicy: 'require-corp',
+      crossOriginEmbedderPolicy: 'credentialless',
+      // crossOriginEmbedderPolicy: 'require-corp',
       crossOriginOpenerPolicy: 'same-origin',
       crossOriginResourcePolicy: 'cross-origin',
       permissionsPolicy: {
-        accelerometer: ['self', '"https://www.youtube.com"', '"https://*.youtube.com"'], // 允許同源和YouTube使用加速計
-        autoplay: ['self', '"https://www.youtube.com"', '"https://*.youtube.com"'],      // 允許同源和YouTube自動播放媒體
+        accelerometer: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube使用加速計
+        autoplay: ['self', '"https://*.youtube.com"'],      // 允許同源和YouTube自動播放媒體
         camera: ['self'],       // 允許同源使用攝影機
         // 'cross-origin-isolated': [], // 根據需求設定
         // displaycapture: [],      // 螢幕截取，謹慎使用
-        fullscreen: ['self', '"https://www.youtube.com"', '"https://*.youtube.com"'],    // 允許同源和YouTube使用全螢幕
+        fullscreen: ['self', '"https://*.youtube.com"'],    // 允許同源和YouTube使用全螢幕
         geolocation: ['self'],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
         // gyroscope: ['self'],     // 允許同源使用陀螺儀
         // magnetometer: ['self'],  // 允許同源使用磁力計
