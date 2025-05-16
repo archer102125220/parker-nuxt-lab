@@ -408,10 +408,10 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: CONTENT_SECURITY_POLICY,
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
-      crossOriginEmbedderPolicy: 'credentialless',
-      // crossOriginEmbedderPolicy: 'require-corp',
-      crossOriginOpenerPolicy: 'same-origin',
-      crossOriginResourcePolicy: 'cross-origin',
+      // crossOriginEmbedderPolicy: 'credentialless',
+      crossOriginEmbedderPolicy: 'require-corp',
+      // crossOriginOpenerPolicy: 'same-origin',
+      // crossOriginResourcePolicy: 'cross-origin',
       permissionsPolicy: {
         accelerometer: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube使用加速計
         autoplay: ['self', '"https://*.youtube.com"'],      // 允許同源和YouTube自動播放媒體
