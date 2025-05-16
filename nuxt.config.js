@@ -19,19 +19,19 @@ import {
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
 const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
-  'default-src': ["'self'", 'https://fonts.googleapis.com https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://www.googletagmanager.com'],
+  'default-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'base-uri': ["'self'"],
-  'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
-  'form-action': ["'self'"],
-  'frame-ancestors': ["'self'"],
-  'img-src': ["'self'", 'data:', 'https://*.ytimg.com', 'https://*.youtube.com'],
+  'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
+  'form-action': ["'self'", 'https://*.facebook.com'],
+  'frame-ancestors': ["'self'", 'https://*.facebook.com'],
+  'img-src': ["'self'", 'data:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
-  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://connect.facebook.net', 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com'],
-  'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com'],
-  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com'],
-  'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com'],
-  'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com'],
+  'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
+  'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
+  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com'],
+  'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
+  'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'upgrade-insecure-requests': true
 } : null;
 
@@ -410,15 +410,15 @@ export default defineNuxtConfig({
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
       permissionsPolicy: {
         accelerometer: ["'self'"], // 允許同源使用加速計
-        autoplay: ["'self'"],      // 允許同源自動播放媒體
-        camera: ["'self'"],       // 允許同源使用攝影機
+        autoplay: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],      // 允許同源自動播放媒體
+        camera: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],       // 允許同源使用攝影機
         // 'cross-origin-isolated': [], // 根據需求設定
         // displaycapture: [],      // 螢幕截取，謹慎使用
-        fullscreen: ["'self'"],    // 允許同源使用全螢幕
-        geolocation: ["'self'"],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
+        fullscreen: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],    // 允許同源使用全螢幕
+        geolocation: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
         // gyroscope: ["'self'"],     // 允許同源使用陀螺儀
         // magnetometer: ["'self'"],  // 允許同源使用磁力計
-        microphone: ["'self'"],   // 允許同源使用麥克風
+        microphone: ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],   // 允許同源使用麥克風
         // midi: [],                // MIDI 裝置
         // payment: ["'self'"],       // 允許同源使用支付請求 API
         // usb: [],                 // USB 裝置
