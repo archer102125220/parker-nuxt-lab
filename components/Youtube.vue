@@ -119,7 +119,7 @@ onMounted(async () => {
     if (document.getElementById('youtube-script') === null) {
       const el = document.createElement('script');
       el.setAttribute('id', 'youtube-script');
-      el.setAttribute('src', `https://www.youtube.com/iframe_api`);
+      el.setAttribute('src', 'https://www.youtube.com/iframe_api');
       el.setAttribute('async', '');
       el.setAttribute('defer', '');
       document.body.appendChild(el);
