@@ -29,6 +29,10 @@ const linkList = computed(() => [
     to: localePath('/css-drawing/triangle-anime-test'),
     label: 'css三角形滿版動畫測試'
   },
+  {
+    to: localePath('/css-drawing/hexagon-test'),
+    label: 'css六邊形測試'
+  },
   { to: localePath('/css-drawing/svg-color-change'), label: 'svg替換顏色測試' }
 ]);
 </script>
