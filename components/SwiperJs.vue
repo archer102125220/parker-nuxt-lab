@@ -480,8 +480,30 @@ function handleSwiperUpdata(newProps) {
         el: scrollbarRef.value
       };
     }
+
+    if (
+      newProps.autoplayDelay !== null &&
+      isNaN(newProps.autoplayDelay) === false
+    ) {
+      _params.modules = [..._params.modules, Autoplay];
+      _params.autoplay = {
+        delay: newProps.autoplayDelay,
+        disableOnInteraction: newProps.autoplayDisableOnInteraction
+      };
+    }
+
     swiperObj.value.update(_params);
+    swiperObj.value.updateSize();
+    swiperObj.value.updateSlides();
     params.value = _params;
+
+    // 校正 slide 位置
+    swiperObj.value.off('slideChange', slideChange);
+    swiperObj.value.slideTo(props.slideList.length - 1, 0, false);
+    setTimeout(() => {
+      swiperObj.value.on('slideChange', slideChange);
+      syncSlide(props.modelValue, swiperObj.value);
+    }, 300);
   }
 }
 function beforeInit(swiper) {
