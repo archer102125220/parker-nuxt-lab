@@ -13,6 +13,7 @@ import initializeDoubleTap from '@/utils/helpers/doubleTap';
 import getScrollEndLimit from '@/utils/helpers/get-scroll-end-limit';
 import getLocalLanguage from '@/utils/third-party/get-local-language';
 import setLocalLanguage from '@/utils/third-party/set-local-language';
+import { classifySwipeDirection } from '@/utils/helpers/classify-swipe-direction';
 
 if (typeof window !== 'undefined') {
   dvhSvhLvhPolyfill();
@@ -32,7 +33,8 @@ export default defineNuxtPlugin(() => {
       googleGAInit,
       getScrollEndLimit,
       getLocalLanguage,
-      setLocalLanguage
+      setLocalLanguage,
+      classifySwipeDirection
     },
   };
 });

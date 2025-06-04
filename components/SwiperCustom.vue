@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import { classifySwipeDirection } from '@/utils/helpers/classify-swipe-direction';
+const { classifySwipeDirection } = useNuxtApp();
 
 const props = defineProps({
   modelValue: {
