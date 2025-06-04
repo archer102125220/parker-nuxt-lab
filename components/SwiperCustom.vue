@@ -148,6 +148,8 @@
 </template>
 
 <script setup>
+import { classifySwipeDirection } from '@/utils/helpers/classify-swipe-direction';
+
 const props = defineProps({
   modelValue: {
     type: [Number, String, Object],
@@ -392,14 +394,34 @@ function handleSliderMove(e) {
     e.changedTouches?.[0]?.clientX ||
     e.changedTouches?.[0]?.offsetX;
 
+  const {
+    isHorizontal,
+    isVertical,
+    originalAngleDeg,
+    angleDeg,
+    angleRad,
+    distance
+  } = classifySwipeDirection(
+    { clientX: startX.value, clientY: startY.value },
+    { clientX: eventX, clientY: eventY }
+  );
+  console.log({
+    isHorizontal,
+    isVertical,
+    originalAngleDeg,
+    angleDeg,
+    angleRad,
+    distance
+  });
+
   if (
-    Math.abs(eventX - startX.value) > 15 ||
+    isHorizontal === false ||
     (moveX.value > 0 && Math.abs(moveX.value - startX.value) > 20)
   ) {
     canCancel.value = false;
   }
 
-  if (Math.abs(startY.value - eventY) > 5 && canCancel.value === true) {
+  if (isHorizontal === false && canCancel.value === true) {
     isDragging.value = false;
     return;
   }

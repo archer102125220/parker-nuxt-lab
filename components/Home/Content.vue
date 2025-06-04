@@ -25,7 +25,7 @@ const linkList = computed(() => [
   { to: localePath('/web-cam'), label: 'WebCam測試' },
   { to: localePath('/face-api'), label: 'face-api測試' },
   { to: localePath('/frontend-api-cach-test'), label: '前端api快取測試' },
-  { to: localePath('/face-swap'), label: 'AI 換臉 測試' }
+  // { to: localePath('/face-swap'), label: 'AI 換臉 測試' }
 ]);
 </script>
 
