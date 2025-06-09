@@ -5,6 +5,7 @@
     :style="cssVariable"
     @mouseup="resetMoveingStatus"
     @touchend="resetMoveingStatus"
+    @transitionend="handleSliderMoveEnd"
   >
     <div v-if="hasNavigation" class="swiper-prev" @click="handlePrev">
       <slot name="prev">
@@ -203,7 +204,8 @@ const emit = defineEmits([
   'reachEnd',
   'fromEdge',
   'activeIndexChange',
-  'beforeTransitionStart'
+  'beforeTransitionStart',
+  'sliderMoveEnd'
 ]);
 
 const sliderContent = ref(null);
@@ -482,6 +484,9 @@ function handleSlideXFindLast(slideX) {
 }
 function resetMoveingStatus() {
   isSliderMoveing.value = false;
+}
+function handleSliderMoveEnd() {
+  emit('sliderMoveEnd', props.modelValue, sliderActiveIndex.value);
 }
 </script>
 
