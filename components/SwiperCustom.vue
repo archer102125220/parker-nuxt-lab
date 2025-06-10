@@ -430,7 +430,7 @@ function handleSliderMove(e) {
 
   moveX.value = eventX;
 
-  emit('sliderMove', e);
+  emit('sliderMove', e, props.modelValue, sliderActiveIndex.value);
 }
 function handleChanging(e) {
   isDragging.value = false;
