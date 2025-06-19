@@ -34,6 +34,9 @@ import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 
 const NO_GO_TOP = [];
 
+const runtimeConfig = useRuntimeConfig();
+useRequestInit(runtimeConfig.public.API_BASE);
+
 const nuxtApp = useNuxtApp();
 const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
 const i18nLocale = useCookie('___i18n_locale');
