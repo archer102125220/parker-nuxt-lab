@@ -9,7 +9,7 @@ export function useRequest(
   path = '',
   payload = {},
   checkPayload,
-  isErrorAdapter,
+  hasErrorAdapter,
   extendOption = { retry: 3 },
   requestOption = {}
 ) {
@@ -69,7 +69,7 @@ export function useRequest(
         path,
         payload,
         _extendOption,
-        isErrorAdapter
+        hasErrorAdapter
       );
 
       response.value = newResponse
