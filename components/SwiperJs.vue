@@ -653,6 +653,7 @@ function resetMoveingStatus() {
   }
   &-next {
     @extend .swiper_js-prev;
+    left: unset;
     right: 5px;
     &-btn {
       @extend .swiper_js-prev-btn;
