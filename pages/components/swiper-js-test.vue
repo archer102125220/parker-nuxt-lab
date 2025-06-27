@@ -46,6 +46,7 @@ const slideList = computed(() => {
   // width: 100dvw;
   height: 90dvh;
   // min-height: 100dvh;
+
   &-content {
     // width: 100%;
     height: 100%;

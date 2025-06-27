@@ -1,9 +1,11 @@
 <template>
   <div
     class="swiper_js"
+    ref="swiperJsRootRef"
     :style="cssVariable"
     @mouseup="resetMoveingStatus"
     @touchend="resetMoveingStatus"
+    @scroll="resetSwiperScroll"
   >
     <!-- If we need navigation buttons -->
     <div v-if="hasNavigation" ref="prevRef" class="swiper_js-prev">
@@ -270,11 +272,12 @@ const emit = defineEmits([
   'realIndexChange'
 ]);
 
-const nextRef = ref(null);
-const prevRef = ref(null);
-const paginationRef = ref(null);
-const scrollbarRef = ref(null);
-const swiperRef = ref(null);
+const swiperJsRootRef = useTemplateRef('swiperJsRootRef');
+const nextRef = useTemplateRef('nextRef');
+const prevRef = useTemplateRef('prevRef');
+const paginationRef = useTemplateRef('paginationRef');
+const scrollbarRef = useTemplateRef('scrollbarRef');
+const swiperRef = useTemplateRef('swiperRef');
 
 const swiperObj = ref(null);
 const params = ref(null);
@@ -625,6 +628,12 @@ function slideChangeTransitionEnd(swiper) {
 }
 function resetMoveingStatus() {
   isSliderMoveing.value = false;
+}
+function resetSwiperScroll() {
+  // 校正 slide 位置，避免有任何scroll事件影響swiper位置
+  if (swiperJsRootRef.value?.scrollWidth > 0) {
+    swiperJsRootRef.value.scrollTo(0, 0);
+  }
 }
 </script>
 
