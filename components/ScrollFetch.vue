@@ -144,7 +144,7 @@ const props = defineProps({
   infinityFetch: { type: Function, default: null },
   vibrate: { type: Boolean, default: false },
   scrollEndWait: { type: Number, default: 100 },
-  timeout: { type: Number, default: null }
+  infinityTimeout: { type: Number, default: null }
 });
 const emit = defineEmits([
   'refresh',
@@ -349,14 +349,17 @@ async function handleInfinityFetch() {
     await Promise(async (resolve, reject) => {
       try {
         // 如果沒有正常觸發釋放事件，則由props.timeout自動釋放
-        if (typeof props.timeout === 'number' && props.timeout > 0) {
+        if (
+          typeof props.infinityTimeout === 'number' &&
+          props.infinityTimeout > 0
+        ) {
           infinityTimeoutTimer.value = setTimeout(async () => {
             await nextTick();
             clearTimeout(infinityTimeoutTimer.value);
             infinityTimeoutTimer.value = null;
 
-            reject(new Error('Infinity fetch timeout exceeded'));
-          }, props.timeout);
+            reject(new Error('Infinity fetch infinityTimeout exceeded'));
+          }, props.infinityTimeout);
         }
 
         if (typeof props.infinityFetch === 'function') {
