@@ -135,9 +135,10 @@ const props = defineProps({
   iosTypeIconStrokeWidth: { type: [String, Number], default: 2 },
   isEmpty: { type: Boolean, default: false },
   emptyLabel: { type: String, default: '暂无资料' },
+  useObserver: { type: Boolean, default: true }, // infinty scroll 的觸發方式
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
-  infinityBuffer: { type: Number, default: 100 },
+  infinityBuffer: { type: Number, default: null },
   infinityDisable: { type: Boolean, default: false },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
@@ -169,6 +170,7 @@ const duration = ref(0);
 const refreshing = ref(false);
 const isPulling = ref(false);
 
+const infinityTrigger = ref(false);
 const infinityLoading = ref(false);
 const infinityTimeoutTimer = ref(null);
 
@@ -287,6 +289,58 @@ watch(
     }
   }
 );
+watch(
+  () => props.useObserver,
+  (newUseObserver) => {
+    if (newUseObserver === true) {
+      if (typeof observer.value?.observe === 'function') {
+        observer.value.observe(infinityTriggerRef.value);
+      } else {
+        observer.value = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            // console.log('元素已出現在畫面可視範圍內');
+            // handleInfinityFetch();
+
+            infinityTrigger.value = true;
+          }
+        });
+
+        observer.value.observe(infinityTriggerRef.value);
+      }
+    } else if (
+      newUseObserver === false &&
+      typeof observer.value?.unobserve === 'function' &&
+      typeof infinityTriggerRef.value === 'object' &&
+      infinityTriggerRef.value !== null
+    ) {
+      observer.value.unobserve(infinityTriggerRef.value);
+    }
+  },
+  { immediate: true }
+);
+watch(
+  () => props.infinityBuffer,
+  (newInfinityBuffer) => {
+    const elementInfo = scrollFetchRef.value || {};
+
+    infinityTrigger.value = createNewInfinityTrigger(
+      elementInfo.scrollHeight,
+      elementInfo.scrollTop,
+      newInfinityBuffer
+    );
+  }
+);
+watch(
+  () => infinityTrigger.value,
+  (newInfinityTrigger) => {
+    handleInfinityTrigger(
+      newInfinityTrigger,
+      infinityLoading.value,
+      props.infinityDisable,
+      props.infinityEnd
+    );
+  }
+);
 
 onMounted(() => {
   if (
@@ -304,19 +358,15 @@ onMounted(() => {
 
   removeWindowScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
 
-  observer.value = new IntersectionObserver((entries) => {
-    if (
-      props.loading === false &&
-      entries[0].isIntersecting &&
-      props.infinityDisable === false &&
-      props.infinityEnd === false
-    ) {
-      // console.log('元素已出現在畫面可視範圍內');
-      handleInfinityFetch();
-    }
-  });
+  // observer.value = new IntersectionObserver((entries) => {
+  //   if (entries[0].isIntersecting) {
+  //     // console.log('元素已出現在畫面可視範圍內');
+  //     // handleInfinityFetch();
+  //     infinityTrigger.value = true;
+  //   }
+  // });
 
-  observer.value.observe(infinityTriggerRef.value);
+  // observer.value.observe(infinityTriggerRef.value);
 });
 onUnmounted(() => {
   window.removeEventListener('contextmenu', handlePullEnd);
@@ -334,6 +384,45 @@ onUnmounted(() => {
     observer.value.unobserve(infinityTriggerRef.value);
   }
 });
+async function handleInfinityTrigger(
+  currentInfinityTrigger = false,
+  currentInfinityLoading = false,
+  currentInfinityDisable = false,
+  currentInfinityEnd = false
+) {
+  if (currentInfinityTrigger !== true) return;
+
+  if (currentInfinityLoading !== true) {
+    if (typeof infinityTimeoutTimer.value === 'number') {
+      clearTimeout(infinityTimeoutTimer.value);
+    }
+
+    const infinityTimeout =
+      typeof props.infinityTimeout === 'number' && props.infinityTimeout > 0
+        ? props.infinityTimeout
+        : 100;
+
+    infinityTimeoutTimer.value = setTimeout(async () => {
+      await nextTick();
+      clearTimeout(infinityTimeoutTimer.value);
+      infinityTimeoutTimer.value = null;
+
+      infinityLoading.valueOf = false;
+    }, infinityTimeout);
+  }
+
+  if (currentInfinityDisable === false && currentInfinityEnd === false) {
+    await handleInfinityFetch();
+  }
+
+  const elementInfo = scrollFetchRef.value || {};
+
+  // infinityTrigger.value = false;
+  infinityTrigger.value = createNewInfinityTrigger(
+    elementInfo.scrollHeight,
+    elementInfo.scrollTop
+  );
+}
 async function handleInfinityFetch() {
   if (infinityLoading.value === true) {
     return;
@@ -559,10 +648,39 @@ function handleWheel(e) {
 }
 function handleScroll(e) {
   emit('scroll', e);
+
+  if (props.useObserver === false) {
+    const scrollHeight = e?.target?.scrollHeight || 1;
+    const scrollTop = e?.target?.scrollTop || 0;
+
+    infinityTrigger.value = createNewInfinityTrigger(scrollHeight, scrollTop);
+  }
 }
 function handleScrollEnd(e) {
   // console.log('scrollEnd', e);
   emit('scrollEnd', e);
+}
+function createNewInfinityTrigger(
+  scrollHeight = 1,
+  scrollTop = 0,
+  newInfinityBuffer
+) {
+  const infinityBuffer = newInfinityBuffer || props.infinityBuffer || 0;
+  const safeScrollHeight = typeof scrollHeight === 'number' ? scrollHeight : 1;
+  const safeScrollTop = typeof scrollTop === 'number' ? scrollTop : 0;
+
+  // const infinityLimint = safeScrollHeight * (props.infinityBuffer || 1);
+  const infinityLimint = safeScrollHeight + infinityBuffer;
+
+  // console.log({
+  //   scrollHeight,
+  //   safeScrollHeight,
+  //   infinityLimint,
+  //   scrollTop,
+  //   safeScrollTop,
+  // });
+
+  return safeScrollTop >= infinityLimint;
 }
 function parentScroll(e) {
   if (e.target === scrollFetchRef.value || e.target === window) {
