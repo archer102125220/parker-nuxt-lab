@@ -3,6 +3,10 @@
     ref="scrollFetchRef"
     class="scroll_fetch"
     :style="cssVariable"
+    v-scroll-end="{
+      handler: handleScrollEnd,
+      wait: scrollEndWait
+    }"
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
     @mouseup="handlePullEnd"
@@ -137,9 +141,19 @@ const props = defineProps({
   infinityDisable: { type: Boolean, default: false },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
-  infinityFetch: { type: Function, default: null }
+  infinityFetch: { type: Function, default: null },
+  vibrate: { type: Boolean, default: false },
+  scrollEndWait: { type: Number, default: 100 },
+  timeout: { type: Number, default: null }
 });
-const emit = defineEmits(['refresh', 'infinityFetch', 'wheel', 'scroll']);
+const emit = defineEmits([
+  'refresh',
+  'infinityFetch',
+  'wheel',
+  'scroll',
+  'scrollEnd',
+  'infinityFail'
+]);
 
 const scrollFetchRef = ref(null);
 const infinityTriggerRef = ref(null);
@@ -156,6 +170,7 @@ const refreshing = ref(false);
 const isPulling = ref(false);
 
 const infinityLoading = ref(false);
+const infinityTimeoutTimer = ref(null);
 
 const refreshIconAnimation = ref(false);
 const refreshTriggerZIndex = ref(-1);
@@ -324,17 +339,48 @@ async function handleInfinityFetch() {
     return;
   }
 
-  infinityLoading.value = true;
-  if (typeof props.infinityFetch === 'function') {
-    await props.infinityFetch(() => {
-      infinityLoading.value = false;
-    });
-    infinityLoading.value = false;
-  } else {
-    emit('infinityFetch', () => {
-      infinityLoading.value = false;
-    });
+  if (typeof infinityTimeoutTimer.value === 'number') {
+    clearTimeout(infinityTimeoutTimer.value);
   }
+
+  infinityLoading.value = true;
+
+  try {
+    await Promise(async (resolve, reject) => {
+      try {
+        // 如果沒有正常觸發釋放事件，則由props.timeout自動釋放
+        if (typeof props.timeout === 'number' && props.timeout > 0) {
+          infinityTimeoutTimer.value = setTimeout(async () => {
+            await nextTick();
+            clearTimeout(infinityTimeoutTimer.value);
+            infinityTimeoutTimer.value = null;
+
+            reject(new Error('Infinity fetch timeout exceeded'));
+          }, props.timeout);
+        }
+
+        if (typeof props.infinityFetch === 'function') {
+          await props.infinityFetch();
+
+          resolve();
+        } else {
+          emit('infinityFetch', () => resolve());
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  } catch (error) {
+    console.error('ScrollFetch infinity fetch error:', error);
+
+    emit('infinityFail', error);
+  }
+
+  if (typeof infinityTimeoutTimer.value === 'number') {
+    clearTimeout(infinityTimeoutTimer.value);
+    infinityTimeoutTimer.value = null;
+  }
+  infinityLoading.value = false;
 }
 
 function handlePullStart(e) {
@@ -427,6 +473,7 @@ function handlePulling(e) {
       moveDistance.value = _moveDistance;
       refreshIconRotate.value = _moveDistance * 5.5;
     } else if (
+      props.vibrate === true &&
       typeof window?.navigator?.vibrate === 'function' &&
       _moveDistance <= MOVE_DISTANCE_LIMIT + 4 &&
       _moveDistance >= MOVE_DISTANCE_LIMIT + 3
@@ -509,6 +556,10 @@ function handleWheel(e) {
 }
 function handleScroll(e) {
   emit('scroll', e);
+}
+function handleScrollEnd(e) {
+  // console.log('scrollEnd', e);
+  emit('scrollEnd', e);
 }
 function parentScroll(e) {
   if (e.target === scrollFetchRef.value || e.target === window) {
