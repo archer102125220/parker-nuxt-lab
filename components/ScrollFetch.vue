@@ -358,7 +358,7 @@ async function handleInfinityFetch() {
             clearTimeout(infinityTimeoutTimer.value);
             infinityTimeoutTimer.value = null;
 
-            reject(new Error('Infinity fetch infinityTimeout exceeded'));
+            reject(new Error('Infinity fetch timeout exceeded'));
           }, props.infinityTimeout);
         }
 
