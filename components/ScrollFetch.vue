@@ -315,8 +315,7 @@ watch(
     ) {
       observer.value.unobserve(infinityTriggerRef.value);
     }
-  },
-  { immediate: true }
+  }
 );
 watch(
   () => props.infinityBuffer,
@@ -358,15 +357,16 @@ onMounted(() => {
 
   removeWindowScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
 
-  // observer.value = new IntersectionObserver((entries) => {
-  //   if (entries[0].isIntersecting) {
-  //     // console.log('元素已出現在畫面可視範圍內');
-  //     // handleInfinityFetch();
-  //     infinityTrigger.value = true;
-  //   }
-  // });
-
-  // observer.value.observe(infinityTriggerRef.value);
+  if (props.useObserver === true) {
+    observer.value = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        // console.log('元素已出現在畫面可視範圍內');
+        // handleInfinityFetch();
+        infinityTrigger.value = true;
+      }
+    });
+    observer.value.observe(infinityTriggerRef.value);
+  }
 });
 onUnmounted(() => {
   window.removeEventListener('contextmenu', handlePullEnd);
@@ -435,7 +435,7 @@ async function handleInfinityFetch() {
   infinityLoading.value = true;
 
   try {
-    await Promise(async (resolve, reject) => {
+    await new Promise(async (resolve, reject) => {
       try {
         // 如果沒有正常觸發釋放事件，則由props.timeout自動釋放
         if (
