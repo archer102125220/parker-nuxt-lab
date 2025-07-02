@@ -3,8 +3,6 @@
     class="swiper_js"
     ref="swiperJsRootRef"
     :style="cssVariable"
-    @mouseup="resetMoveingStatus"
-    @touchend="resetMoveingStatus"
     @scroll="resetSwiperScroll"
   >
     <!-- If we need navigation buttons -->
@@ -372,6 +370,12 @@ watch(
 
 onMounted(() => {
   handleSwiperInit();
+  window.addEventListener('mouseup', resetMoveingStatus, { passive: true });
+  window.addEventListener('touchend', resetMoveingStatus, { passive: true });
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('mouseup', resetMoveingStatus);
+  window.removeEventListener('touchend', resetMoveingStatus);
 });
 
 function handleSwiperInit() {
