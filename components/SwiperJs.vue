@@ -270,7 +270,8 @@ const emit = defineEmits([
   'fromEdge',
   'activeIndexChange',
   'beforeTransitionStart',
-  'realIndexChange'
+  'realIndexChange',
+  'touchEnd'
 ]);
 
 const swiperJsRootRef = useTemplateRef('swiperJsRootRef');
@@ -405,7 +406,8 @@ function handleSwiperInit() {
       activeIndexChange,
       beforeTransitionStart,
       realIndexChange,
-      slideChangeTransitionEnd
+      slideChangeTransitionEnd,
+      touchEnd
     }
   };
   if (props.hasNavigation === true) {
@@ -638,6 +640,11 @@ function slideChangeTransitionEnd(swiper) {
   console.log('slideChangeTransitionEnd');
   isSliderMoveing.value = false;
   emit('slideChangeTransitionEnd', swiper);
+}
+function touchEnd(swiper) {
+  console.log('touchEnd');
+  isSliderMoveing.value = false;
+  emit('touchEnd', swiper);
 }
 function resetMoveingStatus() {
   isSliderMoveing.value = false;
