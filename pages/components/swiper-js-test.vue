@@ -5,7 +5,15 @@
       should-fill-height
       :slide-list="slideList"
       class="swiper_js_test_page-content"
-    />
+    >
+      <template #default="{ item, index, isSliderMoveing }">
+        <div class="swiper_js_test_page-content-slide">
+          <p>item: {{ item }}</p>
+          <p>index: {{ index }}</p>
+          <p>isSliderMoveing: {{ `${isSliderMoveing}` }}</p>
+        </div>
+      </template>
+    </SwiperJs>
     <SwiperJs
       v-model="slideLoop"
       loop
@@ -44,13 +52,19 @@ const slideList = computed(() => {
 <style lang="scss" scoped>
 .swiper_js_test_page {
   // width: 100dvw;
-  height: 90dvh;
+  height: 50dvh;
   // min-height: 100dvh;
+  overflow-y: auto;
 
   &-content {
     // width: 100%;
     height: 100%;
     overflow-x: hidden;
+
+    &-slide {
+      height: 100%;
+      overflow: hidden;
+    }
   }
 }
 </style>

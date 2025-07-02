@@ -3,6 +3,9 @@
     class="swiper_js"
     ref="swiperJsRootRef"
     :style="cssVariable"
+    @mouseup="resetMoveingStatus"
+    @touchend="resetMoveingStatus"
+    @touchcancel="resetMoveingStatus"
     @scroll="resetSwiperScroll"
   >
     <!-- If we need navigation buttons -->
@@ -370,12 +373,14 @@ watch(
 
 onMounted(() => {
   handleSwiperInit();
-  window.addEventListener('mouseup', resetMoveingStatus, { passive: true });
-  window.addEventListener('touchend', resetMoveingStatus, { passive: true });
+  window.addEventListener('mouseup', resetMoveingStatus);
+  window.addEventListener('touchend', resetMoveingStatus);
+  window.addEventListener('touchcancel', resetMoveingStatus);
 });
 onBeforeUnmount(() => {
   window.removeEventListener('mouseup', resetMoveingStatus);
   window.removeEventListener('touchend', resetMoveingStatus);
+  window.removeEventListener('touchcancel', resetMoveingStatus);
 });
 
 function handleSwiperInit() {
@@ -607,6 +612,8 @@ function slideChange(swiper) {
   emit('slideChange', swiper);
 }
 function sliderMove(swiper) {
+  console.log('sliderMove');
+  isSliderMoveing.value = true;
   emit('sliderMove', swiper);
 }
 function reachBeginning(swiper) {
@@ -628,6 +635,8 @@ function realIndexChange(swiper) {
   emit('realIndexChange', swiper);
 }
 function slideChangeTransitionEnd(swiper) {
+  console.log('slideChangeTransitionEnd');
+  isSliderMoveing.value = false;
   emit('slideChangeTransitionEnd', swiper);
 }
 function resetMoveingStatus() {
