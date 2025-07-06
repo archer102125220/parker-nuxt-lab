@@ -38,12 +38,12 @@ const runtimeConfig = useRuntimeConfig();
 useRequestInit(runtimeConfig.public.API_BASE);
 
 const nuxtApp = useNuxtApp();
-const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
+const { $gtm, $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
 const i18nLocale = useCookie('___i18n_locale');
 
 const router = useRouter();
 const route = useRoute();
-// console.log(route);
+console.log(route);
 const getRouteBaseName = useRouteBaseName();
 useHead({
   titleTemplate: (titleChunk) => {
@@ -93,6 +93,17 @@ function resetMessageState() {
 }
 
 watch(
+  () => route.path,
+  (newRoutePath) => {
+    if (typeof $gtm?.trackEvent === 'function') {
+      console.log('trackView', newRoutePath);
+      $gtm.trackEvent({ event: 'scnOpen', url: newRoutePath });
+      // $gtm.trackView('scnOpen', 'newRoutePath');
+    }
+  }
+);
+
+watch(
   () => $i18n.locale.value,
   (newLocale) => {
     $setLocalLanguage(newLocale);
@@ -116,6 +127,12 @@ watch(
 );
 
 onMounted(async () => {
+  // if (typeof $gtm?.trackEvent === 'function') {
+  //   console.log('trackView onMounted', route.path);
+  //   $gtm.trackEvent({ event: 'scnOpen', url: route.path });
+  //   // $gtm.trackView('scnOpen', 'newRoutePath');
+  // }
+
   // $store.system.setDialog({
   //   trigger: true,
   //   content: 'Profile/Birthday',

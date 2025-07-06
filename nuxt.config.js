@@ -148,6 +148,12 @@ export default defineNuxtConfig({
   },
   css: ['@/style/global.scss', '@/style/animation.scss'],
   imports: {
+    // presets: [
+    //   {
+    //     from: '@gtm-support/vue-gtm',
+    //     imports: ['createGtm', 'useGtm']
+    //   }
+    // ],
     dirs: [
       // Scan top-level modules
       'composables',
@@ -438,6 +444,12 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      gtm: {
+        enabled: true,
+        id: process.env.GTM_ID,
+        debug: IS_DEV
+      },
+      GTM_ID: process.env.GTM_ID,
       API_BASE: process.env.API_BASE || '/api',
       WEBSOCKET_BASE_URL:
         process.env.WEBSOCKET_BASE_URL || 'wss://url',

@@ -19,6 +19,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@gtm-support/vue-gtm": "^3.1.0",
     "@mdi/font": "^7.4.47",
     "@tensorflow/tfjs-node": "^4.22.0",
     "@vercel/speed-insights": "^1.2.0",
