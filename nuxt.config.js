@@ -37,6 +37,13 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
 
 const osType = os.type().toLocaleLowerCase();
 const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
+const gtag = {
+  gaId: process.env.GA_ID,
+  enabled: true,
+  gtmId: process.env.GTM_ID,
+  debug: IS_DEV,
+  log: true
+};
 
 if (osType.includes('windows') === true) {
   const targetDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v8');
@@ -143,7 +150,11 @@ export default defineNuxtConfig({
         lang: defaultLang || 'zh-TW',
       },
       // https://realfavicongenerator.net/
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/ico/favicon.ico' }]
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/ico/favicon.ico' }],
+      noscript: [
+        // Google Tag Manager (noscript)
+        { textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtag.gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }
+      ]
     }
   },
   css: ['@/style/global.scss', '@/style/animation.scss'],
@@ -444,13 +455,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      gtag: {
-        gaId: process.env.GA_ID,
-        enabled: true,
-        gtmId: process.env.GTM_ID,
-        debug: IS_DEV,
-        log: true
-      },
+      gtag,
       GTM_ID: process.env.GTM_ID,
       API_BASE: process.env.API_BASE || '/api',
       WEBSOCKET_BASE_URL:
