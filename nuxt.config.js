@@ -444,10 +444,12 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      gtm: {
+      gtag: {
+        gaId: process.env.GA_ID,
         enabled: true,
-        id: process.env.GTM_ID,
-        debug: IS_DEV
+        gtmId: process.env.GTM_ID,
+        debug: IS_DEV,
+        log: true
       },
       GTM_ID: process.env.GTM_ID,
       API_BASE: process.env.API_BASE || '/api',

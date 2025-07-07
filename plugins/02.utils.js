@@ -8,6 +8,8 @@ import {
   handleCurrentCalculation,
 } from '@/utils/helpers/distance-between-points';
 import { googleGAInit } from '@/utils/third-party/ga';
+import { googleGTMInit } from '@/utils/third-party/gtm';
+import { googleGtagInit } from '@/utils/third-party/gtag';
 import dvhSvhLvhPolyfill from '@/utils/polyfill/large-small-dynamic-viewport-units-polyfill';
 import initializeDoubleTap from '@/utils/helpers/doubleTap';
 import getScrollEndLimit from '@/utils/helpers/get-scroll-end-limit';
@@ -31,6 +33,8 @@ export default defineNuxtPlugin(() => {
       handleDistanceCalculation,
       handleCurrentCalculation,
       googleGAInit,
+      googleGTMInit,
+      googleGtagInit,
       getScrollEndLimit,
       getLocalLanguage,
       setLocalLanguage,

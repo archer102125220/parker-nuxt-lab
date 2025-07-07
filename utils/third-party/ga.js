@@ -1,4 +1,6 @@
-export function googleGAInit(googleGAID = '') {
+import { googleGtagInit } from '@/utils/third-party/gtag';
+
+export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === 'development', log = false, callback) {
   if (typeof googleGAID !== 'string' || googleGAID === '') {
     console.error('缺少google ga id');
     return;
@@ -9,9 +11,23 @@ export function googleGAInit(googleGAID = '') {
   const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
 
   const script = document.createElement('script');
-  script.onload = () => init(googleGAID);
-  // script.addEventListener('load', () => init(googleGAID));
+  function init(gtag, gtm, ...arg) {
+    if (typeof gtag === 'function') {
+      gtag('js', new Date());
+      gtag('config', googleGAID, {
+        debug_mode: debug
+      });
+    }
+    if (typeof callback === 'function') {
+      callback(gtag, gtm, ...arg);
+    }
+  }
+  script.onload = () => googleGtagInit(log, init);
+  // script.addEventListener('load', () =>  googleGtagInit(googleGAID, log, init));
 
+
+  script.id = 'gaScript';
+  script.setAttribute('id', 'gaScript');
   script.async = true;
   script.setAttribute('async', true);
   script.src = src;
@@ -19,12 +35,5 @@ export function googleGAInit(googleGAID = '') {
 
   document.querySelector('head').append(script);
 }
-function init(googleGAID = '') {
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () {
-    window.dataLayer.push(arguments);
-  };
-  window.gtag('js', new Date());
 
-  window.gtag('config', googleGAID);
-}
+export default googleGAInit;

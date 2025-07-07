@@ -38,9 +38,10 @@ const runtimeConfig = useRuntimeConfig();
 useRequestInit(runtimeConfig.public.API_BASE);
 
 const nuxtApp = useNuxtApp();
-const { $gtm, $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
+const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
 const i18nLocale = useCookie('___i18n_locale');
 
+const gtm = useNuxtGtm();
 const router = useRouter();
 const route = useRoute();
 console.log(route);
@@ -93,12 +94,13 @@ function resetMessageState() {
 }
 
 watch(
-  () => route.path,
-  (newRoutePath) => {
-    if (typeof $gtm?.trackEvent === 'function') {
+  () => [route.path, gtm.value],
+  (newRoutePath, newGtm) => {
+    console.log({ newRoutePath, newGtm });
+    if (typeof newGtm === 'function') {
       console.log('trackView', newRoutePath);
-      $gtm.trackEvent({ event: 'scnOpen', url: newRoutePath });
-      // $gtm.trackView('scnOpen', 'newRoutePath');
+      newGtm({ event: 'scnOpen', url: newRoutePath });
+      // newGtm('scnOpen', 'newRoutePath');
     }
   }
 );
@@ -127,11 +129,12 @@ watch(
 );
 
 onMounted(async () => {
-  // if (typeof $gtm?.trackEvent === 'function') {
-  //   console.log('trackView onMounted', route.path);
-  //   $gtm.trackEvent({ event: 'scnOpen', url: route.path });
-  //   // $gtm.trackView('scnOpen', 'newRoutePath');
-  // }
+  console.log('onMounted', { gtm });
+  if (typeof gtm.value === 'function') {
+    console.log('trackView onMounted', route.path);
+    gtm.value({ event: 'scnOpen', url: route.path });
+    // gtm.value('scnOpen', 'newRoutePath');
+  }
 
   // $store.system.setDialog({
   //   trigger: true,
