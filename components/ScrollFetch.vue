@@ -138,7 +138,7 @@ const props = defineProps({
   useObserver: { type: Boolean, default: true }, // infinty scroll 的觸發方式
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
-  infinityBuffer: { type: Number, default: null },
+  infinityBuffer: { type: Number, default: 100 },
   infinityDisable: { type: Boolean, default: false },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
@@ -292,41 +292,14 @@ watch(
 watch(
   () => props.useObserver,
   (newUseObserver) => {
-    if (newUseObserver === true) {
-      if (typeof observer.value?.observe === 'function') {
-        observer.value.observe(infinityTriggerRef.value);
-      } else {
-        observer.value = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
-            // console.log('元素已出現在畫面可視範圍內');
-            // handleInfinityFetch();
-
-            infinityTrigger.value = true;
-          }
-        });
-
-        observer.value.observe(infinityTriggerRef.value);
-      }
-    } else if (
-      newUseObserver === false &&
-      typeof observer.value?.unobserve === 'function' &&
-      typeof infinityTriggerRef.value === 'object' &&
-      infinityTriggerRef.value !== null
-    ) {
-      observer.value.unobserve(infinityTriggerRef.value);
-    }
+    createObserver(newUseObserver);
   }
 );
 watch(
   () => props.infinityBuffer,
   (newInfinityBuffer) => {
-    const elementInfo = scrollFetchRef.value || {};
-
-    infinityTrigger.value = createNewInfinityTrigger(
-      elementInfo.scrollHeight,
-      elementInfo.scrollTop,
-      newInfinityBuffer
-    );
+    createObserver(newUseObserver);
+    handleCheckScroll(newInfinityBuffer);
   }
 );
 watch(
@@ -338,6 +311,38 @@ watch(
       props.infinityDisable,
       props.infinityEnd
     );
+  }
+);
+watch(
+  () => props.loading,
+  async (newLoading) => {
+    if (newLoading === false) {
+      duration.value = 300;
+      await nextTick();
+
+      window.requestAnimationFrame(() => {
+        isShowRefreshIcon.value = false;
+        moveDistance.value = 0;
+        refreshIconRotate.value = 0;
+        isPulling.value = false;
+      });
+      // setTimeout(() => {
+      //   isShowRefreshIcon.value = false;
+      //   moveDistance.value = 0;
+      //   refreshIconRotate.value = 0;
+      //   isPulling.value = false;
+      // }, 300);
+
+      if (
+        props.useObserver === false &&
+        props.infinityDisable === false &&
+        props.infinityEnd === false
+      ) {
+        await nextTick();
+
+        handleCheckScroll(props.infinityBuffer);
+      }
+    }
   }
 );
 
@@ -358,14 +363,9 @@ onMounted(() => {
   removeWindowScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
 
   if (props.useObserver === true) {
-    observer.value = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        // console.log('元素已出現在畫面可視範圍內');
-        // handleInfinityFetch();
-        infinityTrigger.value = true;
-      }
-    });
-    observer.value.observe(infinityTriggerRef.value);
+    createObserver(props.useObserver);
+  } else if (props.infinityDisable === false && props.infinityEnd === false) {
+    handleCheckScroll(props.infinityBuffer);
   }
 });
 onUnmounted(() => {
@@ -415,13 +415,11 @@ async function handleInfinityTrigger(
     await handleInfinityFetch();
   }
 
-  const elementInfo = scrollFetchRef.value || {};
-
-  // infinityTrigger.value = false;
-  infinityTrigger.value = createNewInfinityTrigger(
-    elementInfo.scrollHeight,
-    elementInfo.scrollTop
-  );
+  if (props.useObserver === false) {
+    handleCheckScroll(props.infinityBuffer);
+  } else {
+    infinityTrigger.value = false;
+  }
 }
 async function handleInfinityFetch() {
   if (infinityLoading.value === true) {
@@ -649,38 +647,65 @@ function handleWheel(e) {
 function handleScroll(e) {
   emit('scroll', e);
 
-  if (props.useObserver === false) {
-    const scrollHeight = e?.target?.scrollHeight || 1;
-    const scrollTop = e?.target?.scrollTop || 0;
-
-    infinityTrigger.value = createNewInfinityTrigger(scrollHeight, scrollTop);
-  }
+  handleCheckScroll(props.infinityBuffer);
 }
 function handleScrollEnd(e) {
   // console.log('scrollEnd', e);
   emit('scrollEnd', e);
+
+  handleCheckScroll(props.infinityBuffer);
 }
-function createNewInfinityTrigger(
-  scrollHeight = 1,
-  scrollTop = 0,
-  newInfinityBuffer
-) {
-  const infinityBuffer = newInfinityBuffer || props.infinityBuffer || 0;
-  const safeScrollHeight = typeof scrollHeight === 'number' ? scrollHeight : 1;
+function createObserver(_useObserver, _infinityBuffer) {
+  const useObserver =
+    typeof _useObserver === 'boolean' ? _useObserver : props.useObserver;
+  const infinityBuffer =
+    typeof _infinityBuffer === 'number'
+      ? _infinityBuffer
+      : props.infinityBuffer;
+
+  if (useObserver === true) {
+    if (typeof observer.value?.observe === 'function') {
+      observer.value.observe(infinityTriggerRef.value);
+    } else {
+      observer.value = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            // console.log('元素已出現在畫面可視範圍內');
+            // handleInfinityFetch();
+
+            infinityTrigger.value = true;
+          }
+        },
+        { rootMargin: `${infinityBuffer}px 0px 0px 0px` }
+      );
+
+      observer.value.observe(infinityTriggerRef.value);
+    }
+  } else if (
+    useObserver === false &&
+    typeof observer.value?.unobserve === 'function' &&
+    typeof infinityTriggerRef.value === 'object' &&
+    infinityTriggerRef.value !== null
+  ) {
+    observer.value.unobserve(infinityTriggerRef.value);
+  }
+}
+function handleCheckScroll(_infinityBuffer) {
+  const elementInfo = scrollFetchRef.value || {};
+
+  const scrollTop = elementInfo?.scrollTop || 0;
+  const scrollHeight = elementInfo?.scrollHeight || 1;
+  const height = elementInfo?.height || 1;
+
+  const infinityBuffer = _infinityBuffer || props.infinityBuffer || 0;
+  const safeHeight = typeof height === 'number' ? height : 1;
+  const safeScrollHeight =
+    (typeof scrollHeight === 'number' ? scrollHeight : 1) - safeHeight;
   const safeScrollTop = typeof scrollTop === 'number' ? scrollTop : 0;
 
-  // const infinityLimint = safeScrollHeight * (props.infinityBuffer || 1);
-  const infinityLimint = safeScrollHeight + infinityBuffer;
+  const infinityLimint = safeScrollHeight - infinityBuffer;
 
-  // console.log({
-  //   scrollHeight,
-  //   safeScrollHeight,
-  //   infinityLimint,
-  //   scrollTop,
-  //   safeScrollTop,
-  // });
-
-  return safeScrollTop >= infinityLimint;
+  infinityTrigger.value = safeScrollTop >= infinityLimint;
 }
 function parentScroll(e) {
   if (e.target === scrollFetchRef.value || e.target === window) {
