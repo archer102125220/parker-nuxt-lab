@@ -251,6 +251,14 @@ const props = defineProps({
   swiperHeight: {
     type: [String, Number],
     default: ''
+  },
+  slideCenterWidth: {
+    type: [String, Number],
+    default: ''
+  },
+  slideCenterMiddleWidth: {
+    type: [String, Number],
+    default: ''
   }
 });
 const emit = defineEmits([
@@ -318,6 +326,31 @@ const cssVariable = computed(() => {
   } else {
     // _cssVariable["--content_wrapper_slide_height"] = "";
     _cssVariable['--slide_height'] = '';
+  }
+
+  if (
+    typeof props.slideCenterWidth === 'string' &&
+    props.slideCenterWidth !== ''
+  ) {
+    _cssVariable['--slide_center_width'] = props.slideCenterWidth;
+  } else if (
+    props.slideCenterWidth !== '' &&
+    isNaN(Number(props.slideCenterWidth)) === false
+  ) {
+    _cssVariable['--slide_center_width'] = `${props.slideCenterWidth}px`;
+  }
+
+  if (
+    typeof props.slideCenterMiddleWidth === 'string' &&
+    props.slideCenterMiddleWidth !== ''
+  ) {
+    _cssVariable['--slide_center_middle_width'] = props.slideCenterMiddleWidth;
+  } else if (
+    props.slideCenterMiddleWidth !== '' &&
+    isNaN(Number(props.slideCenterMiddleWidth)) === false
+  ) {
+    _cssVariable['--slide_center_middle_width'] =
+      `${props.slideCenterMiddleWidth}px`;
   }
 
   return _cssVariable;
@@ -660,22 +693,28 @@ function resetSwiperScroll() {
 <style lang="scss" scoped>
 .swiper_js {
   position: relative;
+
   &-prev {
     position: absolute;
     left: 5px;
     z-index: 2;
-    height: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    height: 100%;
+
     &-btn {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
       width: 24px;
       height: 24px;
       border-radius: 100%;
+
       color: #fff;
       background-color: #008cff;
     }
@@ -684,6 +723,7 @@ function resetSwiperScroll() {
     @extend .swiper_js-prev;
     left: unset;
     right: 5px;
+
     &-btn {
       @extend .swiper_js-prev-btn;
     }
@@ -698,26 +738,35 @@ function resetSwiperScroll() {
       height: var(--content_wrapper_slide_height);
 
       &-slide {
-        // height: 100%;
-        // overflow-y: auto;
-        // overflow-x: hidden;
         display: var(--slide_display);
         flex-direction: var(--slide_flex_direction);
 
+        // height: 100%;
         // height: var(--content_wrapper_slide_height);
         height: var(--slide_height);
 
+        // overflow-y: auto;
+        // overflow-x: hidden;
+
         &-center {
           position: relative;
+
           flex: var(--center_flex);
+
           display: flex;
+
           height: var(--content_wrapper_slide_height);
           max-height: var(--content_wrapper_slide_height);
+          width: var(--slide_center_width);
 
           &-middle {
             flex: 1;
+
             position: relative;
+
             height: var(--content_wrapper_slide_height);
+            width: var(--slide_center_middle_width);
+
             overflow-y: var(--slide_overflow_y);
             overflow-x: var(--slide_overflow_x);
           }
