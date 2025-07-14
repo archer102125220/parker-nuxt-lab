@@ -138,20 +138,22 @@ const props = defineProps({
   useObserver: { type: Boolean, default: true }, // infinty scroll 的觸發方式
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
-  infinityBuffer: { type: Number, default: 100 },
+  infinityBuffer: { type: Number, default: 100 }, // 以 scroll 觸發時，提早滑動距離觸發，縮短使用者操作等待時間
   infinityDisable: { type: Boolean, default: false },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },
   infinityFetch: { type: Function, default: null },
   vibrate: { type: Boolean, default: false },
   scrollEndWait: { type: Number, default: 100 },
-  infinityTimeout: { type: Number, default: null }
+  infinityTimeout: { type: Number, default: null },
+  scrollTop: { type: Number, default: null }
 });
 const emit = defineEmits([
   'refresh',
   'infinityFetch',
   'wheel',
   'scroll',
+  'update:scrollTop',
   'scrollEnd',
   'infinityFail'
 ]);
@@ -298,7 +300,7 @@ watch(
 watch(
   () => props.infinityBuffer,
   (newInfinityBuffer) => {
-    createObserver(newUseObserver);
+    createObserver(props.useObserver, newInfinityBuffer);
     handleCheckScroll(newInfinityBuffer);
   }
 );
@@ -407,7 +409,7 @@ async function handleInfinityTrigger(
       clearTimeout(infinityTimeoutTimer.value);
       infinityTimeoutTimer.value = null;
 
-      infinityLoading.valueOf = false;
+      infinityLoading.value = false;
     }, infinityTimeout);
   }
 
@@ -645,6 +647,8 @@ function handleWheel(e) {
   emit('wheel', e);
 }
 function handleScroll(e) {
+  const target = e?.target || {};
+  emit('update:scrollTop', target.scrollTop || 0);
   emit('scroll', e);
 
   handleCheckScroll(props.infinityBuffer);
@@ -676,7 +680,7 @@ function createObserver(_useObserver, _infinityBuffer) {
             infinityTrigger.value = true;
           }
         },
-        { rootMargin: `${infinityBuffer}px 0px 0px 0px` }
+        { scrollMargin: `0px 0px ${infinityBuffer}px 0px` }
       );
 
       observer.value.observe(infinityTriggerRef.value);
