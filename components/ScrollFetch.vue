@@ -115,6 +115,8 @@
 </template>
 
 <script setup>
+import _debounce from 'lodash/debounce';
+
 const MOVE_DISTANCE_LIMIT = 50;
 
 const { $polyfillScrollEnd } = useNuxtApp();
@@ -291,12 +293,7 @@ watch(
     }
   }
 );
-watch(
-  () => props.useObserver,
-  (newUseObserver) => {
-    createObserver(newUseObserver);
-  }
-);
+
 watch(
   () => props.infinityBuffer,
   (newInfinityBuffer) => {
@@ -347,6 +344,17 @@ watch(
     }
   }
 );
+watch(
+  () => props.scrollTop,
+  (newScrollTop) => {
+    handleSyncScroll(newScrollTop);
+  }
+);
+const handleSyncScroll = _debounce(function (newScrollTop) {
+  if (typeof newScrollTop === 'number' && newScrollTop > -1) {
+    scrollFetchRef.value.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+  }
+}, 50);
 
 onMounted(() => {
   if (
@@ -648,13 +656,16 @@ function handleWheel(e) {
 }
 function handleScroll(e) {
   const target = e?.target || {};
-  emit('update:scrollTop', target.scrollTop || 0);
-  emit('scroll', e);
+  emit('scroll', e, target);
 
   handleCheckScroll(props.infinityBuffer);
 }
+const handleScrollTop = _debounce(function (e) {
+  emit('update:scrollTop', e.target?.scrollTop || 0);
+}, 50);
 function handleScrollEnd(e) {
   // console.log('scrollEnd', e);
+  handleScrollTop(e);
   emit('scrollEnd', e);
 
   handleCheckScroll(props.infinityBuffer);
