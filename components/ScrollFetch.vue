@@ -386,6 +386,10 @@ onUnmounted(() => {
     removeWindowScrollEnd.value();
   }
 
+  if (typeof removeParentScrollEnd.value === 'function') {
+    removeParentScrollEnd.value();
+  }
+
   if (
     typeof observer.value?.unobserve === 'function' &&
     typeof infinityTriggerRef.value === 'object' &&
