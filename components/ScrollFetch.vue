@@ -569,6 +569,8 @@ function handlePulling(e) {
     isShowRefreshIcon.value = true;
     if (props.iosStyle === false) {
       refreshTriggerZIndex.value = 2;
+    } else {
+      refreshTriggerZIndex.value = 0;
     }
 
     const _moveDistance = Math.pow(move, 0.8);
