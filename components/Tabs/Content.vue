@@ -5,7 +5,8 @@
     @mouseover="resetRefreshDisable"
     @touchend="resetRefreshDisable"
   >
-    <slot v-if="slotNameKey !== 'default' && slotNameIsDefault === false" />
+    <slot name="tabTop" />
+
     <slot name="loading">
       <LoadingBar :loading="loading" />
     </slot>
@@ -118,13 +119,23 @@ const emits = defineEmits(['change', 'update:modelValue', 'sliderMove']);
 const isTabMoveing = ref(false);
 
 const slotsList = computed(() => {
-  return props.tabList.map((tab, index) => getSlotsKey(tab, index));
+  const _slotsList =
+    props.slotNameIsDefault === true
+      ? Object.keys($slotsList)
+      : props.tabList
+          .map((tab, index) => getSlotsKey(tab, index))
+          .filter((slotName) => slotName !== null);
+
+  return _slotsList;
 });
 const slots = computed(() => {
-  const _slots = Object.keys($slotsList).filter(
-    (_slot) => slotsList.value.includes(_slot) === false
-  );
-  // console.log({ _slotList });
+  const _slots =
+    props.slotNameIsDefault === true
+      ? []
+      : Object.keys($slotsList).filter(
+          (slot) => slotsList.value.includes(slot) === false
+        );
+
   return _slots;
 });
 
