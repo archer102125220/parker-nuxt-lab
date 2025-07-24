@@ -25,7 +25,7 @@
           :isPullStart="isPullStart"
           :isShowRefreshIcon="isShowRefreshIcon"
         >
-          <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-label">
+          <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-pull_label">
             {{ isPulling === true ? pullingLabel : pullLabel }}
           </p>
         </slot>
@@ -797,7 +797,8 @@ function windowScrollEnd(e) {
     z-index: var(--refresh_trigger_z_index);
     min-height: 30px;
     width: 100%;
-    &-label {
+
+    &-pull_label {
       font-size: 14px;
       color: rgba(69, 90, 100, 0.6);
       text-align: center;
