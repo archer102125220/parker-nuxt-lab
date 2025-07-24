@@ -186,6 +186,8 @@ const cssVariable = computed(() => {
   const _cssVariable = {};
 
   if (props.iosStyle === true) {
+    _cssVariable['--refresh_icon_transform'] = 'translate3d(0, 0, 0)';
+
     _cssVariable['--refresh_transition'] = `${duration.value}ms`;
     _cssVariable['--refresh_transform'] =
       `translate3d(0, ${moveDistance.value}px, 0)`;
@@ -205,6 +207,8 @@ const cssVariable = computed(() => {
         `${props.iosTypeIconStrokeWidth}px`;
     }
   } else {
+    _cssVariable['--refresh_transform'] = 'translate3d(0, 0px, 0)';
+
     _cssVariable['--refresh_icon_transition'] = `${duration.value}ms`;
     _cssVariable['--refresh_icon_transform'] = `translate3d(0, ${
       moveDistance.value - 25
