@@ -26,7 +26,7 @@
           :isShowRefreshIcon="isShowRefreshIcon"
         >
           <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-label">
-            {{ isPulling === true ? pullingLabel : label }}
+            {{ isPulling === true ? pullingLabel : pullLabel }}
           </p>
         </slot>
         <slot v-else name="refreshing">
@@ -114,7 +114,7 @@ const MOVE_DISTANCE_LIMIT = 50;
 const { $polyfillScrollEnd } = useNuxtApp();
 
 const props = defineProps({
-  label: { type: String, default: '下拉即可重整...' },
+  pullLabel: { type: String, default: '下拉即可重整...' },
   height: { type: [String, Number], default: null },
   containerHeight: { type: [String, Number], default: null },
   pullingLabel: { type: String, default: '釋放即可重整...' },
