@@ -33,7 +33,8 @@
           <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
           <div class="scroll_fetch-trigger-refreshing">
             <div
-              class="scroll_fetch-trigger-refreshing-loading_icon scroll_fetch-trigger-icon_center-loading_icon_animation"
+              class="scroll_fetch-trigger-refreshing-loading_icon"
+              refresh-animation="true"
             />
             <p class="scroll_fetch-trigger-refreshing-label">
               {{ loadingLabel }}
@@ -54,28 +55,19 @@
           <div
             v-if="hasRefreshIcon === false"
             v-show="isShowRefreshIcon"
-            :class="{
-              'scroll_fetch-trigger-icon_center-icon': true,
-              'scroll_fetch-trigger-icon_center-loading_icon_animation':
-                refreshing === true && isPullStart === false
-            }"
+            class="scroll_fetch-trigger-icon_center-icon"
+            :refresh-animation="refreshing === true && isPullStart === false"
           />
           <div
             v-else
             v-show="isShowRefreshIcon"
-            :class="{
-              'scroll_fetch-trigger-icon_center-icon_img_bg': true,
-              'scroll_fetch-trigger-icon_center-icon_img_bg-refresh_icon_animation':
-                refreshIconAnimation
-            }"
+            class="scroll_fetch-trigger-icon_center-icon_img_bg"
+            :activate-animation="refreshIconAnimation"
           >
             <img
               :src="computedRefreshIcon"
-              :class="{
-                'scroll_fetch-trigger-icon_center-icon_img_bg-icon_img': true,
-                'scroll_fetch-trigger-icon_center-loading_icon_animation':
-                  refreshing === true && isPullStart === false
-              }"
+              class="scroll_fetch-trigger-icon_center-icon_img_bg-icon_img"
+              :refresh-animation="refreshing === true && isPullStart === false"
             />
           </div>
         </slot>
@@ -788,6 +780,11 @@ function windowScrollEnd(e) {
 </style>
 
 <style lang="scss" scoped>
+@mixin refresh_animation {
+  &[refresh-animation='true'] {
+    animation: refresh_animation 1s linear infinite;
+  }
+}
 .scroll_fetch {
   position: relative;
   height: var(--refresh_height);
@@ -815,6 +812,7 @@ function windowScrollEnd(e) {
       gap: 5px;
       margin-top: 10px;
       margin-bottom: 20px;
+
       &-loading_icon {
         // width: 23px;
         // height: 23px;
@@ -827,6 +825,8 @@ function windowScrollEnd(e) {
         border-top: var(--refresh_ios_type_icon_stroke_width) solid $primary;
 
         border-radius: 50%;
+
+        @include refresh_animation;
       }
       &-label {
         @extend .scroll_fetch-trigger-label;
@@ -840,13 +840,13 @@ function windowScrollEnd(e) {
       justify-content: center;
       transition: all var(--refresh_icon_transition);
       transform: var(--refresh_icon_transform);
-      &-loading_icon_animation {
-        animation: loading_animation 1s linear infinite;
-      }
+
       &-icon {
         @extend .scroll_fetch-trigger-refreshing-loading_icon;
         margin: auto;
         transition: var(--refresh_icon_transition);
+
+        @include refresh_animation;
       }
       &-icon_img_bg {
         margin: auto;
@@ -859,9 +859,10 @@ function windowScrollEnd(e) {
           0 1px 6px rgba(0, 0, 0, 0.117647),
           0 1px 4px rgba(0, 0, 0, 0.117647);
 
-        &-refresh_icon_animation {
-          animation: refresh_icon_animation 0.2s;
+        &[activate-animation='true'] {
+          animation: activate_refresh_animation 0.2s;
         }
+
         &-icon_img {
           display: block;
           width: 23px;
@@ -869,6 +870,8 @@ function windowScrollEnd(e) {
           margin: auto;
           transition: var(--refresh_icon_transition);
           transform: var(--refresh_icon_rotate);
+
+          @include refresh_animation;
         }
       }
     }
@@ -893,7 +896,7 @@ function windowScrollEnd(e) {
     @extend .scroll_fetch-trigger-label;
   }
 }
-@keyframes loading_animation {
+@keyframes refresh_animation {
   from {
     transform: rotate(0deg);
   }
@@ -901,7 +904,7 @@ function windowScrollEnd(e) {
     transform: rotate(360deg);
   }
 }
-@keyframes refresh_icon_animation {
+@keyframes activate_refresh_animation {
   from {
     transform: scale(1);
   }

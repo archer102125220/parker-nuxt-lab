@@ -23,15 +23,18 @@
       @update:model-value="change"
       @sliderMove="sliderMove"
     >
-      <template v-for="_slot of slots" #[_slot]="{ ...arg }">
+      <template v-for="_slot in slots" #[_slot]="{ ...arg }">
         <slot :name="_slot" v-bind="arg" :is-tab-moveing="isTabMoveing" />
       </template>
 
-      <template v-for="(slotName, index) of slotsList" #[slotName]="{ ...arg }">
+      <template
+        v-for="slotName in slotsList"
+        #[slotName]="{ item: tab, ...arg }"
+      >
         <slot
-          v-if="scrollFetch === false"
+          v-if="scrollFetch === false && isNotScrollFetch(tab)"
           :name="slotName"
-          v-bind="arg"
+          v-bind="{ item: tab, ...arg }"
           :is-tab-moveing="isTabMoveing"
         />
 
@@ -52,13 +55,17 @@
           :infinity-buffer="infinityBuffer"
           :infinity-disable="infinityDisable"
           :is-scroll-to-fetch="isScrollToFetch"
-          :infinity-end="getInfinityEnd(tabList[index])"
-          :refresh-disable="getRefreshDisable(tabList[index])"
-          :infinity-end-label="getInfinityEndLabel(tabList[index])"
+          :infinity-end="getInfinityEnd(tab)"
+          :refresh-disable="getRefreshDisable(tab)"
+          :infinity-end-label="getInfinityEndLabel(tab)"
           v-bind="$attrs"
         >
-          <slot :name="slotName" v-bind="arg" :is-tab-moveing="isTabMoveing">
-            <p>{{ tabList[index].content || tabList[index] }}</p>
+          <slot
+            :name="slotName"
+            v-bind="{ item: tab, ...arg }"
+            :is-tab-moveing="isTabMoveing"
+          >
+            <p>{{ tab.content || tab }}</p>
           </slot>
         </ScrollFetch>
       </template>
@@ -141,6 +148,12 @@ const slots = computed(() => {
 
 function getSlotsKey(tab, index) {
   return tab?.[props.valueKey] || tab?.slotName || index;
+}
+function isNotScrollFetch(tab) {
+  if (typeof tab?.isNotScrollFetch === 'boolean') {
+    return tab.isNotScrollFetch;
+  }
+  return false;
 }
 function getInfinityEnd(tab) {
   if (typeof tab?.infinityEnd !== 'boolean') {
