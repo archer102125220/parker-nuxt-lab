@@ -830,7 +830,7 @@ function windowScrollEnd(e) {
         @include refresh_animation;
       }
       &-label {
-        @extend .scroll_fetch-trigger-label;
+        @extend .scroll_fetch-trigger-pull_label;
       }
     }
     &-icon_center {
@@ -894,7 +894,7 @@ function windowScrollEnd(e) {
     }
   }
   &-infinity_label {
-    @extend .scroll_fetch-trigger-label;
+    @extend .scroll_fetch-trigger-pull_label;
   }
 }
 @keyframes refresh_animation {
