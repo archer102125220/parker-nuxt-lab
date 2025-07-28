@@ -590,6 +590,8 @@ function handlePulling(e) {
   }
 }
 async function handlePullEnd(e) {
+  if (isPullStart.value === false) return;
+
   isPullStart.value = false;
   startY.value = 0;
   duration.value = 300;
