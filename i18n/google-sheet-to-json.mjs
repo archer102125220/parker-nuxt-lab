@@ -37,14 +37,24 @@ const sheetsToExtract = [
 
 async function googleSheetToJson() {
   const en = {
+    en: 'English',
+    ['zh-tw']: 'Chinese',
     system: {
-      titleTemplate: "Parker's Nuxt lab"
+      systemName: "Parker's Nuxt lab",
+      defaultTitle: "Parker's Nuxt lab",
+      titleTemplate: "Parker's Nuxt lab",
+      description: "Parker's Nuxt Laboratory"
     },
     $vuetify: vuetifyEn,
   };
   const zhTw = {
+    en: '英文',
+    ['zh-tw']: '繁體中文',
     system: {
-      titleTemplate: 'Parker 的 Nuxt 實驗室'
+      systemName: "Parker 的 Nuxt實驗室",
+      defaultTitle: "Parker 的 Nuxt實驗室",
+      titleTemplate: 'Parker 的 Nuxt 實驗室',
+      description: "Parker 的 Nuxt實驗室"
     },
     $vuetify: vuetifyZhHant,
   };

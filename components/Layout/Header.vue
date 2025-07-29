@@ -14,12 +14,50 @@
         class="layout_header-name-logo"
         v-lazy="'/img/icon/NuxtRock.v.02.svg'"
       />
-      <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p>
+      <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
+      <p class="layout_header-name-label">{{ $t('system.systemName') }}</p>
     </div>
+
+    <v-btn color="primary" variant="text">
+      <p>{{ $t(currentLocaleLabel) }}</p>
+      <v-menu
+        activator="parent"
+        target="parent"
+        location="start"
+        scroll-strategy="none"
+      >
+        <v-list>
+          <v-list-item
+            v-for="lang in localeList"
+            :key="lang.code"
+            :value="lang.code"
+          >
+            <NuxtLink :to="$switchLocalePath(lang.code)">
+              <v-list-item-title>
+                {{ $t(lang.label) }}
+              </v-list-item-title>
+            </NuxtLink>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
   </header>
 </template>
 <script setup>
 const router = useRouter();
+const { locale } = useI18n();
+
+const localeList = [
+  { code: 'en', label: 'en' },
+  { code: 'zh', label: 'zh-tw' }
+];
+
+const currentLocaleLabel = computed(() => {
+  const found = localeList.find(
+    (localeItem) => localeItem.code === locale.value
+  );
+  return found ? found.label : locale.value;
+});
 
 const props = defineProps({
   hasBack: { type: Boolean, default: true }
