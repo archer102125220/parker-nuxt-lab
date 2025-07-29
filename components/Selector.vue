@@ -25,7 +25,7 @@
             ? 'selector-option_list-item_selsected'
             : ''
         ]"
-        @click.stop="handleChange(option)"
+        @click.stop="handleChange(option, index)"
       >
         <slot
           :index="index"
@@ -198,11 +198,26 @@ function handleOptionListTrigger(newIsOptionListOpen = false) {
 function handleOptionListClose() {
   handleOptionListTrigger(false);
 }
-function handleChange(option) {
+function handleChange(option, index) {
   const newValue = option?.[props.valueKey] || option?.value || option;
   if (props.modelValue !== newValue) {
-    emit('change', props.optionList?.[newValue] || newValue);
-    emit('update:modelValue', props.optionList?.[newValue] || newValue);
+  }
+  if (props.modelValue !== newValue) {
+    if (
+      typeof props.valueKey !== 'undefined' &&
+      typeof props.valueKey !== 'object' &&
+      props.valueKey !== null
+    ) {
+      emit('change', newValue, index);
+      emit('update:modelValue', newValue, index);
+    } else {
+      emit('change', props.optionList?.[newValue] || newValue, index);
+      emit(
+        'update:modelValue',
+        props.optionList?.[newValue] || newValue,
+        index
+      );
+    }
   }
   handleOptionListTrigger(false);
 }
