@@ -1,13 +1,9 @@
 
 export function findLastIndex(array, callback, thisArg) {
+  if (typeof callback?.call !== 'function') {
+    throw new TypeError(`TypeError: ${typeof callback} is not a function`);
+  }
   for (let index = array.length - 1; index >= 0; index--) {
-    if (typeof callback !== 'function') {
-      let errorMsg = typeof callback?.call;
-      if (errorMsg !== 'function') {
-        errorMsg = `${errorMsg} "${callback}"`;
-      }
-      throw new TypeError(`TypeError: ${errorMsg} is not a function`);
-    }
     if (callback.call(thisArg, array[index], index, array)) return index;
   }
   return -1;
