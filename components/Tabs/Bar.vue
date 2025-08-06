@@ -123,6 +123,10 @@ const props = defineProps({
     type: String,
     default: null
   },
+  tabItemLineHeight: {
+    type: [Number, String],
+    default: '150%'
+  },
   alignItems: {
     type: String,
     default: 'center'
@@ -420,6 +424,15 @@ const cssVariable = computed(() => {
       props.tabItemTextAlign !== ''
     ) {
       _cssVariable['--tab_item_text_align'] = props.tabItemTextAlign;
+    }
+
+    if (
+      typeof props.tabItemLineHeight === 'string' &&
+      props.tabItemLineHeight !== ''
+    ) {
+      _cssVariable['--tab_item_line_height'] = props.tabItemLineHeight;
+    } else if (isNaN(Number(props.tabItemLineHeight)) === false) {
+      _cssVariable['--tab_item_line_height'] = `${props.tabItemLineHeight}px`;
     }
 
     if (computedLimitShadow.value === true) {
@@ -1549,7 +1562,8 @@ function handleCustomKeepScrollStep(
       font-size: 17px;
       font-style: normal;
       font-weight: 400;
-      line-height: 150%; /* 25.5px */
+      // line-height: 150%; /* 25.5px */
+      line-height: var(--tab_item_line_height); /* 25.5px */
 
       white-space: nowrap;
       cursor: pointer;
@@ -1560,6 +1574,9 @@ function handleCustomKeepScrollStep(
 
     &-empty {
       flex: 1;
+      // min-width: var(--tab_item_width);
+      width: 100%;
+      height: 100%;
       text-align: center;
     }
   }
