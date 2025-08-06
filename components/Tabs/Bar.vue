@@ -401,6 +401,15 @@ const cssVariable = computed(() => {
     }
   }
 
+  if (
+    typeof props.tabItemLineHeight === 'string' &&
+    props.tabItemLineHeight !== ''
+  ) {
+    _cssVariable['--tab_item_line_height'] = props.tabItemLineHeight;
+  } else if (isNaN(Number(props.tabItemLineHeight)) === false) {
+    _cssVariable['--tab_item_line_height'] = `${props.tabItemLineHeight}px`;
+  }
+
   if (props.vertical === true) {
     _cssVariable['--tab_border_side_bottom'] = 'unset';
     _cssVariable['--tab_flex_direction'] = 'column';
@@ -424,15 +433,6 @@ const cssVariable = computed(() => {
       props.tabItemTextAlign !== ''
     ) {
       _cssVariable['--tab_item_text_align'] = props.tabItemTextAlign;
-    }
-
-    if (
-      typeof props.tabItemLineHeight === 'string' &&
-      props.tabItemLineHeight !== ''
-    ) {
-      _cssVariable['--tab_item_line_height'] = props.tabItemLineHeight;
-    } else if (isNaN(Number(props.tabItemLineHeight)) === false) {
-      _cssVariable['--tab_item_line_height'] = `${props.tabItemLineHeight}px`;
     }
 
     if (computedLimitShadow.value === true) {
