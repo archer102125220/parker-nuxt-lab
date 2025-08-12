@@ -86,6 +86,7 @@ export function axiosInit(baseURL, errorAdapter, defaultExtendOption) {
       {
         enabledByDefault: false,
         cacheFlag: 'useCache',
+        refreshFlag: 'useCacheRefresh',
         getCache,
         setCache,
         deleteCache

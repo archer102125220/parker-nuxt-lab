@@ -156,6 +156,7 @@ const scrollFetchRef = ref(null);
 const infinityTriggerRef = ref(null);
 
 const observer = ref(null);
+const infinityIsIntersecting = ref(false);
 const isPullStart = ref(false);
 const isShowRefreshIcon = ref(false);
 
@@ -646,6 +647,20 @@ async function handleRefreshDone() {
     refreshIconRotate.value = 0;
     isPulling.value = false;
   }
+
+  await nextTick();
+  if (infinityIsIntersecting.value === true) {
+    if (infinityTrigger.value === false) {
+      infinityTrigger.value = true;
+    } else {
+      handleInfinityTrigger(
+        infinityTrigger.value,
+        infinityLoading.value,
+        props.infinityDisable,
+        props.infinityEnd
+      );
+    }
+  }
 }
 function handleRefreshIcon() {
   if (refreshing.value === false) {
@@ -688,6 +703,7 @@ function createObserver(_useObserver, _infinityBuffer) {
     } else {
       observer.value = new IntersectionObserver(
         (entries) => {
+          infinityIsIntersecting.value = entries[0].isIntersecting;
           if (entries[0].isIntersecting) {
             // console.log('元素已出現在畫面可視範圍內');
             // handleInfinityFetch();

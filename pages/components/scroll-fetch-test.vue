@@ -3,10 +3,12 @@
     <ScrollFetch
       :ios-style="false"
       :refresh-disable="false"
-      height="90dvh"
+      height="85dvh"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-      :infinityEnd="infinityEnd"
+      :loading="$store.system.loading"
+      :infinity-buffer="500"
+      :infinity-end="infinityEnd"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
     >
@@ -29,11 +31,15 @@ useHead({
   title: '自製下拉重整及無限滾動測試'
 });
 
+const refreshLoading = ref(false);
+const infinityLoading = ref(false);
 const infinityEnd = ref(false);
+const page = ref(1);
 
+const limit = computed(() => page.value * 20);
 const dataList = computed(() => {
   const _dataList = [];
-  for (let i = 0; i <= 100; i++) {
+  for (let i = 0; i <= page.value * limit.value; i++) {
     // _dataList.push(i);
     let data = '';
     for (let j = i; j >= 0; j--) {
@@ -44,26 +50,64 @@ const dataList = computed(() => {
   return _dataList;
 });
 
-function handleRefresh(done) {
+async function handleRefresh(done) {
+  if (
+    refreshLoading.value === true ||
+    infinityLoading.value === true ||
+    nuxtApp.$store.system.loading === true
+  ) {
+    done();
+    return;
+  }
+
+  refreshLoading.value = true;
   nuxtApp.$store.system.setLoading(true);
   console.log('handleRefresh');
-  setTimeout(() => {
-    console.log('handleRefresh setTimeout');
-    // nuxtApp.$successMessage('handleRefresh');
-    nuxtApp.$store.system.setLoading(false);
-    done();
-  }, 1000);
+
+  page.value = 1;
+  const response = await nuxtApp.$nuxtServer.GET_scrollFetchTest(
+    { page: page.value },
+    { useCache: false, useCacheRefresh: true }
+  );
+  await new Promise((resolve) => nextTick(setTimeout(() => resolve(), 1000)));
+
+  console.log({ response });
+
+  console.log('handleRefresh setTimeout');
+  done();
+  // nuxtApp.$successMessage('handleRefresh');
+  nuxtApp.$store.system.setLoading(false);
+  refreshLoading.value = false;
 }
-function handleInfinityFetch(done) {
+async function handleInfinityFetch(done) {
+  if (
+    refreshLoading.value === true ||
+    infinityLoading.value === true ||
+    nuxtApp.$store.system.loading === true
+  ) {
+    done();
+    return;
+  }
+
+  infinityLoading.value = true;
   nuxtApp.$store.system.setLoading(true);
   console.log('handleInfinityFetch');
-  setTimeout(() => {
-    // infinityEnd.value = true;
-    console.log('handleInfinityFetch setTimeout');
-    // nuxtApp.$successMessage('handleInfinityFetch');
-    nuxtApp.$store.system.setLoading(false);
-    done();
-  }, 1000);
+
+  page.value = page.value + 1;
+  const response = await nuxtApp.$nuxtServer.GET_scrollFetchTest(
+    { page: page.value },
+    { useCache: true, useCacheRefresh: false }
+  );
+  await new Promise((resolve) => nextTick(setTimeout(() => resolve(), 1000)));
+
+  console.log({ response });
+
+  // infinityEnd.value = true;
+  console.log('handleInfinityFetch setTimeout');
+  done();
+  // nuxtApp.$successMessage('handleInfinityFetch');
+  nuxtApp.$store.system.setLoading(false);
+  infinityLoading.value = false;
 }
 </script>
 
