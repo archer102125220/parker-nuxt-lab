@@ -4,7 +4,7 @@ import firebaseAdmin from 'firebase-admin';
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web_2
 
-export const credential = process.env.FIREBASE_CREDENTIAL || '{}';
+export const credential = import.meta.env.VITE_FIREBASE_CREDENTIAL || '{}';
 
 export const firebaseConfig = {
   authDomain: 'parker-nuxt-lab.firebaseapp.com',
@@ -18,7 +18,7 @@ export function getFirebaseAdminApp() {
 }
 
 export const androidCredential =
-  process.env.ANDROID_FIREBASE_CREDENTIAL || '{}';
+  import.meta.env.VITE_ANDROID_FIREBASE_CREDENTIAL || '{}';
 
 export const androidFirebaseConfig = {
   authDomain: 'httpsbibiancojp.firebaseapp.com',
@@ -30,7 +30,7 @@ export function getAndroidFirebaseAdminApp() {
   return androidFirebaseAdminApp;
 }
 
-export const iosCredential = process.env.IOS_FIREBASE_CREDENTIAL || '{}';
+export const iosCredential = import.meta.env.VITE_IOS_FIREBASE_CREDENTIAL || '{}';
 
 export const iosFirebaseConfig = {
   authDomain: 'httpsbibiancojp.firebaseapp.com',

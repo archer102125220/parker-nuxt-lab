@@ -41,7 +41,6 @@ export default defineNuxtPlugin(({ $pinia }) => {
           }
 
           const { $pwa, $firebaseHelper } = useNuxtApp();
-          const runtimeConfig = useRuntimeConfig();
 
           // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
           // watchEffect(async () => {
@@ -55,12 +54,7 @@ export default defineNuxtPlugin(({ $pinia }) => {
             }
 
             if ($pwa.isPWAInstalled === true) {
-              $firebaseHelper.firebaseClientInit({
-                apiKey: runtimeConfig.public.FIREBASE_API_KEY,
-                messagingSenderId: runtimeConfig.public.MESSAGING_SENDER_ID,
-                appId: runtimeConfig.public.APP_ID,
-                measurementId: runtimeConfig.public.GA_ID
-              });
+              $firebaseHelper.firebaseClientInit();
             }
           });
         }

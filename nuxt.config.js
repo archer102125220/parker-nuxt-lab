@@ -38,9 +38,9 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
 const osType = os.type().toLocaleLowerCase();
 const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 const gtag = {
-  gaId: process.env.APP_ID,
+  gaId: process.env.VITE_APP_ID,
   enabled: true,
-  gtmId: process.env.GTM_ID,
+  gtmId: process.env.VITE_GTM_ID,
   debug: IS_DEV,
   log: true
 };
@@ -305,16 +305,17 @@ export default defineNuxtConfig({
     public: {
       gtag,
 
-      APP_ID: process.env.APP_ID,
-      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-      ANDROID_FIREBASE_CREDENTIAL: process.env.ANDROID_FIREBASE_CREDENTIAL,
-      FIREBASE_CREDENTIAL: process.env.FIREBASE_CREDENTIAL,
-      IOS_FIREBASE_CREDENTIAL: process.env.IOS_FIREBASE_CREDENTIAL,
-      FIREBASE_VAPID_KEY: process.env.FIREBASE_VAPID_KEY,
-      MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
+      VITE_APP_ID: process.env.VITE_APP_ID,
+      VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
+      VITE_ANDROID_FIREBASE_CREDENTIAL: process.env.VITE_ANDROID_FIREBASE_CREDENTIAL,
+      VITE_FIREBASE_CREDENTIAL: process.env.VITE_FIREBASE_CREDENTIAL,
+      VITE_IOS_FIREBASE_CREDENTIAL: process.env.VITE_IOS_FIREBASE_CREDENTIAL,
+      VITE_FIREBASE_VAPID_KEY: process.env.VITE_FIREBASE_VAPID_KEY,
+      VITE_MESSAGING_SENDER_ID: process.env.VITE_MESSAGING_SENDER_ID,
 
-      GTM_ID: process.env.GTM_ID,
-      API_BASE: process.env.API_BASE || '/api',
+      VITE_GTM_ID: process.env.VITE_GTM_ID,
+      VITE_API_BASE: process.env.VITE_API_BASE || '/api',
+
       WEBSOCKET_BASE_URL:
         process.env.WEBSOCKET_BASE_URL || 'wss://url',
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

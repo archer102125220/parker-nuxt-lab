@@ -18,13 +18,13 @@ import { POST_registerMessageToken } from '@/services/client/firebase-admin';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v11.10.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'parker-nuxt-lab.firebaseapp.com',
   projectId: 'parker-nuxt-lab',
   storageBucket: 'parker-nuxt-lab.firebasestorage.app',
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.GA_ID
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_GA_ID
 };
 
 export let firebaseApp;
@@ -152,10 +152,10 @@ export async function firebaseMessagingInit(vapidKey) {
       // await fetch(swUrl);
 
       firebaseMessaging = getMessaging(firebaseApp, {
-        vapidKey: process.env.FIREBASE_VAPID_KEY || vapidKey
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY || vapidKey
       });
       const token = await getToken(firebaseMessaging, {
-        vapidKey: process.env.FIREBASE_VAPID_KEY || vapidKey,
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY || vapidKey,
         serviceWorkerRegistration
       });
       await POST_registerMessageToken({ token, os: 'web' });

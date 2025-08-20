@@ -14,7 +14,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // 關於http的冪等性：https://medium.com/willhanchen/%E9%97%9C%E6%96%BChttp%E7%9A%84%E5%86%AA%E7%AD%89%E6%80%A7-4438381d0a70
 // Service Workers 的 Cache API 不能快取 POST https://stackoverflow.com/questions/53639134/request-method-post-is-unsupported
 // registerRoute(
-//   new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
+//   new RegExp(`^${import.meta.env.VITE_API_BASE || '/api'}`, 'i'),
 //   new StaleWhileRevalidate({
 //     cacheName: 'post-api-cache',
 //     expiration: {
@@ -103,7 +103,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // );
 
 registerRoute(
-  new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
+  new RegExp(`^${import.meta.env.VITE_API_BASE || '/api'}`, 'i'),
   new CacheFirst({
     cacheName: 'api-cache',
     expiration: {
