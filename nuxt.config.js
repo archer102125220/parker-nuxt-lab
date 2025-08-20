@@ -23,12 +23,12 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'base-uri': ["'self'"],
   'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
   'form-action': ["'self'", 'https://*.facebook.com'],
-  'img-src': ["'self'", 'data:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
+  'img-src': ["'self'", 'data:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
   'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
-  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com'],
+  'connect-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com', 'https://*.google-analytics.com'],
   'frame-ancestors': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
   'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
   'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
@@ -38,7 +38,7 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
 const osType = os.type().toLocaleLowerCase();
 const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 const gtag = {
-  gaId: process.env.GA_ID,
+  gaId: process.env.APP_ID,
   enabled: true,
   gtmId: process.env.GTM_ID,
   debug: IS_DEV,
@@ -200,6 +200,9 @@ export default defineNuxtConfig({
   // https://vite-pwa-org-zh.netlify.app/guide/
   pwa: {
     injectRegister: 'script-defer',
+    strategies: 'injectManifest',
+    srcDir: './service-worker',
+    filename: 'index.js',
 
     registerType: 'autoUpdate',
 
@@ -251,173 +254,18 @@ export default defineNuxtConfig({
 
     // https://github.com/vite-pwa/nuxt/issues/53#issuecomment-1615266204
     workbox: {
-      runtimeCaching: [
-        // {
-        //   urlPattern: new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
-        //   handler: 'StaleWhileRevalidate',
-        //   // POST做快取會因為Service Workers會再背景再叫一次api，而瀏覽器並不允許這種呼叫兩次同隻POST API的行為，
-        //   // 因此會出現error並無法有效將資料做快取，經查找資料疑似與幕等性有關
-        //   // 關於http的冪等性：https://medium.com/willhanchen/%E9%97%9C%E6%96%BChttp%E7%9A%84%E5%86%AA%E7%AD%89%E6%80%A7-4438381d0a70
-        //   // Service Workers 的 Cache API 不能快取 POST https://stackoverflow.com/questions/53639134/request-method-post-is-unsupported
-        //   method: 'POST',
-        //   options: {
-        //     cacheName: 'post-api-cache',
-        //     expiration: {
-        //       maxEntries: 10,
-        //       maxAgeSeconds: 60 * 2
-        //     },
-        //     plugins: [
-        //       {
-        //         handlerWillStart: async (willStartResponse) => {
-        //           console.log({ willStartResponse });
-        //         },
-        //         requestWillFetch: async (willFetchResponse) => {
-        //           console.log({ willFetchResponse });
-
-        //           return willFetchResponse.request;
-        //         },
-        //         // handlerDidRespond 之後還會再執行一次 cacheKeyWillBeUsed
-        //         cacheKeyWillBeUsed: async (cacheKeyResponse) => {
-        //           console.log({ cacheKeyResponse });
-        //           const request = cacheKeyResponse.request;
-
-        //           if (
-        //             cacheKeyResponse.mode === 'write' ||
-        //             (typeof request?.headers?.get === 'function' && request.headers.get('X-Is-Cacheable') === 'true')
-        //           ) {
-
-        //             return cacheKeyResponse.request;
-        //           }
-        //         },
-        //         cachedResponseWillBeUsed: async (response) => {
-        //           console.log({ response });
-        //           const { cachedResponse } = response;
-
-        //           if (typeof cachedResponse?.clone === 'function') {
-        //             const responseClone = cachedResponse.clone();
-        //             console.log({ response, responseClone });
-        //             return responseClone;
-        //           }
-
-        //           // return response;
-        //         },
-        //         fetchDidSucceed: async (fetchResponse) => {
-        //           console.log({ fetchResponse });
-        //           const { response } = fetchResponse
-
-        //           if (typeof response?.clone === 'function') {
-        //             const responseClone = response.clone();
-        //             console.log({ response, responseClone });
-        //             return responseClone;
-        //           }
-
-        //           return response;
-        //         },
-        //         handlerWillRespond: async (willResponse) => {
-        //           console.log({ willResponse });
-
-        //           return willResponse.response;
-        //         },
-        //         handlerDidRespond: async (didResponse) => {
-        //           console.log({ didResponse });
-        //         },
-        //         cacheWillUpdate: async (cacheWillUpdate) => {
-        //           console.log({ cacheWillUpdate });
-
-        //           return cacheWillUpdate.response;
-        //         },
-        //         handlerDidComplete: async (didCompleteResponse) => {
-        //           console.log({ didCompleteResponse });
-        //         },
-
-        //         cacheDidUpdate: async (cacheDidUpdate) => {
-        //           console.log({ cacheDidUpdate });
-
-        //           return cacheDidUpdate.response;
-        //         },
-        //         fetchDidFail: async (fetchFailResponse) => {
-        //           console.log({ fetchFailResponse });
-        //         },
-        //         handlerDidError: async (didErrorResponse) => {
-        //           console.log({ didErrorResponse });
-        //         },
-        //       },
-        //     ],
-        //   }
-        // },
-        {
-          urlPattern: new RegExp(`^${process.env.API_BASE || '/api'}`, 'i'),
-          handler: 'CacheFirst',
-          method: 'GET',
-          options: {
-            cacheName: 'api-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 2
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            },
-            plugins: [
-              {
-                cacheKeyWillBeUsed: (cacheKeyResponse) => {
-                  const request = cacheKeyResponse.request;
-                  if (
-                    cacheKeyResponse.mode === 'write' ||
-                    (typeof request?.headers?.get === 'function' && request.headers.get('X-Is-Cacheable') === 'true')
-                  ) {
-
-                    return cacheKeyResponse.request;
-                  }
-                }
-              },
-            ],
-          }
-        },
-        {
-          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'google-fonts-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        },
-        {
-          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'gstatic-fonts-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            },
-          }
-        }
-      ],
-
-      // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
-      // https://www.elecfans.com/tools/zijiehuansuan.html
-      maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
-      // Only precache these files - html should be excluded
-      globPatterns: ['**/*'],
-      // Don't fallback on document based (e.g. `/some-page`) requests
-      // Even though this says `null` by default, I had to set this specifically to `null` to make it work
-      navigateFallback: undefined,
+      injectManifest: {
+        // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
+        // https://www.elecfans.com/tools/zijiehuansuan.html
+        maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
+        // Only precache these files - html should be excluded
+        globPatterns: ['**/*'],
+      },
     },
+
     devOptions: {
       enabled: IS_DEV,
       suppressWarnings: true,
-      navigateFallback: '/',
-      navigateFallbackAllowlist: [/^[\/api\/_nuxt\/]/]
     }
   },
 
@@ -433,14 +281,14 @@ export default defineNuxtConfig({
       permissionsPolicy: {
         accelerometer: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube使用加速計
         autoplay: ['self', '"https://*.youtube.com"'],      // 允許同源和YouTube自動播放媒體
-        camera: ['self'],       // 允許同源使用攝影機
+        camera: ['self', '"https://*.youtube.com"'],       // 允許同源使用攝影機和YouTube自動播放媒體
         // 'cross-origin-isolated': [], // 根據需求設定
         // displaycapture: [],      // 螢幕截取，謹慎使用
-        fullscreen: ['self', '"https://*.youtube.com"'],    // 允許同源和YouTube使用全螢幕
+        fullscreen: ['self', '"https://*.youtube.com"'],    // 允許同源和YouTube使用全螢幕和YouTube自動播放媒體
         geolocation: ['self'],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
         // gyroscope: ['self'],     // 允許同源使用陀螺儀
         // magnetometer: ['self'],  // 允許同源使用磁力計
-        microphone: ['self'],   // 允許同源使用麥克風
+        microphone: ['self', '"https://*.youtube.com"'],   // 允許同源使用麥克風和YouTube自動播放媒體
         // midi: [],                // MIDI 裝置
         // payment: ['self'],       // 允許同源使用支付請求 API
         // usb: [],                 // USB 裝置
@@ -456,6 +304,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       gtag,
+
+      APP_ID: process.env.APP_ID,
+      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+      ANDROID_FIREBASE_CREDENTIAL: process.env.ANDROID_FIREBASE_CREDENTIAL,
+      FIREBASE_CREDENTIAL: process.env.FIREBASE_CREDENTIAL,
+      IOS_FIREBASE_CREDENTIAL: process.env.IOS_FIREBASE_CREDENTIAL,
+      FIREBASE_VAPID_KEY: process.env.FIREBASE_VAPID_KEY,
+      MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
+
       GTM_ID: process.env.GTM_ID,
       API_BASE: process.env.API_BASE || '/api',
       WEBSOCKET_BASE_URL:

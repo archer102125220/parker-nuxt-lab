@@ -40,7 +40,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
             window.addEventListener('resize', window._pluginwareHandleResize_);
           }
 
-          const { $pwa } = useNuxtApp();
+          const { $pwa, $firebaseHelper } = useNuxtApp();
+          const runtimeConfig = useRuntimeConfig();
+
           // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
           // watchEffect(async () => {
           //   if ($pwa.needRefresh === true) {
@@ -50,6 +52,15 @@ export default defineNuxtPlugin(({ $pinia }) => {
           watchEffect(() => {
             if ($pwa.offlineReady === true) {
               system.setMessageState({ text: 'App ready to work offline', type: 'success' });
+            }
+
+            if ($pwa.isPWAInstalled === true) {
+              $firebaseHelper.firebaseClientInit({
+                apiKey: runtimeConfig.public.FIREBASE_API_KEY,
+                messagingSenderId: runtimeConfig.public.MESSAGING_SENDER_ID,
+                appId: runtimeConfig.public.APP_ID,
+                measurementId: runtimeConfig.public.GA_ID
+              });
             }
           });
         }

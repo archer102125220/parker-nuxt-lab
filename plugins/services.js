@@ -1,16 +1,28 @@
-import * as lineOauth from '@/services/line-oauth';
-import * as nuxtServer from '@/services/nuxt-server';
-import * as webAuthn from '@/services/web-authn';
-import * as fido2Lib from '@/services/fido2-lib';
+import * as lineOauth from '@/services/client/line-oauth';
+import * as nuxtServer from '@/services/client/nuxt-server';
+import * as webAuthn from '@/services/client/web-authn';
+import * as fido2Lib from '@/services/client/fido2-lib';
+import * as clientFirebaseAdmin from '@/services/client/firebase-admin';
+// import * as serverFirebaseAdmin from '@/services/server/firebase-admin';
 
 export default defineNuxtPlugin(() => {
+  const clientServices = {
+    lineOauth,
+    nuxtServer,
+    webAuthn,
+    fido2Lib,
+    clientFirebaseAdmin
+  }
+  const serverServices = {
+    // serverFirebaseAdmin
+  }
 
   return {
     provide: {
-      lineOauth,
-      nuxtServer,
-      webAuthn,
-      fido2Lib
+      ...clientServices,
+      ...serverServices,
+      clientServices,
+      serverServices
     },
   };
 });

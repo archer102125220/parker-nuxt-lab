@@ -115,7 +115,7 @@ export function cacheAdapterEnhancer(options, defaultAdapter, generateReqKey, ge
 
       if (isLike === true) {
         setCache(requestKey, responsePromise, { ...ttlConfig, method }); // 保存請求回傳的響應對象
-        if (typeof params[refreshCountKey] === 'number' || typeof data[refreshCountKey] === 'number') {
+        if (typeof params?.[refreshCountKey] === 'number' || typeof data?.[refreshCountKey] === 'number') {
           let count = 1
           if (typeof addRefreshCount === 'function') {
             count = addRefreshCount(config, refreshCountKey);

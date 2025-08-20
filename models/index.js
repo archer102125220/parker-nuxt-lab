@@ -1,0 +1,45 @@
+import _Sequelize from 'sequelize';
+import process from 'process';
+
+import databaseConfig from './config/database';
+import createFirebaseMessaging from './firebasemessaging';
+
+const pluginBatabases = {
+  FirebaseMessaging: createFirebaseMessaging
+};
+
+const env = process.env.NODE_ENV || 'development';
+const config = databaseConfig[env] || {};
+
+let _sequelize = null;
+if (config.use_env_variable) {
+  _sequelize = new _Sequelize(process.env[config.use_env_variable], config);
+} else {
+  _sequelize = new _Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
+}
+
+const selfeDatabases = {
+  // FirebaseMessaging: _sequelize.import('firebasemessaging', FirebaseMessaging)
+};
+
+Object.keys(pluginBatabases).forEach(modelName => {
+  // selfeDatabases[modelName] = _sequelize.import(modelName, pluginBatabases[modelName]);
+  selfeDatabases[modelName] = pluginBatabases[modelName](_sequelize, _Sequelize.DataTypes);
+  if (selfeDatabases[modelName].associate) {
+    selfeDatabases[modelName].associate(selfeDatabases);
+  }
+});
+
+selfeDatabases.sequelize = _sequelize;
+selfeDatabases.Sequelize = _Sequelize;
+
+
+export const FirebaseMessaging = selfeDatabases.FirebaseMessaging;
+export const Sequelize = selfeDatabases.Sequelize;
+export const database = selfeDatabases;
+export default database;

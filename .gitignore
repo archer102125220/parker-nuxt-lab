@@ -23,7 +23,12 @@ logs
 .env.*
 !.env.example
 !.env.e2e
+
+
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# firebase
+*-firebase-adminsdk-*.json
