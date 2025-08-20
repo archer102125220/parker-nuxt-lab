@@ -33,19 +33,12 @@ export let firebaseDB;
 export let firebaseMessaging;
 
 // Initialize Firebase
-export async function firebaseClientInit(currentFirebaseConfig = {}) {
+export async function firebaseClientInit() {
   if (typeof window === 'object') {
-    firebaseConfig.apiKey = currentFirebaseConfig.apiKey || firebaseConfig.apiKey;
-    firebaseConfig.messagingSenderId = currentFirebaseConfig.messagingSenderId || firebaseConfig.messagingSenderId;
-    firebaseConfig.appId = currentFirebaseConfig.appId || firebaseConfig.appId;
-    firebaseConfig.measurementId = currentFirebaseConfig.measurementId || firebaseConfig.measurementId;
-
-    console.log({ firebaseConfig, currentFirebaseConfig });
-
     firebaseApp = initializeApp(firebaseConfig);
     firebaseAnalytics = getAnalytics(firebaseApp);
     firebaseDB = getFirestore(firebaseApp);
-    await firebaseMessagingInit(currentFirebaseConfig.vapidKey);
+    await firebaseMessagingInit();
   }
 
   return { firebaseApp, firebaseAnalytics, firebaseDB };
@@ -54,13 +47,15 @@ export async function firebaseClientInit(currentFirebaseConfig = {}) {
 export async function requestPermission() {
   try {
     const isSupport = await isSupported();
+    console.log({ isSupport });
     if (isSupport === false) {
       console.log('FCM is not Supported');
-      // return true的方式略過詢問匡
+      // return true 的方式略過詢問匡
       return true;
     }
     console.log('Requesting permission...');
 
+    console.log({ ['Notification.permission']: Notification.permission });
     if (Notification.permission === 'granted') {
       console.log('Notification permission granted.');
       return true;
@@ -126,8 +121,8 @@ export async function getOrRegisterServiceWorker() {
 //   }
 // }
 
-export async function firebaseMessagingInit(vapidKey) {
-  const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
+export async function firebaseMessagingInit() {
+  // const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
 
   const isSupport = await isSupported();
 
@@ -136,7 +131,7 @@ export async function firebaseMessagingInit(vapidKey) {
   if (typeof window === 'object' && isSupport) {
     try {
       const serviceWorkerRegistration = await getOrRegisterServiceWorker();
-      serviceWorkerRegistration.active.postMessage(`${UrlFirebaseConfig}`);
+      // serviceWorkerRegistration.active.postMessage(`${UrlFirebaseConfig}`);
       // const serviceWorkerRegistration = await new Promise(
       //   setFirebaseServiceWorkerConfig
       // );
@@ -152,15 +147,17 @@ export async function firebaseMessagingInit(vapidKey) {
       // await fetch(swUrl);
 
       firebaseMessaging = getMessaging(firebaseApp, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY || vapidKey
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
       });
       const token = await getToken(firebaseMessaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY || vapidKey,
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         serviceWorkerRegistration
       });
       await POST_registerMessageToken({ token, os: 'web' });
 
+      console.log('before requestPermission');
       await requestPermission();
+      console.log('after requestPermission');
       /*
         interface MessagePayload {
           readonly collapseKey: string; // 僅限 FCM 訊息才有
@@ -183,6 +180,8 @@ export async function firebaseMessagingInit(vapidKey) {
           // 這些屬性通常在 `notification` 物件內部，或者作為 `data` 的一部分，視如何發送而定
         }
       */
+      
+      console.log('before firebaseClientMessage');
       firebaseClientMessage(firebaseMessaging, payload => {
         try {
           // new Notification('測試', {
@@ -205,6 +204,7 @@ export async function firebaseMessagingInit(vapidKey) {
           console.log(error);
         }
       });
+      console.log('after firebaseClientMessage');
     } catch (error) {
       console.log(error);
     }

@@ -4,36 +4,36 @@ import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 import { firebaseConfig } from '@/utils/helpers/firebase';
 
 // https://medium.com/@sumanthegde123/web-push-notifications-with-react-and-firebase-with-safari-error-handling-d2979d10c9ac
-function loadingFirebaseConfig(event) {
-  try {
-    // const url = event?.request?.url || '';
-    // const search = url.substring(url.indexOf('?') + 1);
-    // const urlParams = new URLSearchParams(search);
-    // const firebaseConfig = Object.fromEntries(urlParams);
+// function loadingFirebaseConfig(event) {
+//   try {
+//     // const url = event?.request?.url || '';
+//     // const search = url.substring(url.indexOf('?') + 1);
+//     // const urlParams = new URLSearchParams(search);
+//     // const firebaseConfig = Object.fromEntries(urlParams);
 
-    const dataParams = new URLSearchParams(event?.data);
-    const firebaseConfig = Object.fromEntries(dataParams);
-    if (typeof firebaseConfig.apiKey === 'string') {
-      self.firebaseConfig = firebaseConfig;
+//     const dataParams = new URLSearchParams(event?.data);
+//     const firebaseConfig = Object.fromEntries(dataParams);
+//     if (typeof firebaseConfig.apiKey === 'string') {
+//       self.firebaseConfig = firebaseConfig;
 
-      const { firebase, firebaseMessaging } = firebaseInitializeApp(firebaseConfig);
-      self.firebase = firebase;
-      self.firebaseMessaging = firebaseMessaging;
+//       const { firebase, firebaseMessaging } = firebaseInitializeApp(firebaseConfig);
+//       self.firebase = firebase;
+//       self.firebaseMessaging = firebaseMessaging;
 
-      // self.removeEventListener('fetch', loadingFirebaseConfig);
-      self.removeEventListener('message', loadingFirebaseConfig);
-    }
-  } catch (err) {
-    console.error('Failed to add event listener', err);
-  }
-}
-// self.addEventListener('fetch', loadingFirebaseConfig);
-self.addEventListener('message', loadingFirebaseConfig);
+//       // self.removeEventListener('fetch', loadingFirebaseConfig);
+//       self.removeEventListener('message', loadingFirebaseConfig);
+//     }
+//   } catch (err) {
+//     console.error('Failed to add event listener', err);
+//   }
+// }
+// // self.addEventListener('fetch', loadingFirebaseConfig);
+// self.addEventListener('message', loadingFirebaseConfig);
 
-// const { firebase, firebaseMessaging } = firebaseInitializeApp(firebaseConfig);
+const { firebase, firebaseMessaging } = firebaseInitializeApp(firebaseConfig);
 
-// self.firebase = firebase;
-// self.firebaseMessaging = firebaseMessaging;
+self.firebase = firebase;
+self.firebaseMessaging = firebaseMessaging;
 
 // function handleSWUpdate(event) {
 //   if (!event.data) {

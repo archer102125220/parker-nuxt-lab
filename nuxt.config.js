@@ -197,12 +197,13 @@ export default defineNuxtConfig({
     fallbackLocale,
     detectBrowserLanguage
   },
+
   // https://vite-pwa-org-zh.netlify.app/guide/
   pwa: {
     injectRegister: 'script-defer',
     strategies: 'injectManifest',
     srcDir: './service-worker',
-    filename: 'index.js',
+    filename: 'service-worker.js',
 
     registerType: 'autoUpdate',
 
@@ -279,6 +280,7 @@ export default defineNuxtConfig({
       // crossOriginOpenerPolicy: 'same-origin',
       // crossOriginResourcePolicy: 'cross-origin',
       permissionsPolicy: {
+        notifications: ['self'], // 允許同源使用通知
         accelerometer: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube使用加速計
         autoplay: ['self', '"https://*.youtube.com"'],      // 允許同源和YouTube自動播放媒體
         camera: ['self', '"https://*.youtube.com"'],       // 允許同源使用攝影機和YouTube自動播放媒體
