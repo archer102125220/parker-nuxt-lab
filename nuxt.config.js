@@ -253,15 +253,14 @@ export default defineNuxtConfig({
       display: 'standalone'
     },
 
-    // https://github.com/vite-pwa/nuxt/issues/53#issuecomment-1615266204
-    workbox: {
-      injectManifest: {
-        // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
-        // https://www.elecfans.com/tools/zijiehuansuan.html
-        maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
-        // Only precache these files - html should be excluded
-        globPatterns: ['**/*'],
-      },
+    injectManifest: {
+      // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
+      // https://www.elecfans.com/tools/zijiehuansuan.html
+      maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
+
+      // https://vite-pwa-org.netlify.app/guide/static-assets.html#globpatterns
+      // Only precache these files - html should be excluded
+      globPatterns: ['**/*'],
     },
 
     devOptions: {

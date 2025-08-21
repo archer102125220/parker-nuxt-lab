@@ -1,9 +1,13 @@
 
-import { precacheAndRoute } from 'workbox-precaching';
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 
 import '@/service-worker/firebase-messaging';
+
+// https://unminify.com/ // minify 還原用網址
+
+cleanupOutdatedCaches();
 
 // 這裡的 __WB_MANIFEST 會在打包時由 vite-pwa 自動注入
 // 包含了所有需要預先快取的檔案列表，預先快取靜態檔案
