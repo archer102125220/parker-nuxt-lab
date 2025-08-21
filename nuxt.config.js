@@ -21,9 +21,9 @@ const IS_DEV = process.env.NODE_ENV !== 'production';
 const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'default-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'base-uri': ["'self'"],
-  'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
+  'font-src': ["'self'", 'data:', 'blob:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
   'form-action': ["'self'", 'https://*.facebook.com'],
-  'img-src': ["'self'", 'data:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
+  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
   'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
@@ -33,7 +33,9 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
   'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'upgrade-insecure-requests': true
-} : null;
+} : {
+  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
+};
 
 const osType = os.type().toLocaleLowerCase();
 const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
