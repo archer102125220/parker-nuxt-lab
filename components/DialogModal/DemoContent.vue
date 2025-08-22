@@ -2,8 +2,8 @@
   <div class="dialog_coupon_qr_code">
     <p class="dialog_coupon_qr_code-title">{{ dialogCouponCnName }}</p>
     <p class="dialog_coupon_qr_code-subtitle">
-      <!-- 代碼:{{ dialogCodeId }} -->
-      {{ $t('coupons.code-field') }}:{{ dialogCodeId }}
+      代碼:{{ dialogCodeId }}
+      <!-- {{ $t('coupons.code-field') }}:{{ dialogCodeId }} -->
     </p>
     <QRcode
       v-if="typeof dialogQrcode === 'string' && dialogQrcode !== ''"
@@ -17,8 +17,8 @@
         variant="text"
         @click="emit('close')"
       >
-        <!-- 關閉 -->
-        {{ $t('coupons.coupon-popup-close') }}
+        關閉
+        <!-- {{ $t('coupons.coupon-popup-close') }} -->
       </v-btn>
     </div>
   </div>
@@ -29,7 +29,7 @@
 const props = defineProps({
   dialogCouponCnName: { type: String, default: null },
   dialogCodeId: { type: String, default: null },
-  dialogQrcode: { type: String, default: null }
+  dialogQrcode: { type: String, default: 'demo-content' }
 });
 const emit = defineEmits(['close']);
 </script>

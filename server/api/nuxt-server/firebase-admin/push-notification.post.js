@@ -1,7 +1,7 @@
 import firebaseAdmin from 'firebase-admin';
 
 import {
-  sequelizeFindAllToken
+  messagingFindAllToken
 } from '@/services/server/firebase-admin';
 import {
   getFirebaseAdminApp,
@@ -23,7 +23,7 @@ export default defineEventHandler(async function pushMessage(event) {
       statusMessage: 'Missing parameter: token',
     });
   }
-  const tokens = await sequelizeFindAllToken();
+  const tokens = await messagingFindAllToken();
 
   const webTokens = tokens
     .filter(({ os }) => os === 'web')

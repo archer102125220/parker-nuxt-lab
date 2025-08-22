@@ -1,11 +1,16 @@
 <template>
   <div class="root_style" :style="cssVariable">
+    <NotificationPermission />
+
     <SpeedInsights />
+
     <!-- <NuxtPwaManifest /> -->
     <NuxtPwaAssets />
+
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+
     <client-only>
       <LoadingBar :loading="loading" position="fixed" />
       <Message
@@ -13,19 +18,20 @@
         @reset-message-state="resetMessageState"
       />
       <DialogModal
-        :trigger="$store.system.dialog?.trigger"
-        :width="$store.system.dialog?.width"
-        :content="$store.system.dialog?.content"
-        :bg-color="$store.system.dialog?.bgColor"
-        :radius="$store.system.dialog?.radius"
-        :content-class="$store.system.dialog?.contentClass"
-        :content-props="$store.system.dialog?.contentProps"
-        :dialog-props="$store.system.dialog?.dialogProps"
+        :value="dialogSettings.trigger"
+        :width="dialogSettings.width"
+        :content="dialogSettings.content"
+        :bg-color="dialogSettings.bgColor"
+        :radius="dialogSettings.radius"
+        :content-class="dialogSettings.contentClass"
+        :content-props="dialogSettings.contentProps"
+        :dialog-props="dialogSettings.dialogProps"
         :broswer-info="$store.system.broswerInfo"
         @handle-trigger="$store.system.setDialog"
       />
     </client-only>
-    <GoTop v-if="needGoTop" :px="goTopPx" />
+
+    <GoTop v-if="needGoTop" />
   </div>
 </template>
 
@@ -39,12 +45,11 @@ useRequestInit(runtimeConfig.public.VITE_API_BASE);
 
 const nuxtApp = useNuxtApp();
 const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
-const i18nLocale = useCookie('___i18n_locale');
 
 const gtm = useNuxtGtm();
 const router = useRouter();
 const route = useRoute();
-console.log(route);
+
 const getRouteBaseName = useRouteBaseName();
 useHead({
   titleTemplate: (titleChunk) => {
@@ -67,14 +72,13 @@ nuxtApp.hook('page:finish', () => {
   $store.system.setLoading(false);
 });
 
-const goTopPx = ref(100);
 const loading = computed(() => $store.system.loading);
 const cssVariable = computed(() => {
   const _cssVariable = {};
 
   if (loading.value === true) {
     // _cssVariable['--root_cursor'] = 'wait';
-    _cssVariable['--root_cursor'] = 'url(/img/icon/loadcat.gif), auto';
+    _cssVariable['--root_cursor'] = 'url(/img/icon/loadcat.gif), wait';
   }
 
   return _cssVariable;
@@ -88,6 +92,7 @@ const needGoTop = computed(() => {
   }
   return true;
 });
+const dialogSettings = computed(() => $store.system.dialog || {});
 
 function resetMessageState() {
   $store.system.setMessageState({ text: '', type: 'success' });

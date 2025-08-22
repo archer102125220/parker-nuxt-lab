@@ -44,10 +44,14 @@ export async function firebaseClientInit() {
   return { firebaseApp, firebaseAnalytics, firebaseDB };
 }
 
+export function getPermission() {
+  return Notification.permission === 'granted';
+}
+
 export async function requestPermission() {
   try {
     const isSupport = await isSupported();
-    console.log({ isSupport });
+
     if (isSupport === false) {
       console.log('FCM is not Supported');
       // return true 的方式略過詢問匡
@@ -68,7 +72,7 @@ export async function requestPermission() {
       }
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return false;
 }
@@ -180,7 +184,7 @@ export async function firebaseMessagingInit() {
           // 這些屬性通常在 `notification` 物件內部，或者作為 `data` 的一部分，視如何發送而定
         }
       */
-      
+
       console.log('before firebaseClientMessage');
       firebaseClientMessage(firebaseMessaging, payload => {
         try {

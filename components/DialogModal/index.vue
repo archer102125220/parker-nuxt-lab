@@ -2,14 +2,14 @@
   <v-dialog
     v-bind="dialogProps"
     scroll-strategy="none"
-    :model-value="trigger"
+    :model-value="computedTrigger"
     :width="width"
     @update:model-value="handleChange"
   >
     <component
       :is="contentComponent"
       :key="content"
-      :class="contentClass"
+      :class="computedContentClass"
       :style="cssVariable"
       v-bind="contentProps"
       @close="() => handleChange(false)"
@@ -19,14 +19,15 @@
 
 <script setup>
 const modules = {
-  // ...import.meta.glob('@/components/Dialog/*.vue'),
-  // ...import.meta.glob('@/components/Dialog/*/*.vue')
-  ...import.meta.glob('./*.vue'),
-  ...import.meta.glob('./*/*.vue')
+  ...import.meta.glob('@/components/DialogModal/*.vue'),
+  ...import.meta.glob('@/components/DialogModal/*/*.vue')
 };
 
+// https://cn.vuejs.org/guide/components/v-model#v-model-arguments
+// const modelTrigger = defineModel('trigger', { default: false });
+const modelTrigger = defineModel({ default: false });
+
 const props = defineProps({
-  // trigger: { type: Boolean, default: false },
   width: { type: String, default: null },
   content: { type: String, default: null },
   bgColor: { type: String, default: '#fff' },
@@ -40,10 +41,10 @@ const emit = defineEmits(['handleTrigger']);
 
 const contentComponent = shallowRef(null);
 
-const trigger = ref(false);
+const stateTrigger = ref(false);
 const contentComponentLoaded = ref(false);
 
-const contentClass = computed(() => {
+const computedContentClass = computed(() => {
   const defalutClass = 'dialog_content';
   if (typeof props.contentClass === 'string' && props.contentClass !== '') {
     return `${defalutClass} ${props.contentClass}`;
@@ -85,6 +86,10 @@ const cssVariable = computed(() => {
   return _cssVariable;
 });
 
+const computedTrigger = computed(
+  () => modelTrigger.value || stateTrigger.value
+);
+
 watch(
   () => props.content,
   async (newValue) => {
@@ -95,14 +100,16 @@ watch(
 
     if (typeof newValue === 'string' && newValue !== '') {
       contentComponent.value = defineAsyncComponent(
-        modules[`/components/Dialog/${contentName}`]
+        modules[`/components/DialogModal/${contentName}`]
       );
-      trigger.value = true;
+      stateTrigger.value = true;
+      modelTrigger.value = true;
       await nextTick();
       contentComponentLoaded.value = true;
     } else {
       contentComponentLoaded.value = false;
-      trigger.value = false;
+      stateTrigger.value = false;
+      modelTrigger.value = false;
       document
         .querySelectorAll('html,body')
         .forEach((element) => (element.style.overflow = null));
@@ -111,6 +118,7 @@ watch(
         'handleTrigger',
         {
           trigger: false,
+          // value: false,
           width: null,
           bgColor: '#fff',
           radius: '4px',
@@ -127,25 +135,28 @@ watch(
 );
 
 async function handleChange(newValue) {
-  trigger.value = false;
-  await nextTick();
-  setTimeout(() => {
-    let payload;
-    if (newValue === false) {
-      payload = {
-        trigger: false,
-        width: null,
-        bgColor: '#fff',
-        radius: '4px',
-        content: null,
-        contentClass: null,
-        contentProps: null
-      };
-    } else {
-      payload = JSON.parse(JSON.stringify(props));
-    }
-    emit('handleTrigger', payload, newValue);
-  }, 100);
+  stateTrigger.value = false;
+  modelTrigger.value = false;
+
+  await new Promise((resolve) => nextTick(() => setTimeout(resolve, 100)));
+
+  let payload;
+  if (newValue === false) {
+    payload = {
+      trigger: false,
+      // value: false,
+      width: null,
+      bgColor: '#fff',
+      radius: '4px',
+      content: null,
+      contentClass: null,
+      contentProps: null,
+      dialogProps: null
+    };
+  } else {
+    payload = JSON.parse(JSON.stringify(props));
+  }
+  emit('handleTrigger', payload, newValue);
 }
 </script>
 
@@ -160,7 +171,9 @@ async function handleChange(newValue) {
   // border-radius: 4px;
   border-radius: var(--dialog_radius);
   overflow-y: auto;
-  box-shadow: 0 0.6875rem 0.9375rem -0.4375rem var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
+  box-shadow:
+    0 0.6875rem 0.9375rem -0.4375rem
+      var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
     0 1.5rem 2.375rem 0.1875rem
       var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
     0 0.5625rem 2.875rem 0.5rem
