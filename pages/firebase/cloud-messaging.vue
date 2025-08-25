@@ -1,34 +1,107 @@
 <template>
   <div class="cloud_messaging_page">
-    <v-skeleton-loader type="table" :loading="pending">
-      <ScrollFetch :refresh="refresh">
-        <v-table class="cloud_messaging_page-token_table" fixed-header>
-          <thead class="cloud_messaging_page-token_table-thead">
-            <tr class="cloud_messaging_page-token_table-thead-tr">
-              <th class="cloud_messaging_page-token_table-thead-tr-os_th">
-                作業系統
+    <v-container
+      :tag="VForm"
+      v-model="isValidSubmit"
+      @submit.prevent="handlePushNotification"
+    >
+      <v-row>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="12"
+            :tag="VTextField"
+            label="推播標題"
+            v-model="appMessageTitle"
+            :rules="handleCheckMessageTitle"
+          />
+          <v-col
+            cols="12"
+            sm="12"
+            :tag="VTextField"
+            label="推播訊息"
+            v-model="appMessageData"
+            :rules="handleCheckMessageData"
+          />
+          <v-col
+            cols="12"
+            sm="12"
+            :tag="VTextField"
+            label="推播圖片網址"
+            v-model="appMessageImg"
+          />
+        </v-row>
+        <v-col cols="12" sm="4">
+          <v-btn
+            color="primary"
+            type="submit"
+            width="100%"
+            min-height="100%"
+            :disabled="isValidSubmit === false"
+          >
+            送出
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-skeleton-loader
+      type="table"
+      class="cloud_messaging_page-skeleton_loader"
+      height="500px"
+      :loading="pending"
+    >
+      <ScrollFetch
+        height="100%"
+        infinity-end-label=""
+        refresh-icon="/img/icon/refresh/refresh-icon.svg"
+        refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
+        class="cloud_messaging_page-skeleton_loader-scroll_fetch"
+        :refresh-disable="false"
+        :infinity-disable="true"
+        :refresh="handleRefresh"
+      >
+        <v-table
+          class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table"
+          fixed-header
+        >
+          <thead
+            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead"
+          >
+            <tr
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row"
+            >
+              <th
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-os_th"
+              >
+                {{ OS_TD_TITLE }}
               </th>
-              <th class="cloud_messaging_page-token_table-thead-tr-token_th">
-                token
+              <th
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-token_th"
+              >
+                {{ TOKEN_TD_TITLE }}
               </th>
             </tr>
           </thead>
-          <tbody class="cloud_messaging_page-token_table-tbody">
+          <tbody
+            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody"
+          >
             <tr
-              v-for="webToken in webTokenList"
+              v-for="(webToken, webTokenIndex) in webTokenList"
               :key="webToken.createdAt"
-              class="cloud_messaging_page-token_table-tbody-tr"
+              :data-title="`web token No.${webTokenIndex + 1}`"
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
             >
               <td
-                class="cloud_messaging_page-token_table-tbody-tr-os_td"
-                data-title="作業系統"
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
+                :data-title="`${OS_TD_TITLE}：`"
                 :data-context="webToken.os"
               >
                 {{ webToken.os }}
               </td>
               <td
-                class="cloud_messaging_page-token_table-tbody-tr-token_td"
-                data-title="token"
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
+                :data-title="`${TOKEN_TD_TITLE}：`"
                 :data-context="webToken.token"
               >
                 {{ webToken.token }}
@@ -36,20 +109,21 @@
             </tr>
 
             <tr
-              v-for="androidToken in androidTokenList"
+              v-for="(androidToken, androidTokenIndex) in androidTokenList"
               :key="androidToken.createdAt"
-              class="cloud_messaging_page-token_table-tbody-tr"
+              :data-title="`android token No.${androidTokenIndex + 1}`"
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
             >
               <td
-                class="cloud_messaging_page-token_table-tbody-tr-os_td"
-                data-title="作業系統"
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
+                :data-title="`${OS_TD_TITLE}：`"
                 :data-context="androidToken.os"
               >
                 {{ androidToken.os }}
               </td>
               <td
-                class="cloud_messaging_page-token_table-tbody-tr-token_td"
-                data-title="token"
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
+                :data-title="`${TOKEN_TD_TITLE}：`"
                 :data-context="androidToken.token"
               >
                 {{ androidToken.token }}
@@ -59,18 +133,19 @@
             <tr
               v-for="iosToken in iosTokenList"
               :key="iosToken.createdAt"
-              class="cloud_messaging_page-token_table-tbody-tr"
+              :data-title="`ios token No.${iosToken + 1}`"
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
             >
               <td
-                class="cloud_messaging_page-token_table-tbody-tr-os_td"
-                data-title="作業系統"
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
+                :data-title="`${OS_TD_TITLE}：`"
                 :data-context="iosToken.os"
               >
                 {{ iosToken.os }}
               </td>
               <td
-                class="cloud_messaging_page-token_table-tbody-tr-token_td"
-                data-title="token"
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
+                :data-title="`${TOKEN_TD_TITLE}：`"
                 :data-context="iosToken.token"
               >
                 {{ iosToken.token }}
@@ -84,47 +159,161 @@
 </template>
 
 <script setup>
+import { VTextField, VForm } from 'vuetify/components';
+
 useHead({
   title: 'Firebase Cloud Messaging 後台'
 });
 
 const nuxtApp = useNuxtApp();
 
-const asyncData = await useAsyncData('cloud-messaging-tokens', async () => {
-  if (import.meta.server === true) {
-    const { messagingFindAllToken } = await import(
-      '@/services/server/firebase-admin'
-    );
-    const [webTokenList, androidTokenList, iosTokenList] = await Promise.all([
-      messagingFindAllToken({ os: 'web' }),
-      messagingFindAllToken({ os: 'android' }),
-      messagingFindAllToken({ os: 'ios' })
-    ]);
+const { pending, data, error, refresh } = await useAsyncData(
+  'cloud-messaging-tokens',
+  async () => {
+    if (import.meta.server === true) {
+      const { messagingFindAllToken } = await import(
+        '@/services/server/firebase-admin'
+      );
+      const [webTokenList, androidTokenList, iosTokenList] = await Promise.all([
+        messagingFindAllToken({ os: 'web' }),
+        messagingFindAllToken({ os: 'android' }),
+        messagingFindAllToken({ os: 'ios' })
+      ]);
 
-    const tokenList = { webTokenList, androidTokenList, iosTokenList };
-    return JSON.parse(JSON.stringify(tokenList));
+      const tokenList = { webTokenList, androidTokenList, iosTokenList };
+      return JSON.parse(JSON.stringify(tokenList));
+    }
+
+    const response = await nuxtApp.$clientFirebaseAdmin.GET_getMessageTokens();
+    return response;
   }
+);
+if (error.value) {
+  console.error('Error fetching cloud messaging tokens:', error.value);
+}
 
-  const response = await nuxtApp.$clientFirebaseAdmin.GET_getMessageTokens();
-  return response;
-});
-const { pending, data, error, refresh } = asyncData;
+const OS_TD_TITLE = computed(() => '作業系統');
+const TOKEN_TD_TITLE = computed(() => 'token');
+
+const appMessageTitle = ref('appMessageTitle');
+const appMessageData = ref('appMessage');
+const appMessageImg = ref('/img/ico/favicon.svg');
+const isValidSubmit = ref(false);
+const loading = ref(false);
 
 const webTokenList = computed(() => data.value?.webTokenList || []);
 const androidTokenList = computed(() => data.value?.androidTokenList || []);
 const iosTokenList = computed(() => data.value?.iosTokenList || []);
+
+const handleCheckMessageTitle = computed(() => [
+  function handleCheckMessageTitle(messageTitle) {
+    if (!messageTitle || messageTitle.trim() === '') {
+      return '請檢查推播標題';
+    }
+    return true;
+  }
+]);
+const handleCheckMessageData = computed(() => [
+  function handleCheckMessageData(messageData) {
+    if (!messageData || messageData.trim() === '') {
+      return '請檢查推播訊息';
+    }
+    return true;
+  }
+]);
+
+async function POST_PushNotification() {
+  if (import.meta.server === true) return;
+
+  return await nuxtApp.$clientFirebaseAdmin.POST_pushNotification({
+    title: appMessageTitle.value,
+    data: appMessageData.value,
+    img: appMessageImg.value
+  });
+}
+
+function handleRefresh() {
+  if (pending.value === true) return;
+
+  refresh();
+}
+
+async function handlePushNotification() {
+  console.log({
+    isValidSubmit: isValidSubmit.value,
+    pending: pending.value,
+    loading: loading.value
+  });
+
+  if (
+    isValidSubmit.value === false ||
+    pending.value === true ||
+    loading.value === true
+  ) {
+    return;
+  }
+
+  console.log('push notification');
+
+  nuxtApp.$store.system.setLoading(true);
+  loading.value = true;
+
+  try {
+    const response = await POST_PushNotification();
+
+    console.log({ response });
+  } catch (error) {
+    console.error('Error sending push notification:', error);
+  } finally {
+    loading.value = false;
+    nuxtApp.$store.system.setLoading(false);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
+@mixin mobile_td {
+  @include mobile {
+    --v-table-row-height: auto;
+    margin-bottom: 10px;
+
+    @content;
+
+    &::before {
+      content: attr(data-title);
+      flex-shrink: 0;
+      display: inline-block;
+      // width: 100%;
+    }
+  }
+}
 .os {
   width: 30%;
 
   word-break: keep-all;
+
+  @include mobile_td {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    width: 100%;
+  }
 }
 .token {
   width: 60%;
 
   overflow: auto;
+
+  @include mobile_td {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    width: 100%;
+
+    word-break: break-all;
+  }
 }
 .tr {
   width: 100%;
@@ -133,45 +322,62 @@ const iosTokenList = computed(() => data.value?.iosTokenList || []);
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+
+    &::before {
+      content: attr(data-title);
+      display: block;
+
+      margin-bottom: 10px;
+    }
   }
 }
 
 .cloud_messaging_page {
   width: 100%;
+  min-height: 500px;
 
-  &-token_table {
-    width: 100%;
-    margin: 10px 0;
+  &-skeleton_loader {
+    height: 100%;
 
-    &-thead {
-      width: 100%;
+    &-scroll_fetch {
+      height: 100%;
 
-      @include mobile {
-        display: none;
-      }
-      &-tr {
-        @extend .tr;
+      &-token_table {
+        width: 100%;
+        height: 100%;
+        margin: 10px 0;
 
-        &-os_th {
-          @extend .os;
+        &-thead {
+          width: 100%;
+
+          @include mobile {
+            display: none;
+          }
+          &-title_row {
+            @extend .tr;
+
+            &-os_th {
+              @extend .os;
+            }
+            &-token_th {
+              @extend .token;
+            }
+          }
         }
-        &-token_th {
-          @extend .token;
-        }
-      }
-    }
 
-    &-tbody {
-      width: 100%;
+        &-tbody {
+          width: 100%;
 
-      &-tr {
-        @extend .tr;
+          &-tr {
+            @extend .tr;
 
-        &-os_td {
-          @extend .os;
-        }
-        &-token_td {
-          @extend .token;
+            &-os_td {
+              @extend .os;
+            }
+            &-token_td {
+              @extend .token;
+            }
+          }
         }
       }
     }

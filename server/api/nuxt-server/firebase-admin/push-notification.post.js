@@ -3,26 +3,19 @@ import firebaseAdmin from 'firebase-admin';
 import {
   messagingFindAllToken
 } from '@/services/server/firebase-admin';
-import {
-  getFirebaseAdminApp,
-  getAndroidFirebaseAdminApp,
-  getIosFirebaseAdminApp
-} from '@/utils/helpers/firebase-admin';
 
 export default defineEventHandler(async function pushMessage(event) {
   const body = await readBody(event);
+
+  console.log('Push Notification Body:', body);
 
   if (body.data === undefined || body.data === null) {
     throw createError({
       statusCode: 500,
       statusMessage: 'Missing parameter: data',
     });
-  } else if (Array.isArray(body.token) === false || body.token.length <= 0) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Missing parameter: token',
-    });
   }
+
   const tokens = await messagingFindAllToken();
 
   const webTokens = tokens
@@ -36,9 +29,10 @@ export default defineEventHandler(async function pushMessage(event) {
     .map(({ token }) => token);
   // console.log(body.data, { webTokens, androidTokens, iosTokens });
 
-  const firebaseAdminApp = getFirebaseAdminApp();
-  const androidFirebaseAdminApp = getAndroidFirebaseAdminApp();
-  const iosFirebaseAdminApp = getIosFirebaseAdminApp();
+  const firebaseAdminApp = event.context.$firebaseAdminApp;
+  const androidFirebaseAdminApp = event.context.$androidFirebaseAdminApp;
+  const iosFirebaseAdminApp = event.context.$iosFirebaseAdminApp;
+  console.log({ firebaseAdminApp, androidFirebaseAdminApp, iosFirebaseAdminApp });
 
   const promiseArray = [];
 
