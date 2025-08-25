@@ -6,31 +6,31 @@
       @submit.prevent="handlePushNotification"
     >
       <v-row>
-        <v-row>
-          <v-col
-            cols="12"
-            sm="12"
-            :tag="VTextField"
-            label="推播標題"
-            v-model="appMessageTitle"
-            :rules="handleCheckMessageTitle"
-          />
-          <v-col
-            cols="12"
-            sm="12"
-            :tag="VTextField"
-            label="推播訊息"
-            v-model="appMessageData"
-            :rules="handleCheckMessageData"
-          />
-          <v-col
-            cols="12"
-            sm="12"
-            :tag="VTextField"
-            label="推播圖片網址"
-            v-model="appMessageImg"
-          />
-        </v-row>
+        <v-col
+          cols="12"
+          sm="12"
+          :tag="VTextField"
+          label="推播標題"
+          v-model="appMessageTitle"
+          :rules="handleCheckMessageTitle"
+        />
+        <v-col
+          cols="12"
+          sm="12"
+          :tag="VTextField"
+          label="推播訊息"
+          v-model="appMessageData"
+          :rules="handleCheckMessageData"
+        />
+        <v-col
+          cols="12"
+          sm="12"
+          :tag="VTextField"
+          label="推播圖片網址"
+          v-model="appMessageImg"
+        />
+      </v-row>
+      <v-row justify="end" align="center">
         <v-col cols="12" sm="4">
           <v-btn
             color="primary"
