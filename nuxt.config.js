@@ -96,6 +96,8 @@ export default defineNuxtConfig({
     '/home': { isr: 60 * 60 * 24 },
     '/web-authn': { isr: 60 * 60 * 24 },
     '/web-cam': { isr: 60 * 60 * 24 },
+    '/firebase': { isr: 60 * 60 * 24 },
+    '/firebase/**': { isr: 60 * 60 * 24 },
 
     // '/articles/*': { swr: 3600 },
     // '/admin/**': { ssr: false }
