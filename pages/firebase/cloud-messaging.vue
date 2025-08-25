@@ -115,7 +115,7 @@
                 class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
                 :data-title="`${ACRION_TITLE}：`"
               >
-                <v-btn color="error" @click="handleError(webToken.token)">
+                <v-btn color="error" @click="handleDeleteToken(webToken.token)">
                   刪除
                 </v-btn>
               </td>
@@ -145,7 +145,10 @@
                 class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
                 :data-title="`${ACRION_TITLE}：`"
               >
-                <v-btn color="error" @click="handleError(androidToken.token)">
+                <v-btn
+                  color="error"
+                  @click="handleDeleteToken(androidToken.token)"
+                >
                   刪除
                 </v-btn>
               </td>
@@ -175,7 +178,7 @@
                 class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
                 :data-title="`${ACRION_TITLE}：`"
               >
-                <v-btn color="error" @click="handleError(iosToken.token)">
+                <v-btn color="error" @click="handleDeleteToken(iosToken.token)">
                   刪除
                 </v-btn>
               </td>
@@ -271,7 +274,9 @@ async function DELETE_DeleteToken(token) {
 async function handleRefresh() {
   if (pending.value === true) return;
 
+  nuxtApp.$store.system.setLoading(true);
   await refresh();
+  nuxtApp.$store.system.setLoading(false);
 }
 
 async function handlePushNotification() {
@@ -310,10 +315,12 @@ async function handlePushNotification() {
     nuxtApp.$store.system.setLoading(false);
   }
 }
-async function handleError(token) {
+async function handleDeleteToken(token) {
   if (pending.value === true || loading.value === true) {
     return;
   }
+
+  console.log({ token });
 
   loading.value = true;
   nuxtApp.$store.system.setLoading(true);

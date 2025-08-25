@@ -4,9 +4,8 @@ import {
 import { cancelTokens } from '@/utils/helpers/firebase-admin';
 
 export default defineEventHandler(async function cancelMessageToken(event) {
-  const query = getQuery(event);
+  const { token } = event.context.params;
 
-  const { token } = query;
   cancelTokens(token);
   const response = await messagingRemoveToken(token);
   console.log(response);
