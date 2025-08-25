@@ -2,7 +2,7 @@
 
 import pg from 'pg';
 
-const nodeEnv = process.env.NODE_ENV || 'development';
+// const nodeEnv = process.env.NODE_ENV || 'development';
 
 //https://github.com/sequelize/cli/issues/766
 

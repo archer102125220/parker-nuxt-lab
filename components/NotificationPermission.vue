@@ -44,12 +44,10 @@ onMounted(() => {
 });
 
 function handleCancel() {
-  // 在這裡處理取消的邏輯
   isShow.value = false;
 }
 
 async function handleCofirm() {
-  // 在這裡處理同意的邏輯
   isShow.value = false;
 
   const result = await $firebaseHelper.requestPermission();

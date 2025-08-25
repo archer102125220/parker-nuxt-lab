@@ -45,6 +45,7 @@ export async function firebaseClientInit() {
 }
 
 export function getPermission() {
+  if (import.meta.server) return false;
   return Notification.permission === 'granted';
 }
 
