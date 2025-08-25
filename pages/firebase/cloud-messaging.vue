@@ -81,6 +81,11 @@
               >
                 {{ TOKEN_TD_TITLE }}
               </th>
+              <th
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-action_th"
+              >
+                {{ ACRION_TITLE }}
+              </th>
             </tr>
           </thead>
           <tbody
@@ -106,6 +111,14 @@
               >
                 {{ webToken.token }}
               </td>
+              <td
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
+                :data-title="`${ACRION_TITLE}：`"
+              >
+                <v-btn color="error" @click="handleError(webToken.token)">
+                  刪除
+                </v-btn>
+              </td>
             </tr>
 
             <tr
@@ -128,6 +141,14 @@
               >
                 {{ androidToken.token }}
               </td>
+              <td
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
+                :data-title="`${ACRION_TITLE}：`"
+              >
+                <v-btn color="error" @click="handleError(androidToken.token)">
+                  刪除
+                </v-btn>
+              </td>
             </tr>
 
             <tr
@@ -149,6 +170,14 @@
                 :data-context="iosToken.token"
               >
                 {{ iosToken.token }}
+              </td>
+              <td
+                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
+                :data-title="`${ACRION_TITLE}：`"
+              >
+                <v-btn color="error" @click="handleError(iosToken.token)">
+                  刪除
+                </v-btn>
               </td>
             </tr>
           </tbody>
@@ -194,6 +223,7 @@ if (error.value) {
 
 const OS_TD_TITLE = computed(() => '作業系統');
 const TOKEN_TD_TITLE = computed(() => 'token');
+const ACRION_TITLE = computed(() => '操作');
 
 const appMessageTitle = ref('appMessageTitle');
 const appMessageData = ref('appMessage');
@@ -232,10 +262,16 @@ async function POST_PushNotification() {
   });
 }
 
-function handleRefresh() {
+async function DELETE_DeleteToken(token) {
+  if (import.meta.server === true) return;
+
+  return await nuxtApp.$clientFirebaseAdmin.DELETE_cancelMessageToken(token);
+}
+
+async function handleRefresh() {
   if (pending.value === true) return;
 
-  refresh();
+  await refresh();
 }
 
 async function handlePushNotification() {
@@ -262,8 +298,32 @@ async function handlePushNotification() {
     const response = await POST_PushNotification();
 
     console.log({ response });
+
+    const { failureCount = 0, successCount = 0 } = response;
+    nuxtApp.$infoMessage(
+      `執行完畢，成功向${successCount}份裝置發送推播訊息，${failureCount}份裝置發送失敗`
+    );
   } catch (error) {
     console.error('Error sending push notification:', error);
+  } finally {
+    loading.value = false;
+    nuxtApp.$store.system.setLoading(false);
+  }
+}
+async function handleError(token) {
+  if (pending.value === true || loading.value === true) {
+    return;
+  }
+
+  loading.value = true;
+  nuxtApp.$store.system.setLoading(true);
+  try {
+    await DELETE_DeleteToken(token);
+    await handleRefresh();
+    nuxtApp.$successMessage('刪除成功');
+  } catch (error) {
+    console.error('Error deleting token:', error);
+    nuxtApp.$errorMessage('刪除失敗');
   } finally {
     loading.value = false;
     nuxtApp.$store.system.setLoading(false);
@@ -315,6 +375,18 @@ async function handlePushNotification() {
     word-break: break-all;
   }
 }
+.action {
+  width: 10%;
+
+  @include mobile_td {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    width: 100%;
+  }
+}
 .tr {
   width: 100%;
 
@@ -362,6 +434,9 @@ async function handlePushNotification() {
             &-token_th {
               @extend .token;
             }
+            &-action_th {
+              @extend .action;
+            }
           }
         }
 
@@ -376,6 +451,9 @@ async function handlePushNotification() {
             }
             &-token_td {
               @extend .token;
+            }
+            &-action_td {
+              @extend .action;
             }
           }
         }
