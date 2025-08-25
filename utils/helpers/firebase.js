@@ -158,6 +158,7 @@ export async function firebaseMessagingInit() {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         serviceWorkerRegistration
       });
+      console.log({ token });
       await POST_registerMessageToken({ token, os: 'web' });
 
       console.log('before requestPermission');

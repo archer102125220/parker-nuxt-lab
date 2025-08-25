@@ -40,6 +40,9 @@ const isShow = ref(false);
 
 onMounted(() => {
   const result = $firebaseHelper.getPermission();
+  if (result === true) {
+    $firebaseHelper.firebaseMessagingInit();
+  }
   isShow.value = result === false;
 });
 
@@ -48,8 +51,6 @@ function handleCancel() {
 }
 
 async function handleCofirm() {
-  isShow.value = false;
-
   const result = await $firebaseHelper.requestPermission();
   if (result === true) {
     await $firebaseHelper.firebaseMessagingInit();
