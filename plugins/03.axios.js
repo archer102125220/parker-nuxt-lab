@@ -8,7 +8,7 @@ export default defineNuxtPlugin(() => {
     () => typeof axiosRequest.ax === 'object' && axiosRequest.ax !== null
   );
 
-  const request = axiosInit(runtimeConfig.public.VITE_API_BASE || import.meta.env.VITE_API_BASE || '/');
+  const request = axiosInit(runtimeConfig.public.VITE_API_BASE || import.meta.env.VITE_API_BASE);
 
   isInitialized.value = true;
 

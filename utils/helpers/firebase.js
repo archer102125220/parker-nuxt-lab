@@ -94,9 +94,6 @@ export async function getOrRegisterServiceWorker() {
       '/'
     );
     if (serviceWorker) return serviceWorker;
-    // return await window.navigator.serviceWorker.register(
-    //   '/firebase-messaging-sw.js'
-    // );
     return await window.navigator.serviceWorker.register('/service-worker.js', {
       scope: '/'
     });
@@ -126,12 +123,16 @@ export async function getOrRegisterServiceWorker() {
 //   }
 // }
 
+if (typeof window !== 'undefined') {
+  window.firebaseMessagingInit = firebaseMessagingInit;
+}
+
 export async function firebaseMessagingInit() {
   // const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
 
   const isSupport = await isSupported();
 
-  if (isSupport === false) console.log('FCM is not Supported');
+  if (isSupport === false) console.warn('FCM is not Supported');
 
   if (typeof window === 'object' && isSupport) {
     try {
@@ -151,9 +152,11 @@ export async function firebaseMessagingInit() {
       // }
       // await fetch(swUrl);
 
+      console.log({ serviceWorkerRegistration });
       firebaseMessaging = getMessaging(firebaseApp, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
       });
+      console.log({ firebaseMessaging });
       const token = await getToken(firebaseMessaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         serviceWorkerRegistration
@@ -207,13 +210,14 @@ export async function firebaseMessagingInit() {
             icon: notificationIcon || '/img/favicon/favicon.ico'
           });
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       });
       console.log('after firebaseClientMessage');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
+
   return firebaseMessaging;
 }
