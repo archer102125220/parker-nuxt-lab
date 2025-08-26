@@ -124,6 +124,7 @@ export async function getOrRegisterServiceWorker() {
 // }
 
 if (typeof window !== 'undefined') {
+  window.firebaseClientInit = firebaseClientInit;
   window.firebaseMessagingInit = firebaseMessagingInit;
 }
 
