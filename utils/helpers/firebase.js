@@ -34,11 +34,16 @@ export let firebaseMessaging;
 
 // Initialize Firebase
 export async function firebaseClientInit() {
-  if (typeof window === 'object') {
-    firebaseApp = initializeApp(firebaseConfig);
-    firebaseAnalytics = getAnalytics(firebaseApp);
-    firebaseDB = getFirestore(firebaseApp);
-    await firebaseMessagingInit();
+  try {
+    if (typeof window === 'object') {
+      firebaseApp = initializeApp(firebaseConfig);
+      await firebaseMessagingInit();
+
+      firebaseAnalytics = getAnalytics(firebaseApp);
+      firebaseDB = getFirestore(firebaseApp);
+    }
+  } catch (error) {
+    console.error(error);
   }
 
   return { firebaseApp, firebaseAnalytics, firebaseDB };
@@ -122,11 +127,6 @@ export async function getOrRegisterServiceWorker() {
 //     }
 //   }
 // }
-
-if (typeof window !== 'undefined') {
-  window.firebaseClientInit = firebaseClientInit;
-  window.firebaseMessagingInit = firebaseMessagingInit;
-}
 
 export async function firebaseMessagingInit() {
   // const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
