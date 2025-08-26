@@ -81,7 +81,7 @@ export let ax = null;
 
 export function axiosInit(baseURL, errorAdapter, defaultExtendOption) {
   ax = axios.create({
-    baseURL,
+    baseURL: baseURL || import.meta.env.VITE_API_BASE,
     adapter: cacheAdapterEnhancer(
       {
         enabledByDefault: false,

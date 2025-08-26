@@ -17,7 +17,7 @@ export function useRequest(
 
   const runtimeConfig = useRuntimeConfig();
   const { request: axiosRequest } = useRequestInit(
-    apiBase || runtimeConfig.public.VITE_API_BASE,
+    apiBase || runtimeConfig.public.VITE_API_BASE || import.meta.env.VITE_API_BASE,
     errorAdapter,
     defaultExtendOption
   );

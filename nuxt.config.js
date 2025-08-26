@@ -308,18 +308,18 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      gtag,
+      // gtag,
 
-      VITE_APP_ID: process.env.VITE_APP_ID,
-      VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
-      VITE_ANDROID_FIREBASE_CREDENTIAL: process.env.VITE_ANDROID_FIREBASE_CREDENTIAL,
-      VITE_FIREBASE_CREDENTIAL: process.env.VITE_FIREBASE_CREDENTIAL,
-      VITE_IOS_FIREBASE_CREDENTIAL: process.env.VITE_IOS_FIREBASE_CREDENTIAL,
-      VITE_FIREBASE_VAPID_KEY: process.env.VITE_FIREBASE_VAPID_KEY,
-      VITE_MESSAGING_SENDER_ID: process.env.VITE_MESSAGING_SENDER_ID,
+      // VITE_APP_ID: process.env.VITE_APP_ID,
+      // VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
+      // VITE_ANDROID_FIREBASE_CREDENTIAL: process.env.VITE_ANDROID_FIREBASE_CREDENTIAL,
+      // VITE_FIREBASE_CREDENTIAL: process.env.VITE_FIREBASE_CREDENTIAL,
+      // VITE_IOS_FIREBASE_CREDENTIAL: process.env.VITE_IOS_FIREBASE_CREDENTIAL,
+      // VITE_FIREBASE_VAPID_KEY: process.env.VITE_FIREBASE_VAPID_KEY,
+      // VITE_MESSAGING_SENDER_ID: process.env.VITE_MESSAGING_SENDER_ID,
 
-      VITE_GTM_ID: process.env.VITE_GTM_ID,
-      VITE_API_BASE: process.env.VITE_API_BASE || '/api',
+      // VITE_GTM_ID: process.env.VITE_GTM_ID,
+      // VITE_API_BASE: process.env.VITE_API_BASE || '/api',
 
       WEBSOCKET_BASE_URL:
         process.env.WEBSOCKET_BASE_URL || 'wss://url',

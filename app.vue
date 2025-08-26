@@ -40,8 +40,8 @@ import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 
 const NO_GO_TOP = [];
 
-const runtimeConfig = useRuntimeConfig();
-useRequestInit(runtimeConfig.public.VITE_API_BASE);
+// const runtimeConfig = useRuntimeConfig();
+useRequestInit(import.meta.env.VITE_API_BASE);
 
 const nuxtApp = useNuxtApp();
 const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
