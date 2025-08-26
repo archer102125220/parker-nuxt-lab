@@ -9,7 +9,7 @@ export async function messagingAddToken(payload = { token: '', os: '' }) {
         { os: { [Op.eq]: payload.os } }
       ]
     },
-    defaults: { ...token }
+    defaults: { ...payload }
   });
   return response;
 }
