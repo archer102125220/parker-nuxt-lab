@@ -152,16 +152,22 @@ export async function firebaseMessagingInit() {
       // }
       // await fetch(swUrl);
 
-      console.log({ serviceWorkerRegistration });
+      if (typeof window !== 'undefined') {
+        window.serviceWorkerRegistration = serviceWorkerRegistration;
+      }
       firebaseMessaging = getMessaging(firebaseApp, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
       });
-      console.log({ firebaseMessaging });
+      if (typeof window !== 'undefined') {
+        window.firebaseMessaging = firebaseMessaging;
+      }
       const token = await getToken(firebaseMessaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         serviceWorkerRegistration
       });
-      console.log({ token });
+      if (typeof window !== 'undefined') {
+        window.token = token;
+      }
       await POST_registerMessageToken({ token, os: 'web' });
 
       console.log('before requestPermission');
