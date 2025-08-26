@@ -29,10 +29,10 @@ export function classifySwipeDirection(startPoint, endPoint, options = {}) {
   // 1. 計算總滑動距離 (幾何學：勾股定理)
   const distance = Math.sqrt(dx * dx + dy * dy);
 
-  // 如果距離未達到最小滑動距離，則不判斷為有效滑動
-  if (distance < config.minSwipeDistance) {
-    return null;
-  }
+  const isValidSwipe = distance >= config.minSwipeDistance;
+
+  let isHorizontal = false;
+  let isVertical = false;
 
   // 2. 計算滑動的角度 (三角函數：atan2)
   // atan2(dy, dx) 返回的角度是從正X軸到點(dx, dy)的弧度，範圍從 -PI 到 PI。
@@ -41,33 +41,34 @@ export function classifySwipeDirection(startPoint, endPoint, options = {}) {
   const originalAngleDeg = Math.abs(angleRad * 180 / Math.PI); // 取絕對值，因為方向性由象限決定
   let angleDeg = originalAngleDeg;
 
-  // 將角度映射到 0-90 度範圍，方便判斷接近水平還是垂直
-  // 例如：
-  // 0度 (右) -> 0
-  // 90度 (下) -> 90
-  // 180度 (左) -> 0
-  // 270度 (上) -> 90
-  if (angleDeg > 90) {
-    angleDeg = 180 - angleDeg; // 將 >90 度的角度映射回 0-90 範圍
-  }
+  // 如果距離未達到最小滑動距離，則不判斷為有效滑動
+  if (isValidSwipe === true) {
+    // 將角度映射到 0-90 度範圍，方便判斷接近水平還是垂直
+    // 例如：
+    // 0度 (右) -> 0
+    // 90度 (下) -> 90
+    // 180度 (左) -> 0
+    // 270度 (上) -> 90
+    if (angleDeg > 90) {
+      angleDeg = 180 - angleDeg; // 將 >90 度的角度映射回 0-90 範圍
+    }
 
-  let isHorizontal = false;
-  let isVertical = false;
-
-  // 3. 根據角度閾值判斷方向
-  if (angleDeg <= config.angleThreshold) {
-    // 角度接近 0 度 (水平方向)
-    isHorizontal = true;
-  } else if (angleDeg >= (90 - config.angleThreshold)) {
-    // 角度接近 90 度 (垂直方向)
-    isVertical = true;
-  } else {
-    // 角度既不接近水平也不接近垂直，或者在閾值之間
-    isHorizontal = false;
-    isVertical = false;
+    // 3. 根據角度閾值判斷方向
+    if (angleDeg <= config.angleThreshold) {
+      // 角度接近 0 度 (水平方向)
+      isHorizontal = true;
+    } else if (angleDeg >= (90 - config.angleThreshold)) {
+      // 角度接近 90 度 (垂直方向)
+      isVertical = true;
+    } else {
+      // 角度既不接近水平也不接近垂直，或者在閾值之間
+      isHorizontal = false;
+      isVertical = false;
+    }
   }
 
   return {
+    isValidSwipe,
     isHorizontal,
     isVertical,
     originalAngleDeg,
