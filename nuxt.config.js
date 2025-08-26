@@ -75,7 +75,7 @@ export default defineNuxtConfig({
     // '/components/**': { isr: true },
 
     // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
-    '/**': { prerender: true },
+    // '/**': { prerender: true },
     '/': { isr: true },
     '/zh': { isr: true },
     '/zh/**': { isr: 60 * 60 * 24 },
@@ -96,8 +96,8 @@ export default defineNuxtConfig({
     '/home': { isr: 60 * 60 * 24 },
     '/web-authn': { isr: 60 * 60 * 24 },
     '/web-cam': { isr: 60 * 60 * 24 },
-    '/firebase': { isr: 60 * 60 * 24 },
-    '/firebase/**': { isr: 60 * 60 * 24 },
+    // '/firebase': { isr: 60 * 60 * 24 },
+    // '/firebase/**': { isr: 60 * 60 * 24 },
 
     // '/articles/*': { swr: 3600 },
     // '/admin/**': { ssr: false }
