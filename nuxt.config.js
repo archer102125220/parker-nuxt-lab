@@ -39,13 +39,6 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
 
 const osType = os.type().toLocaleLowerCase();
 const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
-const gtag = {
-  gaId: process.env.VITE_APP_ID,
-  enabled: true,
-  gtmId: process.env.VITE_GTM_ID,
-  debug: IS_DEV,
-  log: true
-};
 
 if (osType.includes('windows') === true) {
   const targetDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v8');
@@ -157,7 +150,7 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/ico/favicon.ico' }],
       noscript: [
         // Google Tag Manager (noscript)
-        { textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtag.gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }
+        { textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${process.env.VITE_GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }
       ]
     }
   },
@@ -308,8 +301,6 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      // gtag,
-
       // VITE_APP_ID: process.env.VITE_APP_ID,
       // VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
       // VITE_ANDROID_FIREBASE_CREDENTIAL: process.env.VITE_ANDROID_FIREBASE_CREDENTIAL,
