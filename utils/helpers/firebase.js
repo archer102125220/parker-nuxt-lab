@@ -155,6 +155,10 @@ export async function firebaseMessagingInit() {
 
       if (typeof window !== 'undefined') {
         window.serviceWorkerRegistration = serviceWorkerRegistration;
+        window.firebaseApp = firebaseApp;
+        window.getMessaging = getMessaging;
+        window.getToken = getToken;
+        window.VITE_FIREBASE_VAPID_KEY = VITE_FIREBASE_VAPID_KEY;
       }
       firebaseMessaging = getMessaging(firebaseApp, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY

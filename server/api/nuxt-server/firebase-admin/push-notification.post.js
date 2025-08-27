@@ -16,17 +16,11 @@ export default defineEventHandler(async function pushMessage(event) {
     });
   }
 
-  const tokens = await messagingFindAllToken();
-
-  const webTokens = tokens
-    .filter(({ os }) => os === 'web')
-    .map(({ token }) => token);
-  const androidTokens = tokens
-    .filter(({ os }) => os === 'android')
-    .map(({ token }) => token);
-  const iosTokens = tokens
-    .filter(({ os }) => os === 'ios')
-    .map(({ token }) => token);
+  const [webTokens, androidTokens, iosTokens] = await Promise.all([
+    messagingFindAllToken({ os: 'web' }),
+    messagingFindAllToken({ os: 'android' }),
+    messagingFindAllToken({ os: 'ios' })
+  ]);
   // console.log(body.data, { webTokens, androidTokens, iosTokens });
 
   const firebaseAdminApp = event.context.$firebaseAdminApp;
@@ -41,7 +35,7 @@ export default defineEventHandler(async function pushMessage(event) {
       firebaseAdmin.messaging(firebaseAdminApp).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
         tokens: webTokens
-      })
+      }).catch((error) => console.error('Error sending message to web tokens:', error))
     );
   }
   if (androidTokens.length > 0) {
@@ -49,7 +43,7 @@ export default defineEventHandler(async function pushMessage(event) {
       firebaseAdmin.messaging(androidFirebaseAdminApp).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
         tokens: androidTokens
-      })
+      }).catch((error) => console.error('Error sending message to android tokens:', error))
     );
   }
   if (iosTokens.length > 0) {
@@ -57,7 +51,7 @@ export default defineEventHandler(async function pushMessage(event) {
       firebaseAdmin.messaging(iosFirebaseAdminApp).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
         tokens: iosTokens
-      })
+      }).catch((error) => console.error('Error sending message to ios tokens:', error))
     );
   }
 

@@ -48,13 +48,19 @@ export default defineNuxtPlugin(({ $pinia }) => {
           //     await $pwa.updateServiceWorker();
           //   }
           // });
-          watchEffect(() => {
+          watchEffect(async () => {
             if ($pwa.offlineReady === true) {
               system.setMessageState({ text: 'App ready to work offline', type: 'success' });
             }
 
             if ($pwa.isPWAInstalled === true) {
               $firebaseHelper.firebaseClientInit();
+            } else {
+              const serviceWorkerRegistration = await $firebaseHelper.getOrRegisterServiceWorker();
+
+              serviceWorkerRegistration.addEventListener('installed', () => {
+                $firebaseHelper.firebaseClientInit();
+              });
             }
           });
         }

@@ -52,7 +52,7 @@ export function firebaseServerInit() {
       // console.log(firebaseAdmin.getApp);
       if (firebaseAdminAppStore.get('[DEFAULT]')) {
         firebaseAdminApp = firebaseAdminAppStore.get('[DEFAULT]');
-      } else if (typeof credential === 'string' && credential !== '{}') {
+      } else if (typeof credential === 'string' && credential !== '{}' && credential !== '') {
         firebaseAdminApp = firebaseAdmin.initializeApp({
           ...firebaseConfig,
           credential: firebaseAdmin.credential.cert(JSON.parse(credential))
@@ -60,7 +60,7 @@ export function firebaseServerInit() {
       }
       if (firebaseAdminAppStore.get('androidFirebase')) {
         androidFirebaseAdminApp = firebaseAdminAppStore.get('androidFirebase');
-      } else if (typeof androidCredential === 'string' && androidCredential !== '{}') {
+      } else if (typeof androidCredential === 'string' && androidCredential !== '{}' && androidCredential !== '') {
         androidFirebaseAdminApp = firebaseAdmin.initializeApp(
           {
             ...androidFirebaseConfig,
@@ -73,7 +73,7 @@ export function firebaseServerInit() {
       }
       if (firebaseAdminAppStore.get('iosFirebase')) {
         iosFirebaseAdminApp = firebaseAdminAppStore.get('iosFirebase');
-      } else if (typeof iosCredential === 'string' && iosCredential !== '{}') {
+      } else if (typeof iosCredential === 'string' && iosCredential !== '{}' && iosCredential !== '') {
         iosFirebaseAdminApp = firebaseAdmin.initializeApp(
           {
             ...iosFirebaseConfig,
@@ -113,32 +113,3 @@ export function firebaseServerInit() {
 
 firebaseServerInit();
 
-let tokens = [];
-
-export function registerTokens(token) {
-  if (
-    typeof token.token !== 'string' ||
-    token.token === '' ||
-    tokens.find(_token => _token.token === token.token) !== undefined
-  ) {
-    return tokens;
-  }
-  tokens.push(token);
-  return tokens;
-}
-
-export function cancelTokens(token) {
-  if (
-    typeof token !== 'string' ||
-    token === '' ||
-    tokens.includes(token) === false
-  ) {
-    return tokens;
-  }
-  tokens = tokens.filter(_token => _token.token !== token);
-  return tokens;
-}
-
-export function getTokens() {
-  return tokens;
-}

@@ -5,8 +5,8 @@ import {
 
 export default defineEventHandler(async function cancelMessageToken(event) {
   const { platform } = event.context.params;
-  
-  const tokens = await messagingFindAllToken();
+
+  const tokens = await messagingFindAllToken({ os: platform });
   for (let i = 0; i < tokens.length; i++) {
     const { os, token } = tokens[i];
     if (os === platform) {
