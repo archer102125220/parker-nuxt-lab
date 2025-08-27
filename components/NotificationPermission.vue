@@ -81,7 +81,7 @@ function handleCancel() {
 async function handleFirebase() {
   const result = await $firebaseHelper.requestPermission();
   if (result === true) {
-    await $firebaseHelper.firebaseMessagingInit();
+    await $firebaseHelper.firebaseClientInit();
   }
   processing.value = false;
   isShow.value = false;
