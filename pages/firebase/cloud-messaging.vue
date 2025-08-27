@@ -216,7 +216,9 @@ const { pending, data, error, refresh } = await useAsyncData(
       return JSON.parse(JSON.stringify(tokenList));
     }
 
-    const response = await nuxtApp.$clientFirebaseAdmin.GET_getMessageTokens();
+    const response =
+      await nuxtApp.$clientFirebaseAdmin.GET_getMessageTokens(false);
+
     return response;
   }
 );

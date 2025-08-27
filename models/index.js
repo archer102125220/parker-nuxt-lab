@@ -1,8 +1,8 @@
 import _Sequelize from 'sequelize';
 import process from 'process';
 
-import databaseConfig from './config/database';
-import createFirebaseMessaging from './firebasemessaging';
+import databaseConfig from '@/models/config/database';
+import createFirebaseMessaging from '@/models/firebasemessaging';
 
 const pluginBatabases = {
   FirebaseMessaging: createFirebaseMessaging

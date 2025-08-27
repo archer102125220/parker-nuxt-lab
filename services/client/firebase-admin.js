@@ -1,9 +1,9 @@
 const prefix = '/nuxt-server/firebase-admin';
 
-export function GET_getMessageTokens() {
+export function GET_getMessageTokens(useCache = false) {
   const { $request } = useNuxtApp();
 
-  return $request.get(`${prefix}/get-push-notification-tokens`);
+  return $request.get(`${prefix}/get-push-notification-tokens`, null, { useCache });
 }
 
 export function POST_registerMessageToken(payload) {

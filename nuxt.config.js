@@ -89,11 +89,19 @@ export default defineNuxtConfig({
     '/home': { isr: 60 * 60 * 24 },
     '/web-authn': { isr: 60 * 60 * 24 },
     '/web-cam': { isr: 60 * 60 * 24 },
-    '/firebase': { isr: 60 * 60 * 24 },
-    '/firebase/**': { isr: 60 * 60 * 24 },
 
     // '/articles/*': { swr: 3600 },
     // '/admin/**': { ssr: false }
+  },
+  nitro: {
+    hooks: {
+      'prerender:generate'(route) {
+        const routesToSkip = ['/firebase', '/firebase/cloud-messaging'];
+        if (routesToSkip.includes(route.route)) {
+          route.skip = true;
+        }
+      }
+    }
   },
   alias: {
     ...windowsAlias
@@ -136,11 +144,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  // nitro: {
-  //   prerender: {
-  //     routes: ['/', '/en']
-  //   }
-  // },
   app: {
     head: {
       htmlAttrs: {

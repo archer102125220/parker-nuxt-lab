@@ -1,7 +1,7 @@
 'use strict';
 import { Model } from 'sequelize';
 
-export function createFirebaseMessaging (sequelize, DataTypes) {
+export function createFirebaseMessaging(sequelize, DataTypes) {
   class FirebaseMessaging extends Model {
     /**
      * Helper method for defining associations.
