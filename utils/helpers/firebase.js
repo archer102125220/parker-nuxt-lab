@@ -27,26 +27,43 @@ export const firebaseConfig = {
   measurementId: import.meta.env.VITE_GA_ID
 };
 
-export let firebaseApp;
-export let firebaseAnalytics;
-export let firebaseDB;
-export let firebaseMessaging;
+let firebaseApp;
+let firebaseAnalytics;
+let firebaseDB;
+let firebaseMessaging;
+export function getFirebaseApp() {
+  return firebaseApp;
+}
+export function getFirebaseAnalytics() {
+  return firebaseAnalytics;
+}
+export function getFirebaseDB() {
+  return firebaseDB;
+}
+export function getFirebaseMessaging() {
+  return firebaseMessaging;
+}
 
 // Initialize Firebase
 export async function firebaseClientInit() {
   try {
     if (typeof window === 'object') {
-      firebaseApp = initializeApp(firebaseConfig);
-      await firebaseMessagingInit(firebaseApp);
+      const newFirebaseApp = initializeApp(firebaseConfig);
+      const newFirebaseMessaging = await firebaseMessagingInit(newFirebaseApp);
 
-      firebaseAnalytics = getAnalytics(firebaseApp);
-      firebaseDB = getFirestore(firebaseApp);
+      const newFirebaseAnalytics = getAnalytics(newFirebaseApp);
+      const newFirebaseDB = getFirestore(newFirebaseApp);
+
+      firebaseApp = newFirebaseApp;
+      firebaseAnalytics = newFirebaseAnalytics;
+      firebaseDB = newFirebaseDB;
+      firebaseMessaging = newFirebaseMessaging;
     }
   } catch (error) {
     console.error(error);
   }
 
-  return { firebaseApp, firebaseAnalytics, firebaseDB };
+  return { firebaseApp, firebaseAnalytics, firebaseDB, firebaseMessaging };
 }
 if (typeof window === 'object') {
   window.firebaseClientInit = firebaseClientInit;
@@ -177,11 +194,11 @@ export async function firebaseMessagingInit(firebaseApp) {
         window.getToken = getToken;
         // window.VITE_FIREBASE_VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
       }
-      firebaseMessaging = getMessaging(firebaseApp);
+      const newFirebaseMessaging = getMessaging(firebaseApp);
       if (typeof window !== 'undefined') {
-        window.firebaseMessaging = firebaseMessaging;
+        window.firebaseMessaging = newFirebaseMessaging;
       }
-      const token = await getToken(firebaseMessaging, {
+      const token = await getToken(newFirebaseMessaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         serviceWorkerRegistration
       });
@@ -190,9 +207,9 @@ export async function firebaseMessagingInit(firebaseApp) {
       }
       await POST_registerMessageToken({ token, os: 'web' });
 
-      console.log('before requestPermission');
-      await requestPermission();
-      console.log('after requestPermission');
+      // console.log('before requestPermission');
+      // await requestPermission();
+      // console.log('after requestPermission');
       /*
         interface MessagePayload {
           readonly collapseKey: string; // 僅限 FCM 訊息才有
@@ -217,7 +234,7 @@ export async function firebaseMessagingInit(firebaseApp) {
       */
 
       console.log('before firebaseClientMessage');
-      firebaseClientMessage(firebaseMessaging, payload => {
+      firebaseClientMessage(newFirebaseMessaging, payload => {
         try {
           // new Notification('測試', {
           //   body: payload.data?.msg,
@@ -240,6 +257,8 @@ export async function firebaseMessagingInit(firebaseApp) {
         }
       });
       console.log('after firebaseClientMessage');
+
+      return newFirebaseMessaging;
     } catch (error) {
       console.error(error);
     }
