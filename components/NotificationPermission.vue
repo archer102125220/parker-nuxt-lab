@@ -34,7 +34,7 @@
 // const emit = defineEmits([]);
 
 const nuxtApp = useNuxtApp();
-const { $firebaseHelper } = nuxtApp;
+const { $firebaseHelper, $pwa } = nuxtApp;
 
 const isShow = ref(false);
 
@@ -44,6 +44,20 @@ onMounted(() => {
     $firebaseHelper.firebaseMessagingInit();
   }
   isShow.value = result === false;
+});
+
+watchEffect(() => {
+  console.log({
+    ['$pwa.offlineReady']: $pwa.offlineReady,
+    ['$pwa.isPWAInstalled']: $pwa.isPWAInstalled
+  });
+
+  if (
+    isShow.value === false &&
+    ($pwa.isPWAInstalled === true || $pwa.swActivated === true)
+  ) {
+    handleCofirm();
+  }
 });
 
 function handleCancel() {

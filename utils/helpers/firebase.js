@@ -53,7 +53,9 @@ if (typeof window === 'object') {
 }
 
 export function getPermission() {
-  if (import.meta.server) return false;
+  if (import.meta.server || typeof window?.Notification === 'undefined') {
+    return false;
+  }
   return Notification.permission === 'granted';
 }
 if (typeof window === 'object') {
@@ -111,9 +113,9 @@ export async function getOrRegisterServiceWorker(scope = '/') {
       scope
     );
     if (serviceWorker) return serviceWorker;
-    return await window.navigator.serviceWorker.register('/service-worker.js', {
-      scope
-    });
+    // return await window.navigator.serviceWorker.register('/service-worker.js', {
+    //   scope
+    // });
   }
   throw new Error('The browser doesn`t support service worker.');
 }
