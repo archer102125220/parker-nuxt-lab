@@ -37,7 +37,7 @@ export async function firebaseClientInit() {
   try {
     if (typeof window === 'object') {
       firebaseApp = initializeApp(firebaseConfig);
-      await firebaseMessagingInit();
+      await firebaseMessagingInit(firebaseApp);
 
       firebaseAnalytics = getAnalytics(firebaseApp);
       firebaseDB = getFirestore(firebaseApp);
@@ -48,10 +48,16 @@ export async function firebaseClientInit() {
 
   return { firebaseApp, firebaseAnalytics, firebaseDB };
 }
+if(typeof window === 'object') {
+  window.firebaseClientInit = firebaseClientInit;
+}
 
 export function getPermission() {
   if (import.meta.server) return false;
   return Notification.permission === 'granted';
+}
+if(typeof window === 'object') {
+  window.getPermission = getPermission;
 }
 
 export async function requestPermission() {
@@ -82,12 +88,18 @@ export async function requestPermission() {
   }
   return false;
 }
+if(typeof window === 'object') {
+  window.requestPermission = requestPermission;
+}
 
 export async function firebaseClientMessage(
   messaging,
   callback = payload => console.log('Message received. ', payload)
 ) {
   onMessage(messaging, callback);
+}
+if(typeof window === 'object') {
+  window.firebaseClientMessage = firebaseClientMessage;
 }
 
 export async function getOrRegisterServiceWorker() {
@@ -104,6 +116,9 @@ export async function getOrRegisterServiceWorker() {
     });
   }
   throw new Error('The browser doesn`t support service worker.');
+}
+if(typeof window === 'object') {
+  window.getOrRegisterServiceWorker = getOrRegisterServiceWorker;
 }
 
 // async function setFirebaseServiceWorkerConfig(resolve, reject) {
@@ -128,7 +143,7 @@ export async function getOrRegisterServiceWorker() {
 //   }
 // }
 
-export async function firebaseMessagingInit() {
+export async function firebaseMessagingInit(firebaseApp) {
   // const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
 
   const isSupport = await isSupported();
@@ -231,4 +246,7 @@ export async function firebaseMessagingInit() {
   }
 
   return firebaseMessaging;
+}
+if(typeof window === 'object') {
+  window.firebaseMessagingInit = firebaseMessagingInit;
 }
