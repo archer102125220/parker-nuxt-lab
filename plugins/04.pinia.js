@@ -48,7 +48,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
           //     await $pwa.updateServiceWorker();
           //   }
           // });
+          console.log({ $pwa });
           watchEffect(async () => {
+            console.log({ ['$pwa.offlineReady']: $pwa.offlineReady, ['$pwa.isPWAInstalled']: $pwa.isPWAInstalled });
             if ($pwa.offlineReady === true) {
               system.setMessageState({ text: 'App ready to work offline', type: 'success' });
             }

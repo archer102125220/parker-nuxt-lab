@@ -173,7 +173,7 @@ export async function firebaseMessagingInit(firebaseApp) {
         window.firebaseApp = firebaseApp;
         window.getMessaging = getMessaging;
         window.getToken = getToken;
-        window.VITE_FIREBASE_VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
+        // window.VITE_FIREBASE_VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
       }
       firebaseMessaging = getMessaging(firebaseApp);
       if (typeof window !== 'undefined') {
