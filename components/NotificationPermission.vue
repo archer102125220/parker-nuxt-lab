@@ -48,13 +48,13 @@ onMounted(() => {
 
 watchEffect(() => {
   console.log({
-    ['$pwa.offlineReady']: $pwa.offlineReady,
-    ['$pwa.isPWAInstalled']: $pwa.isPWAInstalled
+    ['$pwa.offlineReady']: $pwa?.offlineReady,
+    ['$pwa.isPWAInstalled']: $pwa?.isPWAInstalled
   });
 
   if (
     isShow.value === false &&
-    ($pwa.isPWAInstalled === true || $pwa.swActivated === true)
+    ($pwa?.isPWAInstalled === true || $pwa?.swActivated === true)
   ) {
     handleCofirm();
   }
