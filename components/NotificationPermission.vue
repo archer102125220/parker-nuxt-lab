@@ -37,13 +37,24 @@ const nuxtApp = useNuxtApp();
 const { $firebaseHelper, $pwa } = nuxtApp;
 
 const isShow = ref(false);
+const agree = ref(false);
 
 onMounted(() => {
   const result = $firebaseHelper.getPermission();
-  if (result === true) {
-    $firebaseHelper.firebaseMessagingInit();
+  agree.value = result;
+  // if (result === true) {
+  //   $firebaseHelper.firebaseMessagingInit();
+  // }
+  // isShow.value = result === false;
+});
+
+watchEffect(() => {
+  if (
+    agree.value === false &&
+    ($pwa?.isPWAInstalled === true || $pwa?.swActivated === true)
+  ) {
+    isShow.value = true;
   }
-  isShow.value = result === false;
 });
 
 watchEffect(() => {
