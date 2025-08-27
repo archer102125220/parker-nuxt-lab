@@ -48,7 +48,7 @@ export async function firebaseClientInit() {
 
   return { firebaseApp, firebaseAnalytics, firebaseDB };
 }
-if(typeof window === 'object') {
+if (typeof window === 'object') {
   window.firebaseClientInit = firebaseClientInit;
 }
 
@@ -56,7 +56,7 @@ export function getPermission() {
   if (import.meta.server) return false;
   return Notification.permission === 'granted';
 }
-if(typeof window === 'object') {
+if (typeof window === 'object') {
   window.getPermission = getPermission;
 }
 
@@ -88,7 +88,7 @@ export async function requestPermission() {
   }
   return false;
 }
-if(typeof window === 'object') {
+if (typeof window === 'object') {
   window.requestPermission = requestPermission;
 }
 
@@ -98,26 +98,26 @@ export async function firebaseClientMessage(
 ) {
   onMessage(messaging, callback);
 }
-if(typeof window === 'object') {
+if (typeof window === 'object') {
   window.firebaseClientMessage = firebaseClientMessage;
 }
 
-export async function getOrRegisterServiceWorker() {
+export async function getOrRegisterServiceWorker(scope = '/') {
   if (
     'serviceWorker' in navigator &&
     typeof window.navigator.serviceWorker !== 'undefined'
   ) {
     const serviceWorker = await window.navigator.serviceWorker.getRegistration(
-      '/'
+      scope
     );
     if (serviceWorker) return serviceWorker;
     return await window.navigator.serviceWorker.register('/service-worker.js', {
-      scope: '/'
+      scope
     });
   }
   throw new Error('The browser doesn`t support service worker.');
 }
-if(typeof window === 'object') {
+if (typeof window === 'object') {
   window.getOrRegisterServiceWorker = getOrRegisterServiceWorker;
 }
 
@@ -173,11 +173,9 @@ export async function firebaseMessagingInit(firebaseApp) {
         window.firebaseApp = firebaseApp;
         window.getMessaging = getMessaging;
         window.getToken = getToken;
-        window.VITE_FIREBASE_VAPID_KEY = VITE_FIREBASE_VAPID_KEY;
+        window.VITE_FIREBASE_VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
       }
-      firebaseMessaging = getMessaging(firebaseApp, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
-      });
+      firebaseMessaging = getMessaging(firebaseApp);
       if (typeof window !== 'undefined') {
         window.firebaseMessaging = firebaseMessaging;
       }
@@ -247,6 +245,6 @@ export async function firebaseMessagingInit(firebaseApp) {
 
   return firebaseMessaging;
 }
-if(typeof window === 'object') {
+if (typeof window === 'object') {
   window.firebaseMessagingInit = firebaseMessagingInit;
 }
