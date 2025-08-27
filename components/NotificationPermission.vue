@@ -17,10 +17,20 @@
 
       <template v-slot:actions>
         <div class="notification_permission-actions">
-          <v-btn color="error" variant="elevated" @click="handleCancel">
+          <v-btn
+            color="error"
+            variant="elevated"
+            :disabled="processing"
+            @click="handleCancel"
+          >
             不同意
           </v-btn>
-          <v-btn color="primary" variant="elevated" @click="handleCofirm">
+          <v-btn
+            color="primary"
+            variant="elevated"
+            :loading="processing"
+            @click="handleCofirm"
+          >
             同意
           </v-btn>
         </div>
@@ -37,24 +47,16 @@ const nuxtApp = useNuxtApp();
 const { $firebaseHelper, $pwa } = nuxtApp;
 
 const isShow = ref(false);
-const agree = ref(false);
+const agreePermission = ref(false);
+const processing = ref(false);
 
 onMounted(() => {
   const result = $firebaseHelper.getPermission();
-  agree.value = result;
+  agreePermission.value = result;
   // if (result === true) {
   //   $firebaseHelper.firebaseMessagingInit();
   // }
   // isShow.value = result === false;
-});
-
-watchEffect(() => {
-  if (
-    agree.value === false &&
-    ($pwa?.isPWAInstalled === true || $pwa?.swActivated === true)
-  ) {
-    isShow.value = true;
-  }
 });
 
 watchEffect(() => {
@@ -63,11 +65,12 @@ watchEffect(() => {
     ['$pwa.isPWAInstalled']: $pwa?.isPWAInstalled
   });
 
-  if (
-    isShow.value === false &&
-    ($pwa?.isPWAInstalled === true || $pwa?.swActivated === true)
-  ) {
-    handleCofirm();
+  if ($pwa?.isPWAInstalled === true || $pwa?.swActivated === true) {
+    if (agreePermission.value === false) {
+      isShow.value = true;
+    } else {
+      handleFirebase();
+    }
   }
 });
 
@@ -75,12 +78,18 @@ function handleCancel() {
   isShow.value = false;
 }
 
-async function handleCofirm() {
+async function handleFirebase() {
   const result = await $firebaseHelper.requestPermission();
   if (result === true) {
     await $firebaseHelper.firebaseMessagingInit();
   }
+  processing.value = false;
   isShow.value = false;
+}
+
+function handleCofirm() {
+  processing.value = true;
+  agreePermission.value = true;
 }
 </script>
 
