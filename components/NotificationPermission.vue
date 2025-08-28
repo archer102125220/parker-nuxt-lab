@@ -73,12 +73,11 @@ async function handleFirebase() {
   }
   processing.value = false;
   isShow.value = false;
-  system.setAgreeNotification(true);
 }
 
 function handleCofirm() {
   processing.value = true;
-  agreePermission.value = true;
+  system.setAgreeNotification(true);
 }
 </script>
 
