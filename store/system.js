@@ -40,7 +40,9 @@ export const useSystemStore = defineStore('system', {
     },
     contactHTML: '',
     _privilegeRole: [],
-    _otpCheckCode: ''
+    _otpCheckCode: '',
+
+    agreeNotification: false
   }),
   actions: {
     setAccessToken(payload) {
@@ -117,7 +119,10 @@ export const useSystemStore = defineStore('system', {
       }
 
       this._welcomeMsg = payload;
-    }
+    },
+    setAgreeNotification(payload = false) {
+      this.agreeNotification = payload;
+    },
   },
   getters: {
     broswerInfo() {
@@ -255,3 +260,5 @@ export const useSystemStore = defineStore('system', {
     }
   }
 });
+
+export default useSystemStore;

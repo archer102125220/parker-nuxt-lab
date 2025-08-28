@@ -48,6 +48,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
           //     await $pwa.updateServiceWorker();
           //   }
           // });
+
+          system.setAgreeNotification($firebaseHelper.getPermission());
+
           console.log({ $pwa });
           watchEffect(() => {
             console.log({ ['$pwa.offlineReady']: $pwa.offlineReady, ['$pwa.isPWAInstalled']: $pwa.isPWAInstalled });

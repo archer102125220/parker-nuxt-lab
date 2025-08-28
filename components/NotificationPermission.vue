@@ -44,27 +44,15 @@
 // const emit = defineEmits([]);
 
 const nuxtApp = useNuxtApp();
-const { $firebaseHelper, $pwa } = nuxtApp;
+const { $pinia, $firebaseHelper, $pwa } = nuxtApp;
+const system = useSystemStore($pinia);
 
 const isShow = ref(false);
-const agreePermission = ref(false);
 const processing = ref(false);
 
-onMounted(() => {
-  const result = $firebaseHelper.getPermission();
-  agreePermission.value = result;
-  // if (result === true) {
-  //   $firebaseHelper.firebaseMessagingInit();
-  // }
-  // isShow.value = result === false;
-});
+const agreePermission = computed(() => system.agreeNotification);
 
 watchEffect(() => {
-  console.log({
-    ['$pwa.offlineReady']: $pwa?.offlineReady,
-    ['$pwa.isPWAInstalled']: $pwa?.isPWAInstalled
-  });
-
   if ($pwa?.isPWAInstalled === true || $pwa?.swActivated === true) {
     if (agreePermission.value === false) {
       isShow.value = true;
@@ -85,6 +73,7 @@ async function handleFirebase() {
   }
   processing.value = false;
   isShow.value = false;
+  system.setAgreeNotification(true);
 }
 
 function handleCofirm() {

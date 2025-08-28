@@ -198,6 +198,8 @@ useHead({
 });
 
 const nuxtApp = useNuxtApp();
+const { $pinia } = nuxtApp;
+const system = useSystemStore($pinia);
 
 const { pending, data, error, refresh } = await useAsyncData(
   'cloud-messaging-tokens',
@@ -220,7 +222,8 @@ const { pending, data, error, refresh } = await useAsyncData(
       await nuxtApp.$clientFirebaseAdmin.GET_getMessageTokens(false);
 
     return response;
-  }
+  },
+  { watch: [() => system.agreeNotification] }
 );
 if (error.value) {
   console.error('Error fetching cloud messaging tokens:', error.value);
@@ -344,6 +347,8 @@ async function handleDeleteToken(token) {
 @mixin mobile_td {
   @include mobile {
     --v-table-row-height: auto;
+    --v-border-opacity: 0;
+
     margin-bottom: 10px;
 
     @content;
@@ -356,7 +361,7 @@ async function handleDeleteToken(token) {
     }
   }
 }
-.os {
+@mixin os {
   width: 30%;
 
   word-break: keep-all;
@@ -369,10 +374,12 @@ async function handleDeleteToken(token) {
     width: 100%;
   }
 }
-.token {
+@mixin token {
   width: 60%;
 
   overflow: auto;
+
+  word-break: break-all;
 
   @include mobile_td {
     display: flex;
@@ -380,11 +387,9 @@ async function handleDeleteToken(token) {
     flex-wrap: nowrap;
 
     width: 100%;
-
-    word-break: break-all;
   }
 }
-.action {
+@mixin action {
   width: 10%;
 
   @include mobile_td {
@@ -396,7 +401,7 @@ async function handleDeleteToken(token) {
     width: 100%;
   }
 }
-.tr {
+@mixin tr {
   width: 100%;
 
   @include mobile {
@@ -404,10 +409,19 @@ async function handleDeleteToken(token) {
     flex-direction: column;
     flex-wrap: wrap;
 
+    padding: 10px 0px 0px 10px;
+    margin-bottom: 10px;
+    // border-bottom: thin solid
+    //   rgba(var(--v-border-color), var(--v-border-opacity));
+    border-radius: 10px;
+
+    background-color: #00000014;
+
     &::before {
       content: attr(data-title);
       display: block;
 
+      margin-right: 10px;
       margin-bottom: 10px;
     }
   }
@@ -435,16 +449,16 @@ async function handleDeleteToken(token) {
             display: none;
           }
           &-title_row {
-            @extend .tr;
+            @include tr;
 
             &-os_th {
-              @extend .os;
+              @include os;
             }
             &-token_th {
-              @extend .token;
+              @include token;
             }
             &-action_th {
-              @extend .action;
+              @include action;
             }
           }
         }
@@ -453,16 +467,16 @@ async function handleDeleteToken(token) {
           width: 100%;
 
           &-tr {
-            @extend .tr;
+            @include tr;
 
             &-os_td {
-              @extend .os;
+              @include os;
             }
             &-token_td {
-              @extend .token;
+              @include token;
             }
             &-action_td {
-              @extend .action;
+              @include action;
             }
           }
         }
