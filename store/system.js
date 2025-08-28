@@ -42,7 +42,8 @@ export const useSystemStore = defineStore('system', {
     _privilegeRole: [],
     _otpCheckCode: '',
 
-    agreeNotification: false
+    agreeNotification: false,
+    firebaseClientInited: false
   }),
   actions: {
     setAccessToken(payload) {
@@ -122,6 +123,9 @@ export const useSystemStore = defineStore('system', {
     },
     setAgreeNotification(payload = false) {
       this.agreeNotification = payload;
+    },
+    setFirebaseClientInited(payload = false) {
+      this.firebaseClientInited = payload;
     },
   },
   getters: {

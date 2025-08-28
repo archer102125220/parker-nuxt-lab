@@ -223,7 +223,7 @@ const { pending, data, error, refresh } = await useAsyncData(
 
     return response;
   },
-  { watch: [() => system.agreeNotification] }
+  { watch: [() => system.firebaseClientInited] }
 );
 if (error.value) {
   console.error('Error fetching cloud messaging tokens:', error.value);

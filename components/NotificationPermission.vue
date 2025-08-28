@@ -73,6 +73,7 @@ async function handleFirebase() {
   }
   processing.value = false;
   isShow.value = false;
+  system.setFirebaseClientInited(true);
 }
 
 function handleCofirm() {
