@@ -43,7 +43,8 @@ export const useSystemStore = defineStore('system', {
     _otpCheckCode: '',
 
     agreeNotification: false,
-    firebaseClientInited: false
+    firebaseCroeInited: false,
+    firebaseMessagingInited: false
   }),
   actions: {
     setAccessToken(payload) {
@@ -124,8 +125,11 @@ export const useSystemStore = defineStore('system', {
     setAgreeNotification(payload = false) {
       this.agreeNotification = payload;
     },
-    setFirebaseClientInited(payload = false) {
-      this.firebaseClientInited = payload;
+    setFirebaseCroeInited(payload = false) {
+      this.firebaseCroeInited = payload;
+    },
+    setFirebaseMessagingInited(payload = false) {
+      this.firebaseMessagingInited = payload;
     },
   },
   getters: {

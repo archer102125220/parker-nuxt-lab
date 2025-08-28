@@ -58,9 +58,11 @@ export default defineNuxtPlugin(({ $pinia }) => {
               system.setMessageState({ text: 'App ready to work offline', type: 'success' });
             }
 
-            // if ($pwa.isPWAInstalled === true || $pwa.swActivated === true) {
-            //   $firebaseHelper.firebaseClientInit();
-            // }
+            if ($pwa.isPWAInstalled === true || $pwa.swActivated === true) {
+              const firebaseCroe = $firebaseHelper.firebaseCroeClientInit();
+              $firebaseHelper.firebaseClientInit(firebaseCroe);
+              system.setFirebaseCroeInited(true);
+            }
           });
         }
       }

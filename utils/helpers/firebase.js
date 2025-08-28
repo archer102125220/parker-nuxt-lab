@@ -17,7 +17,7 @@ import { POST_registerMessageToken } from '@/services/client/firebase-admin';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v11.10.0 and later, measurementId is optional
-export const firebaseConfig = {
+export const FIREBASE_CONFIG = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'parker-nuxt-lab.firebaseapp.com',
   projectId: 'parker-nuxt-lab',
@@ -27,12 +27,12 @@ export const firebaseConfig = {
   measurementId: import.meta.env.VITE_GA_ID
 };
 
-let firebaseApp;
+let firebaseCroe;
 let firebaseAnalytics;
 let firebaseDB;
 let firebaseMessaging;
-export function getFirebaseApp() {
-  return firebaseApp;
+export function getFirebaseCroe() {
+  return firebaseCroe;
 }
 export function getFirebaseAnalytics() {
   return firebaseAnalytics;
@@ -45,28 +45,42 @@ export function getFirebaseMessaging() {
 }
 
 // Initialize Firebase
-export async function firebaseClientInit() {
+export function firebaseCroeClientInit(firebaseConfig = FIREBASE_CONFIG) {
   try {
     if (typeof window === 'object') {
-      const newFirebaseApp = initializeApp(firebaseConfig);
-      const newFirebaseMessaging = await firebaseMessagingInit(newFirebaseApp);
-
-      const newFirebaseAnalytics = getAnalytics(newFirebaseApp);
-      const newFirebaseDB = getFirestore(newFirebaseApp);
-
-      firebaseApp = newFirebaseApp;
-      firebaseAnalytics = newFirebaseAnalytics;
-      firebaseDB = newFirebaseDB;
-      firebaseMessaging = newFirebaseMessaging;
+      const newFirebaseCroe = initializeApp(firebaseConfig);
+      firebaseCroe = newFirebaseCroe;
     }
   } catch (error) {
     console.error(error);
   }
 
-  return { firebaseApp, firebaseAnalytics, firebaseDB, firebaseMessaging };
+  return { firebaseCroe };
 }
 if (typeof window === 'object') {
-  window.firebaseClientInit = firebaseClientInit;
+  window.firebaseCroeClientInit = firebaseCroeClientInit;
+}
+
+export async function firebaseAppClientInit(currentFirebaseCroe = firebaseCroe) {
+  try {
+    if (typeof window === 'object') {
+      // const newFirebaseMessaging = await firebaseMessagingInit(currentFirebaseCroe);
+
+      const newFirebaseAnalytics = getAnalytics(currentFirebaseCroe);
+      const newFirebaseDB = getFirestore(currentFirebaseCroe);
+
+      firebaseAnalytics = newFirebaseAnalytics;
+      firebaseDB = newFirebaseDB;
+      // firebaseMessaging = newFirebaseMessaging;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  return { firebaseCroe: currentFirebaseCroe, firebaseAnalytics, firebaseDB };
+}
+if (typeof window === 'object') {
+  window.firebaseAppClientInit = firebaseAppClientInit;
 }
 
 export function getPermission() {
@@ -142,7 +156,7 @@ if (typeof window === 'object') {
 
 // async function setFirebaseServiceWorkerConfig(resolve, reject) {
 //   try {
-//     const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
+//     const UrlFirebaseConfig = new URLSearchParams(FIREBASE_CONFIG);
 //     const serviceWorkerRegistration = await getOrRegisterServiceWorker();
 
 //     if (typeof serviceWorkerRegistration?.active?.postMessage === 'function') {
@@ -162,8 +176,8 @@ if (typeof window === 'object') {
 //   }
 // }
 
-export async function firebaseMessagingInit(firebaseApp) {
-  // const UrlFirebaseConfig = new URLSearchParams(firebaseConfig);
+export async function firebaseMessagingInit(currentFirebaseCroe = firebaseCroe) {
+  // const UrlFirebaseConfig = new URLSearchParams(FIREBASE_CONFIG);
 
   const isSupport = await isSupported();
 
@@ -189,12 +203,12 @@ export async function firebaseMessagingInit(firebaseApp) {
 
       if (typeof window !== 'undefined') {
         window.serviceWorkerRegistration = serviceWorkerRegistration;
-        window.firebaseApp = firebaseApp;
+        window.firebaseCroe = currentFirebaseCroe;
         window.getMessaging = getMessaging;
         window.getToken = getToken;
         // window.VITE_FIREBASE_VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
       }
-      const newFirebaseMessaging = getMessaging(firebaseApp);
+      const newFirebaseMessaging = getMessaging(currentFirebaseCroe);
       if (typeof window !== 'undefined') {
         window.firebaseMessaging = newFirebaseMessaging;
       }
