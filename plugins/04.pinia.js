@@ -60,7 +60,7 @@ export default defineNuxtPlugin(({ $pinia }) => {
 
             if ($pwa.isPWAInstalled === true || $pwa.swActivated === true) {
               const firebaseCroe = $firebaseHelper.firebaseCroeClientInit();
-              $firebaseHelper.firebaseClientInit(firebaseCroe);
+              $firebaseHelper.firebaseAppClientInit(firebaseCroe);
               system.setFirebaseCroeInited(true);
             }
           });
