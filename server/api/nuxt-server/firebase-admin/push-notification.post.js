@@ -7,8 +7,6 @@ import {
 export default defineEventHandler(async function pushMessage(event) {
   const body = await readBody(event);
 
-  console.log('Push Notification Body:', body);
-
   if (body.data === undefined || body.data === null) {
     throw createError({
       statusCode: 500,
@@ -21,12 +19,10 @@ export default defineEventHandler(async function pushMessage(event) {
     messagingFindAllToken({ os: 'android' }),
     messagingFindAllToken({ os: 'ios' })
   ]);
-  // console.log(body.data, { webTokens, androidTokens, iosTokens });
 
   const firebaseAdminApp = event.context.$firebaseAdminApp;
   const androidFirebaseAdminApp = event.context.$androidFirebaseAdminApp;
   const iosFirebaseAdminApp = event.context.$iosFirebaseAdminApp;
-  console.log({ firebaseAdminApp, androidFirebaseAdminApp, iosFirebaseAdminApp });
 
   const promiseArray = [];
 
@@ -34,7 +30,7 @@ export default defineEventHandler(async function pushMessage(event) {
     promiseArray.push(
       firebaseAdmin.messaging(firebaseAdminApp).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
-        tokens: webTokens
+        tokens: webTokens.map(({ token }) => token)
       }).catch((error) => console.error('Error sending message to web tokens:', error))
     );
   }
@@ -42,7 +38,7 @@ export default defineEventHandler(async function pushMessage(event) {
     promiseArray.push(
       firebaseAdmin.messaging(androidFirebaseAdminApp).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
-        tokens: androidTokens
+        tokens: androidTokens.map(({ token }) => token)
       }).catch((error) => console.error('Error sending message to android tokens:', error))
     );
   }
@@ -50,7 +46,7 @@ export default defineEventHandler(async function pushMessage(event) {
     promiseArray.push(
       firebaseAdmin.messaging(iosFirebaseAdminApp).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
-        tokens: iosTokens
+        tokens: iosTokens.map(({ token }) => token)
       }).catch((error) => console.error('Error sending message to ios tokens:', error))
     );
   }
