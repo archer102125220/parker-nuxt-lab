@@ -38,7 +38,7 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
 };
 
 const osType = os.type().toLocaleLowerCase();
-const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
+// const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 
 if (osType.includes('windows') === true) {
   const targetDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v8');
@@ -103,9 +103,9 @@ export default defineNuxtConfig({
       }
     }
   },
-  alias: {
-    ...windowsAlias
-  },
+  // alias: {
+  //   ...windowsAlias
+  // },
   vite: {
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
