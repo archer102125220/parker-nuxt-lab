@@ -1,4 +1,4 @@
-import { messagingFindAllToken } from '@/services/server/firebase-admin';
+import { messagingFindAllToken } from '@/services/server/firebase-messaging';
 
 export default defineEventHandler(async function getMessageTokens(event) {
   const query = getQuery(event) || {};

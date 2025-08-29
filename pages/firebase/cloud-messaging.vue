@@ -205,9 +205,7 @@ const { pending, data, error, refresh } = await useAsyncData(
   'cloud-messaging-tokens',
   async () => {
     if (import.meta.server === true) {
-      const { messagingFindAllToken } = await import(
-        '@/services/server/firebase-admin'
-      );
+      const { messagingFindAllToken } = nuxtApp.$serverFirebaseMessaging;
       const [webTokenList, androidTokenList, iosTokenList] = await Promise.all([
         messagingFindAllToken({ os: 'web' }),
         messagingFindAllToken({ os: 'android' }),

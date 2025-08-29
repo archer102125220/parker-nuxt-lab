@@ -1,6 +1,6 @@
 import {
   messagingRemoveToken
-} from '@/services/server/firebase-admin';
+} from '@/services/server/firebase-messaging';
 
 export default defineEventHandler(async function cancelMessageToken(event) {
   const { token } = event.context.params;

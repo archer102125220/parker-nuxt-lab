@@ -2,7 +2,7 @@ import firebaseAdmin from 'firebase-admin';
 
 import {
   messagingFindAllToken
-} from '@/services/server/firebase-admin';
+} from '@/services/server/firebase-messaging';
 
 export default defineEventHandler(async function pushMessage(event) {
   const body = await readBody(event);

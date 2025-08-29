@@ -1,6 +1,6 @@
 import {
   messagingAddToken
-} from '@/services/server/firebase-admin';
+} from '@/services/server/firebase-messaging';
 
 
 export default defineEventHandler(async function registerMessageToken(event) {
