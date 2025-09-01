@@ -72,6 +72,8 @@ nuxtApp.hook('page:finish', () => {
   $store.system.setLoading(false);
 });
 
+const removeWindowEventListener = ref(null);
+
 const loading = computed(() => $store.system.loading);
 const cssVariable = computed(() => {
   const _cssVariable = {};
@@ -164,7 +166,7 @@ onMounted(async () => {
     nuxtApp.$successMessage(successMsg);
   }
   if (typeof $store.clientInit === 'function') {
-    await $store.clientInit();
+    removeWindowEventListener.value = await $store.clientInit();
   }
   router.replace({
     query: {
@@ -177,7 +179,9 @@ onMounted(async () => {
   });
 });
 onUnmounted(() => {
-  window.removeEventListener('resize', window._pluginwareHandleResize_);
+  if (typeof removeWindowEventListener.value === 'function') {
+    removeWindowEventListener.value();
+  }
 });
 </script>
 

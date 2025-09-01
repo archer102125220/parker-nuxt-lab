@@ -64,6 +64,12 @@ export default defineNuxtPlugin(({ $pinia }) => {
               system.setFirebaseCroeInited(true);
             }
           });
+
+
+          if (typeof window._pluginwareHandleResize_ !== 'function') {
+            return () => window.removeEventListener('resize', window._pluginwareHandleResize_);
+          }
+          return () => { };
         }
       }
     }

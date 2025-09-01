@@ -1,6 +1,7 @@
 <template>
   <div class="cloud_messaging_page">
     <v-container
+      class="cloud_messaging_page-form"
       :tag="VForm"
       v-model="isValidSubmit"
       @submit.prevent="handlePushNotification"
@@ -31,17 +32,40 @@
         />
       </v-row>
       <v-row justify="end" align="center">
-        <v-col cols="12" sm="4">
-          <v-btn
-            color="primary"
-            type="submit"
-            width="100%"
-            min-height="100%"
-            :disabled="isValidSubmit === false"
-          >
-            送出
-          </v-btn>
+        <v-col
+          :tag="VBtn"
+          color="primary"
+          variant="outlined"
+          width="100%"
+          min-height="100%"
+          @click="handleResetForm"
+        >
+          重置
         </v-col>
+        <v-col
+          :tag="VBtn"
+          color="primary"
+          type="submit"
+          width="100%"
+          min-height="100%"
+          :disabled="isValidSubmit === false"
+        >
+          送出
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-container>
+      <v-row justify="end" align="center">
+        <v-col
+          cols="1"
+          :tag="VBtn"
+          icon="mdi-reload"
+          color="primary"
+          width="100%"
+          min-height="100%"
+          @click="handleRefresh"
+        />
       </v-row>
     </v-container>
 
@@ -57,11 +81,12 @@
         refresh-icon="/img/icon/refresh/refresh-icon.svg"
         refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
         class="cloud_messaging_page-skeleton_loader-scroll_fetch"
-        :refresh-disable="false"
+        :refresh-disable="$store.system.isMobile === false"
         :infinity-disable="true"
         :refresh="handleRefresh"
       >
         <v-table
+          v-if="hasData === true"
           class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table"
           fixed-header
         >
@@ -185,13 +210,26 @@
             </tr>
           </tbody>
         </v-table>
+
+        <!-- https://vuetifyjs.com/en/components/empty-states -->
+        <v-empty-state
+          v-else
+          width="100%"
+          color="primary"
+          justify="center"
+          icon="mdi-alert"
+          title="暫無資料"
+          text="請稍後再試"
+          action-text="重新整理"
+          @click:action="handleRefresh"
+        />
       </ScrollFetch>
     </v-skeleton-loader>
   </div>
 </template>
 
 <script setup>
-import { VTextField, VForm } from 'vuetify/components';
+import { VTextField, VForm, VBtn } from 'vuetify/components';
 
 useHead({
   title: 'Firebase Cloud Messaging 後台'
@@ -240,6 +278,21 @@ const loading = ref(false);
 const webTokenList = computed(() => data.value?.webTokenList || []);
 const androidTokenList = computed(() => data.value?.androidTokenList || []);
 const iosTokenList = computed(() => data.value?.iosTokenList || []);
+const hasData = computed(
+  () =>
+    (Array.isArray(webTokenList.value) && webTokenList.value.length > 0) ||
+    (Array.isArray(androidTokenList.value) &&
+      androidTokenList.value.length > 0) ||
+    (Array.isArray(iosTokenList.value) && iosTokenList.value.length > 0)
+
+  // () =>
+  //   Array.isArray(webTokenList.value) &&
+  //   webTokenList.value.length > 0 &&
+  //   Array.isArray(androidTokenList.value) &&
+  //   androidTokenList.value.length > 0 &&
+  //   Array.isArray(iosTokenList.value) &&
+  //   iosTokenList.value.length > 0
+);
 
 const handleCheckMessageTitle = computed(() => [
   function handleCheckMessageTitle(messageTitle) {
@@ -282,6 +335,11 @@ async function handleRefresh() {
   nuxtApp.$store.system.setLoading(false);
 }
 
+function handleResetForm() {
+  appMessageTitle.value = 'appMessageTitle';
+  appMessageData.value = 'appMessage';
+  appMessageImg.value = '/img/ico/favicon.svg';
+}
 async function handlePushNotification() {
   console.log({
     isValidSubmit: isValidSubmit.value,
@@ -429,16 +487,41 @@ async function handleDeleteToken(token) {
   width: 100%;
   min-height: 500px;
 
+  &-form {
+    :deep(.v-btn.v-btn--density-default) {
+      padding: 0 16px;
+
+      &.v-col {
+        &:not(:last-child) {
+          margin-right: 16px;
+
+          @include mobile {
+            flex: 1;
+            flex-basis: 100%;
+
+            margin-right: unset;
+            margin-bottom: 16px;
+          }
+        }
+      }
+    }
+  }
+
   &-skeleton_loader {
     height: 100%;
 
     &-scroll_fetch {
       height: 100%;
+      width: 100%;
 
       &-token_table {
         width: 100%;
         height: 100%;
         margin: 10px 0;
+
+        @include mobile {
+          user-select: none;
+        }
 
         &-thead {
           width: 100%;
