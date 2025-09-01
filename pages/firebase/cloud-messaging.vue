@@ -55,17 +55,19 @@
       </v-row>
     </v-container>
 
-    <v-container>
+    <v-container class="cloud_messaging_page-refresh_btn">
       <v-row justify="end" align="center">
         <v-col
-          cols="1"
+          cols="5"
           :tag="VBtn"
-          icon="mdi-reload"
+          prepend-icon="mdi-reload"
           color="primary"
           width="100%"
           min-height="100%"
           @click="handleRefresh"
-        />
+        >
+          重新整理
+        </v-col>
       </v-row>
     </v-container>
 
@@ -488,7 +490,7 @@ async function handleDeleteToken(token) {
   min-height: 500px;
 
   &-form {
-    :deep(.v-btn.v-btn--density-default) {
+    :deep(.v-btn) {
       padding: 0 16px;
 
       &.v-col {
@@ -504,6 +506,12 @@ async function handleDeleteToken(token) {
           }
         }
       }
+    }
+  }
+
+  &-refresh_btn {
+    :deep(.v-btn) {
+      padding: 0 16px;
     }
   }
 

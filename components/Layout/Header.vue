@@ -1,7 +1,7 @@
 <template>
   <header class="layout_header">
     <v-btn
-      v-if="hasBack === true"
+      :has-back="hasBack === true"
       class="layout_header-back"
       size="x-small"
       color="primary"
@@ -9,14 +9,14 @@
       icon="mdi-chevron-left"
       @click="handleGoBack"
     />
-    <div class="layout_header-name">
+    <NuxtLink :to="$localePath('/')" class="layout_header-name">
       <img
         class="layout_header-name-logo"
         v-lazy="'/img/icon/NuxtRock.v.02.svg'"
       />
       <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
       <p class="layout_header-name-label">{{ $t('system.systemName') }}</p>
-    </div>
+    </NuxtLink>
 
     <v-btn color="primary" variant="text">
       <p>{{ $t(currentLocaleLabel) }}</p>
@@ -86,6 +86,13 @@ function handleGoBack() {
     // left: 0px;
     // top: 0;
     font-size: 24px;
+
+    width: 0px;
+
+    transition: width 0.2s;
+    &[has-back='true'] {
+      width: 32px;
+    }
   }
 
   &-name {
@@ -99,14 +106,16 @@ function handleGoBack() {
 
     padding-left: 8px;
 
+    text-decoration: none;
+
     &-logo {
       height: 30px;
       width: 30px;
       object-fit: contain;
     }
 
-    &-name {
-      font-size: 24px;
+    &-label {
+      // font-size: 24px;
       color: #343a40;
       margin: 0;
     }
