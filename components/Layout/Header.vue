@@ -89,9 +89,16 @@ function handleGoBack() {
 
     width: 0px;
 
-    transition: width 0.2s;
+    opacity: 0;
+    overflow: hidden;
+
+    transition:
+      width 0.2s,
+      opacity 0.2s;
+
     &[has-back='true'] {
       width: 32px;
+      opacity: 1;
     }
   }
 

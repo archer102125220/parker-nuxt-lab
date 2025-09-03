@@ -58,7 +58,7 @@
     <v-container class="cloud_messaging_page-refresh_btn">
       <v-row justify="end" align="center">
         <v-col
-          cols="5"
+          cols="4"
           :tag="VBtn"
           prepend-icon="mdi-reload"
           color="primary"
@@ -510,6 +510,9 @@ async function handleDeleteToken(token) {
   }
 
   &-refresh_btn {
+    @include mobile {
+      display: none;
+    }
     :deep(.v-btn) {
       padding: 0 16px;
     }
