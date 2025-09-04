@@ -1,5 +1,9 @@
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { initializeApp, initializeServerApp } from 'firebase/app';
+import {
+  getAnalytics,
+  logEvent,
+  isSupported as analyticsIsSupported
+} from 'firebase/analytics';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from 'firebase/firestore/lite';
@@ -8,7 +12,7 @@ import {
   getMessaging,
   getToken,
   onMessage,
-  isSupported
+  isSupported as messagingIsSupported
 } from 'firebase/messaging';
 
 import { POST_registerMessageToken } from '@/services/client/firebase-admin';
@@ -28,7 +32,10 @@ export const FIREBASE_CONFIG = {
 };
 
 let firebaseCroe;
-let firebaseAnalytics;
+const firebaseAnalytics = {
+  app: null,
+  logEvent: (...arg) => logEvent(...arg)
+};
 let firebaseDB;
 let firebaseMessaging;
 export function getFirebaseCroe() {
@@ -44,13 +51,27 @@ export function getFirebaseMessaging() {
   return firebaseMessaging;
 }
 
-// Initialize Firebase
-export function firebaseCroeClientInit(firebaseConfig = FIREBASE_CONFIG) {
+// Initialize server Firebase
+export function firebaseCroeServerInit(firebaseConfig = FIREBASE_CONFIG) {
+  if (import.meta.client) return { firebaseCroe };
+
   try {
-    if (typeof window === 'object') {
-      const newFirebaseCroe = initializeApp(firebaseConfig);
-      firebaseCroe = newFirebaseCroe;
-    }
+    const newFirebaseCroe = initializeServerApp(firebaseConfig);
+    firebaseCroe = newFirebaseCroe;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return { firebaseCroe };
+}
+
+// Initialize client Firebase
+export function firebaseCroeClientInit(firebaseConfig = FIREBASE_CONFIG) {
+  if (import.meta.server) return { firebaseCroe };
+
+  try {
+    const newFirebaseCroe = initializeApp(firebaseConfig);
+    firebaseCroe = newFirebaseCroe;
   } catch (error) {
     console.error(error);
   }
@@ -61,21 +82,31 @@ if (typeof window === 'object') {
   window.firebaseCroeClientInit = firebaseCroeClientInit;
 }
 
-export async function firebaseAppClientInit(currentFirebaseCroe = firebaseCroe) {
-  try {
-    if (typeof window === 'object') {
-      // const newFirebaseMessaging = await firebaseMessagingInit(currentFirebaseCroe);
-
-      const newFirebaseAnalytics = getAnalytics(currentFirebaseCroe);
-      const newFirebaseDB = getFirestore(currentFirebaseCroe);
-
-      firebaseAnalytics = newFirebaseAnalytics;
-      firebaseDB = newFirebaseDB;
-      // firebaseMessaging = newFirebaseMessaging;
-    }
-  } catch (error) {
-    console.error(error);
+// Initialize Firebase
+export async function firebaseAppInit(currentFirebaseCroe) {
+  if (import.meta.server) {
+    return await firebaseAppServerInit(currentFirebaseCroe);
+  } else {
+    return await firebaseAppClientInit(currentFirebaseCroe);
   }
+}
+if (typeof window === 'object') {
+  window.firebaseAppInit = firebaseAppInit;
+}
+
+export function firebaseAppServerInit(currentFirebaseCroe) {
+  firebaseFirestore(currentFirebaseCroe);
+
+  return { firebaseCroe: currentFirebaseCroe, firebaseDB };
+}
+
+export async function firebaseAppClientInit(currentFirebaseCroe = firebaseCroe) {
+  await Promise.all([
+    firebaseAnalyticsInit(currentFirebaseCroe),
+    firebaseMessagingInit(currentFirebaseCroe)
+  ]);
+
+  firebaseFirestore(currentFirebaseCroe);
 
   return { firebaseCroe: currentFirebaseCroe, firebaseAnalytics, firebaseDB };
 }
@@ -83,24 +114,55 @@ if (typeof window === 'object') {
   window.firebaseAppClientInit = firebaseAppClientInit;
 }
 
-export function getPermission() {
+export function firebaseFirestore(currentFirebaseCroe) {
+  try {
+    const newFirebaseDB = getFirestore(currentFirebaseCroe);
+
+    firebaseDB = newFirebaseDB;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return firebaseDB;
+}
+
+export async function firebaseAnalyticsInit(currentFirebaseCroe = firebaseCroe) {
+  if (import.meta.server) return firebaseAnalytics;
+
+  const isAnalyticsSupport = await analyticsIsSupported();
+
+  if (isAnalyticsSupport === false) console.warn('firebase analytics is not Supported');
+
+  try {
+    if (typeof window === 'object' && isAnalyticsSupport === true) {
+      const newFirebaseAnalytics = getAnalytics(currentFirebaseCroe);
+
+      firebaseAnalytics.app = newFirebaseAnalytics;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  return firebaseAnalytics;
+}
+if (typeof window === 'object') {
+  window.firebaseAnalyticsInit = firebaseAnalyticsInit
+}
+
+export function getNotificationPermission() {
   if (import.meta.server || typeof window?.Notification === 'undefined') {
     return false;
   }
   return Notification.permission === 'granted';
 }
-if (typeof window === 'object') {
-  window.getPermission = getPermission;
-}
 
-export async function requestPermission() {
+export async function requestNotificationPermission() {
   try {
-    const isSupport = await isSupported();
+    const isMessagingSupport = await messagingIsSupported();
 
-    if (isSupport === false) {
-      console.log('FCM is not Supported');
-      // return true 的方式略過詢問匡
-      return true;
+    if (isMessagingSupport === false) {
+      console.warn('FCM is not Supported');
+      return false;
     }
     console.log('Requesting permission...');
 
@@ -121,21 +183,8 @@ export async function requestPermission() {
   }
   return false;
 }
-if (typeof window === 'object') {
-  window.requestPermission = requestPermission;
-}
 
-export async function firebaseClientMessage(
-  messaging,
-  callback = payload => console.log('Message received. ', payload)
-) {
-  onMessage(messaging, callback);
-}
-if (typeof window === 'object') {
-  window.firebaseClientMessage = firebaseClientMessage;
-}
-
-export async function getOrRegisterServiceWorker(scope = '/') {
+export async function getServiceWorker(scope = '/') {
   if (
     'serviceWorker' in navigator &&
     typeof window.navigator.serviceWorker !== 'undefined'
@@ -144,86 +193,59 @@ export async function getOrRegisterServiceWorker(scope = '/') {
       scope
     );
     if (serviceWorker) return serviceWorker;
-    // return await window.navigator.serviceWorker.register('/service-worker.js', {
-    //   scope
-    // });
   }
-  throw new Error('The browser doesn`t support service worker.');
+  // throw new Error('The browser doesn`t support service worker.');
+
+  return null;
 }
-if (typeof window === 'object') {
-  window.getOrRegisterServiceWorker = getOrRegisterServiceWorker;
+
+export async function registerServiceWorker(scope = '/') {
+  if (
+    'serviceWorker' in navigator &&
+    typeof window.navigator.serviceWorker !== 'undefined'
+  ) {
+    return await window.navigator.serviceWorker.register('/service-worker.js', {
+      scope
+    });
+  }
+  // throw new Error('The browser doesn`t support service worker.');
+
+  return null;
 }
 
-// async function setFirebaseServiceWorkerConfig(resolve, reject) {
-//   try {
-//     const UrlFirebaseConfig = new URLSearchParams(FIREBASE_CONFIG);
-//     const serviceWorkerRegistration = await getOrRegisterServiceWorker();
+export async function getOrRegisterServiceWorker(scope = '/') {
+  const serviceWorker = await getServiceWorker(scope)
+  if (serviceWorker) return serviceWorker;
 
-//     if (typeof serviceWorkerRegistration?.active?.postMessage === 'function') {
-//       serviceWorkerRegistration.active.postMessage(`${UrlFirebaseConfig}`);
-//       if (typeof resolve === 'function') resolve(serviceWorkerRegistration);
-//     } else {
-//       setTimeout(() => setFirebaseServiceWorkerConfig(resolve, reject), 100);
-//     }
-
-//     return serviceWorkerRegistration;
-//   } catch (error) {
-//     if (typeof reject === 'function') {
-//       reject(error);
-//     } else {
-//       console.error(error);
-//     }
-//   }
-// }
+  return await registerServiceWorker(scope);
+}
 
 export async function firebaseMessagingInit(currentFirebaseCroe = firebaseCroe) {
-  // const UrlFirebaseConfig = new URLSearchParams(FIREBASE_CONFIG);
+  if (import.meta.server) return firebaseMessaging;
 
-  const isSupport = await isSupported();
+  const isMessagingSupport = await messagingIsSupported();
+  if (isMessagingSupport === false) console.warn('FCM is not Supported');
 
-  if (isSupport === false) console.warn('FCM is not Supported');
+  const permission = getNotificationPermission();
+  if (permission !== true) console.warn('firebaseMessagingInit: Notification Permissio.');
 
-  if (typeof window === 'object' && isSupport) {
+  if (isMessagingSupport === true && permission === true) {
     try {
-      const serviceWorkerRegistration = await getOrRegisterServiceWorker();
-      // serviceWorkerRegistration.active.postMessage(`${UrlFirebaseConfig}`);
-      // const serviceWorkerRegistration = await new Promise(
-      //   setFirebaseServiceWorkerConfig
-      // );
+      const serviceWorkerRegistration = await getServiceWorker();
 
-      // if (
-      //   typeof serviceWorkerRegistration.waiting === 'object' &&
-      //   serviceWorkerRegistration.waiting !== null
-      // ) {
-      //   window.addEventListener('beforeunload', () => {
-      //     serviceWorkerRegistration.active.postMessage('SKIP_WAITING');
-      //   });
-      // }
-      // await fetch(swUrl);
-
-      if (typeof window !== 'undefined') {
-        window.serviceWorkerRegistration = serviceWorkerRegistration;
-        window.firebaseCroe = currentFirebaseCroe;
-        window.getMessaging = getMessaging;
-        window.getToken = getToken;
-        // window.VITE_FIREBASE_VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
+      if (typeof serviceWorkerRegistration === 'undefined' || serviceWorkerRegistration === null) {
+        throw new Error('The browser doesn\'t support service worker.')
       }
+
       const newFirebaseMessaging = getMessaging(currentFirebaseCroe);
-      if (typeof window !== 'undefined') {
-        window.firebaseMessaging = newFirebaseMessaging;
-      }
+
       const token = await getToken(newFirebaseMessaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
         serviceWorkerRegistration
       });
-      if (typeof window !== 'undefined') {
-        window.token = token;
-      }
+
       await POST_registerMessageToken({ token, os: 'web' });
 
-      // console.log('before requestPermission');
-      // await requestPermission();
-      // console.log('after requestPermission');
       /*
         interface MessagePayload {
           readonly collapseKey: string; // 僅限 FCM 訊息才有
@@ -247,8 +269,7 @@ export async function firebaseMessagingInit(currentFirebaseCroe = firebaseCroe) 
         }
       */
 
-      console.log('before firebaseClientMessage');
-      firebaseClientMessage(newFirebaseMessaging, payload => {
+      onMessage(newFirebaseMessaging, payload => {
         try {
           // new Notification('測試', {
           //   body: payload.data?.msg,
@@ -270,7 +291,6 @@ export async function firebaseMessagingInit(currentFirebaseCroe = firebaseCroe) 
           console.error(error);
         }
       });
-      console.log('after firebaseClientMessage');
 
       return newFirebaseMessaging;
     } catch (error) {

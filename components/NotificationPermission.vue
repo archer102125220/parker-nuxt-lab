@@ -67,7 +67,7 @@ function handleCancel() {
 }
 
 async function handleFirebase() {
-  const result = await $firebaseHelper.requestPermission();
+  const result = await $firebaseHelper.requestNotificationPermission();
   if (result === true) {
     const firebaseCroe = $firebaseHelper.getFirebaseCroe();
     if (typeof firebaseCroe === 'undefined' || firebaseCroe === null) {

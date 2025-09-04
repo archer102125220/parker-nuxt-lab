@@ -58,7 +58,7 @@
     <v-container class="cloud_messaging_page-refresh_btn">
       <v-row justify="end" align="center">
         <v-col
-          cols="4"
+          cols="12"
           :tag="VBtn"
           prepend-icon="mdi-reload"
           color="primary"
@@ -77,155 +77,144 @@
       height="500px"
       :loading="pending"
     >
-      <ScrollFetch
-        height="100%"
-        infinity-end-label=""
-        refresh-icon="/img/icon/refresh/refresh-icon.svg"
-        refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-        class="cloud_messaging_page-skeleton_loader-scroll_fetch"
-        :refresh-disable="$store.system.isMobile === false"
-        :infinity-disable="true"
-        :refresh="handleRefresh"
+      <v-table
+        v-if="hasData === true"
+        class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table"
+        fixed-header
       >
-        <v-table
-          v-if="hasData === true"
-          class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table"
-          fixed-header
+        <thead
+          class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead"
         >
-          <thead
-            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead"
+          <tr
+            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row"
           >
-            <tr
-              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row"
+            <th
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-os_th"
             >
-              <th
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-os_th"
-              >
-                {{ OS_TD_TITLE }}
-              </th>
-              <th
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-token_th"
-              >
-                {{ TOKEN_TD_TITLE }}
-              </th>
-              <th
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-action_th"
-              >
-                {{ ACRION_TITLE }}
-              </th>
-            </tr>
-          </thead>
-          <tbody
-            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody"
+              {{ OS_TD_TITLE }}
+            </th>
+            <th
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-token_th"
+            >
+              {{ TOKEN_TD_TITLE }}
+            </th>
+            <th
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-thead-title_row-action_th"
+            >
+              {{ ACRION_TITLE }}
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody"
+        >
+          <tr
+            v-for="(webToken, webTokenIndex) in webTokenList"
+            :key="webToken.createdAt"
+            :data-title="`web token No.${webTokenIndex + 1}`"
+            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
           >
-            <tr
-              v-for="(webToken, webTokenIndex) in webTokenList"
-              :key="webToken.createdAt"
-              :data-title="`web token No.${webTokenIndex + 1}`"
-              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
+              :data-title="`${OS_TD_TITLE}：`"
+              :data-context="webToken.os"
             >
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
-                :data-title="`${OS_TD_TITLE}：`"
-                :data-context="webToken.os"
-              >
-                {{ webToken.os }}
-              </td>
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
-                :data-title="`${TOKEN_TD_TITLE}：`"
-                :data-context="webToken.token"
-              >
-                {{ webToken.token }}
-              </td>
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
-                :data-title="`${ACRION_TITLE}：`"
-              >
-                <v-btn color="error" @click="handleDeleteToken(webToken.token)">
-                  刪除
-                </v-btn>
-              </td>
-            </tr>
-
-            <tr
-              v-for="(androidToken, androidTokenIndex) in androidTokenList"
-              :key="androidToken.createdAt"
-              :data-title="`android token No.${androidTokenIndex + 1}`"
-              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
+              {{ webToken.os }}
+            </td>
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
+              :data-title="`${TOKEN_TD_TITLE}：`"
+              :data-context="webToken.token"
             >
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
-                :data-title="`${OS_TD_TITLE}：`"
-                :data-context="androidToken.os"
-              >
-                {{ androidToken.os }}
-              </td>
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
-                :data-title="`${TOKEN_TD_TITLE}：`"
-                :data-context="androidToken.token"
-              >
-                {{ androidToken.token }}
-              </td>
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
-                :data-title="`${ACRION_TITLE}：`"
-              >
-                <v-btn
-                  color="error"
-                  @click="handleDeleteToken(androidToken.token)"
-                >
-                  刪除
-                </v-btn>
-              </td>
-            </tr>
-
-            <tr
-              v-for="iosToken in iosTokenList"
-              :key="iosToken.createdAt"
-              :data-title="`ios token No.${iosToken + 1}`"
-              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
+              {{ webToken.token }}
+            </td>
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
+              :data-title="`${ACRION_TITLE}：`"
             >
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
-                :data-title="`${OS_TD_TITLE}：`"
-                :data-context="iosToken.os"
-              >
-                {{ iosToken.os }}
-              </td>
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
-                :data-title="`${TOKEN_TD_TITLE}：`"
-                :data-context="iosToken.token"
-              >
-                {{ iosToken.token }}
-              </td>
-              <td
-                class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
-                :data-title="`${ACRION_TITLE}：`"
-              >
-                <v-btn color="error" @click="handleDeleteToken(iosToken.token)">
-                  刪除
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
+              <v-btn color="error" @click="handleDeleteToken(webToken.token)">
+                刪除
+              </v-btn>
+            </td>
+          </tr>
 
-        <!-- https://vuetifyjs.com/en/components/empty-states -->
-        <v-empty-state
-          v-else
-          width="100%"
-          color="primary"
-          justify="center"
-          icon="mdi-alert"
-          title="暫無資料"
-          text="請稍後再試"
-          action-text="重新整理"
-          @click:action="handleRefresh"
-        />
-      </ScrollFetch>
+          <tr
+            v-for="(androidToken, androidTokenIndex) in androidTokenList"
+            :key="androidToken.createdAt"
+            :data-title="`android token No.${androidTokenIndex + 1}`"
+            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
+          >
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
+              :data-title="`${OS_TD_TITLE}：`"
+              :data-context="androidToken.os"
+            >
+              {{ androidToken.os }}
+            </td>
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
+              :data-title="`${TOKEN_TD_TITLE}：`"
+              :data-context="androidToken.token"
+            >
+              {{ androidToken.token }}
+            </td>
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
+              :data-title="`${ACRION_TITLE}：`"
+            >
+              <v-btn
+                color="error"
+                @click="handleDeleteToken(androidToken.token)"
+              >
+                刪除
+              </v-btn>
+            </td>
+          </tr>
+
+          <tr
+            v-for="iosToken in iosTokenList"
+            :key="iosToken.createdAt"
+            :data-title="`ios token No.${iosToken + 1}`"
+            class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr"
+          >
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td"
+              :data-title="`${OS_TD_TITLE}：`"
+              :data-context="iosToken.os"
+            >
+              {{ iosToken.os }}
+            </td>
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td"
+              :data-title="`${TOKEN_TD_TITLE}：`"
+              :data-context="iosToken.token"
+            >
+              {{ iosToken.token }}
+            </td>
+            <td
+              class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
+              :data-title="`${ACRION_TITLE}：`"
+            >
+              <v-btn color="error" @click="handleDeleteToken(iosToken.token)">
+                刪除
+              </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+
+      <!-- https://vuetifyjs.com/en/components/empty-states -->
+      <v-empty-state
+        v-else
+        width="100%"
+        color="primary"
+        justify="center"
+        icon="mdi-alert"
+        title="暫無資料"
+        text="請稍後再試"
+        action-text="重新整理"
+        @click:action="handleRefresh"
+      />
     </v-skeleton-loader>
   </div>
 </template>
@@ -510,9 +499,9 @@ async function handleDeleteToken(token) {
   }
 
   &-refresh_btn {
-    @include mobile {
-      display: none;
-    }
+    // @include mobile {
+    //   display: none;
+    // }
     :deep(.v-btn) {
       padding: 0 16px;
     }
