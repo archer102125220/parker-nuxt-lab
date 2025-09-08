@@ -34,7 +34,7 @@ export const FIREBASE_CONFIG = {
 let firebaseCroe;
 const firebaseAnalytics = {
   app: null,
-  logEvent: (...arg) => logEvent(...arg)
+  analytics: (...arg) => logEvent(firebaseAnalytics.app, ...arg)
 };
 let firebaseDB;
 let firebaseMessaging;

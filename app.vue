@@ -44,7 +44,7 @@ const NO_GO_TOP = [];
 useRequestInit(import.meta.env.VITE_API_BASE);
 
 const nuxtApp = useNuxtApp();
-const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
+const { $i18n, $dayjs, $store, $setLocalLanguage, $firebaseHelper } = nuxtApp;
 
 const gtm = useNuxtGtm();
 const router = useRouter();
@@ -103,11 +103,16 @@ function resetMessageState() {
 watch(
   () => [route.path, gtm.value],
   (newRoutePath, newGtm) => {
-    console.log({ newRoutePath, newGtm });
+    // console.log({ newRoutePath, newGtm });
     if (typeof newGtm === 'function') {
       console.log('trackView', newRoutePath);
       newGtm({ event: 'scnOpen', url: newRoutePath });
       // newGtm('scnOpen', 'newRoutePath');
+
+      $firebaseHelper.firebaseAnalytics.analytics({
+        event: 'scnOpen',
+        url: newRoutePath
+      });
     }
   }
 );
