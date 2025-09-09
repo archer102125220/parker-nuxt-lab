@@ -163,6 +163,7 @@ export class firebase {
   // Initialize client Firebase
   croeClientInit(firebaseConfig = this.firebaseConfig) {
     if (import.meta.server) return { firebaseCroe: this.croe };
+    this.#_croeInited = false;
 
     try {
       const newFirebaseCroe = initializeApp(firebaseConfig);
@@ -171,6 +172,7 @@ export class firebase {
       console.error(error);
     }
 
+    this.#_croeInited = true;
     return { firebaseCroe: this.croe };
   }
 
