@@ -45,7 +45,6 @@ export class firebase {
     this.appServerInit = this.appServerInit.bind(this);
     this.appClientInit = this.appClientInit.bind(this);
     this.analyticsInit = this.analyticsInit.bind(this);
-    this.getAnalytics = this.getAnalytics.bind(this);
     this.getNotificationPermission = this.getNotificationPermission.bind(this);
     this.requestNotificationPermission = this.requestNotificationPermission.bind(this);
     this.getServiceWorker = this.getServiceWorker.bind(this);
@@ -111,6 +110,8 @@ export class firebase {
     return this.#_analyticsInited;
   }
 
+  initializeApp = initializeApp;
+  initializeServerApp = initializeServerApp;
   analyticsIsSupported = analyticsIsSupported;
   messagingIsSupported = messagingIsSupported;
   getFirestore = getFirestore;
@@ -150,7 +151,7 @@ export class firebase {
     this.#_croeInited = false;
 
     try {
-      const newFirebaseCroe = initializeServerApp(firebaseConfig);
+      const newFirebaseCroe = this.initializeServerApp(firebaseConfig);
       this.#_croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);
@@ -166,7 +167,7 @@ export class firebase {
     this.#_croeInited = false;
 
     try {
-      const newFirebaseCroe = initializeApp(firebaseConfig);
+      const newFirebaseCroe = this.initializeApp(firebaseConfig);
       this.#_croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);

@@ -40,7 +40,16 @@ export default defineNuxtPlugin(({ $pinia }) => {
             window.addEventListener('resize', window._pluginwareHandleResize_);
           }
 
-          const { $pwa, $Firebase } = useNuxtApp();
+          const nuxtApp = useNuxtApp();
+          const { $pwa, $firebase } = nuxtApp;
+
+          const $Firebase = new $firebase();
+          nuxtApp.provide('Firebase', $Firebase);
+
+          const firebase = useNuxtFirebase();
+          if (firebase.value !== $Firebase) {
+            firebase.value = $Firebase;
+          }
 
           // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
           // watchEffect(async () => {

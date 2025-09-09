@@ -5,8 +5,7 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      firebase,
-      Firebase: new firebase()
+      firebase
     }
   }
 });
