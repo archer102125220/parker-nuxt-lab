@@ -44,7 +44,7 @@
 // const emit = defineEmits([]);
 
 const nuxtApp = useNuxtApp();
-const { $pinia, $firebaseHelper } = nuxtApp;
+const { $pinia, $Firebase } = nuxtApp;
 const system = useSystemStore($pinia);
 
 const isShow = ref(false);
@@ -67,13 +67,13 @@ function handleCancel() {
 }
 
 async function handleFirebase() {
-  const result = await $firebaseHelper.requestNotificationPermission();
+  const result = await $Firebase.requestNotificationPermission();
   if (result === true) {
-    const firebaseCroe = $firebaseHelper.getFirebaseCroe();
+    const firebaseCroe = $Firebase.croe;
     if (typeof firebaseCroe === 'undefined' || firebaseCroe === null) {
       return handleFirebase();
     }
-    await $firebaseHelper.firebaseMessagingInit(firebaseCroe);
+    await $Firebase.messagingInit(firebaseCroe);
   }
   processing.value = false;
   isShow.value = false;

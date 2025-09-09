@@ -40,7 +40,7 @@ export default defineNuxtPlugin(({ $pinia }) => {
             window.addEventListener('resize', window._pluginwareHandleResize_);
           }
 
-          const { $pwa, $firebaseHelper } = useNuxtApp();
+          const { $pwa, $Firebase } = useNuxtApp();
 
           // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
           // watchEffect(async () => {
@@ -49,7 +49,7 @@ export default defineNuxtPlugin(({ $pinia }) => {
           //   }
           // });
 
-          system.setAgreeNotification($firebaseHelper.getNotificationPermission());
+          system.setAgreeNotification($Firebase.getNotificationPermission());
 
           console.log({ $pwa });
           watchEffect(async () => {
@@ -59,8 +59,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
             }
 
             if ($pwa.isPWAInstalled === true || $pwa.swActivated === true) {
-              const firebaseCroe = $firebaseHelper.firebaseCroeClientInit();
-              await $firebaseHelper.firebaseAppInit(firebaseCroe);
+              await $Firebase.croeInit();
+              await $Firebase.appInit();
+
               system.setFirebaseCroeInited(true);
             }
           });

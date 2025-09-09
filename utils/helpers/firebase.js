@@ -31,275 +31,391 @@ export const FIREBASE_CONFIG = {
   measurementId: import.meta.env.VITE_GA_ID
 };
 
-let firebaseCroe;
-const firebaseAnalytics = {
-  app: null,
-  analytics: (...arg) => logEvent(firebaseAnalytics.app, ...arg)
-};
-let firebaseDB;
-let firebaseMessaging;
-export function getFirebaseCroe() {
-  return firebaseCroe;
-}
-export function getFirebaseAnalytics() {
-  return firebaseAnalytics;
-}
-export function getFirebaseDB() {
-  return firebaseDB;
-}
-export function getFirebaseMessaging() {
-  return firebaseMessaging;
-}
+export class firebase {
+  constructor(config = FIREBASE_CONFIG) {
+    this._firebaseConfig = (typeof config === 'object' ? config : FIREBASE_CONFIG) || FIREBASE_CONFIG;
 
-// Initialize server Firebase
-export function firebaseCroeServerInit(firebaseConfig = FIREBASE_CONFIG) {
-  if (import.meta.client) return { firebaseCroe };
+    this.logEvent = this.logEvent.bind(this);
+    this.analyticsLog = this.analyticsLog.bind(this);
+    this.configUpdate = this.configUpdate.bind(this);
+    this.croeServerInit = this.croeServerInit.bind(this);
+    this.croeClientInit = this.croeClientInit.bind(this);
+    this.croeInit = this.croeInit.bind(this);
+    this.appInit = this.appInit.bind(this);
+    this.appServerInit = this.appServerInit.bind(this);
+    this.appClientInit = this.appClientInit.bind(this);
+    this.analyticsInit = this.analyticsInit.bind(this);
+    this.getAnalytics = this.getAnalytics.bind(this);
+    this.getNotificationPermission = this.getNotificationPermission.bind(this);
+    this.requestNotificationPermission = this.requestNotificationPermission.bind(this);
+    this.getServiceWorker = this.getServiceWorker.bind(this);
+    this.registerServiceWorker = this.registerServiceWorker.bind(this);
+    this.defaultSaveToken = this.defaultSaveToken.bind(this);
+    this.messagingInit = this.messagingInit.bind(this);
+  }
+  #_vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
+  #_firebaseConfig = null;
+  #_serviceWorkerScope = '/';
+  #_serviceWorkerPath = '/service-worker.js';
+  #_serviceWorker = null;
+  #_croe = null;
+  #_croeInited = false;
+  #_store = null
+  #_storeInited = false;
+  #_token = null;
+  #_messaging = null;
+  #_messagingInited = false;
+  #_analytics = null;
+  #_analyticsInited = false;
 
-  try {
-    const newFirebaseCroe = initializeServerApp(firebaseConfig);
-    firebaseCroe = newFirebaseCroe;
-  } catch (error) {
-    console.error(error);
+  get firebaseConfig() {
+    return this.#_firebaseConfig;
+  }
+  get serviceWorkerScope() {
+    return this.#_serviceWorkerScope;
+  }
+  get serviceWorkerPath() {
+    return this.#_serviceWorkerPath;
+  }
+  get serviceWorker() {
+    return this.#_serviceWorker;
+  }
+  get croe() {
+    return this.#_croe;
+  }
+  get croeInited() {
+    return this.#_croeInited;
+  }
+  get store() {
+    return this.#_store;
+  }
+  get storeInited() {
+    return this.#_storeInited;
+  }
+  get token() {
+    return this.#_token;
+  }
+  get messaging() {
+    return this.#_messaging;
+  }
+  get messagingInited() {
+    return this.#_messagingInited;
+  }
+  get analytics() {
+    return {
+      app: this.#_analytics,
+      log: this.logEvent
+    };
+  }
+  get analyticsInited() {
+    return this.#_analyticsInited;
   }
 
-  return { firebaseCroe };
-}
+  analyticsIsSupported = analyticsIsSupported;
+  messagingIsSupported = messagingIsSupported;
+  getFirestore = getFirestore;
+  getAnalytics = getAnalytics;
+  getToken = getToken;
+  getMessaging = getMessaging;
+  onMessage = onMessage;
 
-// Initialize client Firebase
-export function firebaseCroeClientInit(firebaseConfig = FIREBASE_CONFIG) {
-  if (import.meta.server) return { firebaseCroe };
-
-  try {
-    const newFirebaseCroe = initializeApp(firebaseConfig);
-    firebaseCroe = newFirebaseCroe;
-  } catch (error) {
-    console.error(error);
-  }
-
-  return { firebaseCroe };
-}
-if (typeof window === 'object') {
-  window.firebaseCroeClientInit = firebaseCroeClientInit;
-}
-
-// Initialize Firebase
-export async function firebaseAppInit(currentFirebaseCroe) {
-  if (import.meta.server) {
-    return await firebaseAppServerInit(currentFirebaseCroe);
-  } else {
-    return await firebaseAppClientInit(currentFirebaseCroe);
-  }
-}
-if (typeof window === 'object') {
-  window.firebaseAppInit = firebaseAppInit;
-}
-
-export function firebaseAppServerInit(currentFirebaseCroe) {
-  firebaseFirestore(currentFirebaseCroe);
-
-  return { firebaseCroe: currentFirebaseCroe, firebaseDB };
-}
-
-export async function firebaseAppClientInit(currentFirebaseCroe = firebaseCroe) {
-  await Promise.all([
-    firebaseAnalyticsInit(currentFirebaseCroe),
-    firebaseMessagingInit(currentFirebaseCroe)
-  ]);
-
-  firebaseFirestore(currentFirebaseCroe);
-
-  return { firebaseCroe: currentFirebaseCroe, firebaseAnalytics, firebaseDB };
-}
-if (typeof window === 'object') {
-  window.firebaseAppClientInit = firebaseAppClientInit;
-}
-
-export function firebaseFirestore(currentFirebaseCroe) {
-  try {
-    const newFirebaseDB = getFirestore(currentFirebaseCroe);
-
-    firebaseDB = newFirebaseDB;
-  } catch (error) {
-    console.error(error);
-  }
-
-  return firebaseDB;
-}
-
-export async function firebaseAnalyticsInit(currentFirebaseCroe = firebaseCroe) {
-  if (import.meta.server) return firebaseAnalytics;
-
-  const isAnalyticsSupport = await analyticsIsSupported();
-
-  if (isAnalyticsSupport === false) console.warn('firebase analytics is not Supported');
-
-  try {
-    if (typeof window === 'object' && isAnalyticsSupport === true) {
-      const newFirebaseAnalytics = getAnalytics(currentFirebaseCroe);
-
-      firebaseAnalytics.app = newFirebaseAnalytics;
+  logEvent(analyticsApp = this.analytics?.app, ...arg) {
+    if (typeof analyticsApp !== 'object' || analyticsApp === null) {
+      console.warn('firebase analytics missing');
     }
-  } catch (error) {
-    console.error(error);
+    return logEvent(analyticsApp, ...arg)
   }
-
-  return firebaseAnalytics;
-}
-if (typeof window === 'object') {
-  window.firebaseAnalyticsInit = firebaseAnalyticsInit
-}
-
-export function getNotificationPermission() {
-  if (import.meta.server || typeof window?.Notification === 'undefined') {
-    return false;
-  }
-  return Notification.permission === 'granted';
-}
-
-export async function requestNotificationPermission() {
-  try {
-    const isMessagingSupport = await messagingIsSupported();
-
-    if (isMessagingSupport === false) {
-      console.warn('FCM is not Supported');
-      return false;
+  analyticsLog(...arg) {
+    if (this.analyticsInited !== true && (typeof this.#_analytics !== 'object' || this.#_analytics === null)) {
+      console.warn('firebase analytics missing');
+      return;
     }
-    console.log('Requesting permission...');
-
-    console.log({ ['Notification.permission']: Notification.permission });
-    if (Notification.permission === 'granted') {
-      console.log('Notification permission granted.');
-      return true;
-    } else if (Notification.permission !== 'denied') {
-      const permission = await Notification.requestPermission();
-      console.log({ permission });
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        return true;
-      }
+    return this.logEvent(this.analytics?.app, ...arg)
+  }
+  async configUpdate(newConfig = null, reInit = true) {
+    if (typeof newConfig !== 'object' || newConfig === null) {
+      throw new Error('invalid config');
     }
-  } catch (error) {
-    console.error(error);
+    this.#_firebaseConfig = newConfig;
+
+    if (reInit === true) {
+      this.croeInit();
+      await this.appInit();
+    }
   }
-  return false;
-}
 
-export async function getServiceWorker(scope = '/') {
-  if (
-    'serviceWorker' in navigator &&
-    typeof window.navigator.serviceWorker !== 'undefined'
-  ) {
-    const serviceWorker = await window.navigator.serviceWorker.getRegistration(
-      scope
-    );
-    if (serviceWorker) return serviceWorker;
-  }
-  // throw new Error('The browser doesn`t support service worker.');
+  // Initialize server Firebase
+  croeServerInit(firebaseConfig = this.firebaseConfig) {
+    if (import.meta.client) return { firebaseCroe: this.croe };
+    this.#_croeInited = false;
 
-  return null;
-}
-
-export async function registerServiceWorker(scope = '/') {
-  if (
-    'serviceWorker' in navigator &&
-    typeof window.navigator.serviceWorker !== 'undefined'
-  ) {
-    return await window.navigator.serviceWorker.register('/service-worker.js', {
-      scope
-    });
-  }
-  // throw new Error('The browser doesn`t support service worker.');
-
-  return null;
-}
-
-export async function getOrRegisterServiceWorker(scope = '/') {
-  const serviceWorker = await getServiceWorker(scope)
-  if (serviceWorker) return serviceWorker;
-
-  return await registerServiceWorker(scope);
-}
-
-export async function firebaseMessagingInit(currentFirebaseCroe = firebaseCroe) {
-  if (import.meta.server) return firebaseMessaging;
-
-  const isMessagingSupport = await messagingIsSupported();
-  if (isMessagingSupport === false) console.warn('FCM is not Supported');
-
-  const permission = getNotificationPermission();
-  if (permission !== true) console.warn('firebaseMessagingInit: Notification Permissio.');
-
-  if (isMessagingSupport === true && permission === true) {
     try {
-      const serviceWorkerRegistration = await getServiceWorker();
-
-      if (typeof serviceWorkerRegistration === 'undefined' || serviceWorkerRegistration === null) {
-        throw new Error('The browser doesn\'t support service worker.')
-      }
-
-      const newFirebaseMessaging = getMessaging(currentFirebaseCroe);
-
-      const token = await getToken(newFirebaseMessaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-        serviceWorkerRegistration
-      });
-
-      await POST_registerMessageToken({ token, os: 'web' });
-
-      /*
-        interface MessagePayload {
-          readonly collapseKey: string; // 僅限 FCM 訊息才有
-          readonly from: string;       // 訊息的發送者
-          readonly messageId: string;  // 訊息的唯一 ID
-          readonly messageType: string; // "push" 或 "data"
-
-          readonly data?: { [key: string]: string }; // 如果有資料訊息，則包含此屬性
-
-          readonly notification?: NotificationPayload; // 如果有通知訊息，則包含此屬性
-
-          readonly rawData: object; // 原始訊息數據，可能包含更多低級別屬性
-        }
-
-        interface NotificationPayload {
-          readonly title: string | undefined;
-          readonly body: string | undefined;
-          readonly image: string | undefined; // 如果設定了通知圖片
-          // 還有其他可能的標準通知屬性，例如 icon, badge, click_action, tag, etc.
-          // 這些屬性通常在 `notification` 物件內部，或者作為 `data` 的一部分，視如何發送而定
-        }
-      */
-
-      onMessage(newFirebaseMessaging, payload => {
-        try {
-          // new Notification('測試', {
-          //   body: payload.data?.msg,
-          //   icon: '/img/favicon/favicon.ico'
-          // });
-
-          const notificationTitle =
-            payload?.notification?.title || payload?.data?.title || '';
-          const notificationBody =
-            payload?.notification?.body || payload?.data?.msg || '';
-          const notificationIcon =
-            payload?.notification?.image || payload?.data?.img || '';
-
-          serviceWorkerRegistration.showNotification(notificationTitle, {
-            body: notificationBody,
-            icon: notificationIcon || '/img/favicon/favicon.ico'
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      });
-
-      return newFirebaseMessaging;
+      const newFirebaseCroe = initializeServerApp(firebaseConfig);
+      this.croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);
     }
+
+    this.#_croeInited = true;
+    return { firebaseCroe: this.croe };
   }
 
-  return firebaseMessaging;
+  // Initialize client Firebase
+  croeClientInit(firebaseConfig = this.firebaseConfig) {
+    if (import.meta.server) return { firebaseCroe: this.croe };
+
+    try {
+      const newFirebaseCroe = initializeApp(firebaseConfig);
+      this.croe = newFirebaseCroe;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return { firebaseCroe: this.croe };
+  }
+
+  // Initialize Firebase
+  croeInit(firebaseConfig = this.firebaseConfig) {
+    if (import.meta.server) {
+      this.croeServerInit(firebaseConfig);
+    } else {
+      this.croeClientInit(firebaseConfig)
+    }
+  }
+
+  // Initialize Firebase App
+  async appInit(currentFirebaseCroe = this.croe) {
+    if (import.meta.server) {
+      return await this.appServerInit(currentFirebaseCroe);
+    } else {
+      return await this.appClientInit(currentFirebaseCroe);
+    }
+  }
+
+  appServerInit(currentFirebaseCroe = this.croe) {
+    this.firestoreInit(currentFirebaseCroe);
+
+    return { firebaseCroe: currentFirebaseCroe, store: this.store };
+  }
+
+  async appClientInit(currentFirebaseCroe = firebaseCroe) {
+    await Promise.all([
+      this.analyticsInit(currentFirebaseCroe),
+      this.messagingInit(currentFirebaseCroe)
+    ]);
+
+    firebaseFirestore(currentFirebaseCroe);
+
+    return { firebaseCroe: currentFirebaseCroe, firebaseAnalytics, firebaseDB };
+  }
+
+  firestoreInit(currentFirebaseCroe = this.croe) {
+    this.#_storeInited = false;
+
+    try {
+      const newFirebaseDB = this.getFirestore(currentFirebaseCroe);
+      this.#_store = newFirebaseDB;
+
+    } catch (error) {
+      console.error(error);
+    }
+
+    this.#_storeInited = true;
+    return this.#_store;
+  }
+
+  async analyticsInit(currentFirebaseCroe = this.croe) {
+    if (import.meta.server) return this.analytics;
+
+    this.#_analyticsInited = false;
+
+    const isAnalyticsSupport = await this.analyticsIsSupported();
+
+    if (isAnalyticsSupport === false) console.warn('firebase analytics is not Supported');
+
+    try {
+      if (isAnalyticsSupport === true) {
+        const newFirebaseAnalytics = this.getAnalytics(currentFirebaseCroe);
+        this.#_analytics = newFirebaseAnalytics;
+      }
+
+      this.#_analyticsInited = true;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return this.analytics;
+  }
+  getNotificationPermission() {
+    if (import.meta.server || typeof window?.Notification === 'undefined') {
+      return false;
+    }
+    return Notification.permission === 'granted';
+  }
+  async requestNotificationPermission() {
+    try {
+      const isMessagingSupport = await this.messagingIsSupported();
+
+      if (isMessagingSupport === false) {
+        console.warn('FCM is not Supported');
+        return false;
+      }
+      console.log('Requesting permission...');
+
+      console.log({ ['Notification.permission']: Notification.permission });
+      if (Notification.permission === 'granted') {
+        console.log('Notification permission granted.');
+        return true;
+      } else if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        console.log({ permission });
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
+          return true;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  }
+  async getServiceWorker(scope = this.serviceWorkerScope) {
+    if (
+      'serviceWorker' in navigator &&
+      typeof window.navigator.serviceWorker !== 'undefined'
+    ) {
+      const serviceWorker = await window.navigator.serviceWorker.getRegistration(
+        scope
+      );
+      if (serviceWorker) {
+        this.#_serviceWorkerScope = scope;
+        this.#_serviceWorker = serviceWorker;
+
+        return serviceWorker;
+      }
+    }
+    // throw new Error('The browser doesn`t support service worker.');
+
+    return null;
+  }
+  async registerServiceWorker(scope = this.serviceWorkerScope, serviceWorkerPath = this.serviceWorkerPath) {
+    if (
+      'serviceWorker' in navigator &&
+      typeof window.navigator.serviceWorker !== 'undefined'
+    ) {
+      const serviceWorker = await window.navigator.serviceWorker.register(serviceWorkerPath, {
+        scope
+      });
+
+      this.#_serviceWorkerScope = scope;
+      this.#_serviceWorker = serviceWorker;
+
+      return serviceWorker;
+    }
+    // throw new Error('The browser doesn`t support service worker.');
+
+    return null;
+  }
+  async getOrRegisterServiceWorker(scope = this.serviceWorkerScope) {
+    const serviceWorker = await this.getServiceWorker(scope)
+    if (serviceWorker) return serviceWorker;
+
+    return await this.registerServiceWorker(scope);
+  }
+  async defaultSaveToken(token) {
+    return await POST_registerMessageToken({ token, os: 'web' });
+  }
+  async messagingInit(currentFirebaseCroe = this.croe, saveToken = this.defaultSaveToken) {
+    if (import.meta.server) return this.messaging;
+
+    const isMessagingSupport = await this.messagingIsSupported();
+    if (isMessagingSupport === false) console.warn('FCM is not Supported');
+
+    const permission = this.getNotificationPermission();
+    if (permission !== true) console.warn('firebaseMessagingInit: Notification Permissio.');
+
+    if (isMessagingSupport === true && permission === true) {
+      this.#_messagingInited = false;
+
+      try {
+        const serviceWorkerRegistration = await this.getServiceWorker();
+
+        if (typeof serviceWorkerRegistration === 'undefined' || serviceWorkerRegistration === null) {
+          throw new Error('The browser doesn\'t support service worker.')
+        }
+
+        const newFirebaseMessaging = this.getMessaging(currentFirebaseCroe);
+        this.#_messaging = newFirebaseMessaging
+
+        const token = await this.getToken(newFirebaseMessaging, {
+          vapidKey: this.#_vapidKey,
+          serviceWorkerRegistration
+        });
+        this.#_token = token;
+
+        await saveToken({ token, os: 'web' });
+
+        /*
+          interface MessagePayload {
+            readonly collapseKey: string; // 僅限 FCM 訊息才有
+            readonly from: string;       // 訊息的發送者
+            readonly messageId: string;  // 訊息的唯一 ID
+            readonly messageType: string; // "push" 或 "data"
+  
+            readonly data?: { [key: string]: string }; // 如果有資料訊息，則包含此屬性
+  
+            readonly notification?: NotificationPayload; // 如果有通知訊息，則包含此屬性
+  
+            readonly rawData: object; // 原始訊息數據，可能包含更多低級別屬性
+          }
+  
+          interface NotificationPayload {
+            readonly title: string | undefined;
+            readonly body: string | undefined;
+            readonly image: string | undefined; // 如果設定了通知圖片
+            // 還有其他可能的標準通知屬性，例如 icon, badge, click_action, tag, etc.
+            // 這些屬性通常在 `notification` 物件內部，或者作為 `data` 的一部分，視如何發送而定
+          }
+        */
+
+        this.onMessage(newFirebaseMessaging, payload => {
+          try {
+            // new Notification('測試', {
+            //   body: payload.data?.msg,
+            //   icon: '/img/favicon/favicon.ico'
+            // });
+
+            const notificationTitle =
+              payload?.notification?.title || payload?.data?.title || '';
+            const notificationBody =
+              payload?.notification?.body || payload?.data?.msg || '';
+            const notificationIcon =
+              payload?.notification?.image || payload?.data?.img || '';
+
+            serviceWorkerRegistration.showNotification(notificationTitle, {
+              body: notificationBody,
+              icon: notificationIcon || '/img/favicon/favicon.ico'
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        });
+
+        this.#_messagingInited = true;
+
+        return newFirebaseMessaging;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    return this.messaging;
+  }
 }
+export const Firebase = new firebase();
+
 if (typeof window === 'object') {
-  window.firebaseMessagingInit = firebaseMessagingInit;
+  window.__firebase = firebase;
+  window.__Firebase = Firebase;
+  window.FIREBASE_CONFIG = FIREBASE_CONFIG;
 }
