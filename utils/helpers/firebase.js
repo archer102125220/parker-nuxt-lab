@@ -33,7 +33,7 @@ export const FIREBASE_CONFIG = {
 
 export class firebase {
   constructor(config = FIREBASE_CONFIG) {
-    this._firebaseConfig = (typeof config === 'object' ? config : FIREBASE_CONFIG) || FIREBASE_CONFIG;
+    this.#_firebaseConfig = (typeof config === 'object' ? config : FIREBASE_CONFIG) || FIREBASE_CONFIG;
 
     this.logEvent = this.logEvent.bind(this);
     this.analyticsLog = this.analyticsLog.bind(this);
@@ -177,9 +177,9 @@ export class firebase {
   // Initialize Firebase
   croeInit(firebaseConfig = this.firebaseConfig) {
     if (import.meta.server) {
-      this.croeServerInit(firebaseConfig);
+      return this.croeServerInit(firebaseConfig);
     } else {
-      this.croeClientInit(firebaseConfig)
+      return this.croeClientInit(firebaseConfig)
     }
   }
 
