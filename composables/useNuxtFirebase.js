@@ -1,7 +1,7 @@
 export function useNuxtFirebase() {
   const nuxtApp = useNuxtApp();
 
-  const Firebase = useState('gtm_Firebase', () => {
+  const Firebase = useState('Firebase_nuxt', () => {
     return nuxtApp.$Firebase || null;
   });
 
