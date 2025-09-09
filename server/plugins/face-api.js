@@ -19,7 +19,7 @@ const __dirname = dirname(__filename);
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 if (process.env.NODE_ENV === 'production') {
-  faceapi.nets.ssdMobilenetv1.loadFromDisk('./public/models');
+  // faceapi.nets.ssdMobilenetv1.loadFromDisk('./public/models');
 } else {
   faceapi.nets.ssdMobilenetv1.loadFromDisk(join(__dirname, '../public/models'));
 }
