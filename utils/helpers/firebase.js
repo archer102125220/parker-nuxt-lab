@@ -198,15 +198,15 @@ export class firebase {
     return { firebaseCroe: currentFirebaseCroe, store: this.store };
   }
 
-  async appClientInit(currentFirebaseCroe = firebaseCroe) {
+  async appClientInit(currentFirebaseCroe = this.croe) {
     await Promise.all([
       this.analyticsInit(currentFirebaseCroe),
       this.messagingInit(currentFirebaseCroe)
     ]);
 
-    firebaseFirestore(currentFirebaseCroe);
+    this.firestoreInit(currentFirebaseCroe);
 
-    return { firebaseCroe: currentFirebaseCroe, firebaseAnalytics, firebaseDB };
+    return { firebaseCroe: currentFirebaseCroe, firebaseAnalytics: this.analytics, firestore: this.#_store };
   }
 
   firestoreInit(currentFirebaseCroe = this.croe) {
