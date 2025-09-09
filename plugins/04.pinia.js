@@ -51,7 +51,6 @@ export default defineNuxtPlugin(({ $pinia }) => {
 
           system.setAgreeNotification($Firebase.getNotificationPermission());
 
-          console.log({ $pwa });
           watchEffect(async () => {
             console.log({ ['$pwa.offlineReady']: $pwa.offlineReady, ['$pwa.isPWAInstalled']: $pwa.isPWAInstalled });
             if ($pwa.offlineReady === true) {
@@ -65,7 +64,6 @@ export default defineNuxtPlugin(({ $pinia }) => {
               system.setFirebaseCroeInited(true);
             }
           });
-
 
           if (typeof window._pluginwareHandleResize_ !== 'function') {
             return () => window.removeEventListener('resize', window._pluginwareHandleResize_);

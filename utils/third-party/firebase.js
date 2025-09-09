@@ -414,4 +414,4 @@ export class firebase {
     return this.messaging;
   }
 }
-export const Firebase = new firebase();
+// export const Firebase = new firebase();

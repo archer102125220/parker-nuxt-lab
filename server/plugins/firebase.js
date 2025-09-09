@@ -1,4 +1,4 @@
-import { firebaseServerInit } from '@/utils/helpers/firebase-admin';
+import { firebaseServerInit } from '@/utils/third-party/firebase-admin';
 
 export default defineNitroPlugin((nitroApp) => {
   const { firebaseAdminApp, androidFirebaseAdminApp, iosFirebaseAdminApp } = firebaseServerInit();

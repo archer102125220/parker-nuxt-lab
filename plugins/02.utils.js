@@ -16,7 +16,6 @@ import getScrollEndLimit from '@/utils/helpers/get-scroll-end-limit';
 import getLocalLanguage from '@/utils/third-party/get-local-language';
 import setLocalLanguage from '@/utils/third-party/set-local-language';
 import { classifySwipeDirection } from '@/utils/helpers/classify-swipe-direction';
-import { firebase, Firebase } from '@/utils/helpers/firebase';
 import { findLastIndex, handleFindLastIndexPolyfill } from '@/utils/polyfill/array-find-last-index-polyfill';
 
 handleFindLastIndexPolyfill();
@@ -43,8 +42,6 @@ export default defineNuxtPlugin(() => {
       setLocalLanguage,
       classifySwipeDirection,
       findLastIndex,
-      firebase,
-      Firebase
     },
   };
 });

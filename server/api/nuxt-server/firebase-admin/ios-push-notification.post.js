@@ -2,7 +2,7 @@ import firebaseAdmin from 'firebase-admin';
 
 import {
   getIosFirebaseAdminApp
-} from '@/utils/helpers/firebase-admin';
+} from '@/utils/third-party/firebase-admin';
 
 export default defineEventHandler(async function iosPushMessage(event) {
   const body = await readBody(event);

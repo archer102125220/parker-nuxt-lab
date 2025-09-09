@@ -37,6 +37,7 @@
 
 <script setup>
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
+import _debounce from 'lodash/debounce';
 
 const NO_GO_TOP = [];
 
@@ -44,9 +45,11 @@ const NO_GO_TOP = [];
 useRequestInit(import.meta.env.VITE_API_BASE);
 
 const nuxtApp = useNuxtApp();
-const { $i18n, $dayjs, $store, $setLocalLanguage, $Firebase } = nuxtApp;
+const { $i18n, $dayjs, $store, $setLocalLanguage } = nuxtApp;
 
 const gtm = useNuxtGtm();
+const firebase = useNuxtFirebase();
+
 const router = useRouter();
 const route = useRoute();
 
@@ -100,22 +103,28 @@ function resetMessageState() {
   $store.system.setMessageState({ text: '', type: 'success' });
 }
 
-watch(
-  () => [route.path, gtm.value],
-  (newRoutePath, newGtm) => {
-    // console.log({ newRoutePath, newGtm });
-    if (typeof newGtm === 'function') {
-      console.log('trackView', newRoutePath);
-      newGtm({ event: 'scnOpen', url: newRoutePath });
-      // newGtm('scnOpen', 'newRoutePath');
-
-      $Firebase.analytics.log({
-        event: 'scnOpen',
-        url: newRoutePath
-      });
-    }
+const handleTrackData = _debounce(function handleTrackData(
+  newRoutePath,
+  newGtm,
+  newFirebase
+) {
+  // console.log({ newRoutePath, newGtm });
+  if (typeof newGtm === 'function') {
+    console.log('trackView', newRoutePath);
+    newGtm({ event: 'scnOpen', url: newRoutePath });
+    // newGtm('scnOpen', 'newRoutePath');
   }
-);
+
+  if (typeof newFirebase?.analytics?.log === 'function') {
+    console.log('newFirebase?.analytics?.log', newRoutePath);
+    newFirebase.analytics.log({
+      event: 'scnOpen',
+      url: newRoutePath
+    });
+  }
+}, 100);
+
+watch(() => [route.path, gtm.value, firebase.value], handleTrackData);
 
 watch(
   () => $i18n.locale.value,

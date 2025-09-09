@@ -3,7 +3,7 @@ import firebaseAdmin from 'firebase-admin';
 import {
   getFirebaseAdminApp
   // firebaseAdminApp
-} from '@/utils/helpers/firebase-admin';
+} from '@/utils/third-party/firebase-admin';
 
 export default defineEventHandler(async function webPushMessage(event) {
   const body = await readBody(event);
