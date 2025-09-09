@@ -151,7 +151,7 @@ export class firebase {
 
     try {
       const newFirebaseCroe = initializeServerApp(firebaseConfig);
-      this.croe = newFirebaseCroe;
+      this.#_croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);
     }
@@ -166,7 +166,7 @@ export class firebase {
 
     try {
       const newFirebaseCroe = initializeApp(firebaseConfig);
-      this.croe = newFirebaseCroe;
+      this.#_croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);
     }
