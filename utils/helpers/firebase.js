@@ -353,7 +353,7 @@ export class firebase {
         });
         this.#_token = token;
 
-        await saveToken({ token, os: 'web' });
+        await saveToken(token);
 
         /*
           interface MessagePayload {
