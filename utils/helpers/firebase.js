@@ -413,9 +413,3 @@ export class firebase {
   }
 }
 export const Firebase = new firebase();
-
-if (typeof window === 'object') {
-  window.__firebase = firebase;
-  window.__Firebase = Firebase;
-  window.FIREBASE_CONFIG = FIREBASE_CONFIG;
-}
