@@ -4,9 +4,9 @@ import firebaseAdmin from 'firebase-admin';
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web_2
 
-export const credential = import.meta.env.VITE_FIREBASE_CREDENTIAL || '{}';
+export const CREDENTIAL = import.meta.env.VITE_FIREBASE_CREDENTIAL || '{}';
 
-export const firebaseConfig = {
+export const FIREBASE_ADMIN_CONFIG = {
   authDomain: 'parker-nuxt-lab.firebaseapp.com',
   projectId: 'parker-nuxt-lab',
   storageBucket: 'parker-nuxt-lab.firebasestorage.app'
@@ -17,10 +17,10 @@ export function getFirebaseAdminApp() {
   return firebaseAdminApp;
 }
 
-export const androidCredential =
+export const ANDROID_CREDENTIAL =
   import.meta.env.VITE_ANDROID_FIREBASE_CREDENTIAL || '{}';
 
-export const androidFirebaseConfig = {
+export const ANDROID_FIREBASE_ADMIN_CONFIG = {
   authDomain: 'httpsbibiancojp.firebaseapp.com',
   projectId: 'httpsbibiancojp',
   storageBucket: 'httpsbibiancojp.appspot.com'
@@ -30,9 +30,9 @@ export function getAndroidFirebaseAdminApp() {
   return androidFirebaseAdminApp;
 }
 
-export const iosCredential = import.meta.env.VITE_IOS_FIREBASE_CREDENTIAL || '{}';
+export const IOS_CREDENTIAL = import.meta.env.VITE_IOS_FIREBASE_CREDENTIAL || '{}';
 
-export const iosFirebaseConfig = {
+export const IOS_FIREBASE_ADMIN_CONFIG = {
   authDomain: 'httpsbibiancojp.firebaseapp.com',
   projectId: 'httpsbibiancojp',
   storageBucket: 'httpsbibiancojp.appspot.com'
@@ -42,46 +42,46 @@ export function getIosFirebaseAdminApp() {
   return iosFirebaseAdminApp;
 }
 
-export function firebaseServerInit() {
+export function firebaseAdminServerInit() {
   try {
-    if (typeof window === 'undefined') {
-      const firebaseAdminAppStore = firebaseAdmin.INTERNAL.appStore.appStore;
-      // console.log(firebaseAdmin.messaging);
-      // console.log(firebaseAdmin.INTERNAL.appStore.appStore);
-      // console.log(firebaseAdmin.appStore);
-      // console.log(firebaseAdmin.getApp);
-      if (firebaseAdminAppStore.get('[DEFAULT]')) {
-        firebaseAdminApp = firebaseAdminAppStore.get('[DEFAULT]');
-      } else if (typeof credential === 'string' && credential !== '{}' && credential !== '') {
-        firebaseAdminApp = firebaseAdmin.initializeApp({
-          ...firebaseConfig,
-          credential: firebaseAdmin.credential.cert(JSON.parse(credential))
-        });
-      }
-      if (firebaseAdminAppStore.get('androidFirebase')) {
-        androidFirebaseAdminApp = firebaseAdminAppStore.get('androidFirebase');
-      } else if (typeof androidCredential === 'string' && androidCredential !== '{}' && androidCredential !== '') {
-        androidFirebaseAdminApp = firebaseAdmin.initializeApp(
-          {
-            ...androidFirebaseConfig,
-            credential: firebaseAdmin.credential.cert(
-              JSON.parse(androidCredential)
-            )
-          },
-          'androidFirebase'
-        );
-      }
-      if (firebaseAdminAppStore.get('iosFirebase')) {
-        iosFirebaseAdminApp = firebaseAdminAppStore.get('iosFirebase');
-      } else if (typeof iosCredential === 'string' && iosCredential !== '{}' && iosCredential !== '') {
-        iosFirebaseAdminApp = firebaseAdmin.initializeApp(
-          {
-            ...iosFirebaseConfig,
-            credential: firebaseAdmin.credential.cert(JSON.parse(iosCredential))
-          },
-          'iosFirebase'
-        );
-      }
+    if (typeof window !== 'undefined') return;
+
+
+    const firebaseAdminAppStore = firebaseAdmin.INTERNAL.appStore.appStore;
+
+    if (firebaseAdminAppStore.get('[DEFAULT]')) {
+      firebaseAdminApp = firebaseAdminAppStore.get('[DEFAULT]');
+    } else if (typeof CREDENTIAL === 'string' && CREDENTIAL !== '{}' && CREDENTIAL !== '') {
+      firebaseAdminApp = firebaseAdmin.initializeApp({
+        ...FIREBASE_ADMIN_CONFIG,
+        credential: firebaseAdmin.credential.cert(JSON.parse(CREDENTIAL))
+      });
+    }
+
+    if (firebaseAdminAppStore.get('androidFirebaseAdmin')) {
+      androidFirebaseAdminApp = firebaseAdminAppStore.get('androidFirebaseAdmin');
+    } else if (typeof ANDROID_CREDENTIAL === 'string' && ANDROID_CREDENTIAL !== '{}' && ANDROID_CREDENTIAL !== '') {
+      androidFirebaseAdminApp = firebaseAdmin.initializeApp(
+        {
+          ...ANDROID_FIREBASE_ADMIN_CONFIG,
+          credential: firebaseAdmin.credential.cert(
+            JSON.parse(ANDROID_CREDENTIAL)
+          )
+        },
+        'androidFirebaseAdmin'
+      );
+    }
+
+    if (firebaseAdminAppStore.get('iosFirebaseAdmin')) {
+      iosFirebaseAdminApp = firebaseAdminAppStore.get('iosFirebaseAdmin');
+    } else if (typeof IOS_CREDENTIAL === 'string' && IOS_CREDENTIAL !== '{}' && IOS_CREDENTIAL !== '') {
+      iosFirebaseAdminApp = firebaseAdmin.initializeApp(
+        {
+          ...IOS_FIREBASE_ADMIN_CONFIG,
+          credential: firebaseAdmin.credential.cert(JSON.parse(IOS_CREDENTIAL))
+        },
+        'iosFirebaseAdmin'
+      );
     }
   } catch (error) {
     console.error(error);
@@ -89,19 +89,19 @@ export function firebaseServerInit() {
 
   if (typeof firebaseAdminApp !== 'object' || firebaseAdminApp === null) {
     console.warn(
-      'Firebase app initialization failed.'
+      'Firebase Admin app initialization failed.'
     );
   }
 
   if (typeof androidFirebaseAdminApp !== 'object' || androidFirebaseAdminApp === null) {
     console.warn(
-      'Android Firebase app initialization failed.'
+      'Android Firebase Admin app initialization failed.'
     );
   }
 
   if (typeof iosFirebaseAdminApp !== 'object' || iosFirebaseAdminApp === null) {
     console.warn(
-      'IOS Firebase app initialization failed.'
+      'IOS Firebase Admin app initialization failed.'
     );
   }
 
@@ -111,5 +111,5 @@ export function firebaseServerInit() {
 // https://ithelp.ithome.com.tw/articles/10269342
 // https://vercel.com/archer102125220/resume-web
 
-firebaseServerInit();
+firebaseAdminServerInit();
 

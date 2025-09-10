@@ -20,9 +20,9 @@ export default defineEventHandler(async function pushMessage(event) {
     messagingFindAllToken({ os: 'ios' })
   ]);
 
-  const firebaseAdminApp = event.context.$firebaseAdminApp;
-  const androidFirebaseAdminApp = event.context.$androidFirebaseAdminApp;
-  const iosFirebaseAdminApp = event.context.$iosFirebaseAdminApp;
+  const firebaseAdminApp = event.context.$firebaseAdminApp.web;
+  const androidFirebaseAdminApp = event.context.$firebaseAdminApp.android;
+  const iosFirebaseAdminApp = event.context.$firebaseAdminApp.ios;
 
   const promiseArray = [];
 

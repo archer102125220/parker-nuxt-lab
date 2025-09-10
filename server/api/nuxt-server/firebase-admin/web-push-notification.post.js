@@ -1,10 +1,5 @@
 import firebaseAdmin from 'firebase-admin';
 
-import {
-  getFirebaseAdminApp
-  // firebaseAdminApp
-} from '@/utils/third-party/firebase-admin';
-
 export default defineEventHandler(async function webPushMessage(event) {
   const body = await readBody(event);
 
@@ -20,7 +15,7 @@ export default defineEventHandler(async function webPushMessage(event) {
     });
   }
 
-  const firebaseAdminApp = getFirebaseAdminApp();
+  const firebaseAdminApp = event.context.$firebaseAdminApp.web;
   const response = await firebaseAdmin
     .messaging(firebaseAdminApp)
     .sendEachForMulticast({
