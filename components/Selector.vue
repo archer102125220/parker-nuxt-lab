@@ -187,12 +187,12 @@ const displayValue = computed(() => {
         props.modelValue?.value ||
         props.modelValue)
   );
-  console.log(
-    currentOption,
-    props.modelValue,
-    props.valueKey,
-    props.displayKey
-  );
+  // console.log(
+  //   currentOption,
+  //   props.modelValue,
+  //   props.valueKey,
+  //   props.displayKey
+  // );
   return (
     currentOption?.[props.displayKey] ||
     props.modelValue?.[props.displayKey] ||

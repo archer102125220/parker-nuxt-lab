@@ -9,10 +9,10 @@
 </template>
 
 <script setup>
-const { $pwa } = useNuxtApp();
-onMounted(() => {
-  console.log({ $pwa });
-});
+// const { $pwa } = useNuxtApp();
+// onMounted(() => {
+//   console.log({ $pwa });
+// });
 </script>
 
 <style lang="scss" scoped>

@@ -647,7 +647,7 @@ function slideChange(swiper) {
   emit('slideChange', swiper);
 }
 function sliderMove(swiper) {
-  console.log('sliderMove');
+  // console.log('sliderMove');
   isSliderMoveing.value = true;
   emit('sliderMove', swiper);
 }
@@ -670,12 +670,12 @@ function realIndexChange(swiper) {
   emit('realIndexChange', swiper);
 }
 function slideChangeTransitionEnd(swiper) {
-  console.log('slideChangeTransitionEnd');
+  // console.log('slideChangeTransitionEnd');
   isSliderMoveing.value = false;
   emit('slideChangeTransitionEnd', swiper);
 }
 function touchEnd(swiper) {
-  console.log('touchEnd');
+  // console.log('touchEnd');
   isSliderMoveing.value = false;
   emit('touchEnd', swiper);
 }

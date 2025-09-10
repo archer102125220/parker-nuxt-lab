@@ -40,40 +40,6 @@ export default defineNuxtPlugin(({ $pinia }) => {
             window.addEventListener('resize', window._pluginwareHandleResize_);
           }
 
-          const nuxtApp = useNuxtApp();
-          const { $pwa, $firebase } = nuxtApp;
-
-          const $Firebase = new $firebase();
-          nuxtApp.provide('Firebase', $Firebase);
-
-          const firebase = useNuxtFirebase();
-          if (firebase.value !== $Firebase) {
-            firebase.value = $Firebase;
-          }
-
-          // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
-          // watchEffect(async () => {
-          //   if ($pwa.needRefresh === true) {
-          //     await $pwa.updateServiceWorker();
-          //   }
-          // });
-
-          system.setAgreeNotification($Firebase.getNotificationPermission());
-
-          watchEffect(async () => {
-            console.log({ ['$pwa.offlineReady']: $pwa.offlineReady, ['$pwa.isPWAInstalled']: $pwa.isPWAInstalled });
-            if ($pwa.offlineReady === true) {
-              system.setMessageState({ text: 'App ready to work offline', type: 'success' });
-            }
-
-            if ($pwa.isPWAInstalled === true || $pwa.swActivated === true) {
-              await $Firebase.croeInit();
-              await $Firebase.appInit();
-
-              system.setFirebaseCroeInited(true);
-            }
-          });
-
           if (typeof window._pluginwareHandleResize_ !== 'function') {
             return () => window.removeEventListener('resize', window._pluginwareHandleResize_);
           }

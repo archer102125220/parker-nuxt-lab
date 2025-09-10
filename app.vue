@@ -110,13 +110,13 @@ const handleTrackData = _debounce(function handleTrackData(
 ) {
   // console.log({ newRoutePath, newGtm });
   if (typeof newGtm === 'function') {
-    console.log('trackView', newRoutePath);
+    // console.log('trackView', newRoutePath);
     newGtm({ event: 'scnOpen', url: newRoutePath });
     // newGtm('scnOpen', 'newRoutePath');
   }
 
   if (typeof newFirebase?.analytics?.log === 'function') {
-    console.log('newFirebase?.analytics?.log', newRoutePath);
+    // console.log('newFirebase?.analytics?.log', newRoutePath);
     newFirebase.analytics.log({
       event: 'scnOpen',
       url: newRoutePath
@@ -150,9 +150,9 @@ watch(
 );
 
 onMounted(async () => {
-  console.log('onMounted', { gtm });
+  // console.log('onMounted', { gtm });
   if (typeof gtm.value === 'function') {
-    console.log('trackView onMounted', route.path);
+    // console.log('trackView onMounted', route.path);
     gtm.value({ event: 'scnOpen', url: route.path });
     // gtm.value('scnOpen', 'newRoutePath');
   }

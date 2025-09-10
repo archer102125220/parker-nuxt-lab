@@ -407,14 +407,14 @@ function handleSliderMove(e) {
     { clientX: startX.value, clientY: startY.value },
     { clientX: eventX, clientY: eventY }
   );
-  console.log({
-    isHorizontal,
-    isVertical,
-    originalAngleDeg,
-    angleDeg,
-    angleRad,
-    distance
-  });
+  // console.log({
+  //   isHorizontal,
+  //   isVertical,
+  //   originalAngleDeg,
+  //   angleDeg,
+  //   angleRad,
+  //   distance
+  // });
 
   if (
     isHorizontal === false ||

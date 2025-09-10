@@ -40,7 +40,7 @@
           min-height="100%"
           @click="handleResetForm"
         >
-          重置
+          <span> 重置 </span>
         </v-col>
         <v-col
           :tag="VBtn"
@@ -66,7 +66,7 @@
           min-height="100%"
           @click="handleRefresh"
         >
-          重新整理
+          <span> 重新整理 </span>
         </v-col>
       </v-row>
     </v-container>
@@ -133,7 +133,7 @@
               :data-title="`${ACRION_TITLE}：`"
             >
               <v-btn color="error" @click="handleDeleteToken(webToken.token)">
-                刪除
+                <span> 刪除 </span>
               </v-btn>
             </td>
           </tr>
@@ -166,7 +166,7 @@
                 color="error"
                 @click="handleDeleteToken(androidToken.token)"
               >
-                刪除
+                <span> 刪除 </span>
               </v-btn>
             </td>
           </tr>
@@ -196,7 +196,7 @@
               :data-title="`${ACRION_TITLE}：`"
             >
               <v-btn color="error" @click="handleDeleteToken(iosToken.token)">
-                刪除
+                <span> 刪除 </span>
               </v-btn>
             </td>
           </tr>
