@@ -20,7 +20,7 @@ export default defineEventHandler(async function pushMessage(event) {
     messagingFindAllToken({ os: 'ios' })
   ]);
 
-  const firebaseAdminApp = event.context.$firebaseAdminApp.web;
+  const firebaseAdminWeb = event.context.$firebaseAdminApp.web;
   const androidFirebaseAdminApp = event.context.$firebaseAdminApp.android;
   const iosFirebaseAdminApp = event.context.$firebaseAdminApp.ios;
 
@@ -28,7 +28,7 @@ export default defineEventHandler(async function pushMessage(event) {
 
   if (webTokens.length > 0) {
     promiseArray.push(
-      firebaseAdmin.messaging(firebaseAdminApp).sendEachForMulticast({
+      firebaseAdmin.messaging(firebaseAdminWeb).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
         tokens: webTokens.map(({ token }) => token)
       }).catch((error) => console.error('Error sending message to web tokens:', error))

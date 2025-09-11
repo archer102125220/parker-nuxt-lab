@@ -15,9 +15,9 @@ export default defineEventHandler(async function webPushMessage(event) {
     });
   }
 
-  const firebaseAdminApp = event.context.$firebaseAdminApp.web;
+  const firebaseAdminWeb = event.context.$firebaseAdminApp.web;
   const response = await firebaseAdmin
-    .messaging(firebaseAdminApp)
+    .messaging(firebaseAdminWeb)
     .sendEachForMulticast({
       data: { msg: body.data, title: body.title, img: body.img },
       tokens: body.token

@@ -1,5 +1,5 @@
 import {
-  getFirebaseAdminApp,
+  getFirebaseAdminWeb,
   getAndroidFirebaseAdminApp,
   getIosFirebaseAdminApp
 } from '@/utils/third-party/firebase-admin';
@@ -8,7 +8,7 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook("request", (event) => {
     event.context.$firebaseAdminApp = {
       get web() {
-        return getFirebaseAdminApp();
+        return getFirebaseAdminWeb();
       },
       get android() {
         return getAndroidFirebaseAdminApp();
