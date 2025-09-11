@@ -25,9 +25,9 @@ export const ANDROID_FIREBASE_ADMIN_CONFIG = {
   projectId: 'httpsbibiancojp',
   storageBucket: 'httpsbibiancojp.appspot.com'
 };
-export let androidFirebaseAdminApp = null;
-export function getAndroidFirebaseAdminApp() {
-  return androidFirebaseAdminApp;
+export let firebaseAdminAndroid = null;
+export function getFirebaseAdminAndroid() {
+  return firebaseAdminAndroid;
 }
 
 export const IOS_CREDENTIAL = import.meta.env.VITE_IOS_FIREBASE_CREDENTIAL || '{}';
@@ -37,9 +37,9 @@ export const IOS_FIREBASE_ADMIN_CONFIG = {
   projectId: 'httpsbibiancojp',
   storageBucket: 'httpsbibiancojp.appspot.com'
 };
-export let iosFirebaseAdminApp = null;
-export function getIosFirebaseAdminApp() {
-  return iosFirebaseAdminApp;
+export let firebaseAdminIos = null;
+export function getFirebaseAdminIos() {
+  return firebaseAdminIos;
 }
 
 export function getFirebaseAdmin(name = '[DEFAULT]') {
@@ -66,9 +66,9 @@ export function firebaseAdminServerInit() {
     }
 
     if (getFirebaseAdmin('androidFirebaseAdmin')) {
-      androidFirebaseAdminApp = getFirebaseAdmin('androidFirebaseAdmin');
+      firebaseAdminAndroid = getFirebaseAdmin('androidFirebaseAdmin');
     } else if (typeof ANDROID_CREDENTIAL === 'string' && ANDROID_CREDENTIAL !== '{}' && ANDROID_CREDENTIAL !== '') {
-      androidFirebaseAdminApp = firebaseAdmin.initializeApp(
+      firebaseAdminAndroid = firebaseAdmin.initializeApp(
         {
           ...ANDROID_FIREBASE_ADMIN_CONFIG,
           credential: firebaseAdmin.credential.cert(
@@ -80,9 +80,9 @@ export function firebaseAdminServerInit() {
     }
 
     if (getFirebaseAdmin('iosFirebaseAdmin')) {
-      iosFirebaseAdminApp = getFirebaseAdmin('iosFirebaseAdmin');
+      firebaseAdminIos = getFirebaseAdmin('iosFirebaseAdmin');
     } else if (typeof IOS_CREDENTIAL === 'string' && IOS_CREDENTIAL !== '{}' && IOS_CREDENTIAL !== '') {
-      iosFirebaseAdminApp = firebaseAdmin.initializeApp(
+      firebaseAdminIos = firebaseAdmin.initializeApp(
         {
           ...IOS_FIREBASE_ADMIN_CONFIG,
           credential: firebaseAdmin.credential.cert(JSON.parse(IOS_CREDENTIAL))
@@ -100,19 +100,19 @@ export function firebaseAdminServerInit() {
     );
   }
 
-  if (typeof androidFirebaseAdminApp !== 'object' || androidFirebaseAdminApp === null) {
+  if (typeof firebaseAdminAndroid !== 'object' || firebaseAdminAndroid === null) {
     console.warn(
       'Android Firebase Admin app initialization failed.'
     );
   }
 
-  if (typeof iosFirebaseAdminApp !== 'object' || iosFirebaseAdminApp === null) {
+  if (typeof firebaseAdminIos !== 'object' || firebaseAdminIos === null) {
     console.warn(
       'IOS Firebase Admin app initialization failed.'
     );
   }
 
-  return { firebaseAdminWeb, androidFirebaseAdminApp, iosFirebaseAdminApp };
+  return { firebaseAdminWeb, firebaseAdminAndroid, firebaseAdminIos };
 }
 
 // https://ithelp.ithome.com.tw/articles/10269342

@@ -21,8 +21,8 @@ export default defineEventHandler(async function pushMessage(event) {
   ]);
 
   const firebaseAdminWeb = event.context.$firebaseAdminApp.web;
-  const androidFirebaseAdminApp = event.context.$firebaseAdminApp.android;
-  const iosFirebaseAdminApp = event.context.$firebaseAdminApp.ios;
+  const firebaseAdminAndroid = event.context.$firebaseAdminApp.android;
+  const firebaseAdminIos = event.context.$firebaseAdminApp.ios;
 
   const promiseArray = [];
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async function pushMessage(event) {
   }
   if (androidTokens.length > 0) {
     promiseArray.push(
-      firebaseAdmin.messaging(androidFirebaseAdminApp).sendEachForMulticast({
+      firebaseAdmin.messaging(firebaseAdminAndroid).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
         tokens: androidTokens.map(({ token }) => token)
       }).catch((error) => console.error('Error sending message to android tokens:', error))
@@ -44,7 +44,7 @@ export default defineEventHandler(async function pushMessage(event) {
   }
   if (iosTokens.length > 0) {
     promiseArray.push(
-      firebaseAdmin.messaging(iosFirebaseAdminApp).sendEachForMulticast({
+      firebaseAdmin.messaging(firebaseAdminIos).sendEachForMulticast({
         data: { msg: body.data, title: body.title, img: body.img },
         tokens: iosTokens.map(({ token }) => token)
       }).catch((error) => console.error('Error sending message to ios tokens:', error))

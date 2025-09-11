@@ -1,7 +1,7 @@
 import {
   getFirebaseAdminWeb,
-  getAndroidFirebaseAdminApp,
-  getIosFirebaseAdminApp
+  getFirebaseAdminAndroid,
+  getFirebaseAdminIos
 } from '@/utils/third-party/firebase-admin';
 
 export default defineNitroPlugin((nitroApp) => {
@@ -11,10 +11,10 @@ export default defineNitroPlugin((nitroApp) => {
         return getFirebaseAdminWeb();
       },
       get android() {
-        return getAndroidFirebaseAdminApp();
+        return getFirebaseAdminAndroid();
       },
       get ios() {
-        return getIosFirebaseAdminApp();
+        return getFirebaseAdminIos();
       }
     };
   });

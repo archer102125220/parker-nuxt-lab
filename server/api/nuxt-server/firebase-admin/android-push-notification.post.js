@@ -15,9 +15,9 @@ export default defineEventHandler(async function androidPushMessage(event) {
     });
   }
 
-  const androidFirebaseAdminApp = event.context.$firebaseAdminApp.android;
+  const firebaseAdminAndroid = event.context.$firebaseAdminApp.android;
   const response = await firebaseAdmin
-    .messaging(androidFirebaseAdminApp)
+    .messaging(firebaseAdminAndroid)
     .sendEachForMulticast({
       data: { msg: body.data, title: body.title, img: body.img },
       tokens: body.token
