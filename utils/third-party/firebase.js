@@ -28,7 +28,7 @@ export const FIREBASE_CONFIG = {
   storageBucket: 'parker-nuxt-lab.firebasestorage.app',
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_ID,
-  measurementId: import.meta.env.VITE_GA_ID
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
 export class firebase {
