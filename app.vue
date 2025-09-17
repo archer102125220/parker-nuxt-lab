@@ -3,6 +3,7 @@
     <NotificationPermission />
 
     <SpeedInsights />
+    <Analytics />
 
     <!-- <NuxtPwaManifest /> -->
     <NuxtPwaAssets />
@@ -37,6 +38,7 @@
 
 <script setup>
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
+import { Analytics } from '@vercel/analytics/nuxt';
 import _debounce from 'lodash/debounce';
 
 const NO_GO_TOP = [];
