@@ -111,7 +111,7 @@ import _debounce from 'lodash/debounce';
 
 const MOVE_DISTANCE_LIMIT = 50;
 
-const { $polyfillScrollEnd } = useNuxtApp();
+const { $bindScrollEnd } = useNuxtApp();
 
 const props = defineProps({
   pullLabel: { type: String, default: '下拉即可重整...' },
@@ -358,7 +358,7 @@ onMounted(() => {
     typeof scrollFetchRef.value?.parentElement?.addEventListener === 'function'
   ) {
     scrollFetchRef.value.parentElement.addEventListener('scroll', parentScroll);
-    removeParentScrollEnd.value = $polyfillScrollEnd(
+    removeParentScrollEnd.value = $bindScrollEnd(
       scrollFetchRef.value.parentElement,
       parentScrollEnd
     );
@@ -367,7 +367,7 @@ onMounted(() => {
   window.addEventListener('contextmenu', handlePullEnd);
   window.addEventListener('scroll', windowScroll);
 
-  removeWindowScrollEnd.value = $polyfillScrollEnd(window, windowScrollEnd);
+  removeWindowScrollEnd.value = $bindScrollEnd(window, windowScrollEnd);
 
   if (props.useObserver === true) {
     createObserver(props.useObserver);
