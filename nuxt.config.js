@@ -181,6 +181,7 @@ export default defineNuxtConfig({
     ]
   },
   modules: [
+    'nuxt-socket-io',
     '@pinia/nuxt',
     (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) =>
@@ -191,6 +192,14 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     'nuxt-security'
   ],
+  // https://nuxt.com/modules/socket-io
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: process.env.VITE_WEBSOCKET_BASE_URL || '',
+    }]
+  },
   i18n: {
     strategy,
     locales,
