@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: 'css三角形測試'
 });
 </script>

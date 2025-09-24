@@ -222,7 +222,7 @@
 <script setup>
 import { VTextField, VForm, VBtn } from 'vuetify/components';
 
-useHead({
+useHeadMataData({
   title: 'Firebase Cloud Messaging 後台'
 });
 

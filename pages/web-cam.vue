@@ -20,6 +20,10 @@
   </div>
 </template>
 <script setup>
+useHeadMataData({
+  title: 'WebCam測試'
+});
+
 // https://mrcodingroom.freesite.host/js%E5%B0%87video-webcam%E7%95%AB%E5%9C%A8canvas%E4%B8%8A/
 const videoEl = useTemplateRef('videoEl');
 const canvasEl = useTemplateRef('canvasEl');

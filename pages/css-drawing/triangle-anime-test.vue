@@ -7,8 +7,7 @@
 </template>
 
 <script setup>
-// const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: 'css三角形滿版動畫測試'
 });
 </script>

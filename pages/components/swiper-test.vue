@@ -10,8 +10,7 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: '自製Swiper測試'
 });
 

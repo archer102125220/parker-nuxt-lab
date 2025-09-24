@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: '文字特效測試'
 });
 

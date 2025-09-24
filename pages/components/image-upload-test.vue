@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: '選擇圖片組件測試'
 });
 const identifyImage = ref('');

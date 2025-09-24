@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: 'QRcode測試'
 });
 const qrCodeValue = ref('QRcodeTest');

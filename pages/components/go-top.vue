@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: '返回置頂組件測試'
 });
 </script>

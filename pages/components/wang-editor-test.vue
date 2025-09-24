@@ -5,8 +5,7 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: 'Wang Editor整合測試'
 });
 </script>

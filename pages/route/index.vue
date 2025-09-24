@@ -15,6 +15,9 @@
 </template>
 
 <script setup>
+useHeadMataData({
+  title: 'route相關測試'
+});
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 

@@ -66,6 +66,9 @@
 </template>
 
 <script setup>
+useHeadMataData({
+  title: '前端api快取測試'
+});
 const nuxtApp = useNuxtApp();
 const { $store } = nuxtApp;
 

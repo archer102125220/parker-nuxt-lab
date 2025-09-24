@@ -10,6 +10,9 @@
 </template>
 
 <script setup>
+useHeadMataData({
+  title: '下拉選單測試'
+});
 const classId = ref();
 const matchTypeList = computed(() => {
   return [

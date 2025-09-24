@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: 'svg替換顏色測試'
 });
 const color = ref('#000000');

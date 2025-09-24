@@ -16,7 +16,7 @@
 
 <script setup>
 // https://github.com/nuxt/nuxt/issues/27982
-useHead({
+useHeadMataData({
   title: '路由參數與上一頁測試'
 });
 

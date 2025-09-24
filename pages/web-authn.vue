@@ -77,10 +77,10 @@
 // https://flyhigher.top/develop/2160.html#verify-authenticator
 import { Base64 as base64Js } from 'js-base64';
 
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: '生物辨識測試(原生)'
 });
+const nuxtApp = useNuxtApp();
 
 const credentialId = ref(null);
 const credentialPublicKeyPem = ref(null);

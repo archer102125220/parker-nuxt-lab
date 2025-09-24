@@ -26,10 +26,10 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: '自製下拉重整及無限滾動測試'
 });
+const nuxtApp = useNuxtApp();
 
 const refreshLoading = ref(false);
 const infinityLoading = ref(false);

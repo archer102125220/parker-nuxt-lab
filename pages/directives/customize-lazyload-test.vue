@@ -12,6 +12,12 @@
   </div>
 </template>
 
+<script setup>
+useHeadMataData({
+  title: '自製lazyload directive測試'
+});
+</script>
+
 <style lang="scss" scoped>
 .customize_lazyload_test_page {
   &-normal {

@@ -13,6 +13,9 @@
 </template>
 
 <script setup>
+useHeadMataData({
+  title: '彈窗組件測試'
+});
 const nuxtApp = useNuxtApp();
 const { $store } = nuxtApp;
 

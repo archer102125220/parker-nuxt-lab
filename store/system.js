@@ -57,8 +57,8 @@ export const useSystemStore = defineStore('system', {
       this.messageState = payload;
     },
     setCantResendOTPTime(payload, second = 120) {
-      const { $dayjs } = useNuxtApp();
-      this.cantResendOTPTime = $dayjs(payload).add(second, 'second').valueOf();
+      const dayjs = useDayjs();
+      this.cantResendOTPTime = dayjs.value(payload).add(second, 'second').valueOf();
     },
     setIsMobile(payload = false) {
       this.isMobile = payload;

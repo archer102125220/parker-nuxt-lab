@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: 'virtual-scroller組件測試'
 });
 

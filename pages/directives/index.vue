@@ -17,6 +17,10 @@
 </template>
 
 <script setup>
+useHeadMataData({
+  title: '自製vue指令'
+});
+
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();
 

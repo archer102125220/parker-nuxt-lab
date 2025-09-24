@@ -7,8 +7,7 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: 'youtube整合測試'
 });
 </script>

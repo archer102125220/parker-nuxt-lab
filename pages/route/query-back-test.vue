@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: '路由query與上一頁測試'
 });
 

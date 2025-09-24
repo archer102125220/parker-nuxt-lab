@@ -84,13 +84,13 @@
 </template>
 
 <script setup>
-import { Base64 as base64Js } from 'js-base64';
+import { Base64 as base64Js } from 'js-base64'
+useHeadMataData({
+  title: '生物辨識測試(fido2-lib)'
+});;
 
 const nuxtApp = useNuxtApp();
 const system = nuxtApp.$store?.system;
-useHead({
-  title: '生物辨識測試(fido2-lib)'
-});
 
 const credentialId = ref(null);
 const credentialPublicKeyPem = ref(null);

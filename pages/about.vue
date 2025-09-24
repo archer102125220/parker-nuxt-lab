@@ -65,7 +65,7 @@ watchEffect(() => {
   systemStore.setLoading(pending.value);
 });
 
-useHead({
+useHeadMataData({
   title: '關於本站 - Nuxt實驗室',
   meta: [
     {

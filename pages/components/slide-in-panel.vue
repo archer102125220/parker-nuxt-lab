@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: '訊息佇列測試'
 });
 

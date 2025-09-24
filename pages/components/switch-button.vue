@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: 'switch組件測試'
 });
 

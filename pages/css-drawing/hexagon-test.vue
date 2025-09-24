@@ -33,7 +33,11 @@
     </div>
   </div>
 </template>
-<script setup></script>
+<script setup>
+useHeadMataData({
+  title: 'css六邊形測試'
+});
+</script>
 
 <style lang="scss" scoped>
 @mixin triangle {

@@ -93,10 +93,10 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: '自製Tab測試'
 });
+const nuxtApp = useNuxtApp();
 
 const infinityEnd = ref(false);
 

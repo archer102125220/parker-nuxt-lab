@@ -17,6 +17,9 @@
 </template>
 
 <script setup>
+useHeadMataData({
+  title: '抽屜收展組件測試'
+});
 const isShow = ref(false);
 const anchor = ref('bottom');
 

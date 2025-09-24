@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-useHead({
+useHeadMataData({
   title: 'Firebase整合測試'
 });
 const localePath = useLocalePath();

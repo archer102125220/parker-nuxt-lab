@@ -27,8 +27,7 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
-useHead({
+useHeadMataData({
   title: 'Swiper.js整合測試'
 });
 
