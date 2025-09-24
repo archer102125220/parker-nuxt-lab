@@ -27,6 +27,7 @@ export function useHeadMataData({
     title: metaDataTitle.value,
     meta: [
       { id: 'meta-lang', language: metaDataLanguage.value },
+      { property: 'description', content: metaDataDescription.value },
       {
         property: 'twitter:image',
         content: metaDataImage.value
