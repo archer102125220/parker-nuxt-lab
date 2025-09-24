@@ -13,13 +13,14 @@ export function useHeadMataData({
   const { $i18n } = useNuxtApp();
   const dayjs = useDayjs();
 
+  const DOMAIN = import.meta.env.VITE_DOMAIN || '';
   const metaDataLanguage = computed(() => _metaDataLanguage || $i18n?.locale?.value || 'zh');
-  const metaDataImage = computed(() => _metaDataImage || '/img/ico/web-app-manifest-512x512.png');
+  const metaDataImage = computed(() => _metaDataImage || (DOMAIN + '/img/ico/web-app-manifest-512x512.png'));
   const metaDataName = computed(() => _metaDataName || $i18n.t('system.systemName'));
   const metaDataCard = computed(() => _metaDataCard || $i18n.t('system.description'));
   const metaDataTitle = computed(() => _metaDataTitle || $i18n.t('system.defaultTitle'));
   const metaDataDescription = computed(() => _metaDataDescription || $i18n.t('system.description'));
-  const metaDataUrl = computed(() => _metaDataUrl || import.meta.env.VITE_DOMAIN || '');
+  const metaDataUrl = computed(() => _metaDataUrl || DOMAIN);
   const metaDataType = computed(() => _metaDataType || 'website');
   const metaDataCopyright = computed(() => _metaDataCopyright || `Copyright © ${dayjs.value().year()} Parker Chen. All rights reserved.`);
 
