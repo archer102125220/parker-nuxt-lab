@@ -17,7 +17,7 @@ export function useHeadMataData({
   const metaDataLanguage = computed(() => _metaDataLanguage || $i18n?.locale?.value || 'zh');
   const metaDataImage = computed(() => _metaDataImage || (DOMAIN + '/img/ico/web-app-manifest-512x512.png'));
   const metaDataName = computed(() => _metaDataName || $i18n.t('system.systemName'));
-  const metaDataCard = computed(() => _metaDataCard || $i18n.t('system.description'));
+  const metaDataCard = computed(() => _metaDataCard || 'summary_large_image');
   const metaDataTitle = computed(() => _metaDataTitle || $i18n.t('system.defaultTitle'));
   const metaDataDescription = computed(() => _metaDataDescription || $i18n.t('system.description'));
   const metaDataUrl = computed(() => _metaDataUrl || DOMAIN);
