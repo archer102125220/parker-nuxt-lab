@@ -1,10 +1,8 @@
 import { request } from '@/utils/request';
 
-// const runtimeConfig = useRuntimeConfig();
-
-// const CLIENT_ID = runtimeConfig.public.LINE_CLIENT_ID;
-// const CLIENT_SECRET = runtimeConfig.public.LINE_CLIENT_SECRET;
-// const CALLBACK_URI = runtimeConfig.public.LINE_CALLBACK_URI;
+// const CLIENT_ID = import.meta.env.VITE_LINE_CLIENT_ID;
+// const CLIENT_SECRET = import.meta.env.VITE_LINE_CLIENT_SECRET;
+// const CALLBACK_URI = import.meta.env.VITE_LINE_CALLBACK_URI;
 
 // https://developers.line.biz/en/reference/line-login/#verify-access-token-http-request
 export default defineEventHandler(async (event) => {

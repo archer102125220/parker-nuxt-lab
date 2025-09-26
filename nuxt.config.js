@@ -96,6 +96,9 @@ export default defineNuxtConfig({
     // '/admin/**': { ssr: false }
   },
   nitro: {
+    experimental: {
+      websocket: true
+    },
     hooks: {
       'prerender:generate'(route) {
         const routesToSkip = ['/firebase/cloud-messaging'];
@@ -181,7 +184,6 @@ export default defineNuxtConfig({
     ]
   },
   modules: [
-    'nuxt-socket-io',
     '@pinia/nuxt',
     (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) =>
@@ -192,14 +194,6 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     'nuxt-security'
   ],
-  // https://nuxt.com/modules/socket-io
-  io: {
-    // module options
-    sockets: [{
-      name: 'main',
-      url: process.env.VITE_WEBSOCKET_BASE_URL || '',
-    }]
-  },
   i18n: {
     strategy,
     locales,
@@ -326,17 +320,18 @@ export default defineNuxtConfig({
       // VITE_GTM_ID: process.env.VITE_GTM_ID,
       // VITE_API_BASE: process.env.VITE_API_BASE || '/api',
 
-      WEBSOCKET_BASE_URL:
-        process.env.WEBSOCKET_BASE_URL || 'wss://url',
-      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-      FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
-      FACEBOOK_API_VERSION: process.env.FACEBOOK_API_VERSION,
-      LINE_CLIENT_ID: process.env.LINE_CLIENT_ID,
-      LINE_CLIENT_SECRET: process.env.LINE_CLIENT_SECRET,
-      LINE_CALLBACK_URI: process.env.LINE_CALLBACK_URI,
+      // VITE_WEBSOCKET_BASE_URL:
+      //   process.env.VITE_WEBSOCKET_BASE_URL || 'wss://url',
+      // VITE_GOOGLE_CLIENT_ID: process.env.VITE_GOOGLE_CLIENT_ID,
+      // VITE_FACEBOOK_APP_ID: process.env.VITE_FACEBOOK_APP_ID,
+      // VITE_FACEBOOK_API_VERSION: process.env.VITE_FACEBOOK_API_VERSION,
+      // VITE_LINE_CLIENT_ID: process.env.VITE_LINE_CLIENT_ID,
+      // VITE_LINE_CLIENT_SECRET: process.env.VITE_LINE_CLIENT_SECRET,
+      // VITE_LINE_CALLBACK_URI: process.env.VITE_LINE_CALLBACK_URI,
+
       HTTPS:
         process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
-      isDev: IS_DEV
+      isDev: IS_DEV,
     }
-  }
+  },
 });

@@ -6,7 +6,7 @@ export function useNuxtGtm() {
     return nuxtApp.$gtm || null;
   });
 
-  console.log({ gtm });
+  // console.log({ gtm });
 
   return gtm;
 }

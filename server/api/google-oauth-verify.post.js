@@ -1,8 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 
-const runtimeConfig = useRuntimeConfig();
-
-const CLIENT_ID = runtimeConfig.public.GOOGLE_CLIENT_ID;
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const client = new OAuth2Client(CLIENT_ID);
 

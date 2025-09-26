@@ -141,7 +141,7 @@ const detectionsWithExpressionsOutput = useTemplateRef(
 );
 
 const [faceapi, faceapiInit] = useFaceapi(MODELS_PATH);
-const streamObj = useCameraStream(handleFaceApi);
+const streamObj = useCameraStream(null, handleFaceApi);
 
 const faceBoundingBoxesData = ref(null);
 const faceLandmarksData = ref(null);

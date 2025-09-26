@@ -1,7 +1,7 @@
 export function useFacebook(initFn = () => { }) {
   const runtimeConfig = useRuntimeConfig();
-  const APP_ID = runtimeConfig.public.FACEBOOK_APP_ID;
-  const API_VERSION = runtimeConfig.public.FACEBOOK_API_VERSION;
+  const APP_ID = runtimeConfig.public.VITE_FACEBOOK_APP_ID;
+  const API_VERSION = runtimeConfig.public.VITE_FACEBOOK_API_VERSION;
 
   const facebook = useState('__facebook', () => null);
 

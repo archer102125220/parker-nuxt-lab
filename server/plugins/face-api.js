@@ -33,6 +33,8 @@ if (process.env.NODE_ENV === 'production') {
 export default defineNitroPlugin((nitroApp) => {
   console.log('faceapi plugin');
 
+  nitroApp.$faceapi = faceapi;
+
   nitroApp.hooks.hook("request", (event) => {
     console.log('faceapi plugin request');
     event.context.$faceapi = faceapi;

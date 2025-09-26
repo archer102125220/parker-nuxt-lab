@@ -5,7 +5,7 @@ export function useNuxtFirebase() {
     return nuxtApp.$Firebase || null;
   });
 
-  console.log({ Firebase });
+  // console.log({ Firebase });
 
   return Firebase;
 }

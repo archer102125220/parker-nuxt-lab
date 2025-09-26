@@ -1,8 +1,6 @@
 import { axiosInit, request as axiosRequest } from '@/utils/request';
 
 export function useRequestInit(apiBase, errorAdapter, defaultExtendOption) {
-  const runtimeConfig = useRuntimeConfig();
-
   const isInitialized = useState(
     'axiosInitialized',
     () => typeof axiosRequest.ax === 'object' && axiosRequest.ax !== null
@@ -16,7 +14,7 @@ export function useRequestInit(apiBase, errorAdapter, defaultExtendOption) {
       error.value = null;
 
       try {
-        const baseURL = apiBase || runtimeConfig.public.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+        const baseURL = apiBase || import.meta.env.VITE_API_BASE;
         console.log({ baseURL });
         if (typeof baseURL !== 'string' || baseURL === '') {
           console.warn('VITE_API_BASE 環境變數未設定');

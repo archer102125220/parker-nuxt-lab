@@ -1,8 +1,6 @@
 import { request } from '@/utils/request';
 
-const runtimeConfig = useRuntimeConfig();
-
-const APP_ID = runtimeConfig.public.FACEBOOK_APP_ID;
+const APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
 
 // https://stackoverflow.com/questions/70114224/how-to-verify-facebook-login-access-token-from-node-js
 // https://developers.facebook.com/docs/graph-api/overview
