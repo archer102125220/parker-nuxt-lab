@@ -1,5 +1,3 @@
-// https://nitro.build/guide/websocket
-// https://hub.nuxt.com/docs/features/realtime
 // https://socket.io/how-to/use-with-nuxt
 import { useNitroApp } from '#imports';
 
@@ -13,13 +11,25 @@ export default defineEventHandler({
   },
   websocket: {
     open(peer) {
-      console.log('[ws] Default WebSocket connected');
+      console.log('[ws-socket.io] Default WebSocket connected');
 
       const nitroApp = useNitroApp();
 
-      // 
       nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
       nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
+    },
+
+    message(peer, message) {
+      // console.log("[ws-socket.io] Default WebSocket message", peer, message);
+      console.log("[ws-socket.io] Default WebSocket message", message);
+    },
+
+    close(peer) {
+      console.log('[ws-socket.io] Default WebSocket close');
+    },
+
+    error(peer, error) {
+      console.log("[ws-socket.io] Default WebSocket error", error);
     },
   },
 })
