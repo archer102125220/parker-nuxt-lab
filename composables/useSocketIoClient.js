@@ -1,6 +1,7 @@
 import * as _socketIoClient from 'socket.io-client';
 
-export function useSocketIoClient(config = { channel: '/default' }) {
+export function useSocketIoClient(config = { channel: '/socket.io' }) {
+  const runtimeConfig = useRuntimeConfig();
   const socketIoClient = computed(() => useNuxtApp().$socketIoClient || _socketIoClient);
 
   const SocketIo = ref(null);
@@ -14,24 +15,18 @@ export function useSocketIoClient(config = { channel: '/default' }) {
 
     const { channel: currentChannel, ...socketIoClientConfig } = (currentConfig?.value || currentConfig);
 
-    const WEBSOCKET_BASE_URL = import.meta.env.VITE_WEBSOCKET_BASE_URL || '';
-    const wsUrl = (
-      currentChannel.indexOf('ws://') === 0 ||
-      currentChannel.indexOf('wss://') === 0 ||
-      currentChannel.indexOf('http://') === 0 ||
-      currentChannel.indexOf('https://') === 0
-    ) ?
-      currentChannel :
+    const DOMAIN = (runtimeConfig?.public?.isDev === true ? window?.location?.origin : import.meta.env.VITE_WEBSOCKET_BASE_PATH || window?.location?.origin) || '';
+    const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/';
+    const path =
       currentChannel.indexOf('/') === 0
-        ? WEBSOCKET_BASE_URL + currentChannel
-        : WEBSOCKET_BASE_URL + '/' + currentChannel;
-
-    console.log({ wsUrl, currentChannel, WEBSOCKET_BASE_URL });
+        ? WEBSOCKET_BASE_PATH + currentChannel
+        : WEBSOCKET_BASE_PATH + '/' + currentChannel;
 
     const newSocketIo = socketIoClient?.value?.io(
-      wsUrl,
+      DOMAIN,
       {
         ...socketIoClientConfig,
+        path,
         autoConnect:
           typeof socketIoClientConfig?.autoConnect === 'boolean'
             ? socketIoClientConfig.autoConnect
@@ -54,6 +49,9 @@ export function useSocketIoClient(config = { channel: '/default' }) {
     });
     newSocketIo.on('connect', () => {
       console.log('Socket.IO client connect', newSocketIo.connected);
+    });
+    newSocketIo.on('disconnect', () => {
+      console.log('Socket.IO client disconnect', newSocketIo.connected);
     });
 
     newSocketIo.connect();

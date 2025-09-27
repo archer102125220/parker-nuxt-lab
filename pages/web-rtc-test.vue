@@ -2,7 +2,7 @@
   <div class="web_rtc_page">
     <p>測試中</p>
 
-    <!-- <video
+    <video
       ref="localVideoEl"
       id="localVideo"
       class="web_rtc_page-video"
@@ -10,7 +10,7 @@
       height="360"
       autoplay
       :srcObject="streamObj"
-    /> -->
+    />
   </div>
 </template>
 
@@ -27,7 +27,7 @@ const streamObj = useCameraStream({ audio: true });
 
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC(null, streamObj);
-const socketIoClient = useSocketIoClient({ channel: '/webrtc' });
+const socketIoClient = useSocketIoClient({ channel: '/web-rtc' });
 
 watch(
   () => [streamObj.value, webRTC.value, socketIoClient.value],

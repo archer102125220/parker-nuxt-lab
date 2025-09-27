@@ -1,3 +1,5 @@
+// https://nitro.build/guide/websocket#server-sent-events-sse
+// https://tehub.com/a/cHJ76vwCFv
 export default defineEventHandler(async (event) => {
   const eventStream = createEventStream(event);
 
