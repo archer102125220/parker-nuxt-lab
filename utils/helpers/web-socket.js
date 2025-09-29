@@ -1,7 +1,7 @@
 export function createWebSocket(
-  confing = { open() {}, message() {}, close() {}, error() {} }
+  confing = { open() { }, message() { }, close() { }, error() { } }
 ) {
-  if (typeof window !== 'object') return;
+  if (typeof window !== 'object') return null;
 
   if (typeof confing !== 'object') throw new Error('invalid confing');
 
@@ -22,7 +22,7 @@ export function createWebSocket(
     const payload = { event, data };
     console.log(payload);
     this._send(JSON.stringify(payload));
-  };
+  }.bind(socket);
 
   if (typeof open === 'function') {
     socket.addEventListener('open', open);
@@ -39,3 +39,5 @@ export function createWebSocket(
 
   return socket;
 }
+
+export default createWebSocket;

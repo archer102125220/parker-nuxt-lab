@@ -1,5 +1,7 @@
 import { useNitroApp } from '#imports';
 
+import { decodeSocketIOPayload } from '@/utils/third-party/socket.io-decode';
+
 export default defineEventHandler({
   handler(event) {
     console.log('/socket.io/web-rtc');
@@ -18,9 +20,18 @@ export default defineEventHandler({
       nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
     },
 
-    message(peer, message) {
-      // console.log("[ws-socket.io] WebRTC WebSocket message", peer, message);
-      console.log("[ws-socket.io] WebRTC WebSocket message", message);
+    async message(peer, message) {
+      // console.log('[ws-socket.io] WebRTC WebSocket message', peer, message);
+      console.log('[ws-socket.io] WebRTC WebSocket message', message);
+      console.log('[ws-socket.io] WebRTC WebSocket message.data.toString()', message.data.toString());
+
+      const decodedMessage = await decodeSocketIOPayload(message.data.toString());
+      console.log('[ws-socket.io] WebRTC WebSocket decoded message', decodedMessage);
+
+      const nitroApp = useNitroApp();
+      if (typeof decodedMessage?.data?.[0] === 'string') {
+        nitroApp.$socketIoServer.emit(decodedMessage.data[0], decodedMessage.data[1]);
+      }
     },
 
     close(peer) {
@@ -28,7 +39,7 @@ export default defineEventHandler({
     },
 
     error(peer, error) {
-      console.log("[ws-socket.io] WebRTC WebSocket error", error);
+      console.log('[ws-socket.io] WebRTC WebSocket error', error);
     },
   },
 })

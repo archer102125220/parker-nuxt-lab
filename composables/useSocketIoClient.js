@@ -1,6 +1,6 @@
 import * as _socketIoClient from 'socket.io-client';
 
-export function useSocketIoClient(config = { channel: '/socket.io' }) {
+export function useSocketIoClient(config = { channel: '/socket.io' }, afterInit = () => { }) {
   const runtimeConfig = useRuntimeConfig();
   const socketIoClient = computed(() => useNuxtApp().$socketIoClient || _socketIoClient);
 
@@ -15,12 +15,12 @@ export function useSocketIoClient(config = { channel: '/socket.io' }) {
 
     const { channel: currentChannel, ...socketIoClientConfig } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (runtimeConfig?.public?.isDev === true ? window?.location?.origin : import.meta.env.VITE_WEBSOCKET_BASE_PATH || window?.location?.origin) || '';
-    const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/';
+    const DOMAIN = (runtimeConfig?.public?.isDev === true ? window?.location?.origin : import.meta.env.VITE_SOCKET_IO_BASE_PATH || window?.location?.origin) || '';
+    const SOCKET_IO_BASE_PATH = import.meta.env.VITE_SOCKET_IO_BASE_PATH || '/socket.io';
     const path =
       currentChannel.indexOf('/') === 0
-        ? WEBSOCKET_BASE_PATH + currentChannel
-        : WEBSOCKET_BASE_PATH + '/' + currentChannel;
+        ? SOCKET_IO_BASE_PATH + currentChannel
+        : SOCKET_IO_BASE_PATH + '/' + currentChannel;
 
     const newSocketIo = socketIoClient?.value?.io(
       DOMAIN,
@@ -37,6 +37,10 @@ export function useSocketIoClient(config = { channel: '/socket.io' }) {
             : ['websocket'],
       },
     );
+
+    if (typeof afterInit === 'function') {
+      afterInit(newSocketIo);
+    }
 
     newSocketIo.io.on('error', (error) => {
       console.error('Socket.IO client error', error);

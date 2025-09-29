@@ -21,7 +21,12 @@
 
 <script setup>
 useHeadMataData({
-  title: '自製組件及第三方整合組件'
+  title: '組件列表',
+  titleTemplate: (titleChunk) => {
+    return titleChunk
+      ? `${titleChunk} | 自製組件及第三方整合組件`
+      : '自製組件及第三方整合組件';
+  }
 });
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();

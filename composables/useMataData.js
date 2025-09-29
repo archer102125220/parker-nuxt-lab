@@ -1,5 +1,6 @@
 
 export function useHeadMataData({
+  titleTemplate: _titleTemplate,
   language: _metaDataLanguage,
   image: _metaDataImage,
   name: _metaDataName,
@@ -14,6 +15,7 @@ export function useHeadMataData({
   const dayjs = useDayjs();
 
   const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+  const titleTemplate = computed(() => _titleTemplate || undefined);
   const metaDataLanguage = computed(() => _metaDataLanguage || $i18n?.locale?.value || 'zh');
   const metaDataImage = computed(() => _metaDataImage || (DOMAIN + '/img/ico/web-app-manifest-512x512.png'));
   const metaDataName = computed(() => _metaDataName || $i18n.t('system.systemName'));
@@ -25,6 +27,7 @@ export function useHeadMataData({
   const metaDataCopyright = computed(() => _metaDataCopyright || `Copyright © ${dayjs.value().year()} Parker Chen. All rights reserved.`);
 
   return useHead({
+    titleTemplate: titleTemplate.value,
     title: metaDataTitle.value,
     meta: [
       { id: 'meta-lang', language: metaDataLanguage.value },

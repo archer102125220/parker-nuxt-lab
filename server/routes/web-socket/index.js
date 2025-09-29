@@ -1,5 +1,6 @@
 // https://nitro.build/guide/websocket
 // https://hub.nuxt.com/docs/features/realtime
+// import { defineWebSocketHandler } from 'h3';
 
 export default defineWebSocketHandler({
   open(peer) {

@@ -18,7 +18,10 @@
 
 <script setup>
 useHeadMataData({
-  title: '自製vue指令'
+  title: '自製vue指令列表',
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | 自製vue指令` : '自製vue指令';
+  }
 });
 
 // https://www.cnblogs.com/ganto/articles/17917868.html

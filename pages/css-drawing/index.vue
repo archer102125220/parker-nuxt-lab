@@ -16,7 +16,10 @@
 
 <script setup>
 useHeadMataData({
-  title: 'css繪圖相關測試'
+  title: 'css繪圖列表',
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | css繪圖相關測試` : 'css繪圖相關測試';
+  }
 });
 
 // https://www.cnblogs.com/ganto/articles/17917868.html

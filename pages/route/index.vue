@@ -16,7 +16,10 @@
 
 <script setup>
 useHeadMataData({
-  title: 'route相關測試'
+  title: 'route相關測試列表',
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | route相關測試` : 'route相關測試';
+  }
 });
 // https://www.cnblogs.com/ganto/articles/17917868.html
 const nuxtApp = useNuxtApp();

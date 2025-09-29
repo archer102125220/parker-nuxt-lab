@@ -27,7 +27,10 @@
 
 <script setup>
 useHeadMataData({
-  title: 'Firebase整合測試'
+  title: 'Firebase整合列表',
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | Firebase整合測試` : 'Firebase整合測試';
+  }
 });
 const localePath = useLocalePath();
 </script>

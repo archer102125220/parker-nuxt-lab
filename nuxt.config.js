@@ -320,8 +320,8 @@ export default defineNuxtConfig({
       // VITE_GTM_ID: process.env.VITE_GTM_ID,
       // VITE_API_BASE: process.env.VITE_API_BASE || '/api',
 
-      // VITE_WEBSOCKET_BASE_PATH:
-      //   process.env.VITE_WEBSOCKET_BASE_PATH || '/',
+      // VITE_SOCKET_IO_BASE_PATH:
+      //   process.env.VITE_SOCKET_IO_BASE_PATH || '/',
       // VITE_GOOGLE_CLIENT_ID: process.env.VITE_GOOGLE_CLIENT_ID,
       // VITE_FACEBOOK_APP_ID: process.env.VITE_FACEBOOK_APP_ID,
       // VITE_FACEBOOK_API_VERSION: process.env.VITE_FACEBOOK_API_VERSION,
