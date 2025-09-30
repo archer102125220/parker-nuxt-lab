@@ -18,15 +18,19 @@ export function useSocketIoClient(config = { channel: '/socket.io' }, afterInit 
     const DOMAIN = (runtimeConfig?.public?.isDev === true ? window?.location?.origin : import.meta.env.VITE_SOCKET_IO_BASE_PATH || window?.location?.origin) || '';
     const SOCKET_IO_BASE_PATH = import.meta.env.VITE_SOCKET_IO_BASE_PATH || '/socket.io';
     const path =
-      currentChannel.indexOf('/') === 0
-        ? SOCKET_IO_BASE_PATH + currentChannel
-        : SOCKET_IO_BASE_PATH + '/' + currentChannel;
+      currentChannel === '/'
+        ? SOCKET_IO_BASE_PATH
+        : currentChannel.indexOf('/') === 0
+          ? SOCKET_IO_BASE_PATH + currentChannel
+          : SOCKET_IO_BASE_PATH + '/' + currentChannel;
+    const socketIoUrl = DOMAIN + path;
 
     const newSocketIo = socketIoClient?.value?.io(
-      DOMAIN,
+      // DOMAIN,
+      socketIoUrl,
       {
+        // path,
         ...socketIoClientConfig,
-        path,
         autoConnect:
           typeof socketIoClientConfig?.autoConnect === 'boolean'
             ? socketIoClientConfig.autoConnect

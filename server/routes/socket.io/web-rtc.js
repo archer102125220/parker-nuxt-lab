@@ -30,7 +30,7 @@ export default defineEventHandler({
 
       const nitroApp = useNitroApp();
       if (typeof decodedMessage?.data?.[0] === 'string') {
-        nitroApp.$socketIoServer.emit(decodedMessage.data[0], decodedMessage.data[1]);
+        nitroApp.$socketIoServer.of('/socket.io/web-rtc').emit(decodedMessage.data[0], decodedMessage.data[1]);
       }
     },
 

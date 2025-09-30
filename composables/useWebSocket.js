@@ -1,6 +1,6 @@
 import _createWebSocket from '@/utils/helpers/web-socket';
 
-export function useWebSocket(config = { channel: '/web-socket' }) {
+export function useWebSocket(config = { channel: '/web-socket' }, afterInit = () => { }) {
   const runtimeConfig = useRuntimeConfig();
   const createWebSocket = computed(() => useNuxtApp().$createWebSocket || _createWebSocket);
 
@@ -28,6 +28,10 @@ export function useWebSocket(config = { channel: '/web-socket' }) {
         url: DOMAIN + path,
       },
     );
+
+    if (typeof afterInit === 'function') {
+      afterInit(newWebSocket);
+    }
 
     newWebSocket.addEventListener('error', (error) => {
       console.error('WebSocket client error', error);
