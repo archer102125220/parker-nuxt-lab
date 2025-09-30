@@ -35,10 +35,10 @@ const socketIoClient = useSocketIoClient(
 
 const socketIoClientMessageList = ref([]);
 
-function onMessage(...arg) {
-  console.log({ arg });
+function onMessage(payload) {
+  console.log({ payload });
   const newSocketIoClientMessage = _cloneDeep(socketIoClientMessageList.value);
-  newSocketIoClientMessage.push([...arg]);
+  newSocketIoClientMessage.push(payload);
   socketIoClientMessageList.value = newSocketIoClientMessage;
 }
 

@@ -14,33 +14,31 @@ export function useWebSocket(config = { channel: '/web-socket', afterInit() { } 
 
     const { channel: currentChannel, afterInit: currentAfterInit, ...webSocketConfig } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_SOCKET_IO_BASE_PATH || window?.location?.origin) || '';
+    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_WEBSOCKET_BASE_PATH || window?.location?.origin) || '';
     const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/web-socket';
     const path =
       currentChannel.indexOf('/') === 0
         ? WEBSOCKET_BASE_PATH + currentChannel
         : WEBSOCKET_BASE_PATH + '/' + currentChannel;
 
+
     const newWebSocket = createWebSocket?.value(
       {
         ...webSocketConfig,
+        open(event, ...arg) {
+          console.log('WebSocket client open', event);
+
+          if (this.inited === undefined && typeof currentAfterInit === 'function') {
+            handleWaitConnect(currentAfterInit, this)
+            this.inited = true;
+          }
+          if (typeof webSocketConfig.open === 'function') {
+            webSocketConfig.open(event, ...arg);
+          }
+        },
         url: DOMAIN + path,
       },
     );
-
-    if (typeof currentAfterInit === 'function') {
-      currentAfterInit(newWebSocket);
-    }
-
-    newWebSocket.addEventListener('error', (error) => {
-      console.error('WebSocket client error', error);
-    });
-    newWebSocket.addEventListener('open', () => {
-      console.log('WebSocket client open', newWebSocket);
-    });
-    newWebSocket.addEventListener('close', () => {
-      console.log('WebSocket client close', newWebSocket);
-    });
 
     WebSocket.value = newWebSocket;
   }
@@ -63,6 +61,13 @@ export function useWebSocket(config = { channel: '/web-socket', afterInit() { } 
   watch(() => (config?.value || config), initWebSocket, { deep: true });
 
   return WebSocket;
+}
+
+function handleWaitConnect(currentAfterInit, socket) {
+  if (socket.readyState !== WebSocket.OPEN) {
+    return setTimeout(() => handleWaitConnect(currentAfterInit, socket), 500);
+  }
+  currentAfterInit(socket);
 }
 
 export default useWebSocket;

@@ -1,5 +1,6 @@
 export function createWebSocket(
-  confing = { open() { }, message() { }, close() { }, error() { } }
+  confing = { open() { }, message() { }, close() { }, error() { } },
+  log = false
 ) {
   if (typeof window !== 'object') return null;
 
@@ -29,7 +30,7 @@ export function createWebSocket(
   socket.send = function (event, data) {
     const payload = { event, data };
 
-    if (import.meta.dev) {
+    if (log === true && import.meta.dev) {
       console.log(payload);
     }
 

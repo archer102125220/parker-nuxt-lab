@@ -23,6 +23,10 @@ export default defineWebSocketHandler({
     if (messageJson.event === 'ping') {
       peer.send({ ...messageJson, event: 'pong' });
     }
+
+    if (typeof messageJson.event === 'string' && messageJson.event !== '') {
+      peer.send(messageJson);
+    }
   },
 
   close(peer) {
