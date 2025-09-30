@@ -62,4 +62,4 @@ export function useWebSocket(config = { channel: '/web-socket' }) {
   return WebSocket;
 }
 
-export default useWebSocketClient;
+export default useWebSocket;
