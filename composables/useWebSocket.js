@@ -1,7 +1,6 @@
 import _createWebSocket from '@/utils/helpers/web-socket';
 
-export function useWebSocket(config = { channel: '/web-socket' }, afterInit = () => { }) {
-  const runtimeConfig = useRuntimeConfig();
+export function useWebSocket(config = { channel: '/web-socket', afterInit() { } }) {
   const createWebSocket = computed(() => useNuxtApp().$createWebSocket || _createWebSocket);
 
   const WebSocket = ref(null);
@@ -13,9 +12,9 @@ export function useWebSocket(config = { channel: '/web-socket' }, afterInit = ()
       WebSocket.value.close();
     }
 
-    const { channel: currentChannel, ...webSocketConfig } = (currentConfig?.value || currentConfig);
+    const { channel: currentChannel, afterInit: currentAfterInit, ...webSocketConfig } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (runtimeConfig?.public?.isDev === true ? window?.location?.origin : import.meta.env.VITE_SOCKET_IO_BASE_PATH || window?.location?.origin) || '';
+    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_SOCKET_IO_BASE_PATH || window?.location?.origin) || '';
     const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/web-socket';
     const path =
       currentChannel.indexOf('/') === 0
@@ -29,8 +28,8 @@ export function useWebSocket(config = { channel: '/web-socket' }, afterInit = ()
       },
     );
 
-    if (typeof afterInit === 'function') {
-      afterInit(newWebSocket);
+    if (typeof currentAfterInit === 'function') {
+      currentAfterInit(newWebSocket);
     }
 
     newWebSocket.addEventListener('error', (error) => {

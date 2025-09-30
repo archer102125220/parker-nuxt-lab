@@ -47,8 +47,7 @@ watch(
   async (newSocketIoClientConnected) => {
     console.log({ newSocketIoClientConnected });
     if (newSocketIoClientConnected === true) {
-      await nextTick();
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      await new Promise((resolve) => nextTick(() => setTimeout(resolve, 250)));
 
       socketIoClient.value.emit('socket.io-test', {
         a: 'b',

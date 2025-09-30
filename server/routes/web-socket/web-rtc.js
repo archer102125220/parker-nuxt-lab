@@ -11,10 +11,13 @@ export default defineWebSocketHandler({
   },
 
   message(peer, message) {
-    // console.log("[ws] webRTC WebSocket message", peer, message);
-    console.log("[ws] webRTC WebSocket message", message);
-    if (message.text().includes("ping")) {
-      peer.send("pong");
+    const messageJson = JSON.parse(message.text());
+    // console.log('[ws] Default WebSocket message', peer, message);
+    // console.log('[ws] Default WebSocket message', message);
+    console.log('[ws] Default WebSocket messageJson', messageJson);
+
+    if (messageJson.event === 'ping') {
+      peer.send({ ...messageJson, event: 'pong' });
     }
   },
 

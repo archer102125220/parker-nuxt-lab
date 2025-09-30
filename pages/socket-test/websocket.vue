@@ -8,7 +8,13 @@
 useHeadMataData({
   title: '原生配合Nuxt3內建的websocket'
 });
-const webSocket = useWebSocket({ channel: '/' });
+const webSocket = useWebSocket({
+  channel: '/',
+  message(...arg) {
+    console.log('message event:');
+    console.log(...arg);
+  }
+});
 
 watch(
   () => webSocket.value,
