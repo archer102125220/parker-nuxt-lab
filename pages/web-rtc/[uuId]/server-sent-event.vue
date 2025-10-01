@@ -23,6 +23,7 @@ useHeadMataData({
 definePageMeta({
   middleware: 'check-params-uuid'
 });
+const route = useRoute();
 
 const localVideoEl = useTemplateRef('localVideoEl');
 const streamObj = useCameraStream({ audio: true });
