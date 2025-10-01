@@ -25,7 +25,6 @@ export function useSocketIoClient(config = { channel: '/' }, afterInit = () => {
     const socketIoUrl = DOMAIN + path;
 
     const newSocketIo = socketIoClient?.value?.io(
-      // DOMAIN,
       socketIoUrl,
       {
         // path,
@@ -54,12 +53,15 @@ export function useSocketIoClient(config = { channel: '/' }, afterInit = () => {
     newSocketIo.io.on('reconnect_failed', (error) => {
       console.error('Socket.IO client reconnect_failed', error);
     });
-    newSocketIo.on('connect', () => {
-      console.log('Socket.IO client connect', newSocketIo.connected);
-    });
-    newSocketIo.on('disconnect', () => {
-      console.log('Socket.IO client disconnect', newSocketIo.connected);
-    });
+
+    if (import.meta.dev) {
+      newSocketIo.on('connect', () => {
+        console.log('Socket.IO client connect', newSocketIo.connected);
+      });
+      newSocketIo.on('disconnect', () => {
+        console.log('Socket.IO client disconnect', newSocketIo.connected);
+      });
+    }
 
     newSocketIo.connect();
 
@@ -67,11 +69,7 @@ export function useSocketIoClient(config = { channel: '/' }, afterInit = () => {
   }
 
   onMounted(function () {
-    console.log({ socketIoClient, config });
-
     initSocketIoClient((config?.value || config));
-
-    console.log({ socketIoClient, config, SocketIo });
   });
 
   onBeforeUnmount(() => {

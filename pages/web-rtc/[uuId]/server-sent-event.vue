@@ -30,7 +30,15 @@ const streamObj = useCameraStream({ audio: true });
 
 const webRTC = useWebRTC(null, streamObj);
 const eventSource = useEventSource({
-  channel: `/web-rtc/${route.params.uuId}`
+  channel: `/web-rtc/${route.params.uuId}`,
+  eventList: [
+    {
+      name: 'webrtc',
+      handler(payload) {
+        console.log({ payload });
+      }
+    }
+  ]
 });
 
 watch(

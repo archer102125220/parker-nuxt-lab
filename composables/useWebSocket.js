@@ -21,7 +21,6 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
         ? WEBSOCKET_BASE_PATH + currentChannel
         : WEBSOCKET_BASE_PATH + '/' + currentChannel;
 
-
     const newWebSocket = createWebSocket?.value(
       {
         ...webSocketConfig,
@@ -44,11 +43,7 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
   }
 
   onMounted(function () {
-    console.log({ createWebSocket, config });
-
     initWebSocket((config?.value || config));
-
-    console.log({ createWebSocket, config, WebSocket });
   });
 
   onBeforeUnmount(() => {
