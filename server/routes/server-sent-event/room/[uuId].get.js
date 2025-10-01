@@ -3,17 +3,17 @@ export default defineEventHandler(async (event) => {
   setResponseHeader(event, 'Cache-Control', 'no-cache');
   setResponseHeader(event, 'Connection', 'keep-alive');
 
-  console.log('WebRTC SSE');
-  // const { webRtcId } = event.context.params;
-  const webRtcId = getRouterParam(event, 'webRtcId')
+  console.log('room SSE');
+  // const { uuId } = event.context.params;
+  const uuId = getRouterParam(event, 'uuId')
   const query = getQuery(event);
 
   const eventStream = createEventStream(event);
 
   // const interval = setInterval(async () => {
-  //   await eventStream.push({ data: { webRtcId, query } });
+  //   await eventStream.push({ data: { uuId, query } });
   // }, 1000);
-  await eventStream.push({ event: 'webrtc', data: { webRtcId, query } });
+  await eventStream.push({ event: 'webrtc', data: { uuId, query } });
 
   eventStream.onClosed(async () => {
     // clearInterval(interval);

@@ -78,9 +78,9 @@ export default defineNitroPlugin((nitroApp) => {
   // https://regex101.com/ 正規表示法測試網址
   // uuid v4 正規表示法 [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
   // /^\/socket.io\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
-  io.of(/^\/socket.io\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+  io.of(/^\/socket.io\/web-rtc\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
     .on('connection', (socket) => {
-      console.log('/socket.io/[webRtcId] connection');
+      console.log('/socket.io/web-rtc/[webRtcId] connection');
       console.log('a user connected', socket.id);
 
       socket.on('ping', (callback) => {

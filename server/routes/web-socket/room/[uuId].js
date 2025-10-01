@@ -1,6 +1,6 @@
 export default defineWebSocketHandler({
   open(peer) {
-    console.log('[ws] webRTC WebSocket open');
+    console.log('[ws] Room WebSocket open');
 
     // We subscribe to the 'webrtc' channel
     peer.subscribe('webrtc');
@@ -12,10 +12,10 @@ export default defineWebSocketHandler({
 
   message(peer, message) {
     const messageJson = JSON.parse(message.text());
-    // console.log('[ws] Default WebSocket message', peer, message);
-    // console.log('[ws] Default WebSocket message', message);
-    console.log('[ws] Default WebSocket peer.webRtcId', peer.webRtcId);
-    console.log('[ws] Default WebSocket messageJson', messageJson);
+    // console.log('[ws] Room WebSocket message', peer, message);
+    // console.log('[ws] Room WebSocket message', message);
+    console.log('[ws] Room WebSocket peer.uuId', peer.uuId);
+    console.log('[ws] Room WebSocket messageJson', messageJson);
 
     if (messageJson.event === 'ping') {
       peer.send({ ...messageJson, event: 'pong' });
@@ -23,7 +23,7 @@ export default defineWebSocketHandler({
   },
 
   close(peer) {
-    console.log('[ws] webRTC WebSocket close');
+    console.log('[ws] Room WebSocket close');
 
     peer.unsubscribe('webrtc');
     // Wait 500ms before sending the updated locations to the server
@@ -34,7 +34,7 @@ export default defineWebSocketHandler({
 
 
   error(peer, error) {
-    // console.log("[ws] Default WebSocket error", peer, error);
-    console.log("[ws] webRTC WebSocket error", error);
+    // console.log("[ws] Room WebSocket error", peer, error);
+    console.log("[ws] Room WebSocket error", error);
   },
 });
