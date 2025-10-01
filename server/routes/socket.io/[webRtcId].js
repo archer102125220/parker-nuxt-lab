@@ -22,7 +22,8 @@ export default defineEventHandler({
 
     async message(peer, message) {
       // console.log('[ws-socket.io] WebRTC WebSocket message', peer, message);
-      console.log('[ws-socket.io] WebRTC WebSocket message', message);
+      // console.log('[ws-socket.io] WebRTC WebSocket message', message);
+      console.log('[ws-socket.io]  WebRTC WebSocket peer.webRtcId', peer.webRtcId);
       console.log('[ws-socket.io] WebRTC WebSocket message.data.toString()', message.data.toString());
 
       const decodedMessage = await decodeSocketIOPayload(message.data.toString());
@@ -30,7 +31,8 @@ export default defineEventHandler({
 
       const nitroApp = useNitroApp();
       if (typeof decodedMessage?.data?.[0] === 'string') {
-        nitroApp.$socketIoServer.of('/socket.io/web-rtc').emit(decodedMessage.data[0], decodedMessage.data[1]);
+        // nitroApp.$socketIoServer.of('/socket.io/web-rtc').emit(decodedMessage.data[0], decodedMessage.data[1]);
+        nitroApp.$socketIoServer.of(`/socket.io/${peer.webRtcId}`).emit(decodedMessage.data[0], decodedMessage.data[1]);
       }
     },
 

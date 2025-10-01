@@ -14,6 +14,7 @@ export default defineWebSocketHandler({
     const messageJson = JSON.parse(message.text());
     // console.log('[ws] Default WebSocket message', peer, message);
     // console.log('[ws] Default WebSocket message', message);
+    console.log('[ws] Default WebSocket peer.webRtcId', peer.webRtcId);
     console.log('[ws] Default WebSocket messageJson', messageJson);
 
     if (messageJson.event === 'ping') {
