@@ -1,7 +1,12 @@
 <template>
   <div class="web_rtc_socket_io_page">
-    <p class="web_rtc_socket_io_page-description">
-      配合 socket.io 實作
+    <p class="web_rtc_socket_io_page-description">配合 socket.io 實作</p>
+
+    <p
+      v-if="$store.system.supportWebsocket === false"
+      class="web_rtc_socket_io_page-warning"
+    >
+      *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
     </p>
 
     <video
@@ -33,7 +38,9 @@ const streamObj = useCameraStream({ audio: true });
 
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC(null, streamObj);
-const socketIoClient = useSocketIoClient({ channel: `/web-rtc/${route.params.uuId}` });
+const socketIoClient = useSocketIoClient({
+  channel: `/web-rtc/${route.params.uuId}`
+});
 
 watch(
   () => [streamObj.value, webRTC.value, socketIoClient.value],
@@ -46,5 +53,14 @@ watch(
 
 <style lang="scss" scoped>
 .web_rtc_socket_io_page {
+  &-description {
+    margin-bottom: 8px;
+  }
+
+  &-warning {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
 }
 </style>

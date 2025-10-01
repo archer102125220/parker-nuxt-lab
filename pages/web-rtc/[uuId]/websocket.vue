@@ -4,6 +4,13 @@
       配合 Nuxt3 內建的 WebSocket 實作
     </p>
 
+    <p
+      v-if="$store.system.supportWebsocket === false"
+      class="web_rtc_websocket_page-warning"
+    >
+      *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
+    </p>
+
     <video
       ref="localVideoEl"
       id="localVideo"
@@ -46,5 +53,14 @@ watch(
 
 <style lang="scss" scoped>
 .web_rtc_websocket_page {
+  &-description {
+    margin-bottom: 8px;
+  }
+
+  &-warning {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
 }
 </style>

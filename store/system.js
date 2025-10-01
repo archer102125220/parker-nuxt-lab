@@ -202,6 +202,9 @@ export const useSystemStore = defineStore('system', {
 
       return broswerInfo;
     },
+    supportWebsocket() {
+      return import.meta.env.VITE_SUPPORT_WEBSOCKET === 'true';
+    },
     localLanguage() {
       const { $i18n } = useNuxtApp();
       return getLocalLanguage($i18n?.local?.value);
