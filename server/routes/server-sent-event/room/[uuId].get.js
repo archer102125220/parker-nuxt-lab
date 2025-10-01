@@ -11,9 +11,9 @@ export default defineEventHandler(async (event) => {
   const eventStream = createEventStream(event);
 
   const interval = setInterval(async () => {
-    await eventStream.push({ data: JSON.stringify({ uuId, query }) });
+    await eventStream.push({ event: 'room', data: JSON.stringify({ uuId, query }) });
   }, 1000);
-  // await eventStream.push({ event: 'room', data: { uuId, query } });
+  // await eventStream.push({ event: 'room', data: JSON.stringify({ uuId, query }) });
 
   eventStream.onClosed(async () => {
     clearInterval(interval);

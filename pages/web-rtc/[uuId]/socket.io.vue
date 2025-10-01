@@ -1,6 +1,8 @@
 <template>
   <div class="web_rtc_socket_io_page">
-    <p>測試中</p>
+    <p class="web_rtc_socket_io_page-description">
+      配合 socket.io 實作
+    </p>
 
     <video
       ref="localVideoEl"

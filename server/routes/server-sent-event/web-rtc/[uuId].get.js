@@ -1,3 +1,5 @@
+import { createEventStream } from 'h3';
+
 export default defineEventHandler(async (event) => {
   setResponseHeader(event, 'Content-Type', 'text/event-stream');
   setResponseHeader(event, 'Cache-Control', 'no-cache');
@@ -10,13 +12,13 @@ export default defineEventHandler(async (event) => {
 
   const eventStream = createEventStream(event);
 
-  // const interval = setInterval(async () => {
-  //   await eventStream.push({ data: { uuId, query } });
-  // }, 1000);
-  await eventStream.push({ event: 'webrtc', data: { uuId, query } });
+  const interval = setInterval(async () => {
+    await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
+  }, 1000);
+  // await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
 
   eventStream.onClosed(async () => {
-    // clearInterval(interval);
+    clearInterval(interval);
     await eventStream.close();
   });
 

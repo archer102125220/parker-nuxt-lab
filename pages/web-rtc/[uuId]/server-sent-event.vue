@@ -3,6 +3,16 @@
     <p class="web_rtc_server_sent_event_page-description">
       配合 Server-Sent Event 實作
     </p>
+
+    <video
+      ref="localVideoEl"
+      id="localVideo"
+      class="web_rtc_server_sent_event_page-video"
+      width="100%"
+      height="360"
+      autoplay
+      :srcObject="streamObj"
+    />
   </section>
 </template>
 
@@ -13,6 +23,22 @@ useHeadMataData({
 definePageMeta({
   middleware: 'check-params-uuid'
 });
+
+const localVideoEl = useTemplateRef('localVideoEl');
+const streamObj = useCameraStream({ audio: true });
+
+const webRTC = useWebRTC(null, streamObj);
+const eventSource = useEventSource({
+  channel: `/web-rtc/${route.params.uuId}`
+});
+
+watch(
+  () => [streamObj.value, webRTC.value, eventSource.value],
+  ([newStream, newWebRTC, newEventSource]) => {
+    console.log({ newStream, newWebRTC, newEventSource });
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="scss">

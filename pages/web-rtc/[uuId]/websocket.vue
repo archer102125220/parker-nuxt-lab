@@ -1,6 +1,8 @@
 <template>
   <div class="web_rtc_websocket_page">
-    <p>測試中</p>
+    <p class="web_rtc_websocket_page-description">
+      配合 Nuxt3 內建的 WebSocket 實作
+    </p>
 
     <video
       ref="localVideoEl"
