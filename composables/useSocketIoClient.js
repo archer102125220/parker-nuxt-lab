@@ -1,6 +1,6 @@
 import * as _socketIoClient from 'socket.io-client';
 
-export function useSocketIoClient(config = { channel: '/socket.io' }, afterInit = () => { }) {
+export function useSocketIoClient(config = { channel: '/' }, afterInit = () => { }) {
   const socketIoClient = computed(() => useNuxtApp().$socketIoClient || _socketIoClient);
 
   const SocketIo = ref(null);

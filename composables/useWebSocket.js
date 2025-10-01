@@ -1,6 +1,6 @@
 import _createWebSocket from '@/utils/helpers/web-socket';
 
-export function useWebSocket(config = { channel: '/web-socket', afterInit() { } }) {
+export function useWebSocket(config = { channel: '/', afterInit() { } }) {
   const createWebSocket = computed(() => useNuxtApp().$createWebSocket || _createWebSocket);
 
   const WebSocket = ref(null);

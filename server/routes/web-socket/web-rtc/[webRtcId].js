@@ -2,10 +2,10 @@ export default defineWebSocketHandler({
   open(peer) {
     console.log('[ws] WebRTC WebSocket open');
 
-    // We subscribe to the 'webrtc' channel
-    peer.subscribe('webrtc');
-    // We publish the number of connected users to the 'webrtc' channel
-    peer.publish('webrtc', peer.peers.size);
+    // We subscribe to the `web-rtc-${peer.webRtcId}` channel
+    peer.subscribe(`web-rtc-${peer.webRtcId}`);
+    // We publish the number of connected users to the `web-rtc-${peer.webRtcId}` channel
+    peer.publish(`web-rtc-${peer.webRtcId}`, peer.peers.size);
     // We send the number of connected users to the client
     peer.send(peer.peers.size);
   },
@@ -25,10 +25,10 @@ export default defineWebSocketHandler({
   close(peer) {
     console.log('[ws] WebRTC WebSocket close');
 
-    peer.unsubscribe('webrtc');
+    peer.unsubscribe(`web-rtc-${peer.webRtcId}`);
     // Wait 500ms before sending the updated locations to the server
     setTimeout(() => {
-      peer.publish('webrtc', peer.peers.size);
+      peer.publish(`web-rtc-${peer.webRtcId}`, peer.peers.size);
     }, 500);
   },
 

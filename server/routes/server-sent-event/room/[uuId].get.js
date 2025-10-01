@@ -5,18 +5,18 @@ export default defineEventHandler(async (event) => {
 
   console.log('room SSE');
   // const { uuId } = event.context.params;
-  const uuId = getRouterParam(event, 'uuId')
+  const uuId = getRouterParam(event, 'uuId');
   const query = getQuery(event);
 
   const eventStream = createEventStream(event);
 
-  // const interval = setInterval(async () => {
-  //   await eventStream.push({ data: { uuId, query } });
-  // }, 1000);
-  await eventStream.push({ event: 'webrtc', data: { uuId, query } });
+  const interval = setInterval(async () => {
+    await eventStream.push({ data: JSON.stringify({ uuId, query }) });
+  }, 1000);
+  // await eventStream.push({ event: 'room', data: { uuId, query } });
 
   eventStream.onClosed(async () => {
-    // clearInterval(interval);
+    clearInterval(interval);
     await eventStream.close();
   });
 

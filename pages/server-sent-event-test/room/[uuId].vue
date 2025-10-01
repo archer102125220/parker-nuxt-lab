@@ -1,6 +1,11 @@
 <template>
   <section class="server_sent_event_route_param_page">
-    <p></p>
+    <p>接收到的data：</p>
+    <div>
+      <p v-for="(SSEMessage, index) in SSEMessageList" :key="index">
+        {{ SSEMessage }}
+      </p>
+    </div>
   </section>
 </template>
 
@@ -11,6 +16,26 @@ useHeadMataData({
 definePageMeta({
   middleware: 'check-params-uuid'
 });
+import _cloneDeep from 'lodash/cloneDeep';
+const route = useRoute();
+
+const SSEMessageList = ref([]);
+const eventSource = useEventSource({
+  channel: `/room/${route.params.uuId}`,
+  message(payload) {
+    console.log({ payload });
+    const newSSEMessageList = _cloneDeep(SSEMessageList.value);
+    newSSEMessageList.push(payload?.data);
+    SSEMessageList.value = newSSEMessageList;
+  }
+});
+watch(
+  () => eventSource.value,
+  (newEventSource) => {
+    console.log({ newEventSource });
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="scss">

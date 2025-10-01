@@ -87,6 +87,15 @@ export default defineNitroPlugin((nitroApp) => {
         callback();
       });
     });
+  io.of(/^\/socket.io\/room\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+    .on('connection', (socket) => {
+      console.log('/socket.io/room/[uuId] connection');
+      console.log('a user connected', socket.id);
+
+      socket.on('ping', (callback) => {
+        callback();
+      });
+    });
 
   nitroApp.$socketEngine = engine;
   nitroApp.$socketIoServer = io;
