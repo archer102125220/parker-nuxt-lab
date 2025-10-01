@@ -14,7 +14,7 @@ export function useSocketIoClient(config = { channel: '/' }, afterInit = () => {
 
     const { channel: currentChannel, ...socketIoClientConfig } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_SOCKET_IO_BASE_PATH || window?.location?.origin) || '';
+    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
     const SOCKET_IO_BASE_PATH = import.meta.env.VITE_SOCKET_IO_BASE_PATH || '/socket.io';
     const path =
       currentChannel === '/'

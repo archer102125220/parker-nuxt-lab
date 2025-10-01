@@ -14,7 +14,7 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
 
     const { channel: currentChannel, afterInit: currentAfterInit, ...webSocketConfig } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_WEBSOCKET_BASE_PATH || window?.location?.origin) || '';
+    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
     const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/web-socket';
     const path =
       currentChannel.indexOf('/') === 0
