@@ -59,11 +59,17 @@ export function useEventSource(config = { channel: '/', afterInit() { } }) {
       newEventSourceObj.addEventListener('ping', currentConfig.message);
     }
 
+    if (Array.isArray(currentConfig?.eventList) === true) {
+      currentConfig.eventList.forEach(event => {
+        if (typeof event.name === 'string' && typeof event.handler === 'function') {
+          newEventSourceObj.addEventListener(event.name, event.handler);
+        }
+      });
+    }
+
 
     EventSourceObj.value = newEventSourceObj;
   }
-
-
 
   onMounted(function () {
     initEventSource((config?.value || config));

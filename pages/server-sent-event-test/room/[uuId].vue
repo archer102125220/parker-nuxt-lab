@@ -22,12 +22,17 @@ const route = useRoute();
 const SSEMessageList = ref([]);
 const eventSource = useEventSource({
   channel: `/room/${route.params.uuId}`,
-  message(payload) {
-    console.log({ payload });
-    const newSSEMessageList = _cloneDeep(SSEMessageList.value);
-    newSSEMessageList.push(payload?.data);
-    SSEMessageList.value = newSSEMessageList;
-  }
+  eventList: [
+    {
+      name: 'room',
+      handler(payload) {
+        console.log({ payload });
+        const newSSEMessageList = _cloneDeep(SSEMessageList.value);
+        newSSEMessageList.push(payload?.data);
+        SSEMessageList.value = newSSEMessageList;
+      }
+    }
+  ]
 });
 watch(
   () => eventSource.value,
