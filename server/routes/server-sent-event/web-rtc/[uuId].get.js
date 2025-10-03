@@ -12,15 +12,18 @@ export default defineEventHandler(async (event) => {
 
   const eventStream = createEventStream(event);
 
-  const interval = setInterval(async () => {
+  // const interval = setInterval(async () => {
+  //   await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
+  // }, 1000);
+  setTimeout(async () => {
     await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
-  }, 1000);
-  // await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
+  },1500);
 
   eventStream.onClosed(async () => {
-    clearInterval(interval);
+    // clearInterval(interval);
     await eventStream.close();
   });
+
 
   return eventStream.send();
 })
