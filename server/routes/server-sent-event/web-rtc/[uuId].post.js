@@ -1,6 +1,6 @@
 import { createEventStream } from 'h3';
 
-export default defineEventHandler(function (event) {
+export default defineEventHandler(async function (event) {
   setResponseHeader(event, 'Content-Type', 'text/event-stream');
   setResponseHeader(event, 'Cache-Control', 'no-cache');
   setResponseHeader(event, 'Connection', 'keep-alive');
@@ -8,15 +8,15 @@ export default defineEventHandler(function (event) {
   console.log('WebRTC SSE');
   // const { uuId } = event.context.params;
   const uuId = getRouterParam(event, 'uuId')
-  const query = getQuery(event);
+  const body = await readBody(event);
 
   const eventStream = createEventStream(event);
 
   // const interval = setInterval(async () => {
-  //   await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
+  //   await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, body }) });
   // }, 1000);
   setTimeout(async () => {
-    await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, query }) });
+    await eventStream.push({ event: 'webrtc', data: JSON.stringify({ uuId, body }) });
   }, 1500);
 
   eventStream.onClosed(async () => {

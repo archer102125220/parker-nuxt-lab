@@ -5,7 +5,6 @@
     </p>
 
     <video
-      ref="localVideoEl"
       id="localVideo"
       class="web_rtc_server_sent_event_page-video"
       width="100%"
@@ -15,7 +14,6 @@
     />
 
     <video
-      ref="remoteVideoEl"
       id="remoteVideo"
       class="web_rtc_server_sent_event_page-video"
       width="100%"
@@ -35,7 +33,6 @@ definePageMeta({
 });
 const route = useRoute();
 
-const localVideoEl = useTemplateRef('localVideoEl');
 const streamObj = useCameraStream({ audio: true });
 const remoteStream = ref(null);
 
@@ -52,26 +49,7 @@ const localWebRTC = useWebRTC({
     );
   }
 });
-const remoteWebRTC = useWebRTC({
-  iceCandidate(remoteIceCandidateEvent) {
-    console.log({ remoteIceCandidateEvent });
-    console.log('onIceCandidate => ', remoteIceCandidateEvent.candidate);
-  },
-  iceconnectionStateChange(remoteIceconnectionStateChangeEvent) {
-    console.log({ remoteIceconnectionStateChangeEvent });
-    console.log(
-      'ICE 伺服器狀態變更 => ',
-      remoteIceconnectionStateChangeEvent.target.iceConnectionState
-    );
-  },
-  addStream(remoteaddStreamEvenr) {
-    console.log({ remoteaddStreamEvenr });
-    if (!remoteStream.value && remoteaddStreamEvenr.stream) {
-      remoteStream.value = remoteaddStreamEvenr.stream;
-      console.log('接收流並顯示於遠端視訊！', remoteaddStreamEvenr);
-    }
-  }
-});
+
 const eventSourceConfig = computed(() => ({
   channel: `/web-rtc/${route.params.uuId}`,
   eventList: [
@@ -90,30 +68,25 @@ watch(
   async ([newStream, newLocalWebRTC, newEventSource]) => {
     console.log({ newStream, newLocalWebRTC, newEventSource });
     if (
-      typeof newLocalWebRTC?.addStream === 'function' &&
-      newStream instanceof window?.EventSource
+      typeof newLocalWebRTC?.addTrack === 'function' &&
+      newStream instanceof window?.MediaStream
     ) {
-      newLocalWebRTC.addStream(newStream);
+      // 將本地視訊軌加入 RTCPeerConnection
+      newStream.getTracks().forEach((track) => {
+        console.log({ track });
+        newLocalWebRTC.addTrack(track, newStream);
+      });
 
       try {
         console.log(newLocalWebRTC.createOffer);
-        const RTCSessionDescription = await newLocalWebRTC.createOffer();
-        console.log({ RTCSessionDescription });
-        const response = await newLocalWebRTC.setLocalDescription(
-          RTCSessionDescription
-        );
+        const offer = await newLocalWebRTC.createOffer();
+        console.log({ offer });
+        const response = await newLocalWebRTC.setLocalDescription(offer);
         console.log({ response });
       } catch (error) {
         console.error(error);
       }
     }
-  },
-  { deep: true }
-);
-watch(
-  () => [remoteWebRTC.value, localWebRTC.value],
-  ([newRemoteWebRTC, newLocalWebRTC]) => {
-    console.log({ newRemoteWebRTC, newLocalWebRTC });
   },
   { deep: true }
 );
