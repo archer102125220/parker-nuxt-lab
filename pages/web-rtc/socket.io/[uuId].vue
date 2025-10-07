@@ -53,14 +53,16 @@ const offer = ref(null);
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC({
   iceCandidate(localIceCandidateEvent) {
-    console.log({ localIceCandidateEvent });
     console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
     // socketIoClient.value.emit('webrtc', localIceCandidateEvent.candidate);
     if (localIceCandidateEvent.candidate) {
       candidate.value = localIceCandidateEvent.candidate;
     }
-    if (localIceCandidateEvent.localDescription) {
-      localDescription.value = localIceCandidateEvent.localDescription;
+    if (
+      typeof webRTC.value?.localDescription === 'object' &&
+      webRTC.value?.localDescription !== null
+    ) {
+      localDescription.value = webRTC.value.localDescription;
     }
   },
   iceconnectionStateChange(localIceconnectionStateChangeEvent) {
@@ -74,8 +76,20 @@ const webRTC = useWebRTC({
     console.log({ localTrackEvent });
     console.log('onTrack => ', localTrackEvent.track);
 
-    if (remoteStream.value !== localTrackEvent.streams[0]) {
-      remoteStream.value = localTrackEvent.streams[0];
+    const streamList = Array.isArray(localTrackEvent.streams)
+      ? localTrackEvent.streams
+      : [];
+
+    const newRemoteStream = streamList.find(
+      (stream) =>
+        streamObj.value?.id !== stream?.id &&
+        remoteStream.value?.id !== stream?.id
+    );
+
+    console.log({ newRemoteStream });
+
+    if (newRemoteStream !== undefined) {
+      remoteStream.value = newRemoteStream;
       console.log('接收到遠端串流。');
     }
   }
@@ -86,23 +100,19 @@ const socketIoClient = useSocketIoClient(
     socketIo.on('webrtc', async function (webrtcPayload) {
       console.log({ webrtcPayload });
 
-      if (webrtcPayload.localDescription.type === 'offer') {
-      }
-
-      // 檢查是否已設定過遠端描述，避免重複操作
+      // 檢查描述檔，避免重複設定
       if (
-        webRTC.value.remoteDescription &&
-        webRTC.value.remoteDescription.type ===
-          webrtcPayload.localDescription?.type
+        webRTC.value.localDescription?.type ===
+          webrtcPayload.description?.type ||
+        webRTC.value.remoteDescription?.type === webrtcPayload.description?.type
       ) {
-        nuxtApp.$warningMessage('遠端描述已設定，請等待連線。');
         return;
       }
 
       await webRTC.value.setRemoteDescription(
-        new RTCSessionDescription(webrtcPayload.localDescription)
+        new RTCSessionDescription(webrtcPayload.description)
       );
-      console.log(`已成功設定遠端 ${webrtcPayload.localDescription?.type}。`);
+      console.log(`已成功設定遠端 ${webrtcPayload.description?.type}。`);
     });
     socketIo.emit('webrtc-join', route.params.uuId);
 
@@ -155,7 +165,7 @@ watch(
     if (newSocketIoConnected === true) {
       socketIoClient.value.emit('webrtc', {
         candidate: newCandidate,
-        localDescription: newLocalDescription
+        description: newLocalDescription
       });
     }
   }
