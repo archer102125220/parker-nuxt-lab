@@ -12,7 +12,7 @@ export function useSocketIoClient(config = { channel: '/' }, afterInit = () => {
       SocketIo.value.disconnect();
     }
 
-    const { channel: currentChannel, ...socketIoClientConfig } = (currentConfig?.value || currentConfig);
+    const { channel: currentChannel, channelAsPath = true, ...socketIoClientConfig } = (currentConfig?.value || currentConfig);
 
     const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
     const SOCKET_IO_BASE_PATH = import.meta.env.VITE_SOCKET_IO_BASE_PATH || '/socket.io';
@@ -22,12 +22,12 @@ export function useSocketIoClient(config = { channel: '/' }, afterInit = () => {
         : currentChannel.indexOf('/') === 0
           ? SOCKET_IO_BASE_PATH + currentChannel
           : SOCKET_IO_BASE_PATH + '/' + currentChannel;
-    const socketIoUrl = DOMAIN + path;
+    const socketIoUrl = (DOMAIN + path);
 
     const newSocketIo = socketIoClient?.value?.io(
       socketIoUrl,
       {
-        // path,
+        path: channelAsPath === true ? path.includes('?') ? path.substring(0, path.indexOf('?')) : path : undefined,
         ...socketIoClientConfig,
         autoConnect:
           typeof socketIoClientConfig?.autoConnect === 'boolean'

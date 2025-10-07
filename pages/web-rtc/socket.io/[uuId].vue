@@ -81,14 +81,8 @@ const webRTC = useWebRTC({
   }
 });
 const socketIoClient = useSocketIoClient(
-  { channel: `/web-rtc/${route.params.uuId}` },
+  { channel: `/web-rtc?webRtcId=${route.params.uuId}` },
   function (socketIo) {
-    socketIo.on('connect', () => {
-      socketIoConnected.value = socketIo.connected;
-    });
-    socketIo.on('disconnect', () => {
-      socketIoConnected.value = socketIo.connected;
-    });
     socketIo.on('webrtc', async function (webrtcPayload) {
       console.log({ webrtcPayload });
 
@@ -109,6 +103,13 @@ const socketIoClient = useSocketIoClient(
         new RTCSessionDescription(webrtcPayload.localDescription)
       );
       console.log(`已成功設定遠端 ${webrtcPayload.localDescription?.type}。`);
+    });
+
+    socketIo.on('connect', () => {
+      socketIoConnected.value = socketIo.connected;
+    });
+    socketIo.on('disconnect', () => {
+      socketIoConnected.value = socketIo.connected;
     });
   }
 );

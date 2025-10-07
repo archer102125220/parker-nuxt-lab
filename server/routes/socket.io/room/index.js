@@ -1,11 +1,13 @@
 import qs from 'qs';
 import { useNitroApp } from '#imports';
 
+// import { defineEventHandler } from 'h3';
+
 import { decodeSocketIOPayload } from '@/utils/third-party/socket.io-decode';
 
 export default defineEventHandler({
   handler(event) {
-    console.log('/socket.io/web-rtc/webRtcId');
+    console.log('/socket.io/room');
     const nitroApp = useNitroApp();
 
     nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
@@ -15,29 +17,20 @@ export default defineEventHandler({
     open(peer) {
       console.log('[ws-socket.io] WebRTC WebSocket connected');
 
-      const urlParts = (peer._internal.nodeReq.url || '').split('/');
-      const namespace = (decodedMessage?.nsp || '');
-      const _namespace = namespace.replaceAll('/socket.io/web-rtc/', '').replaceAll('/socket.io/web-rtc', '');
-      const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
-      const webRtcId = urlParts[urlParts.length - 1] || query?.webRtcId || _namespace;
-
       const nitroApp = useNitroApp();
 
-      // uuid v4
-      // https://regex101.com/ 正規表示法測試網址
-      // uuid v4 正規表示法 [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
-      // /^\/socket.io\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
-      nitroApp.$socketIoServer
-        .of(/^\/socket.io\/web-rtc\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
-        .once('connection', function (socket) {
-          console.log('/socket.io/web-rtc/[webRtcId] connection', { webRtcId });
+      const urlParts = (peer._internal.nodeReq.url || '').split('/');
+      const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
+      const uuId = query?.uuId || '';
+
+      nitroApp.$socketIoServer.of('/socket.io/room')
+        .on('connection', function (socket) {
+          console.log('/socket.io/room connection');
           console.log('a user connected', socket.id);
 
-          socket.on('webrtc', function (payload) {
-            console.log({ webrtcPayload: payload });
-
-            socket.emit('webrtc', payload);
-          });
+          if (typeof uuId === 'string' && uuId !== '') {
+            socket.join(uuId);
+          }
 
           socket.on('ping', function (callback) {
             callback();
@@ -50,7 +43,6 @@ export default defineEventHandler({
 
     async message(peer, message) {
       // console.log('[ws-socket.io] WebRTC WebSocket message.data.toString()', message.data.toString());
-
       const decodedMessage = await decodeSocketIOPayload(message.data.toString());
       console.log('[ws-socket.io] WebRTC WebSocket decoded message', decodedMessage);
     },

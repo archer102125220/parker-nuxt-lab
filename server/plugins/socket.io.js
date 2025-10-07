@@ -57,52 +57,20 @@ export default defineNitroPlugin((nitroApp) => {
 
   io.bind(engine);
 
-  io.of('/socket.io').on('connection', (socket) => {
-    console.log('/socket.io connection');
-    console.log('a user connected', socket.id);
-
-    socket.on('ping', (callback) => {
-      callback();
-    });
-  });
-
-  // io.of('/socket.io/web-rtc').on('connection', (socket) => {
-  //   console.log('/socket.io/web-rtc connection');
+  // io.of('/socket.io').on('connection', (socket) => {
+  //   console.log('/socket.io connection');
   //   console.log('a user connected', socket.id);
 
   //   socket.on('ping', (callback) => {
   //     callback();
   //   });
   // });
-  // uuid v4
-  // https://regex101.com/ 正規表示法測試網址
-  // uuid v4 正規表示法 [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
-  // /^\/socket.io\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
-  io.of(/^\/socket.io\/web-rtc\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
-    .on('connection', (socket) => {
-      console.log('/socket.io/web-rtc/[webRtcId] connection');
-      console.log('a user connected', socket.id);
-
-      socket.on('ping', (callback) => {
-        callback();
-      });
-    });
-  io.of(/^\/socket.io\/room\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
-    .on('connection', (socket) => {
-      console.log('/socket.io/room/[uuId] connection');
-      console.log('a user connected', socket.id);
-
-      socket.on('ping', (callback) => {
-        callback();
-      });
-    });
 
   nitroApp.$socketEngine = engine;
   nitroApp.$socketIoServer = io;
   nitroApp.$socketIo = socketIo;
 
-
-  nitroApp.hooks.hook('close', async () => {
+  nitroApp.hooks.hook('close', () => {
     io.close();
     engine.close();
   });

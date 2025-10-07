@@ -16,24 +16,47 @@ export default defineEventHandler({
 
       const nitroApp = useNitroApp();
 
+      const urlParts = (peer._internal.nodeReq.url || '').split('/');
+      const namespace = (decodedMessage?.nsp || '');
+      const _namespace = namespace.replaceAll('/socket.io/room/', '').replaceAll('/socket.io/room', '');
+      const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
+      const uuId = urlParts[urlParts.length - 1] || query?.uuId || _namespace;
+
+      // uuid v4
+      // https://regex101.com/ 正規表示法測試網址
+      // uuid v4 正規表示法 [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
+      // /^\/socket.io\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+      nitroApp.$socketIoServer
+        .of(/^\/socket.io\/room\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+        .once('connection', function (socket) {
+          console.log('/socket.io/room/[uuId] connection', { uuId });
+          console.log('a user connected', socket.id);
+
+          // socket.on('room', function (payload) {
+          //   console.log({ roomPayload: payload, uuId });
+
+          //   if (typeof uuId === 'string' && uuId !== '') {
+          //     nitroApp.$socketIoServer
+          //       .of(/^\/socket.io\/room\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+          //       .in(uuId)
+          //       .emit('room', { ...payload, uuId });
+          //   } else {
+          //     socket.emit('room', { ...payload, uuId });
+          //   }
+          // });
+
+          socket.on('ping', function (callback) {
+            callback();
+          });
+        });
+
       nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
       nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
     },
 
     async message(peer, message) {
-      // console.log('[ws-socket.io] Room WebSocket message', peer, message);
-      // console.log('[ws-socket.io] Room WebSocket message', message);
-      console.log('[ws-socket.io]  Room WebSocket peer.uuId', peer.uuId);
-      console.log('[ws-socket.io] Room WebSocket message.data.toString()', message.data.toString());
-
       const decodedMessage = await decodeSocketIOPayload(message.data.toString());
       console.log('[ws-socket.io] Room WebSocket decoded message', decodedMessage);
-
-      const nitroApp = useNitroApp();
-      if (typeof decodedMessage?.data?.[0] === 'string') {
-        // nitroApp.$socketIoServer.of('/socket.io/web-rtc').emit(decodedMessage.data[0], decodedMessage.data[1]);
-        nitroApp.$socketIoServer.of(`/socket.io/room/${peer.uuId}`).emit(decodedMessage.data[0], decodedMessage.data[1]);
-      }
     },
 
     close(peer) {
