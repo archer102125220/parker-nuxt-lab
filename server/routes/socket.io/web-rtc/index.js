@@ -21,22 +21,33 @@ export default defineEventHandler({
 
       const urlParts = (peer._internal.nodeReq.url || '').split('/');
       const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
-      const webRtcId = query?.webRtcId || '';
+      const queryWebRtcId = query?.webRtcId || '';
 
-      nitroApp.$socketIoServer.of('/socket.io/web-rtc')
+      nitroApp.$socketIoServer
+        .of('/socket.io/web-rtc')
         .once('connection', function (socket) {
+          let webRtcId = queryWebRtcId;
+
           console.log('/socket.io/web-rtc connection', { webRtcId });
           console.log('a user connected', socket.id);
 
-          if (typeof webRtcId === 'string' && webRtcId !== '') {
-            socket.join(webRtcId);
-          }
+          socket.on('webrtc-join', function (newWebRtcId) {
+            console.log({ newWebRtcId: newWebRtcId });
+
+            if (typeof newWebRtcId === 'string' && newWebRtcId !== '') {
+              webRtcId = newWebRtcId;
+              socket.join(newWebRtcId);
+            }
+          });
 
           socket.on('webrtc', function (payload) {
             console.log({ webrtcPayload: payload, webRtcId });
 
             if (typeof webRtcId === 'string' && webRtcId !== '') {
-              nitroApp.$socketIoServer.of('/socket.io/web-rtc').in(webRtcId).emit('webrtc', { ...payload, webRtcId });
+              nitroApp.$socketIoServer
+                .of('/socket.io/web-rtc')
+                .in(webRtcId)
+                .emit('webrtc', { ...payload, webRtcId });
             } else {
               socket.emit('webrtc', { ...payload, webRtcId });
             }

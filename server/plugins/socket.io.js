@@ -66,6 +66,37 @@ export default defineNitroPlugin((nitroApp) => {
   //   });
   // });
 
+  // io.of('/socket.io/web-rtc')
+  //   .on('connection', function (socket) {
+  //     let webRtcId = '???';
+  //     console.log('/socket.io/web-rtc connection', { webRtcId });
+  //     console.log('a user connected', socket.id);
+
+  //     socket.on('webrtc-join', function (newWebRtcId) {
+  //       console.log({ newWebRtcId: newWebRtcId });
+
+  //       if (typeof newWebRtcId === 'string' && newWebRtcId !== '') {
+  //         webRtcId = newWebRtcId;
+  //         socket.join(newWebRtcId);
+  //       }
+  //     });
+
+  //     socket.on('webrtc', function (payload) {
+  //       console.log({ webrtcPayload: payload, webRtcId });
+
+  //       if (typeof webRtcId === 'string' && webRtcId !== '') {
+  //         // socket.to(webRtcId).emit('webrtc', { ...payload, webRtcId });
+  //         io.of('/socket.io/web-rtc').in(webRtcId).emit('webrtc', { ...payload, webRtcId });
+  //       } else {
+  //         socket.emit('webrtc', { ...payload, webRtcId });
+  //       }
+  //     });
+
+  //     socket.on('ping', function (callback) {
+  //       callback();
+  //     });
+  //   });
+
   nitroApp.$socketEngine = engine;
   nitroApp.$socketIoServer = io;
   nitroApp.$socketIo = socketIo;

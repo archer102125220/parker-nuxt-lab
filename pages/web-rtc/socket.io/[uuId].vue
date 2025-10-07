@@ -57,9 +57,9 @@ const webRTC = useWebRTC({
     console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
     // socketIoClient.value.emit('webrtc', localIceCandidateEvent.candidate);
     if (localIceCandidateEvent.candidate) {
-      // 情況 1: 傳送新的 ICE 候選 (Candidate) 給對等端
       candidate.value = localIceCandidateEvent.candidate;
-
+    }
+    if (localIceCandidateEvent.localDescription) {
       localDescription.value = localIceCandidateEvent.localDescription;
     }
   },
@@ -104,6 +104,7 @@ const socketIoClient = useSocketIoClient(
       );
       console.log(`已成功設定遠端 ${webrtcPayload.localDescription?.type}。`);
     });
+    socketIo.emit('webrtc-join', route.params.uuId);
 
     socketIo.on('connect', () => {
       socketIoConnected.value = socketIo.connected;
