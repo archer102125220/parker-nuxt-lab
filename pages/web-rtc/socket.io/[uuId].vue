@@ -95,26 +95,32 @@ const webRTC = useWebRTC({
   }
 });
 const socketIoClient = useSocketIoClient(
-  { channel: `/web-rtc?webRtcId=${route.params.uuId}` },
+  { channel: '/web-rtc' },
   function (socketIo) {
+    socketIo.emit('webrtcJoin', route.params.uuId);
+
+    socketIo.on('webrtcJoined', function (webrtcJoinedPayload) {
+      console.log({ webrtcJoinedPayload });
+    });
+
     socketIo.on('webrtc', async function (webrtcPayload) {
       console.log({ webrtcPayload });
 
       // 檢查描述檔，避免重複設定
       if (
-        webRTC.value.localDescription?.type ===
-          webrtcPayload.description?.type ||
-        webRTC.value.remoteDescription?.type === webrtcPayload.description?.type
+        webRTC.value?.localDescription?.type ===
+          webrtcPayload?.description?.type ||
+        webRTC.value?.remoteDescription?.type ===
+          webrtcPayload?.description?.type
       ) {
         return;
       }
 
-      await webRTC.value.setRemoteDescription(
-        new RTCSessionDescription(webrtcPayload.description)
+      await webRTC.value?.setRemoteDescription(
+        new RTCSessionDescription(webrtcPayload?.description)
       );
-      console.log(`已成功設定遠端 ${webrtcPayload.description?.type}。`);
+      console.log(`已成功設定遠端 ${webrtcPayload?.description?.type}。`);
     });
-    socketIo.emit('webrtc-join', route.params.uuId);
 
     socketIo.on('connect', () => {
       socketIoConnected.value = socketIo.connected;
@@ -135,8 +141,6 @@ watch(
       typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
     ) {
-      console.log({ tracks: newStream.getTracks() });
-
       // 將本地視訊軌加入 RTCPeerConnection
       newStream.getTracks().forEach((track) => {
         console.log({ track });

@@ -72,7 +72,7 @@ export default defineNitroPlugin((nitroApp) => {
   //     console.log('/socket.io/web-rtc connection', { webRtcId });
   //     console.log('a user connected', socket.id);
 
-  //     socket.on('webrtc-join', function (newWebRtcId) {
+  //     socket.on('webrtcJoin', function (newWebRtcId) {
   //       console.log({ newWebRtcId: newWebRtcId });
 
   //       if (typeof newWebRtcId === 'string' && newWebRtcId !== '') {

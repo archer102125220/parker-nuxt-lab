@@ -31,13 +31,15 @@ export default defineEventHandler({
           console.log('/socket.io/web-rtc connection', { webRtcId });
           console.log('a user connected', socket.id);
 
-          socket.on('webrtc-join', function (newWebRtcId) {
-            console.log({ newWebRtcId: newWebRtcId });
+          socket.on('webrtcJoin', function (newWebRtcId) {
+            console.log({ newWebRtcId: newWebRtcId, ['socket.rooms.size']: socket.rooms.size });
 
             if (typeof newWebRtcId === 'string' && newWebRtcId !== '') {
               webRtcId = newWebRtcId;
               socket.join(newWebRtcId);
             }
+
+            socket.emit('webrtcJoined', { newWebRtcId, webRtcId, webRtcId, roomsSize: socket.rooms.size });
           });
 
           socket.on('webrtc', function (payload) {
@@ -49,7 +51,9 @@ export default defineEventHandler({
                 .in(webRtcId)
                 .emit('webrtc', { ...payload, webRtcId });
             } else {
-              socket.emit('webrtc', { ...payload, webRtcId });
+              nitroApp.$socketIoServer
+                .of('/socket.io/web-rtc')
+                .emit('webrtc', { ...payload, webRtcId });
             }
           });
 
@@ -63,9 +67,10 @@ export default defineEventHandler({
     },
 
     async message(peer, message) {
+      console.log('[ws-socket.io] WebRTC WebSocket message');
       // console.log('[ws-socket.io] WebRTC WebSocket message.data.toString()', message.data.toString());
-      const decodedMessage = await decodeSocketIOPayload(message.data.toString());
-      console.log('[ws-socket.io] WebRTC WebSocket decoded message', decodedMessage);
+      // const decodedMessage = await decodeSocketIOPayload(message.data.toString());
+      // console.log('[ws-socket.io] WebRTC WebSocket decoded message', decodedMessage);
     },
 
     close(peer) {
