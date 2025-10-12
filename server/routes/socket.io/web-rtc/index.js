@@ -31,34 +31,52 @@ export default defineEventHandler({
           console.log('/socket.io/web-rtc connection', { webRtcId });
           console.log('a user connected', socket.id);
 
-          socket.on('webrtcJoin', function (newWebRtcId) {
-            console.log({ newWebRtcId: newWebRtcId, ['socket.rooms.size']: socket.rooms.size });
-
+          socket.on('webrtcJoin', async function (newWebRtcId) {
             if (typeof newWebRtcId === 'string' && newWebRtcId !== '') {
               webRtcId = newWebRtcId;
               socket.join(newWebRtcId);
             }
 
-            socket.emit('webrtcJoined', { newWebRtcId, webRtcId, webRtcId, roomsSize: socket.rooms.size });
+            const socketsInRoom = await nitroApp.$socketIoServer
+              .of('/socket.io/web-rtc')
+              .in(webRtcId).allSockets();
+
+            const socketIdList = Array.from(socketsInRoom);
+            const isOffer = socketIdList.length <= 1;
+
+            socket.emit('webrtcJoined', {
+              newWebRtcId,
+              webRtcId,
+              socketIdCount: socketIdList.length,
+              isOffer
+            });
           });
 
-          socket.on('webrtc', function (payload) {
+          socket.on('webrtcDescription', function (payload) {
             console.log({ webrtcPayload: payload, webRtcId });
 
             if (typeof webRtcId === 'string' && webRtcId !== '') {
-              nitroApp.$socketIoServer
-                .of('/socket.io/web-rtc')
-                .in(webRtcId)
-                .emit('webrtc', { ...payload, webRtcId });
+              // nitroApp.$socketIoServer
+              //   .of('/socket.io/web-rtc')
+              //   .in(webRtcId)
+              //   .emit('webrtcDescription', { ...payload, webRtcId });
+              socket
+                .to(webRtcId)
+                .emit('webrtcDescription', { ...payload, webRtcId });
             } else {
-              nitroApp.$socketIoServer
-                .of('/socket.io/web-rtc')
-                .emit('webrtc', { ...payload, webRtcId });
+              // nitroApp.$socketIoServer
+              //   .of('/socket.io/web-rtc')
+              //   .emit('webrtcDescription', { ...payload, webRtcId });
+              socket
+                .emit('webrtcDescription', { ...payload, webRtcId });
             }
           });
 
           socket.on('ping', function (callback) {
-            callback();
+            console.log({ callback });
+            if (typeof callback === 'function') {
+              callback();
+            }
           });
         });
 
