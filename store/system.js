@@ -168,9 +168,12 @@ export const useSystemStore = defineStore('system', {
 
       // /MicroMessenger/i.test
       // https://gist.github.com/ShinChven/8aa1953e4a559230bab874dd4ebe3ee7
-      broswerInfo.isWechat = userAgent.includes('micromessenger');
-
-      if (userAgent.match(/edge\/([\d.]+)/)) {
+      // broswerInfo.isWechat = userAgent.includes('micromessenger');
+      if (userAgent.match(/MicroMessenger/i)) { // Android設備上疑似會有 Safari 字樣，因此獨立處理
+        broswerInfo.type = 'Wechat';
+        broswerInfo.version = 'N/A';
+        broswerInfo.isWechat = true;
+      } else if (userAgent.match(/edge\/([\d.]+)/)) {
         broswerInfo.type = 'Edge';
         broswerInfo.version = userAgent.match(/edge\/([\d.]+)/)[1];
         broswerInfo.isEdge = true;
