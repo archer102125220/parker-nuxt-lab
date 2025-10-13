@@ -5,6 +5,38 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 
 /**
+ * @openapi
+ * /google-oauth-verify:
+ *    post:
+ *      description: Google OAuth 驗證
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - accessToken
+ *              properties:
+ *                accessToken:
+ *                  type: string
+ *                  description: Google ID Token
+ *                  example: "google_id_token_here"
+ *      responses:
+ *        200:
+ *          description: 驗證是否成功
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: 驗證是否成功
+ *              example:
+ *                success: true
+ */
+/**
  * Google OAuth 驗證 API
  * 
  * 使用 Google Auth Library 驗證從前端傳入的 Google ID Token

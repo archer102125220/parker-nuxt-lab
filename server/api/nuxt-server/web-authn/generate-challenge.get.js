@@ -2,6 +2,21 @@ import { Base64 as base64Js } from 'js-base64';
 
 // 簽章驗證之部分找不到相關資料，因此此部分略過待完全依賴fido2-lib套件在實作驗證
 /**
+ * @openapi
+ * /nuxt-server/web-authn/generate-challenge:
+ *    get:
+ *      description: 生成 WebAuthn 挑戰
+ *      responses:
+ *        200:
+ *          description: Base64URL 編碼的挑戰值
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: string
+ *                description: Base64URL 編碼的挑戰值
+ *                example: "base64url_encoded_challenge_string"
+ */
+/**
  * WebAuthn 挑戰生成 API
  * 
  * 生成 WebAuthn 認證所需的隨機挑戰值

@@ -2,6 +2,72 @@ import swaggerJSDoc from 'swagger-jsdoc';
 
 // https://github.com/nuxt/nuxt/discussions/16165
 /**
+ * @openapi
+ * /nuxt-server/swagger-docs:
+ *    get:
+ *      description: 取得 Swagger API 文檔
+ *      responses:
+ *        200:
+ *          description: Swagger/OpenAPI 3.0 文檔物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  openapi:
+ *                    type: string
+ *                    description: OpenAPI 版本號
+ *                    example: "3.0.0"
+ *                  info:
+ *                    type: object
+ *                    description: API 基本資訊
+ *                    properties:
+ *                      title:
+ *                        type: string
+ *                        description: API 標題
+ *                        example: "TITLE"
+ *                      version:
+ *                        type: string
+ *                        description: API 版本
+ *                        example: "1.0.0"
+ *                  servers:
+ *                    type: array
+ *                    description: 伺服器資訊
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        url:
+ *                          type: string
+ *                          example: "/api"
+ *                  schemes:
+ *                    type: array
+ *                    description: 支援的協議
+ *                    items:
+ *                      type: string
+ *                      enum: ["http", "https"]
+ *                  components:
+ *                    type: object
+ *                    description: 組件定義
+ *                  paths:
+ *                    type: object
+ *                    description: API 路徑定義
+ *                    additionalProperties: true
+ *                  security:
+ *                    type: object
+ *                    description: 安全性定義
+ *              example:
+ *                openapi: "3.0.0"
+ *                info:
+ *                  title: "TITLE"
+ *                  version: "1.0.0"
+ *                servers:
+ *                  - url: "/api"
+ *                schemes: ["http", "https"]
+ *                paths:
+ *                  "/facebook-oauth-verify":
+ *                    post: {}
+ */
+/**
  * Swagger API 文檔生成 API
  * 
  * 動態生成專案的 Swagger/OpenAPI 3.0 文檔

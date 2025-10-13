@@ -3,6 +3,48 @@ import {
 } from '@/services/server/firebase-messaging';
 
 /**
+ * @openapi
+ * /nuxt-server/firebase-admin/register-push-notification-token:
+ *    post:
+ *      description: 註冊推播通知權杖
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - token
+ *                - os
+ *              properties:
+ *                token:
+ *                  type: string
+ *                  description: FCM 推播通知權杖
+ *                  example: "fcm_token_here"
+ *                os:
+ *                  type: string
+ *                  description: 作業系統平台
+ *                  enum: ["web", "android", "ios"]
+ *                  example: "web"
+ *      responses:
+ *        200:
+ *          description: 註冊結果物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: 註冊是否成功
+ *                  token:
+ *                    type: string
+ *                    description: 註冊的權杖
+ *              example:
+ *                success: true
+ *                token: "fcm_token_here"
+ */
+/**
  * 註冊推播通知權杖 API
  * 
  * 將客戶端的 FCM 推播通知權杖註冊到資料庫

@@ -1,4 +1,70 @@
 /**
+ * @openapi
+ * /nuxt-server/cookie:
+ *    post:
+ *      description: 設定 Cookie
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              additionalProperties:
+ *                type: string
+ *              properties:
+ *                __cookie_seting__:
+ *                  type: object
+ *                  description: Cookie 全域設定選項
+ *                  properties:
+ *                    httpOnly:
+ *                      type: boolean
+ *                      description: 是否僅 HTTP 可存取
+ *                      default: true
+ *                    secure:
+ *                      type: boolean
+ *                      description: 是否僅 HTTPS 傳輸
+ *                    domain:
+ *                      type: string
+ *                      description: Cookie 網域
+ *                    path:
+ *                      type: string
+ *                      description: Cookie 路徑
+ *                    maxAge:
+ *                      type: number
+ *                      description: Cookie 最大存活時間（秒）
+ *            example:
+ *              userId: "user123"
+ *              theme: "dark"
+ *              __cookie_seting__:
+ *                httpOnly: true
+ *                secure: true
+ *                maxAge: 86400
+ *      responses:
+ *        200:
+ *          description: Cookie 設定結果
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: 設定是否成功
+ *                  error:
+ *                    type: string
+ *                    description: 錯誤訊息（僅在失敗時出現）
+ *              examples:
+ *                success:
+ *                  summary: 設定成功
+ *                  value:
+ *                    success: true
+ *                failure:
+ *                  summary: 設定失敗
+ *                  value:
+ *                    success: false
+ *                    error: "Error message here"
+ */
+/**
  * 設定 Cookie API
  * 
  * 根據請求內容設定多個 Cookie

@@ -3,9 +3,96 @@ import { Fido2Lib } from 'fido2-lib';
 
 // import { fido2LibInitialize, getFido2Lib, fido2LibIsInitialized } from '@/utils/fido2-lib';
 
-// https://webauthn-open-source.github.io/fido2-lib/index.html
-
 // 前端透過 GET_fido2LibGenerateOption 呼叫這隻http get的api
+/**
+ * @openapi
+ * /nuxt-server/fido2-lib/generate-option:
+ *    get:
+ *      description: 生成 FIDO2 選項
+ *      parameters:
+ *        - in: query
+ *          name: isLogin
+ *          description: 是否為登入模式
+ *          schema:
+ *            type: boolean
+ *            default: false
+ *          example: false
+ *        - in: query
+ *          name: userId
+ *          description: 使用者 ID (註冊時需要)
+ *          schema:
+ *            type: string
+ *          example: "user123"
+ *        - in: query
+ *          name: userName
+ *          description: 使用者名稱 (註冊時需要)
+ *          schema:
+ *            type: string
+ *          example: "john"
+ *        - in: query
+ *          name: userDisplayName
+ *          description: 使用者顯示名稱 (註冊時需要)
+ *          schema:
+ *            type: string
+ *          example: "John Doe"
+ *      responses:
+ *        200:
+ *          description: FIDO2 選項物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  challenge:
+ *                    type: string
+ *                    description: Base64URL 編碼的挑戰值
+ *                  timeout:
+ *                    type: number
+ *                    description: 超時時間（毫秒）
+ *                  rpId:
+ *                    type: string
+ *                    description: 信賴方 ID
+ *                  rpName:
+ *                    type: string
+ *                    description: 信賴方名稱
+ *                  allowCredentials:
+ *                    type: array
+ *                    description: 允許的憑證清單（登入時）
+ *                    items:
+ *                      type: object
+ *                  user:
+ *                    type: object
+ *                    description: 使用者資訊（註冊時）
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        description: 使用者 ID
+ *                      name:
+ *                        type: string
+ *                        description: 使用者名稱
+ *                      displayName:
+ *                        type: string
+ *                        description: 使用者顯示名稱
+ *              examples:
+ *                registration:
+ *                  summary: 註冊模式成功回應
+ *                  value:
+ *                    challenge: "base64url_encoded_challenge"
+ *                    timeout: 60000
+ *                    rpId: "parker-nuxt-lab.vercel.app"
+ *                    rpName: "Nuxt Lab"
+ *                    user:
+ *                      id: "user123"
+ *                      name: "john"
+ *                      displayName: "John Doe"
+ *                login:
+ *                  summary: 登入模式成功回應
+ *                  value:
+ *                    challenge: "base64url_encoded_challenge"
+ *                    timeout: 60000
+ *                    rpId: "parker-nuxt-lab.vercel.app"
+ *                    allowCredentials: []
+ */
 /**
  * FIDO2 選項生成 API
  * 

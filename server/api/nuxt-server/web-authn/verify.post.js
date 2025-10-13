@@ -3,10 +3,128 @@ import { parseAuthenticatorData } from '@/utils/third-party/fido2-lib';
 
 // 簽章驗證之部分找不到相關資料，因此此部分略過待完全依賴fido2-lib套件在實作驗證
 
-// https://blog.techbridge.cc/2019/08/17/webauthn-intro
-// https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/
-// https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API#browser_compatibility
 // https://flyhigher.top/develop/2160.html#verify-authenticator
+/**
+ * @openapi
+ * /nuxt-server/web-authn/verify:
+ *    post:
+ *      description: WebAuthn 憑證驗證
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - challengeString
+ *                - credential
+ *                - base64URLServerSaveData
+ *                - userId
+ *              properties:
+ *                challengeString:
+ *                  type: string
+ *                  description: 挑戰字串
+ *                  example: "base64url_challenge"
+ *                credential:
+ *                  type: object
+ *                  description: WebAuthn 憑證物件
+ *                  required:
+ *                    - id
+ *                    - rawId
+ *                    - authenticatorAttachment
+ *                    - authenticatorData
+ *                    - clientDataJSON
+ *                    - userHandle
+ *                  properties:
+ *                    id:
+ *                      type: string
+ *                      description: 憑證 ID
+ *                      example: "credential_id"
+ *                    rawId:
+ *                      type: string
+ *                      description: Base64URL 編碼的原始憑證 ID
+ *                      example: "base64url_raw_id"
+ *                    authenticatorAttachment:
+ *                      type: string
+ *                      description: 認證器類型
+ *                      example: "platform"
+ *                    authenticatorData:
+ *                      type: string
+ *                      description: Base64URL 編碼的認證器資料
+ *                      example: "base64url_authenticator_data"
+ *                    clientDataJSON:
+ *                      type: string
+ *                      description: Base64URL 編碼的客戶端資料
+ *                      example: "base64url_client_data"
+ *                    userHandle:
+ *                      type: string
+ *                      description: Base64URL 編碼的使用者控制代碼
+ *                      example: "base64url_user_handle"
+ *                base64URLServerSaveData:
+ *                  type: object
+ *                  description: 伺服器儲存的憑證資料
+ *                  required:
+ *                    - credentialPublicKeyPem
+ *                  properties:
+ *                    credentialPublicKeyPem:
+ *                      type: string
+ *                      description: PEM 格式的公鑰
+ *                      example: "pem_encoded_public_key"
+ *                    credentialPublicKeyJwk:
+ *                      type: string
+ *                      description: JWK 格式的公鑰
+ *                      example: "jwk_encoded_public_key"
+ *                userId:
+ *                  type: string
+ *                  description: 使用者 ID
+ *                  example: "user123"
+ *      responses:
+ *        200:
+ *          description: 驗證結果物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  credential:
+ *                    type: object
+ *                    description: 憑證物件
+ *                  base64URLServerSaveDataCredentialPublicKeyPem:
+ *                    type: string
+ *                    description: PEM 格式的公鑰
+ *                  decodeClientDataObj:
+ *                    type: object
+ *                    description: 解析後的客戶端資料物件
+ *                    properties:
+ *                      type:
+ *                        type: string
+ *                        example: "webauthn.get"
+ *                      challenge:
+ *                        type: string
+ *                        example: "base64url_challenge"
+ *                      origin:
+ *                        type: string
+ *                        example: "https://example.com"
+ *                  success:
+ *                    type: boolean
+ *                    description: 驗證是否成功
+ *                  userHandle:
+ *                    type: string
+ *                    description: 使用者控制代碼
+ *        401:
+ *          description: 驗證失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 401
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "clientData.type error"
+ */
 /**
  * WebAuthn 憑證驗證 API
  * 

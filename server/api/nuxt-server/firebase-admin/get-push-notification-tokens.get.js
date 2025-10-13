@@ -1,6 +1,97 @@
 import { messagingFindAllToken } from '@/services/server/firebase-messaging';
 
 /**
+ * @openapi
+ * /nuxt-server/firebase-admin/get-push-notification-tokens:
+ *    get:
+ *      description: 取得推播通知權杖
+ *      parameters:
+ *        - in: query
+ *          name: os
+ *          description: 作業系統平台篩選
+ *          schema:
+ *            type: string
+ *            enum: ["web", "android", "ios"]
+ *          example: "web"
+ *      responses:
+ *        200:
+ *          description: 權杖清單物件或單一平台權杖清單
+ *          content:
+ *            application/json:
+ *              schema:
+ *                oneOf:
+ *                  - type: object
+ *                    description: 所有平台權杖清單物件（無 os 參數時）
+ *                    properties:
+ *                      webTokenList:
+ *                        type: array
+ *                        description: Web 平台權杖清單
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            id:
+ *                              type: number
+ *                              description: 權杖在資料庫中的唯一識別碼
+ *                            token:
+ *                              type: string
+ *                              description: FCM 推播通知權杖
+ *                            os:
+ *                              type: string
+ *                              description: 作業系統平台標識
+ *                      androidTokenList:
+ *                        type: array
+ *                        description: Android 平台權杖清單
+ *                        items:
+ *                          type: object
+ *                      iosTokenList:
+ *                        type: array
+ *                        description: iOS 平台權杖清單
+ *                        items:
+ *                          type: object
+ *                  - type: array
+ *                    description: 單一平台權杖清單（指定 os 參數時）
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        id:
+ *                          type: number
+ *                          description: 權杖在資料庫中的唯一識別碼
+ *                        token:
+ *                          type: string
+ *                          description: FCM 推播通知權杖
+ *                        os:
+ *                          type: string
+ *                          description: 作業系統平台標識
+ *              examples:
+ *                allPlatforms:
+ *                  summary: 所有平台權杖清單
+ *                  value:
+ *                    webTokenList:
+ *                      - id: 1
+ *                        token: "web_token_1"
+ *                        os: "web"
+ *                      - id: 2
+ *                        token: "web_token_2"
+ *                        os: "web"
+ *                    androidTokenList:
+ *                      - id: 3
+ *                        token: "android_token_1"
+ *                        os: "android"
+ *                    iosTokenList:
+ *                      - id: 4
+ *                        token: "ios_token_1"
+ *                        os: "ios"
+ *                singlePlatform:
+ *                  summary: 單一平台權杖清單
+ *                  value:
+ *                    - id: 1
+ *                      token: "web_token_1"
+ *                      os: "web"
+ *                    - id: 2
+ *                      token: "web_token_2"
+ *                      os: "web"
+ */
+/**
  * 取得推播通知權杖 API
  * 
  * 查詢並回傳所有平台的 FCM 推播通知權杖

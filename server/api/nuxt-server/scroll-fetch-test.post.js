@@ -1,4 +1,61 @@
 /**
+ * @openapi
+ * /nuxt-server/scroll-fetch-test:
+ *    post:
+ *      description: 滾動載入測試
+ *      parameters:
+ *        - in: query
+ *          name: page
+ *          description: 頁面編號
+ *          schema:
+ *            type: integer
+ *            default: 1
+ *          example: 2
+ *        - in: query
+ *          name: limit
+ *          description: 每頁資料數量
+ *          schema:
+ *            type: integer
+ *            default: 10
+ *          example: 15
+ *      requestBody:
+ *        required: false
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              additionalProperties: true
+ *              description: 任意請求體資料，如篩選條件等
+ *            example:
+ *              filter:
+ *                category: "news"
+ *                date: "2024-01-01"
+ *      responses:
+ *        200:
+ *          description: 滾動載入測試結果
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  query:
+ *                    type: object
+ *                    additionalProperties: true
+ *                    description: 查詢參數物件
+ *                  payload:
+ *                    type: object
+ *                    additionalProperties: true
+ *                    description: 請求體資料物件
+ *              example:
+ *                query:
+ *                  page: "2"
+ *                  limit: "15"
+ *                payload:
+ *                  filter:
+ *                    category: "news"
+ *                    date: "2024-01-01"
+ */
+/**
  * 滾動載入測試 API (POST)
  * 
  * 用於測試前端滾動載入功能的 POST 端點

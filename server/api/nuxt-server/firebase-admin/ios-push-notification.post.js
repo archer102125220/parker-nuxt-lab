@@ -1,6 +1,85 @@
 import firebaseAdmin from 'firebase-admin';
 
 /**
+ * @openapi
+ * /nuxt-server/firebase-admin/ios-push-notification:
+ *    post:
+ *      description: iOS 推播通知
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - data
+ *                - token
+ *              properties:
+ *                data:
+ *                  type: string
+ *                  description: 推播訊息內容
+ *                  example: "您有新的訊息"
+ *                title:
+ *                  type: string
+ *                  description: 推播訊息標題
+ *                  example: "通知標題"
+ *                img:
+ *                  type: string
+ *                  description: 推播訊息圖片 URL
+ *                  example: "https://example.com/image.jpg"
+ *                token:
+ *                  type: array
+ *                  description: iOS 裝置的 FCM 權杖陣列
+ *                  items:
+ *                    type: string
+ *                  example: ["ios_token_1", "ios_token_2"]
+ *      responses:
+ *        200:
+ *          description: FCM 回應物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  successCount:
+ *                    type: number
+ *                    description: 成功發送的數量
+ *                  failureCount:
+ *                    type: number
+ *                    description: 發送失敗的數量
+ *                  responses:
+ *                    type: array
+ *                    description: 個別發送結果陣列
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        success:
+ *                          type: boolean
+ *                        messageId:
+ *                          type: string
+ *              example:
+ *                successCount: 2
+ *                failureCount: 0
+ *                responses:
+ *                  - success: true
+ *                    messageId: "message_id_1"
+ *                  - success: true
+ *                    messageId: "message_id_2"
+ *        500:
+ *          description: 發送失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 500
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Missing parameter: data"
+ */
+/**
  * iOS 推播通知 API
  * 
  * 發送推播通知到 iOS 裝置

@@ -1,4 +1,40 @@
 /**
+ * @openapi
+ * /nuxt-server/about-content:
+ *    get:
+ *      description: 取得關於頁面內容
+ *      responses:
+ *        200:
+ *          description: 關於頁面內容陣列
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    title:
+ *                      type: string
+ *                      description: 區塊標題
+ *                    description:
+ *                      type: array
+ *                      description: 區塊描述文字陣列
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          isDel:
+ *                            type: boolean
+ *                            description: 是否為刪除線文字
+ *                          text:
+ *                            type: string
+ *                            description: 描述文字內容
+ *                    listItemList:
+ *                      type: array
+ *                      description: 列表項目陣列
+ *                      items:
+ *                        type: string
+ */
+/**
  * 關於頁面內容資料
  * 
  * 包含專案介紹、技術棧、測試項目等相關資訊

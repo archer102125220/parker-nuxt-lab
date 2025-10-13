@@ -4,30 +4,64 @@ import { request } from '@/utils/request';
 // const CLIENT_SECRET = import.meta.env.VITE_LINE_CLIENT_SECRET;
 // const CALLBACK_URI = import.meta.env.VITE_LINE_CALLBACK_URI;
 
-
 /**
  * @openapi
  * /line-oauth-verify:
  *    post:
  *      description: LINE OAuth 驗證
- *      parameters:
- *        - in: body
- *          name: accessToken
- *          description: accessToken LINE 存取權杖
- *          schema: 
- *            type: string
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - accessToken
+ *              properties:
+ *                accessToken:
+ *                  type: string
+ *                  description: LINE 存取權杖
+ *                  example: "line_access_token_here"
  *      responses:
  *        200:
- *          description: success 驗證是否成功
+ *          description: 驗證是否成功
  *          content:
  *            application/json:
  *              schema:
  *                type: object
  *                properties:
- *                    success:
- *                      type: boolean
- *                      description: 驗證是否成功
- *            
+ *                  success:
+ *                    type: boolean
+ *                    description: 驗證是否成功
+ *                    example: true
+ *              example:
+ *                success: true
+ *        401:
+ *          description: 驗證失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 401
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Invalid access token"
+ *        500:
+ *          description: 伺服器內部錯誤
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 500
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Internal server error"
  */
 /**
  * LINE OAuth 驗證 API

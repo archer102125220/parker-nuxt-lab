@@ -1,4 +1,34 @@
 /**
+ * @openapi
+ * /nuxt-server/cookie:
+ *    get:
+ *      description: 取得 Cookie 資訊
+ *      responses:
+ *        200:
+ *          description: Cookie 物件，鍵值對形式
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                additionalProperties:
+ *                  type: string
+ *                description: Cookie 鍵值對物件
+ *                example:
+ *                  sessionId: "abc123"
+ *                  userId: "user456"
+ *                  theme: "dark"
+ *        500:
+ *          description: 解析 Cookie 失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    description: 錯誤訊息
+ */
+/**
  * 取得 Cookie 資訊 API
  * 
  * 解析並回傳請求中的所有 Cookie 資訊

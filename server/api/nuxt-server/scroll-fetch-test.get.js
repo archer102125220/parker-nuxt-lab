@@ -1,4 +1,41 @@
 /**
+ * @openapi
+ * /nuxt-server/scroll-fetch-test:
+ *    get:
+ *      description: 滾動載入測試
+ *      parameters:
+ *        - in: query
+ *          name: page
+ *          description: 頁面編號
+ *          schema:
+ *            type: integer
+ *            default: 1
+ *          example: 1
+ *        - in: query
+ *          name: limit
+ *          description: 每頁資料數量
+ *          schema:
+ *            type: integer
+ *            default: 10
+ *          example: 20
+ *      responses:
+ *        200:
+ *          description: 滾動載入測試結果
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  query:
+ *                    type: object
+ *                    additionalProperties: true
+ *                    description: 查詢參數物件
+ *              example:
+ *                query:
+ *                  page: "1"
+ *                  limit: "20"
+ */
+/**
  * 滾動載入測試 API (GET)
  * 
  * 用於測試前端滾動載入功能的 GET 端點

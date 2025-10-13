@@ -4,10 +4,116 @@ import fido2Lib from 'fido2-lib';
 
 // 簽章驗證之部分找不到相關資料，因此此部分略過待完全依賴fido2-lib套件在實作驗證
 
-// https://blog.techbridge.cc/2019/08/17/webauthn-intro
-// https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/
-// https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API#browser_compatibility
 // https://flyhigher.top/develop/2160.html#verify-authenticator
+/**
+ * @openapi
+ * /nuxt-server/web-authn/registration:
+ *    post:
+ *      description: WebAuthn 憑證註冊
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - challengeString
+ *                - credential
+ *              properties:
+ *                challengeString:
+ *                  type: string
+ *                  description: 挑戰字串
+ *                  example: "base64url_challenge"
+ *                credential:
+ *                  type: object
+ *                  description: WebAuthn 憑證物件
+ *                  required:
+ *                    - id
+ *                    - rawId
+ *                    - type
+ *                    - response
+ *                  properties:
+ *                    id:
+ *                      type: string
+ *                      description: 憑證 ID
+ *                      example: "credential_id"
+ *                    rawId:
+ *                      type: string
+ *                      description: Base64URL 編碼的原始憑證 ID
+ *                      example: "base64url_raw_id"
+ *                    type:
+ *                      type: string
+ *                      description: 憑證類型
+ *                      example: "public-key"
+ *                    response:
+ *                      type: object
+ *                      description: 憑證回應物件
+ *                      required:
+ *                        - attestationObject
+ *                        - clientDataJSON
+ *                      properties:
+ *                        attestationObject:
+ *                          type: string
+ *                          description: Base64URL 編碼的證明物件
+ *                          example: "base64url_attestation_object"
+ *                        clientDataJSON:
+ *                          type: string
+ *                          description: Base64URL 編碼的客戶端資料
+ *                          example: "base64url_client_data"
+ *      responses:
+ *        200:
+ *          description: 註冊結果物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  credential:
+ *                    type: object
+ *                    description: 憑證物件
+ *                  decodeClientDataObj:
+ *                    type: object
+ *                    description: 解析後的客戶端資料物件
+ *                    properties:
+ *                      type:
+ *                        type: string
+ *                        example: "webauthn.create"
+ *                      challenge:
+ *                        type: string
+ *                        example: "base64url_challenge"
+ *                      origin:
+ *                        type: string
+ *                        example: "https://example.com"
+ *                  success:
+ *                    type: boolean
+ *                    description: 註冊是否成功
+ *                  base64URLServerSaveData:
+ *                    type: object
+ *                    description: 伺服器儲存資料
+ *                    properties:
+ *                      credentialId:
+ *                        type: string
+ *                        description: 憑證 ID
+ *                      credentialPublicKeyPem:
+ *                        type: string
+ *                        description: PEM 格式的公鑰
+ *                      credentialPublicKeyJwk:
+ *                        type: string
+ *                        description: JWK 格式的公鑰
+ *        401:
+ *          description: 註冊失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 401
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "clientData.type error"
+ */
 /**
  * WebAuthn 憑證註冊 API
  * 

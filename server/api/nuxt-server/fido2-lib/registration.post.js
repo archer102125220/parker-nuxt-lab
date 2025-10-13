@@ -1,9 +1,149 @@
 import { Base64 as base64Js } from 'js-base64';
 import { Fido2Lib } from 'fido2-lib';
 
-// https://webauthn-open-source.github.io/fido2-lib/index.html
-
 // 前端透過 POST_fido2LibRegistration 呼叫這隻http post的api
+/**
+ * @openapi
+ * /nuxt-server/fido2-lib/registration:
+ *    post:
+ *      description: FIDO2 憑證註冊
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - challengeString
+ *                - credential
+ *                - user
+ *              properties:
+ *                challengeString:
+ *                  type: string
+ *                  description: 挑戰字串
+ *                  example: "base64url_challenge"
+ *                credential:
+ *                  type: object
+ *                  description: WebAuthn 憑證物件
+ *                  required:
+ *                    - id
+ *                    - rawId
+ *                    - type
+ *                    - response
+ *                  properties:
+ *                    id:
+ *                      type: string
+ *                      description: 憑證 ID
+ *                      example: "credential_id"
+ *                    rawId:
+ *                      type: string
+ *                      description: Base64URL 編碼的原始憑證 ID
+ *                      example: "base64url_raw_id"
+ *                    type:
+ *                      type: string
+ *                      description: 憑證類型
+ *                      example: "public-key"
+ *                    response:
+ *                      type: object
+ *                      description: 憑證回應物件
+ *                      required:
+ *                        - attestationObject
+ *                        - authenticatorData
+ *                        - clientDataJSON
+ *                        - publicKey
+ *                      properties:
+ *                        attestationObject:
+ *                          type: string
+ *                          description: Base64URL 編碼的證明物件
+ *                          example: "base64url_attestation_object"
+ *                        authenticatorData:
+ *                          type: string
+ *                          description: Base64URL 編碼的認證器資料
+ *                          example: "base64url_authenticator_data"
+ *                        clientDataJSON:
+ *                          type: string
+ *                          description: Base64URL 編碼的客戶端資料
+ *                          example: "base64url_client_data"
+ *                        publicKey:
+ *                          type: string
+ *                          description: Base64URL 編碼的公鑰
+ *                          example: "base64url_public_key"
+ *                user:
+ *                  type: object
+ *                  description: 使用者資訊
+ *                  required:
+ *                    - id
+ *                  properties:
+ *                    id:
+ *                      type: string
+ *                      description: 使用者 ID
+ *                      example: "user123"
+ *      responses:
+ *        200:
+ *          description: 註冊結果物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  credential:
+ *                    type: object
+ *                    description: 憑證物件
+ *                  attestationResult:
+ *                    type: object
+ *                    description: 證明結果物件
+ *                    properties:
+ *                      audit:
+ *                        type: object
+ *                        description: 審計資訊
+ *                      requiredExpectations:
+ *                        type: array
+ *                        description: 必要期望值陣列
+ *                      optionalExpectations:
+ *                        type: array
+ *                        description: 可選期望值陣列
+ *                      expectations:
+ *                        type: object
+ *                        description: 期望值物件
+ *                      request:
+ *                        type: object
+ *                        description: 請求物件
+ *                      clientData:
+ *                        type: object
+ *                        description: 客戶端資料物件
+ *                      authnrData:
+ *                        type: object
+ *                        description: 認證器資料物件
+ *                  base64URLServerSaveData:
+ *                    type: object
+ *                    description: 伺服器儲存資料
+ *                    properties:
+ *                      resultId:
+ *                        type: string
+ *                        description: 結果 ID
+ *                      credentialPublicKeyPem:
+ *                        type: string
+ *                        description: PEM 格式的公鑰
+ *                      userId:
+ *                        type: string
+ *                        description: 使用者 ID
+ *                      counter:
+ *                        type: number
+ *                        description: 計數器值
+ *        401:
+ *          description: 註冊失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 401
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Attestation validation failed"
+ */
 /**
  * FIDO2 憑證註冊 API
  * 

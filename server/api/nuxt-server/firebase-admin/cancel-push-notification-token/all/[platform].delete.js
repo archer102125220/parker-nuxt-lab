@@ -4,6 +4,38 @@ import {
 } from '@/services/server/firebase-messaging';
 
 /**
+ * @openapi
+ * /nuxt-server/firebase-admin/cancel-push-notification-token/all/{platform}:
+ *    delete:
+ *      description: 取消平台所有推播通知權杖
+ *      parameters:
+ *        - in: path
+ *          name: platform
+ *          required: true
+ *          description: 作業系統平台
+ *          schema:
+ *            type: string
+ *            enum: ["web", "android", "ios"]
+ *          example: "web"
+ *      responses:
+ *        200:
+ *          description: 取消結果物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: 取消是否成功
+ *                  platform:
+ *                    type: string
+ *                    description: 被清理的平台
+ *              example:
+ *                success: true
+ *                platform: "web"
+ */
+/**
  * 取消平台所有推播通知權杖 API
  * 
  * 從資料庫中移除指定平台的所有 FCM 推播通知權杖

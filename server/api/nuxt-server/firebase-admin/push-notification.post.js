@@ -5,6 +5,80 @@ import {
 } from '@/services/server/firebase-messaging';
 
 /**
+ * @openapi
+ * /nuxt-server/firebase-admin/push-notification:
+ *    post:
+ *      description: 全平台推播通知
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - data
+ *              properties:
+ *                data:
+ *                  type: string
+ *                  description: 推播訊息內容
+ *                  example: "您有新的訊息"
+ *                title:
+ *                  type: string
+ *                  description: 推播訊息標題
+ *                  example: "通知標題"
+ *                img:
+ *                  type: string
+ *                  description: 推播訊息圖片 URL
+ *                  example: "https://example.com/image.jpg"
+ *      responses:
+ *        200:
+ *          description: 推播結果統計物件
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  successCount:
+ *                    type: number
+ *                    description: 總成功發送數量
+ *                  failureCount:
+ *                    type: number
+ *                    description: 總發送失敗數量
+ *                  responses:
+ *                    type: array
+ *                    description: 所有發送結果陣列
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        success:
+ *                          type: boolean
+ *                        messageId:
+ *                          type: string
+ *                        error:
+ *                          type: string
+ *              example:
+ *                successCount: 5
+ *                failureCount: 1
+ *                responses:
+ *                  - success: true
+ *                    messageId: "message_id_1"
+ *                  - success: false
+ *                    error: "Invalid token"
+ *        500:
+ *          description: 發送失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 500
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Missing parameter: data"
+ */
+/**
  * 全平台推播通知 API
  * 
  * 發送推播通知到所有平台 (Web、Android、iOS)

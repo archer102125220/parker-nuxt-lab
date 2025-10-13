@@ -7,23 +7,59 @@ const APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
  * /facebook-oauth-verify:
  *    post:
  *      description: Facebook OAuth 驗證
- *      parameters:
- *        - in: body
- *          name: accessToken
- *          description: accessToken Facebook 存取權杖
- *          schema: 
- *            type: string
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - accessToken
+ *              properties:
+ *                accessToken:
+ *                  type: string
+ *                  description: Facebook 存取權杖
+ *                  example: "facebook_access_token_here"
  *      responses:
  *        200:
- *          description: success 驗證是否成功
+ *          description: 驗證是否成功
  *          content:
  *            application/json:
  *              schema:
  *                type: object
  *                properties:
- *                    success:
- *                      type: boolean
- *                      description: 驗證是否成功
+ *                  success:
+ *                    type: boolean
+ *                    description: 驗證是否成功
+ *                    example: true
+ *              example:
+ *                success: true
+ *        401:
+ *          description: 驗證失敗時的錯誤資訊
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 401
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Invalid access token"
+ *        500:
+ *          description: 伺服器內部錯誤
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  statusCode:
+ *                    type: number
+ *                    example: 500
+ *                  statusMessage:
+ *                    type: string
+ *                    example: "Internal server error"
  */
 /**
  * Facebook OAuth 驗證 API
