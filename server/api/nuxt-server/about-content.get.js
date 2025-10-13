@@ -1,3 +1,9 @@
+/**
+ * 關於頁面內容資料
+ * 
+ * 包含專案介紹、技術棧、測試項目等相關資訊
+ * 用於動態生成關於頁面的內容結構
+ */
 const ABOUT_CONTENT_DATA = [
   {
     title: '專案目的',
@@ -60,6 +66,45 @@ const ABOUT_CONTENT_DATA = [
   }
 ];
 
+/**
+ * 取得關於頁面內容 API
+ * 
+ * 回傳關於頁面的靜態內容資料，包含專案介紹、技術棧、
+ * 測試項目等資訊。模擬延遲回應以測試前端載入狀態。
+ * 
+ * @api {GET} /api/nuxt-server/about-content 取得關於頁面內容
+ * @apiGroup Content
+ * @apiName GetAboutContent
+ * 
+ * @apiSuccess {Array} data 關於頁面內容陣列
+ * @apiSuccess {String} data[].title 區塊標題
+ * @apiSuccess {Array} [data[].description] 區塊描述文字陣列
+ * @apiSuccess {Boolean} data[].description[].isDel 是否為刪除線文字
+ * @apiSuccess {String} data[].description[].text 描述文字內容
+ * @apiSuccess {Array} [data[].listItemList] 列表項目陣列
+ * 
+ * @example
+ * // 請求範例
+ * GET /api/nuxt-server/about-content
+ * 
+ * @example
+ * // 成功回應範例
+ * [
+ *   {
+ *     "title": "專案目的",
+ *     "description": [
+ *       { "isDel": false, "text": "這是一個用於測試和實驗的專案" }
+ *     ],
+ *     "listItemList": [
+ *       "客製化 Vue 組件的開發與測試",
+ *       "Nuxt3 框架的相關套件整合與應用"
+ *     ]
+ *   }
+ * ]
+ * 
+ * @description
+ * 此 API 模擬 1 秒的延遲回應，用於測試前端的載入狀態處理
+ */
 export default defineEventHandler(() => {
   return new Promise((resolve) => {
     setTimeout(() => {

@@ -4,6 +4,86 @@ import { Fido2Lib } from 'fido2-lib';
 // https://webauthn-open-source.github.io/fido2-lib/index.html
 
 // 前端透過 POST_fido2LibVerify 呼叫這隻http post的api
+/**
+ * FIDO2 憑證驗證 API
+ * 
+ * 驗證 FIDO2/WebAuthn 登入請求
+ * 使用已儲存的憑證資料驗證使用者的身份
+ * 
+ * @api {POST} /api/nuxt-server/fido2-lib/verify FIDO2 憑證驗證
+ * @apiGroup FIDO2
+ * @apiName Fido2Verify
+ * 
+ * @apiBody {String} challengeString 挑戰字串
+ * @apiBody {Object} credential WebAuthn 憑證物件
+ * @apiBody {String} credential.id 憑證 ID
+ * @apiBody {String} credential.rawId Base64URL 編碼的原始憑證 ID
+ * @apiBody {String} credential.type 憑證類型
+ * @apiBody {Object} credential.response 憑證回應物件
+ * @apiBody {String} credential.response.authenticatorData Base64URL 編碼的認證器資料
+ * @apiBody {String} credential.response.clientDataJSON Base64URL 編碼的客戶端資料
+ * @apiBody {String} credential.response.signature Base64URL 編碼的簽章
+ * @apiBody {String} credential.response.userHandle Base64URL 編碼的使用者控制代碼
+ * @apiBody {Object} base64URLServerSaveData 伺服器儲存的憑證資料
+ * @apiBody {String} base64URLServerSaveData.credentialPublicKeyPem PEM 格式的公鑰
+ * @apiBody {String} base64URLServerSaveData.userId 使用者 ID
+ * @apiBody {Number} base64URLServerSaveData.counter 計數器值
+ * 
+ * @apiSuccess {Object} data 驗證結果物件
+ * @apiSuccess {String} data.credential.id 憑證 ID
+ * @apiBody {Object} data.assertionResult 斷言結果物件
+ * 
+ * @apiError {Object} error 驗證失敗時的錯誤資訊
+ * @apiError {Number} error.statusCode=401 HTTP 狀態碼
+ * @apiError {String} error.statusMessage 錯誤訊息
+ * 
+ * @example
+ * // 請求範例
+ * POST /api/nuxt-server/fido2-lib/verify
+ * Content-Type: application/json
+ * {
+ *   "challengeString": "base64url_challenge",
+ *   "credential": {
+ *     "id": "credential_id",
+ *     "rawId": "base64url_raw_id",
+ *     "type": "public-key",
+ *     "response": {
+ *       "authenticatorData": "base64url_authenticator_data",
+ *       "clientDataJSON": "base64url_client_data",
+ *       "signature": "base64url_signature",
+ *       "userHandle": "base64url_user_handle"
+ *     }
+ *   },
+ *   "base64URLServerSaveData": {
+ *     "credentialPublicKeyPem": "pem_encoded_public_key",
+ *     "userId": "user123",
+ *     "counter": 1
+ *   }
+ * }
+ * 
+ * @example
+ * // 成功回應範例
+ * {
+ *   "credential": { ... },
+ *   "assertionResult": { ... }
+ * }
+ * 
+ * @description
+ * 此 API 處理 FIDO2/WebAuthn 登入驗證流程：
+ * 
+ * 1. 驗證憑證資料的完整性和有效性
+ * 2. 使用伺服器儲存的公鑰驗證簽章
+ * 3. 驗證挑戰值是否正確
+ * 4. 檢查計數器值防止重放攻擊
+ * 5. 驗證使用者控制代碼
+ * 
+ * 重要注意事項：
+ * - 需要從資料庫取得對應的憑證資料 (base64URLServerSaveData)
+ * - 驗證成功後應更新計數器值
+ * - 支援跨平台和平台認證器
+ * 
+ * @see {@link https://webauthn-open-source.github.io/fido2-lib/index.html FIDO2-Lib 文檔}
+ */
 export default defineEventHandler(async (event) => {
   const payload = await readBody(event);
   const challengeString = payload.challengeString || '';
