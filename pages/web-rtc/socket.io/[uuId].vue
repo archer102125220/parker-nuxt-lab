@@ -48,20 +48,6 @@ const remoteStream = ref(null);
 const socketIoConnected = ref(false);
 const candidate = ref(null);
 const localDescription = ref(null);
-const sendWebrtcDescription = computed(() => {
-  console.log({
-    candidate: candidate.value,
-    description: localDescription.value
-  });
-  if (candidate.value === null || localDescription.value === null) {
-    return null;
-  }
-
-  return {
-    candidate: candidate.value,
-    description: localDescription.value
-  };
-});
 const offer = ref(null);
 const answer = ref(null);
 
@@ -71,10 +57,10 @@ const isAnswer = ref(false);
 
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC({
-  iceCandidate(localIceCandidateEvent) {
-    console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
-    if (localIceCandidateEvent.candidate) {
-      candidate.value = localIceCandidateEvent.candidate;
+  iceCandidate(iceCandidateEvent) {
+    // console.log('onIceCandidate => ', iceCandidateEvent.candidate);
+    if (iceCandidateEvent.candidate) {
+      candidate.value = iceCandidateEvent.candidate;
     }
     if (
       typeof webRTC.value?.localDescription === 'object' &&
@@ -83,16 +69,16 @@ const webRTC = useWebRTC({
       localDescription.value = webRTC.value.localDescription;
     }
   },
-  iceconnectionStateChange(localIceconnectionStateChangeEvent) {
-    console.log({ localIceconnectionStateChangeEvent });
-    console.log(
-      'ICE 伺服器狀態變更 => ',
-      localIceconnectionStateChangeEvent.target.iceConnectionState
-    );
-  },
-  track(localTrackEvent) {
-    const streamList = Array.isArray(localTrackEvent.streams)
-      ? localTrackEvent.streams
+  // iceconnectionStateChange(iceconnectionStateChangeEvent) {
+  //   console.log({ iceconnectionStateChangeEvent });
+  //   console.log(
+  //     'ICE 伺服器狀態變更 => ',
+  //     iceconnectionStateChangeEvent.target.iceConnectionState
+  //   );
+  // },
+  track(trackEvent) {
+    const streamList = Array.isArray(trackEvent.streams)
+      ? trackEvent.streams
       : [];
 
     const newRemoteStream = streamList.find(
@@ -152,37 +138,27 @@ const socketIoClient = useSocketIoClient(
       watch: false
     },
     webrtcDescription: {
-      value: () => sendWebrtcDescription.value,
+      value: () => ({
+        candidate: candidate.value,
+        description: localDescription.value
+      }),
       watch: true
     }
   }
 );
 
 watch(
-  () => [streamObj.value, webRTC.value, localStreamAdded.value],
-  async ([newStream, newWebRTC, newLocalStreamAdded]) => {
-    console.log({
-      newStream,
-      newWebRTC,
-      newLocalStreamAdded,
-      ['isOffer.value']: isOffer.value
-    });
-
+  () => [streamObj.value, webRTC.value],
+  async ([newStream, newWebRTC]) => {
     if (
-      newLocalStreamAdded === false &&
+      localStreamAdded.value === false &&
       typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
     ) {
       // 將本地視訊軌加入 RTCPeerConnection
       newStream.getTracks().forEach((track) => {
-        console.log({ track });
         newWebRTC.addTrack(track, newStream);
       });
-
-      // 考慮到實際執行流程，應該重新思考設置時機
-      // const newOffer = await newWebRTC.createOffer();
-      // console.log({ offer: newOffer });
-      // await newWebRTC.setLocalDescription(newOffer);
 
       localStreamAdded.value = true;
     }
@@ -190,24 +166,21 @@ watch(
   { deep: true }
 );
 watch(
-  () => [webRTC.value, isOffer.value, isAnswer.value],
-  async ([newWebRTC, newIsOffer, newIsAnswer]) => {
-    console.log({ newWebRTC, newIsOffer, newIsAnswer });
+  () => [localStreamAdded.value, isOffer.value, isAnswer.value],
+  async ([newLocalStreamAdded, newIsOffer, newIsAnswer]) => {
+    if (newLocalStreamAdded === false) return;
+
     try {
       if (newIsOffer === true) {
-        const newOffer = await newWebRTC.createOffer();
-        console.log({ offer: newOffer });
-        await newWebRTC.setLocalDescription(newOffer);
-        console.log({ newWebRTC });
+        const newOffer = await webRTC.value.createOffer();
+        await webRTC.value.setLocalDescription(newOffer);
         isOffer.value = false;
       }
       if (newIsAnswer === true) {
-        const newAnswer = await newWebRTC.createAnswer();
-        console.log({ answer: newAnswer });
-        await newWebRTC.setLocalDescription(newAnswer);
+        const newAnswer = await webRTC.value.createAnswer();
+        await newWewebRTC.valuebRTC.setLocalDescription(newAnswer);
         isAnswer.value = false;
       }
-      console.log({ newWebRTC });
     } catch (error) {
       console.error(error);
     }
