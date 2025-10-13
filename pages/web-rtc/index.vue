@@ -1,5 +1,6 @@
 <template>
   <section class="web_rtc_page">
+    <p>目前尚未完成</p>
     <p class="web_rtc_page-description">WebRTC的實作測試，主要分爲：</p>
 
     <nav class="web_rtc_page-content">
