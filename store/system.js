@@ -147,15 +147,17 @@ export const useSystemStore = defineStore('system', {
         isIos: false,
         isIphone: false,
         isIpad: false,
-        isStandalone: false,
+        isStandalone: false, // 判斷是否為ios書籤
         isDesktop: false,
-        isWeiXin: false, // 微信瀏覽器
+        isWechat: false, // 微信瀏覽器
         notBroswer: typeof window === 'undefined',
+        userAgent: '',
       };
       if (typeof window === 'undefined') {
         return broswerInfo;
       }
-      const userAgent = (window?.navigator?.userAgent || '').toLowerCase();
+      broswerInfo.userAgent = window?.navigator?.userAgent || '';
+      const userAgent = broswerInfo.userAgent.toLowerCase();
 
       broswerInfo.isDesktop = ['windows nt', 'macintosh', 'x11'].some(keyword => userAgent.includes(keyword));
       broswerInfo.isAndroid = userAgent.includes('android');
@@ -165,7 +167,8 @@ export const useSystemStore = defineStore('system', {
       broswerInfo.isStandalone = window.navigator?.standalone === true || window.matchMedia?.('(display-mode: standalone)')?.matches === true;
 
       // /MicroMessenger/i.test
-      broswerInfo.isWeiXin = userAgent.includes('micromessenger');
+      // https://gist.github.com/ShinChven/8aa1953e4a559230bab874dd4ebe3ee7
+      broswerInfo.isWechat = userAgent.includes('micromessenger');
 
       if (userAgent.match(/edge\/([\d.]+)/)) {
         broswerInfo.type = 'Edge';
