@@ -1,6 +1,7 @@
 const LAYOUT_SETTING = [
   { name: 'index', layout: 'home' },
   { name: 'home', layout: 'home' },
+  { name: 'swagger-doc', layout: false },
   { path: '/css-drawing/triangle-full-test', layout: 'full-screen' },
   { path: '/css-drawing/triangle-full-test', layout: 'full-screen' }
 ];
@@ -23,7 +24,7 @@ export default defineNuxtRouteMiddleware((to) => {
     }
   )?.layout;
 
-  setPageLayout(typeof newLayoutName === 'string'
+  setPageLayout(typeof newLayoutName === 'string' || newLayoutName === false
     ? newLayoutName
     : 'default');
 })

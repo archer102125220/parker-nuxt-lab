@@ -4,7 +4,31 @@ import { request } from '@/utils/request';
 // const CLIENT_SECRET = import.meta.env.VITE_LINE_CLIENT_SECRET;
 // const CALLBACK_URI = import.meta.env.VITE_LINE_CALLBACK_URI;
 
-// https://developers.line.biz/en/reference/line-login/#verify-access-token-http-request
+
+/**
+ * @openapi
+ * /line-oauth-verify:
+ *    post:
+ *      description: LINE OAuth 驗證
+ *      parameters:
+ *        - in: body
+ *          name: accessToken
+ *          description: accessToken LINE 存取權杖
+ *          schema: 
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: success 驗證是否成功
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                    success:
+ *                      type: boolean
+ *                      description: 驗證是否成功
+ *            
+ */
 /**
  * LINE OAuth 驗證 API
  * 

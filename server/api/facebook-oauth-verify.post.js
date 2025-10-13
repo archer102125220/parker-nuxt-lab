@@ -2,17 +2,30 @@ import { request } from '@/utils/request';
 
 const APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
 
-// https://stackoverflow.com/questions/70114224/how-to-verify-facebook-login-access-token-from-node-js
-// https://developers.facebook.com/docs/graph-api/overview
 /**
  * @openapi
  * /facebook-oauth-verify:
- *    POST:
+ *    post:
  *      description: Facebook OAuth 驗證
+ *      parameters:
+ *        - in: body
+ *          name: accessToken
+ *          description: accessToken Facebook 存取權杖
+ *          schema: 
+ *            type: string
  *      responses:
  *        200:
  *          description: success 驗證是否成功
- * 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                    success:
+ *                      type: boolean
+ *                      description: 驗證是否成功
+ */
+/**
  * Facebook OAuth 驗證 API
  * 
  * 驗證從前端傳入的 Facebook 存取權杖是否有效

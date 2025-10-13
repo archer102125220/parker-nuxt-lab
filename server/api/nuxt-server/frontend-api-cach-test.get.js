@@ -1,3 +1,19 @@
+
+/**
+ * @openapi
+ * /nuxt-server/frontend-api-cach-test:
+ *    get:
+ *      description: 前端 API 快取測試
+ *      parameters:
+ *        - in: query
+ *          name: test
+ *          description: 意查詢參數，用於測試快取機制
+ *          schema: 
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: api 環傳請求
+ */
 /**
  * 前端 API 快取測試 API (GET)
  * 
