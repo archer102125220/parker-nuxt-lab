@@ -65,7 +65,7 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui": "^5.29.4",
+    "swagger-ui-dist": "^5.29.4",
     "swiper": "^11.1.4",
     "uuid": "^13.0.0",
     "videojs": "^1.0.0",
