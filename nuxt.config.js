@@ -23,7 +23,7 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'base-uri': ["'self'"],
   'font-src': ["'self'", 'data:', 'blob:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
   'form-action': ["'self'", 'https://*.facebook.com'],
-  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
+  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com', 'https://validator.swagger.io'],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
   // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
@@ -69,6 +69,7 @@ export default defineNuxtConfig({
 
     // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
     '/**': { prerender: true },
+    '/api/nuxt-server/swagger-docs': { prerender: true },
     '/': { isr: true },
     '/zh': { isr: true },
     '/zh/**': { isr: 60 * 60 * 24 },
