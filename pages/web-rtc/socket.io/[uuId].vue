@@ -157,8 +157,7 @@ watch(
         webRTC.localDescription = newOffer;
 
         isOffer.value = false;
-      }
-      if (newIsAnswer === true) {
+      } else if (newIsAnswer === true) {
         const newAnswer = await webRTC.RTC.createAnswer();
         webRTC.localDescription = newAnswer;
 

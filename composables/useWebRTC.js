@@ -105,8 +105,6 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
   }
   async function webRTCConfigUpdate(newConfig = DEFAULT_CONFIG, oldConfig = null) {
     if (typeof window === 'undefined' || webRTC.RTC instanceof window?.RTCPeerConnection === false) return;
-    console.log('webRTCConfigUpdate');
-    console.log({ newConfig, oldConfig });
 
     const {
       iceCandidate: newIceCandidate,
@@ -209,8 +207,6 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
   }
 
   async function handleStreamData(newStreamData, oldStreamData, currentWebRTC = webRTC.RTC) {
-    console.log({ oldStreamData, newStreamData });
-
     if (typeof window === 'undefined' || currentWebRTC instanceof window?.RTCPeerConnection === false) return;
 
     if (oldStreamData?.value instanceof window?.MediaStream === true) {

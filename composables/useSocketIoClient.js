@@ -12,8 +12,8 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
   function initSocketIoClient(currentConfig = {}, isReInit = false) {
     if (typeof window === 'undefined' || typeof socketIoClient?.value?.io !== 'function') return;
 
-    if (typeof SocketIo.value?.disconnect === 'function') {
-      SocketIo.value.disconnect();
+    if (typeof SocketIo.io?.disconnect === 'function') {
+      SocketIo.io.disconnect();
     }
 
     const {
@@ -100,13 +100,12 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
 
     newSocketIo.connect();
 
-    SocketIo.value = newSocketIo;
+    SocketIo.io = newSocketIo;
   }
 
   function handleUnwatch() {
     const safeUnwatchSender = unwatchSender.value || null;
     if (typeof safeUnwatchSender === 'object' && safeUnwatchSender !== null) {
-      console.log({ safeUnwatchSender });
 
       Object.keys(safeUnwatchSender).forEach(safeUnwatchSenderKey => {
         if (typeof safeUnwatchSender[safeUnwatchSenderKey] === 'function') {
@@ -123,7 +122,6 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
     handleUnwatch();
 
     if (typeof senderSetting === 'object' && senderSetting !== null) {
-      console.log({ senderSetting });
 
       const newUnwatchSender = {};
       Object.keys(senderSetting).forEach(senderSettingKey => {
@@ -135,22 +133,20 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
         }
 
         const sendValue = getSendValue();
-        console.log({ sendValue });
 
         if (senderSetting[senderSettingKey]?.watch === true) {
-          console.log(senderSetting[senderSettingKey]?.watch);
+
           newUnwatchSender[senderSettingKey] = watch(
             getSendValue,
             (newSendValue) => {
-              console.log({ newSendValue });
-              SocketIo.value.emit(senderSettingKey, newSendValue);
+              SocketIo.io.emit(senderSettingKey, newSendValue);
             },
             { deep: typeof sendValue === 'object' }
           );
         }
 
         if (sendValue !== null && sendValue !== undefined) {
-          SocketIo.value.emit(senderSettingKey, sendValue);
+          SocketIo.io.emit(senderSettingKey, sendValue);
         }
       });
 
@@ -162,9 +158,9 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
   });
 
   onBeforeUnmount(() => {
-    if (typeof SocketIo.value?.disconnect === 'function') {
-      SocketIo.value.disconnect();
-      SocketIo.value = null;
+    if (typeof SocketIo.io?.disconnect === 'function') {
+      SocketIo.io.disconnect();
+      SocketIo.io = null;
     }
 
     handleUnwatch();
