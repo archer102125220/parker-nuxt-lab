@@ -57,18 +57,6 @@ const isAnswer = ref(false);
 
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC({
-  iceCandidate(iceCandidateEvent) {
-    // console.log('onIceCandidate => ', iceCandidateEvent.candidate);
-    if (iceCandidateEvent.candidate) {
-      candidate.value = iceCandidateEvent.candidate;
-    }
-    if (
-      typeof webRTC.value?.localDescription === 'object' &&
-      webRTC.value?.localDescription !== null
-    ) {
-      localDescription.value = webRTC.value.localDescription;
-    }
-  },
   // iceconnectionStateChange(iceconnectionStateChangeEvent) {
   //   console.log({ iceconnectionStateChangeEvent });
   //   console.log(
@@ -76,35 +64,11 @@ const webRTC = useWebRTC({
   //     iceconnectionStateChangeEvent.target.iceConnectionState
   //   );
   // },
-  track(trackEvent) {
-    const streamList = Array.isArray(trackEvent.streams)
-      ? trackEvent.streams
-      : [];
-
-    const newRemoteStream = streamList.find(
-      (stream) =>
-        streamObj.value?.id !== stream?.id &&
-        remoteStream.value?.id !== stream?.id
-    );
-
-    console.log({ newRemoteStream });
-
-    if (newRemoteStream !== undefined) {
-      remoteStream.value = newRemoteStream;
-      console.log('接收到遠端串流。');
-    }
-  }
 });
 const socketIoClient = useSocketIoClient(
   {
     channel: '/web-rtc',
     listener: {
-      connect() {
-        socketIoConnected.value = socketIoClient.value.connected;
-      },
-      disconnect() {
-        socketIoConnected.value = socketIoClient.value.connected;
-      },
       webrtcJoined(webrtcJoinedPayload) {
         console.log({ webrtcJoinedPayload });
         isOffer.value = webrtcJoinedPayload.isOffer === true;
@@ -113,19 +77,19 @@ const socketIoClient = useSocketIoClient(
       async webrtcDescription(webrtcPayload) {
         console.log({ webrtcPayload });
 
-        const localDescription = webRTC.value?.localDescription || {};
-        const remoteDescription = webRTC.value?.remoteDescription || {};
+        const rtcLocalDescription = webRTC.RTC?.localDescription || {};
+        const remoteDescription = webRTC.RTC?.remoteDescription || {};
         const description = webrtcPayload?.description || {};
 
         // 檢查描述檔，避免重複設定
         if (
-          localDescription?.type === description?.type ||
+          rtcLocalDescription?.type === description?.type ||
           remoteDescription?.type === description?.type
         ) {
           return;
         }
 
-        await webRTC.value?.setRemoteDescription(
+        await webRTC.RTC?.setRemoteDescription(
           new RTCSessionDescription(description)
         );
         console.log(`已成功設定遠端 ${description?.type}。`);
@@ -139,8 +103,8 @@ const socketIoClient = useSocketIoClient(
     },
     webrtcDescription: {
       value: () => ({
-        candidate: candidate.value,
-        description: localDescription.value
+        candidate: webRTC.candidate,
+        description: webRTC.localDescription
       }),
       watch: true
     }
@@ -148,7 +112,7 @@ const socketIoClient = useSocketIoClient(
 );
 
 watch(
-  () => [streamObj.value, webRTC.value],
+  () => [streamObj.value, webRTC.RTC],
   async ([newStream, newWebRTC]) => {
     if (
       localStreamAdded.value === false &&
@@ -166,19 +130,38 @@ watch(
   { deep: true }
 );
 watch(
+  () => webRTC.streamList,
+  (newStreamList) => {
+    const newRemoteStream = newStreamList.find(
+      (stream) =>
+        streamObj.value?.id !== stream?.id &&
+        remoteStream.value?.id !== stream?.id
+    );
+
+    console.log({ newRemoteStream });
+
+    if (newRemoteStream !== undefined) {
+      remoteStream.value = newRemoteStream;
+      console.log('接收到遠端串流。');
+    }
+  }
+);
+watch(
   () => [localStreamAdded.value, isOffer.value, isAnswer.value],
   async ([newLocalStreamAdded, newIsOffer, newIsAnswer]) => {
     if (newLocalStreamAdded === false) return;
 
     try {
       if (newIsOffer === true) {
-        const newOffer = await webRTC.value.createOffer();
-        await webRTC.value.setLocalDescription(newOffer);
+        const newOffer = await webRTC.RTC.createOffer();
+        webRTC.localDescription = newOffer;
+
         isOffer.value = false;
       }
       if (newIsAnswer === true) {
-        const newAnswer = await webRTC.value.createAnswer();
-        await newWewebRTC.valuebRTC.setLocalDescription(newAnswer);
+        const newAnswer = await webRTC.RTC.createAnswer();
+        webRTC.localDescription = newAnswer;
+
         isAnswer.value = false;
       }
     } catch (error) {

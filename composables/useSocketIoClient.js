@@ -3,7 +3,10 @@ import * as _socketIoClient from 'socket.io-client';
 export function useSocketIoClient(config = { channel: '/', listener: {} }, senderSetting = {}, afterInit = () => { }) {
   const socketIoClient = computed(() => useNuxtApp().$socketIoClient || _socketIoClient);
 
-  const SocketIo = ref(null);
+  const SocketIo = reactive({
+    io: null,
+    connected: false
+  });
   const unwatchSender = ref(null);
 
   function initSocketIoClient(currentConfig = {}, isReInit = false) {
@@ -46,9 +49,27 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
       },
     );
 
+    newSocketIo.on('connect', (...arg) => {
+      SocketIo.connected = newSocketIo.connected;
+
+      if (typeof listener.connect === 'function') {
+        listener.connect(...arg);
+      }
+    });
+    newSocketIo.on('disconnect', () => {
+      SocketIo.connected = newSocketIo.connected;
+
+      if (typeof listener.disconnect === 'function') {
+        listener.disconnect(...arg);
+      }
+    });
+
     if (typeof listener === 'object' && listener !== null) {
       Object.keys(listener).forEach(listenerKey => {
-        if (typeof listener[listenerKey] === 'function') {
+        if (
+          ['connect', 'disconnect'].includes(listenerKey) === false &&
+          typeof listener[listenerKey] === 'function'
+        ) {
           newSocketIo.on(listenerKey, listener[listenerKey]);
         }
       });
@@ -113,7 +134,7 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
           return senderSetting[senderSettingKey]?.value;
         }
 
-        const sendValue = getSendValue() || null;
+        const sendValue = getSendValue();
         console.log({ sendValue });
 
         if (senderSetting[senderSettingKey]?.watch === true) {

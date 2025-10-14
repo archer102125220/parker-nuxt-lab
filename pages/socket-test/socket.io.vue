@@ -49,12 +49,12 @@ watch(
     if (newSocketIoClientConnected === true) {
       await new Promise((resolve) => nextTick(() => setTimeout(resolve, 250)));
 
-      socketIoClient.value.emit('socket.io-test', {
+      socketIoClient.io.emit('socket.io-test', {
         a: 'b',
         c: [],
         testData: 'socket.io test Data'
       });
-      socketIoClient.value.emit('message', {
+      socketIoClient.io.emit('message', {
         a: 'b',
         c: [],
         testData: 'message test Data'

@@ -15,15 +15,19 @@ const DEFAULT_CONFIG = {
 };
 
 export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
-  const webRTC = ref(null);
+  const webRTC = reactive({
+    RTC: null,
+    candidate: null,
+    localDescriptionSetting: false,
+    localDescription: null,
+    streamList: []
+  });
 
   async function webRTCInit(newConfig = DEFAULT_CONFIG) {
     if (typeof window === 'undefined') return;
-    console.log('webRTCInit');
-    console.log({ newConfig });
 
-    if (webRTC.value instanceof window?.RTCPeerConnection === true) {
-      webRTC.value.close();
+    if (webRTC.RTC instanceof window?.RTCPeerConnection === true) {
+      webRTC.RTC.close();
     }
 
     const {
@@ -42,13 +46,21 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
       ...(webRTCConfig || {}),
       iceServers: webRTCConfig?.iceServers || freeice()
     }
-    console.log({ _webRTCConfig });
     const newWebRTC = new window.RTCPeerConnection(_webRTCConfig);
 
-    if (typeof iceCandidate === 'function') {
-      newWebRTC.addEventListener('icecandidate', iceCandidate);
-      // newWebRTC.onicecandidate = iceCandidate;
-    }
+    newWebRTC.addEventListener('icecandidate', function (iceCandidateEvent, ...arg) {
+      if (iceCandidateEvent.candidate) {
+        webRTC.candidate = iceCandidateEvent.candidate;
+      }
+
+      if (typeof iceCandidate === 'function') {
+        iceCandidate(iceCandidateEvent, ...arg);
+      }
+    });
+    // if (typeof iceCandidate === 'function') {
+    //   newWebRTC.addEventListener('icecandidate', iceCandidate);
+    //   // newWebRTC.onicecandidate = iceCandidate;
+    // }
     if (typeof iceCandidateError === 'function') {
       newWebRTC.addEventListener('icecandidateerror', iceCandidateError);
       // newWebRTC.addEventListener('icecandidateerror', console.error);
@@ -60,9 +72,21 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     if (typeof addStream === 'function') {
       newWebRTC.addEventListener('addstream', addStream);
     }
-    if (typeof track === 'function') {
-      newWebRTC.addEventListener('track', track);
-    }
+
+    newWebRTC.addEventListener('track', function (trackEvent, ...arg) {
+      const streamList = Array.isArray(trackEvent.streams)
+        ? trackEvent.streams
+        : [];
+
+      webRTC.streamList = streamList;
+
+      if (typeof track === 'function') {
+        track(trackEvent, ...arg);
+      }
+    });
+    // if (typeof track === 'function') {
+    //   newWebRTC.addEventListener('track', track);
+    // }
     if (typeof dataChannel === 'function') {
       newWebRTC.addEventListener('datachannel', dataChannel);
     }
@@ -72,15 +96,15 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
 
     handleStreamData(streamData, null, newWebRTC);
 
-    webRTC.value = newWebRTC;
+    webRTC.RTC = newWebRTC;
 
     await nextTick();
     if (typeof afterInit === 'function') {
-      afterInit(webRTC.value);
+      afterInit(webRTC.RTC);
     }
   }
   async function webRTCConfigUpdate(newConfig = DEFAULT_CONFIG, oldConfig = null) {
-    if (typeof window === 'undefined' || webRTC.value instanceof window?.RTCPeerConnection === false) return;
+    if (typeof window === 'undefined' || webRTC.RTC instanceof window?.RTCPeerConnection === false) return;
     console.log('webRTCConfigUpdate');
     console.log({ newConfig, oldConfig });
 
@@ -106,85 +130,85 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
       track: oldTrack
     } = oldConfig || {};
 
-    webRTC.value.setConfiguration({
+    webRTC.RTC.setConfiguration({
       ...(newWebRTCConfig || {}),
       iceServers: newWebRTCConfig?.iceServers || freeice()
     });
 
     if (newIceCandidate !== oldIceCandidate) {
       if (typeof oldIceCandidate === 'function') {
-        webRTC.value.removeEventListener('icecandidate', oldIceCandidate)
+        webRTC.RTC.removeEventListener('icecandidate', oldIceCandidate)
       }
       if (typeof newIceCandidate === 'function') {
-        webRTC.value.addEventListener('icecandidate', newIceCandidate)
+        webRTC.RTC.addEventListener('icecandidate', newIceCandidate)
       }
     }
 
     if (newIceCandidateError !== oldIceCandidateError) {
       if (typeof oldIceCandidateError === 'function') {
-        webRTC.value.removeEventListener('icecandidateerror', oldIceCandidateError)
+        webRTC.RTC.removeEventListener('icecandidateerror', oldIceCandidateError)
       }
       if (typeof newIceCandidateError === 'function') {
-        webRTC.value.addEventListener('icecandidateerror', newIceCandidateError);
-        // webRTC.value.addEventListener('icecandidateerror', console.error);
-        // webRTC.value.onicecandidateerror = newIceCandidateError;
+        webRTC.RTC.addEventListener('icecandidateerror', newIceCandidateError);
+        // webRTC.RTC.addEventListener('icecandidateerror', console.error);
+        // webRTC.RTC.onicecandidateerror = newIceCandidateError;
       }
     }
 
     if (newIceconnectionStateChange !== oldIceconnectionStateChange) {
       if (typeof oldIceconnectionStateChange === 'function') {
-        webRTC.value.removeEventListener('iceconnectionstatechange', oldIceconnectionStateChange);
+        webRTC.RTC.removeEventListener('iceconnectionstatechange', oldIceconnectionStateChange);
       }
       if (typeof newIceconnectionStateChange === 'function') {
-        webRTC.value.addEventListener('iceconnectionstatechange', newIceconnectionStateChange);
+        webRTC.RTC.addEventListener('iceconnectionstatechange', newIceconnectionStateChange);
       }
     }
 
     if (newAddStream !== oldAddStream) {
       if (typeof oldAddStream === 'function') {
-        webRTC.value.removeEventListener('addstream', oldAddStream);
+        webRTC.RTC.removeEventListener('addstream', oldAddStream);
       }
       if (typeof newAddStream === 'function') {
-        webRTC.value.addEventListener('addstream', newAddStream);
+        webRTC.RTC.addEventListener('addstream', newAddStream);
       }
     }
 
 
     if (newTrack !== oldTrack) {
       if (typeof oldTrack === 'function') {
-        webRTC.value.removeEventListener('track', oldTrack);
+        webRTC.RTC.removeEventListener('track', oldTrack);
       }
       if (typeof newTrack === 'function') {
-        webRTC.value.addEventListener('track', newTrack);
+        webRTC.RTC.addEventListener('track', newTrack);
       }
     }
 
     if (newDataChannel !== oldDataChannel) {
       if (typeof oldDataChannel === 'function') {
-        webRTC.value.removeEventListener('datachannel', oldDataChannel);
+        webRTC.RTC.removeEventListener('datachannel', oldDataChannel);
       }
       if (typeof newDataChannel === 'function') {
-        webRTC.value.addEventListener('datachannel', newDataChannel);
+        webRTC.RTC.addEventListener('datachannel', newDataChannel);
       }
     }
 
 
     if (newNegotiationNeeded !== oldNegotiationNeeded) {
       if (typeof oldNegotiationNeeded === 'function') {
-        webRTC.value.removeEventListener('negotiationneeded', oldNegotiationNeeded);
+        webRTC.RTC.removeEventListener('negotiationneeded', oldNegotiationNeeded);
       }
       if (typeof newNegotiationNeeded === 'function') {
-        webRTC.value.addEventListener('negotiationneeded', newNegotiationNeeded);
+        webRTC.RTC.addEventListener('negotiationneeded', newNegotiationNeeded);
       }
     }
 
     await nextTick();
     if (typeof afterUpdate === 'function') {
-      afterUpdate(webRTC.value);
+      afterUpdate(webRTC.RTC);
     }
   }
 
-  async function handleStreamData(newStreamData, oldStreamData, currentWebRTC = webRTC.value) {
+  async function handleStreamData(newStreamData, oldStreamData, currentWebRTC = webRTC.RTC) {
     console.log({ oldStreamData, newStreamData });
 
     if (typeof window === 'undefined' || currentWebRTC instanceof window?.RTCPeerConnection === false) return;
@@ -211,22 +235,30 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
 
   watch(() => (config?.value || config), webRTCConfigUpdate, { deep: true });
   watch(() => (streamData?.value || streamData), handleStreamData, { deep: true });
+  watch(() => webRTC.localDescription,
+    async function (newLocalDescription) {
+      webRTC.localDescriptionSetting = true;
+      await webRTC.RTC.setLocalDescription(newLocalDescription);
+      webRTC.localDescriptionSetting = false;
+    },
+    { deep: true }
+  );
 
   onMounted(() => {
     webRTCInit(config);
   });
 
   onBeforeUnmount(() => {
-    if (typeof webRTC.value?.removeStream === 'function') {
+    if (typeof webRTC.RTC?.removeStream === 'function') {
       if (streamData?.value instanceof window?.MediaStream === true) {
-        webRTC.value.removeStream(streamData.value);
+        webRTC.RTC.removeStream(streamData.value);
       } else if (streamData instanceof window?.MediaStream === true) {
-        webRTC.value.removeStream(streamData);
+        webRTC.RTC.removeStream(streamData);
       }
 
-      webRTC.value.close();
+      webRTC.RTC.close();
 
-      webRTC.value = null;
+      webRTC.RTC = null;
     }
   });
 

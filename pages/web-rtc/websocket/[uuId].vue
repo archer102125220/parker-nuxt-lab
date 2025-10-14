@@ -64,7 +64,7 @@ function onMessage(payload) {
 }
 
 watch(
-  () => [streamObj.value, webRTC.value, websocket.value],
+  () => [streamObj.value, webRTC.RTC, websocket.value],
   ([newStream, newWebRTC, newWebsocket]) => {
     console.log({ newStream, newWebRTC, newWebsocket });
   },

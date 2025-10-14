@@ -64,7 +64,7 @@ const eventSourceConfig = computed(() => ({
 const eventSource = useEventSource(eventSourceConfig);
 
 watch(
-  () => [streamObj.value, localWebRTC.value, eventSource.value],
+  () => [streamObj.value, localWebRTC.RTC, eventSource.value],
   async ([newStream, newLocalWebRTC, newEventSource]) => {
     console.log({ newStream, newLocalWebRTC, newEventSource });
     if (
