@@ -73,13 +73,21 @@ const isAnswer = ref(false);
 
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC({
-  // iceconnectionStateChange(iceconnectionStateChangeEvent) {
-  //   console.log({ iceconnectionStateChangeEvent });
-  //   console.log(
-  //     'ICE 伺服器狀態變更 => ',
-  //     iceconnectionStateChangeEvent.target.iceConnectionState
-  //   );
-  // },
+  iceServers: [
+    {
+      urls: 'stun:stun.l.google.com:19302' // google 提供免費的 STUN server
+    }
+  ],
+  iceconnectionStateChange(iceconnectionStateChangeEvent) {
+    console.log({ iceconnectionStateChangeEvent });
+    console.log(
+      'ICE 伺服器狀態變更 => ',
+      iceconnectionStateChangeEvent.target.iceConnectionState
+    );
+  },
+  iceCandidateError(error) {
+    console.error('iceCandidateError', error);
+  }
 });
 const socketIoClient = useSocketIoClient(
   {
@@ -160,7 +168,7 @@ const socketIoClient = useSocketIoClient(
   }
 );
 const streamList = computed(() => {
-  return Array.isArray(webRTC.streamList) ? webRTC.streamList : [];
+  return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
 });
 
 watch(
@@ -168,16 +176,16 @@ watch(
   async ([newStream, newWebRTC]) => {
     console.log({ newStream });
     if (
-      localStreamAdded.value === false &&
       typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
     ) {
       // 將本地視訊軌加入 RTCPeerConnection
       newStream.getTracks().forEach((track) => {
+        console.log({ track, newStream });
         newWebRTC.addTrack(track, newStream);
       });
 
-      localStreamAdded.value = true;
+      setTimeout(() => (localStreamAdded.value = true), 200);
     }
   },
   { deep: true }
@@ -190,6 +198,7 @@ watch(
     try {
       if (newIsOffer === true) {
         const newOffer = await webRTC.RTC.createOffer();
+        console.log({ newOffer });
         webRTC.localDescription = newOffer;
 
         // socketIoClient.io.emit('newUser', { offer: newOffer });
@@ -226,7 +235,7 @@ watch(
     margin-bottom: 8px;
 
     background-color: #f0f8ff;
-    opacity: 0;
+    // opacity: 0;
   }
 }
 </style>

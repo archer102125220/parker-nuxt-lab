@@ -44,6 +44,7 @@ export default defineEventHandler({
             const socketIdList = Array.from(socketsInRoom);
             const isOffer = socketIdList.length <= 1;
 
+            socket.broadcast.to(webRtcId).emit('newUser');
             socket.emit('webrtcJoined', {
               newWebRtcId,
               webRtcId,
@@ -51,7 +52,6 @@ export default defineEventHandler({
               isOffer
             });
 
-            socket.broadcast.to(webRtcId).emit('newUser');
           });
 
           socket.on('webrtcDescription', function (payload) {
