@@ -52,7 +52,6 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     const newWebRTC = new window.RTCPeerConnection(_webRTCConfig);
 
     newWebRTC.addEventListener('icecandidate', function (iceCandidateEvent, ...arg) {
-      console.log({ iceCandidateEvent });
       // if (iceCandidateEvent.candidate) {
       //   webRTC.candidate = iceCandidateEvent.candidate;
       // }

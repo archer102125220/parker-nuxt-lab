@@ -78,6 +78,10 @@ const webRTC = useWebRTC({
       urls: 'stun:stun.l.google.com:19302' // google 提供免費的 STUN server
     }
   ],
+  iceCandidate(localIceCandidateEvent) {
+    console.log({ localIceCandidateEvent });
+    console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
+  },
   iceconnectionStateChange(iceconnectionStateChangeEvent) {
     console.log({ iceconnectionStateChangeEvent });
     console.log(
@@ -173,8 +177,11 @@ const streamList = computed(() => {
 
 watch(
   () => [streamObj.value, webRTC.RTC],
-  async ([newStream, newWebRTC]) => {
-    console.log({ newStream });
+  async ([newStream, newWebRTC], [oldStream, oldWebRTC]) => {
+    console.log({
+      newStream,
+      ['newWebRTC===oldWebRTC']: newWebRTC === oldWebRTC
+    });
     if (
       typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
@@ -185,7 +192,17 @@ watch(
         newWebRTC.addTrack(track, newStream);
       });
 
-      setTimeout(() => (localStreamAdded.value = true), 200);
+      // setTimeout(() => (localStreamAdded.value = true), 200);
+
+      try {
+        console.log(newWebRTC.createOffer);
+        const offer = await newWebRTC.createOffer();
+        console.log({ offer });
+        const response = await newWebRTC.setLocalDescription(offer);
+        console.log({ response });
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   { deep: true }
@@ -194,6 +211,7 @@ watch(
   () => [localStreamAdded.value, isOffer.value, isAnswer.value],
   async ([newLocalStreamAdded, newIsOffer, newIsAnswer]) => {
     if (newLocalStreamAdded === false) return;
+    console.log({ newLocalStreamAdded, newIsOffer, newIsAnswer });
 
     try {
       if (newIsOffer === true) {
