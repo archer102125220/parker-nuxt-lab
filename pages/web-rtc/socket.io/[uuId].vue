@@ -9,8 +9,7 @@
       *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
     </p>
 
-    <video
-      id="localVideo"
+    <!-- <video
       class="web_rtc_socket_io_page-video"
       width="100%"
       height="360"
@@ -19,12 +18,30 @@
     />
 
     <video
-      id="remoteVideo"
+      v-if="remoteStream !== null"
+      ref="remoteVideo"
       class="web_rtc_socket_io_page-video"
       width="100%"
       height="360"
       autoplay
       :srcObject="remoteStream"
+    /> -->
+    <video
+      class="web_rtc_socket_io_page-video"
+      width="100%"
+      height="360"
+      autoplay
+      :srcObject="streamObj"
+    />
+
+    <video
+      v-for="streamItem in streamList"
+      :key="streamItem?.id"
+      class="web_rtc_socket_io_page-video"
+      width="100%"
+      height="360"
+      autoplay
+      :srcObject="streamItem"
     />
   </div>
 </template>
@@ -36,18 +53,17 @@ useHeadMataData({
 definePageMeta({
   middleware: 'check-params-uuid'
 });
-const nuxtApp = useNuxtApp();
 const route = useRoute();
 
 // https://johnnywang1994.github.io/book/articles/js/webrtc-realtime-meeting.html
 // https://nuxt.com/modules/socket-io
 
+// const remoteVideo = useTemplateRef('remoteVideo');
+
 const streamObj = useCameraStream({ audio: true });
 const remoteStream = ref(null);
 
-const socketIoConnected = ref(false);
-const candidate = ref(null);
-const localDescription = ref(null);
+// const localDescription = ref(null);
 const offer = ref(null);
 const answer = ref(null);
 
@@ -75,25 +91,58 @@ const socketIoClient = useSocketIoClient(
         isAnswer.value = webrtcJoinedPayload.isOffer === false;
       },
       async webrtcDescription(webrtcPayload) {
-        console.log({ webrtcPayload });
+        const RTCLocalDescription = webRTC.RTC?.localDescription || {};
+        const RTCRemoteDescription = webRTC.RTC?.remoteDescription || {};
+        const description =
+          webrtcPayload?.offer ||
+          webrtcPayload?.answer ||
+          webrtcPayload?.description ||
+          {};
 
-        const rtcLocalDescription = webRTC.RTC?.localDescription || {};
-        const remoteDescription = webRTC.RTC?.remoteDescription || {};
-        const description = webrtcPayload?.description || {};
+        console.log({
+          webrtcPayload,
+          ['webRTC.RTC']: webRTC.RTC,
+          RTCLocalDescription,
+          RTCRemoteDescription,
+          description
+        });
 
         // 檢查描述檔，避免重複設定
         if (
-          rtcLocalDescription?.type === description?.type ||
-          remoteDescription?.type === description?.type
+          RTCLocalDescription?.type === description?.type ||
+          RTCRemoteDescription?.type === description?.type
         ) {
           return;
         }
 
-        await webRTC.RTC?.setRemoteDescription(
-          new RTCSessionDescription(description)
-        );
-        console.log(`已成功設定遠端 ${description?.type}。`);
+        try {
+          console.log(`設在設定設定遠端 ${description?.type}...`);
+          await webRTC.RTC.setRemoteDescription(
+            new RTCSessionDescription(description)
+          );
+          console.log(`已成功設定遠端 ${description?.type}。`);
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      newUser(newUserPayload) {
+        console.log({ newUserPayload });
+        let payload = {};
+
+        if (typeof offer.value === 'object' && offer.value !== null) {
+          payload.offer = offer.value;
+        } else if (typeof answer.value === 'object' && answer.value !== null) {
+          payload.answer = answer.value;
+        }
+        socketIoClient.io.emit('webrtcDescription', payload);
       }
+      // webrtcSignal(webrtcSignalPaylaod) {
+      //   if (
+      //     typeof webrtcSignal?.offer === 'object' &&
+      //     webrtcSignalPaylaod?.offer !== null
+      //   ) {
+      //   }
+      // }
     }
   },
   {
@@ -110,10 +159,14 @@ const socketIoClient = useSocketIoClient(
     }
   }
 );
+const streamList = computed(() => {
+  return Array.isArray(webRTC.streamList) ? webRTC.streamList : [];
+});
 
 watch(
   () => [streamObj.value, webRTC.RTC],
   async ([newStream, newWebRTC]) => {
+    console.log({ newStream });
     if (
       localStreamAdded.value === false &&
       typeof newWebRTC?.addTrack === 'function' &&
@@ -130,23 +183,6 @@ watch(
   { deep: true }
 );
 watch(
-  () => webRTC.streamList,
-  (newStreamList) => {
-    const newRemoteStream = newStreamList.find(
-      (stream) =>
-        streamObj.value?.id !== stream?.id &&
-        remoteStream.value?.id !== stream?.id
-    );
-
-    console.log({ newRemoteStream });
-
-    if (newRemoteStream !== undefined) {
-      remoteStream.value = newRemoteStream;
-      console.log('接收到遠端串流。');
-    }
-  }
-);
-watch(
   () => [localStreamAdded.value, isOffer.value, isAnswer.value],
   async ([newLocalStreamAdded, newIsOffer, newIsAnswer]) => {
     if (newLocalStreamAdded === false) return;
@@ -156,12 +192,16 @@ watch(
         const newOffer = await webRTC.RTC.createOffer();
         webRTC.localDescription = newOffer;
 
+        // socketIoClient.io.emit('newUser', { offer: newOffer });
         isOffer.value = false;
+        offer.value = newOffer;
       } else if (newIsAnswer === true) {
         const newAnswer = await webRTC.RTC.createAnswer();
         webRTC.localDescription = newAnswer;
 
+        // socketIoClient.io.emit('newUser', { answer: newAnswer });
         isAnswer.value = false;
+        answer.value = newAnswer;
       }
     } catch (error) {
       console.error(error);
@@ -184,6 +224,9 @@ watch(
 
   &-video {
     margin-bottom: 8px;
+
+    background-color: #f0f8ff;
+    opacity: 0;
   }
 }
 </style>

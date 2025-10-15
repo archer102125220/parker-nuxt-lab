@@ -31,7 +31,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     }
 
     const {
-      iceCandidate,
+      // iceCandidate,
       iceCandidateError,
       iceconnectionStateChange,
       addStream,
@@ -53,8 +53,8 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
         webRTC.candidate = iceCandidateEvent.candidate;
       }
 
-      if (typeof iceCandidate === 'function') {
-        iceCandidate(iceCandidateEvent, ...arg);
+      if (typeof config?.iceCandidate === 'function') {
+        config.iceCandidate(iceCandidateEvent, ...arg);
       }
     });
     // if (typeof iceCandidate === 'function') {
@@ -69,6 +69,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     if (typeof iceconnectionStateChange === 'function') {
       newWebRTC.addEventListener('iceconnectionstatechange', iceconnectionStateChange);
     }
+
     if (typeof addStream === 'function') {
       newWebRTC.addEventListener('addstream', addStream);
     }
@@ -80,8 +81,8 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
 
       webRTC.streamList = streamList;
 
-      if (typeof track === 'function') {
-        track(trackEvent, ...arg);
+      if (typeof config?.track === 'function') {
+        config.track(trackEvent, ...arg);
       }
     });
     // if (typeof track === 'function') {
@@ -107,7 +108,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     if (typeof window === 'undefined' || webRTC.RTC instanceof window?.RTCPeerConnection === false) return;
 
     const {
-      iceCandidate: newIceCandidate,
+      // iceCandidate: newIceCandidate,
       iceCandidateError: newIceCandidateError,
       iceconnectionStateChange: newIceconnectionStateChange,
       addStream: newAddStream,
@@ -119,7 +120,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
       ...newWebRTCConfig
     } = newConfig || {};
     const {
-      iceCandidate: oldIceCandidate,
+      // iceCandidate: oldIceCandidate,
       iceCandidateError: oldIceCandidateError,
       iceconnectionStateChange: oldIceconnectionStateChange,
       addStream: oldAddStream,
@@ -133,14 +134,14 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
       iceServers: newWebRTCConfig?.iceServers || freeice()
     });
 
-    if (newIceCandidate !== oldIceCandidate) {
-      if (typeof oldIceCandidate === 'function') {
-        webRTC.RTC.removeEventListener('icecandidate', oldIceCandidate)
-      }
-      if (typeof newIceCandidate === 'function') {
-        webRTC.RTC.addEventListener('icecandidate', newIceCandidate)
-      }
-    }
+    // if (newIceCandidate !== oldIceCandidate) {
+    //   if (typeof oldIceCandidate === 'function') {
+    //     webRTC.RTC.removeEventListener('icecandidate', oldIceCandidate)
+    //   }
+    //   if (typeof newIceCandidate === 'function') {
+    //     webRTC.RTC.addEventListener('icecandidate', newIceCandidate)
+    //   }
+    // }
 
     if (newIceCandidateError !== oldIceCandidateError) {
       if (typeof oldIceCandidateError === 'function') {
@@ -148,7 +149,6 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
       }
       if (typeof newIceCandidateError === 'function') {
         webRTC.RTC.addEventListener('icecandidateerror', newIceCandidateError);
-        // webRTC.RTC.addEventListener('icecandidateerror', console.error);
         // webRTC.RTC.onicecandidateerror = newIceCandidateError;
       }
     }

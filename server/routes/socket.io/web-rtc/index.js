@@ -3,7 +3,7 @@ import { useNitroApp } from '#imports';
 
 // import { defineEventHandler } from 'h3';
 
-import { decodeSocketIOPayload } from '@/utils/third-party/socket.io-decode';
+// import { decodeSocketIOPayload } from '@/utils/third-party/socket.io-decode';
 
 export default defineEventHandler({
   handler(event) {
@@ -50,6 +50,8 @@ export default defineEventHandler({
               socketIdCount: socketIdList.length,
               isOffer
             });
+
+            socket.broadcast.to(webRtcId).emit('newUser');
           });
 
           socket.on('webrtcDescription', function (payload) {
@@ -58,9 +60,10 @@ export default defineEventHandler({
             if (typeof webRtcId === 'string' && webRtcId !== '') {
               // nitroApp.$socketIoServer
               //   .of('/socket.io/web-rtc')
-              //   .in(webRtcId)
+              //   .to(webRtcId)
               //   .emit('webrtcDescription', { ...payload, webRtcId });
               socket
+                .broadcast
                 .to(webRtcId)
                 .emit('webrtcDescription', { ...payload, webRtcId });
             } else {
@@ -68,6 +71,7 @@ export default defineEventHandler({
               //   .of('/socket.io/web-rtc')
               //   .emit('webrtcDescription', { ...payload, webRtcId });
               socket
+                .broadcast
                 .emit('webrtcDescription', { ...payload, webRtcId });
             }
           });
