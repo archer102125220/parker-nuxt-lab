@@ -46,6 +46,7 @@ export default defineEventHandler({
 
             socket.broadcast.to(webRtcId).emit('newUser');
             socket.emit('webrtcJoined', {
+              id: socket.id,
               newWebRtcId,
               webRtcId,
               socketIdCount: socketIdList.length,
@@ -74,6 +75,13 @@ export default defineEventHandler({
                 .broadcast
                 .emit('webrtcDescription', { ...payload, webRtcId });
             }
+          });
+
+          socket.on('sendPrivate', function (data) {
+            const { targetId: targetSocketId, ...payload } = data; // 假設客戶端在數據中傳遞了目標ID
+
+            // 使用 socket.to(socketId)
+            socket.broadcast.to(targetSocketId).emit('privateMsg', payload);
           });
 
           socket.on('ping', function (callback) {

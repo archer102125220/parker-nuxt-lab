@@ -3,29 +3,12 @@
     <p class="web_rtc_socket_io_page-description">配合 socket.io 實作</p>
 
     <p
-      v-if="$store.system.supportWebsocket === false"
+      v-if="system.supportWebsocket === false"
       class="web_rtc_socket_io_page-warning"
     >
       *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
     </p>
 
-    <!-- <video
-      class="web_rtc_socket_io_page-video"
-      width="100%"
-      height="360"
-      autoplay
-      :srcObject="streamObj"
-    />
-
-    <video
-      v-if="remoteStream !== null"
-      ref="remoteVideo"
-      class="web_rtc_socket_io_page-video"
-      width="100%"
-      height="360"
-      autoplay
-      :srcObject="remoteStream"
-    /> -->
     <video
       class="web_rtc_socket_io_page-video"
       width="100%"
@@ -58,40 +41,20 @@ const route = useRoute();
 // https://johnnywang1994.github.io/book/articles/js/webrtc-realtime-meeting.html
 // https://nuxt.com/modules/socket-io
 
-// const remoteVideo = useTemplateRef('remoteVideo');
-
 const streamObj = useCameraStream({ audio: true });
-const remoteStream = ref(null);
-
-// const localDescription = ref(null);
-const offer = ref(null);
-const answer = ref(null);
-
-const localStreamAdded = ref(false);
-const isOffer = ref(false);
-const isAnswer = ref(false);
-
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 const webRTC = useWebRTC({
-  iceServers: [
-    {
-      urls: 'stun:stun.l.google.com:19302' // google 提供免費的 STUN server
-    }
-  ],
-  iceCandidate(localIceCandidateEvent) {
-    console.log({ localIceCandidateEvent });
-    console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
-  },
-  iceconnectionStateChange(iceconnectionStateChangeEvent) {
-    console.log({ iceconnectionStateChangeEvent });
-    console.log(
-      'ICE 伺服器狀態變更 => ',
-      iceconnectionStateChangeEvent.target.iceConnectionState
-    );
-  },
-  iceCandidateError(error) {
-    console.error('iceCandidateError', error);
-  }
+  // iceCandidate(localIceCandidateEvent) {
+  //   console.log({ localIceCandidateEvent });
+  //   console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
+  // },
+  // iceconnectionStateChange(iceconnectionStateChangeEvent) {
+  //   console.log({ iceconnectionStateChangeEvent });
+  //   console.log(
+  //     'ICE 伺服器狀態變更 => ',
+  //     iceconnectionStateChangeEvent.target.iceConnectionState
+  //   );
+  // }
 });
 const socketIoClient = useSocketIoClient(
   {
@@ -105,11 +68,15 @@ const socketIoClient = useSocketIoClient(
       async webrtcDescription(webrtcPayload) {
         const RTCLocalDescription = webRTC.RTC?.localDescription || {};
         const RTCRemoteDescription = webRTC.RTC?.remoteDescription || {};
+
+        const candidate = webrtcPayload?.candidate;
         const description =
           webrtcPayload?.offer ||
           webrtcPayload?.answer ||
           webrtcPayload?.description ||
           {};
+
+        await webRTC.RTC.addIceCandidate(candidate);
 
         console.log({
           webrtcPayload,
@@ -171,38 +138,32 @@ const socketIoClient = useSocketIoClient(
     }
   }
 );
+
+const system = useSystemStore();
+
+const offer = ref(null);
+const answer = ref(null);
+
+const localStreamAdded = ref(false);
+const isOffer = ref(false);
+const isAnswer = ref(false);
 const streamList = computed(() => {
   return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
 });
 
 watch(
   () => [streamObj.value, webRTC.RTC],
-  async ([newStream, newWebRTC], [oldStream, oldWebRTC]) => {
-    console.log({
-      newStream,
-      ['newWebRTC===oldWebRTC']: newWebRTC === oldWebRTC
-    });
+  async ([newStream, newWebRTC]) => {
     if (
       typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
     ) {
       // 將本地視訊軌加入 RTCPeerConnection
       newStream.getTracks().forEach((track) => {
-        console.log({ track, newStream });
         newWebRTC.addTrack(track, newStream);
       });
 
-      // setTimeout(() => (localStreamAdded.value = true), 200);
-
-      try {
-        console.log(newWebRTC.createOffer);
-        const offer = await newWebRTC.createOffer();
-        console.log({ offer });
-        const response = await newWebRTC.setLocalDescription(offer);
-        console.log({ response });
-      } catch (error) {
-        console.error(error);
-      }
+      localStreamAdded.value = true;
     }
   },
   { deep: true }
@@ -211,12 +172,10 @@ watch(
   () => [localStreamAdded.value, isOffer.value, isAnswer.value],
   async ([newLocalStreamAdded, newIsOffer, newIsAnswer]) => {
     if (newLocalStreamAdded === false) return;
-    console.log({ newLocalStreamAdded, newIsOffer, newIsAnswer });
 
     try {
       if (newIsOffer === true) {
         const newOffer = await webRTC.RTC.createOffer();
-        console.log({ newOffer });
         webRTC.localDescription = newOffer;
 
         // socketIoClient.io.emit('newUser', { offer: newOffer });
@@ -235,6 +194,23 @@ watch(
     }
   }
 );
+
+if (system.supportWebsocket === false) {
+  onMounted(() => {
+    window.webRTC = webRTC;
+    window.getWebRTC = function () {
+      webRTC.value;
+    };
+  });
+}
+onBeforeUnmount(() => {
+  socketIoClient.io.emit('leaveWebRTC', {
+    candidate: webRTC.candidate,
+    description: webRTC.localDescription,
+    offer: offer.value,
+    answer: answer.value
+  });
+});
 </script>
 
 <style lang="scss" scoped>
