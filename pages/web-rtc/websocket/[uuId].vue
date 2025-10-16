@@ -1,4 +1,3 @@
-
 <template>
   <div class="web_rtc_websocket_page">
     <p class="web_rtc_websocket_page-description">
@@ -82,6 +81,13 @@ watch(
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 8px;
+  }
+
+  &-video {
+    margin-bottom: 8px;
+
+    background-color: #f0f8ff;
+    // opacity: 0;
   }
 }
 </style>

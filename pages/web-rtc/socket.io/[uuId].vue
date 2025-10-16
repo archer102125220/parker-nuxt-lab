@@ -158,10 +158,14 @@ watch(
       typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
     ) {
+      const trackSender = Array.isArray(webRTC.trackSender)
+        ? webRTC.trackSender
+        : [];
       // 將本地視訊軌加入 RTCPeerConnection
       newStream.getTracks().forEach((track) => {
-        newWebRTC.addTrack(track, newStream);
+        trackSender.push(newWebRTC.addTrack(track, newStream));
       });
+      webRTC.trackSender = trackSender;
 
       localStreamAdded.value = true;
     }

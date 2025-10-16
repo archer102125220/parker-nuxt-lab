@@ -5,7 +5,6 @@
     </p>
 
     <video
-      id="localVideo"
       class="web_rtc_server_sent_event_page-video"
       width="100%"
       height="360"
@@ -14,12 +13,13 @@
     />
 
     <video
-      id="remoteVideo"
+      v-for="streamItem in streamList"
+      :key="streamItem?.id"
       class="web_rtc_server_sent_event_page-video"
       width="100%"
       height="360"
       autoplay
-      :srcObject="remoteStream"
+      :srcObject="streamItem"
     />
   </section>
 </template>
@@ -34,9 +34,7 @@ definePageMeta({
 const route = useRoute();
 
 const streamObj = useCameraStream({ audio: true });
-const remoteStream = ref(null);
-
-const localWebRTC = useWebRTC({
+const webRTC = useWebRTC({
   iceCandidate(localIceCandidateEvent) {
     console.log({ localIceCandidateEvent });
     console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
@@ -49,8 +47,7 @@ const localWebRTC = useWebRTC({
     );
   }
 });
-
-const eventSourceConfig = computed(() => ({
+const eventSource = useEventSource({
   channel: `/web-rtc/${route.params.uuId}`,
   eventList: [
     {
@@ -60,39 +57,96 @@ const eventSourceConfig = computed(() => ({
       }
     }
   ]
-}));
-const eventSource = useEventSource(eventSourceConfig);
+});
+
+const system = useSystemStore();
+
+const offer = ref(null);
+const answer = ref(null);
+
+const localStreamAdded = ref(false);
+const isOffer = ref(false);
+const isAnswer = ref(false);
+const streamList = computed(() => {
+  return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
+});
 
 watch(
-  () => [streamObj.value, localWebRTC.RTC, eventSource.value],
-  async ([newStream, newLocalWebRTC, newEventSource]) => {
-    console.log({ newStream, newLocalWebRTC, newEventSource });
+  () => [streamObj.value, webRTC.RTC],
+  async ([newStream, newWebRTC]) => {
     if (
-      typeof newLocalWebRTC?.addTrack === 'function' &&
+      typeof newWebRTC?.addTrack === 'function' &&
       newStream instanceof window?.MediaStream
     ) {
       // 將本地視訊軌加入 RTCPeerConnection
       newStream.getTracks().forEach((track) => {
-        console.log({ track });
-        newLocalWebRTC.addTrack(track, newStream);
+        newWebRTC.addTrack(track, newStream);
       });
 
-      try {
-        console.log(newLocalWebRTC.createOffer);
-        const offer = await newLocalWebRTC.createOffer();
-        console.log({ offer });
-        const response = await newLocalWebRTC.setLocalDescription(offer);
-        console.log({ response });
-      } catch (error) {
-        console.error(error);
-      }
+      localStreamAdded.value = true;
     }
   },
   { deep: true }
 );
+watch(
+  () => [localStreamAdded.value, isOffer.value, isAnswer.value],
+  async ([newLocalStreamAdded, newIsOffer, newIsAnswer]) => {
+    if (newLocalStreamAdded === false) return;
+
+    try {
+      if (newIsOffer === true) {
+        const newOffer = await webRTC.RTC.createOffer();
+        webRTC.localDescription = newOffer;
+
+        isOffer.value = false;
+        offer.value = newOffer;
+      } else if (newIsAnswer === true) {
+        const newAnswer = await webRTC.RTC.createAnswer();
+        webRTC.localDescription = newAnswer;
+
+        isAnswer.value = false;
+        answer.value = newAnswer;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+if (system.supportWebsocket === false) {
+  onMounted(() => {
+    window.webRTC = webRTC;
+    window.getWebRTC = function () {
+      webRTC.value;
+    };
+  });
+}
+onBeforeUnmount(() => {
+  socketIoClient.io.emit('leaveWebRTC', {
+    candidate: webRTC.candidate,
+    description: webRTC.localDescription,
+    offer: offer.value,
+    answer: answer.value
+  });
+});
 </script>
 
 <style lang="scss">
 .web_rtc_server_sent_event_page {
+  &-description {
+    margin-bottom: 8px;
+  }
+
+  // &-warning {
+  //   font-size: 16px;
+  //   font-weight: 600;
+  //   margin-bottom: 8px;
+  // }
+
+  &-video {
+    margin-bottom: 8px;
+
+    background-color: #f0f8ff;
+    // opacity: 0;
+  }
 }
 </style>

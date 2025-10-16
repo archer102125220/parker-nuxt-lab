@@ -78,7 +78,8 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     candidate: null,
     localDescriptionSetting: false,
     localDescription: null,
-    streamList: []
+    streamList: [],
+    trackSender: []
   });
 
   async function handleWebRTCInit(newConfig = DEFAULT_CONFIG) {
@@ -149,7 +150,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
       addStream: oldAddStream,
       dataChannel: oldDataChannel,
       negotiationNeeded: oldNegotiationNeeded,
-      track: oldTrack,
+      track: _oldTrack,
       signalingstateChange: oldSignalingstateChange,
     } = oldConfig || {};
 
@@ -241,25 +242,28 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
 
   async function handleStreamData(newStreamData, oldStreamData, currentWebRTC = webRTC.RTC) {
     if (typeof window === 'undefined' || currentWebRTC instanceof RTC === false) return;
+    // 還要測試
 
-    if (oldStreamData?.value instanceof window?.MediaStream === true) {
-      currentWebRTC.removeStream(oldStreamData.value);
-    } else if (oldStreamData instanceof window?.MediaStream === true) {
-      currentWebRTC.removeStream(oldStreamData);
-    }
+    // if (oldStreamData?.value instanceof window?.MediaStream === true) {
+    //   currentWebRTC.removeStream(oldStreamData.value);
+    // } else if (oldStreamData instanceof window?.MediaStream === true) {
+    //   currentWebRTC.removeStream(oldStreamData);
+    // }
 
-    if (newStreamData?.value instanceof window?.MediaStream === true) {
-      currentWebRTC.addStream(newStreamData.value);
-    } else if (newStreamData instanceof window?.MediaStream === true) {
-      currentWebRTC.addStream(newStreamData);
-    }
+    // if (newStreamData?.value instanceof window?.MediaStream === true) {
+    //   currentWebRTC.addStream(newStreamData.value);
+    // } else if (newStreamData instanceof window?.MediaStream === true) {
+    //   currentWebRTC.addStream(newStreamData);
+    // }
 
-    const streamAdded = (config?.value || config)?.streamAdded;
+    // webRTC.trackSender
 
-    await nextTick();
-    if (typeof streamAdded === 'function') {
-      streamAdded(currentWebRTC);
-    }
+    // const streamAdded = (config?.value || config)?.streamAdded;
+
+    // await nextTick();
+    // if (typeof streamAdded === 'function') {
+    //   streamAdded(currentWebRTC);
+    // }
   }
 
   watch(() => (config?.value || config), handleWebRTCConfigUpdate, { deep: true });
@@ -294,12 +298,10 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
   });
 
   onBeforeUnmount(() => {
-    if (typeof webRTC.RTC?.removeStream === 'function') {
-      if (streamData?.value instanceof window?.MediaStream === true) {
-        webRTC.RTC.removeStream(streamData.value);
-      } else if (streamData instanceof window?.MediaStream === true) {
-        webRTC.RTC.removeStream(streamData);
-      }
+    if (typeof webRTC.RTC?.removeTrack === 'function') {
+      webRTC.trackSender.forEach(track => {
+        webRTC.RTC.removeTrack(track);
+      })
     }
     if (typeof webRTC.RTC.close === 'function') {
       webRTC.RTC?.close();
