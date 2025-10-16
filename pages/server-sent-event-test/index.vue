@@ -32,12 +32,20 @@ const nuxtApp = useNuxtApp();
 const localePath = useLocalePath();
 const linkList = computed(() => [
   {
-    to: localePath('/server-sent-event-test/global'),
+    to: localePath('/server-sent-event-test/global-get'),
     label: 'Server Sent Event全域測試'
   },
   {
-    to: localePath('/server-sent-event-test/room'),
+    to: localePath('/server-sent-event-test/global-post'),
+    label: 'Server Sent Event Post全域測試'
+  },
+  {
+    to: localePath('/server-sent-event-test/room-get'),
     label: 'Server Sent Event route param分組測試'
+  },
+  {
+    to: localePath('/server-sent-event-test/room-post'),
+    label: 'Server Sent Event Post route param分組測試'
   }
 ]);
 </script>

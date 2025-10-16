@@ -1,3 +1,6 @@
+const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
+const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';
+
 export function useEventSource(config = { channel: '/' }) {
   const EventSourceObj = ref(null);
 
@@ -10,8 +13,6 @@ export function useEventSource(config = { channel: '/' }) {
 
     const { channel: currentChannel } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
-    const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';
     const path =
       currentChannel.indexOf('/') === 0
         ? SERVER_SENT_EVENT_BASE_PATH + currentChannel

@@ -1,5 +1,5 @@
 <template>
-  <section class="server_sent_event_global_page">
+  <section class="server_sent_event_global_post_page">
     <p>接收到的data：</p>
     <div>
       <p v-for="(SSEMessage, index) in SSEMessageList" :key="index">
@@ -11,13 +11,19 @@
 
 <script setup>
 useHeadMataData({
-  title: 'Server Sent Event全域測試'
+  title: 'Server Sent Event Post全域測試'
 });
 import _cloneDeep from 'lodash/cloneDeep';
 
 const SSEMessageList = ref([]);
-const eventSource = useEventSource({
+const postEventSource = usePostEventSource({
   channel: '/',
+  open(event) {
+    console.log({ event });
+  },
+  ping(event) {
+    console.log({ pingEvent: event });
+  },
   message(payload) {
     console.log({ payload });
     const newSSEMessageList = _cloneDeep(SSEMessageList.value);
@@ -25,18 +31,18 @@ const eventSource = useEventSource({
     SSEMessageList.value = newSSEMessageList;
   }
 });
-console.log({ eventSource });
+console.log({ postEventSource });
 watch(
-  () => eventSource.value,
-  (newEventSource) => {
-    console.log({ newEventSource });
+  () => postEventSource.value,
+  (newPostEventSource) => {
+    console.log({ newPostEventSource });
   },
   { deep: true }
 );
 </script>
 
 <style lang="scss">
-.server_sent_event_global_page {
+.server_sent_event_global_post_page {
   &-description {
   }
   &-content {

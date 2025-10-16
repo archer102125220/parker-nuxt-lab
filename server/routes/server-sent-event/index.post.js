@@ -7,7 +7,8 @@ export default defineEventHandler(async (event) => {
   setResponseHeader(event, 'Connection', 'keep-alive');
 
   const query = getQuery(event);
-  console.log({ query });
+  const body = await readBody(event);
+  console.log({ query, body });
 
   const eventStream = createEventStream(event);
 
@@ -21,12 +22,11 @@ export default defineEventHandler(async (event) => {
     }
      */
     // await eventStream.push(`Message @ ${new Date().toLocaleTimeString()}`);
-    // await eventStream.push({ data: `Message @ ${new Date().toLocaleTimeString()}` });
-    await eventStream.push({ data: JSON.stringify({ time: `Message @ ${new Date().toLocaleTimeString()}` }) });
+    await eventStream.push({ data: `Message @ ${new Date().toLocaleTimeString()}` });
   }, 1000);
 
   eventStream.onClosed(async () => {
-    console.log('server/routes/server-sent-event/index.get');
+    console.log('server/routes/server-sent-event/index.post');
     clearInterval(interval);
     await eventStream.close();
   });
