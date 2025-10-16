@@ -25,6 +25,8 @@
 </template>
 
 <script setup>
+import { nanoid } from 'nanoid';
+
 useHeadMataData({
   title: 'WebRTC Server-Sent Event測試'
 });
@@ -32,6 +34,8 @@ definePageMeta({
   middleware: 'check-params-uuid'
 });
 const route = useRoute();
+
+const userId = computed(() => nanoid());
 
 const streamObj = useCameraStream({ audio: true });
 const webRTC = useWebRTC({
@@ -47,8 +51,11 @@ const webRTC = useWebRTC({
     );
   }
 });
-const eventSource = useEventSource({
+const postEventSource = usePostEventSource({
   channel: `/web-rtc/${route.params.uuId}`,
+  payload: {
+    userId: userId.value
+  },
   eventList: [
     {
       name: 'webrtc',
@@ -120,14 +127,6 @@ if (system.supportWebsocket === false) {
     };
   });
 }
-onBeforeUnmount(() => {
-  socketIoClient.io.emit('leaveWebRTC', {
-    candidate: webRTC.candidate,
-    description: webRTC.localDescription,
-    offer: offer.value,
-    answer: answer.value
-  });
-});
 </script>
 
 <style lang="scss">
@@ -146,7 +145,7 @@ onBeforeUnmount(() => {
     margin-bottom: 8px;
 
     background-color: #f0f8ff;
-    // opacity: 0;
+    opacity: 0;
   }
 }
 </style>

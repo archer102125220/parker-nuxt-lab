@@ -35,12 +35,11 @@ export class PostEventSource extends EventTarget {
             'Content-Type': 'application/json',
             ...headers
           },
-          // body: postData,
           body: JSON.stringify(postData),
           signal: this.#controller.signal,
         }
       );
-      console.log({ response });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -67,21 +66,12 @@ export class PostEventSource extends EventTarget {
     let buffer = '';
 
     while (true) {
-      const readData = await reader.read();
-      const { value, done } = readData;
-
-      console.log({ readData });
+      const { value, done } = await reader.read();
       if (done) break;
 
       buffer += value;
       let boundary = buffer.indexOf('\n\n');
 
-      console.log('Received', value);
-      // if (typeof value?.event === 'string' && value?.event !== '') {
-      //   this.dispatchEvent(new MessageEvent(value.event, { data: value }));
-      // } else {
-      //   this.dispatchEvent(new MessageEvent('message', { data: value }));
-      // }
       while (boundary !== -1) {
         const message = buffer.substring(0, boundary);
         buffer = buffer.substring(boundary + 2);
@@ -107,16 +97,13 @@ export class PostEventSource extends EventTarget {
       if (line.startsWith('event:')) {
         eventName = line.substring(6).trim();
       } else if (line.startsWith('data:')) {
-        // 支援多行 data
         data += line.substring(5).trim() + '\n';
       }
-      // 為了簡化，此處省略 id 和 retry 欄位的處理
     }
 
-    // 移除最後一個換行符
     data = data.slice(0, -1);
 
-    this.dispatchEvent(new MessageEvent(eventName, { data }));
+    this.dispatchEvent(new MessageEvent(eventName, { data: this.tryParseJSON(data) }));
   }
 
   close() {
@@ -124,6 +111,20 @@ export class PostEventSource extends EventTarget {
     try {
       this.#controller.abort();
     } catch (error) { }
+  }
+
+  /**
+   * 檢查一個字串是否是有效的 JSON 格式，並返回解析後的物件（如果有效）。
+   * @param {string} text 要檢查的字串
+   * @returns {object | null} 如果是有效的 JSON 則返回解析後的物件/值，否則返回 null。
+  */
+  tryParseJSON(text) {
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      // console.error('無效的 JSON 格式:', error.message);
+      return text;
+    }
   }
 
 };
