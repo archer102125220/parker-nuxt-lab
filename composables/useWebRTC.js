@@ -1,5 +1,5 @@
-
 import freeice from 'freeice';
+import _cloneDeep from 'lodash/cloneDeep';
 
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
 // http://ithelp.ithome.com.tw/articles/10258599
@@ -17,7 +17,6 @@ const RTC = window?.RTCPeerConnection || window?.mozRTCPeerConnection || window?
 
 export function webRTCInit(newConfig = DEFAULT_CONFIG) {
   if (typeof window === 'undefined') return;
-  console.log('-----------webRTCInit-----------');
 
   const {
     iceCandidate,
@@ -36,7 +35,6 @@ export function webRTCInit(newConfig = DEFAULT_CONFIG) {
     ...(webRTCConfig || {}),
     iceServers: webRTCConfig?.iceServers || freeice()
   };
-  console.log({ _webRTCConfig });
   const newWebRTC = new RTC(_webRTCConfig);
 
   if (typeof iceCandidate === 'function') {
@@ -73,18 +71,31 @@ export function webRTCInit(newConfig = DEFAULT_CONFIG) {
 }
 
 export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
+  const localStreamAdded = ref(false);
+
   const webRTC = reactive({
     RTC: null,
     candidate: null,
     localDescriptionSetting: false,
     localDescription: null,
     streamList: [],
-    trackSender: []
+    trackSenderList: [],
+    trackSender: {},
+    isOffer: false,
+    offer: null,
+    isAnswer: false,
+    answer: null,
+    remoteDescriptionAdded: false,
+    get localStreamAdded() {
+      return localStreamAdded.value;
+    },
+    set localStreamAdded(newLocalStreamAdded) {
+      localStreamAdded.value = newLocalStreamAdded;
+    }
   });
 
   async function handleWebRTCInit(newConfig = DEFAULT_CONFIG) {
     if (typeof window === 'undefined') return;
-    console.log('__________handleWebRTCInit__________');
 
     if (webRTC.RTC instanceof RTC === true) {
       webRTC.RTC.close();
@@ -128,7 +139,6 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
   }
   async function handleWebRTCConfigUpdate(newConfig = DEFAULT_CONFIG, oldConfig = null) {
     if (typeof window === 'undefined' || webRTC.RTC instanceof RTC === false) return;
-    console.log('-----------handleWebRTCConfigUpdate-----------');
 
     const {
       iceCandidate: _newIceCandidate,
@@ -244,6 +254,11 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     if (typeof window === 'undefined' || currentWebRTC instanceof RTC === false) return;
     // 還要測試
 
+    const trackSenderList = Array.isArray(webRTC.trackSenderList)
+      ? _cloneDeep(webRTC.trackSenderList)
+      : [];
+    const trackSender = _cloneDeep(webRTC.trackSender);
+
     // if (oldStreamData?.value instanceof window?.MediaStream === true) {
     //   currentWebRTC.removeStream(oldStreamData.value);
     // } else if (oldStreamData instanceof window?.MediaStream === true) {
@@ -256,7 +271,41 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     //   currentWebRTC.addStream(newStreamData);
     // }
 
-    // webRTC.trackSender
+    const _oldStreamData = oldStreamData?.value instanceof window?.MediaStream === true ?
+      oldStreamData?.value :
+      oldStreamData instanceof window?.MediaStream === true ?
+        oldStreamData :
+        null;
+    if (_oldStreamData !== null) {
+      if (Array.isArray(trackSender[_oldStreamData.id]) === true) {
+        trackSender[_oldStreamData.id].forEach((sender) => {
+          webRTC.RTC.removeTrack(sender);
+        });
+        trackSender[_oldStreamData.id] = null;
+        delete trackSender[_oldStreamData.id];
+      }
+    }
+
+    const _newStreamData = newStreamData?.value instanceof window?.MediaStream === true ?
+      newStreamData?.value :
+      newStreamData instanceof window?.MediaStream === true ?
+        newStreamData :
+        null;
+    if (_newStreamData !== null) {
+      if (Array.isArray(trackSender[_newStreamData.id]) === false) {
+        trackSender[_newStreamData.id] = [];
+      }
+
+      // 將本地視訊軌加入 RTCPeerConnection
+      _newStreamData.getTracks().forEach((track) => {
+        const _trackSender = webRTC.RTC.addTrack(track, _newStreamData);
+        trackSenderList.push(_trackSender);
+        trackSender[_newStreamData.id].push(_trackSender);
+      });
+      localStreamAdded.value = true;
+    }
+    webRTC.trackSender = trackSender;
+    webRTC.trackSenderList = trackSenderList;
 
     // const streamAdded = (config?.value || config)?.streamAdded;
 
@@ -267,40 +316,79 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
   }
 
   watch(() => (config?.value || config), handleWebRTCConfigUpdate, { deep: true });
-  watch(() => (streamData?.value || streamData), handleStreamData, { deep: true });
+  watch(
+    () => (streamData?.value || streamData),
+    (newStreamData, oldStreamData) => handleStreamData(newStreamData, oldStreamData, webRTC.RTC),
+    { deep: true }
+  );
   watch(() => webRTC.localDescription,
     async function (newLocalDescription) {
       try {
-        const rawNewLocalDescription = toRaw(newLocalDescription);
-        console.log({ rawNewLocalDescription, ['webRTC.RTC']: webRTC.RTC });
-        console.log({
-          ['webRTC.RTC.connectionState']: webRTC.RTC.connectionState,
-          ['webRTC.RTC.signalingState']: webRTC.RTC.signalingState,
-          ['webRTC.RTC.localDescription?.sdp']: webRTC.RTC.localDescription?.sdp
-        });
+        // const rawNewLocalDescription = toRaw(newLocalDescription);
         webRTC.localDescriptionSetting = true;
-        await webRTC.RTC.setLocalDescription(rawNewLocalDescription);
+        await webRTC.RTC.setLocalDescription(newLocalDescription);
         webRTC.localDescriptionSetting = false;
-        console.log({
-          ['webRTC.RTC.connectionState']: webRTC.RTC.connectionState,
-          ['webRTC.RTC.signalingState']: webRTC.RTC.signalingState,
-          ['webRTC.RTC.localDescription?.sdp']: webRTC.RTC.localDescription?.sdp
-        });
       } catch (error) {
         console.log(error);
       }
     },
     { deep: true }
   );
+  watch(
+    () => [
+      localStreamAdded.value,
+      webRTC.remoteDescriptionAdded,
+      webRTC.isOffer,
+      webRTC.isAnswer
+    ],
+    async ([
+      newLocalStreamAdded,
+      newWremoteWebrtcDescriptionAdded,
+      newIsOffer,
+      newIsAnswer
+    ]) => {
+      if (newLocalStreamAdded === false) return;
+
+      try {
+        if (newIsOffer === true) {
+          const newOffer = await webRTC.RTC.createOffer();
+          webRTC.localDescription = newOffer;
+
+          // socketIoClient.io.emit('newUser', { offer: newOffer });
+          webRTC.isOffer = false;
+          webRTC.offer = newOffer;
+        } else if (
+          newWremoteWebrtcDescriptionAdded === true &&
+          newIsAnswer === true
+        ) {
+          const newAnswer = await webRTC.RTC.createAnswer();
+          webRTC.localDescription = newAnswer;
+
+          // socketIoClient.io.emit('newUser', { answer: newAnswer });
+          webRTC.isAnswer = false;
+          webRTC.answer = newAnswer;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  );
 
   onMounted(() => {
     handleWebRTCInit(config);
+
+    if (system.supportWebsocket === false) {
+      window.webRTC = webRTC;
+      window.getWebRTC = function () {
+        webRTC.value;
+      };
+    }
   });
 
   onBeforeUnmount(() => {
     if (typeof webRTC.RTC?.removeTrack === 'function') {
-      webRTC.trackSender.forEach(track => {
-        webRTC.RTC.removeTrack(track);
+      webRTC.trackSenderList.forEach(sender => {
+        webRTC.RTC.removeTrack(sender);
       })
     }
     if (typeof webRTC.RTC.close === 'function') {

@@ -157,13 +157,12 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
     }
   });
 
-  onBeforeUnmount(() => {
+  onBeforeUnmount(handleUnwatch);
+  onUnmounted(() => {
     if (typeof SocketIo.io?.disconnect === 'function') {
       SocketIo.io.disconnect();
       SocketIo.io = null;
     }
-
-    handleUnwatch();
   });
 
   watch(
