@@ -46,7 +46,7 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
     initWebSocket((config?.value || config));
   });
 
-  onBeforeUnmount(() => {
+  onUnmounted(() => {
     if (typeof WebSocket.value?.close === 'function') {
       WebSocket.value.close();
       WebSocket.value = null;
@@ -59,7 +59,7 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
 }
 
 function handleWaitConnect(currentAfterInit, socket) {
-  if (socket.readyState !== WebSocket.OPEN) {
+  if (socket.readyState !== window.WebSocket.OPEN) {
     return setTimeout(() => handleWaitConnect(currentAfterInit, socket), 500);
   }
   currentAfterInit(socket);

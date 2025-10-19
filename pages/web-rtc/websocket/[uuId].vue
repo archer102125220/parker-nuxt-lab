@@ -12,13 +12,21 @@
     </p>
 
     <video
-      ref="localVideoEl"
-      id="localVideo"
-      class="web_rtc_websocket_page-video"
+      class="web_rtc_socket_io_page-video"
       width="100%"
       height="360"
       autoplay
       :srcObject="streamObj"
+    />
+
+    <video
+      v-for="streamItem in streamList"
+      :key="streamItem?.id"
+      class="web_rtc_socket_io_page-video"
+      width="100%"
+      height="360"
+      autoplay
+      :srcObject="streamItem"
     />
   </div>
 </template>
@@ -35,26 +43,31 @@ const route = useRoute();
 // https://johnnywang1994.github.io/book/articles/js/webrtc-realtime-meeting.html
 // https://nuxt.com/modules/socket-io
 
-const localVideoEl = useTemplateRef('localVideoEl');
 const streamObj = useCameraStream({ audio: true });
-
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
-const webRTC = useWebRTC({
-  iceCandidate(localIceCandidateEvent) {
-    console.log({ localIceCandidateEvent });
-    console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
+const webRTC = useWebRTC(
+  {
+    iceCandidate(localIceCandidateEvent) {
+      // console.log({ localIceCandidateEvent });
+      console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
+    },
+    iceconnectionStateChange(iceconnectionStateChangeEvent) {
+      // console.log({ iceconnectionStateChangeEvent });
+      console.log(
+        'ICE 伺服器狀態變更 => ',
+        iceconnectionStateChangeEvent.target.iceConnectionState
+      );
+    }
   },
-  iceconnectionStateChange(localIceconnectionStateChangeEvent) {
-    console.log({ localIceconnectionStateChangeEvent });
-    console.log(
-      'ICE 伺服器狀態變更 => ',
-      localIceconnectionStateChangeEvent.target.iceConnectionState
-    );
-  }
-});
+  streamObj
+);
 const websocket = useWebSocket({
   channel: `/web-rtc/${route.params.uuId}`,
   message: onMessage
+});
+
+const streamList = computed(() => {
+  return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
 });
 
 function onMessage(payload) {

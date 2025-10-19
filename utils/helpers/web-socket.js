@@ -15,7 +15,7 @@ export function createWebSocket(
   const webSocketUrl = url.replaceAll('https://', 'wss://').replaceAll('http://', 'ws://');
 
   const domain = window?.location?.origin || '';
-  const socket = new WebSocket(
+  const socket = new window.WebSocket(
     webSocketUrl.indexOf('ws') === 0
       ? webSocketUrl
       : (
