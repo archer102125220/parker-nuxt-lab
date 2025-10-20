@@ -29,6 +29,7 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@tensorflow/tfjs-node": "^4.22.0",
+    "@upstash/redis": "^1.35.6",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "@vite-pwa/nuxt": "^0.10.6",
@@ -72,7 +73,8 @@
     "videojs": "^1.0.0",
     "vue": "^3.5.8",
     "vue-lazyload": "^3.0.0",
-    "vuetify": "^3.6.13"
+    "vuetify": "^3.6.13",
+    "webrtc-adapter": "^9.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",

@@ -31,7 +31,7 @@
 
 <script setup>
 useHeadMataData({
-  title: 'WebRTC測試'
+  title: 'WebRTC測試 - socket.io信號交換'
 });
 definePageMeta({
   middleware: 'check-params-uuid'

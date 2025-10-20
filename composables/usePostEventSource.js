@@ -3,14 +3,18 @@ import { PostEventSource } from '@/utils/request/PostEventSource';
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
 const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';
 
-export function usePostEventSource(config = { channel: '/' }) {
-  const PostEventSourceObj = ref(null);
+export function usePostEventSource(config = { autonInit: true, channel: '/' }) {
+  const PostEventSourceObj = reactive({
+    croe: null,
+    init: false
+  });
 
   function initPostEventSource(currentConfig = {}) {
+    console.log('initPostEventSource');
     if (typeof window === 'undefined' || typeof PostEventSource !== 'function') return;
 
-    if (typeof PostEventSourceObj.value?.close === 'function') {
-      PostEventSourceObj.value.close();
+    if (typeof PostEventSourceObj.croe?.close === 'function') {
+      PostEventSourceObj.croe.close();
     }
 
     const { channel: currentChannel, payload } = (currentConfig?.value || currentConfig);
@@ -43,21 +47,24 @@ export function usePostEventSource(config = { channel: '/' }) {
       });
     }
 
-    PostEventSourceObj.value = newPostEventSource;
+    PostEventSourceObj.croe = newPostEventSource;
   }
 
-  onMounted(function () {
-    initPostEventSource((config?.value || config));
-  });
+  watch(() => (config?.value || config), initPostEventSource, { deep: true });
 
-  onBeforeUnmount(function () {
-    if (typeof PostEventSourceObj.value?.close === 'function') {
-      PostEventSourceObj.value.close();
-      PostEventSourceObj.value = null;
+  onMounted(function () {
+    const _config = config?.value || config;
+    if (_config.autonInit === true) {
+      initPostEventSource(_config);
     }
   });
 
-  watch(() => (config?.value || config), initPostEventSource, { deep: true });
+  onBeforeUnmount(function () {
+    if (typeof PostEventSourceObj.croe?.close === 'function') {
+      PostEventSourceObj.croe.close();
+      PostEventSourceObj.croe = null;
+    }
+  });
 
   return PostEventSourceObj;
 }

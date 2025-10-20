@@ -32,3 +32,4 @@ logs
 
 # firebase
 *-firebase-adminsdk-*.json
+.vercel

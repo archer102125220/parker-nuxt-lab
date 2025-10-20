@@ -33,7 +33,7 @@
 
 <script setup>
 useHeadMataData({
-  title: 'WebRTC測試'
+  title: 'WebRTC測試 - 原生配合Nuxt3內建Websocket信號交換'
 });
 definePageMeta({
   middleware: 'check-params-uuid'
