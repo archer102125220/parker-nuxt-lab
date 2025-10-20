@@ -1,7 +1,7 @@
 <template>
   <section class="web_rtc_server_sent_event_page">
     <p class="web_rtc_server_sent_event_page-description">
-      配合 Server-Sent Event 實作
+      配合 Server-Sent Event 及 @upstash/redis 實作
     </p>
 
     <video
@@ -26,30 +26,27 @@
 
 <script setup>
 import { nanoid } from 'nanoid';
+import _debounce from 'lodash/debounce';
 
 useHeadMataData({
-  title: 'WebRTC測試 - 配合Server-Sent Event實作'
+  title: 'WebRTC測試 - 配合Server-Sent Event 及 @upstash/redis實作'
 });
 definePageMeta({
   middleware: 'check-params-uuid'
 });
+
+const nuxtApp = useNuxtApp();
 const route = useRoute();
 
-const postEventSourceAutonInit = ref(false);
 const userId = computed(() => nanoid());
 
 const streamObj = useCameraStream({ audio: true });
 const webRTC = useWebRTC(
   {
-    afterInit() {
-      postEventSourceAutonInit.value = true;
-    },
     iceCandidate(localIceCandidateEvent) {
-      console.log({ localIceCandidateEvent });
       console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
     },
     iceconnectionStateChange(localIceconnectionStateChangeEvent) {
-      console.log({ localIceconnectionStateChangeEvent });
       console.log(
         'ICE 伺服器狀態變更 => ',
         localIceconnectionStateChangeEvent.target.iceConnectionState
@@ -62,12 +59,9 @@ const streamList = computed(() => {
   return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
 });
 const postEventSourceConfig = computed(() => ({
-  channel: `/web-rtc/${route.params.uuId}`,
-  autonInit: postEventSourceAutonInit.value,
+  channel: `/web-rtc/subscription/${route.params.uuId}`,
   payload: {
-    userId: userId.value,
-    candidate: webRTC.candidate,
-    description: webRTC.localDescription
+    userId: userId.value
   },
   eventList: [
     {
@@ -76,8 +70,14 @@ const postEventSourceConfig = computed(() => ({
         const payload = event.data;
         console.log({ payload, ['webRTC.RTC']: webRTC });
 
-        if (Array.isArray(payload) === false) return;
-        const isOffer = payload.length <= 1;
+        if (
+          typeof payload.isOffer !== 'boolean' &&
+          typeof payload.isAnswer !== 'boolean'
+        ) {
+          return;
+        }
+
+        const isOffer = payload.isOffer;
         console.log({
           isOffer,
           ['webRTC.offer']: webRTC.offer,
@@ -90,17 +90,32 @@ const postEventSourceConfig = computed(() => ({
         if (webRTC.answer === null) {
           webRTC.isAnswer = isOffer === false;
         }
-        payload.forEach(async function (remoteData) {
+
+        const remoteCandidateList = payload.memberCandidateList || [];
+        remoteCandidateList.forEach(async function (remoteData) {
           console.log({ remoteData });
           if (remoteData.userId === userId.value) return;
 
-          const RTCLocalDescription = webRTC.RTC?.localDescription || {};
-          const RTCRemoteDescription = webRTC.RTC?.remoteDescription || {};
+          const candidateList = remoteData?.candidateList;
 
-          const candidate = remoteData?.candidate;
+          if (Array.isArray(candidateList) === true) {
+            await Promise.all(
+              candidateList.map((candidate) =>
+                webRTC.RTC.addIceCandidate(candidate)
+              )
+            );
+          }
+        });
+
+        const remoteDescriptionList = payload.memberDescriptionList || [];
+        remoteDescriptionList.forEach(async function (remoteData) {
+          console.log({ remoteData });
+          if (remoteData.userId === userId.value) return;
+
           const description = remoteData?.description || {};
 
-          await webRTC.RTC.addIceCandidate(candidate);
+          const RTCLocalDescription = webRTC.RTC?.localDescription || {};
+          const RTCRemoteDescription = webRTC.RTC?.remoteDescription || {};
 
           // 檢查描述檔，避免重複設定
           if (
@@ -128,6 +143,59 @@ const postEventSourceConfig = computed(() => ({
   ]
 }));
 const postEventSource = usePostEventSource(postEventSourceConfig);
+
+watch(
+  () => webRTC.candidateList,
+  _debounce(
+    async function (newCandidateList) {
+      console.log({ newCandidateList });
+      try {
+        await nuxtApp.$serverSentEvent.POST_webRTCCandidateList({
+          roomId: route.params.uuId,
+          userId: userId.value,
+          candidateList: newCandidateList
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    200,
+    { trailing: true }
+  ),
+  { deep: true }
+);
+
+watch(
+  () => webRTC.localDescription,
+  _debounce(
+    async function (newLocalDescription) {
+      console.log({ newLocalDescription });
+      try {
+        await nuxtApp.$serverSentEvent.POST_webRTCDescription({
+          roomId: route.params.uuId,
+          userId: userId.value,
+          description: newLocalDescription
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    200,
+    { trailing: true }
+  ),
+  { deep: true }
+);
+
+onBeforeMount(async function () {
+  try {
+    await nuxtApp.$serverSentEvent.POST_webRTCJoinRoom({
+      roomId: route.params.uuId,
+      userId: userId.value
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
 </script>
 
 <style lang="scss">
@@ -146,7 +214,7 @@ const postEventSource = usePostEventSource(postEventSourceConfig);
     margin-bottom: 8px;
 
     background-color: #f0f8ff;
-    opacity: 0;
+    // opacity: 0;
   }
 }
 </style>

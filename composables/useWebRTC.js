@@ -78,8 +78,11 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
   const webRTC = reactive({
     RTC: null,
     candidate: null,
+    candidateList: [],
     localDescriptionSetting: false,
     localDescription: null,
+    remoteDescriptionSetting: false,
+    remoteDescription: null,
     streamList: [],
     trackSenderList: [],
     trackSender: {},
@@ -107,11 +110,16 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     const newWebRTC = webRTCInit({
       ...webRTCConfig,
       iceCandidate(iceCandidateEvent, ...arg) {
-        // if (iceCandidateEvent.candidate) {
-        //   webRTC.candidate = iceCandidateEvent.candidate;
-        // }
-
         webRTC.candidate = iceCandidateEvent.candidate;
+
+        let candidateList = [];
+        if (Array.isArray(webRTC.candidateList) === true) {
+          candidateList = _cloneDeep(webRTC.candidateList);
+        }
+        if (iceCandidateEvent.candidate) {
+          candidateList.push(iceCandidateEvent.candidate);
+        }
+        webRTC.candidateList = candidateList;
 
         if (typeof config?.iceCandidate === 'function') {
           config.iceCandidate(iceCandidateEvent, ...arg);
@@ -380,6 +388,22 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
         console.error(error);
       }
     }
+  );
+
+  watch(() => webRTC.remoteDescription,
+    async function (newRemoteDescription) {
+      try {
+        // const rawNewLocalDescription = toRaw(newRemoteDescription);
+        webRTC.remoteDescriptionSetting = true;
+        console.log(`設在設定設定遠端 ${newRemoteDescription?.type}...`);
+        await webRTC.RTC.setRemoteDescription(newRemoteDescription);
+        console.log(`已成功設定遠端 ${newRemoteDescription?.type}。`);
+        webRTC.remoteDescriptionSetting = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    { deep: true }
   );
 
   onMounted(() => {

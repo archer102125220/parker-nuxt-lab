@@ -54,7 +54,7 @@ export function usePostEventSource(config = { autonInit: true, channel: '/' }) {
 
   onMounted(function () {
     const _config = config?.value || config;
-    if (_config.autonInit === true) {
+    if (_config.autonInit !== false) {
       initPostEventSource(_config);
     }
   });
