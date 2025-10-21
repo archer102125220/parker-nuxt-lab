@@ -305,7 +305,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vuetify', 'date-fns']
+    transpile: ['vuetify', 'date-fns', 'lodash']
   },
 
   runtimeConfig: {
