@@ -1,9 +1,13 @@
 import _createWebSocket from '@/utils/helpers/web-socket';
 
-export function useWebSocket(config = { channel: '/', afterInit() { } }) {
+const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
+const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/web-socket';
+
+export function useWebSocket(config = { channel: '/' }, senderSetting = {}, afterInit = () => { }) {
   const createWebSocket = computed(() => useNuxtApp().$createWebSocket || _createWebSocket);
 
   const WebSocket = ref(null);
+  const unwatchSender = ref(null);
 
   function initWebSocket(currentConfig = {}) {
     if (typeof window === 'undefined' || typeof createWebSocket?.value !== 'function') return;
@@ -12,10 +16,11 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
       WebSocket.value.close();
     }
 
-    const { channel: currentChannel, afterInit: currentAfterInit, ...webSocketConfig } = (currentConfig?.value || currentConfig);
+    const {
+      channel: currentChannel,
+      ...webSocketConfig
+    } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
-    const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/web-socket';
     const path =
       currentChannel.indexOf('/') === 0
         ? WEBSOCKET_BASE_PATH + currentChannel
@@ -27,8 +32,8 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
         open(event, ...arg) {
           console.log('WebSocket client open', event);
 
-          if (this.inited === undefined && typeof currentAfterInit === 'function') {
-            handleWaitConnect(currentAfterInit, this)
+          if (this.inited === undefined && typeof afterInit === 'function') {
+            handleWaitConnect(afterInit, this)
             this.inited = true;
           }
           if (typeof webSocketConfig.open === 'function') {
@@ -42,8 +47,60 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
     WebSocket.value = newWebSocket;
   }
 
-  onMounted(function () {
+  function handleUnwatch() {
+    const safeUnwatchSender = unwatchSender.value || null;
+    if (typeof safeUnwatchSender === 'object' && safeUnwatchSender !== null) {
+
+      Object.keys(safeUnwatchSender).forEach(safeUnwatchSenderKey => {
+        if (typeof safeUnwatchSender[safeUnwatchSenderKey] === 'function') {
+          safeUnwatchSender[safeUnwatchSenderKey]();
+        }
+      });
+    }
+  }
+
+  watch(() => (config?.value || config), initWebSocket, { deep: true });
+
+  onMounted(async function () {
     initWebSocket((config?.value || config));
+
+    await nextTick();
+    handleUnwatch();
+
+    if (typeof senderSetting === 'object' && senderSetting !== null) {
+
+      const newUnwatchSender = {};
+      Object.keys(senderSetting).forEach(senderSettingKey => {
+        const getSendValue = () => {
+          if (typeof senderSetting[senderSettingKey]?.value === 'function') {
+            return senderSetting[senderSettingKey]?.value();
+          }
+          return senderSetting[senderSettingKey]?.value;
+        }
+
+        const sendValue = getSendValue();
+
+        if (senderSetting[senderSettingKey]?.watch === true) {
+
+          newUnwatchSender[senderSettingKey] = watch(
+            getSendValue,
+            (newSendValue) => {
+              WebSocket.value.send({ event: senderSettingKey, data: newSendValue });
+            },
+            { deep: typeof sendValue === 'object' }
+          );
+        }
+
+        if (sendValue !== null && sendValue !== undefined) {
+          WebSocket.value.send({ event: senderSettingKey, data: sendValue });
+        }
+      });
+
+      console.log({ newUnwatchSender });
+      unwatchSender.value = newUnwatchSender;
+    } else {
+      unwatchSender.value = null;
+    }
   });
 
   onUnmounted(() => {
@@ -52,8 +109,6 @@ export function useWebSocket(config = { channel: '/', afterInit() { } }) {
       WebSocket.value = null;
     }
   });
-
-  watch(() => (config?.value || config), initWebSocket, { deep: true });
 
   return WebSocket;
 }

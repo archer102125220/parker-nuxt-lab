@@ -1,3 +1,5 @@
+import { safeParseJSON } from '@/utils/helpers/safeToJSON';
+
 export function createWebSocket(
   confing = { open() { }, message() { }, close() { }, error() { } },
   log = false
@@ -6,7 +8,7 @@ export function createWebSocket(
 
   if (typeof confing !== 'object') throw new Error('invalid confing');
 
-  const { url, open, message, close, error } = confing;
+  const { url, open, close, error, listener } = confing;
 
   if (typeof url !== 'string' || url === '') {
     throw new Error('invalid url');
@@ -27,44 +29,18 @@ export function createWebSocket(
   );
 
   socket._send = socket.send;
-  socket.send = function (event, data) {
+  socket.send = async function (event, data) {
     const payload = { event, data };
 
     if (log === true && import.meta.dev) {
       console.log(payload);
     }
 
+    await handleWaitConnect(this);
     this._send(JSON.stringify(payload));
   }.bind(socket);
 
-  if (typeof open === 'function') {
-    socket.addEventListener('open', open);
-  }
-  handleHeatbeat(socket);
-
-  if (typeof message === 'function') {
-    socket.addEventListener('message', message);
-  }
-  if (typeof close === 'function') {
-    socket.addEventListener('close', close);
-  }
-  if (typeof error === 'function') {
-    socket.addEventListener('error', error);
-  }
-
-  return socket;
-}
-
-function handleHeatbeat(socket) {
-  if (typeof socket !== 'object' || socket === null) return;
-
-  if (socket.readyState !== WebSocket.OPEN) {
-    return setTimeout(() => handleHeatbeat(socket), 500);
-  }
-  socket.send('ping');
-
   let intervalId = null;
-
   function start() {
     if (intervalId !== null) return;
     intervalId = setInterval(() => {
@@ -83,8 +59,77 @@ function handleHeatbeat(socket) {
   socket.addEventListener('open', start);
   socket.addEventListener('close', stop);
   socket.addEventListener('error', stop);
-
   start();
+
+  if (typeof open === 'function') {
+    socket.addEventListener('open', open);
+  }
+  // if (typeof message === 'function') {
+  //   socket.addEventListener('message', message);
+  // }
+  socket.addEventListener('message', function (event) {
+    const jsonData = safeParseJSON(event.data);
+    event.jsonData = jsonData;
+
+    if (typeof confing.message === 'function') {
+      confing.message(event);
+    }
+
+    if (typeof jsonData.event === 'string' && jsonData.event !== '') {
+      const messageEvent = new MessageEvent(jsonData.event, { data: event.data });
+      messageEvent.jsonData = jsonData;
+      this.dispatchEvent(messageEvent);
+    }
+  }.bind(socket));
+
+  socket.addEventListener('pong', function (event) {
+    if (typeof confing.pong === 'function') {
+      confing.pong(event);
+    }
+
+    setTimeout(() => handleHeatbeat(this), 3000);
+  }.bind(socket));
+
+  if (typeof close === 'function') {
+    socket.addEventListener('close', close);
+  }
+  if (typeof error === 'function') {
+    socket.addEventListener('error', error);
+  }
+
+  if (typeof listener === 'object' && listener !== null) {
+    Object.keys(listener).forEach(listenerKey => {
+      if (
+        ['open', 'message'].includes(listenerKey) === false &&
+        typeof listener[listenerKey] === 'function'
+      ) {
+        socket.addEventListener(listenerKey, listener[listenerKey]);
+      }
+    });
+  }
+
+  handleHeatbeat(socket);
+  return socket;
+}
+
+function handleWaitConnect(socket) {
+  return new Promise(async resolve => {
+    if (socket instanceof window.WebSocket === false || socket.readyState === window.WebSocket.OPEN) {
+      resolve();
+    }
+
+    await new Promise((_resolve) => setTimeout(_resolve, 500));
+    resolve(handleWaitConnect(socket));
+  })
+}
+
+function handleHeatbeat(socket) {
+  if (typeof socket !== 'object' || socket === null) return;
+
+  if (socket.readyState !== window.WebSocket.OPEN) {
+    return setTimeout(() => handleHeatbeat(socket), 500);
+  }
+  socket.send('ping');
 }
 
 export default createWebSocket;

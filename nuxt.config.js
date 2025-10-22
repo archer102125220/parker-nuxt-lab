@@ -305,7 +305,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vuetify', 'date-fns', 'lodash']
+    transpile: IS_DEV === true ? ['vuetify', 'date-fns'] : ['vuetify', 'date-fns', 'lodash']
   },
 
   runtimeConfig: {

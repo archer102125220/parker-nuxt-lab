@@ -12,9 +12,10 @@
     </p>
 
     <video
-      class="web_rtc_socket_io_page-video"
+      class="web_rtc_websocket_page-video"
       width="100%"
       height="360"
+      muted
       autoplay
       :srcObject="streamObj"
     />
@@ -22,7 +23,7 @@
     <video
       v-for="streamItem in streamList"
       :key="streamItem?.id"
-      class="web_rtc_socket_io_page-video"
+      class="web_rtc_websocket_page-video"
       width="100%"
       height="360"
       autoplay
@@ -61,19 +62,74 @@ const webRTC = useWebRTC(
   },
   streamObj
 );
-const websocket = useWebSocket({
-  channel: `/web-rtc/${route.params.uuId}`,
-  message: onMessage
-});
+const websocket = useWebSocket(
+  {
+    channel: `/web-rtc/${route.params.uuId}`,
+    listener: {
+      webrtcJoined(webrtcJoinedPayload) {
+        webRTC.isOffer = webrtcJoinedPayload.isOffer === true;
+        webRTC.isAnswer = webrtcJoinedPayload.isOffer === false;
+      },
+      async webrtcDescription(webrtcPayload) {
+        const RTCLocalDescription = webRTC.RTC?.localDescription || {};
+        const RTCRemoteDescription = webRTC.RTC?.remoteDescription || {};
+
+        const candidate = webrtcPayload?.candidate;
+        const description = webrtcPayload?.description || {};
+
+        await webRTC.RTC.addIceCandidate(candidate);
+
+        // 檢查描述檔，避免重複設定
+        if (
+          RTCLocalDescription?.type === description?.type ||
+          RTCRemoteDescription?.type === description?.type
+        ) {
+          return;
+        }
+
+        try {
+          console.log(`設在設定設定遠端 ${description?.type}...`);
+          await webRTC.RTC.setRemoteDescription(
+            new RTCSessionDescription(description)
+          );
+          console.log(`已成功設定遠端 ${description?.type}。`);
+
+          webRTC.remoteDescriptionAdded = true;
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      newUser() {
+        websocket.value.send({
+          event: 'webrtcDescription',
+          data: {
+            description:
+              typeof webRTC.offer === 'object' && webRTC.offer !== null
+                ? webRTC.offer
+                : webRTC.answer
+          }
+        });
+      }
+    }
+  },
+  {
+    webrtcJoin: {
+      value: () => route.params.uuId,
+      watch: false
+    },
+    webrtcDescription: {
+      value: () => ({
+        candidate: webRTC.candidate,
+        description: webRTC.localDescription
+      }),
+      watch: true
+    }
+  }
+);
 
 const streamList = computed(() => {
   return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
 });
-
-function onMessage(payload) {
-  console.log({ payload });
-  console.log({ ['payload?.data']: payload?.data });
-}
 
 watch(
   () => [streamObj.value, webRTC.RTC, websocket.value],
@@ -100,7 +156,7 @@ watch(
     margin-bottom: 8px;
 
     background-color: #f0f8ff;
-    // opacity: 0;
+    opacity: 0;
   }
 }
 </style>

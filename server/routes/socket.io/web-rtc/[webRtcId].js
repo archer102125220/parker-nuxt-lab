@@ -15,11 +15,11 @@ export default defineEventHandler({
     open(peer) {
       console.log('[ws-socket.io] WebRTC WebSocket connected');
 
-      const urlParts = (peer._internal.nodeReq.url || '').split('/');
+      const urlParts = (peer.request.url || '').split('/');
       const namespace = (decodedMessage?.nsp || '');
       const _namespace = namespace.replaceAll('/socket.io/web-rtc/', '').replaceAll('/socket.io/web-rtc', '');
       const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
-      const webRtcId = urlParts[urlParts.length - 1] || query?.webRtcId || _namespace;
+      const webRtcId = _namespace || urlParts[urlParts.length - 1] || query?.webRtcId;
 
       const nitroApp = useNitroApp();
 
@@ -28,24 +28,76 @@ export default defineEventHandler({
       // uuid v4 正規表示法 [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
       // /^\/socket.io\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
       nitroApp.$socketIoServer
-        .of(/^\/socket.io\/web-rtc\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+        .of(`/socket.io/web-rtc/${webRtcId}`)
         .once('connection', function (socket) {
-          console.log('/socket.io/web-rtc/[webRtcId] connection', { webRtcId });
+          let _webRtcId = webRtcId;
+
+          console.log(`/socket.io/web-rtc/${webRtcId} connection`, { _webRtcId });
           console.log('a user connected', socket.id);
 
-          socket.on('webrtc', function (payload) {
-            console.log({ webrtcPayload: payload });
+          socket.on('webrtcJoin', async function (newWebRtcId) {
+            if (typeof newWebRtcId === 'string' && newWebRtcId !== '') {
+              _webRtcId = newWebRtcId;
+              socket.join(newWebRtcId);
+            }
 
-            socket.emit('webrtc', payload);
+            const socketsInRoom = await nitroApp.$socketIoServer
+              .of(`/socket.io/web-rtc/${webRtcId}`)
+              .in(_webRtcId).allSockets();
+
+            const socketIdList = Array.from(socketsInRoom);
+            const isOffer = socketIdList.length <= 1;
+
+            socket.broadcast.to(_webRtcId).emit('newUser');
+            socket.emit('webrtcJoined', {
+              id: socket.id,
+              newWebRtcId,
+              _webRtcId,
+              socketIdCount: socketIdList.length,
+              isOffer
+            });
+
+          });
+
+          socket.on('webrtcDescription', function (payload) {
+            console.log({ webrtcPayload: payload, _webRtcId });
+
+            if (typeof webRt_webRtcIdcId === 'string' && _webRtcId !== '') {
+              // nitroApp.$socketIoServer
+              //   .of(`/socket.io/web-rtc/${webRtcId}`)
+              //   .to(webRtcId)
+              //   .emit('webrtcDescription', { ...payload, webRtcId: _webRtcId });
+              socket
+                .broadcast
+                .to(_webRtcId)
+                .emit('webrtcDescription', { ...payload, webRtcId: _webRtcId });
+            } else {
+              // nitroApp.$socketIoServer
+              //   .of(`/socket.io/web-rtc/${webRtcId}`)
+              //   .emit('webrtcDescription', { ...payload, webRtcId: _webRtcId });
+              socket
+                .broadcast
+                .emit('webrtcDescription', { ...payload, webRtcId: _webRtcId });
+            }
+          });
+
+          socket.on('sendPrivate', function (data) {
+            const { targetId: targetSocketId, ...payload } = data; // 假設客戶端在數據中傳遞了目標ID
+
+            // 使用 socket.to(socketId)
+            socket.broadcast.to(targetSocketId).emit('privateMsg', payload);
           });
 
           socket.on('ping', function (callback) {
-            callback();
+            console.log({ callback });
+            if (typeof callback === 'function') {
+              callback();
+            }
           });
         });
 
-      nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
-      nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
+      nitroApp.$socketEngine.prepare(peer.request);
+      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
     },
 
     async message(peer, message) {

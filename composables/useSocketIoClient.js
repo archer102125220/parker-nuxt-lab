@@ -1,5 +1,8 @@
 import * as _socketIoClient from 'socket.io-client';
 
+const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
+const SOCKET_IO_BASE_PATH = import.meta.env.VITE_SOCKET_IO_BASE_PATH || '/socket.io';
+
 export function useSocketIoClient(config = { channel: '/', listener: {} }, senderSetting = {}, afterInit = () => { }) {
   const socketIoClient = computed(() => useNuxtApp().$socketIoClient || _socketIoClient);
 
@@ -9,7 +12,7 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
   });
   const unwatchSender = ref(null);
 
-  function initSocketIoClient(currentConfig = {}, isReInit = false) {
+  function initSocketIoClient(currentConfig = {}) {
     if (typeof window === 'undefined' || typeof socketIoClient?.value?.io !== 'function') return;
 
     if (typeof SocketIo.io?.disconnect === 'function') {
@@ -23,8 +26,6 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
       ...socketIoClientConfig
     } = (currentConfig?.value || currentConfig);
 
-    const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
-    const SOCKET_IO_BASE_PATH = import.meta.env.VITE_SOCKET_IO_BASE_PATH || '/socket.io';
     const path =
       currentChannel === '/'
         ? SOCKET_IO_BASE_PATH
@@ -36,7 +37,11 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
     const newSocketIo = socketIoClient?.value?.io(
       socketIoUrl,
       {
-        path: channelAsPath === true ? path.includes('?') ? path.substring(0, path.indexOf('?')) : path : undefined,
+        path: channelAsPath === true ?
+          path.includes('?') ?
+            path.substring(0, path.indexOf('?')) :
+            path :
+          undefined,
         ...socketIoClientConfig,
         autoConnect:
           typeof socketIoClientConfig?.autoConnect === 'boolean'
@@ -115,8 +120,14 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
     }
   }
 
+  watch(
+    () => (config?.value || config),
+    initSocketIoClient,
+    { deep: true }
+  );
+
   onMounted(async function () {
-    initSocketIoClient((config?.value || config));
+    initSocketIoClient(config?.value || config);
 
     await nextTick();
     handleUnwatch();
@@ -150,7 +161,6 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
         }
       });
 
-      console.log({ newUnwatchSender });
       unwatchSender.value = newUnwatchSender;
     } else {
       unwatchSender.value = null;
@@ -164,12 +174,6 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
       SocketIo.io = null;
     }
   });
-
-  watch(
-    () => (config?.value || config),
-    (newConfig) => initSocketIoClient(newConfig, true),
-    { deep: true }
-  );
 
   return SocketIo;
 }

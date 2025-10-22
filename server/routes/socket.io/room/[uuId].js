@@ -16,7 +16,7 @@ export default defineEventHandler({
 
       const nitroApp = useNitroApp();
 
-      const urlParts = (peer._internal.nodeReq.url || '').split('/');
+      const urlParts = (peer.request.url || '').split('/');
       const namespace = (decodedMessage?.nsp || '');
       const _namespace = namespace.replaceAll('/socket.io/room/', '').replaceAll('/socket.io/room', '');
       const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
@@ -50,8 +50,8 @@ export default defineEventHandler({
           });
         });
 
-      nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
-      nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
+      nitroApp.$socketEngine.prepare(peer.request);
+      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
     },
 
     async message(peer, message) {

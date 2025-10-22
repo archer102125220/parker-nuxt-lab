@@ -13,6 +13,7 @@
       class="web_rtc_socket_io_page-video"
       width="100%"
       height="360"
+      muted
       autoplay
       :srcObject="streamObj"
     />
@@ -45,22 +46,7 @@ const system = useSystemStore();
 
 const streamObj = useCameraStream({ audio: true });
 // https://medium.com/@hiro05097952/%E5%88%9D%E6%8E%A2-webrtc-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%BB%BA%E7%AB%8B%E7%B7%9A%E4%B8%8A%E8%A6%96%E8%A8%8A-3-65e14b07cc87
-const webRTC = useWebRTC(
-  {
-    // iceCandidate(localIceCandidateEvent) {
-    //   console.log({ localIceCandidateEvent });
-    //   console.log('onIceCandidate => ', localIceCandidateEvent.candidate);
-    // },
-    // iceconnectionStateChange(iceconnectionStateChangeEvent) {
-    //   console.log({ iceconnectionStateChangeEvent });
-    //   console.log(
-    //     'ICE 伺服器狀態變更 => ',
-    //     iceconnectionStateChangeEvent.target.iceConnectionState
-    //   );
-    // }
-  },
-  streamObj
-);
+const webRTC = useWebRTC(null, streamObj);
 const socketIoClient = useSocketIoClient(
   {
     channel: '/web-rtc',

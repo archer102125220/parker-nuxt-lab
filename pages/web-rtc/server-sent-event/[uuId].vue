@@ -8,6 +8,7 @@
       class="web_rtc_server_sent_event_page-video"
       width="100%"
       height="360"
+      muted
       autoplay
       :srcObject="streamObj"
     />
