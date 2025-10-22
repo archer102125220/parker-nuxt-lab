@@ -85,14 +85,14 @@ export function useWebSocket(config = { channel: '/' }, senderSetting = {}, afte
           newUnwatchSender[senderSettingKey] = watch(
             getSendValue,
             (newSendValue) => {
-              WebSocket.value.send({ event: senderSettingKey, data: newSendValue });
+              WebSocket.value.send(senderSettingKey, newSendValue);
             },
             { deep: typeof sendValue === 'object' }
           );
         }
 
         if (sendValue !== null && sendValue !== undefined) {
-          WebSocket.value.send({ event: senderSettingKey, data: sendValue });
+          WebSocket.value.send(senderSettingKey, sendValue);
         }
       });
 

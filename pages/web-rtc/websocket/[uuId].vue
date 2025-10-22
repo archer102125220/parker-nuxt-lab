@@ -100,14 +100,11 @@ const websocket = useWebSocket(
         }
       },
       newUser() {
-        websocket.value.send({
-          event: 'webrtcDescription',
-          data: {
-            description:
-              typeof webRTC.offer === 'object' && webRTC.offer !== null
-                ? webRTC.offer
-                : webRTC.answer
-          }
+        websocket.value.send('webrtcDescription', {
+          description:
+            typeof webRTC.offer === 'object' && webRTC.offer !== null
+              ? webRTC.offer
+              : webRTC.answer
         });
       }
     }

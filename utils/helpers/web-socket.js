@@ -32,6 +32,8 @@ export function createWebSocket(
   socket.send = async function (event, data) {
     const payload = { event, data };
 
+    console.log({ payload });
+
     if (log === true && import.meta.dev) {
       console.log(payload);
     }
