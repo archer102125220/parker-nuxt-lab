@@ -35,7 +35,7 @@ const eventSource = useEventSource({
   ]
 });
 watch(
-  () => eventSource.value,
+  () => eventSource.croe,
   (newEventSource) => {
     console.log({ newEventSource });
   },

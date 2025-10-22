@@ -38,7 +38,7 @@ const postEventSource = usePostEventSource({
   ]
 });
 watch(
-  () => postEventSource.value,
+  () => postEventSource.croe,
   (newPostEventSource) => {
     console.log({ newPostEventSource });
   },

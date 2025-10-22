@@ -1,14 +1,31 @@
+import { dayjs } from '@/plugins/01.day';
+
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
 const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';
 
 export function useEventSource(config = { channel: '/' }) {
-  const EventSourceObj = ref(null);
+  const EventSourceObj = reactive({
+    croe: null,
+    lastMessgTime: null,
+    timeoutTimestamp: null
+  });
 
+  function handleCheckConnect() {
+    const diff = dayjs().diff(dayjs(EventSourceObj.lastMessgTime), 'second');
+    console.log({ diff });
+    if (diff > 10) {
+      EventSourceObj.lastMessgTime = null;
+      return initEventSource(config?.value || config);
+    }
+
+    EventSourceObj.lastMessgTime = dayjs().unix();
+    EventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 250);
+  }
   function initEventSource(currentConfig = {}) {
     if (typeof window === 'undefined' || typeof window?.EventSource !== 'function') return;
 
-    if (typeof EventSourceObj.value?.close === 'function') {
-      EventSourceObj.value.close();
+    if (typeof EventSourceObj.croe?.close === 'function') {
+      EventSourceObj.croe.close();
     }
 
     const { channel: currentChannel } = (currentConfig?.value || currentConfig);
@@ -20,17 +37,35 @@ export function useEventSource(config = { channel: '/' }) {
 
     const newEventSourceObj = new EventSource(DOMAIN + path);
 
-    if (typeof currentConfig?.open === 'function') {
-      newEventSourceObj.addEventListener('open', currentConfig.open);
-    }
+    // if (typeof currentConfig?.open === 'function') {
+    //   newEventSourceObj.addEventListener('open', currentConfig.open);
+    // }
+    newEventSourceObj.addEventListener('open', async function (...arg) {
+      handleCheckConnect();
+
+      const _config = config?.value || config;
+
+      if (typeof _config?.open === 'function') {
+        await _config.open(...arg);
+      }
+    });
     if (typeof currentConfig?.error === 'function') {
       newEventSourceObj.addEventListener('error', currentConfig.error);
     }
-    if (typeof currentConfig?.message === 'function') {
-      newEventSourceObj.addEventListener('message', currentConfig.message);
-    }
+    // if (typeof currentConfig?.message === 'function') {
+    //   newEventSourceObj.addEventListener('message', currentConfig.message);
+    // }
+    newEventSourceObj.addEventListener('message', async function (...arg) {
+      handleCheckConnect();
+
+      const _config = config?.value || config;
+
+      if (typeof _config?.message === 'function') {
+        await _config.message(...arg);
+      }
+    });
     if (typeof currentConfig?.ping === 'function') {
-      newEventSourceObj.addEventListener('ping', currentConfig.message);
+      newEventSourceObj.addEventListener('ping', currentConfig.ping);
     }
 
     if (Array.isArray(currentConfig?.eventList) === true) {
@@ -41,21 +76,22 @@ export function useEventSource(config = { channel: '/' }) {
       });
     }
 
-    EventSourceObj.value = newEventSourceObj;
+    EventSourceObj.croe = newEventSourceObj;
   }
 
+  watch(() => (config?.value || config), initEventSource, { deep: true });
+
   onMounted(function () {
-    initEventSource((config?.value || config));
+    initEventSource(config?.value || config);
   });
 
   onBeforeUnmount(function () {
-    if (typeof EventSourceObj.value?.close === 'function') {
-      EventSourceObj.value.close();
-      EventSourceObj.value = null;
+    if (typeof EventSourceObj.croe?.close === 'function') {
+      clearTimeout(EventSourceObj.timeoutTimestamp);
+      EventSourceObj.croe.close();
+      EventSourceObj.croe = null;
     }
   });
-
-  watch(() => (config?.value || config), initEventSource, { deep: true });
 
   return EventSourceObj;
 }

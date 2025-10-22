@@ -186,7 +186,6 @@ module.exports = {
     useElementVisibility: false,
     useEventBus: false,
     useEventListener: false,
-    useEventSource: false,
     useEyeDropper: false,
     useFavicon: false,
     useFocus: false,
