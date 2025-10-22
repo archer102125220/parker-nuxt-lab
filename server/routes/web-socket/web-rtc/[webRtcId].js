@@ -42,7 +42,7 @@ export default defineWebSocketHandler({
       peer.send(
         JSON.stringify({
           event: 'webrtcJoined',
-          deta: {
+          data: {
             isOffer,
             webRtcId,
             id: peer.id,

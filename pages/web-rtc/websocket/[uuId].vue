@@ -66,16 +66,21 @@ const websocket = useWebSocket(
   {
     channel: `/web-rtc/${route.params.uuId}`,
     listener: {
-      webrtcJoined(webrtcJoinedPayload) {
+      webrtcJoined(webrtcJoinedEvent) {
+        const webrtcJoinedPayload = webrtcJoinedEvent.jsonData?.data || {};
+        console.log({ webrtcJoinedEvent, webrtcJoinedPayload });
         webRTC.isOffer = webrtcJoinedPayload.isOffer === true;
         webRTC.isAnswer = webrtcJoinedPayload.isOffer === false;
       },
-      async webrtcDescription(webrtcPayload) {
+      async webrtcDescription(webrtcEvent) {
         const RTCLocalDescription = webRTC.RTC?.localDescription || {};
         const RTCRemoteDescription = webRTC.RTC?.remoteDescription || {};
 
+        const webrtcPayload = webrtcEvent.jsonData?.data || {};
         const candidate = webrtcPayload?.candidate;
         const description = webrtcPayload?.description || {};
+
+        console.log({ webrtcEvent, webrtcPayload });
 
         await webRTC.RTC.addIceCandidate(candidate);
 
@@ -153,7 +158,7 @@ watch(
     margin-bottom: 8px;
 
     background-color: #f0f8ff;
-    opacity: 0;
+    // opacity: 0;
   }
 }
 </style>
