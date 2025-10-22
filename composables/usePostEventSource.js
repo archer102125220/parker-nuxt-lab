@@ -20,7 +20,7 @@ export function usePostEventSource(config = { channel: '/' }) {
     }
 
     PostEventSourceObj.lastMessgTime = dayjs().unix();
-    PostEventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 250);
+    PostEventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 10);
   }
   function initPostEventSource(currentConfig = {}) {
     console.log('initPostEventSource');
