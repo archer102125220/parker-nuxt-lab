@@ -2,7 +2,7 @@ import firebaseAdmin from 'firebase-admin';
 
 import {
   messagingFindAllToken
-} from '@/services/server/firebase-messaging';
+} from '@services/server/firebase-messaging';
 
 /**
  * @openapi

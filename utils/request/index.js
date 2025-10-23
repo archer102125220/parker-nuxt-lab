@@ -2,7 +2,7 @@ import axios from 'axios';
 // import qs from 'qs';
 import { LRUCache } from 'lru-cache';
 
-// import cacheAdapterEnhancer from '@/utils/axios-extensions';
+// import cacheAdapterEnhancer from '@utils/axios-extensions';
 import cacheAdapterEnhancer from './axios-extensions';
 
 // https://www.hai-fe.com/docs/nuxt/apiCache.html

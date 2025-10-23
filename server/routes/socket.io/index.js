@@ -2,7 +2,7 @@
 // https://github.com/socketio/socket.io/discussions/5021
 import { useNitroApp } from '#imports';
 
-import { decodeSocketIOPayload } from '@/utils/third-party/socket.io-decode';
+import { decodeSocketIOPayload } from '@utils/third-party/socket.io-decode';
 
 export default defineEventHandler({
   handler(event) {

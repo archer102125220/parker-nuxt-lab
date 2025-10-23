@@ -1,4 +1,4 @@
-import { request } from '@/utils/request';
+import { request } from '@utils/request';
 
 // const CLIENT_ID = import.meta.env.VITE_LINE_CLIENT_ID;
 // const CLIENT_SECRET = import.meta.env.VITE_LINE_CLIENT_SECRET;

@@ -29,7 +29,7 @@ const color = ref('#000000');
       height: 24px;
 
       background-color: var(--change_color, #fff);
-      // background-image: url('@/static/android.svg');
+      // background-image: url('@app/static/android.svg');
       mask: url('/img/svg-color-change/android.svg');
     }
   }

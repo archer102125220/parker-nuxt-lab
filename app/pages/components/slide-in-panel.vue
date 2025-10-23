@@ -43,6 +43,7 @@
       <TabsContent
         class="slide_in_panel_list_page-content-tab_content"
         height="100%"
+        tabs-content-height="70%"
         v-model="tab"
         :tab-list="tabList"
         :slot-name-is-default="true"
@@ -53,8 +54,20 @@
             :item="item"
           >
             <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
+            <p>{{ item }}</p>
             <SlideInPanel
               bottom="0px"
+              zIndex="3"
+              :timeout="3000000"
               container-position="absolute"
               v-model="showMessage"
               :left-enter="leftEnter"
@@ -100,6 +113,7 @@ onMounted(() => {
 .slide_in_panel_list_page {
   display: flex;
   flex-direction: column;
+  height: 80vh;
   overflow-x: hidden;
 
   &-describe {
@@ -112,13 +126,13 @@ onMounted(() => {
   }
   &-content {
     flex: 1;
-    flex-basis: 400px;
+    // flex-basis: 400px;
 
     &-tab_content {
       // height: 30%;
       &-item {
         position: relative;
-        height: 80%;
+        // height: 80%;
         overflow: hidden;
       }
     }

@@ -1,4 +1,4 @@
-import { messagingFindAllToken } from '@/services/server/firebase-messaging';
+import { messagingFindAllToken } from '@services/server/firebase-messaging';
 
 /**
  * @openapi

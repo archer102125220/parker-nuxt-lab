@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-const { classifySwipeDirection } = useNuxtApp();
+const { $classifySwipeDirection } = useNuxtApp();
 
 const props = defineProps({
   modelValue: {
@@ -403,7 +403,7 @@ function handleSliderMove(e) {
     angleDeg,
     angleRad,
     distance
-  } = classifySwipeDirection(
+  } = $classifySwipeDirection(
     { clientX: startX.value, clientY: startY.value },
     { clientX: eventX, clientY: eventY }
   );

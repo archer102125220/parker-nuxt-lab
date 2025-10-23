@@ -28,7 +28,7 @@ useHeadMataData({
 const videoEl = useTemplateRef('videoEl');
 const canvasEl = useTemplateRef('canvasEl');
 
-const streamObj = useCameraStream(handleFrameFromVideo);
+const streamObj = useCameraStream(null, handleFrameFromVideo);
 
 function handleFrameFromVideo() {
   const video = videoEl.value;

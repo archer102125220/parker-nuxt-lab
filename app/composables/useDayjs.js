@@ -1,4 +1,4 @@
-import { dayjs } from '@/plugins/01.day';
+import { dayjs } from '@app/plugins/01.day';
 
 export function useDayjs() {
   const _dayjs = computed(() => useNuxtApp().$dayjs || dayjs);

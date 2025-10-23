@@ -1,4 +1,4 @@
-import { useSystemStore } from '@/store/system';
+import { useSystemStore } from '@app/store/system';
 
 export default defineNuxtPlugin(({ $pinia }) => {
   const system = useSystemStore($pinia);

@@ -1,4 +1,4 @@
-import { googleGtagInit } from '@/utils/third-party/gtag';
+import { googleGtagInit } from '@utils/third-party/gtag';
 
 export function googleGTMInit(googleGTMID = '', log = false, callback) {
   if (typeof googleGTMID !== 'string' || googleGTMID === '') {

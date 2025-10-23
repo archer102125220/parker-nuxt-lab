@@ -19,8 +19,8 @@
 
 <script setup>
 const modules = {
-  ...import.meta.glob('@/components/DialogModal/*.vue'),
-  ...import.meta.glob('@/components/DialogModal/*/*.vue')
+  ...import.meta.glob('@app/components/DialogModal/*.vue'),
+  ...import.meta.glob('@app/components/DialogModal/*/*.vue')
 };
 
 // https://cn.vuejs.org/guide/components/v-model#v-model-arguments

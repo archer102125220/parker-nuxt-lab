@@ -3,7 +3,7 @@ import { useNitroApp } from '#imports';
 
 // import { defineEventHandler } from 'h3';
 
-import { decodeSocketIOPayload } from '@/utils/third-party/socket.io-decode';
+import { decodeSocketIOPayload } from '@utils/third-party/socket.io-decode';
 
 export default defineEventHandler({
   handler(event) {

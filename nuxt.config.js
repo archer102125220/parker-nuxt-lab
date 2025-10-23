@@ -109,9 +109,30 @@ export default defineNuxtConfig({
       }
     }
   },
-  // alias: {
-  //   ...windowsAlias
-  // },
+  alias: {
+    // ...windowsAlias,
+    '@': __dirname,
+    '@app': path.join(__dirname, 'app'),
+    '@i18n': path.join(__dirname, 'i18n'),
+    '@style': path.join(__dirname, 'style'),
+    '@public': path.join(__dirname, 'public'),
+    '@models': path.join(__dirname, 'models'),
+    '@services': path.join(__dirname, 'services'),
+    '@utils': path.join(__dirname, 'utils'),
+    '@service-worker': path.join(__dirname, 'service-worker'),
+    '@modules': path.join(__dirname, 'modules'),
+
+    '~': __dirname,
+    '~app': path.join(__dirname, 'app'),
+    '~i18n': path.join(__dirname, 'i18n'),
+    '~style': path.join(__dirname, 'style'),
+    '~public': path.join(__dirname, 'public'),
+    '~models': path.join(__dirname, 'models'),
+    '~services': path.join(__dirname, 'services'),
+    '~utils': path.join(__dirname, 'utils'),
+    '~service-worker': path.join(__dirname, 'service-worker'),
+    '~modules': path.join(__dirname, 'modules'),
+  },
   vite: {
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
@@ -126,7 +147,7 @@ export default defineNuxtConfig({
         scss: {
           api: 'modern-compiler', // or "modern", "legacy"
           additionalData:
-            '@use "~/style/variable.scss" as *; @use "~/style/mixin.scss" as *;'
+            '@use "@style/variable.scss" as *; @use "@style/mixin.scss" as *;'
         }
       },
       postcss: {
@@ -163,7 +184,7 @@ export default defineNuxtConfig({
       ]
     }
   },
-  css: ['@/style/global.scss', '@/style/animation.scss'],
+  css: ['@style/global.scss', '@style/animation.scss'],
   imports: {
     // presets: [
     //   {

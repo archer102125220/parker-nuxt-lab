@@ -1,6 +1,6 @@
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
-import PHONE_AREA_CODE from '@/assets/phoneCountryCode';
+import PHONE_AREA_CODE from '@app/assets/phoneCountryCode';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 

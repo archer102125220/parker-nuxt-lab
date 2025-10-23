@@ -1,4 +1,4 @@
-import { dayjs } from '@/plugins/01.day';
+import { dayjs } from '@app/plugins/01.day';
 
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
 const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';
@@ -11,14 +11,20 @@ export function useEventSource(config = { channel: '/' }) {
   });
 
   function handleCheckConnect() {
-    const diff = dayjs().diff(dayjs(EventSourceObj.lastMessgTime), 'second');
-    console.log({ diff });
+    if (EventSourceObj.timeoutTimestamp !== null) {
+      clearTimeout(EventSourceObj.timeoutTimestamp);
+    }
+
+    const nowDayjs = dayjs();
+    const lastMessgTimeDayjs = EventSourceObj.lastMessgTime || dayjs().valueOf();
+    const diff = nowDayjs.diff(lastMessgTimeDayjs, 'second');
+
     if (diff > 10) {
       EventSourceObj.lastMessgTime = null;
       return initEventSource(config?.value || config);
     }
 
-    EventSourceObj.lastMessgTime = dayjs().unix();
+    EventSourceObj.lastMessgTime = dayjs().valueOf();
     EventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 10);
   }
   function initEventSource(currentConfig = {}) {
@@ -86,8 +92,8 @@ export function useEventSource(config = { channel: '/' }) {
   });
 
   onBeforeUnmount(function () {
+    clearTimeout(EventSourceObj.timeoutTimestamp);
     if (typeof EventSourceObj.croe?.close === 'function') {
-      clearTimeout(EventSourceObj.timeoutTimestamp);
       EventSourceObj.croe.close();
       EventSourceObj.croe = null;
     }

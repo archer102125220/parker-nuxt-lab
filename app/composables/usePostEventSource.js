@@ -1,5 +1,5 @@
-import { dayjs } from '@/plugins/01.day';
-import { PostEventSource } from '@/utils/request/PostEventSource';
+import { dayjs } from '@app/plugins/01.day';
+import { PostEventSource } from '@utils/request/post-event-source';
 
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
 const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';
@@ -12,14 +12,20 @@ export function usePostEventSource(config = { channel: '/' }) {
   });
 
   function handleCheckConnect() {
-    const diff = dayjs().diff(dayjs(PostEventSourceObj.lastMessgTime), 'second');
-    console.log({ diff });
+    if (PostEventSourceObj.timeoutTimestamp !== null) {
+      clearTimeout(PostEventSourceObj.timeoutTimestamp);
+    }
+
+    const nowDayjs = dayjs();
+    const lastMessgTimeDayjs = PostEventSourceObj.lastMessgTime || dayjs();
+    const diff = nowDayjs.diff(lastMessgTimeDayjs, 'second');
+
     if (diff > 10) {
       PostEventSourceObj.lastMessgTime = null;
       return initPostEventSource(config?.value || config);
     }
 
-    PostEventSourceObj.lastMessgTime = dayjs().unix();
+    PostEventSourceObj.lastMessgTime = dayjs();
     PostEventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 10);
   }
   function initPostEventSource(currentConfig = {}) {
@@ -88,8 +94,8 @@ export function usePostEventSource(config = { channel: '/' }) {
   });
 
   onBeforeUnmount(function () {
+    clearTimeout(PostEventSourceObj.timeoutTimestamp);
     if (typeof PostEventSourceObj.croe?.close === 'function') {
-      clearTimeout(PostEventSourceObj.timeoutTimestamp);
       PostEventSourceObj.croe.close();
       PostEventSourceObj.croe = null;
     }

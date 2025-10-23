@@ -1,4 +1,4 @@
-import { defaultLang } from '@/i18n';
+import { defaultLang } from '@i18n';
 
 export function getLocalLanguage(defaultLanguag = defaultLang) {
   if (typeof window?.localStorage === 'object') {

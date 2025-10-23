@@ -1,7 +1,7 @@
 import {
   messagingRemoveToken,
   messagingFindAllToken
-} from '@/services/server/firebase-messaging';
+} from '@services/server/firebase-messaging';
 
 /**
  * @openapi

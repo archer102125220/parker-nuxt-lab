@@ -1,4 +1,4 @@
-import _createWebSocket from '@/utils/helpers/web-socket';
+import _createWebSocket from '@utils/helpers/web-socket';
 
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
 const WEBSOCKET_BASE_PATH = import.meta.env.VITE_WEBSOCKET_BASE_PATH || '/web-socket';

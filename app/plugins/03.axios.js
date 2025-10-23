@@ -1,4 +1,4 @@
-import { axiosInit, request as axiosRequest } from '@/utils/request';
+import { axiosInit, request as axiosRequest } from '@utils/request';
 
 export default defineNuxtPlugin(() => {
   const isInitialized = useState(

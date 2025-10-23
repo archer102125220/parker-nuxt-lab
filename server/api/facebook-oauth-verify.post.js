@@ -1,4 +1,4 @@
-import { request } from '@/utils/request';
+import { request } from '@utils/request';
 
 const APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
 

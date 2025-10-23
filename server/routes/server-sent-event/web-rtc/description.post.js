@@ -1,7 +1,7 @@
 import { Redis } from '@upstash/redis';
 import _cloneDeep from 'lodash/cloneDeep';
 
-import { safeToJSON, safeParseJSON } from '@/utils/helpers/safeToJSON';
+import { safeToJSON, safeParseJSON } from '@utils/helpers/safeToJSON';
 
 const UpstashRedis = Redis.fromEnv();
 

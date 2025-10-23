@@ -1,4 +1,4 @@
-import { googleGtagInit } from '@/utils/third-party/gtag';
+import { googleGtagInit } from '@utils/third-party/gtag';
 
 export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === 'development', log = false, callback) {
   if (typeof googleGAID !== 'string' || googleGAID === '') {

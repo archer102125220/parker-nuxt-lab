@@ -1,4 +1,4 @@
-import { FirebaseMessaging, Sequelize } from '@/models';
+import { FirebaseMessaging, Sequelize } from '@app/../models';
 const { Op } = Sequelize;
 
 export async function messagingAddToken(payload = { token: '', os: '' }) {

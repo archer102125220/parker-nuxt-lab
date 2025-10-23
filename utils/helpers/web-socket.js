@@ -1,4 +1,4 @@
-import { safeParseJSON } from '@/utils/helpers/safeToJSON';
+import { safeParseJSON } from '@utils/helpers/safeToJSON';
 
 export function createWebSocket(
   confing = { open() { }, message() { }, close() { }, error() { } },

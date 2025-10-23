@@ -1,7 +1,7 @@
 import { Base64 as base64Js } from 'js-base64';
 import { Fido2Lib } from 'fido2-lib';
 
-// import { fido2LibInitialize, getFido2Lib, fido2LibIsInitialized } from '@/utils/fido2-lib';
+// import { fido2LibInitialize, getFido2Lib, fido2LibIsInitialized } from '@utils/fido2-lib';
 
 // 前端透過 GET_fido2LibGenerateOption 呼叫這隻http get的api
 /**

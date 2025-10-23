@@ -1,6 +1,7 @@
 <template>
   <div
     class="tabs_content"
+    :style="cssVariable"
     @mouseup="resetRefreshDisable"
     @mouseover="resetRefreshDisable"
     @touchend="resetRefreshDisable"
@@ -105,6 +106,8 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  tabsContentHeight: { type: [String, Number], default: '100%' },
+  swiperHeight: { type: [String, Number], default: '100%' },
   label: { type: String, default: undefined },
   height: { type: [String, Number], default: undefined },
   pullingLabel: { type: String, default: undefined },
@@ -145,6 +148,32 @@ const slots = computed(() => {
 
   return _slots;
 });
+const cssVariable = computed(() => {
+  const _cssVariable = {};
+
+  if (
+    typeof props.tabsContentHeight === 'string' &&
+    props.tabsContentHeight !== ''
+  ) {
+    _cssVariable['--tabs_content_height'] = props.tabsContentHeight;
+  } else if (
+    typeof props.tabsContentHeight === 'number' ||
+    isNaN(props.tabsContentHeight) === false
+  ) {
+    _cssVariable['--tabs_content_height'] = `${props.tabsContentHeight}px`;
+  }
+
+  if (typeof props.swiperHeight === 'string' && props.swiperHeight !== '') {
+    _cssVariable['--tabs_content_swiper_height'] = props.swiperHeight;
+  } else if (
+    typeof props.swiperHeight === 'number' ||
+    isNaN(props.swiperHeight) === false
+  ) {
+    _cssVariable['--tabs_content_swiper_height'] = `${props.swiperHeight}px`;
+  }
+
+  return _cssVariable;
+});
 
 function getSlotsKey(tab, index) {
   return tab?.[props.valueKey] || tab?.slotName || index;
@@ -153,7 +182,7 @@ function isNotScrollFetch(tab) {
   if (typeof tab?.isNotScrollFetch === 'boolean') {
     return tab.isNotScrollFetch;
   }
-  return false;
+  return typeof tab !== 'object';
 }
 function getInfinityEnd(tab) {
   if (typeof tab?.infinityEnd !== 'boolean') {
@@ -185,13 +214,18 @@ function resetRefreshDisable() {
   isTabMoveing.value = false;
 }
 </script>
+
 <style lang="scss" scoped>
 .tabs_content {
   position: relative;
   flex: 1;
-  height: 100%;
+  // height: 100%;
+  height: var(--tabs_content_height);
+
   &-swiper {
-    height: 100%;
+    // height: 100%;
+    height: var(--tabs_content_swiper_height);
+
     :deep(.tabs_content-swiper-scroll_fetch.scroll_fetch) {
       position: static;
     }

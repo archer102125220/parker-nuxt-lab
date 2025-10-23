@@ -15,7 +15,7 @@ import {
   isSupported as messagingIsSupported
 } from 'firebase/messaging';
 
-import { POST_registerMessageToken } from '@/services/client/firebase-admin';
+import { POST_registerMessageToken } from '@services/client/firebase-admin';
 
 // https://firebase.google.com/docs/cloud-messaging/js/receive?hl=zh-cn#web-version-9_2
 
