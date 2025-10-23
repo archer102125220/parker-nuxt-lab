@@ -115,7 +115,7 @@ export function createWebSocket(
 function handleWaitConnect(socket) {
   return new Promise(async resolve => {
     if (socket instanceof window.WebSocket === false || socket.readyState === window.WebSocket.OPEN) {
-      resolve();
+      return setTimeout(resolve, 500);
     }
 
     await new Promise((_resolve) => setTimeout(_resolve, 500));
