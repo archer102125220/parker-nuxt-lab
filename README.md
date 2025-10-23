@@ -2,20 +2,22 @@
 
 [繁體中文說明](./README.zh-TW.md)
 
-An experimental Nuxt 3 project that integrates PWA, i18n, Pinia, Vuetify, Socket.IO, WebRTC, Firebase Cloud Messaging, Swagger, and Sequelize (PostgreSQL). It serves as a sandbox to quickly validate features and showcase example pages.
+An experimental Nuxt 4 project that integrates PWA, i18n, Pinia, Vuetify, Socket.IO, WebRTC, Firebase Cloud Messaging, Swagger, and Sequelize (PostgreSQL). It serves as a sandbox to quickly validate features and showcase example pages.
 
-- **Framework**: Nuxt 3 (Vue 3)
-- **UI**: Vuetify 3
-- **State**: Pinia
-- **i18n**: `@nuxtjs/i18n`
-- **PWA**: `@vite-pwa/nuxt` (Inject Manifest)
-- **Security**: `nuxt-security` with CSP/Permissions Policy
-- **Realtime**: Socket.IO, SSE, WebSocket, WebRTC pages
-- **ML / Imaging**: `face-api.js`, `@tensorflow/tfjs-node` (with Windows DLL copy helper)
-- **Notifications**: Firebase Cloud Messaging (Service Worker included)
+- **Framework**: Nuxt 4 (Vue 3.5.8)
+- **UI**: Vuetify 3.6
+- **State**: Pinia 2.1
+- **i18n**: `@nuxtjs/i18n` 9.0
+- **PWA**: `@vite-pwa/nuxt` 0.10 (Inject Manifest)
+- **Security**: `nuxt-security` 2.2 with CSP/Permissions Policy
+- **Realtime**: Socket.IO 4.8, SSE, WebSocket, WebRTC pages
+- **ML / Imaging**: `face-api.js` 0.22, `@tensorflow/tfjs-node` 4.22 (with Windows DLL copy helper)
+- **Notifications**: Firebase Cloud Messaging 12.1 (Service Worker included)
 - **API Docs**: Swagger (`/api/nuxt-server/swagger-docs`)
-- **Testing**: Playwright E2E
-- **Database**: Sequelize + PostgreSQL (migrations/seeds scripts)
+- **Testing**: Playwright 1.47 E2E
+- **Database**: Sequelize 6.37 + PostgreSQL (migrations/seeds scripts)
+- **Additional Libraries**: WangEditor 5.1 (rich text editor), FIDO2, QR Code, Swiper 11.1, Day.js, Axios 1.7
+- **Analytics**: Vercel Analytics & Speed Insights
 
 
 ## Key Directories
@@ -31,7 +33,7 @@ An experimental Nuxt 3 project that integrates PWA, i18n, Pinia, Vuetify, Socket
 ## Requirements
 
 - Node.js 18+ (LTS recommended)
-- Yarn 1.x (project default)
+- Yarn 1.22+ (project default)
 - PostgreSQL (if you use Sequelize features)
 - On macOS, see node-canvas install notes in references
 
@@ -187,7 +189,7 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 
 ## References
 
-- Nuxt 3 Docs: <https://nuxt.com/docs/getting-started/introduction>
+- Nuxt 4 Docs: <https://nuxt.com/docs/getting-started/introduction>
 - Deployment: <https://nuxt.com/docs/getting-started/deployment>
 - face-api.js models (weights): <https://github.com/justadudewhohacks/face-api.js/tree/master>
 - node-canvas (macOS): <https://github.com/Automattic/node-canvas>

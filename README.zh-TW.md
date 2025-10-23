@@ -2,20 +2,22 @@
 
 [English README](./README.md)
 
-一個以 Nuxt 3 為核心的實驗型專案，整合 PWA、i18n、Pinia、Vuetify、Socket.IO、WebRTC、Firebase Cloud Messaging、Swagger、Sequelize（PostgreSQL）等常見前後端能力，用於快速驗證功能與展示範例頁。
+一個以 Nuxt 4 為核心的實驗型專案，整合 PWA、i18n、Pinia、Vuetify、Socket.IO、WebRTC、Firebase Cloud Messaging、Swagger、Sequelize（PostgreSQL）等常見前後端能力，用於快速驗證功能與展示範例頁。
 
-- **框架**: Nuxt 3（Vue 3）
-- **UI**: Vuetify 3
-- **狀態管理**: Pinia
-- **多語系**: `@nuxtjs/i18n`
-- **PWA**: `@vite-pwa/nuxt`（Inject Manifest）
-- **安全性**: `nuxt-security` + CSP/Permissions Policy 設定
-- **即時**: Socket.IO、SSE、WebSocket、WebRTC 範例頁
-- **ML / 影像**: `face-api.js`、`@tensorflow/tfjs-node`（含 Windows DLL 複製處理）
-- **通知**: Firebase Cloud Messaging（含 Service Worker）
+- **框架**: Nuxt 4（Vue 3.5.8）
+- **UI**: Vuetify 3.6
+- **狀態管理**: Pinia 2.1
+- **多語系**: `@nuxtjs/i18n` 9.0
+- **PWA**: `@vite-pwa/nuxt` 0.10（Inject Manifest）
+- **安全性**: `nuxt-security` 2.2 + CSP/Permissions Policy 設定
+- **即時**: Socket.IO 4.8、SSE、WebSocket、WebRTC 範例頁
+- **ML / 影像**: `face-api.js` 0.22、`@tensorflow/tfjs-node` 4.22（含 Windows DLL 複製處理）
+- **通知**: Firebase Cloud Messaging 12.1（含 Service Worker）
 - **API 文件**: Swagger（`/api/nuxt-server/swagger-docs`）
-- **測試**: Playwright E2E
-- **資料庫**: Sequelize + PostgreSQL（含 migrations/seeds 指令）
+- **測試**: Playwright 1.47 E2E
+- **資料庫**: Sequelize 6.37 + PostgreSQL（含 migrations/seeds 指令）
+- **額外套件**: WangEditor 5.1（富文本編輯器）、FIDO2、QR Code、Swiper 11.1、Day.js、Axios 1.7
+- **分析工具**: Vercel Analytics & Speed Insights
 
 
 ## 目錄重點
@@ -31,7 +33,7 @@
 ## 環境需求
 
 - Node.js 18+（建議 LTS）
-- Yarn 1.x（專案預設）
+- Yarn 1.22+（專案預設）
 - PostgreSQL（若使用 Sequelize 相關功能）
 - macOS 安裝 `node-canvas` 依賴可參考官方文件
 
@@ -188,7 +190,7 @@ yarn test:codegen
 
 ## 參考連結
 
-- Nuxt 3 文件：<https://nuxt.com/docs/getting-started/introduction>
+- Nuxt 4 文件：<https://nuxt.com/docs/getting-started/introduction>
 - 部署文件：<https://nuxt.com/docs/getting-started/deployment>
 - face-api.js models（weights）：<https://github.com/justadudewhohacks/face-api.js/tree/master>
 - mac 安裝 node-canvas：<https://github.com/Automattic/node-canvas>
