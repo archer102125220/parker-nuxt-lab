@@ -229,7 +229,9 @@ export default defineNuxtConfig({
   pwa: {
     injectRegister: 'script-defer',
     strategies: 'injectManifest',
-    srcDir: './service-worker',
+    // default -> 'public', nuxt4 build -> 'app/public'
+    srcDir: '../service-worker',
+    // default -> 'sw.js'
     filename: 'service-worker.js',
 
     registerType: 'autoUpdate',

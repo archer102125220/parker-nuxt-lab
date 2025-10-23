@@ -3,7 +3,7 @@ import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 
-import '@app/service-worker/firebase-messaging';
+import '@service-worker/firebase-messaging';
 
 // https://unminify.com/ // minify 還原用網址
 
