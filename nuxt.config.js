@@ -16,6 +16,7 @@ import {
   detectBrowserLanguage
 } from './i18n';
 
+const IS_DEBUG = process.env.VITE_DEBUG === 'true';
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
 const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
@@ -134,6 +135,15 @@ export default defineNuxtConfig({
     '~modules': path.join(__dirname, 'modules'),
   },
   vite: {
+    ...(IS_DEBUG === true ? {
+      esbuild: {
+        // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
+        // 明确设置为不移除 'console.log' 等
+        drop: ['debugger'], // 仍然移除 debugger
+        pure: [],
+      }
+    } : {}),
+
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
     },
@@ -299,6 +309,8 @@ export default defineNuxtConfig({
   },
 
   security: {
+    removeLoggers: IS_DEBUG === false,
+
     headers: {
       contentSecurityPolicy: CONTENT_SECURITY_POLICY,
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only

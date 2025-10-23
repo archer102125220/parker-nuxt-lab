@@ -6,17 +6,24 @@ export default defineNuxtPlugin({
 
   async setup() {
     const Firebase = new firebase();
+
+    const provide = { firebase };
+
+    provide.firebaseFirestoreUpdate = function firebaseFirestoreUpdate(firebaseFirestore) {
+      this.firebaseFirestore = firebaseFirestore;
+    }.bind(provide);
+
     // client 需配合PWA載入完畢
     if (import.meta.server) {
       await Firebase.croeInit();
       await Firebase.appInit();
+
+      // provide.firebaseFirestore = Firebase.store;
+      provide.firebaseFirestoreUpdate(Firebase.store);
     }
 
     return {
-      provide: {
-        firebase,
-        firebaseFirestore: Firebase.store
-      }
+      provide
     }
   },
 
@@ -40,20 +47,21 @@ export default defineNuxtPlugin({
       //     await $pwa.updateServiceWorker();
       //   }
       // });
-
-      $store.system.setAgreeNotification(Firebase.getNotificationPermission());
-
       watchEffect(async () => {
         if ($pwa.offlineReady === true) {
           $store.system.setMessageState({ text: 'App ready to work offline', type: 'success' });
         }
+      });
 
-        if ($pwa.isPWAInstalled === true || $pwa.swActivated === true) {
+      $store.system.setAgreeNotification(Firebase.getNotificationPermission());
+
+      watchEffect(async () => {
+        if ($pwa.isPWAInstalled === true || $pwa.swActivated === true || $pwa.offlineReady === true) {
           await Firebase.croeInit();
           await Firebase.appInit();
 
-          nuxtApp.provide('firebaseFirestore', Firebase.store);
           $store.system.setFirebaseCroeInited(true);
+          nuxtApp.$firebaseFirestoreUpdate(Firebase.store);
         }
       });
     }
