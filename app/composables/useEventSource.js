@@ -25,7 +25,7 @@ export function useEventSource(config = { channel: '/' }) {
     }
 
     EventSourceObj.lastMessgTime = dayjs().valueOf();
-    EventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 10);
+    EventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 5);
   }
   function initEventSource(currentConfig = {}) {
     if (typeof window === 'undefined' || typeof window?.EventSource !== 'function') return;
