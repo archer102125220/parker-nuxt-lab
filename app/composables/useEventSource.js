@@ -24,7 +24,6 @@ export function useEventSource(config = { channel: '/' }) {
       return initEventSource(config?.value || config);
     }
 
-    EventSourceObj.lastMessgTime = dayjs().valueOf();
     EventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 5);
   }
   function initEventSource(currentConfig = {}) {
@@ -48,6 +47,7 @@ export function useEventSource(config = { channel: '/' }) {
     // }
     newEventSourceObj.addEventListener('open', async function (...arg) {
       handleCheckConnect();
+      EventSourceObj.lastMessgTime = dayjs().valueOf();
 
       const _config = config?.value || config;
 
@@ -63,6 +63,7 @@ export function useEventSource(config = { channel: '/' }) {
     // }
     newEventSourceObj.addEventListener('message', async function (...arg) {
       handleCheckConnect();
+      EventSourceObj.lastMessgTime = dayjs().valueOf();
 
       const _config = config?.value || config;
 

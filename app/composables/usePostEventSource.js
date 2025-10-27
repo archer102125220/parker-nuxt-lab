@@ -25,7 +25,6 @@ export function usePostEventSource(config = { channel: '/' }) {
       return initPostEventSource(config?.value || config);
     }
 
-    PostEventSourceObj.lastMessgTime = dayjs().valueOf();
     PostEventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 5);
   }
   function initPostEventSource(currentConfig = {}) {
@@ -50,6 +49,7 @@ export function usePostEventSource(config = { channel: '/' }) {
     // }
     newPostEventSource.addEventListener('open', async function (...arg) {
       handleCheckConnect();
+      PostEventSourceObj.lastMessgTime = dayjs().valueOf();
 
       const _config = config?.value || config;
 
@@ -65,6 +65,7 @@ export function usePostEventSource(config = { channel: '/' }) {
     // }
     newPostEventSource.addEventListener('message', async function (...arg) {
       handleCheckConnect();
+      PostEventSourceObj.lastMessgTime = dayjs().valueOf();
 
       const _config = config?.value || config;
 
