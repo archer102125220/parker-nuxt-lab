@@ -17,7 +17,7 @@ export function usePostEventSource(config = { channel: '/' }) {
     }
 
     const nowDayjs = dayjs();
-    const lastMessgTimeDayjs = PostEventSourceObj.lastMessgTime || dayjs();
+    const lastMessgTimeDayjs = PostEventSourceObj.lastMessgTime || dayjs().valueOf();
     const diff = nowDayjs.diff(lastMessgTimeDayjs, 'second');
 
     if (diff > 10) {
@@ -25,7 +25,7 @@ export function usePostEventSource(config = { channel: '/' }) {
       return initPostEventSource(config?.value || config);
     }
 
-    PostEventSourceObj.lastMessgTime = dayjs();
+    PostEventSourceObj.lastMessgTime = dayjs().valueOf();
     PostEventSourceObj.timeoutTimestamp = setTimeout(handleCheckConnect, 1000 * 5);
   }
   function initPostEventSource(currentConfig = {}) {
