@@ -4,24 +4,26 @@
       配合 Server-Sent Event 及 @upstash/redis 實作
     </p>
 
-    <video
-      class="web_rtc_server_sent_event_page-video"
-      width="100%"
-      height="360"
-      muted
-      autoplay
-      :srcObject="streamObj"
-    />
+    <div class="web_rtc_server_sent_event_page-video_list">
+      <video
+        class="web_rtc_server_sent_event_page-video_list-self"
+        width="100%"
+        height="360"
+        muted
+        autoplay
+        :srcObject="streamObj"
+      />
 
-    <video
-      v-for="streamItem in streamList"
-      :key="streamItem?.id"
-      class="web_rtc_server_sent_event_page-video"
-      width="100%"
-      height="360"
-      autoplay
-      :srcObject="streamItem"
-    />
+      <video
+        v-for="streamItem in streamList"
+        :key="streamItem?.id"
+        class="web_rtc_server_sent_event_page-video_list-other"
+        width="100%"
+        height="360"
+        autoplay
+        :srcObject="streamItem"
+      />
+    </div>
   </section>
 </template>
 
@@ -205,17 +207,24 @@ onBeforeMount(async function () {
     margin-bottom: 8px;
   }
 
-  // &-warning {
-  //   font-size: 16px;
-  //   font-weight: 600;
-  //   margin-bottom: 8px;
-  // }
+  &-video_list {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    align-items: flex-end;
 
-  &-video {
     margin-bottom: 8px;
-
     background-color: #f0f8ff;
-    // opacity: 0;
+
+    &-self {
+      aspect-ratio: 1/1;
+      // opacity: 0;
+    }
+    &-other {
+      flex: 1;
+      aspect-ratio: 1 / 1;
+      // opacity: 0;
+    }
   }
 }
 </style>

@@ -9,24 +9,26 @@
       *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
     </p>
 
-    <video
-      class="web_rtc_socket_io_page-video"
-      width="100%"
-      height="360"
-      muted
-      autoplay
-      :srcObject="streamObj"
-    />
+    <div class="web_rtc_socket_io_page-video_list">
+      <video
+        class="web_rtc_socket_io_page-video_list-self"
+        width="100%"
+        height="360"
+        muted
+        autoplay
+        :srcObject="streamObj"
+      />
 
-    <video
-      v-for="streamItem in streamList"
-      :key="streamItem?.id"
-      class="web_rtc_socket_io_page-video"
-      width="100%"
-      height="360"
-      autoplay
-      :srcObject="streamItem"
-    />
+      <video
+        v-for="streamItem in streamList"
+        :key="streamItem?.id"
+        class="web_rtc_socket_io_page-video_list-other"
+        width="100%"
+        height="360"
+        autoplay
+        :srcObject="streamItem"
+      />
+    </div>
   </div>
 </template>
 
@@ -135,11 +137,24 @@ onBeforeUnmount(() => {
     margin-bottom: 8px;
   }
 
-  &-video {
-    margin-bottom: 8px;
+  &-video_list {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    align-items: flex-end;
 
+    margin-bottom: 8px;
     background-color: #f0f8ff;
-    // opacity: 0;
+
+    &-self {
+      aspect-ratio: 1/1;
+      // opacity: 0;
+    }
+    &-other {
+      flex: 1;
+      aspect-ratio: 1 / 1;
+      // opacity: 0;
+    }
   }
 }
 </style>
