@@ -52,15 +52,15 @@ const localeList = [
   { code: 'zh', label: 'zh-tw' }
 ];
 
+const props = defineProps({
+  hasBack: { type: Boolean, default: true }
+});
+
 const currentLocaleLabel = computed(() => {
   const found = localeList.find(
     (localeItem) => localeItem.code === locale.value
   );
   return found ? found.label : locale.value;
-});
-
-const props = defineProps({
-  hasBack: { type: Boolean, default: true }
 });
 
 function handleGoBack() {

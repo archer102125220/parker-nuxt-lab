@@ -19,23 +19,24 @@ html {
   font-family: 'Noto Sans TC', sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   font-size: 16px;
 
   *:not(
-      .wang_editor_view,
-      .wang_editor_view *,
-      .wang_editor,
-      .wang_editor *,
-      .v-icon--size-x-large,
-      .v-icon--size-x-large *,
-      .v-icon--size-large,
-      .v-icon--size-large *,
-      .v-icon--size-small,
-      .v-icon--size-small *,
-      .v-icon--size-x-small,
-      .v-icon--size-x-small *
-    ) {
+    .wang_editor_view,
+    .wang_editor_view *,
+    .wang_editor,
+    .wang_editor *,
+    .v-icon--size-x-large,
+    .v-icon--size-x-large *,
+    .v-icon--size-large,
+    .v-icon--size-large *,
+    .v-icon--size-small,
+    .v-icon--size-small *,
+    .v-icon--size-x-small,
+    .v-icon--size-x-small *
+  ) {
     font-size: inherit;
     font-family: inherit;
     font-weight: inherit;
