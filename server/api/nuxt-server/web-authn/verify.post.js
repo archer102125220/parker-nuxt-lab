@@ -234,13 +234,13 @@ export default defineEventHandler(async (event) => {
       payload.credential.rawId
     ),
     authenticatorData: base64Js.toUint8Array(
-      payload.credential.authenticatorData
+      payload.credential.response.authenticatorData
     ),
     clientDataJSON: base64Js.toUint8Array(
-      payload.credential.clientDataJSON
+      payload.credential.response.clientDataJSON
     ),
     userHandle: base64Js.decode(
-      payload.credential.userHandle
+      payload.credential.response.userHandle
     )
   };
   // console.log(credential.rawId);

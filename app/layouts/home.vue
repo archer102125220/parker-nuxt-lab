@@ -25,8 +25,6 @@ const animation = computed(() => {
   return true;
 });
 onMounted(() => {
-  console.log({ nuxtApp, ['nuxtApp?.isHydrating']: nuxtApp?.isHydrating });
-  console.log('home_layout');
   window.___IS_NUXT_INITED__ = true;
 });
 </script>
