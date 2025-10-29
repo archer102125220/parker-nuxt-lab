@@ -1,5 +1,5 @@
 <template>
-  <header class="layout_header">
+  <header class="layout_header" :animation="animation">
     <v-btn
       :has-back="hasBack === true"
       class="layout_header-back"
@@ -9,14 +9,19 @@
       icon="mdi-chevron-left"
       @click="handleGoBack"
     />
-    <NuxtLink :to="$localePath('/')" class="layout_header-name">
-      <img
-        class="layout_header-name-logo"
-        v-lazy="'/img/icon/NuxtRock.v.02.svg'"
-      />
-      <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
-      <p class="layout_header-name-label">{{ $t('system.systemName') }}</p>
-    </NuxtLink>
+
+    <div class="layout_header-name">
+      <NuxtLink :to="$localePath('/')" class="layout_header-name-link">
+        <img
+          class="layout_header-name-link-logo"
+          v-lazy="'/img/icon/NuxtRock.v.02.svg'"
+        />
+        <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
+        <p class="layout_header-name-link-label">
+          {{ $t('system.systemName') }}
+        </p>
+      </NuxtLink>
+    </div>
 
     <v-btn color="primary" variant="text">
       <p>{{ $t(currentLocaleLabel) }}</p>
@@ -56,6 +61,13 @@ const props = defineProps({
   hasBack: { type: Boolean, default: true }
 });
 
+const animation = computed(() => {
+  if (import.meta.client) {
+    return window.___IS_NUXT_INITED__ !== true;
+  }
+  return true;
+});
+
 const currentLocaleLabel = computed(() => {
   const found = localeList.find(
     (localeItem) => localeItem.code === locale.value
@@ -66,9 +78,24 @@ const currentLocaleLabel = computed(() => {
 function handleGoBack() {
   router.back();
 }
+
+onMounted(() => {
+  window.___IS_NUXT_INITED__ = true;
+});
 </script>
 
 <style lang="scss" scoped>
+@keyframes headerEnterAnimation {
+  from {
+    opacity: 0;
+    transform: translate(0px, -120px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0px, 0px);
+  }
+}
 .layout_header {
   // position: relative;
 
@@ -80,6 +107,11 @@ function handleGoBack() {
   padding: 8px 16px;
 
   background-color: #f8f9fa;
+
+  &[animation='true'] {
+    animation-name: headerEnterAnimation;
+    animation-duration: 0.3s;
+  }
 
   &-back {
     // position: absolute;
@@ -105,26 +137,28 @@ function handleGoBack() {
   &-name {
     flex: 1;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 13px;
-
     padding-left: 8px;
 
-    text-decoration: none;
+    &-link {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 13px;
 
-    &-logo {
-      height: 30px;
-      width: 30px;
-      object-fit: contain;
-    }
+      text-decoration: none;
 
-    &-label {
-      // font-size: 24px;
-      color: #343a40;
-      margin: 0;
+      &-logo {
+        height: 30px;
+        width: 30px;
+        object-fit: contain;
+      }
+
+      &-label {
+        // font-size: 24px;
+        color: #343a40;
+        margin: 0;
+      }
     }
   }
 }
