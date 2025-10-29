@@ -30,7 +30,7 @@
   &-content {
     flex: 1;
     // min-height: 100vh;
-    width: 80%;
+    width: 90%;
     margin: auto;
   }
 }

@@ -1,12 +1,16 @@
 <template>
-  <section class="web_rtc_server_sent_event_page">
-    <p class="web_rtc_server_sent_event_page-description">
+  <section class="web_rtc_server_sent_event_room_page">
+    <p class="web_rtc_server_sent_event_room_page-description">
       配合 Server-Sent Event 及 @upstash/redis 實作
     </p>
 
-    <div class="web_rtc_server_sent_event_page-video_list">
+    <p class="web_rtc_server_sent_event_room_page-uuid">
+      目前配對ID為: {{ uuId }}
+    </p>
+
+    <div class="web_rtc_server_sent_event_room_page-video_list">
       <video
-        class="web_rtc_server_sent_event_page-video_list-self"
+        class="web_rtc_server_sent_event_room_page-video_list-self"
         width="100%"
         height="360"
         muted
@@ -17,7 +21,7 @@
       <video
         v-for="streamItem in streamList"
         :key="streamItem?.id"
-        class="web_rtc_server_sent_event_page-video_list-other"
+        class="web_rtc_server_sent_event_room_page-video_list-other"
         width="100%"
         height="360"
         autoplay
@@ -41,6 +45,7 @@ definePageMeta({
 const nuxtApp = useNuxtApp();
 const route = useRoute();
 
+const uuId = computed(() => route.params.uuId);
 const userId = computed(() => nanoid());
 
 const streamObj = useCameraStream({ audio: true });
@@ -62,7 +67,7 @@ const streamList = computed(() => {
   return Array.isArray(webRTC.streamList) === true ? webRTC.streamList : [];
 });
 const postEventSourceConfig = computed(() => ({
-  channel: `/web-rtc/subscription/${route.params.uuId}`,
+  channel: `/web-rtc/subscription/${uuId.value}`,
   payload: {
     userId: userId.value
   },
@@ -202,7 +207,7 @@ onBeforeMount(async function () {
 </script>
 
 <style lang="scss">
-.web_rtc_server_sent_event_page {
+.web_rtc_server_sent_event_room_page {
   &-description {
     margin-bottom: 8px;
   }
