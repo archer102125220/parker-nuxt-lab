@@ -39,17 +39,20 @@ export default defineNuxtPlugin({
       const Firebase = new firebase();
       nuxtApp.provide('Firebase', Firebase);
 
-      const { $store, $pwa } = nuxtApp;
+      const { $store, $successMessage, $infoMessage, $pwa } = nuxtApp;
 
       // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
-      // watchEffect(async () => {
-      //   if ($pwa.needRefresh === true) {
-      //     await $pwa.updateServiceWorker();
-      //   }
-      // });
+      watchEffect(async () => {
+        if ($pwa.needRefresh === true) {
+          $infoMessage('偵測到PWA資源可更新，將在背景更新PWA資源，並在更新完成後自動重新載入．');
+          $store.system.setPwaUpdataing(true);
+          await $pwa.updateServiceWorker();
+          $store.system.setPwaUpdataing(false);
+        }
+      });
       watchEffect(async () => {
         if ($pwa.offlineReady === true) {
-          $store.system.setMessageState({ text: 'App ready to work offline', type: 'success' });
+          $successMessage('PWA資源載入完成');
         }
       });
 

@@ -30,6 +30,8 @@
         :broswer-info="$store.system.broswerInfo"
         @handle-trigger="$store.system.setDialog"
       />
+
+      <PWALoading />
     </client-only>
 
     <GoTop v-if="needGoTop" />

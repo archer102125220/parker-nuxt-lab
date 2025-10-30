@@ -16,13 +16,18 @@ const DIALOG_PROPS = {
 
 export const useSystemStore = defineStore('system', {
   state: () => ({
+    _supplierCode: '',
+    _otpCheckCode: '',
     _welcomeMsg: true,
+    _privilegeRole: [],
+
+    pwaUpdataing: false,
+
     displayTitle: '',
     accessToken: null,
     loading: false,
     messageState: { text: '', type: 'success' },
     cantResendOTPTime: Date.now(),
-    _supplierCode: '',
     windowInnerWidth: 1920,
     windowInnerHeight: 1080,
     isMobile: false,
@@ -39,8 +44,6 @@ export const useSystemStore = defineStore('system', {
       dialogProps: null
     },
     contactHTML: '',
-    _privilegeRole: [],
-    _otpCheckCode: '',
 
     agreeNotification: false,
     firebaseCroeInited: false,
@@ -130,6 +133,9 @@ export const useSystemStore = defineStore('system', {
     },
     setFirebaseMessagingInited(payload = false) {
       this.firebaseMessagingInited = payload;
+    },
+    setPwaUpdataing(payload = false) {
+      this.pwaUpdataing = payload;
     },
   },
   getters: {
