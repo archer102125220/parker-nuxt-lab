@@ -9,17 +9,10 @@
 </template>
 
 <script setup>
-const nuxtApp = useNuxtApp();
 // const { $pwa } = nuxtApp;
 // onMounted(() => {
 //   console.log({ $pwa });
 // });
-const animation = computed(() => {
-  if (import.meta.client) {
-    return window.___IS_NUXT_INITED__ !== true;
-  }
-  return true;
-});
 </script>
 
 <style lang="scss" scoped>
@@ -32,8 +25,13 @@ const animation = computed(() => {
   &-content {
     flex: 1;
     // min-height: 100vh;
-    width: 80%;
+    width: 90%;
     margin: auto;
+    padding: 1rem;
+
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }
 </style>

@@ -32,6 +32,11 @@
     // min-height: 100vh;
     width: 90%;
     margin: auto;
+    padding: 1rem;
+
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }
 </style>
