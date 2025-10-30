@@ -14,7 +14,7 @@
       <NuxtLink :to="$localePath('/')" class="layout_header-name-link">
         <v-img
           class="layout_header-name-link-logo"
-          v-lazy="'/img/icon/NuxtRock.v.02.svg'"
+          src="/img/icon/NuxtRock.v.02.svg"
         />
         <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
         <p class="layout_header-name-link-label">
