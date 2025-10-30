@@ -1,12 +1,31 @@
 <template>
   <nav class="home_content">
-    <NuxtLink
+    <!-- <NuxtLink
       v-for="link in linkList"
       :key="link.to"
       class="home_content-link"
       :to="link.to"
     >
       {{ link.label }}
+    </NuxtLink> -->
+
+    <NuxtLink
+      v-for="link in linkList"
+      :key="link.to"
+      :to="link.to"
+      class="home_content-link"
+    >
+      <v-card class="home_content-link-card" v-ripple max-width="200">
+        <v-img
+          cover
+          height="100"
+          :src="link.banner || '/img/icon/NuxtRock.v.02.webp'"
+        />
+
+        <v-card-subtitle class="home_content-link-card-page_name">
+          {{ link.label }}
+        </v-card-subtitle>
+      </v-card>
     </NuxtLink>
   </nav>
 </template>
@@ -15,8 +34,16 @@
 useHeadMataData();
 const localePath = useLocalePath();
 const linkList = computed(() => [
-  { to: localePath('/about'), label: '關於本站' },
-  { to: localePath('/components'), label: '自製組件及第三方整合組件' },
+  {
+    to: localePath('/about'),
+    banner: '/img/about/about-v.08.png',
+    label: '關於本站'
+  },
+  {
+    to: localePath('/components'),
+    banner: '/img/components-page/components-page-v.03.png',
+    label: '自製組件及第三方整合組件'
+  },
   { to: localePath('/components-test'), label: '組件綜合測試' },
   { to: localePath('/directives'), label: '自製vue指令' },
   { to: localePath('/route'), label: 'route相關測試' },
@@ -39,13 +66,23 @@ const linkList = computed(() => [
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  gap: 8px;
+  row-gap: 16px;
+  column-gap: 8px;
+
   // width: 80%;
   // margin: auto;
 
   &-link {
     flex: 1;
-    flex-basis: 400px;
+    flex-basis: 200px;
+
+    &-card {
+      margin: auto;
+
+      &-page_name {
+        padding: 8px;
+      }
+    }
   }
 }
 </style>

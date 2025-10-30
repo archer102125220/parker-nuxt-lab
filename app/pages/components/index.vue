@@ -6,6 +6,10 @@
     <p>
       其餘主要是因為該套件並未提供vue版本，因此整合供純js之版本為組件的方式做實作
     </p>
+    <v-img
+      class="components_page-banner"
+      src="/img/components-page/components-page-v.03.png"
+    />
     <nav class="components_page-content">
       <NuxtLink
         v-for="link in linkList"
@@ -66,6 +70,10 @@ const linkList = computed(() => [
 
 <style lang="scss">
 .components_page {
+  &-banner {
+    width: 100%;
+  }
+
   &-content {
     display: flex;
     flex-wrap: wrap;

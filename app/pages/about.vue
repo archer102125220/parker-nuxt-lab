@@ -9,7 +9,7 @@
     <p v-else-if="error">無法載入內容：{{ error.message }}</p>
     <template v-else-if="data">
       <h1 class="about_page-title">關於本站</h1>
-      <img class="about_page-banner" src="/img/about/about-v.08.png" />
+      <v-img class="about_page-banner" src="/img/about/about-v.08.png" />
       <section
         v-for="(section, index) in sectionList"
         :key="index"

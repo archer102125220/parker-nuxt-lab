@@ -12,7 +12,7 @@
 
     <div class="layout_header-name">
       <NuxtLink :to="$localePath('/')" class="layout_header-name-link">
-        <img
+        <v-img
           class="layout_header-name-link-logo"
           v-lazy="'/img/icon/NuxtRock.v.02.svg'"
         />
