@@ -23,19 +23,22 @@
       </NuxtLink>
     </div>
 
-    <v-btn color="primary" variant="text">
-      <p>{{ $t(currentLocaleLabel) }}</p>
+    <v-btn color="primary" variant="text" rounded>
+      <!-- <p>{{ $t(currentLocaleLabel) }}</p> -->
+      <v-img src="/img/icon/i18n/i18n.v-02.png" width="20" height="20" cover />
       <v-menu
         activator="parent"
         target="parent"
         location="start"
         scroll-strategy="none"
       >
-        <v-list>
+        <v-list :value="locale">
           <v-list-item
             v-for="lang in localeList"
             :key="lang.code"
             :value="lang.code"
+            :active="locale === lang.code"
+            color="primary"
           >
             <NuxtLink :to="$switchLocalePath(lang.code)">
               <v-list-item-title>

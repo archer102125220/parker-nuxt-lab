@@ -32,7 +32,7 @@
     // min-height: 100vh;
     width: 90%;
     margin: auto;
-    padding: 1rem;
+    padding: 8px;
 
     border-radius: 8px;
     background: white;
