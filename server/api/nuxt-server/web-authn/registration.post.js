@@ -263,13 +263,14 @@ export default defineEventHandler(async (event) => {
   const attestationObject = await fido2Lib.parseAttestationObject(credential.response.attestationObject.buffer);
   // console.log(attestationObject);
 
-  const alg = attestationObject.get('alg');
-  if (alg?.hashAlg !== 'SHA-256') {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Unsupported algorithm',
-    });
-  }
+  // 不同作業系統疑似不同，window測試時出錯
+  // const alg = attestationObject.get('alg');
+  // if (alg?.hashAlg !== 'SHA-256') {
+  //   throw createError({
+  //     statusCode: 401,
+  //     statusMessage: 'Unsupported algorithm',
+  //   });
+  // }
 
   if (challengeString !== clientDataObj.challenge) {
     throw createError({

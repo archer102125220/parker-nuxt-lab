@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
-import { FIREBASE_CONFIG as firebaseConfig } from '@utils/third-party/firebase';
+import { FIREBASE_CONFIG as firebaseConfig } from '@shared/third-party/firebase';
 
 // https://medium.com/@sumanthegde123/web-push-notifications-with-react-and-firebase-with-safari-error-handling-d2979d10c9ac
 // function loadingFirebaseConfig(event) {

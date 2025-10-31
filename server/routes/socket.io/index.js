@@ -1,9 +1,11 @@
 // https://socket.io/how-to/use-with-nuxt
 // https://github.com/socketio/socket.io/discussions/5021
 import { useNitroApp } from '#imports';
+import { defineEventHandler } from 'h3';
 
-import { decodeSocketIOPayload } from '@utils/third-party/socket.io-decode';
+import { decodeSocketIOPayload } from '@server/utils/socket.io-decode';
 
+// TODO:Nuxt4 的websocket要重新與socket.io做整合
 export default defineEventHandler({
   handler(event) {
     console.log('/socket.io');
@@ -47,8 +49,16 @@ export default defineEventHandler({
           });
         });
 
+      // console.log(peer.request);
+      console.log(peer.context);
+      // console.log(peer.request._req.socket);
+      // console.log(peer.request.socket?.connection);
+      // console.log(peer.websocket);
+      // console.log(peer.request.get('socket'));
+
       nitroApp.$socketEngine.prepare(peer.request);
-      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
+      // nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
+      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request._req.socket, peer.websocket);
     },
 
     async message(peer, message) {

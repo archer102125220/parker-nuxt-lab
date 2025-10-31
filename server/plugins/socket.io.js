@@ -45,6 +45,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 });
 */
 
+// TODO:Nuxt4 的websocket要重新與socket.io做整合
 import { Server as Engine } from 'engine.io';
 import { Server } from 'socket.io';
 import * as socketIo from 'socket.io';

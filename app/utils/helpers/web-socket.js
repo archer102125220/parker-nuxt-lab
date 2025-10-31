@@ -1,4 +1,4 @@
-import { safeParseJSON } from '@utils/helpers/safeToJSON';
+import { safeParseJSON } from '@shared/helpers/safeToJSON';
 
 export function createWebSocket(
   confing = { open() { }, message() { }, close() { }, error() { } },
@@ -62,17 +62,17 @@ export function createWebSocket(
   start();
 
   if (typeof open === 'function') {
-    socket.addEventListener('open', open);
+    socket.addEventListener('open', open.bind(socket));
   }
   // if (typeof message === 'function') {
-  //   socket.addEventListener('message', message);
+  //   socket.addEventListener('message', message.bind(socket));
   // }
   socket.addEventListener('message', function (event) {
     const jsonData = safeParseJSON(event.data);
     event.jsonData = jsonData;
 
     if (typeof confing.message === 'function') {
-      confing.message(event);
+      confing.message.call(this, event);
     }
 
     if (typeof jsonData.event === 'string' && jsonData.event !== '') {
@@ -84,17 +84,17 @@ export function createWebSocket(
 
   socket.addEventListener('pong', function (event) {
     if (typeof confing.pong === 'function') {
-      confing.pong(event);
+      confing.pong.call(this, event);
     }
 
     setTimeout(() => handleHeatbeat(this), 3000);
   }.bind(socket));
 
   if (typeof close === 'function') {
-    socket.addEventListener('close', close);
+    socket.addEventListener('close', close.bind(socket));
   }
   if (typeof error === 'function') {
-    socket.addEventListener('error', error);
+    socket.addEventListener('error', error.bind(socket));
   }
 
   if (typeof listener === 'object' && listener !== null) {
@@ -103,7 +103,7 @@ export function createWebSocket(
         ['open', 'message'].includes(listenerKey) === false &&
         typeof listener[listenerKey] === 'function'
       ) {
-        socket.addEventListener(listenerKey, listener[listenerKey]);
+        socket.addEventListener(listenerKey, listener[listenerKey].bind(socket));
       }
     });
   }

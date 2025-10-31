@@ -1,8 +1,9 @@
 import qs from 'qs';
 import { useNitroApp } from '#imports';
 
-import { decodeSocketIOPayload } from '@utils/third-party/socket.io-decode';
+import { decodeSocketIOPayload } from '@server/utils/socket.io-decode';
 
+// TODO:Nuxt4 的websocket要重新與socket.io做整合
 export default defineEventHandler({
   handler(event) {
     console.log('/socket.io/web-rtc/webRtcId');

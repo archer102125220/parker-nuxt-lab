@@ -1,4 +1,4 @@
-import '@style/customize-ripple.scss';
+import '@app/assets/styles/customize-ripple.scss';
 
 // 可以直接傳入boolean來控制是否啟用，也可傳入{ enabled: boolean }的方式來控制，顏色則可透過{ color: string }的方式做客製化
 export default defineNuxtPlugin((nuxtApp) => {

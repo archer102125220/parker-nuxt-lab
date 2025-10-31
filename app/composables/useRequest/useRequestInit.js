@@ -1,4 +1,4 @@
-import { axiosInit, request as axiosRequest } from '@utils/request';
+import { axiosInit, request as axiosRequest } from '@shared/request';
 
 export function useRequestInit(apiBase, errorAdapter, defaultExtendOption) {
   const isInitialized = useState(

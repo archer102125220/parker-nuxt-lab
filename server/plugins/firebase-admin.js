@@ -2,7 +2,7 @@ import {
   getFirebaseAdminWeb,
   getFirebaseAdminAndroid,
   getFirebaseAdminIos
-} from '@utils/third-party/firebase-admin';
+} from '@server/utils/firebase-admin';
 
 export default defineNitroPlugin((nitroApp) => {
   const firebaseAdminApp = {

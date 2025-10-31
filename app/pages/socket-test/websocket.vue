@@ -15,10 +15,13 @@ useHeadMataData({
 });
 import _cloneDeep from 'lodash/cloneDeep';
 
-const webSocket = useWebSocket({
-  channel: '/',
-  message: onMessage,
-  afterInit(newWebSocket) {
+const webSocket = useWebSocket(
+  {
+    channel: '/',
+    message: onMessage
+  },
+  null,
+  function (newWebSocket) {
     newWebSocket.send('websocket-test', {
       a: 'b',
       c: [],
@@ -30,7 +33,7 @@ const webSocket = useWebSocket({
       testData: 'websocket test Data'
     });
   }
-});
+);
 
 const webSocketMessageList = ref([]);
 

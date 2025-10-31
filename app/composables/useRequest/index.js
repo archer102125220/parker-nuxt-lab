@@ -2,7 +2,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 
 import { useRequestInit } from '@app/hooks/useRequest/useRequestInit';
 
-// import { axiosInit, request as axiosRequest } from '@utils/request';
+// import { axiosInit, request as axiosRequest } from '@shared/request';
 
 export function useRequest(
   method = 'get',

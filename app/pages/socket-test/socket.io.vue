@@ -21,6 +21,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 const socketIoClientConnected = ref(false);
 const socketIoClient = useSocketIoClient(
   { channel: '/' },
+  null,
   function (newSocketIo) {
     newSocketIo.on('socket.io-test', onMessage);
     newSocketIo.on('message', onMessage);

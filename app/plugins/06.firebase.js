@@ -1,5 +1,5 @@
 
-import { firebase } from '@utils/third-party/firebase';
+import { firebase } from '@shared/third-party/firebase';
 
 export default defineNuxtPlugin({
   name: 'firebase-plugin',
