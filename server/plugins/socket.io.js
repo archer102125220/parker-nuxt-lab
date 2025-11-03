@@ -102,7 +102,7 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.$socketIoServer = io;
   nitroApp.$socketIo = socketIo;
 
-  nitroApp.$attachSocketIOHandler = function attachSocketIOHandler(event) {
+  nitroApp.$registerSocketIOHandlers = function registerSocketIOHandlers(event) {
     const _nitroApp = useNitroApp();
 
     event.node.req.context = event.context;
@@ -112,7 +112,7 @@ export default defineNitroPlugin((nitroApp) => {
   }
 
 
-  nitroApp.$attachSocketIO = function attachSocketIO(peer) {
+  nitroApp.$adaptSocketIO = function adaptSocketIO(peer) {
     const _nitroApp = useNitroApp();
 
     _nitroApp.$socketEngine.prepare(peer._internal.nodeReq);

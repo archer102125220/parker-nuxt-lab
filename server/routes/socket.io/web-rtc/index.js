@@ -10,7 +10,7 @@ export default defineEventHandler({
     console.log('/socket.io/web-rtc');
     const nitroApp = useNitroApp();
 
-    nitroApp.$attachSocketIOHandler(event);
+    nitroApp.$registerSocketIOHandlers(event);
   },
   websocket: {
     open(peer) {
@@ -22,7 +22,7 @@ export default defineEventHandler({
 
       const nitroApp = useNitroApp();
 
-      nitroApp.$attachSocketIO(peer, function (_peer, _nitroApp) {
+      nitroApp.$adaptSocketIO(peer, function (_peer, _nitroApp) {
         _nitroApp.$socketIoServer
           .of('/socket.io/web-rtc')
           .once('connection', function (socket) {

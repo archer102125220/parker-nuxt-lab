@@ -7,7 +7,7 @@ export default defineEventHandler({
     console.log('/socket.io/room/uuid');
     const nitroApp = useNitroApp();
 
-    nitroApp.$attachSocketIOHandler(event);
+    nitroApp.$registerSocketIOHandlers(event);
   },
   websocket: {
     open(peer) {
@@ -47,7 +47,7 @@ export default defineEventHandler({
           });
         });
 
-      nitroApp.$attachSocketIO(peer);
+      nitroApp.$adaptSocketIO(peer);
     },
 
     async message(peer, message) {
