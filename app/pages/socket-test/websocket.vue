@@ -11,14 +11,17 @@
 
 <script setup>
 useHeadMataData({
-  title: '原生配合Nuxt3內建的websocket'
+  title: '原生配合Nuxt4內建的websocket'
 });
 import _cloneDeep from 'lodash/cloneDeep';
 
 const webSocket = useWebSocket(
   {
     channel: '/',
-    message: onMessage
+    message: onMessage,
+    listener: {
+      ['websocket-test']: onMessage
+    }
   },
   null,
   function (newWebSocket) {
@@ -39,7 +42,7 @@ const webSocketMessageList = ref([]);
 
 function onMessage(event) {
   try {
-    console.log({ event, data: event.data });
+    // console.log({ event, data: event.data });
     const payload = JSON.parse(event.data);
     if (payload.data) {
       const newWebSocketMessage = _cloneDeep(webSocketMessageList.value);

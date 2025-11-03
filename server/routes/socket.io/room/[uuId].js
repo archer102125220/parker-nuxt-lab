@@ -7,20 +7,17 @@ export default defineEventHandler({
     console.log('/socket.io/room/uuid');
     const nitroApp = useNitroApp();
 
-    nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
-    event._handled = true;
+    nitroApp.$attachSocketIOHandler(event);
   },
   websocket: {
     open(peer) {
       console.log('[ws-socket.io] Room WebSocket connected');
 
-      const nitroApp = useNitroApp();
-
       const urlParts = (peer.request.url || '').split('/');
-      const namespace = (decodedMessage?.nsp || '');
-      const _namespace = namespace.replaceAll('/socket.io/room/', '').replaceAll('/socket.io/room', '');
       const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
-      const uuId = urlParts[urlParts.length - 1] || query?.uuId || _namespace;
+      const uuId = urlParts[urlParts.length - 1] || query?.uuId || '';
+
+      const nitroApp = useNitroApp();
 
       // uuid v4
       // https://regex101.com/ 正規表示法測試網址
@@ -50,12 +47,13 @@ export default defineEventHandler({
           });
         });
 
-      nitroApp.$socketEngine.prepare(peer.request);
-      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
+      nitroApp.$attachSocketIO(peer);
     },
 
     async message(peer, message) {
       const decodedMessage = await decodeSocketIOPayload(message.data.toString());
+      // const namespace = (decodedMessage?.nsp || '');
+      // const _namespace = namespace.replaceAll('/socket.io/room/', '').replaceAll('/socket.io/room', '');
       console.log('[ws-socket.io] Room WebSocket decoded message', decodedMessage);
     },
 

@@ -55,7 +55,7 @@
  * }
  * 
  * @description
- * 使用 Nuxt3 的 parseCookies 工具函數解析請求中的 Cookie
+ * 使用 Nuxt4 的 parseCookies 工具函數解析請求中的 Cookie
  * 如果解析失敗會回傳錯誤資訊而非拋出例外
  */
 export default defineEventHandler((event) => {

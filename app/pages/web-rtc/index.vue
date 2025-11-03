@@ -32,7 +32,7 @@ const linkList = computed(() => [
   },
   {
     to: localePath(`/web-rtc/websocket`),
-    label: '配合前端原生/後端Nuxt3內建實作'
+    label: '配合前端原生/後端Nuxt4內建實作'
   },
   {
     to: localePath(`/web-rtc/server-sent-event`),

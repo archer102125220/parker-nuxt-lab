@@ -45,7 +45,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 });
 */
 
-// TODO:Nuxt4 的websocket要重新與socket.io做整合
+import { useNitroApp } from '#imports';
 import { Server as Engine } from 'engine.io';
 import { Server } from 'socket.io';
 import * as socketIo from 'socket.io';
@@ -101,6 +101,23 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.$socketEngine = engine;
   nitroApp.$socketIoServer = io;
   nitroApp.$socketIo = socketIo;
+
+  nitroApp.$attachSocketIOHandler = function attachSocketIOHandler(event) {
+    const _nitroApp = useNitroApp();
+
+    event.node.req.context = event.context;
+
+    _nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
+    event._handled = true;
+  }
+
+
+  nitroApp.$attachSocketIO = function attachSocketIO(peer) {
+    const _nitroApp = useNitroApp();
+
+    _nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
+    _nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
+  }
 
   nitroApp.hooks.hook('close', () => {
     io.close();

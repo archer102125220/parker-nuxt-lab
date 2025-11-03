@@ -91,7 +91,7 @@ const linkList = computed(() => [
   flex-wrap: wrap;
   flex-direction: row;
   row-gap: 24px;
-  // column-gap: 8px;
+  column-gap: 8px;
 
   // width: 80%;
   // margin: auto;

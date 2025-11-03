@@ -3,24 +3,20 @@ import { useNitroApp } from '#imports';
 
 import { decodeSocketIOPayload } from '@server/utils/socket.io-decode';
 
-// TODO:Nuxt4 的websocket要重新與socket.io做整合
 export default defineEventHandler({
   handler(event) {
     console.log('/socket.io/web-rtc/webRtcId');
     const nitroApp = useNitroApp();
 
-    nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
-    event._handled = true;
+    nitroApp.$attachSocketIOHandler(event);
   },
   websocket: {
     open(peer) {
       console.log('[ws-socket.io] WebRTC WebSocket connected');
 
       const urlParts = (peer.request.url || '').split('/');
-      const namespace = (decodedMessage?.nsp || '');
-      const _namespace = namespace.replaceAll('/socket.io/web-rtc/', '').replaceAll('/socket.io/web-rtc', '');
       const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
-      const webRtcId = _namespace || urlParts[urlParts.length - 1] || query?.webRtcId;
+      const webRtcId = urlParts[urlParts.length - 1] || query?.webRtcId;
 
       const nitroApp = useNitroApp();
 
@@ -97,14 +93,15 @@ export default defineEventHandler({
           });
         });
 
-      nitroApp.$socketEngine.prepare(peer.request);
-      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
+      nitroApp.$attachSocketIO(peer);
     },
 
     async message(peer, message) {
       // console.log('[ws-socket.io] WebRTC WebSocket message.data.toString()', message.data.toString());
 
       const decodedMessage = await decodeSocketIOPayload(message.data.toString());
+      // const namespace = (decodedMessage?.nsp || '');
+      // const _namespace = namespace.replaceAll('/socket.io/web-rtc/', '').replaceAll('/socket.io/web-rtc', '');
       console.log('[ws-socket.io] WebRTC WebSocket decoded message', decodedMessage);
     },
 

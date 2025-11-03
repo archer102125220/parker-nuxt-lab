@@ -1,7 +1,7 @@
 <template>
   <div class="web_rtc_websocket_page">
     <p class="web_rtc_websocket_page-description">
-      配合 Nuxt3 內建的 WebSocket 實作
+      配合 Nuxt4 內建的 WebSocket 實作
     </p>
 
     <p
@@ -36,7 +36,7 @@
 
 <script setup>
 useHeadMataData({
-  title: 'WebRTC測試 - 原生配合Nuxt3內建Websocket信號交換'
+  title: 'WebRTC測試 - 原生配合Nuxt4內建Websocket信號交換'
 });
 definePageMeta({
   middleware: 'check-params-uuid'

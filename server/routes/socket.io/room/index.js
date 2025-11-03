@@ -10,18 +10,17 @@ export default defineEventHandler({
     console.log('/socket.io/room');
     const nitroApp = useNitroApp();
 
-    nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
-    event._handled = true;
+    nitroApp.$attachSocketIOHandler(event);
   },
   websocket: {
     open(peer) {
       console.log('[ws-socket.io] WebRTC WebSocket connected');
 
-      const nitroApp = useNitroApp();
-
       const urlParts = (peer.request.url || '').split('/');
       const query = qs.parse((urlParts[urlParts.length - 1] || '').replaceAll('?', ''));
       const uuId = query?.uuId || '';
+
+      const nitroApp = useNitroApp();
 
       nitroApp.$socketIoServer.of('/socket.io/room')
         .on('connection', function (socket) {
@@ -37,8 +36,7 @@ export default defineEventHandler({
           });
         });
 
-      nitroApp.$socketEngine.prepare(peer.request);
-      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
+      nitroApp.$attachSocketIO(peer);
     },
 
     async message(peer, message) {

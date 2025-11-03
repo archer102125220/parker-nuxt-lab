@@ -67,7 +67,7 @@ useHeadMataData({
     {
       name: 'description',
       content:
-        '這是一個用於測試和實驗的專案，主要聚焦於客製化組件、Nuxt3套件整合以及PWA實驗。'
+        '這是一個用於測試和實驗的專案，主要聚焦於客製化組件、Nuxt4套件整合以及PWA實驗。'
     }
   ]
 });

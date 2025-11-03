@@ -1,7 +1,7 @@
 <template>
   <section class="socket_test_page">
     <div class="socket_test_page-description">
-      <p>紀錄原生配合Nuxt3內建的websocket以及前後端皆由</p>
+      <p>紀錄原生配合Nuxt4內建的websocket以及前後端皆由</p>
       <a target="_blank" href="https://socket.io/">socket.io</a>
       <p>實作的結果</p>
     </div>
@@ -44,7 +44,7 @@ const linkList = computed(() => [
   },
   {
     to: localePath('/socket-test/websocket'),
-    label: '前端原生/後端Nuxt3內建'
+    label: '前端原生/後端Nuxt4內建'
   }
 ]);
 </script>

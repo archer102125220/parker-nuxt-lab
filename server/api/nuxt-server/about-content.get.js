@@ -181,7 +181,7 @@ const ABOUT_CONTENT_DATA = [
  *     ],
  *     "listItemList": [
  *       "客製化 Vue 組件的開發與測試",
- *       "Nuxt3 框架的相關套件整合與應用"
+ *       "Nuxt4 框架的相關套件整合與應用"
  *     ]
  *   }
  * ]

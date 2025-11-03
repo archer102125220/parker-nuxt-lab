@@ -71,12 +71,12 @@ const animation = computed(() => {
   return true;
 });
 
-const currentLocaleLabel = computed(() => {
-  const found = localeList.find(
-    (localeItem) => localeItem.code === locale.value
-  );
-  return found ? found.label : locale.value;
-});
+// const currentLocaleLabel = computed(() => {
+//   const found = localeList.find(
+//     (localeItem) => localeItem.code === locale.value
+//   );
+//   return found ? found.label : locale.value;
+// });
 
 function handleGoBack() {
   router.back();

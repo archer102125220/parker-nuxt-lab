@@ -71,15 +71,18 @@ export function createWebSocket(
     const jsonData = safeParseJSON(event.data);
     event.jsonData = jsonData;
 
-    if (typeof confing.message === 'function') {
-      confing.message.call(this, event);
-    }
-
-    if (typeof jsonData.event === 'string' && jsonData.event !== '') {
+    if (
+      typeof jsonData.event === 'string' &&
+      jsonData.event !== '' &&
+      jsonData.event !== 'message'
+    ) {
       const messageEvent = new MessageEvent(jsonData.event, { data: event.data });
       messageEvent.jsonData = jsonData;
       this.dispatchEvent(messageEvent);
+    } else if (typeof confing.message === 'function') {
+      confing.message.call(this, event);
     }
+
   }.bind(socket));
 
   socket.addEventListener('pong', function (event) {

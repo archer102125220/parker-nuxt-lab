@@ -5,16 +5,12 @@ import { defineEventHandler } from 'h3';
 
 import { decodeSocketIOPayload } from '@server/utils/socket.io-decode';
 
-// TODO:Nuxt4 的websocket要重新與socket.io做整合
 export default defineEventHandler({
   handler(event) {
     console.log('/socket.io');
     const nitroApp = useNitroApp();
 
-    event.node.req.context = event.context;
-
-    nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
-    event._handled = true;
+    nitroApp.$attachSocketIOHandler(event);
   },
   websocket: {
     open(peer) {
@@ -22,9 +18,7 @@ export default defineEventHandler({
 
       const nitroApp = useNitroApp();
 
-      // console.log(peer.request);
       console.log('[ws-socket.io] Default WebSocket open:', peer.id);
-
 
       nitroApp.$socketIoServer
         .of('/socket.io')
@@ -49,16 +43,7 @@ export default defineEventHandler({
           });
         });
 
-      // console.log(peer.request);
-      console.log(peer.context);
-      // console.log(peer.request._req.socket);
-      // console.log(peer.request.socket?.connection);
-      // console.log(peer.websocket);
-      // console.log(peer.request.get('socket'));
-
-      nitroApp.$socketEngine.prepare(peer.request);
-      // nitroApp.$socketEngine.onWebSocket(peer.request, peer.request.socket, peer.websocket);
-      nitroApp.$socketEngine.onWebSocket(peer.request, peer.request._req.socket, peer.websocket);
+      nitroApp.$attachSocketIO(peer);
     },
 
     async message(peer, message) {
