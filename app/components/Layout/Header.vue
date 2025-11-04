@@ -15,17 +15,26 @@
         <v-img
           class="layout_header-name-link-logo"
           src="/img/icon/NuxtRock.v.02.svg"
+          :alt="$t('system.systemName')"
         />
         <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
-        <p class="layout_header-name-link-label">
-          {{ $t('system.systemName') }}
-        </p>
+        <AnimationEnterLabel
+          class="layout_header-name-link-label"
+          :animation-end="animation === false"
+          :label="$t('system.systemName')"
+        />
       </NuxtLink>
     </div>
 
     <v-btn color="primary" variant="text" rounded>
       <!-- <p>{{ $t(currentLocaleLabel) }}</p> -->
-      <v-img src="/img/icon/i18n/i18n.v-02.png" width="20" height="20" cover />
+      <v-img
+        src="/img/icon/i18n/i18n.v-02.png"
+        cover
+        width="20"
+        height="20"
+        alt="i18n"
+      />
       <v-menu
         activator="parent"
         target="parent"

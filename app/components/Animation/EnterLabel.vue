@@ -47,6 +47,17 @@ watch(
   }
 );
 
+watch(
+  () => [modelAnimationEnd.value, props.label],
+  ([newModelAnimationEnd, newLabel]) => {
+    if (newModelAnimationEnd === true) {
+      modelValue.value = true;
+      emits('update:modelValue', true);
+      nextTick(() => (enterLabel.value = newLabel));
+    }
+  }
+);
+
 function handleEnterLabel() {
   if (enterLabel.value.length <= props.label.length) {
     const randomLen = props.randomLen.toLowerCase();
@@ -99,7 +110,9 @@ function generateRandomChineseCharacter() {
 }
 
 onMounted(() => {
-  if (props.autoStart === true || modelValue.value === true) {
+  if (props.animationEnd === true) {
+    enterLabel.value = props.label;
+  } else if (props.autoStart === true || modelValue.value === true) {
     if (modelValue.value === true) {
       handleEnterLabel();
     } else {
