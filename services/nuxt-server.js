@@ -31,10 +31,10 @@ export function GET_frontendApiCachTest(payload = {}, extendOption) {
 }
 
 
-export function GET_aboutContent(extendOption) {
+export function GET_aboutContent(payload, extendOption) {
   const { $request } = useNuxtApp();
 
-  return $request.get(`${prefix}/about-content`, null, extendOption);
+  return $request.get(`${prefix}/about-content`, payload, extendOption);
 }
 
 export function GET_scrollFetchTest(payload = {}, extendOption) {

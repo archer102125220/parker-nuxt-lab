@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="to" class="link_card">
+  <NuxtLink :to="to" :alt="label" class="link_card">
     <v-card class="link_card-card" v-ripple max-width="150">
       <v-img cover height="100" :src="safeBanner" @error="handleBannerError" />
 

@@ -40,10 +40,115 @@ async function googleSheetToJson() {
     en: 'English',
     ['zh-tw']: 'Chinese',
     system: {
-      systemName: "Parker's Nuxt lab",
-      defaultTitle: "Parker's Nuxt lab",
-      titleTemplate: "Parker's Nuxt lab",
-      description: "Parker's Nuxt Laboratory"
+      systemName: 'Parker\'s Nuxt lab',
+      defaultTitle: 'Parker\'s Nuxt lab',
+      titleTemplate: 'Parker\'s Nuxt lab',
+      description: 'Parker\'s Nuxt Laboratory'
+    },
+    index: {
+      about: 'About',
+      components: 'Custom components and third-party integrations',
+      directives: 'Custom Vue directives',
+      route: 'Route-related tests',
+      css_drawing: 'CSS drawing tests',
+      web_authn: 'Biometric authentication test (native)',
+      fido2_lib: 'Biometric authentication test (fido2-lib)',
+      web_cam: 'WebCam test',
+      face_api: 'face_api test',
+      frontend_cach_api: 'Frontend API cache test',
+      firebase: 'Firebase integration test',
+      socket: 'Socket tests',
+      server_sent_event: 'Server-Sent Event tests',
+      web_rtc: 'WebRTC tests'
+    },
+    components: {
+      description: {
+        span1: 'Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.',
+        span2: 'Others are integrated because no official Vue version exists; we wrap vanilla JS libraries as components.'
+      },
+      tab: 'Tabs component test',
+      scroll_fetch: 'Pull-to-refresh / Infinite scroll test',
+      wang_editor: 'WangEditor (HTML editor) test',
+      youtube: 'YouTube test',
+      components: 'Combined components test (Tabs, Pull-to-refresh / Infinite scroll, WangEditor (HTML editor), YouTube)',
+      swiper_js: 'SwiperJs test',
+      swiper: 'Custom Swiper test',
+      qrcode: 'QR code test',
+      slide_in_panel: 'Message queue test',
+      switch: 'Switch component test',
+      go_top: 'Back to top component test',
+      virtual_scroller: 'virtual-scroller component test',
+      enter_label: 'Text effect test',
+      image_upload: 'Image upload selector test',
+      dialog: 'Dialog component',
+      drawer: 'Drawer expand/collapse component',
+      selector: 'Dropdown selector component'
+    },
+    css_drawing: {
+      description: {
+        span1: 'Mainly CSS drawing and anime.js integration tests'
+      },
+      triangle: 'CSS triangle test',
+      triangle_full: 'Fullscreen CSS triangle test',
+      triangle_anime: 'Fullscreen CSS triangle animation test',
+      hexagon: 'CSS hexagon test',
+      svg_color: 'SVG color replacement test'
+    },
+    directives: {
+      description: {
+        span1: 'To avoid incompatibility or project mismatch with npm tools, we implement directives ourselves.'
+      },
+      ripple: 'Custom ripple directive test',
+      lazyload: 'Custom lazyload directive test'
+    },
+    firebase: {
+      description: {
+        span1: 'Originally implemented in the',
+        span2: 'e-Resume',
+        span3: 'project, but since that project does not implement PWA or other Service Worker features, this project integrates Service Worker for testing.'
+      },
+      'cloud_messaging': 'FCM push notification admin'
+    },
+    route: {
+      description: {
+        span1: 'Mainly for reproductions and note-taking tests'
+      },
+      query_back: 'Route query and back navigation test',
+      params_back: 'Route params and back navigation test'
+    },
+    server_sent_event_test: {
+      description: {
+        span1: 'Test global and route-param grouped Server-Sent Event'
+      },
+      global_get: 'Server-Sent Event global test',
+      global_post: 'Server-Sent Event POST global test',
+      room_get: 'Server-Sent Event route param group test',
+      room_post: 'Server-Sent Event POST route param group test',
+      page: {
+        get_data: 'Received data:'
+      }
+    },
+    socket: {
+      description: {
+        span1: 'Record results of native + Nuxt4 built-in websocket and',
+        span2: 'socket.io',
+        span3: 'implementations on both frontend and backend'
+      },
+      warning: 'Current deployment may not support WebSocket (e.g., Vercel), so it may not work',
+      socket_io: 'Frontend and backend handled by socket.io',
+      websocket: 'Frontend native / backend Nuxt4 built-in',
+      page: {
+        get_data: 'Received data:'
+      }
+    },
+    web_rtc: {
+      description: {
+        span1: 'The video feature is basically done, but the detailed flow is incomplete. To test, copy the URL manually.',
+        span2: 'WebRTC implementation tests mainly include:'
+      },
+      socket_io: 'Implemented with socket.io',
+      websocket: 'Implemented with frontend native / backend Nuxt4 built-in',
+      server_sent_event: 'Implemented with SSE'
     },
     $vuetify: vuetifyEn,
   };
@@ -51,10 +156,10 @@ async function googleSheetToJson() {
     en: '英文',
     ['zh-tw']: '繁體中文',
     system: {
-      systemName: "Parker 的 Nuxt實驗室",
-      defaultTitle: "Parker 的 Nuxt實驗室",
+      systemName: 'Parker 的 Nuxt實驗室',
+      defaultTitle: 'Parker 的 Nuxt實驗室',
       titleTemplate: 'Parker 的 Nuxt 實驗室',
-      description: "Parker 的 Nuxt實驗室"
+      description: 'Parker 的 Nuxt實驗室'
     },
     index: {
       about: '關於本站',
@@ -65,7 +170,7 @@ async function googleSheetToJson() {
       web_authn: '生物辨識測試（原生）',
       fido2_lib: '生物辨識測試（fido2-lib）',
       web_cam: 'WebCam測試',
-      face_api: 'face_api測試',
+      face_api: 'face-api測試',
       frontend_cach_api: '前端api快取測試',
       firebase: 'firebase整合測試',
       socket: 'socket測試',

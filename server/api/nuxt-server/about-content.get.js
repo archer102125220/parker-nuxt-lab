@@ -40,7 +40,7 @@
  * 包含專案介紹、技術棧、測試項目等相關資訊
  * 用於動態生成關於頁面的內容結構
  */
-const ABOUT_CONTENT_DATA = [
+const ABOUT_CONTENT_DATA_ZH = [
   {
     title: '專案宗旨',
     description: [
@@ -189,10 +189,13 @@ const ABOUT_CONTENT_DATA = [
  * @description
  * 此 API 模擬 1 秒的延遲回應，用於測試前端的載入狀態處理
  */
-export default defineEventHandler(() => {
+export default defineEventHandler((event) => {
+  const query = getQuery(event);
+  console.log({ query });
+
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(ABOUT_CONTENT_DATA);
+      resolve(ABOUT_CONTENT_DATA_ZH);
     }, 1000);
   });
 });

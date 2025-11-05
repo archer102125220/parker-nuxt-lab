@@ -8,7 +8,7 @@
     />
     <p v-else-if="error">無法載入內容：{{ error.message }}</p>
     <template v-else-if="data">
-      <h1 class="about_page-title">關於本站</h1>
+      <!-- <h1 class="about_page-title">關於本站</h1> -->
       <v-img class="about_page-banner" src="/img/about/about-v.08.png" />
       <section
         v-for="(section, index) in sectionList"
@@ -47,9 +47,12 @@
 <script setup>
 const systemStore = useSystemStore();
 const { $nuxtServer } = useNuxtApp();
+const { locale } = useI18n();
 
-const { data, pending, error } = await useAsyncData('about-content', () =>
-  $nuxtServer.GET_aboutContent()
+const { data, pending, error } = await useAsyncData(
+  'about-content',
+  () => $nuxtServer.GET_aboutContent({ locale: locale.value }),
+  { watch: [locale] }
 );
 
 const sectionList = computed(() => {
