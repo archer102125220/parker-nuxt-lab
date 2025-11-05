@@ -126,7 +126,7 @@ onMounted(() => {
   }
   &-content {
     flex: 1;
-    // flex-basis: 400px;
+    // flex-basis: 150px;
 
     &-tab_content {
       // height: 30%;

@@ -14,14 +14,23 @@
     </p>
 
     <nav class="socket_test_page-content">
-      <NuxtLink
+      <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
         class="socket_test_page-content-link"
         :to="link.to"
       >
         {{ link.label }}
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="socket_test_page-content-link"
+      />
     </nav>
   </section>
 </template>
@@ -73,7 +82,7 @@ const linkList = computed(() => [
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

@@ -15,12 +15,21 @@
     </div>
 
     <nav class="firebase_page-link_list">
-      <NuxtLink
+      <!-- <NuxtLink
         class="firebase_page-link_list-link"
         :to="localePath('/firebase/cloud-messaging')"
       >
         FCM推播通知後台
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="firebase_page-link_list-link"
+      />
     </nav>
   </div>
 </template>
@@ -33,6 +42,12 @@ useHeadMataData({
   }
 });
 const localePath = useLocalePath();
+const linkList = computed(() => [
+  {
+    to: localePath('/firebase/cloud-messaging'),
+    label: 'FCM推播通知後台'
+  }
+]);
 </script>
 
 <style lang="scss" scoped>
@@ -43,7 +58,7 @@ const localePath = useLocalePath();
     flex-wrap: wrap;
     gap: 8px;
 
-    margin-bottom: 16px;;
+    margin-bottom: 16px;
   }
 
   &-link_list {
@@ -54,7 +69,7 @@ const localePath = useLocalePath();
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

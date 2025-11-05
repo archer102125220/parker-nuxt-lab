@@ -4,14 +4,23 @@
       為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關directives
     </p>
     <nav class="directives_page-content">
-      <NuxtLink
+      <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
         class="directives_page-content-link"
         :to="link.to"
       >
         {{ link.label }}
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="directives_page-content-link"
+      />
     </nav>
   </section>
 </template>
@@ -50,7 +59,7 @@ const linkList = computed(() => [
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

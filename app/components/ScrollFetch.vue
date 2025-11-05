@@ -34,7 +34,7 @@
           <div class="scroll_fetch-trigger-refreshing">
             <div
               class="scroll_fetch-trigger-refreshing-loading_icon"
-              refresh-animation="true"
+              css-refresh-animation="true"
             />
             <p class="scroll_fetch-trigger-refreshing-label">
               {{ loadingLabel }}
@@ -56,18 +56,18 @@
             v-if="hasRefreshIcon === false"
             v-show="isShowRefreshIcon"
             class="scroll_fetch-trigger-icon_center-icon"
-            :refresh-animation="refreshing === true && isPullStart === false"
+            :css-refresh-animation="refreshing === true && isPullStart === false"
           />
           <div
             v-else
             v-show="isShowRefreshIcon"
             class="scroll_fetch-trigger-icon_center-icon_img_bg"
-            :activate-animation="refreshIconAnimation"
+            :css-activate-animation="refreshIconAnimation"
           >
             <img
               :src="computedRefreshIcon"
               class="scroll_fetch-trigger-icon_center-icon_img_bg-icon_img"
-              :refresh-animation="refreshing === true && isPullStart === false"
+              :css-refresh-animation="refreshing === true && isPullStart === false"
             />
           </div>
         </slot>
@@ -803,7 +803,7 @@ function windowScrollEnd(e) {
 
 <style lang="scss" scoped>
 @mixin refresh_animation {
-  &[refresh-animation='true'] {
+  &[css-refresh-animation='true'] {
     animation: refresh_animation 1s linear infinite;
   }
 }
@@ -882,7 +882,7 @@ function windowScrollEnd(e) {
           0 1px 6px rgba(0, 0, 0, 0.117647),
           0 1px 4px rgba(0, 0, 0, 0.117647);
 
-        &[activate-animation='true'] {
+        &[css-activate-animation='true'] {
           animation: activate_refresh_animation 0.2s;
         }
 

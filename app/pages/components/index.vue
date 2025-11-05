@@ -11,14 +11,23 @@
       src="/img/components-page/components-page-v.03.png"
     />
     <nav class="components_page-content">
-      <NuxtLink
+      <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
         class="components_page-content-link"
         :to="link.to"
       >
         {{ link.label }}
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="components_page-content-link"
+      />
     </nav>
   </section>
 </template>
@@ -33,7 +42,7 @@ useHeadMataData({
   }
 });
 // https://www.cnblogs.com/ganto/articles/17917868.html
-const nuxtApp = useNuxtApp();
+// const nuxtApp = useNuxtApp();
 
 const localePath = useLocalePath();
 const linkList = computed(() => [
@@ -47,6 +56,12 @@ const linkList = computed(() => [
     label: 'WangEditor（HTML編輯器）測試'
   },
   { to: localePath('/components/youtube-test'), label: 'Youtube測試' },
+  {
+    to: localePath('/components/components-test'),
+    banner: '/img/components-test/components-test-v.03.png',
+    label:
+      '組件綜合測試（Tabs組件、下拉重載/無限滾動測試、WangEditor（HTML編輯器）、Youtube測試）'
+  },
   { to: localePath('/components/swiper-js-test'), label: 'SwiperJs測試' },
   { to: localePath('/components/swiper-test'), label: '自製Swiper測試' },
   { to: localePath('/components/qr-code-test'), label: 'QRcode測試' },
@@ -80,9 +95,11 @@ const linkList = computed(() => [
     flex-direction: row;
     gap: 8px;
 
+    margin-top: 8px;
+
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

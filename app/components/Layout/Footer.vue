@@ -1,5 +1,5 @@
 <template>
-  <footer class="layout_footer" :animation="animation">
+  <footer class="layout_footer" :css-animation="animation">
     <p class="layout_footer-copyright">&copy; {{ copyright }}</p>
   </footer>
 </template>
@@ -33,7 +33,7 @@ onMounted(() => {
 }
 
 .layout_footer {
-  &[animation='true'] {
+  &[css-animation='true'] {
     animation-name: footerEnterAnimation;
     animation-duration: 0.3s;
   }

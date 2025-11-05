@@ -1,17 +1,28 @@
 <template>
   <section class="web_rtc_page">
-    <p>目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試</p>
+    <p>
+      目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試
+    </p>
     <p class="web_rtc_page-description">WebRTC的實作測試，主要分爲：</p>
 
     <nav class="web_rtc_page-content">
-      <NuxtLink
+      <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
         class="web_rtc_page-content-link"
         :to="link.to"
       >
         {{ link.label }}
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="web_rtc_page-content-link"
+      />
     </nav>
   </section>
 </template>
@@ -53,7 +64,7 @@ const linkList = computed(() => [
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

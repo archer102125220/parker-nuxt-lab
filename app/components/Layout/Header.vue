@@ -1,12 +1,12 @@
 <template>
-  <header class="layout_header" :animation="animation">
+  <header class="layout_header" :css-animation="animation">
     <v-btn
-      :has-back="hasBack === true"
       class="layout_header-back"
       size="x-small"
       color="primary"
       variant="outlined"
       icon="mdi-chevron-left"
+      :css-has-back="hasBack === true"
       @click="handleGoBack"
     />
 
@@ -16,10 +16,12 @@
           class="layout_header-name-link-logo"
           src="/img/icon/NuxtRock.v.02.svg"
           :alt="$t('system.systemName')"
+          :transition="imgTransition"
         />
         <!-- <p class="layout_header-name-label">Parker Chen 的Nuxt實驗室</p> -->
         <AnimationEnterLabel
           class="layout_header-name-link-label"
+          :css-animation="animation"
           :animation-end="animation === false"
           :label="$t('system.systemName')"
         />
@@ -34,6 +36,7 @@
         width="20"
         height="20"
         alt="i18n"
+        :transition="imgTransition"
       />
       <v-menu
         activator="parent"
@@ -80,6 +83,13 @@ const animation = computed(() => {
   return true;
 });
 
+const imgTransition = computed(() => {
+  if (animation.value === true) {
+    return 'fade-transition';
+  }
+  return false;
+});
+
 // const currentLocaleLabel = computed(() => {
 //   const found = localeList.find(
 //     (localeItem) => localeItem.code === locale.value
@@ -108,6 +118,15 @@ onMounted(() => {
     transform: translate(0px, 0px);
   }
 }
+@keyframes headerEnterLabelAnimation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
 .layout_header {
   // position: relative;
 
@@ -120,7 +139,7 @@ onMounted(() => {
 
   background-color: #f8f9fa;
 
-  &[animation='true'] {
+  &[css-animation='true'] {
     animation-name: headerEnterAnimation;
     animation-duration: 0.3s;
   }
@@ -140,7 +159,7 @@ onMounted(() => {
       width 0.2s,
       opacity 0.2s;
 
-    &[has-back='true'] {
+    &[css-has-back='true'] {
       width: 32px;
       opacity: 1;
     }
@@ -170,6 +189,11 @@ onMounted(() => {
         // font-size: 24px;
         color: #343a40;
         margin: 0;
+
+        &[css-animation='true'] {
+          animation-name: headerEnterLabelAnimation;
+          animation-duration: 0.3s;
+        }
       }
     }
   }

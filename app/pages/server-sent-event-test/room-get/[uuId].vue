@@ -55,7 +55,7 @@ watch(
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

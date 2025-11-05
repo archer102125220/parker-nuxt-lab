@@ -1,5 +1,5 @@
 <template>
-  <div class="slide_in_panel_list" :style="cssVariable" :left-enter="leftEnter">
+  <div class="slide_in_panel_list" :style="cssVariable" :css-left-enter="leftEnter">
     <div
       v-for="(message, index) in messageList"
       :key="message.timestamp"
@@ -9,8 +9,8 @@
         '--message_item_spacing': `calc(var(--slide_in_panel_list_item_spacing, 0px)  * ${messageList.length - index})`,
         ...messageStyleList[index]
       }"
-      :left-enter="leftEnter"
-      :remove-type="removeType"
+      :css-left-enter="leftEnter"
+      :css-remove-type="removeType"
       class="slide_in_panel_list-message"
       @transitionend="handleTransitionEnd(message, index)"
       @click="handleUserRemoveClick($event, message, index)"
@@ -252,7 +252,7 @@ function handleMessageStyle(message) {
 
   if (_isElement(messageEl.value?.[elIndex]) === true) {
     const isMessageStarted =
-      messageEl.value[elIndex].getAttribute('message-started') === 'true';
+      messageEl.value[elIndex].getAttribute('css-essage-started') === 'true';
 
     messageEl.value[elIndex].setAttribute('timestamp', message.timestamp);
     // messageEl.value[elIndex].setAttribute('index', index);
@@ -266,7 +266,7 @@ function handleMessageStyle(message) {
     }
 
     if (isMessageStarted === false) {
-      messageEl.value[elIndex].setAttribute('message-started', true);
+      messageEl.value[elIndex].setAttribute('css-message-started', true);
     }
   }
 
@@ -275,7 +275,7 @@ function handleMessageStyle(message) {
 function handleTransitionEnd(message, index) {
   const elIndex = getMessageElIndex(message, index);
   const isMessageEnded =
-    messageEl.value[elIndex].getAttribute('message-ended') === 'true';
+    messageEl.value[elIndex].getAttribute('css-message-ended') === 'true';
 
   if (
     isMessageEnded === false &&
@@ -311,7 +311,7 @@ async function handleMessageHidden() {
   messageList.value.forEach((message, index) => {
     if (
       _isElement(messageEl.value[index]) === true &&
-      messageEl.value[index].getAttribute('message-ended') === 'true'
+      messageEl.value[index].getAttribute('css-message-ended') === 'true'
     ) {
       const newMessageStyleList = _cloneDeep(messageStyleList.value);
       newMessageStyleList[index]['--message_z_index'] = '-1';
@@ -332,7 +332,7 @@ async function handleMessageHidden() {
       messageList.value = messageList.value.filter((message, removeIndex) => {
         const isNotRemove =
           _isElement(messageEl.value?.[removeIndex]) === false ||
-          messageEl.value[removeIndex].getAttribute('message-ended') !== 'true';
+          messageEl.value[removeIndex].getAttribute('css-message-ended') !== 'true';
         if (isNotRemove === true) {
           emit('remove', message, removeIndex);
         }
@@ -347,7 +347,7 @@ function handleMessageEnd(message, returnStyle = false, messageStyle) {
   const elIndex = getMessageElIndex(message, index);
 
   if (_isElement(messageEl.value?.[elIndex]) === true) {
-    messageEl.value[elIndex].setAttribute('message-ended', true);
+    messageEl.value[elIndex].setAttribute('css-message-ended', true);
     emit('close', message, index, messageEl.value?.[elIndex]);
 
     const newMessageStyleList = _cloneDeep(messageStyleList.value);
@@ -378,7 +378,7 @@ function handleUserRemoveClick(e, message, index) {
   e.stopPropagation();
 
   const elIndex = getMessageElIndex(message, index);
-  if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
+  if (messageEl.value[elIndex].getAttribute('css-message-ended') === 'true') {
     return;
   }
   handleMessageEnd(message);
@@ -388,7 +388,7 @@ function handleUserRemoveStart(e, message, index) {
   e.stopPropagation();
 
   const elIndex = getMessageElIndex(message, index);
-  if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
+  if (messageEl.value[elIndex].getAttribute('css-message-ended') === 'true') {
     return;
   }
 
@@ -420,7 +420,7 @@ function handleUserRemoveing(e, message, index) {
 
   const elIndex = getMessageElIndex(message, index);
 
-  if (messageEl.value[elIndex].getAttribute('message-ended') === 'true') {
+  if (messageEl.value[elIndex].getAttribute('css-message-ended') === 'true') {
     userRemoveing.value = false;
     startX.value = 0;
     moveX.value = 0;
@@ -482,7 +482,7 @@ async function handleUserRemoveEnd(message, index) {
   const elIndex = getMessageElIndex(message, index);
   if (
     userRemoveingId.value !== message.timestamp ||
-    messageEl.value[elIndex].getAttribute('message-ended') === 'true'
+    messageEl.value[elIndex].getAttribute('css-message-ended') === 'true'
   ) {
     return;
   }
@@ -537,10 +537,10 @@ async function handleUserRemoveEnd(message, index) {
   width: var(--slide_in_panel_list_width, 100vw);
   user-select: none;
 
-  &[left-enter='true'] {
+  &[css-left-enter='true'] {
     left: var(--slide_in_panel_list_left, -100vw);
   }
-  &:not([left-enter='true']) {
+  &:not([css-left-enter='true']) {
     right: var(--slide_in_panel_list_right, -100vw);
   }
 
@@ -559,36 +559,36 @@ async function handleUserRemoveEnd(message, index) {
 
     word-break: keep-all;
 
-    &[left-enter='true'] {
+    &[css-left-enter='true'] {
       left: var(--message_left, 0px);
 
-      &[message-started='true'] {
+      &[css-message-started='true'] {
         left: var(--message_left, 100%);
       }
 
-      &[message-ended='true'] {
-        &[remove-type='move'] {
+      &[css-message-ended='true'] {
+        &[css-remove-type='move'] {
           left: 0px;
         }
-        &[remove-type='opacity'] {
+        &[css-remove-type='opacity'] {
           left: var(--message_left, 100%);
           opacity: 0;
         }
       }
     }
 
-    &:not([left-enter='true']) {
+    &:not([css-left-enter='true']) {
       right: var(--message_right, 0px);
 
-      &[message-started='true'] {
+      &[css-message-started='true'] {
         right: var(--message_right, 100%);
       }
 
-      &[message-ended='true'] {
-        &[remove-type='move'] {
+      &[css-message-ended='true'] {
+        &[css-remove-type='move'] {
           right: 0px;
         }
-        &[remove-type='opacity'] {
+        &[css-remove-type='opacity'] {
           right: var(--message_right, 100%);
           opacity: 0;
         }

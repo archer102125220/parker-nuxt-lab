@@ -59,9 +59,9 @@
         >
           <div
             class="drawer_root-wrapping-drawer-drag_bar"
-            :anchor="computedAnchor"
-            :is-vertical="isVertical"
-            :is-horizontal="isHorizontal"
+            :css-anchor="computedAnchor"
+            :css-is-vertical="isVertical"
+            :css-is-horizontal="isHorizontal"
             @click="handleDragBarClick"
             @mousedown="handleDragStart"
             @mousemove="handleDraging"
@@ -670,14 +670,14 @@ function handleDragEnd(e) {
 
         background-color: #fff;
 
-        &[is-vertical='true'] {
+        &[css-is-vertical='true'] {
           width: 100%;
           height: 20px;
 
-          &[anchor='top'] {
+          &[css-anchor='top'] {
             bottom: 0px;
           }
-          &[anchor='bottom'] {
+          &[css-anchor='bottom'] {
             top: 0px;
           }
           &:after {
@@ -690,7 +690,7 @@ function handleDragEnd(e) {
             background-color: #e4e4e4;
           }
         }
-        &[is-horizontal='true'] {
+        &[css-is-horizontal='true'] {
           width: 20px;
           // height: 100%;
           top: 0px;
@@ -698,10 +698,10 @@ function handleDragEnd(e) {
 
           align-items: center;
 
-          &[anchor='left'] {
+          &[css-anchor='left'] {
             right: 0px;
           }
-          &[anchor='right'] {
+          &[css-anchor='right'] {
             left: 0px;
           }
           &:after {

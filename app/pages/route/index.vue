@@ -2,14 +2,23 @@
   <section class="route_test_page">
     <p>主要用作複現狀況，篇筆記用途的測試</p>
     <nav class="route_test_page-content">
-      <NuxtLink
+      <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
         class="route_test_page-content-link"
         :to="link.to"
       >
         {{ link.label }}
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="route_test_page-content-link"
+      />
     </nav>
   </section>
 </template>
@@ -44,7 +53,7 @@ const linkList = computed(() => [
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }

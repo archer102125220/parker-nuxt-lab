@@ -56,6 +56,22 @@ async function googleSheetToJson() {
       titleTemplate: 'Parker 的 Nuxt 實驗室',
       description: "Parker 的 Nuxt實驗室"
     },
+    index: {
+      about: '關於本站',
+      components: '自製組件及第三方整合組件',
+      directives: '自製vue指令',
+      route: 'route相關測試',
+      css_drawing: 'css繪圖相關測試',
+      web_authn: '生物辨識測試（原生）',
+      fido2_lib: '生物辨識測試（fido2-lib）',
+      web_cam: 'WebCam測試',
+      face_api: 'face_api測試',
+      frontend_cach_api: '前端api快取測試',
+      firebase: 'firebase整合測試',
+      socket: 'socket測試',
+      server_sent_event: 'Server Sent Event測試',
+      web_rtc: 'WebRTC測試'
+    },
     $vuetify: vuetifyZhHant,
   };
   let err;

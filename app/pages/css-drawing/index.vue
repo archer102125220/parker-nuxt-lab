@@ -2,14 +2,23 @@
   <section class="css_animejs_page">
     <p>主要以css繪圖及anime.js整合測試為主</p>
     <nav class="css_animejs_page-content">
-      <NuxtLink
+      <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
         class="css_animejs_page-content-link"
         :to="link.to"
       >
         {{ link.label }}
-      </NuxtLink>
+      </NuxtLink> -->
+
+      <LinkCard
+        v-for="link in linkList"
+        :key="link.to"
+        :to="link.to"
+        :banner="link.banner"
+        :label="link.label"
+        class="css_animejs_page-content-link"
+      />
     </nav>
   </section>
 </template>
@@ -54,7 +63,7 @@ const linkList = computed(() => [
 
     &-link {
       flex: 1;
-      flex-basis: 400px;
+      flex-basis: 150px;
     }
   }
 }
