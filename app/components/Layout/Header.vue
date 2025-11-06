@@ -52,7 +52,11 @@
             :active="locale === lang.code"
             color="primary"
           >
-            <NuxtLink :to="$switchLocalePath(lang.code)">
+            <NuxtLink
+              :to="$switchLocalePath(lang.code)"
+              disabled
+              @click="router.replace($switchLocalePath(lang.code))"
+            >
               <v-list-item-title>
                 {{ $t(lang.label) }}
               </v-list-item-title>
@@ -66,6 +70,7 @@
 <script setup>
 const router = useRouter();
 const { locale } = useI18n();
+// const switchLocalePath = useSwitchLocalePath();
 
 const localeList = [
   { code: 'en', label: 'en' },
