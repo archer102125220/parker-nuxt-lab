@@ -1,10 +1,12 @@
 <template>
   <section class="components_page">
     <p>
-      自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components
+      <!-- 自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components -->
+      {{ $t('components.description.span1') }}
     </p>
     <p>
-      其餘主要是因為該套件並未提供vue版本，因此整合供純js之版本為組件的方式做實作
+      <!-- 其餘主要是因為該套件並未提供vue版本，因此整合供純js之版本為組件的方式做實作 -->
+      {{ $t('components.description.span2') }}
     </p>
     <v-img
       class="components_page-banner"
@@ -45,17 +47,29 @@ useHeadMataData({
 // const nuxtApp = useNuxtApp();
 
 const localePath = useLocalePath();
+const { t } = useI18n();
+
 const linkList = computed(() => [
-  { to: localePath('/components/tab-test'), label: 'Tabs組件測試' },
+  {
+    to: localePath('/components/tab-test'),
+    //  label: 'Tabs組件測試',
+    label: t('components.tab')
+  },
   {
     to: localePath('/components/scroll-fetch-test'),
-    label: '下拉重載/無限滾動測試'
+    // label: '下拉重載/無限滾動測試',
+    label: t('components.scroll_fetch')
   },
   {
     to: localePath('/components/wang-editor-test'),
-    label: 'WangEditor（HTML編輯器）測試'
+    // label: 'WangEditor（HTML編輯器）測試',
+    label: t('components.wang_editor')
   },
-  { to: localePath('/components/youtube-test'), label: 'Youtube測試' },
+  {
+    to: localePath('/components/youtube-test'),
+    //  label: 'Youtube測試',
+    label: t('components.youtube')
+  },
   {
     to: localePath('/components/components-test'),
     banner: '/img/components-test/components-test-v.03.png',
@@ -87,6 +101,7 @@ const linkList = computed(() => [
 .components_page {
   &-banner {
     width: 100%;
+    margin-bottom: 8px;
   }
 
   &-content {

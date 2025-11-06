@@ -8,7 +8,6 @@
 
 <script setup>
 const props = defineProps({
-  label: { type: String, default: '' },
   height: { type: [String, Number], default: '120px' },
   width: { type: [String, Number], default: '100px' },
   maskColor: { type: String, default: '#007bff' }

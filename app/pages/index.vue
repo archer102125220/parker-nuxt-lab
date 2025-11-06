@@ -24,6 +24,10 @@
 
 <script setup>
 useHeadMataData();
+definePageMeta({
+  title: 'system.defaultTitle'
+});
+
 const localePath = useLocalePath();
 const { t } = useI18n();
 
@@ -65,48 +69,55 @@ const linkList = computed(() => [
   },
   {
     to: localePath('/web-authn'),
-    banner: '/img/web-authn/web-authn-v.02.png',
+    banner: '/img/web-authn/web-authn-v.03.png',
     // label: '生物辨識測試（原生）',
     label: t('index.web_authn')
   },
   {
     to: localePath('/fido2-lib'),
-    banner: '/img/fido2-lib/fido2-lib-v.06.png',
+    banner: '/img/fido2-lib/fido2-lib-v.07.png',
     // label: '生物辨識測試（fido2-lib）',
     label: t('index.fido2_lib')
   },
   {
     to: localePath('/web-cam'),
+    banner: '/img/web-cam/web-cam-v.03.png',
     // label: 'WebCam測試',
     label: t('index.web_cam')
   },
   {
     to: localePath('/face-api'),
+    banner: '/img/face-api/face-api-v.01.png',
     // label: 'face-api測試',
-    label: t('index.fido2_lib')
+    label: t('index.face_api')
   },
   {
     to: localePath('/frontend-api-cach-test'),
+    banner: '/img/frontend-api-cach/frontend-api-cach-v.03.png',
     // label: '前端api快取測試',
     label: t('index.frontend_cach_api')
   },
   {
     to: localePath('/firebase'),
+    banner: '/img/firebase/firebase-v.04.png',
     // label: 'firebase整合測試',
     label: t('index.firebase')
   },
   {
     to: localePath('/socket-test'),
+    banner: '/img/socket/socket-v.02.png',
     // label: 'socket測試',
     label: t('index.socket')
   },
   {
     to: localePath('/server-sent-event-test'),
+    banner: '/img/server-sent-event/server-sent-event-v.01.png',
     // label: 'Server Sent Event測試',
     label: t('index.server_sent_event')
   },
   {
     to: localePath('/web-rtc'),
+    banner: '/img/web-rtc/web-rtc-v.01.png',
     // label: 'WebRTC測試',
     label: t('index.web_rtc')
   }

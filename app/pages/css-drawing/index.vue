@@ -1,6 +1,10 @@
 <template>
   <section class="css_animejs_page">
     <p>主要以css繪圖及anime.js整合測試為主</p>
+    <v-img
+      class="css_animejs_page-banner"
+      src="/img/css-drawing/css-drawing-v.03.png"
+    />
     <nav class="css_animejs_page-content">
       <!-- <NuxtLink
         v-for="link in linkList"
@@ -55,6 +59,11 @@ const linkList = computed(() => [
 
 <style lang="scss">
 .css_animejs_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-content {
     display: flex;
     flex-wrap: wrap;

@@ -123,7 +123,34 @@ onMounted(() => {
     transform: translate(0px, 0px);
   }
 }
-@keyframes headerEnterLabelAnimation {
+@keyframes enterLabelAnimation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+@keyframes enterLabelAnimation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+@keyframes backWidthAnimation {
+  from {
+    width: 0px;
+  }
+
+  to {
+    width: 32px;
+  }
+}
+@keyframes backOpacityAnimation {
   from {
     opacity: 0;
   }
@@ -156,17 +183,21 @@ onMounted(() => {
     font-size: 24px;
 
     width: 0px;
-
     opacity: 0;
+
     overflow: hidden;
 
-    transition:
-      width 0.2s,
-      opacity 0.2s;
+    animation-name: backWidthAnimation, backOpacityAnimation;
+    animation-duration: 0.2s, 0.3s;
+    animation-direction: reverse, reverse;
 
     &[css-has-back='true'] {
       width: 32px;
       opacity: 1;
+
+      animation-name: backWidthAnimation, backOpacityAnimation;
+      animation-duration: 0.2s, 0.3s;
+      animation-direction: normal, normal;
     }
   }
 
@@ -196,7 +227,7 @@ onMounted(() => {
         margin: 0;
 
         &[css-animation='true'] {
-          animation-name: headerEnterLabelAnimation;
+          animation-name: enterLabelAnimation;
           animation-duration: 0.3s;
         }
       }

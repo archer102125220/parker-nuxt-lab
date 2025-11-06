@@ -20,7 +20,7 @@ export function useHeadMataData({
   const metaDataImage = computed(() => _metaDataImage || (DOMAIN + '/img/ico/web-app-manifest-512x512.png'));
   const metaDataName = computed(() => _metaDataName || $i18n.t('system.systemName'));
   const metaDataCard = computed(() => _metaDataCard || 'summary_large_image'); // summary, summary_large_image, app or player
-  const metaDataTitle = computed(() => _metaDataTitle || $i18n.t('system.defaultTitle'));
+  const metaDataTitle = computed(() => _metaDataTitle || '');
   const metaDataDescription = computed(() => _metaDataDescription || $i18n.t('system.description'));
   const metaDataUrl = computed(() => _metaDataUrl || DOMAIN);
   const metaDataType = computed(() => _metaDataType || 'website');

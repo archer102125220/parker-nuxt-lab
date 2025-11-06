@@ -1,6 +1,7 @@
 <template>
   <section class="route_test_page">
     <p>主要用作複現狀況，篇筆記用途的測試</p>
+    <v-img class="route_test_page-banner" src="/img/route/route-v.03.png" />
     <nav class="route_test_page-content">
       <!-- <NuxtLink
         v-for="link in linkList"
@@ -45,6 +46,11 @@ const linkList = computed(() => [
 
 <style lang="scss">
 .route_test_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-content {
     display: flex;
     flex-wrap: wrap;
