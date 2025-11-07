@@ -14,6 +14,8 @@
       </p>
     </div>
 
+    <v-img class="firebase_page-banner" src="/img/firebase/firebase-v.04.png" />
+
     <nav class="firebase_page-link_list">
       <!-- <NuxtLink
         class="firebase_page-link_list-link"
@@ -52,6 +54,11 @@ const linkList = computed(() => [
 
 <style lang="scss" scoped>
 .firebase_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-content {
     display: flex;
     flex-direction: row;

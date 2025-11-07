@@ -4,6 +4,11 @@
       測試全域及依照route param做分組的 Server-Sent Event
     </p>
 
+    <v-img
+      class="server_sent_event_test_page-banner"
+      src="/img/server-sent-event/server-sent-event-v.01.png"
+    />
+
     <nav class="server_sent_event_test_page-content">
       <!-- <NuxtLink
         v-for="link in linkList"
@@ -62,7 +67,14 @@ const linkList = computed(() => [
 <style lang="scss">
 .server_sent_event_test_page {
   &-description {
+    margin-bottom: 8px;
   }
+
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-content {
     display: flex;
     flex-wrap: wrap;

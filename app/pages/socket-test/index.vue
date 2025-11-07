@@ -6,6 +6,8 @@
       <p>實作的結果</p>
     </div>
 
+    <v-img class="socket_test_page-banner" src="/img/socket/socket-v.02.png" />
+
     <p
       v-if="$store.system.supportWebsocket === false"
       class="socket_test_page-warning"
@@ -71,6 +73,11 @@ const linkList = computed(() => [
   &-warning {
     font-size: 16px;
     font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  &-banner {
+    width: 100%;
     margin-bottom: 8px;
   }
 
