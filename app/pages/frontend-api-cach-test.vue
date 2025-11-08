@@ -9,6 +9,13 @@
         notion筆記連結
       </a>
     </div>
+
+    <v-img
+      class="frontend_api_cach_test_page-banner"
+      max-height="400"
+      src="/img/frontend-api-cach/frontend-api-cach-v.03.png"
+    />
+
     <form
       class="frontend_api_cach_test_page-form"
       @submit.prevent="handleSubmit"
@@ -145,6 +152,11 @@ async function handleGetApi() {
 
 <style lang="scss" scoped>
 .frontend_api_cach_test_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-outbound_link {
     display: flex;
     align-items: baseline;

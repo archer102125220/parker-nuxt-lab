@@ -10,6 +10,7 @@
     </p>
     <v-img
       class="components_page-banner"
+      max-height="400"
       src="/img/components-page/components-page-v.03.png"
     />
     <nav class="components_page-content">

@@ -3,10 +3,13 @@
     <p>
       為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關directives
     </p>
+
     <v-img
       class="directives_page-banner"
+      max-height="400"
       src="/img/vue-directives/vue-directives-v.02.png"
     />
+
     <nav class="directives_page-content">
       <!-- <NuxtLink
         v-for="link in linkList"

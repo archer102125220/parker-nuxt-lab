@@ -14,7 +14,11 @@
       </p>
     </div>
 
-    <v-img class="firebase_page-banner" src="/img/firebase/firebase-v.04.png" />
+    <v-img
+      class="firebase_page-banner"
+      max-height="400"
+      src="/img/firebase/firebase-v.04.png"
+    />
 
     <nav class="firebase_page-link_list">
       <!-- <NuxtLink

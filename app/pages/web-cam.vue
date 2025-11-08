@@ -1,5 +1,11 @@
 <template>
   <div class="web_cam_page">
+    <v-img
+      class="web_cam_page-banner"
+      max-height="400"
+      src="/img/web-cam/web-cam-v.03.png"
+    />
+
     <video
       ref="videoEl"
       id="vid"
@@ -52,6 +58,12 @@ function handleFrameFromVideo() {
 <style lang="scss">
 .web_cam_page {
   font-family: sans-serif;
+
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-video {
     display: none;
     width: 480px;

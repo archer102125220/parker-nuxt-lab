@@ -6,7 +6,12 @@
       <p>實作的結果</p>
     </div>
 
-    <v-img class="socket_test_page-banner" src="/img/socket/socket-v.02.png" />
+    <v-img
+      class="socket_test_page-banner"
+      max-height="400"
+      cover
+      src="/img/socket/socket-v.02.png"
+    />
 
     <p
       v-if="$store.system.supportWebsocket === false"

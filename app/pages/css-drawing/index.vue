@@ -1,10 +1,13 @@
 <template>
   <section class="css_animejs_page">
     <p>主要以css繪圖及anime.js整合測試為主</p>
+
     <v-img
       class="css_animejs_page-banner"
+      max-height="400"
       src="/img/css-drawing/css-drawing-v.03.png"
     />
+
     <nav class="css_animejs_page-content">
       <!-- <NuxtLink
         v-for="link in linkList"

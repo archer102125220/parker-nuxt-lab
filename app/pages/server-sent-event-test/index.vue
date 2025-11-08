@@ -6,6 +6,7 @@
 
     <v-img
       class="server_sent_event_test_page-banner"
+      max-height="400"
       src="/img/server-sent-event/server-sent-event-v.01.png"
     />
 

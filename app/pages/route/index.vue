@@ -1,7 +1,13 @@
 <template>
   <section class="route_test_page">
     <p>主要用作複現狀況，篇筆記用途的測試</p>
-    <v-img class="route_test_page-banner" src="/img/route/route-v.03.png" />
+
+    <v-img
+      class="route_test_page-banner"
+      max-height="400"
+      src="/img/route/route-v.03.png"
+    />
+
     <nav class="route_test_page-content">
       <!-- <NuxtLink
         v-for="link in linkList"

@@ -10,6 +10,13 @@
         notion筆記連結
       </a>
     </div>
+
+    <v-img
+      class="web_authn_page-banner"
+      max-height="400"
+      src="/img/web-authn/web-authn-v.03.png"
+    />
+
     <div class="web_authn_page-register">
       <form @submit.prevent="handleWebAuthnRegister">
         <p class="web_authn_page-register-title">向伺服器註冊生物辨識資料</p>
@@ -337,6 +344,11 @@ async function handleWebAuthnLogin() {
 
 <style lang="scss" scoped>
 .web_authn_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-outbound_link {
     display: flex;
     align-items: baseline;

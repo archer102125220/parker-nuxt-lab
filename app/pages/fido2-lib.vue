@@ -10,6 +10,13 @@
         notion筆記連結
       </a>
     </div>
+
+    <v-img
+      class="fido2_lib_page-banner"
+      max-height="400"
+      src="/img/fido2-lib/fido2-lib-v.07.png"
+    />
+
     <div class="fido2_lib_page-register">
       <form @submit.prevent="handleFido2LibRegister">
         <p class="fido2_lib_page-register-title">向伺服器註冊生物辨識資料</p>
@@ -84,10 +91,10 @@
 </template>
 
 <script setup>
-import { Base64 as base64Js } from 'js-base64'
+import { Base64 as base64Js } from 'js-base64';
 useHeadMataData({
   title: '生物辨識測試(fido2-lib)'
-});;
+});
 
 const nuxtApp = useNuxtApp();
 const system = nuxtApp.$store?.system;
@@ -382,6 +389,11 @@ async function handleFido2LibLogin() {
 
 <style lang="scss" scoped>
 .fido2_lib_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   &-outbound_link {
     display: flex;
     align-items: baseline;

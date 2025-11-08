@@ -1,5 +1,12 @@
 <template>
   <div class="face_api_page">
+    <v-img
+      class="face_api_page-banner"
+      max-height="400"
+      cover
+      src="/img/face-api/face-api-v.01.png"
+    />
+
     <form class="face_api_page-form" @submit.prevent="handleDiscern">
       <ImageUpload
         ref="imgSelectorEl"
@@ -401,6 +408,11 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
 <style lang="scss">
 .face_api_page {
   font-family: sans-serif;
+
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 
   &-form {
     margin-bottom: 16px;

@@ -151,6 +151,122 @@ const ABOUT_CONTENT_DATA_ZH = [
 ];
 
 /**
+ * About page content data (English)
+ * 
+ * Contains project introduction, tech stack, test items and related information
+ * Used to dynamically generate about page content structure
+ */
+const ABOUT_CONTENT_DATA_EN = [
+  {
+    title: 'Project Purpose',
+    description: [
+      { isDel: false, text: 'This project is "Parker Chen\'s Nuxt Laboratory", focusing on Nuxt 4 ecosystem integration and experimentation' },
+      { isDel: false, text: ', and demonstrates topics such as multi-language, PWA, ISR, security, real-time interaction through actual pages and APIs.' },
+      {
+        isDel: true,
+        text: '(Originally not planned to be deployed, but due to PWA testing requirements, this project was deployed)'
+      }
+    ]
+  },
+  {
+    title: 'Core Modules and Technologies',
+    listItemList: [
+      'Nuxt 4, Vue 3, Pinia state management',
+      'Vuetify component library (integrated via Vite plugin)',
+      'nuxt-i18n multi-language (including locale directories and browser language detection)',
+      'Vite PWA (injectManifest, custom service-worker)',
+      'nuxt-security (CSP and security header configuration)',
+      'SCSS + PostCSS (including px-to-rem and custom plugin)'
+    ]
+  },
+  {
+    title: 'Rendering and Caching Strategy',
+    description: [
+      { isDel: false, text: 'Routes adopt a hybrid strategy of Prerender and ISR, with both homepage and multi-language routes enabled with ISR.' }
+    ],
+    listItemList: [
+      'Global prerendering `/**` for complete PWA caching',
+      'Most feature pages (components, directives, css-drawing, route...) set to ISR(24h)',
+      'Specific routes like `/firebase/cloud-messaging` update with SWR 15 seconds',
+      'Nitro enables WebSocket (experimental)'
+    ]
+  },
+  {
+    title: 'API and Integration Items',
+    listItemList: [
+      'WebAuthn (registration/verification flow)',
+      'FIDO2-lib implementation (option generation/registration/verification)',
+      'Firebase Admin push notifications (Web / iOS / Android) and Token maintenance',
+      'Frontend API cache testing and Scroll Fetch examples',
+      'Server-Sent Events and Socket.IO examples'
+    ]
+  },
+  {
+    title: 'API Documentation (Swagger)',
+    description: [
+      { isDel: false, text: 'Dynamically scans JSDoc annotations in server/api/**/*.js using swagger-jsdoc to generate complete OpenAPI 3 specification documentation.' }
+    ],
+    listItemList: [
+      'Documentation endpoint: /api/nuxt-server/swagger-docs',
+      'Covers all API paths and field structures annotated with JSDoc in the project'
+    ]
+  },
+  {
+    title: 'PWA and App Appearance',
+    listItemList: [
+      'Register service worker with injectManifest strategy, automate offline and version updates',
+      'Custom Manifest (name, language, colors, icons)',
+      'Site icons and Favicon configured, display mode is standalone'
+    ]
+  },
+  {
+    title: 'Security Configuration',
+    description: [
+      { isDel: false, text: 'Configure Content Security Policy and Permissions-Policy through nuxt-security.' }
+    ],
+    listItemList: [
+      'Switch CSP based on environment (different strategies for prod and dev)',
+      'Permissions-Policy controls camera, microphone, fullscreen, autoplay, etc.',
+      'Streamline production environment logger (removeLoggers)'
+    ]
+  },
+  {
+    title: 'Multi-language and Navigation',
+    listItemList: [
+      'Support zh / en, with language switching UI',
+      'Page head sets `htmlAttrs.lang` and multi-language routes',
+      'Site name and title integrate i18n copywriting'
+    ]
+  },
+  {
+    title: 'Featured Pages and Experiments',
+    listItemList: [
+      'Components / Directives / CSS Drawing demo pages',
+      'WebAuthn, FIDO2, biometric authentication flow',
+      'WebCam and face recognition (Face API)',
+      'Server-Sent Events and Socket.IO interaction testing',
+      'Frontend API cache testing (Frontend API Cache Test)',
+      'Firebase (including Cloud Messaging)'
+    ]
+  },
+  {
+    title: 'Development Experience and Compatibility',
+    listItemList: [
+      'Aliases and auto-imports (composables, store) improve development efficiency',
+      'Windows compatibility handling (tfjs-node DLL copy)',
+      'Styles modularized with SCSS, unified variables and mixins'
+    ]
+  },
+  {
+    title: 'Design and Copyright',
+    listItemList: [
+      'Site images and icons are generated and designed with assistance from Google Gemini',
+      '© Parker Chen\'s Nuxt Laboratory'
+    ]
+  }
+];
+
+/**
  * 取得關於頁面內容 API
  * 
  * 回傳關於頁面的靜態內容資料，包含專案介紹、技術棧、
@@ -195,7 +311,11 @@ export default defineEventHandler((event) => {
 
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(ABOUT_CONTENT_DATA_ZH);
+      if(query.locale === 'en') {
+        resolve(ABOUT_CONTENT_DATA_EN);
+      } else {
+        resolve(ABOUT_CONTENT_DATA_ZH);
+      }
     }, 1000);
   });
 });
