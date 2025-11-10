@@ -1,5 +1,5 @@
 <template>
-  <div class="fido2_lib_page">
+  <section class="fido2_lib_page">
     <h1>fido2-lib套件的方式為主的方式實作</h1>
     <div class="fido2_lib_page-outbound_link">
       <p>記錄筆記：</p>
@@ -87,7 +87,7 @@
         <p>{{ loginOutput }}</p>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

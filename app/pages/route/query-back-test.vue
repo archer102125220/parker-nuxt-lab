@@ -1,5 +1,5 @@
 <template>
-  <div class="query_back_test_page">
+  <section class="query_back_test_page">
     <p>{{ queryTestData }}</p>
     <div>
       <v-btn color="primary" @click="handleRouteQueryPush">
@@ -11,7 +11,7 @@
         增加query(replace)
       </v-btn>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

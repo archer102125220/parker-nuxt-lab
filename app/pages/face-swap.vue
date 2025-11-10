@@ -1,5 +1,5 @@
 <template>
-  <div class="face_swap_page">
+  <section class="face_swap_page">
     <form class="face_swap_page-form" @submit.prevent="handleDiscern">
       <ImageUpload
         ref="imgSelectorEl"
@@ -107,7 +107,7 @@
         </p>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

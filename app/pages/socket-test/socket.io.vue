@@ -1,5 +1,5 @@
 <template>
-  <div class="socket_io_page">
+  <section class="socket_io_page">
     <p>接收到的data：</p>
     <div>
       <p
@@ -9,7 +9,7 @@
         {{ socketIoClientMessage }}
       </p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

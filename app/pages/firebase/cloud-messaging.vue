@@ -1,5 +1,5 @@
 <template>
-  <div class="cloud_messaging_page">
+  <section class="cloud_messaging_page">
     <v-container
       class="cloud_messaging_page-form"
       :tag="VForm"
@@ -216,7 +216,7 @@
         @click:action="handleRefresh"
       />
     </v-skeleton-loader>
-  </div>
+  </section>
 </template>
 
 <script setup>

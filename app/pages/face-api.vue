@@ -1,5 +1,5 @@
 <template>
-  <div class="face_api_page">
+  <section class="face_api_page">
     <v-img
       class="face_api_page-banner"
       max-height="400"
@@ -114,7 +114,7 @@
         </p>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

@@ -1,12 +1,12 @@
 <template>
-  <div class="websocket_page">
+  <section class="websocket_page">
     <p>接收到的data：</p>
     <div>
       <p v-for="(webSocketMessage, index) in webSocketMessageList" :key="index">
         {{ webSocketMessage }}
       </p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-  <div class="customize_lazyload_test_page">
+  <section class="customize_lazyload_test_page">
     <!-- <div style="height: 50vh" /> -->
     <img
       class="customize_lazyload_test_page-normal"
@@ -9,7 +9,7 @@
       class="customize_lazyload_test_page-lazyload"
       v-customize-lazyload="'/img/test-img/1499231493_936.gif'"
     />
-  </div>
+  </section>
 </template>
 
 <script setup>

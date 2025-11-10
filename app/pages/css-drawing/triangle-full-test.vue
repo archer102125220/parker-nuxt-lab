@@ -1,5 +1,5 @@
 <template>
-  <div class="triangle_full_test_page">
+  <section class="triangle_full_test_page">
     <Triangle
       class="triangle_full_test_page-left"
       height="100vh"
@@ -13,7 +13,7 @@
       angle-lower-right
       color="rgb(147, 147, 255)"
     />
-  </div>
+  </section>
 </template>
 
 <script setup>

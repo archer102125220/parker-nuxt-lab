@@ -1,5 +1,5 @@
 <template>
-  <div class="web_cam_page">
+  <section class="web_cam_page">
     <v-img
       class="web_cam_page-banner"
       max-height="400"
@@ -23,7 +23,7 @@
       width="480"
       height="360"
     />
-  </div>
+  </section>
 </template>
 <script setup>
 useHeadMataData({

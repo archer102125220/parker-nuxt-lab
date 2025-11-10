@@ -1,5 +1,5 @@
 <template>
-  <div class="web_authn_page">
+  <section class="web_authn_page">
     <h1>原生方式為主，套件用來編碼、解碼的方式實作</h1>
     <div class="web_authn_page-outbound_link">
       <p>記錄筆記：</p>
@@ -74,7 +74,7 @@
         <p>{{ loginOutput }}</p>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-  <div class="triangle_test_page">
+  <section class="triangle_test_page">
     <div class="triangle_test_page-cases_1" />
     <div class="triangle_test_page-cases_2" />
     <div class="triangle_test_page-cases_3" />
@@ -17,7 +17,7 @@
       <Triangle size="100px" angle-lower-left />
       <Triangle size="100px" angle-upper-right />
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

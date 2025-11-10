@@ -1,5 +1,5 @@
 <template>
-  <div class="params_back_test_page">
+  <section class="params_back_test_page">
     <p>{{ paramsTestData }}</p>
     <div>
       <v-btn color="primary" @click="handleRouteParamsPush">
@@ -11,7 +11,7 @@
         增加params(Replace)
       </v-btn>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

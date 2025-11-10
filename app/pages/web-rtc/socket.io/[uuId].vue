@@ -1,5 +1,5 @@
 <template>
-  <div class="web_rtc_socket_io_page">
+  <section class="web_rtc_socket_io_page">
     <p class="web_rtc_socket_io_page-description">配合 socket.io 實作</p>
 
     <p
@@ -29,7 +29,7 @@
         :srcObject="streamItem"
       />
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

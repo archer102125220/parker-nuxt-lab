@@ -1,5 +1,5 @@
 <template>
-  <div class="firebase_page">
+  <section class="firebase_page">
     <div class="firebase_page-content">
       <p>原本在</p>
       <a
@@ -37,7 +37,7 @@
         class="firebase_page-link_list-link"
       />
     </nav>
-  </div>
+  </section>
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-  <div class="svg_color_change_page" :style="{ '--change_color': color }">
+  <section class="svg_color_change_page" :style="{ '--change_color': color }">
     <form @submit.prevent="">
       <v-color-picker v-model="color" />
       <p>{{ color }}</p>
@@ -7,7 +7,7 @@
     <div class="svg_color_change_page-pseudo_elements">
       <p>偽元素測試：</p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

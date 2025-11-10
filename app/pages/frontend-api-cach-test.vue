@@ -1,5 +1,5 @@
 <template>
-  <div class="frontend_api_cach_test_page">
+  <section class="frontend_api_cach_test_page">
     <div class="frontend_api_cach_test_page-outbound_link">
       <p>漸進式網頁（Progressive Web Apps，PWA）記錄筆記：</p>
       <a
@@ -69,7 +69,7 @@
 
     <p>回傳值：</p>
     <p>{{ JSON.stringify(response) }}</p>
-  </div>
+  </section>
 </template>
 
 <script setup>

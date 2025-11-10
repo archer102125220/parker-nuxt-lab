@@ -1,9 +1,9 @@
 <template>
-  <div class="triangle_anime_test_page" @click="handleAnime">
+  <section class="triangle_anime_test_page">
     <AnimationTriangleEnter :is-mobile="$store.system.isMobile">
       <p>test</p>
     </AnimationTriangleEnter>
-  </div>
+  </section>
 </template>
 
 <script setup>

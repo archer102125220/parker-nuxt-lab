@@ -1,5 +1,5 @@
 <template>
-  <div class="index_page">
+  <section class="index_page">
     <nav class="index_page-content">
       <!-- <NuxtLink
       v-for="link in linkList"
@@ -19,7 +19,7 @@
         class="index_page-content-link"
       />
     </nav>
-  </div>
+  </section>
 </template>
 
 <script setup>

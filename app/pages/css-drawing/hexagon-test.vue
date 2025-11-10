@@ -1,5 +1,5 @@
 <template>
-  <div class="hexagon_page">
+  <section class="hexagon_page">
     <Hexagon class="hexagon_page-component" />
     <HexagonContainer class="hexagon_page-hexagon_container">
       <p>987654321</p>
@@ -31,7 +31,7 @@
     <div class="hexagon_page-drawing_container">
       <div class="hexagon_page-drawing_container-drawing" />
     </div>
-  </div>
+  </section>
 </template>
 <script setup>
 useHeadMataData({

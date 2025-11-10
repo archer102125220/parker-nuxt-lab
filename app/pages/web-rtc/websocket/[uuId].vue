@@ -1,5 +1,5 @@
 <template>
-  <div class="web_rtc_websocket_page">
+  <section class="web_rtc_websocket_page">
     <p class="web_rtc_websocket_page-description">
       配合 Nuxt4 內建的 WebSocket 實作
     </p>
@@ -31,7 +31,7 @@
         :srcObject="streamItem"
       />
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
