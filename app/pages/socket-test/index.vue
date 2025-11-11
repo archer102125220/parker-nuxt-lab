@@ -10,7 +10,7 @@
       class="socket_test_page-banner"
       max-height="400"
       cover
-      src="/img/socket/socket-v.02.png"
+      src="/img/socket/socket-v.05.webp"
     />
 
     <p

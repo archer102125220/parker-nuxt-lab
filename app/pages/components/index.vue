@@ -11,7 +11,7 @@
     <v-img
       class="components_page-banner"
       max-height="400"
-      src="/img/components-page/components-page-v.03.png"
+      src="/img/components-page/components-page-v.05.webp"
     />
     <nav class="components_page-content">
       <!-- <NuxtLink
@@ -73,7 +73,7 @@ const linkList = computed(() => [
   },
   {
     to: localePath('/components/components-test'),
-    banner: '/img/components-test/components-test-v.03.png',
+    banner: '/img/components-test/components-test-v.05.webp',
     label:
       '組件綜合測試（Tabs組件、下拉重載/無限滾動測試、WangEditor（HTML編輯器）、Youtube測試）'
   },

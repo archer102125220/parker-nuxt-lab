@@ -5,7 +5,7 @@
     <v-img
       class="css_animejs_page-banner"
       max-height="400"
-      src="/img/css-drawing/css-drawing-v.03.png"
+      src="/img/css-drawing/css-drawing-v.05.webp"
     />
 
     <nav class="css_animejs_page-content">

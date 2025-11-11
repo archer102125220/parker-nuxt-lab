@@ -31,7 +31,7 @@
     <v-btn color="primary" variant="text" rounded>
       <!-- <p>{{ $t(currentLocaleLabel) }}</p> -->
       <v-img
-        src="/img/icon/i18n/i18n.v-02.png"
+        src="/img/icon/i18n/i18n.v-04.webp"
         cover
         width="20"
         height="20"

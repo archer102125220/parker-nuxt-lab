@@ -14,7 +14,7 @@
     <v-img
       class="fido2_lib_page-banner"
       max-height="400"
-      src="/img/fido2-lib/fido2-lib-v.07.png"
+      src="/img/fido2-lib/fido2-lib-v.09.webp"
     />
 
     <div class="fido2_lib_page-register">

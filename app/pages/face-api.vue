@@ -4,7 +4,7 @@
       class="face_api_page-banner"
       max-height="400"
       cover
-      src="/img/face-api/face-api-v.01.png"
+      src="/img/face-api/face-api-v.04.webp"
     />
 
     <form class="face_api_page-form" @submit.prevent="handleDiscern">

@@ -3,7 +3,7 @@
     <v-img
       class="web_cam_page-banner"
       max-height="400"
-      src="/img/web-cam/web-cam-v.03.png"
+      src="/img/web-cam/web-cam-v.05.webp"
     />
 
     <video

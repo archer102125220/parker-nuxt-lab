@@ -3,7 +3,7 @@
     <v-img
       class="about_page-banner"
       max-height="400"
-      src="/img/about/about-v.08.png"
+      src="/img/about/about-v.10.webp"
     />
     <v-skeleton-loader
       v-if="pending"

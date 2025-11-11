@@ -5,7 +5,7 @@
     <v-img
       class="route_test_page-banner"
       max-height="400"
-      src="/img/route/route-v.03.png"
+      src="/img/route/route-v.05.webp"
     />
 
     <nav class="route_test_page-content">

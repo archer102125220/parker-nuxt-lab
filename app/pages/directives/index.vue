@@ -7,7 +7,7 @@
     <v-img
       class="directives_page-banner"
       max-height="400"
-      src="/img/vue-directives/vue-directives-v.02.png"
+      src="/img/vue-directives/vue-directives-v.04.webp"
     />
 
     <nav class="directives_page-content">

@@ -7,7 +7,7 @@
     <v-img
       class="web_rtc_page-banner"
       max-height="400"
-      src="/img/web-rtc/web-rtc-v.02.png"
+      src="/img/web-rtc/web-rtc-v.04.webp"
     />
 
     <p class="web_rtc_page-description">WebRTC的實作測試，主要分爲：</p>

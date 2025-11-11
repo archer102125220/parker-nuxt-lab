@@ -17,7 +17,7 @@
     <v-img
       class="firebase_page-banner"
       max-height="400"
-      src="/img/firebase/firebase-v.04.png"
+      src="/img/firebase/firebase-v.07.webp"
     />
 
     <nav class="firebase_page-link_list">

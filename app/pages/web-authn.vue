@@ -14,7 +14,7 @@
     <v-img
       class="web_authn_page-banner"
       max-height="400"
-      src="/img/web-authn/web-authn-v.03.png"
+      src="/img/web-authn/web-authn-v.06.webp"
     />
 
     <div class="web_authn_page-register">

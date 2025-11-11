@@ -249,9 +249,11 @@ export default defineNuxtConfig({
 
     registerType: 'autoUpdate',
 
-    // https://www.photoroom.com/zh-tw/tools/background-remover
-    // https://remove-white-background.imageonline.co/cn/
-    // https://www.freeconvert.com/image-converter
+    // https://www.fotor.com/tw/features/crop.html 圖片編輯（包含裁切功能）
+    // https://www.photoroom.com/zh-tw/tools/background-remover 去除背景
+    // https://remove-white-background.imageonline.co/cn/ 去除背景
+    // https://www.freeconvert.com/image-converter 圖片轉檔
+    // https://cloudconvert.com/png-to-webp 圖片轉檔
     // https://realfavicongenerator.net/
     manifest: {
       name: 'Parker Chen 的Nuxt實驗室',

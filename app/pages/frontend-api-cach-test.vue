@@ -13,7 +13,7 @@
     <v-img
       class="frontend_api_cach_test_page-banner"
       max-height="400"
-      src="/img/frontend-api-cach/frontend-api-cach-v.03.png"
+      src="/img/frontend-api-cach/frontend-api-cach-v.06.webp"
     />
 
     <form
