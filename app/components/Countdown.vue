@@ -434,19 +434,24 @@ const props = defineProps({
   },
   width: {
     type: [Number, String],
-    default: null
+    default: 100
   },
   height: {
     type: [Number, String],
-    default: null
+    default: 100
   },
   padding: {
     type: [Number, String],
-    default: null
+    // default: 8,
+    default: 0
   },
   bgColor: {
     type: String,
     default: '#fff'
+  },
+  color: {
+    type: String,
+    default: '#000'
   }
 });
 
@@ -458,23 +463,23 @@ const cssVariable = computed(() => {
 
   if (typeof props.width === 'string' && props.width !== '') {
     safeCssVariable['--countdown_width'] = props.width;
-  } else if (typeof props.width === 'string' && isNaN(props.width) === false) {
-    safeCssVariable['--countdown_number'] = `${props.width}px`;
+  } else if (typeof props.width === 'number' || isNaN(props.width) === false) {
+    safeCssVariable['--countdown_width'] = `${props.width}px`;
   }
 
   if (typeof props.height === 'string' && props.height !== '') {
     safeCssVariable['--countdown_height'] = props.height;
   } else if (
-    typeof props.height === 'string' &&
+    typeof props.height === 'number' ||
     isNaN(props.height) === false
   ) {
-    safeCssVariable['--countdown_number'] = `${props.height}px`;
+    safeCssVariable['--countdown_height'] = `${props.height}px`;
   }
 
   if (typeof props.padding === 'string' && props.padding !== '') {
     safeCssVariable['--countdown_padding'] = props.padding;
   } else if (
-    typeof props.padding === 'string' &&
+    typeof props.padding === 'number' ||
     isNaN(props.padding) === false
   ) {
     safeCssVariable['--countdown_padding'] = `${props.padding}px`;
@@ -482,6 +487,10 @@ const cssVariable = computed(() => {
 
   if (typeof props.bgColor === 'string' && props.bgColor !== '') {
     safeCssVariable['--countdown_bg_color'] = props.bgColor;
+  }
+
+  if (typeof props.color === 'string' && props.color !== '') {
+    safeCssVariable['--countdown_color'] = props.color;
   }
 
   return safeCssVariable;
@@ -521,8 +530,13 @@ const contdownCard = computed(() => {
 });
 
 watch(
-  () => [props.autoStart, props.initialSeconds, props.endSecond],
-  async ([newAutoStart, newInitialSeconds, newEndSecond]) => {
+  () => [
+    props.autoStart,
+    props.initialSeconds,
+    props.endSecond,
+    props.countdownType
+  ],
+  async ([newAutoStart, newInitialSeconds, newEndSecond, newCountdownType]) => {
     if (
       newAutoStart === true &&
       typeof newInitialSeconds === 'number' &&
@@ -550,7 +564,7 @@ onMounted(async () => {
 });
 
 async function handleNumberAnimationEnd(e) {
-  console.log(e?.target);
+  // console.log(e?.target);
 
   await nextTick();
 
@@ -589,7 +603,7 @@ $countdownDownEnterTotal: 59;
 }
 .conutdow_block {
   display: inline-block;
-  margin: 40px 50px;
+  // margin: 40px 50px;
 
   vertical-align: top;
 
@@ -602,7 +616,8 @@ $countdownDownEnterTotal: 59;
   left: 0;
   right: 0;
 
-  color: #e74c3c;
+  // color: #e74c3c;
+  color: var(--countdown_color);
   text-align: center;
 
   overflow: hidden;
@@ -612,6 +627,9 @@ $countdownDownEnterTotal: 59;
   top: 0;
   bottom: 50%;
 
+  // border-bottom: 1px solid;
+  // border-bottom-style: dotted;
+
   transform-origin: 50% 100%;
   // background: linear-gradient(to bottom, #000000 0%, #111 100%); /* W3C */
   background-color: var(--countdown_bg_color);
@@ -619,6 +637,8 @@ $countdownDownEnterTotal: 59;
 .number_down {
   top: 50%;
   bottom: 0;
+
+  border-top: 1px solid;
 
   line-height: 0px;
   transform-origin: 50% 0%;
@@ -676,11 +696,13 @@ $countdownDownEnterTotal: 59;
       z-index: var(--down_enter_up_z_index);
 
       font-size: calc(
-        var(--countdown_down_enter_height) - var(--countdown_down_enter_padding)
+        var(--countdown_height, var(--countdown_down_enter_height)) - var(
+            --countdown_down_enter_padding
+          )
       );
       // font-size: $countdownDownEnterHeight - $countdownDownEnterPadding;
 
-      line-height: var(--countdown_down_enter_height);
+      line-height: var(--countdown_height, var(--countdown_down_enter_height));
       // line-height: $countdownDownEnterHeight;
 
       &[css-is-anime-start='true']:not([css-is-end-second='true']) {
@@ -707,7 +729,9 @@ $countdownDownEnterTotal: 59;
       z-index: var(--down_enter_down_z_index);
 
       font-size: calc(
-        var(--countdown_down_enter_height) - var(--countdown_down_enter_padding)
+        var(--countdown_height, var(--countdown_down_enter_height)) - var(
+            --countdown_down_enter_padding
+          )
       );
       // font-size: $countdownDownEnterHeight - $countdownDownEnterPadding;
 
@@ -761,10 +785,12 @@ $countdownDownEnterTotal: 59;
       z-index: var(--up_leave_up_z_index);
 
       font-size: calc(
-        var(--countdown_up_leave_height) - var(--countdown_up_leave_padding)
+        var(--countdown_height, var(--countdown_up_leave_height)) - var(
+            --countdown_up_leave_padding
+          )
       );
       // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
-      line-height: var(--countdown_up_leave_height);
+      line-height: var(--countdown_height, var(--countdown_up_leave_height));
       // line-height: $countdownUpLeaveHeight;
 
       transform: rotate3d(-1, 0, 0, 180deg);
@@ -795,7 +821,9 @@ $countdownDownEnterTotal: 59;
       z-index: var(--up_leave_down_z_index);
 
       font-size: calc(
-        var(--countdown_up_leave_height) - var(--countdown_up_leave_padding)
+        var(--countdown_height, var(--countdown_up_leave_height)) - var(
+            --countdown_up_leave_padding
+          )
       );
       // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
 

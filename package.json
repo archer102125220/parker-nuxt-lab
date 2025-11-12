@@ -33,6 +33,7 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "@vite-pwa/nuxt": "^0.10.6",
+    "@vuepic/vue-datepicker": "^12.0.3",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "animejs": "^3.2.2",
