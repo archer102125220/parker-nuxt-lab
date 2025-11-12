@@ -1,6 +1,6 @@
 <template>
   <div class="countdown_test_page">
-    <Countdown :initial-seconds="100" />
+    <Countdown :initial-seconds="20" />
   </div>
 </template>
 
