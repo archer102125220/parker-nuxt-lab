@@ -18,7 +18,7 @@
       </div>
     </form>
 
-    <Countdown :initial-seconds="demoNumber" countdown-type="fade"  />
+    <Countdown :initial-seconds="demoNumber" countdown-type="down"  />
   </div>
 </template>
 

@@ -69,7 +69,8 @@
       </template>
     </div>
 
-    <div
+    <!-- TODO:淡出淡入效果實作 -->
+    <!-- <div
       v-else-if="safeCountDownType === COUNTDOWN_TYPE_FADE_VALUE"
       class="countdown-fade_out_in"
     >
@@ -79,16 +80,19 @@
           :data-current-number="currentNumber"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
-            isCountdownStart === true && cardNumber >= currentNumber
+            isCountdownStart === true && cardNumber >= currentNumber - 1
           "
           :css-is-end-second="isCountdownEnd === true"
           :css-card-fade="cardNumber"
+          :style="{
+            ['--tick_delay']: cardNumber >= 1 ? 0 : 2
+          }"
           @animationend="handleNumberAnimationEnd"
         >
           {{ cardNumber }}
         </p>
       </template>
-    </div>
+    </div> -->
 
     <!-- <div class="countdown-up_leave">
       <p class="countdown-up_leave-up_leave_up up-59">59</p>
@@ -402,7 +406,12 @@
 <script setup>
 const COUNTDOWN_TYPE_DOWN_VALUE = 'down';
 const COUNTDOWN_TYPE_UP_VALUE = 'up';
-const COUNTDOWN_TYPE_FADE_VALUE = 'fade';
+// const COUNTDOWN_TYPE_FADE_VALUE = 'fade'; // TODO:淡出淡入效果實作
+const COUNTDOWN_TYPE_LIST = [
+  COUNTDOWN_TYPE_DOWN_VALUE,
+  COUNTDOWN_TYPE_UP_VALUE
+  // COUNTDOWN_TYPE_FADE_VALUE
+];
 
 const props = defineProps({
   countdownType: {
@@ -427,8 +436,12 @@ const currentNumber = ref(null);
 const isCountdownStart = ref(false);
 
 const safeCountDownType = computed(() => {
-  if (typeof props.countdownType !== 'string' || props.countdownType === '') {
-    return COUNTDOWN_TYPE_DOWN_VALUE;
+  if (
+    typeof props.countdownType !== 'string' ||
+    props.countdownType === '' ||
+    COUNTDOWN_TYPE_LIST.includes(props.countdownType) === false
+  ) {
+    return COUNTDOWN_TYPE_LIST[0];
   }
   return props.countdownType;
 });
@@ -529,7 +542,7 @@ $countdownFadeTotal: 59;
 * {
   box-sizing: border-box;
 }
-.clock {
+.conutdow_block {
   display: inline-block;
   margin: 40px 50px;
 
@@ -589,7 +602,7 @@ $countdownFadeTotal: 59;
   --countdown_fade_total: #{$countdownFadeTotal};
 
   &-down_enter {
-    @extend .clock;
+    @extend .conutdow_block;
     position: relative;
 
     width: var(--countdown_down_enter_width);
@@ -673,7 +686,7 @@ $countdownFadeTotal: 59;
   }
 
   &-up_leave {
-    @extend .clock;
+    @extend .conutdow_block;
     position: relative;
 
     width: var(--countdown_up_leave_width);
@@ -752,55 +765,57 @@ $countdownFadeTotal: 59;
     }
   }
 
-  &-fade_out_in {
-    @extend .clock;
-    position: relative;
+  // &-fade_out_in {
+  //   @extend .conutdow_block;
+  //   position: relative;
 
-    width: var(--countdown_fade_width);
-    height: var(--countdown_fade_height);
-    padding: var(--countdown_fade_padding);
-    // width: $countdownFadeWidth;
-    // height: $countdownFadeHeight;
-    // padding: $countdownFadePadding;
+  //   width: var(--countdown_fade_width);
+  //   height: var(--countdown_fade_height);
+  //   padding: var(--countdown_fade_padding);
+  //   // width: $countdownFadeWidth;
+  //   // height: $countdownFadeHeight;
+  //   // padding: $countdownFadePadding;
 
-    background: black;
+  //   background: black;
 
-    &-tick {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+  //   &-tick {
+  //     position: absolute;
+  //     top: 0;
+  //     bottom: 0;
+  //     left: 0;
+  //     right: 0;
 
-      color: #e74c3c;
-      font-size: var(--countdown_fade_height);
-      // font-size: $countdownFadeHeight;
-      text-align: center;
-      line-height: calc(
-        var(--countdown_fade_height) - var(--countdown_fade_padding) / 2
-      );
-      // line-height: calc($countdownFadeHeight - $countdownFadePadding / 2);
+  //     color: #e74c3c;
+  //     font-size: var(--countdown_fade_height);
+  //     // font-size: $countdownFadeHeight;
+  //     text-align: center;
+  //     line-height: calc(
+  //       var(--countdown_fade_height) - var(--countdown_fade_padding) / 2
+  //     );
+  //     // line-height: calc($countdownFadeHeight - $countdownFadePadding / 2);
 
-      // opacity: 0;
+  //     // opacity: 0;
 
-      background: black;
+  //     background: black;
 
-      &[css-is-anime-start='true'] {
-        animation: fade 2s 1;
-        animation-fill-mode: forwards;
-      }
-    }
+  //     &[css-is-anime-start='true'] {
+  //       animation: fade 2s 1;
+  //       animation-fill-mode: forwards;
 
-    $i: $countdownDownEnterTotal;
-    @while $i >= 0 {
-      .tick-#{$i} {
-        animation: fade 2s 1;
-        animation-delay: #{$countdownDownEnterTotal - $i - 1}s;
-        animation-fill-mode: forwards;
-      }
-      $i: $i - 1;
-    }
-  }
+  //       animation-delay: var(--tick_delay);
+  //     }
+  //   }
+
+  //   $i: $countdownDownEnterTotal;
+  //   @while $i >= 0 {
+  //     .tick-#{$i} {
+  //       animation: fade 2s 1;
+  //       animation-delay: #{$countdownDownEnterTotal - $i - 1}s;
+  //       animation-fill-mode: forwards;
+  //     }
+  //     $i: $i - 1;
+  //   }
+  // }
 }
 
 @-webkit-keyframes flip-up /* Safari and Chrome */ {
