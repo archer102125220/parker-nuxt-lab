@@ -13,7 +13,7 @@
           "
           :css-is-end-second="cardNumber === endSecond"
           :style="{ ['--down_enter_up_z_index']: cardNumber }"
-          @animationend="handleNumberUpAnimationEnd"
+          @animationend="handleNumberAnimationEnd"
         >
           {{ cardNumber }}
         </p>
@@ -26,7 +26,6 @@
           :style="{
             ['--down_enter_down_z_index']: contdownCard.length - cardNumber
           }"
-          @animationend="handleNumberDownAnimationEnd"
         >
           {{ cardNumber }}
         </p>
@@ -38,38 +37,18 @@
       class="countdown-up_leave"
     >
       <template v-for="cardNumber in contdownCard" :key="cardNumber">
-        <template
-          v-if="
-            isCountdownStart === true &&
-            cardNumber >= currentNumber &&
-            currentNumber > 0
-          "
-        >
-          <p class="countdown-up_leave-debug_log">
-            currentNumber:{{ currentNumber }}
-          </p>
-          <p class="countdown-up_leave-debug_log">
-            isCountdownEnd:{{ isCountdownEnd }}
-          </p>
-          <p class="countdown-up_leave-debug_log">
-            cardNumber:{{ cardNumber }}
-          </p>
-          <p class="countdown-up_leave-debug_log">
-            isCountdownStart:{{ isCountdownStart }}
-          </p>
-        </template>
-
         <p
           class="countdown-up_leave-up_leave_up"
           :data-current-number="currentNumber"
+          :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
-            isCountdownStart === true &&
-            cardNumber >= currentNumber - 1 &&
-            currentNumber > 0
+            isCountdownStart === true && cardNumber >= currentNumber - 1
           "
+          :css-is-end-second="cardNumber === endSecond"
           :css-card-up_leave_up="cardNumber"
-          :style="{ ['--up_leave_up_z_index']: cardNumber }"
-          @animationend="handleNumberUpAnimationEnd"
+          :style="{
+            ['--up_leave_up_z_index']: contdownCard.length - cardNumber
+          }"
         >
           {{ cardNumber }}
         </p>
@@ -78,15 +57,14 @@
           :data-current-number="currentNumber"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
-            isCountdownStart === true &&
-            cardNumber >= currentNumber &&
-            currentNumber > 0
+            isCountdownStart === true && cardNumber >= currentNumber
           "
+          :css-is-end-second="cardNumber === endSecond"
           :css-card-up_leave_down="cardNumber"
           :style="{
-            ['--up_leave_down_z_index']: contdownCard.length - cardNumber
+            ['--up_leave_down_z_index']: cardNumber
           }"
-          @animationend="handleNumberDownAnimationEnd"
+          @animationend="handleNumberAnimationEnd"
         >
           {{ cardNumber }}
         </p>
@@ -480,18 +458,10 @@ onMounted(async () => {
   ) {
     currentNumber.value = props.initialSeconds;
     await nextTick();
-    window.requestAnimationFrame(() => (isCountdownStart.value = true));
+    window.requestAnimationFrame(() => (isCountdownStart.value  = true));
   }
 });
 
-async function handleNumberUpAnimationEnd(e) {
-  if (safeCountDownType.value === COUNTDOWN_TYPE_DOWN_VALUE) return;
-  handleNumberAnimationEnd(e);
-}
-async function handleNumberDownAnimationEnd(e) {
-  if (safeCountDownType.value === COUNTDOWN_TYPE_UP_VALUE) return;
-  handleNumberAnimationEnd(e);
-}
 async function handleNumberAnimationEnd(e) {
   console.log(e?.target);
 
@@ -546,7 +516,6 @@ $countdownFadeTotal: 59;
 
   overflow: hidden;
   backface-visibility: hidden;
-  animation-fill-mode: forwards;
 
   // &[css-is-anime-start='true'] {
   //   animation-delay: 0s !important;
@@ -590,98 +559,6 @@ $countdownFadeTotal: 59;
   --countdown_fade_padding: #{$countdownFadePadding};
   --countdown_fade_total: #{$countdownFadeTotal};
 
-  &-up_leave {
-    @extend .clock;
-    position: relative;
-
-    width: var(--countdown_up_leave_width);
-    height: var(--countdown_up_leave_height);
-    padding: var(--countdown_up_leave_padding);
-    // width: $countdownUpLeaveWidth;
-    // height: $countdownUpLeaveHeight;
-    // padding: $countdownUpLeavePadding;
-
-    perspective: 1000px;
-    background: black;
-
-    &-debug_log {
-      @extend .debug_log;
-    }
-
-    &-up_leave_up {
-      @extend .number;
-      @extend .number_up;
-
-      font-size: calc(
-        var(--countdown_up_leave_height) - var(--countdown_up_leave_padding)
-      );
-      // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
-      line-height: var(--countdown_up_leave_height);
-      // line-height: $countdownUpLeaveHeight;
-
-      // TODO: 將參考的部分移除後要加回去
-      // transform: rotate3d(-1, 0, 0, 180deg);
-      &[css-is-anime-start='false'] {
-        transform: rotate3d(-1, 0, 0, 180deg);
-      }
-      &[css-is-anime-start='true'] {
-        transform: rotate3d(-1, 0, 0, 180deg);
-        animation: flip-up-back 1s 1;
-        animation-fill-mode: forwards;
-      }
-
-      @for $i from 1 through $countdownUpLeaveTotal {
-        &[css-card-up_leave_up='#{$i}'] {
-          z-index: $i;
-        }
-      }
-    }
-
-    @for $i from 1 through $countdownUpLeaveTotal {
-      .up-#{$i} {
-        z-index: $i;
-
-        transform: rotate3d(-1, 0, 0, 180deg);
-        animation: flip-up-back 1s 1;
-        animation-delay: #{$i}s;
-        animation-fill-mode: forwards;
-      }
-    }
-
-    &-up_leave_down {
-      @extend .number;
-      @extend .number_down;
-
-      font-size: calc(
-        var(--countdown_up_leave_height) - var(--countdown_up_leave_padding)
-      );
-      // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
-
-      &[css-is-anime-start='true'] {
-        animation: flip-up 1s 1;
-        animation-fill-mode: forwards;
-      }
-
-      @for $i from 0 through $countdownUpLeaveTotal - 1 {
-        &[css-card-up_leave_down='#{$i}'] {
-          z-index: 100-$i;
-          // z-index: calc(100 - $i);
-          // z-index: $i + 1;
-        }
-      }
-    }
-
-    @for $i from 0 through $countdownUpLeaveTotal - 1 {
-      .down-#{$i} {
-        z-index: 100-$i;
-
-        animation: flip-up 1s 1;
-        animation-delay: #{$i + 1}s;
-        animation-fill-mode: forwards;
-      }
-    }
-  }
-
   &-down_enter {
     @extend .clock;
     position: relative;
@@ -719,14 +596,6 @@ $countdownFadeTotal: 59;
         animation: flip-up 1s 1;
         animation-fill-mode: forwards;
       }
-
-      // $i: $countdownDownEnterTotal;
-      // @while $i > 0 {
-      //   &[css-card-down_enter_up='#{$i}'] {
-      //     z-index: $i;
-      //   }
-      //   $i: $i - 1;
-      // }
     }
 
     $i: $countdownDownEnterTotal;
@@ -752,7 +621,6 @@ $countdownFadeTotal: 59;
       // font-size: $countdownDownEnterHeight - $countdownDownEnterPadding;
 
       transform: rotate3d(-1, 0, 0, 180deg);
-
       &[css-is-anime-start='true']:not([css-is-initial-seconds='true']) {
         animation: flip-up-back 1s 1;
         animation-fill-mode: forwards;
@@ -760,14 +628,6 @@ $countdownFadeTotal: 59;
       &[css-is-initial-seconds='true'] {
         transform: rotate3d(0, 0, 0, 180deg);
       }
-
-      // $i: $countdownDownEnterTotal;
-      // @while $i >= 0 {
-      //   &[css-card-down_enter_down='#{$i}'] {
-      //     z-index: $countdownDownEnterTotal - $i;
-      //   }
-      //   $i: $i - 1;
-      // }
     }
 
     $i: $countdownDownEnterTotal;
@@ -780,6 +640,86 @@ $countdownFadeTotal: 59;
         animation-fill-mode: forwards;
       }
       $i: $i - 1;
+    }
+  }
+
+  &-up_leave {
+    @extend .clock;
+    position: relative;
+
+    width: var(--countdown_up_leave_width);
+    height: var(--countdown_up_leave_height);
+    padding: var(--countdown_up_leave_padding);
+    // width: $countdownUpLeaveWidth;
+    // height: $countdownUpLeaveHeight;
+    // padding: $countdownUpLeavePadding;
+
+    perspective: 1000px;
+    background: black;
+
+    &-debug_log {
+      @extend .debug_log;
+    }
+
+    &-up_leave_up {
+      @extend .number;
+      @extend .number_up;
+
+      z-index: var(--up_leave_up_z_index);
+
+      font-size: calc(
+        var(--countdown_up_leave_height) - var(--countdown_up_leave_padding)
+      );
+      // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
+      line-height: var(--countdown_up_leave_height);
+      // line-height: $countdownUpLeaveHeight;
+
+      transform: rotate3d(-1, 0, 0, 180deg);
+      &[css-is-anime-start='true']:not([css-is-initial-seconds='true']) {
+        animation: flip-up-back 1s 1;
+        animation-fill-mode: forwards;
+      }
+      &[css-is-initial-seconds='true'] {
+        transform: rotate3d(0, 0, 0, 180deg);
+      }
+    }
+
+    @for $i from 1 through $countdownUpLeaveTotal {
+      .up-#{$i} {
+        z-index: $i;
+
+        transform: rotate3d(-1, 0, 0, 180deg);
+        animation: flip-up-back 1s 1;
+        animation-delay: #{$i}s;
+        animation-fill-mode: forwards;
+      }
+    }
+
+    &-up_leave_down {
+      @extend .number;
+      @extend .number_down;
+
+      z-index: var(--up_leave_down_z_index);
+
+      font-size: calc(
+        var(--countdown_up_leave_height) - var(--countdown_up_leave_padding)
+      );
+      // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
+
+      &[css-is-anime-start='true']:not([css-is-end-second='true']) {
+        animation: flip-up 1s 1;
+        animation-fill-mode: forwards;
+      }
+    }
+
+    @for $i from 0 through $countdownUpLeaveTotal - 1 {
+      .down-#{$i} {
+        z-index: 100-$i;
+
+        animation: flip-up 1s 1;
+        animation-delay: #{$i + 1}s;
+        animation-fill-mode: forwards;
+      }
     }
   }
 
