@@ -15,9 +15,9 @@
 .pwa_loading {
   position: sticky;
   // right: 8px;
-  bottom: 8px;
+  bottom: 16px;
   display: flex;
   justify-content: flex-end;
-  padding: 0 8px;
+  padding: 0 16px;
 }
 </style>
