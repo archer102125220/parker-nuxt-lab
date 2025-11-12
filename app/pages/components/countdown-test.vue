@@ -41,7 +41,7 @@
         :inset="false"
         v-model="demoInput"
       /> -->
-      <DatePicker />
+      <DatePicker v-model="demoDate" />
 
       <v-radio-group v-model="demoRadio">
         <v-radio label="向上翻" value="up" />
@@ -68,6 +68,8 @@ const demoNumber = ref(DEMO_NUMBER);
 const demoInput = ref(DEMO_NUMBER);
 const demoRadio = ref('up');
 const demoCountdownType = ref('up');
+const demoDate = ref(null);
+const demoCountdownDate = ref(null);
 
 function handleSecondDemo() {
   if (typeof demoInput.value !== 'number') {
