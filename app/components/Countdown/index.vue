@@ -11,7 +11,7 @@
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber
           "
-          :css-is-end-second="cardNumber === endSecond"
+          :css-is-end-second="isCountdownEnd === true"
           :style="{ ['--down_enter_up_z_index']: cardNumber }"
           @animationend="handleNumberAnimationEnd"
         >
@@ -39,12 +39,11 @@
       <template v-for="cardNumber in contdownCard" :key="cardNumber">
         <p
           class="countdown-up_leave-up_leave_up"
-          :data-current-number="currentNumber"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber - 1
           "
-          :css-is-end-second="cardNumber === endSecond"
+          :css-is-end-second="isCountdownEnd === true"
           :css-card-up_leave_up="cardNumber"
           :style="{
             ['--up_leave_up_z_index']: contdownCard.length - cardNumber
@@ -54,12 +53,11 @@
         </p>
         <p
           class="countdown-up_leave-up_leave_down"
-          :data-current-number="currentNumber"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber
           "
-          :css-is-end-second="cardNumber === endSecond"
+          :css-is-end-second="isCountdownEnd === true"
           :css-card-up_leave_down="cardNumber"
           :style="{
             ['--up_leave_down_z_index']: cardNumber
@@ -74,7 +72,23 @@
     <div
       v-else-if="safeCountDownType === COUNTDOWN_TYPE_FADE_VALUE"
       class="countdown-fade_out_in"
-    ></div>
+    >
+      <template v-for="cardNumber in contdownCard" :key="cardNumber">
+        <p
+          class="countdown-fade_out_in-tick"
+          :data-current-number="currentNumber"
+          :css-is-initial-seconds="cardNumber === initialSeconds"
+          :css-is-anime-start="
+            isCountdownStart === true && cardNumber >= currentNumber
+          "
+          :css-is-end-second="isCountdownEnd === true"
+          :css-card-fade="cardNumber"
+          @animationend="handleNumberAnimationEnd"
+        >
+          {{ cardNumber }}
+        </p>
+      </template>
+    </div>
 
     <div class="countdown-up_leave">
       <p class="countdown-up_leave-up_leave_up up-59">59</p>
@@ -320,7 +334,6 @@
       <p class="up-59 countdown-down_enter-down_enter_up">59</p>
       <p class="countdown-down_enter-down_enter_down down-59">59</p>
     </div>
-
     <div class="countdown-fade_out_in">
       <p class="countdown-fade_out_in-tick tick-0">0</p>
       <p class="countdown-fade_out_in-tick tick-1">1</p>
@@ -422,24 +435,40 @@ const safeCountDownType = computed(() => {
 const contdownCard = computed(() => {
   const safeInitialSeconds =
     typeof props.initialSeconds !== 'number' ? 0 : props.initialSeconds;
+  const safeEndSecond =
+    typeof props.endSecond !== 'number' ? 0 : props.endSecond;
+
   const contdownCardList = [];
 
-  for (let start = 0; start <= safeInitialSeconds; start++) {
-    contdownCardList.push(start);
+  // 由大至小的數數
+  if (safeInitialSeconds > safeEndSecond) {
+    for (let start = 0; start <= safeInitialSeconds; start++) {
+      contdownCardList.push(start);
+    }
   }
+  // TODO:由小至大的數數
+  // else if (safeInitialSeconds < safeEndSecond) {
+  //   for (let start = safeInitialSeconds; start <= safeEndSecond; start++) {
+  //     contdownCardList.push(start);
+  //   }
+  // }
+
   return contdownCardList;
 });
 const isCountdownEnd = computed(() => {
-  return currentNumber.value === 0;
+  const safeEndSecond =
+    typeof props.endSecond !== 'number' ? 0 : props.endSecond;
+
+  return currentNumber.value === safeEndSecond;
 });
 
 watch(
-  () => [props.autoStart, props.initialSeconds],
-  async ([newAutoStart, newInitialSeconds]) => {
+  () => [props.autoStart, props.initialSeconds, props.endSecond],
+  async ([newAutoStart, newInitialSeconds, newEndSecond]) => {
     if (
       newAutoStart === true &&
       typeof newInitialSeconds === 'number' &&
-      newInitialSeconds > 0
+      Math.abs(newInitialSeconds - newEndSecond) > 0
     ) {
       isCountdownStart.value = false;
       currentNumber.value = newInitialSeconds;
@@ -454,11 +483,11 @@ onMounted(async () => {
   if (
     props.autoStart === true &&
     typeof props.initialSeconds === 'number' &&
-    props.initialSeconds > 0
+    Math.abs(props.initialSeconds - props.endSecond) > 0
   ) {
     currentNumber.value = props.initialSeconds;
     await nextTick();
-    window.requestAnimationFrame(() => (isCountdownStart.value  = true));
+    window.requestAnimationFrame(() => (isCountdownStart.value = true));
   }
 });
 
@@ -470,8 +499,12 @@ async function handleNumberAnimationEnd(e) {
   window.requestAnimationFrame(() => {
     if (currentNumber.value === 0) {
       isCountdownStart.value = false;
-    } else {
+      // 由大至小的數數
+    } else if (props.initialSeconds > props.endSecond) {
       currentNumber.value = currentNumber.value - 1;
+      // TODO:由小至大的數數
+    } else if (props.initialSeconds < props.endSecond) {
+      currentNumber.value = currentNumber.value + 1;
     }
   });
 }
@@ -751,6 +784,8 @@ $countdownFadeTotal: 59;
         var(--countdown_fade_height) - var(--countdown_fade_padding) / 2
       );
       // line-height: calc($countdownFadeHeight - $countdownFadePadding / 2);
+
+      // opacity: 0;
 
       background: black;
 
