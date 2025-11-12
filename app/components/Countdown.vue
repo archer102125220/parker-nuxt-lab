@@ -1,6 +1,6 @@
 <template>
   <!-- https://codepen.io/daniesy/pen/DWVgXN -->
-  <div class="countdown">
+  <div class="countdown" :style="cssVariable">
     <div
       v-if="safeCountDownType === COUNTDOWN_TYPE_DOWN_VALUE"
       class="countdown-down_enter"
@@ -11,8 +11,10 @@
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber
           "
-          :css-is-end-second="isCountdownEnd === true"
-          :style="{ ['--down_enter_up_z_index']: cardNumber }"
+          :css-is-end-second="cardNumber === endSecond"
+          :style="{
+            ['--down_enter_up_z_index']: cardNumber
+          }"
           @animationend="handleNumberAnimationEnd"
         >
           {{ cardNumber }}
@@ -43,7 +45,7 @@
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber - 1
           "
-          :css-is-end-second="isCountdownEnd === true"
+          :css-is-end-second="cardNumber === endSecond"
           :css-card-up_leave_up="cardNumber"
           :style="{
             ['--up_leave_up_z_index']: contdownCard.length - cardNumber
@@ -57,7 +59,7 @@
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber
           "
-          :css-is-end-second="isCountdownEnd === true"
+          :css-is-end-second="cardNumber === endSecond"
           :css-card-up_leave_down="cardNumber"
           :style="{
             ['--up_leave_down_z_index']: cardNumber
@@ -82,7 +84,7 @@
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber - 1
           "
-          :css-is-end-second="isCountdownEnd === true"
+          :css-is-end-second="cardNumber === endSecond"
           :css-card-fade="cardNumber"
           :style="{
             ['--tick_delay']: cardNumber >= 1 ? 0 : 2
@@ -429,12 +431,61 @@ const props = defineProps({
   autoStart: {
     type: Boolean,
     default: true
+  },
+  width: {
+    type: [Number, String],
+    default: null
+  },
+  height: {
+    type: [Number, String],
+    default: null
+  },
+  padding: {
+    type: [Number, String],
+    default: null
+  },
+  bgColor: {
+    type: String,
+    default: '#fff'
   }
 });
 
 const currentNumber = ref(null);
 const isCountdownStart = ref(false);
 
+const cssVariable = computed(() => {
+  const safeCssVariable = {};
+
+  if (typeof props.width === 'string' && props.width !== '') {
+    safeCssVariable['--countdown_width'] = props.width;
+  } else if (typeof props.width === 'string' && isNaN(props.width) === false) {
+    safeCssVariable['--countdown_number'] = `${props.width}px`;
+  }
+
+  if (typeof props.height === 'string' && props.height !== '') {
+    safeCssVariable['--countdown_height'] = props.height;
+  } else if (
+    typeof props.height === 'string' &&
+    isNaN(props.height) === false
+  ) {
+    safeCssVariable['--countdown_number'] = `${props.height}px`;
+  }
+
+  if (typeof props.padding === 'string' && props.padding !== '') {
+    safeCssVariable['--countdown_padding'] = props.padding;
+  } else if (
+    typeof props.padding === 'string' &&
+    isNaN(props.padding) === false
+  ) {
+    safeCssVariable['--countdown_padding'] = `${props.padding}px`;
+  }
+
+  if (typeof props.bgColor === 'string' && props.bgColor !== '') {
+    safeCssVariable['--countdown_bg_color'] = props.bgColor;
+  }
+
+  return safeCssVariable;
+});
 const safeCountDownType = computed(() => {
   if (
     typeof props.countdownType !== 'string' ||
@@ -467,12 +518,6 @@ const contdownCard = computed(() => {
   // }
 
   return contdownCardList;
-});
-const isCountdownEnd = computed(() => {
-  const safeEndSecond =
-    typeof props.endSecond !== 'number' ? 0 : props.endSecond;
-
-  return currentNumber.value === safeEndSecond;
 });
 
 watch(
@@ -534,10 +579,10 @@ $countdownDownEnterHeight: 100px;
 $countdownDownEnterPadding: 10px;
 $countdownDownEnterTotal: 59;
 
-$countdownFadeWidth: 100px;
-$countdownFadeHeight: 50px;
-$countdownFadePadding: 5px;
-$countdownFadeTotal: 59;
+// $countdownFadeWidth: 100px;
+// $countdownFadeHeight: 50px;
+// $countdownFadePadding: 5px;
+// $countdownFadeTotal: 59;
 
 * {
   box-sizing: border-box;
@@ -548,9 +593,9 @@ $countdownFadeTotal: 59;
 
   vertical-align: top;
 
-  box-shadow:
-    4px 4px 0 4px #fff,
-    8px 8px 0 8px #c0392b;
+  // box-shadow:
+  //   4px 4px 0 4px #fff,
+  //   8px 8px 0 8px #c0392b;
 }
 .number {
   position: absolute;
@@ -568,7 +613,8 @@ $countdownFadeTotal: 59;
   bottom: 50%;
 
   transform-origin: 50% 100%;
-  background: linear-gradient(to bottom, #000000 0%, #111 100%); /* W3C */
+  // background: linear-gradient(to bottom, #000000 0%, #111 100%); /* W3C */
+  background-color: var(--countdown_bg_color);
 }
 .number_down {
   top: 50%;
@@ -576,7 +622,9 @@ $countdownFadeTotal: 59;
 
   line-height: 0px;
   transform-origin: 50% 0%;
-  background: black;
+
+  // background: black;
+  background-color: var(--countdown_bg_color);
 }
 .debug_log {
   position: relative;
@@ -596,23 +644,24 @@ $countdownFadeTotal: 59;
   --countdown_down_enter_padding: #{$countdownDownEnterPadding};
   --countdown_down_enter_total: #{$countdownDownEnterTotal};
 
-  --countdown_fade_width: #{$countdownFadeWidth};
-  --countdown_fade_height: #{$countdownFadeHeight};
-  --countdown_fade_padding: #{$countdownFadePadding};
-  --countdown_fade_total: #{$countdownFadeTotal};
+  // --countdown_fade_width: #{$countdownFadeWidth};
+  // --countdown_fade_height: #{$countdownFadeHeight};
+  // --countdown_fade_padding: #{$countdownFadePadding};
+  // --countdown_fade_total: #{$countdownFadeTotal};
 
   &-down_enter {
     @extend .conutdow_block;
     position: relative;
 
-    width: var(--countdown_down_enter_width);
-    height: var(--countdown_down_enter_height);
-    padding: var(--countdown_down_enter_padding);
+    width: var(--countdown_width, var(--countdown_down_enter_width));
+    height: var(--countdown_height, var(--countdown_down_enter_height));
+    padding: var(--countdown_padding, var(--countdown_down_enter_padding));
     // width: $countdownDownEnterWidth;
     // height: $countdownDownEnterHeight;
     // padding: $countdownDownEnterPadding;
 
-    background: black;
+    // background: black;
+    background-color: var(--countdown_bg_color);
 
     perspective: 1000px;
 
@@ -689,15 +738,17 @@ $countdownFadeTotal: 59;
     @extend .conutdow_block;
     position: relative;
 
-    width: var(--countdown_up_leave_width);
-    height: var(--countdown_up_leave_height);
-    padding: var(--countdown_up_leave_padding);
+    width: var(--countdown_width, var(--countdown_up_leave_width));
+    height: var(--countdown_height, var(--countdown_up_leave_height));
+    padding: var(--countdown_padding, var(--countdown_up_leave_padding));
     // width: $countdownUpLeaveWidth;
     // height: $countdownUpLeaveHeight;
     // padding: $countdownUpLeavePadding;
 
     perspective: 1000px;
-    background: black;
+
+    // background: black;
+    background-color: var(--countdown_bg_color);
 
     &-debug_log {
       @extend .debug_log;
@@ -769,14 +820,15 @@ $countdownFadeTotal: 59;
   //   @extend .conutdow_block;
   //   position: relative;
 
-  //   width: var(--countdown_fade_width);
-  //   height: var(--countdown_fade_height);
-  //   padding: var(--countdown_fade_padding);
+  //   width: var(--countdown_width, var(--countdown_fade_width));
+  //   height: var(--countdown_height, var(--countdown_fade_height));
+  //   padding: var(--countdown_padding, var(--countdown_fade_padding));
   //   // width: $countdownFadeWidth;
   //   // height: $countdownFadeHeight;
   //   // padding: $countdownFadePadding;
 
-  //   background: black;
+  //    // background: black;
+  //    background-color: var(--countdown_bg_color);
 
   //   &-tick {
   //     position: absolute;
@@ -786,17 +838,22 @@ $countdownFadeTotal: 59;
   //     right: 0;
 
   //     color: #e74c3c;
-  //     font-size: var(--countdown_fade_height);
+  //     font-size: var(--countdown_height, var(--countdown_fade_height));
   //     // font-size: $countdownFadeHeight;
   //     text-align: center;
   //     line-height: calc(
-  //       var(--countdown_fade_height) - var(--countdown_fade_padding) / 2
+  //       var(--countdown_height, var(--countdown_fade_height)) - var(
+  //           --countdown_padding,
+  //           var(--countdown_fade_padding)
+  //         ) /
+  //         2
   //     );
   //     // line-height: calc($countdownFadeHeight - $countdownFadePadding / 2);
 
   //     // opacity: 0;
 
-  //     background: black;
+  //    // background: black;
+  //    background-color: var(--countdown_bg_color);
 
   //     &[css-is-anime-start='true'] {
   //       animation: fade 2s 1;
