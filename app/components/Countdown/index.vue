@@ -1,4 +1,5 @@
 <template>
+  <!-- https://codepen.io/daniesy/pen/DWVgXN -->
   <div class="countdown">
     <div class="countdown-up_leave">
       <p class="countdown-up_leave-number_up up-59">59</p>
@@ -127,8 +128,15 @@
       <template v-for="cardNumber in contdownCard" :key="cardNumber">
         <p
           class="countdown-down_enter-number_up"
-          :current-number="currentNumber"
-          :css-is-anime-start="cardNumber === currentNumber"
+          :data-current-number="currentNumber"
+          :css-is-countdown-end="
+            isCountdownEnd === true && cardNumber === currentNumber
+          "
+          :css-is-anime-start="
+            isCountdownStart === true &&
+            cardNumber >= currentNumber &&
+            currentNumber > 0
+          "
           :css-card-number_up="cardNumber"
           @animationend="numberUpAnimationEnd"
         >
@@ -136,8 +144,16 @@
         </p>
         <p
           class="countdown-down_enter-number_down"
-          :current-number="currentNumber"
-          :css-is-anime-start="cardNumber === currentNumber - 1"
+          :data-current-number="currentNumber"
+          :css-is-countdown-end="
+            isCountdownEnd === true && cardNumber === currentNumber
+          "
+          :css-is-initial-seconds="cardNumber === initialSeconds"
+          :css-is-anime-start="
+            isCountdownStart === true &&
+            cardNumber >= currentNumber - 1 &&
+            currentNumber > 0
+          "
           :css-card-number_down="cardNumber"
           @animationend="numberDownAnimationEnd"
         >
@@ -346,7 +362,8 @@ const props = defineProps({
   }
 });
 
-const currentNumber = ref(0);
+const currentNumber = ref(null);
+const isCountdownStart = ref(false);
 
 const contdownCard = computed(() => {
   const safeInitialSeconds =
@@ -358,27 +375,35 @@ const contdownCard = computed(() => {
   }
   return contdownCardList;
 });
+const isCountdownEnd = computed(() => {
+  return currentNumber.value === 0;
+});
 
 watch(
   () => [props.autoStart, props.initialSeconds],
-  ([newAutoStart, newInitialSeconds]) => {
+  async ([newAutoStart, newInitialSeconds]) => {
     if (
       newAutoStart === true &&
       typeof newInitialSeconds === 'number' &&
       newInitialSeconds > 0
     ) {
       currentNumber.value = newInitialSeconds;
+
+      await nextTick();
+      window.requestAnimationFrame(() => (isCountdownStart.value = true));
     }
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
   if (
     props.autoStart === true &&
     typeof props.initialSeconds === 'number' &&
     props.initialSeconds > 0
   ) {
     currentNumber.value = props.initialSeconds;
+    await nextTick();
+    window.requestAnimationFrame(() => (isCountdownStart.value = true));
   }
 });
 
@@ -387,13 +412,13 @@ async function numberUpAnimationEnd(e) {
 
   await nextTick();
 
-  setTimeout(
-    () =>
-      window.requestAnimationFrame(() => {
-        // currentNumber.value = currentNumber.value - 1;
-      }),
-    1000
-  );
+  window.requestAnimationFrame(() => {
+    if (currentNumber.value === 0) {
+      isCountdownStart.value = false;
+    } else {
+      currentNumber.value = currentNumber.value - 1;
+    }
+  });
 }
 async function numberDownAnimationEnd(e) {
   console.log(e?.target);
@@ -429,8 +454,6 @@ $clockFadeTotal: 59;
   display: inline-block;
   margin: 40px 50px;
 
-  color: #e74c3c;
-
   vertical-align: top;
 
   box-shadow:
@@ -442,6 +465,7 @@ $clockFadeTotal: 59;
   left: 0;
   right: 0;
 
+  color: #e74c3c;
   text-align: center;
 
   overflow: hidden;
@@ -466,6 +490,12 @@ $clockFadeTotal: 59;
   line-height: 0px;
   transform-origin: 50% 0%;
   background: black;
+}
+.debug_log {
+  position: relative;
+
+  z-index: 999999;
+  color: #36a300;
 }
 
 .countdown {
@@ -498,6 +528,10 @@ $clockFadeTotal: 59;
     perspective: 1000px;
     background: black;
 
+    &-debug_log {
+      @extend .debug_log;
+    }
+
     &-number_up {
       @extend .number;
       @extend .number_up;
@@ -507,13 +541,17 @@ $clockFadeTotal: 59;
       line-height: var(--clockCountHeight);
       // line-height: $clockCountHeight;
 
-      @for $i from 1 through $clockCountTotal {
-        &[css-card-number_up='#{$i}'][css-is-anime-start='true'] {
-          z-index: $i;
+      // TODO: 將參考的部分移除後要加回去
+      // transform: rotate3d(-1, 0, 0, 180deg);
 
-          transform: rotate3d(-1, 0, 0, 180deg);
-          animation: flip-up-back 1s 1;
-          animation-fill-mode: forwards;
+      &[css-is-anime-start='true'] {
+        animation: flip-up-back 1s 1;
+        animation-fill-mode: forwards;
+      }
+
+      @for $i from 1 through $clockCountTotal {
+        &[css-card-number_up='#{$i}'] {
+          z-index: $i;
         }
       }
     }
@@ -525,12 +563,14 @@ $clockFadeTotal: 59;
       font-size: calc(var(--clockCountHeight) - var(--clockCountPadding));
       // font-size: $clockCountHeight - $clockCountPadding;
 
-      @for $i from 0 through $clockCountTotal - 1 {
-        &[css-card-number_down='#{$i}'][css-is-anime-start='true'] {
-          z-index: 100-$i;
+      &[css-is-anime-start='true'] {
+        animation: flip-up 1s 1;
+        animation-fill-mode: forwards;
+      }
 
-          animation: flip-up 1s 1;
-          animation-fill-mode: forwards;
+      @for $i from 0 through $clockCountTotal - 1 {
+        &[css-card-number_down='#{$i}'] {
+          z-index: calc(100 - $i);
         }
       }
     }
@@ -572,6 +612,10 @@ $clockFadeTotal: 59;
 
     perspective: 1000px;
 
+    &-debug_log {
+      @extend .debug_log;
+    }
+
     &-number_up {
       @extend .number;
       @extend .number_up;
@@ -582,11 +626,17 @@ $clockFadeTotal: 59;
       line-height: var(--clockReverseHeight);
       // line-height: $clockReverseHeight;
 
+      &[css-is-anime-start='true'] {
+        animation: flip-up 1s 1;
+        animation-fill-mode: forwards;
+      }
+      &[css-is-countdown-end='true'] {
+        z-index: 10;
+      }
+
       $i: $clockReverseTotal;
       @while $i > 0 {
-        &[css-card-number_up='#{$i}'][css-is-anime-start='true'] {
-          animation: flip-up 1s 1;
-          animation-fill-mode: forwards;
+        &[css-card-number_up='#{$i}'] {
           z-index: $i;
         }
         $i: $i - 1;
@@ -600,13 +650,24 @@ $clockFadeTotal: 59;
       font-size: calc(var(--clockReverseHeight) - var(--clockReversePadding));
       // font-size: $clockReverseHeight - $clockReversePadding;
 
+      transform: rotate3d(-1, 0, 0, 180deg);
+
+      &[css-is-anime-start='true']:not([css-is-initial-seconds='true']) {
+        animation: flip-up-back 1s 1;
+        animation-fill-mode: forwards;
+      }
+      &[css-is-initial-seconds='true'] {
+        transform: rotate3d(0, 0, 0, 180deg);
+      }
+      &[css-is-countdown-end='true'] {
+        z-index: 99;
+        transform: rotate3d(0, 0, 0, 180deg);
+      }
+
       $i: $clockReverseTotal;
       @while $i >= 0 {
-        &[css-card-number_down='#{$i}'][css-is-anime-start='true'] {
+        &[css-card-number_down='#{$i}'] {
           z-index: $clockReverseTotal - $i;
-          transform: rotate3d(-1, 0, 0, 180deg);
-          animation: flip-up-back 1s 1;
-          animation-fill-mode: forwards;
         }
         $i: $i - 1;
       }
@@ -656,6 +717,7 @@ $clockFadeTotal: 59;
       left: 0;
       right: 0;
 
+      color: #e74c3c;
       font-size: var(--clockFadeHeight);
       // font-size: $clockFadeHeight;
       text-align: center;
@@ -664,13 +726,9 @@ $clockFadeTotal: 59;
 
       background: black;
 
-      $i: $clockReverseTotal;
-      @while $i >= 0 {
-        &[css-card-number_tick='#{$i}'][css-is-anime-start='true'] {
-          animation: fade 2s 1;
-          animation-fill-mode: forwards;
-        }
-        $i: $i - 1;
+      &[css-is-anime-start='true'] {
+        animation: fade 2s 1;
+        animation-fill-mode: forwards;
       }
     }
 
