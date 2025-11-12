@@ -8,31 +8,24 @@
       <template v-for="cardNumber in contdownCard" :key="cardNumber">
         <p
           class="countdown-down_enter-down_enter_up"
-          :css-is-countdown-end="
-            isCountdownEnd === true && cardNumber === currentNumber
-          "
           :css-is-anime-start="
-            isCountdownStart === true &&
-            cardNumber >= currentNumber &&
-            currentNumber > 0
+            isCountdownStart === true && cardNumber >= currentNumber
           "
-          :css-card-down_enter_up="cardNumber"
+          :css-is-end-second="cardNumber === endSecond"
+          :style="{ ['--down_enter_up_z_index']: cardNumber }"
           @animationend="handleNumberUpAnimationEnd"
         >
           {{ cardNumber }}
         </p>
         <p
           class="countdown-down_enter-down_enter_down"
-          :css-is-countdown-end="
-            isCountdownEnd === true && cardNumber === currentNumber
-          "
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
-            isCountdownStart === true &&
-            cardNumber >= currentNumber - 1 &&
-            currentNumber > 0
+            isCountdownStart === true && cardNumber >= currentNumber - 1
           "
-          :css-card-down_enter_down="cardNumber"
+          :style="{
+            ['--down_enter_down_z_index']: contdownCard.length - cardNumber
+          }"
           @animationend="handleNumberDownAnimationEnd"
         >
           {{ cardNumber }}
@@ -69,15 +62,13 @@
         <p
           class="countdown-up_leave-up_leave_up"
           :data-current-number="currentNumber"
-          :css-is-countdown-end="
-            isCountdownEnd === true && cardNumber === currentNumber
-          "
           :css-is-anime-start="
             isCountdownStart === true &&
             cardNumber >= currentNumber - 1 &&
             currentNumber > 0
           "
           :css-card-up_leave_up="cardNumber"
+          :style="{ ['--up_leave_up_z_index']: cardNumber }"
           @animationend="handleNumberUpAnimationEnd"
         >
           {{ cardNumber }}
@@ -85,9 +76,6 @@
         <p
           class="countdown-up_leave-up_leave_down"
           :data-current-number="currentNumber"
-          :css-is-countdown-end="
-            isCountdownEnd === true && cardNumber === currentNumber
-          "
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
             isCountdownStart === true &&
@@ -95,6 +83,9 @@
             currentNumber > 0
           "
           :css-card-up_leave_down="cardNumber"
+          :style="{
+            ['--up_leave_down_z_index']: contdownCard.length - cardNumber
+          }"
           @animationend="handleNumberDownAnimationEnd"
         >
           {{ cardNumber }}
@@ -431,6 +422,10 @@ const props = defineProps({
     type: Number,
     default: 20
   },
+  endSecond: {
+    type: Number,
+    default: 0
+  },
   autoStart: {
     type: Boolean,
     default: true
@@ -710,6 +705,8 @@ $countdownFadeTotal: 59;
       @extend .number;
       @extend .number_up;
 
+      z-index: var(--down_enter_up_z_index);
+
       font-size: calc(
         var(--countdown_down_enter_height) - var(--countdown_down_enter_padding)
       );
@@ -718,21 +715,18 @@ $countdownFadeTotal: 59;
       line-height: var(--countdown_down_enter_height);
       // line-height: $countdownDownEnterHeight;
 
-      &[css-is-anime-start='true'] {
+      &[css-is-anime-start='true']:not([css-is-end-second='true']) {
         animation: flip-up 1s 1;
         animation-fill-mode: forwards;
       }
-      &[css-is-countdown-end='true'] {
-        z-index: 10;
-      }
 
-      $i: $countdownDownEnterTotal;
-      @while $i > 0 {
-        &[css-card-down_enter_up='#{$i}'] {
-          z-index: $i;
-        }
-        $i: $i - 1;
-      }
+      // $i: $countdownDownEnterTotal;
+      // @while $i > 0 {
+      //   &[css-card-down_enter_up='#{$i}'] {
+      //     z-index: $i;
+      //   }
+      //   $i: $i - 1;
+      // }
     }
 
     $i: $countdownDownEnterTotal;
@@ -750,6 +744,8 @@ $countdownFadeTotal: 59;
       @extend .number;
       @extend .number_down;
 
+      z-index: var(--down_enter_down_z_index);
+
       font-size: calc(
         var(--countdown_down_enter_height) - var(--countdown_down_enter_padding)
       );
@@ -764,18 +760,14 @@ $countdownFadeTotal: 59;
       &[css-is-initial-seconds='true'] {
         transform: rotate3d(0, 0, 0, 180deg);
       }
-      &[css-is-countdown-end='true'] {
-        z-index: 99;
-        transform: rotate3d(0, 0, 0, 180deg);
-      }
 
-      $i: $countdownDownEnterTotal;
-      @while $i >= 0 {
-        &[css-card-down_enter_down='#{$i}'] {
-          z-index: $countdownDownEnterTotal - $i;
-        }
-        $i: $i - 1;
-      }
+      // $i: $countdownDownEnterTotal;
+      // @while $i >= 0 {
+      //   &[css-card-down_enter_down='#{$i}'] {
+      //     z-index: $countdownDownEnterTotal - $i;
+      //   }
+      //   $i: $i - 1;
+      // }
     }
 
     $i: $countdownDownEnterTotal;
