@@ -53,10 +53,10 @@ export default defineNuxtPlugin({
 
       watchEffect(async () => {
         if ($pwa.swActivated === false) {
-          $infoMessage('PWA開始安裝...');
+          // $infoMessage('PWA開始安裝...');
           $store.system.setPwaUpdataing(true);
         } else {
-          $successMessage('PWA安裝並啟用完成');
+          // $successMessage('PWA安裝並啟用完成');
           $store.system.setPwaUpdataing(false);
         }
       });
