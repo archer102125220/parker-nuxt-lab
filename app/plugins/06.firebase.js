@@ -56,7 +56,7 @@ export default defineNuxtPlugin({
           $infoMessage('PWA開始安裝...');
           $store.system.setPwaUpdataing(true);
         } else {
-          $infoMessage('PWA安裝並啟用完成');
+          $successMessage('PWA安裝並啟用完成');
           $store.system.setPwaUpdataing(false);
         }
       });
