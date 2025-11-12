@@ -61,6 +61,7 @@ useHeadMataData({
   title: '倒數計時組件測試'
 });
 // const nuxtApp = useNuxtApp();
+const dayjs = useDayjs();
 
 const DEMO_NUMBER = 20;
 
@@ -80,7 +81,12 @@ function handleSecondDemo() {
   demoNumber.value = Number(demoInput.value);
   demoCountdownType.value = demoRadio.value;
 }
-function handleDateDemo() {}
+function handleDateDemo() {
+  console.log({
+    demoDate: demoDate.value,
+    ['dayjs(demoDate.value)']: dayjs(demoDate.value)
+  });
+}
 </script>
 
 <style lang="scss" scoped>

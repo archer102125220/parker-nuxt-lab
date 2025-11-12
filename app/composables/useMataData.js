@@ -24,7 +24,7 @@ export function useHeadMataData({
   const metaDataDescription = computed(() => _metaDataDescription || $i18n.t('system.description'));
   const metaDataUrl = computed(() => _metaDataUrl || DOMAIN);
   const metaDataType = computed(() => _metaDataType || 'website');
-  const metaDataCopyright = computed(() => _metaDataCopyright || `Copyright © ${dayjs.value().year()} Parker Chen. All rights reserved.`);
+  const metaDataCopyright = computed(() => _metaDataCopyright || `Copyright © ${dayjs().year()} Parker Chen. All rights reserved.`);
 
   return useHead({
     titleTemplate: titleTemplate.value,

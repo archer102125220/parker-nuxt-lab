@@ -61,7 +61,7 @@ export const useSystemStore = defineStore('system', {
     },
     setCantResendOTPTime(payload, second = 120) {
       const dayjs = useDayjs();
-      this.cantResendOTPTime = dayjs.value(payload).add(second, 'second').valueOf();
+      this.cantResendOTPTime = dayjs(payload).add(second, 'second').valueOf();
     },
     setIsMobile(payload = false) {
       this.isMobile = payload;
