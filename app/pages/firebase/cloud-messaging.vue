@@ -1,5 +1,9 @@
 <template>
   <section class="cloud_messaging_page">
+    <p class="cloud_messaging_page-description">
+      需等帶PWA安裝完成才會觸發通知權限請求流程，同意後才能正常觸發通知功能
+    </p>
+
     <v-container
       class="cloud_messaging_page-form"
       :tag="VForm"
