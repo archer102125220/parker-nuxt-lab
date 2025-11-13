@@ -1,5 +1,24 @@
 <template>
   <div class="scroll_fetch_test_page">
+    <form class="scroll_fetch_test_page-form" @submit.prevent="">
+      <v-radio-group class="frontend_api_cach_test_page-form-http_method">
+        <div class="scroll_fetch_test_page-form-token_input">
+          <v-radio
+            color="primary"
+            label="自行輸入 GitHub Token"
+            value="input"
+          />
+          <v-text-field clearable label="GitHub Token" />
+        </div>
+
+        <v-radio
+          color="primary"
+          label="使用專案設定GitHub Token"
+          value="default"
+        />
+      </v-radio-group>
+    </form>
+
     <ScrollFetch
       :ios-style="false"
       :refresh-disable="false"
@@ -31,6 +50,24 @@ useHeadMataData({
 });
 const nuxtApp = useNuxtApp();
 
+// https://docs.github.com/zh/rest/authentication/endpoints-available-for-fine-grained-personal-access-tokens?apiVersion=2022-11-28
+/*
+VITE_GITHUB_TOKEN
+
+curl -L \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer YOUR_PERSONAL_ACCESS_TOKEN" \
+  https://api.github.com/user/repos
+
+參數,說明,範例值
+type,篩選儲存庫類型,"all, owner (僅您擁有的), member (您是成員或協作者的)"
+sort,排序依據,"created, updated, pushed, full_name"
+direction,排序方向,"asc (升序), desc (降序)"
+visibility,篩選可見性,"all, public, private"
+per_page,每頁顯示數量,1 到 100，預設是 30
+
+*/
+
 const refreshLoading = ref(false);
 const infinityLoading = ref(false);
 const infinityEnd = ref(false);
@@ -40,12 +77,12 @@ const limit = computed(() => page.value * 20);
 const dataList = computed(() => {
   const _dataList = [];
   for (let i = 0; i <= page.value * limit.value; i++) {
-    // _dataList.push(i);
-    let data = '';
-    for (let j = i; j >= 0; j--) {
-      data += j;
-    }
-    _dataList.push(data);
+    _dataList.push(i);
+    // let data = '';
+    // for (let j = i; j >= 0; j--) {
+    //   data += j;
+    // }
+    // _dataList.push(data);
   }
   return _dataList;
 });
