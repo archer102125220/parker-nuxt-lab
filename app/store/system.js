@@ -21,7 +21,7 @@ export const useSystemStore = defineStore('system', {
     _welcomeMsg: true,
     _privilegeRole: [],
 
-    pwaUpdataing: false,
+    pwaLoading: false,
 
     displayTitle: '',
     accessToken: null,
@@ -134,8 +134,8 @@ export const useSystemStore = defineStore('system', {
     setFirebaseMessagingInited(payload = false) {
       this.firebaseMessagingInited = payload;
     },
-    setPwaUpdataing(payload = false) {
-      this.pwaUpdataing = payload;
+    setPwaLoading(payload = false) {
+      this.pwaLoading = payload;
     },
   },
   getters: {

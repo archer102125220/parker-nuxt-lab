@@ -1,7 +1,7 @@
 <template>
   <div class="pwa_loading">
     <v-snackbar
-      :model-value="$store.system.pwaUpdataing"
+      :model-value="$store.system.pwaLoading"
       :timeout="-1"
       :attach="true"
       color="info"
@@ -11,7 +11,7 @@
       class="pwa_loading-block"
     >
       <v-alert type="info">
-        <p>PWA安裝中...</p>
+        <p>PWA安裝/更新中...</p>
 
         <v-progress-circular indeterminate />
       </v-alert>
