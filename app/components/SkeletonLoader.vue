@@ -12,15 +12,12 @@ const props = defineProps({
 </script>
 
 <style lang="scss">
-@keyframes skeleton_animation {
+@keyframes loaded_fadein {
   0% {
-    background-position: 100% 100%;
-  }
-  50% {
-    background-position: 0 0;
+    opacity: 0;
   }
   100% {
-    background-position: -100% -100%;
+    opacity: 1;
   }
 }
 @keyframes skeleton_after_animation {
@@ -36,25 +33,21 @@ const props = defineProps({
 }
 
 .skeleton_loader {
+  &[css-fadein='true'] {
+    animation: loaded_fadein 0.5s ease-in-out;
+  }
+
   &-loading {
     position: relative;
 
     height: 100%;
     width: 100%;
     // aspect-ratio: 1;
-    border-radius: 1rem;
+    // border-radius: 1rem;
 
     overflow: hidden;
     // background-color: #dcdcdc;
     background: repeating-linear-gradient(126deg, #ededed, #dcdcdc, #ededed);
-    // background: repeating-linear-gradient(
-    //   126deg,
-    //   #ededed 30%,
-    //   #dcdcdc 50%,
-    //   #ededed 70%
-    // );
-    // background-size: 400%;
-    // animation: skeleton_animation 2.5s infinite linear;
 
     &:after {
       content: '';
@@ -62,7 +55,6 @@ const props = defineProps({
       position: absolute;
       top: 0;
       bottom: 0;
-      // right: 100%;
       right: 0;
 
       display: block;
@@ -71,7 +63,6 @@ const props = defineProps({
 
       border-radius: 100%;
 
-      // background: repeating-linear-gradient(90deg, #ededed, #dcdcdc);
       background: repeating-linear-gradient(
         126deg,
         #ededed 30%,
@@ -79,7 +70,6 @@ const props = defineProps({
         #ededed 70%
       );
 
-      // animation: skeleton_after_animation 2.5s 2.5s infinite linear;
       animation: skeleton_after_animation 2.5s infinite linear;
     }
   }
