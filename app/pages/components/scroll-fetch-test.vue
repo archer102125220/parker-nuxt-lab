@@ -1,23 +1,39 @@
 <template>
   <div class="scroll_fetch_test_page">
     <form class="scroll_fetch_test_page-form" @submit.prevent="">
-      <v-radio-group class="frontend_api_cach_test_page-form-http_method">
-        <div class="scroll_fetch_test_page-form-token_input">
-          <v-radio
-            color="primary"
-            label="自行輸入 GitHub Token"
-            value="input"
-          />
-          <v-text-field clearable label="GitHub Token" />
-        </div>
+      <v-radio-group
+        class="frontend_api_cach_test_page-form-http_method"
+        v-model="userTokenType"
+      >
+        <v-radio color="primary" label="前端模擬" value="fake" />
 
         <v-radio
           color="primary"
           label="使用專案設定GitHub Token"
           value="default"
         />
+
+        <div class="scroll_fetch_test_page-form-token_input">
+          <v-radio
+            color="primary"
+            label="自行輸入 GitHub Token"
+            value="input"
+          />
+          <v-text-field
+            clearable
+            label="GitHub Token"
+            :disabled="userTokenType !== 'input'"
+          />
+        </div>
       </v-radio-group>
     </form>
+
+    <v-checkbox
+      label="停用user-select"
+      color="primary"
+      :value="true"
+      v-model="userSelect"
+    />
 
     <ScrollFetch
       :ios-style="false"
@@ -25,9 +41,10 @@
       height="85dvh"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-      :loading="$store.system.loading"
       :infinity-buffer="500"
+      :user-select-none="userSelect"
       :infinity-end="infinityEnd"
+      :loading="$store.system.loading"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
     >
@@ -68,10 +85,14 @@ per_page,每頁顯示數量,1 到 100，預設是 30
 
 */
 
+const userSelect = ref(false);
 const refreshLoading = ref(false);
 const infinityLoading = ref(false);
 const infinityEnd = ref(false);
+const userTokenType = ref('default');
 const page = ref(1);
+
+const asyncData = useAsyncData('scroll_fetch_test', () => {});
 
 const limit = computed(() => page.value * 20);
 const dataList = computed(() => {

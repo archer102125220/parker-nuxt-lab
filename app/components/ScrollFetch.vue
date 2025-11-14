@@ -10,6 +10,7 @@
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
     @mouseup="handlePullEnd"
+    @mouseover.self="handlePullEnd"
     @touchstart="handlePullStart"
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
@@ -56,7 +57,9 @@
             v-if="hasRefreshIcon === false"
             v-show="isShowRefreshIcon"
             class="scroll_fetch-trigger-icon_center-icon"
-            :css-refresh-animation="refreshing === true && isPullStart === false"
+            :css-refresh-animation="
+              refreshing === true && isPullStart === false
+            "
           />
           <div
             v-else
@@ -67,7 +70,9 @@
             <img
               :src="computedRefreshIcon"
               class="scroll_fetch-trigger-icon_center-icon_img_bg-icon_img"
-              :css-refresh-animation="refreshing === true && isPullStart === false"
+              :css-refresh-animation="
+                refreshing === true && isPullStart === false
+              "
             />
           </div>
         </slot>
@@ -77,7 +82,6 @@
     <div
       v-if="isEmpty === false"
       class="scroll_fetch-container"
-      @mouseover="handlePullEnd"
       @transitionend="handleRefreshIcon"
     >
       <slot />
@@ -140,7 +144,8 @@ const props = defineProps({
   vibrate: { type: Boolean, default: false },
   scrollEndWait: { type: Number, default: 100 },
   infinityTimeout: { type: Number, default: null },
-  scrollTop: { type: Number, default: null }
+  scrollTop: { type: Number, default: null },
+  userSelectNone: { type: Boolean, default: false }
 });
 const emit = defineEmits([
   'refresh',
@@ -231,6 +236,10 @@ const cssVariable = computed(() => {
     _cssVariable['--refresh_container_height'] = props.containerHeight;
   } else if (typeof props.containerHeight === 'number') {
     _cssVariable['--refresh_container_height'] = `${props.containerHeight}px`;
+  }
+
+  if (props.userSelectNone === true) {
+    _cssVariable['--refresh_user_select'] = 'none';
   }
 
   if (moveDistance.value > 0) {
@@ -485,6 +494,7 @@ async function handleInfinityFetch() {
 }
 
 function handlePullStart(e) {
+  console.log({ e });
   if (
     (windowIsScrollIng.value === true && windowScrollIsTop.value === false) ||
     (parentIsScrollIng.value === true && parentScrollIsTop.value === false) ||
@@ -539,8 +549,10 @@ function handlePulling(e) {
     infinityLoading.value === true ||
     refreshing.value === true ||
     props.loading === true
-  )
+  ) {
     return;
+  }
+  console.log({ e });
   // const scrollTop =
   //   scrollFetchRef.value?.scrollTop ||
   //   document.body?.scrollTop ||
@@ -592,6 +604,7 @@ function handlePulling(e) {
 }
 async function handlePullEnd(e) {
   if (isPullStart.value === false) return;
+  console.log({ e });
 
   isPullStart.value = false;
   startY.value = 0;
@@ -811,6 +824,7 @@ function windowScrollEnd(e) {
   position: relative;
   height: var(--refresh_height);
   overflow: var(--refresh_overflow);
+  user-select: var(--refresh_user_select);
 
   &-trigger {
     position: absolute;
