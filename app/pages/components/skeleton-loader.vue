@@ -4,6 +4,12 @@
   </div>
 </template>
 
+<script setup>
+useHeadMataData({
+  title: 'skeleton組件'
+});
+</script>
+
 <style lang="scss" scoped>
 .skeleton_loader_page {
   &-skeleton {

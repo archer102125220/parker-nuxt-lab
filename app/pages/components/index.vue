@@ -95,7 +95,8 @@ const linkList = computed(() => [
   { to: localePath('/components/dialog'), label: '彈窗組件' },
   { to: localePath('/components/drawer'), label: '抽屜收展組件' },
   { to: localePath('/components/selector'), label: '下拉選單組件' },
-  { to: localePath('/components/countdown-test'), label: '倒數計時組件' }
+  { to: localePath('/components/countdown-test'), label: '倒數計時組件' },
+  { to: localePath('/components/skeleton-loader'), label: 'skeleton組件' }
 ]);
 </script>
 
