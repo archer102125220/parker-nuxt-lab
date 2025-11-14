@@ -132,11 +132,11 @@ const props = defineProps({
   iosTypeIconSize: { type: [String, Number], default: 10 },
   iosTypeIconStrokeWidth: { type: [String, Number], default: 2 },
   isEmpty: { type: Boolean, default: false },
-  emptyLabel: { type: String, default: '暂无资料' },
+  emptyLabel: { type: String, default: '暫無資料' },
   useObserver: { type: Boolean, default: true }, // infinty scroll 的觸發方式
   infinityLabel: { type: String, default: '拉至底部可繼續加載' },
   infinityEndLabel: { type: String, default: '沒有更多資料了' },
-  infinityBuffer: { type: Number, default: 100 }, // 以 scroll 觸發時，提早滑動距離觸發，縮短使用者操作等待時間
+  infinityBuffer: { type: Number, default: 100 }, // 提早滑動距離觸發，縮短使用者操作等待時間
   infinityDisable: { type: Boolean, default: false },
   isScrollToFetch: { type: Boolean, default: true },
   infinityEnd: { type: Boolean, default: true },

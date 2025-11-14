@@ -69,8 +69,6 @@ const nuxtApp = useNuxtApp();
 
 // https://docs.github.com/zh/rest/authentication/endpoints-available-for-fine-grained-personal-access-tokens?apiVersion=2022-11-28
 /*
-VITE_GITHUB_TOKEN
-
 curl -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer YOUR_PERSONAL_ACCESS_TOKEN" \
@@ -82,7 +80,6 @@ sort,排序依據,"created, updated, pushed, full_name"
 direction,排序方向,"asc (升序), desc (降序)"
 visibility,篩選可見性,"all, public, private"
 per_page,每頁顯示數量,1 到 100，預設是 30
-
 */
 
 const userSelect = ref(false);
@@ -92,7 +89,22 @@ const infinityEnd = ref(false);
 const userTokenType = ref('default');
 const page = ref(1);
 
-const asyncData = useAsyncData('scroll_fetch_test', () => {});
+const asyncData = await useAsyncData('scroll_fetch_test', () => {
+  const { $request } = useNuxtApp();
+  return $request.get(
+    'https://api.github.com/user/repos',
+    {
+      per_page: 10,
+      page: 1
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN || ''}`
+      }
+    }
+  );
+});
+const { pending, data, error, refresh } = asyncData;
 
 const limit = computed(() => page.value * 20);
 const dataList = computed(() => {
@@ -108,8 +120,22 @@ const dataList = computed(() => {
   return _dataList;
 });
 
+watch(
+  () => pending,
+  (newPadding) => {
+    nuxtApp.$store.system.setLoading(newPadding);
+  }
+);
+watch(
+  () => data,
+  (newData) => {
+    console.log({ newData });
+  }
+);
+
 async function handleRefresh(done) {
   if (
+    pending === true ||
     refreshLoading.value === true ||
     infinityLoading.value === true ||
     nuxtApp.$store.system.loading === true
