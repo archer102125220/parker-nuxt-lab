@@ -7,6 +7,9 @@
     >
       <template v-for="cardNumber in contdownCard" :key="cardNumber">
         <p
+          v-if="
+            cardNumber <= currentNumber + 3 && cardNumber >= currentNumber - 3
+          "
           class="countdown-down_enter-down_enter_up"
           :css-is-anime-start="
             isCountdownStart === true && cardNumber >= currentNumber
@@ -20,6 +23,9 @@
           {{ cardNumber }}
         </p>
         <p
+          v-if="
+            cardNumber <= currentNumber + 3 && cardNumber >= currentNumber - 3
+          "
           class="countdown-down_enter-down_enter_down"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
@@ -40,6 +46,9 @@
     >
       <template v-for="cardNumber in contdownCard" :key="cardNumber">
         <p
+          v-if="
+            cardNumber <= currentNumber + 3 && cardNumber >= currentNumber - 3
+          "
           class="countdown-up_leave-up_leave_up"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
@@ -54,6 +63,9 @@
           {{ cardNumber }}
         </p>
         <p
+          v-if="
+            cardNumber <= currentNumber + 3 && cardNumber >= currentNumber - 3
+          "
           class="countdown-up_leave-up_leave_down"
           :css-is-initial-seconds="cardNumber === initialSeconds"
           :css-is-anime-start="
