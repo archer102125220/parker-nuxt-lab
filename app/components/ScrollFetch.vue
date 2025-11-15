@@ -106,6 +106,13 @@
         {{ infinityEndLabel }}
       </p>
     </slot>
+
+    <GoTop
+      position="sticky"
+      right="unset"
+      left="90%"
+      :parent-element-trigger="true"
+    />
   </div>
 </template>
 
@@ -937,7 +944,7 @@ function windowScrollEnd(e) {
     flex-wrap: wrap;
     &-label {
       margin: auto;
-      margin-top: 50%;
+      // margin-top: 50%;
       text-align: center;
     }
   }

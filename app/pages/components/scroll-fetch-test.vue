@@ -1,8 +1,8 @@
 <template>
   <div class="scroll_fetch_test_page">
-    <form class="scroll_fetch_test_page-form" @submit.prevent="">
+    <form class="scroll_fetch_test_page-form" @submit.prevent="refresh">
       <v-radio-group
-        class="frontend_api_cach_test_page-form-http_method"
+        class="scroll_fetch_test_page-form-token_type"
         v-model="userTokenType"
       >
         <v-radio
@@ -11,25 +11,37 @@
           value="default"
         />
 
-        <div class="scroll_fetch_test_page-form-token_input">
-          <v-radio
-            color="primary"
-            label="自行輸入 GitHub Token"
-            value="input"
-          />
+        <v-radio
+          color="primary"
+          label="自行輸入GitHub Token及GitHub帳號"
+          value="input"
+        />
+        <div class="scroll_fetch_test_page-form-token_type-input_block">
           <v-text-field
             clearable
             label="GitHub Token"
+            class="scroll_fetch_test_page-form-token_type-input_block-token"
+            v-model="userInputToken"
+            :disabled="userTokenType !== 'input'"
+          />
+          <v-text-field
+            clearable
+            label="GitHub帳號"
+            v-model="userInputAccount"
+            class="scroll_fetch_test_page-form-token_type-input_block-account"
             :disabled="userTokenType !== 'input'"
           />
         </div>
       </v-radio-group>
+
+      <v-btn block color="primary" type="submit">重新載入</v-btn>
     </form>
 
     <v-checkbox
       label="停用user-select"
       color="primary"
       :value="true"
+      class="scroll_fetch_test_page-user_select_disabled"
       v-model="userSelect"
     />
 
@@ -37,24 +49,50 @@
       height="85dvh"
       :ios-style="false"
       :infinity-buffer="500"
-      :refresh-disable="false"
+      :refresh-disable="true"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
       class="scroll_fetch_test_page-scroll_fetch"
       :user-select-none="userSelect"
       :infinity-end="infinityEnd"
-      :loading="$store.system.loading"
+      :is-empty="displayDataList.length <= 0"
+      :loading="pending"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
     >
       <div class="scroll_fetch_test_page-scroll_fetch-content">
-        <p
-          v-for="displayData in displayDataList"
+        <div
+          v-for="(displayData, index) in displayDataList"
           :key="displayData.id"
           class="scroll_fetch_test_page-scroll_fetch-content-item"
         >
-          {{ displayData.full_name }}
-        </p>
+          <p class="scroll_fetch_test_page-scroll_fetch-content-item-number">
+            No.{{ index + 1 }}
+          </p>
+          <!-- <p class="scroll_fetch_test_page-scroll_fetch-content-item-full_name">
+            {{ displayData.full_name }}
+          </p> -->
+          <p class="scroll_fetch_test_page-scroll_fetch-content-item-name">
+            respo名稱: {{ displayData.name }}
+          </p>
+          <p
+            class="scroll_fetch_test_page-scroll_fetch-content-item-description"
+          >
+            repo描述: {{ displayData.description }}
+          </p>
+          <div
+            class="scroll_fetch_test_page-scroll_fetch-content-item-html_link"
+          >
+            <p>repo連結:</p>
+            <a
+              class="scroll_fetch_test_page-scroll_fetch-content-item-html_link-repo_link"
+              target="_blank"
+              :href="displayData.html_url"
+            >
+              {{ displayData.html_url }}
+            </a>
+          </div>
+        </div>
       </div>
     </ScrollFetch>
   </div>
@@ -82,14 +120,13 @@ visibility,篩選可見性,"all, public, private"
 per_page,每頁顯示數量,1 到 100，預設是 30
 */
 
-const userSelect = ref(false);
-const refreshLoading = ref(false);
 const displayDataList = useState('scrollFetchTestDisplayDataList', () => []);
 const infinityEnd = useState('scrollFetchTestInfinityEnd', () => false);
-const infinityLoading = ref(false);
+const page = ref(1);
 const userTokenType = ref('default');
 const userInputToken = ref('');
-const page = ref(1);
+const userInputAccount = ref('');
+const userSelect = ref(false);
 
 const asyncData = await useAsyncData('scroll_fetch_test', async function () {
   const { $request } = useNuxtApp();
@@ -97,12 +134,16 @@ const asyncData = await useAsyncData('scroll_fetch_test', async function () {
     userTokenType.value === 'default'
       ? import.meta.env.VITE_GITHUB_TOKEN || ''
       : userInputToken.value;
+  const account =
+    userTokenType.value === 'default'
+      ? import.meta.env.VITE_GITHUB_ACCOUNT || ''
+      : userInputAccount.value;
 
   if (typeof token !== 'string' || token === '') {
     throw new Error('invalid token');
   }
   const response = await $request.get(
-    'https://api.github.com/user/repos',
+    `https://api.github.com/users/${account}/repos`,
     {
       per_page: 10,
       page: page.value
@@ -135,16 +176,6 @@ const asyncData = await useAsyncData('scroll_fetch_test', async function () {
   }
 
   const headersLink = response.headers?.link || '';
-  console.log(
-    {
-      headersLink,
-      ["headersLink.split(',')"]: headersLink.split(',')
-    },
-    headersLink.split(',').some((linkString) => {
-      console.log({ linkString });
-      return linkString.includes('rel="next"');
-    })
-  );
 
   infinityEnd.value =
     headersLink
@@ -156,24 +187,30 @@ const asyncData = await useAsyncData('scroll_fetch_test', async function () {
 const { pending, data, error, refresh, execute } = asyncData;
 
 watch(
-  () => pending,
+  () => pending.value,
   (newPadding) => {
     nuxtApp.$store.system.setLoading(newPadding);
   }
 );
 
+watch(
+  () => error.value,
+  (newError) => {
+    if (typeof newError === 'object' && newError !== null) {
+      console.error(newError);
+
+      displayDataList.value = [];
+      infinityEnd.value = true;
+    }
+  }
+);
+
 async function handleRefresh(done) {
-  if (
-    pending === true ||
-    refreshLoading.value === true ||
-    infinityLoading.value === true ||
-    nuxtApp.$store.system.loading === true
-  ) {
+  if (pending === true || nuxtApp.$store.system.loading === true) {
     done();
     return;
   }
 
-  refreshLoading.value = true;
   nuxtApp.$store.system.setLoading(true);
 
   page.value = 1;
@@ -182,19 +219,13 @@ async function handleRefresh(done) {
 
   done();
   nuxtApp.$store.system.setLoading(false);
-  refreshLoading.value = false;
 }
 async function handleInfinityFetch(done) {
-  if (
-    refreshLoading.value === true ||
-    infinityLoading.value === true ||
-    nuxtApp.$store.system.loading === true
-  ) {
+  if (pending === true || nuxtApp.$store.system.loading === true) {
     done();
     return;
   }
 
-  infinityLoading.value = true;
   nuxtApp.$store.system.setLoading(true);
 
   page.value = page.value + 1;
@@ -202,21 +233,65 @@ async function handleInfinityFetch(done) {
 
   done();
   nuxtApp.$store.system.setLoading(false);
-  infinityLoading.value = false;
 }
 </script>
 
 <style lang="scss" scoped>
 .scroll_fetch_test_page {
   // height: 100dvh;
+
+  :deep(.v-input__details) {
+    display: none;
+  }
+
+  &-form {
+    // class="scroll_fetch_test_page-form-token_type-input_block-token"
+
+    &-token_type {
+      &-input_block {
+        display: flex;
+        gap: 16px;
+
+        &-token {
+          flex: 1;
+          margin-bottom: 16px;
+        }
+        &-account {
+          flex: 1;
+          margin-bottom: 16px;
+        }
+      }
+    }
+  }
+  &-user_select_disabled {
+    margin-bottom: 16px;
+  }
+
   &-scroll_fetch {
-    background-color: #fff;
+    margin-top: 16px;
+    padding-top: 16px;
+
+    background-color: #f7f7f7;
 
     &-content {
-      // background-color: #fff;
       // min-height: 100dvh;
+
       &-item {
-        height: 200px;
+        // height: 200px;
+        margin: 0 8px;
+        margin-bottom: 16px;
+        padding: 8px;
+
+        border: 1px solid #afafaf;
+        border-radius: 10px;
+
+        word-break: break-all;
+
+        &-html_link {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
       }
     }
   }
