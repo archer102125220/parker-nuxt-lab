@@ -5,8 +5,6 @@
         class="frontend_api_cach_test_page-form-http_method"
         v-model="userTokenType"
       >
-        <v-radio color="primary" label="前端模擬" value="fake" />
-
         <v-radio
           color="primary"
           label="使用專案設定GitHub Token"
@@ -36,25 +34,26 @@
     />
 
     <ScrollFetch
-      :ios-style="false"
-      :refresh-disable="false"
       height="85dvh"
+      :ios-style="false"
+      :infinity-buffer="500"
+      :refresh-disable="false"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-      :infinity-buffer="500"
+      class="scroll_fetch_test_page-scroll_fetch"
       :user-select-none="userSelect"
       :infinity-end="infinityEnd"
       :loading="$store.system.loading"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
     >
-      <div class="scroll_fetch_test_page-content">
+      <div class="scroll_fetch_test_page-scroll_fetch-content">
         <p
-          v-for="(data, index) in dataList"
-          :key="index"
-          class="scroll_fetch_test_page-content-text"
+          v-for="displayData in displayDataList"
+          :key="displayData.id"
+          class="scroll_fetch_test_page-scroll_fetch-content-item"
         >
-          {{ data }}
+          {{ displayData.full_name }}
         </p>
       </div>
     </ScrollFetch>
@@ -62,6 +61,7 @@
 </template>
 
 <script setup>
+import _cloneDeep from 'lodash/cloneDeep';
 useHeadMataData({
   title: '自製下拉重整及無限滾動測試'
 });
@@ -84,52 +84,81 @@ per_page,每頁顯示數量,1 到 100，預設是 30
 
 const userSelect = ref(false);
 const refreshLoading = ref(false);
+const displayDataList = useState('scrollFetchTestDisplayDataList', () => []);
+const infinityEnd = useState('scrollFetchTestInfinityEnd', () => false);
 const infinityLoading = ref(false);
-const infinityEnd = ref(false);
 const userTokenType = ref('default');
+const userInputToken = ref('');
 const page = ref(1);
 
-const asyncData = await useAsyncData('scroll_fetch_test', () => {
+const asyncData = await useAsyncData('scroll_fetch_test', async function () {
   const { $request } = useNuxtApp();
-  return $request.get(
+  const token =
+    userTokenType.value === 'default'
+      ? import.meta.env.VITE_GITHUB_TOKEN || ''
+      : userInputToken.value;
+
+  if (typeof token !== 'string' || token === '') {
+    throw new Error('invalid token');
+  }
+  const response = await $request.get(
     'https://api.github.com/user/repos',
     {
       per_page: 10,
-      page: 1
+      page: page.value
     },
     {
       headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN || ''}`
+        Authorization: `Bearer ${token}`
+      },
+      responseSetting: {
+        returnRawResponse: true
       }
     }
   );
-});
-const { pending, data, error, refresh } = asyncData;
 
-const limit = computed(() => page.value * 20);
-const dataList = computed(() => {
-  const _dataList = [];
-  for (let i = 0; i <= page.value * limit.value; i++) {
-    _dataList.push(i);
-    // let data = '';
-    // for (let j = i; j >= 0; j--) {
-    //   data += j;
-    // }
-    // _dataList.push(data);
+  if (page.value === 1) {
+    displayDataList.value = response?.data || [];
+  } else {
+    const newDisplayDataList = [
+      ..._cloneDeep(displayDataList.value),
+      ...(response?.data || [])
+    ];
+
+    console.log({
+      newDisplayDataList,
+      displayDataList: displayDataList.value,
+      response
+    });
+
+    displayDataList.value = newDisplayDataList;
   }
-  return _dataList;
+
+  const headersLink = response.headers?.link || '';
+  console.log(
+    {
+      headersLink,
+      ["headersLink.split(',')"]: headersLink.split(',')
+    },
+    headersLink.split(',').some((linkString) => {
+      console.log({ linkString });
+      return linkString.includes('rel="next"');
+    })
+  );
+
+  infinityEnd.value =
+    headersLink
+      .split(',')
+      .some((linkString) => linkString.includes('rel="next"')) === false;
+
+  return response?.data;
 });
+const { pending, data, error, refresh, execute } = asyncData;
 
 watch(
   () => pending,
   (newPadding) => {
     nuxtApp.$store.system.setLoading(newPadding);
-  }
-);
-watch(
-  () => data,
-  (newData) => {
-    console.log({ newData });
   }
 );
 
@@ -146,20 +175,12 @@ async function handleRefresh(done) {
 
   refreshLoading.value = true;
   nuxtApp.$store.system.setLoading(true);
-  console.log('handleRefresh');
 
   page.value = 1;
-  const response = await nuxtApp.$nuxtServer.GET_scrollFetchTest(
-    { page: page.value },
-    { useCache: false, useCacheRefresh: true }
-  );
-  await new Promise((resolve) => nextTick(setTimeout(() => resolve(), 1000)));
 
-  console.log({ response });
+  await refresh();
 
-  console.log('handleRefresh setTimeout');
   done();
-  // nuxtApp.$successMessage('handleRefresh');
   nuxtApp.$store.system.setLoading(false);
   refreshLoading.value = false;
 }
@@ -175,21 +196,11 @@ async function handleInfinityFetch(done) {
 
   infinityLoading.value = true;
   nuxtApp.$store.system.setLoading(true);
-  console.log('handleInfinityFetch');
 
   page.value = page.value + 1;
-  const response = await nuxtApp.$nuxtServer.GET_scrollFetchTest(
-    { page: page.value },
-    { useCache: true, useCacheRefresh: false }
-  );
-  await new Promise((resolve) => nextTick(setTimeout(() => resolve(), 1000)));
+  await execute();
 
-  console.log({ response });
-
-  // infinityEnd.value = true;
-  console.log('handleInfinityFetch setTimeout');
   done();
-  // nuxtApp.$successMessage('handleInfinityFetch');
   nuxtApp.$store.system.setLoading(false);
   infinityLoading.value = false;
 }
@@ -198,11 +209,13 @@ async function handleInfinityFetch(done) {
 <style lang="scss" scoped>
 .scroll_fetch_test_page {
   // height: 100dvh;
-  &-content {
+  &-scroll_fetch {
     background-color: #fff;
-    &-scroll_fetch {
+
+    &-content {
+      // background-color: #fff;
       // min-height: 100dvh;
-      &-text {
+      &-item {
         height: 200px;
       }
     }

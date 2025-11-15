@@ -9,8 +9,6 @@
     }"
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
-    @mouseup="handlePullEnd"
-    @mouseover.self="handlePullEnd"
     @touchstart="handlePullStart"
     @touchmove="handlePulling"
     @touchend="handlePullEnd"
@@ -82,6 +80,7 @@
     <div
       v-if="isEmpty === false"
       class="scroll_fetch-container"
+      @mouseover.self="handlePullEnd"
       @transitionend="handleRefreshIcon"
     >
       <slot />
@@ -375,6 +374,7 @@ onMounted(() => {
 
   window.addEventListener('contextmenu', handlePullEnd);
   window.addEventListener('scroll', windowScroll);
+  window.addEventListener('mouseup', handlePullEnd);
 
   removeWindowScrollEnd.value = $bindScrollEnd(window, windowScrollEnd);
 
@@ -384,16 +384,28 @@ onMounted(() => {
     handleCheckScroll(props.infinityBuffer);
   }
 });
+onBeforeUnmount(() => {
+  if (
+    typeof scrollFetchRef.value?.parentElement?.removeEventListener ===
+    'function'
+  ) {
+    scrollFetchRef.value.parentElement.removeEventListener(
+      'scroll',
+      parentScroll
+    );
+  }
+
+  if (typeof removeParentScrollEnd.value === 'function') {
+    removeParentScrollEnd.value();
+  }
+});
 onUnmounted(() => {
+  window.removeEventListener('mouseup', handlePullEnd);
   window.removeEventListener('contextmenu', handlePullEnd);
   window.removeEventListener('scroll', windowScroll);
 
   if (typeof removeWindowScrollEnd.value === 'function') {
     removeWindowScrollEnd.value();
-  }
-
-  if (typeof removeParentScrollEnd.value === 'function') {
-    removeParentScrollEnd.value();
   }
 
   if (
@@ -494,7 +506,7 @@ async function handleInfinityFetch() {
 }
 
 function handlePullStart(e) {
-  console.log({ e });
+  // console.log({ e });
   if (
     (windowIsScrollIng.value === true && windowScrollIsTop.value === false) ||
     (parentIsScrollIng.value === true && parentScrollIsTop.value === false) ||
@@ -552,7 +564,7 @@ function handlePulling(e) {
   ) {
     return;
   }
-  console.log({ e });
+  // console.log({ e });
   // const scrollTop =
   //   scrollFetchRef.value?.scrollTop ||
   //   document.body?.scrollTop ||
@@ -604,7 +616,7 @@ function handlePulling(e) {
 }
 async function handlePullEnd(e) {
   if (isPullStart.value === false) return;
-  console.log({ e });
+  // console.log({ e });
 
   isPullStart.value = false;
   startY.value = 0;

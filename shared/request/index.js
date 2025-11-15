@@ -221,14 +221,20 @@ export function request(
         indexes: null
       },
       ...params,
-      ...extendOption
+      ...extendOption,
+      responseSetting: {
+        returnRawResponse: false,
+        ...(extendOption?.responseSetting || {})
+      }
       // withCredentials: true,
     })
     .then((response) => {
-      const { config, data } = response;
+      const { config, data, headers } = response;
+      const { responseSetting } = config || {};
+
       let params = config.params;
       const configData = config.data;
-      if (configData && typeof configData === 'string') {
+      if (typeof configData === 'string') {
         try {
           params = JSON.parse(configData);
         } catch (error) {
@@ -238,6 +244,14 @@ export function request(
         params = configData;
       }
       CancelRequest.removeRequestCanceler(config.method, config.url, params);
+
+      if (responseSetting?.returnRawResponse === true) {
+        return response;
+      }
+
+      if (responseSetting?.returnHeaders === true) {
+        data.responseHeaders = headers;
+      }
       return data;
     })
     .catch(async (error) => {
