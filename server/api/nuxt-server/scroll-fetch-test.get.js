@@ -1,6 +1,6 @@
 /**
  * @openapi
- * /nuxt-server/scroll-fetch-test:
+ * /nuxt-server/scroll-fetch:
  *    get:
  *      description: 滾動載入測試
  *      parameters:
@@ -41,7 +41,7 @@
  * 用於測試前端滾動載入功能的 GET 端點
  * 回傳請求中的查詢參數，用於驗證滾動載入行為
  * 
- * @api {GET} /api/nuxt-server/scroll-fetch-test 滾動載入測試
+ * @api {GET} /api/nuxt-server/scroll-fetch 滾動載入測試
  * @apiGroup Test
  * @apiName ScrollFetchTestGet
  * 
@@ -53,7 +53,7 @@
  * 
  * @example
  * // 請求範例
- * GET /api/nuxt-server/scroll-fetch-test?page=1&limit=20
+ * GET /api/nuxt-server/scroll-fetch?page=1&limit=20
  * 
  * @example
  * // 成功回應範例
@@ -69,7 +69,7 @@
  * 通常配合前端的分頁或無限滾動組件使用
  */
 export default defineEventHandler((event) => {
-  console.log('api:scroll-fetch-test.get');
+  console.log('api:scroll-fetch.get');
 
   const query = getQuery(event);
   return { query };

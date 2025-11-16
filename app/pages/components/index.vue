@@ -57,7 +57,7 @@ const linkList = computed(() => [
     label: t('components.tab')
   },
   {
-    to: localePath('/components/scroll-fetch-test'),
+    to: localePath('/components/scroll-fetch'),
     // label: '下拉重載/無限滾動測試',
     label: t('components.scroll_fetch')
   },

@@ -40,11 +40,11 @@ export function GET_aboutContent(payload, extendOption) {
 export function GET_scrollFetchTest(payload = {}, extendOption) {
   const { $request } = useNuxtApp();
 
-  return $request.get(`${prefix}/scroll-fetch-test`, payload, extendOption);
+  return $request.get(`${prefix}/scroll-fetch`, payload, extendOption);
 }
 
 export function POST_scrollFetchTest(payload = {}, extendOption) {
   const { $request } = useNuxtApp();
 
-  return $request.post(`${prefix}/scroll-fetch-test`, payload, extendOption);
+  return $request.post(`${prefix}/scroll-fetch`, payload, extendOption);
 }

@@ -1,6 +1,6 @@
 /**
  * @openapi
- * /nuxt-server/scroll-fetch-test:
+ * /nuxt-server/scroll-fetch:
  *    post:
  *      description: 滾動載入測試
  *      parameters:
@@ -61,7 +61,7 @@
  * 用於測試前端滾動載入功能的 POST 端點
  * 回傳請求中的查詢參數和請求體，用於驗證滾動載入行為
  * 
- * @api {POST} /api/nuxt-server/scroll-fetch-test 滾動載入測試
+ * @api {POST} /api/nuxt-server/scroll-fetch 滾動載入測試
  * @apiGroup Test
  * @apiName ScrollFetchTestPost
  * 
@@ -75,7 +75,7 @@
  * 
  * @example
  * // 請求範例
- * POST /api/nuxt-server/scroll-fetch-test?page=2&limit=15
+ * POST /api/nuxt-server/scroll-fetch?page=2&limit=15
  * Content-Type: application/json
  * {
  *   "filter": {
@@ -104,7 +104,7 @@
  * 支援 POST 請求以處理複雜的篩選條件或資料查詢
  */
 export default defineEventHandler(async (event) => {
-  console.log('api:scroll-fetch-test.post');
+  console.log('api:scroll-fetch.post');
 
   const payload = await readBody(event);
   const query = getQuery(event);

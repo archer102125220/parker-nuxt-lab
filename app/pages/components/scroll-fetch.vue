@@ -3,7 +3,7 @@
     <div class="scroll_fetch_test_page-description">
       <a
         target="_blank"
-        href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/pages/components/scroll-fetch-test.vue"
+        href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/pages/components/scroll-fetch.vue"
       >
         本頁GitHub
       </a>
