@@ -108,6 +108,7 @@
     </slot>
 
     <GoTop
+      v-if="hasGoTop === true"
       position="sticky"
       right="unset"
       left="90%"
@@ -151,7 +152,9 @@ const props = defineProps({
   scrollEndWait: { type: Number, default: 100 },
   infinityTimeout: { type: Number, default: null },
   scrollTop: { type: Number, default: null },
-  userSelectNone: { type: Boolean, default: false }
+  userSelectNone: { type: Boolean, default: false },
+  hasGoTop: { type: Boolean, default: false },
+  isMobile: { type: Boolean, default: true }
 });
 const emit = defineEmits([
   'refresh',
@@ -368,19 +371,62 @@ const handleSyncScroll = _debounce(function (newScrollTop) {
   }
 }, 50);
 
+watch(
+  () => props.isMobile,
+  (newIsMobile) => {
+    console.log({ newIsMobile });
+    if (newIsMobile === true) {
+      scrollFetchRef.value.parentElement.addEventListener(
+        'scroll',
+        parentScroll
+      );
+      removeParentScrollEnd.value = $bindScrollEnd(
+        scrollFetchRef.value.parentElement,
+        parentScrollEnd
+      );
+
+      window.addEventListener('scroll', windowScroll);
+    } else if (newIsMobile === false) {
+      if (
+        typeof scrollFetchRef.value?.parentElement?.removeEventListener ===
+        'function'
+      ) {
+        scrollFetchRef.value.parentElement.removeEventListener(
+          'scroll',
+          parentScroll
+        );
+      }
+
+      if (typeof removeParentScrollEnd.value === 'function') {
+        removeParentScrollEnd.value();
+      }
+
+      window.removeEventListener('scroll', windowScroll);
+    }
+  }
+);
+
 onMounted(() => {
-  if (
-    typeof scrollFetchRef.value?.parentElement?.addEventListener === 'function'
-  ) {
-    scrollFetchRef.value.parentElement.addEventListener('scroll', parentScroll);
-    removeParentScrollEnd.value = $bindScrollEnd(
-      scrollFetchRef.value.parentElement,
-      parentScrollEnd
-    );
+  console.log({ ['props.isMobile']: props.isMobile });
+  if (props.isMobile === true) {
+    if (
+      typeof scrollFetchRef.value?.parentElement?.addEventListener ===
+      'function'
+    ) {
+      scrollFetchRef.value.parentElement.addEventListener(
+        'scroll',
+        parentScroll
+      );
+      removeParentScrollEnd.value = $bindScrollEnd(
+        scrollFetchRef.value.parentElement,
+        parentScrollEnd
+      );
+    }
+
+    window.addEventListener('scroll', windowScroll);
   }
 
   window.addEventListener('contextmenu', handlePullEnd);
-  window.addEventListener('scroll', windowScroll);
   window.addEventListener('mouseup', handlePullEnd);
 
   removeWindowScrollEnd.value = $bindScrollEnd(window, windowScrollEnd);
@@ -393,8 +439,9 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
   if (
+    props.isMobile === true &&
     typeof scrollFetchRef.value?.parentElement?.removeEventListener ===
-    'function'
+      'function'
   ) {
     scrollFetchRef.value.parentElement.removeEventListener(
       'scroll',
@@ -402,14 +449,19 @@ onBeforeUnmount(() => {
     );
   }
 
-  if (typeof removeParentScrollEnd.value === 'function') {
+  if (
+    props.isMobile === true &&
+    typeof removeParentScrollEnd.value === 'function'
+  ) {
     removeParentScrollEnd.value();
   }
 });
 onUnmounted(() => {
   window.removeEventListener('mouseup', handlePullEnd);
   window.removeEventListener('contextmenu', handlePullEnd);
-  window.removeEventListener('scroll', windowScroll);
+  if (props.isMobile === true) {
+    window.removeEventListener('scroll', windowScroll);
+  }
 
   if (typeof removeWindowScrollEnd.value === 'function') {
     removeWindowScrollEnd.value();

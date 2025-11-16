@@ -1,7 +1,22 @@
 <template>
   <div class="scroll_fetch_test_page">
-    <form class="scroll_fetch_test_page-form" @submit.prevent="refresh">
+    <div class="scroll_fetch_test_page-description">
+      <a
+        target="_blank"
+        href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/pages/components/scroll-fetch-test.vue"
+      >
+        本頁GitHub
+      </a>
+      <a
+        target="_blank"
+        href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/components/ScrollFetch.vue"
+      >
+        本組件GitHub
+      </a>
+    </div>
+    <form class="scroll_fetch_test_page-form" @submit.prevent="handleRefresh">
       <v-radio-group
+        inline
         class="scroll_fetch_test_page-form-token_type"
         v-model="userTokenType"
       >
@@ -11,27 +26,35 @@
           value="default"
         />
 
+        <v-radio color="primary" label="自行輸入GitHub Token" value="input" />
+        <v-text-field
+          clearable
+          label="GitHub Token"
+          class="scroll_fetch_test_page-form-token_type-token_input"
+          v-model="userInputToken"
+          :disabled="userTokenType !== 'input'"
+        />
+      </v-radio-group>
+
+      <v-radio-group
+        class="scroll_fetch_test_page-form-account_type"
+        inline
+        v-model="userAccountType"
+      >
         <v-radio
           color="primary"
-          label="自行輸入GitHub Token及GitHub帳號"
-          value="input"
+          label="使用專案設定GitHub 帳號"
+          value="default"
         />
-        <div class="scroll_fetch_test_page-form-token_type-input_block">
-          <v-text-field
-            clearable
-            label="GitHub Token"
-            class="scroll_fetch_test_page-form-token_type-input_block-token"
-            v-model="userInputToken"
-            :disabled="userTokenType !== 'input'"
-          />
-          <v-text-field
-            clearable
-            label="GitHub帳號"
-            v-model="userInputAccount"
-            class="scroll_fetch_test_page-form-token_type-input_block-account"
-            :disabled="userTokenType !== 'input'"
-          />
-        </div>
+
+        <v-radio color="primary" label="自行輸入GitHub帳號" value="input" />
+        <v-text-field
+          clearable
+          label="GitHub帳號"
+          v-model="userInputAccount"
+          class="scroll_fetch_test_page-form-account_type-account_input"
+          :disabled="userAccountType !== 'input'"
+        />
       </v-radio-group>
 
       <v-btn block color="primary" type="submit">重新載入</v-btn>
@@ -45,17 +68,26 @@
       v-model="userSelect"
     />
 
+    <v-checkbox
+      label="停用下拉重整"
+      color="primary"
+      :value="true"
+      class="scroll_fetch_test_page-pull_Refresh_disabled"
+      v-model="pullRefeshDisabled"
+    />
+
     <ScrollFetch
       height="85dvh"
       :ios-style="false"
       :infinity-buffer="500"
-      :refresh-disable="true"
+      :refresh-disable="pullRefeshDisabled"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
       class="scroll_fetch_test_page-scroll_fetch"
       :user-select-none="userSelect"
       :infinity-end="infinityEnd"
       :is-empty="displayDataList.length <= 0"
+      :is-mobile="$store.system.isMobile"
       :loading="pending"
       @refresh="handleRefresh"
       @infinityFetch="handleInfinityFetch"
@@ -125,8 +157,10 @@ const infinityEnd = useState('scrollFetchTestInfinityEnd', () => false);
 const page = ref(1);
 const userTokenType = ref('default');
 const userInputToken = ref('');
+const userAccountType = ref('default');
 const userInputAccount = ref('');
 const userSelect = ref(false);
+const pullRefeshDisabled = ref(false);
 
 const asyncData = await useAsyncData('scroll_fetch_test', async function () {
   const { $request } = useNuxtApp();
@@ -135,13 +169,18 @@ const asyncData = await useAsyncData('scroll_fetch_test', async function () {
       ? import.meta.env.VITE_GITHUB_TOKEN || ''
       : userInputToken.value;
   const account =
-    userTokenType.value === 'default'
+    userAccountType.value === 'default'
       ? import.meta.env.VITE_GITHUB_ACCOUNT || ''
       : userInputAccount.value;
 
   if (typeof token !== 'string' || token === '') {
     throw new Error('invalid token');
   }
+
+  if (typeof account !== 'string' || account === '') {
+    throw new Error('invalid account');
+  }
+
   const response = await $request.get(
     `https://api.github.com/users/${account}/repos`,
     {
@@ -165,12 +204,6 @@ const asyncData = await useAsyncData('scroll_fetch_test', async function () {
       ..._cloneDeep(displayDataList.value),
       ...(response?.data || [])
     ];
-
-    console.log({
-      newDisplayDataList,
-      displayDataList: displayDataList.value,
-      response
-    });
 
     displayDataList.value = newDisplayDataList;
   }
@@ -199,6 +232,16 @@ watch(
     if (typeof newError === 'object' && newError !== null) {
       console.error(newError);
 
+      if (typeof newError?.message === 'string') {
+        if (newError.message === 'invalid token') {
+          nuxtApp.$warningMessage('請輸入有效token');
+        } else if (newError.message === 'invalid account') {
+          nuxtApp.$warningMessage('請輸入有效GitHub帳號');
+        } else {
+          nuxtApp.$errorMessage(newError.message);
+        }
+      }
+
       displayDataList.value = [];
       infinityEnd.value = true;
     }
@@ -207,7 +250,7 @@ watch(
 
 async function handleRefresh(done) {
   if (pending === true || nuxtApp.$store.system.loading === true) {
-    done();
+    if (typeof done === 'function') done();
     return;
   }
 
@@ -217,12 +260,12 @@ async function handleRefresh(done) {
 
   await refresh();
 
-  done();
+  if (typeof done === 'function') done();
   nuxtApp.$store.system.setLoading(false);
 }
 async function handleInfinityFetch(done) {
   if (pending === true || nuxtApp.$store.system.loading === true) {
-    done();
+    if (typeof done === 'function') done();
     return;
   }
 
@@ -231,7 +274,7 @@ async function handleInfinityFetch(done) {
   page.value = page.value + 1;
   await execute();
 
-  done();
+  if (typeof done === 'function') done();
   nuxtApp.$store.system.setLoading(false);
 }
 </script>
@@ -244,26 +287,31 @@ async function handleInfinityFetch(done) {
     display: none;
   }
 
+  &-description {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
   &-form {
     // class="scroll_fetch_test_page-form-token_type-input_block-token"
 
     &-token_type {
-      &-input_block {
-        display: flex;
-        gap: 16px;
+      &-token_input {
+        flex: 1;
+        margin-bottom: 16px;
+      }
+    }
 
-        &-token {
-          flex: 1;
-          margin-bottom: 16px;
-        }
-        &-account {
-          flex: 1;
-          margin-bottom: 16px;
-        }
+    &-account_type {
+      &-account_input {
+        flex: 1;
+        margin-bottom: 16px;
       }
     }
   }
-  &-user_select_disabled {
+
+  &-pull_Refresh_disabled {
     margin-bottom: 16px;
   }
 
