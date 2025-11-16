@@ -29,7 +29,7 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'script-src-attr': ["'none'"],
   // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
-  'connect-src': ["'self'", 'https://assets.vercel.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com', 'https://*.google-analytics.com', 'https://*.googleapis.com'],
+  'connect-src': ["'self'", 'https://assets.vercel.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com', 'https://*.google-analytics.com', 'https://*.googleapis.com', 'https://api.github.com'],
   'frame-ancestors': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
   'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
   'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
@@ -219,6 +219,7 @@ export default defineNuxtConfig({
     ]
   },
   modules: [
+    '@nuxt/eslint',
     '@pinia/nuxt',
     (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) =>

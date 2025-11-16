@@ -1,4 +1,6 @@
-module.exports = {
+import withNuxt from './.nuxt/eslint.config.mjs'
+
+export default withNuxt({
   parserOptions: {
     parser: '@babel/eslint-parser',
     requireConfigFile: false,
@@ -8,13 +10,11 @@ module.exports = {
       }
     }
   },
-  extends: ['@nuxtjs/eslint-config', 'plugin:vue/vue3-recommended', 'prettier'],
+  extends: ['prettier'],
   env: {
     browser: true,
     node: true
   },
-  plugins: ['vue'],
-  ignorePatterns: ['.eslintrc.js'],
   rules: {
     'vue/no-deprecated-destroyed-lifecycle': 1,
     'vue/no-v-for-template-key-on-child': 0,
@@ -297,4 +297,4 @@ module.exports = {
     useAsyncDataError: false,
     useBeforeunload: false
   }
-};
+});
