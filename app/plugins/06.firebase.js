@@ -47,7 +47,7 @@ export default defineNuxtPlugin({
     },
     // async 'service-worker:activated'(serviceWorkerActivatedEvent) {
     async 'service-worker:activated'() {
-      const { $store, $successMessage, $infoMessage, $pwa, $Firebase } = useNuxtApp();
+      const { $store, $successMessage, $infoMessage, $pwa, $Firebase, $firebaseFirestoreUpdate } = useNuxtApp();
 
       watchEffect(() => {
         if ($pwa.swActivated === false) {
@@ -83,7 +83,7 @@ export default defineNuxtPlugin({
       await $Firebase.appInit();
 
       $store.system.setFirebaseCroeInited(true);
-      nuxtApp.$firebaseFirestoreUpdate($Firebase.store);
+      $firebaseFirestoreUpdate($Firebase.store);
 
       // console.log({ serviceWorkerActivatedEvent, $pwa: _cloneDeep($pwa) });
     },
