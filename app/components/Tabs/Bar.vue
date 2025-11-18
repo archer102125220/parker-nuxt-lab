@@ -1503,14 +1503,14 @@ function handleCustomKeepScrollStep(
   }
 
   &-option_list {
-    flex: 1;
+    // flex: 1;
     min-width: var(--tab_bar_min_width);
     position: relative;
     display: flex;
     // flex-direction: row;
     flex-direction: var(--tab_flex_direction);
     flex-wrap: nowrap;
-    justify-content: var(--tab_bar_justify_content, flex-start);
+    // justify-content: var(--tab_bar_justify_content, flex-start);
     // gap: var(--tab_gap);
     // align-items: center;
     align-items: var(--tab_bar_align_items, cneter);

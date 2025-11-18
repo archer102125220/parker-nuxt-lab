@@ -673,6 +673,13 @@ function handleDragEnd(e) {
 
         background-color: #fff;
 
+        &:after {
+          content: '';
+
+          border-radius: 8px;
+
+          background-color: #e4e4e4;
+        }
         &[css-is-vertical='true'] {
           width: 100%;
           height: 20px;
@@ -684,13 +691,8 @@ function handleDragEnd(e) {
             top: 0px;
           }
           &:after {
-            content: '';
-
             width: 31px;
             height: 3px;
-            border-radius: 8px;
-
-            background-color: #e4e4e4;
           }
         }
         &[css-is-horizontal='true'] {
@@ -708,13 +710,8 @@ function handleDragEnd(e) {
             left: 0px;
           }
           &:after {
-            content: '';
-
             width: 3px;
             height: 31px;
-            border-radius: 8px;
-
-            background-color: #e4e4e4;
           }
         }
       }
