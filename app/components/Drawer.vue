@@ -400,6 +400,9 @@ function handleOpen() {
   }
   opacityTrigger.value = true;
   animationReverse.value = false;
+
+  emits('change', true);
+  emits('update:modelValue', true);
 }
 
 function handleClose() {
