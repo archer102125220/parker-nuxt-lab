@@ -1,6 +1,14 @@
 <template>
   <div class="skeleton_loader_page">
-    <SkeletonLoader :loading="true" class="skeleton_loader_page-skeleton" />
+    <v-checkbox
+      v-model="loading"
+      :value="true"
+      color="primary"
+      label="開啟載入中狀態"
+    />
+    <SkeletonLoader :loading="loading" class="skeleton_loader_page-skeleton">
+      <p>載入完成區塊</p>
+    </SkeletonLoader>
   </div>
 </template>
 
@@ -8,6 +16,7 @@
 useHeadMataData({
   title: 'skeleton組件'
 });
+const loading = ref(true);
 </script>
 
 <style lang="scss" scoped>
