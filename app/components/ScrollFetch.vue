@@ -376,6 +376,11 @@ watch(
   (newIsMobile) => {
     console.log({ newIsMobile });
     if (newIsMobile === true) {
+      const htmlDom = document.querySelector('html');
+      if (htmlDom) {
+        htmlDom.style.setProperty('--root_overscroll_behavior', 'none');
+      }
+
       scrollFetchRef.value.parentElement.addEventListener(
         'scroll',
         parentScroll
@@ -387,6 +392,12 @@ watch(
 
       window.addEventListener('scroll', windowScroll);
     } else if (newIsMobile === false) {
+      const htmlDom = document.querySelector('html');
+      if (htmlDom) {
+        htmlDom.style.setProperty('--root_overscroll_behavior', '');
+        htmlDom.style.removeProperty('--root_overscroll_behavior');
+      }
+
       if (
         typeof scrollFetchRef.value?.parentElement?.removeEventListener ===
         'function'
@@ -409,6 +420,11 @@ watch(
 onMounted(() => {
   console.log({ ['props.isMobile']: props.isMobile });
   if (props.isMobile === true) {
+    const htmlDom = document.querySelector('html');
+    if (htmlDom) {
+      htmlDom.style.setProperty('--root_overscroll_behavior', 'none');
+    }
+
     if (
       typeof scrollFetchRef.value?.parentElement?.addEventListener ===
       'function'
@@ -438,22 +454,26 @@ onMounted(() => {
   }
 });
 onBeforeUnmount(() => {
-  if (
-    props.isMobile === true &&
-    typeof scrollFetchRef.value?.parentElement?.removeEventListener ===
-      'function'
-  ) {
-    scrollFetchRef.value.parentElement.removeEventListener(
-      'scroll',
-      parentScroll
-    );
-  }
+  if (props.isMobile === true) {
+    const htmlDom = document.querySelector('html');
+    if (htmlDom) {
+      htmlDom.style.setProperty('--root_overscroll_behavior', '');
+      htmlDom.style.removeProperty('--root_overscroll_behavior');
+    }
 
-  if (
-    props.isMobile === true &&
-    typeof removeParentScrollEnd.value === 'function'
-  ) {
-    removeParentScrollEnd.value();
+    if (
+      typeof scrollFetchRef.value?.parentElement?.removeEventListener ===
+      'function'
+    ) {
+      scrollFetchRef.value.parentElement.removeEventListener(
+        'scroll',
+        parentScroll
+      );
+    }
+
+    if (typeof removeParentScrollEnd.value === 'function') {
+      removeParentScrollEnd.value();
+    }
   }
 });
 onUnmounted(() => {
@@ -876,6 +896,9 @@ function windowScrollEnd(e) {
 </script>
 
 <style lang="scss">
+html {
+  overscroll-behavior: var(--root_overscroll_behavior);
+}
 .scroll_fetching {
   overflow: hidden;
 
