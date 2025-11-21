@@ -1,5 +1,20 @@
 <template>
-  <div class="scroll_fetch_test_page">
+  <ScrollFetch
+    height="85dvh"
+    :ios-style="false"
+    :infinity-buffer="500"
+    :refresh-disable="pullRefeshDisabled"
+    refresh-icon="/img/icon/refresh/refresh-icon.svg"
+    refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
+    :user-select-none="userSelect"
+    :infinity-end="infinityEnd"
+    :is-empty="displayDataList.length <= 0"
+    :is-mobile="$store.system.isMobile"
+    :loading="pending"
+    @refresh="handleRefresh"
+    @infinityFetch="handleInfinityFetch"
+    class="scroll_fetch_test_page"
+  >
     <div class="scroll_fetch_test_page-description">
       <a
         target="_blank"
@@ -76,48 +91,29 @@
       v-model="pullRefeshDisabled"
     />
 
-    <ScrollFetch
-      height="85dvh"
-      :ios-style="false"
-      :infinity-buffer="500"
-      :refresh-disable="pullRefeshDisabled"
-      refresh-icon="/img/icon/refresh/refresh-icon.svg"
-      refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-      class="scroll_fetch_test_page-scroll_fetch"
-      :user-select-none="userSelect"
-      :infinity-end="infinityEnd"
-      :is-empty="displayDataList.length <= 0"
-      :is-mobile="$store.system.isMobile"
-      :loading="pending"
-      @refresh="handleRefresh"
-      @infinityFetch="handleInfinityFetch"
-    >
-      <div class="scroll_fetch_test_page-scroll_fetch-content">
+    <div class="scroll_fetch_test_page-list">
+      <div class="scroll_fetch_test_page-list-content">
         <div
           v-for="(displayData, index) in displayDataList"
           :key="displayData.id"
-          class="scroll_fetch_test_page-scroll_fetch-content-item"
+          class="scroll_fetch_test_page-list-content-item"
         >
-          <p class="scroll_fetch_test_page-scroll_fetch-content-item-number">
+          <p class="scroll_fetch_test_page-list-content-item-number">
             No.{{ index + 1 }}
           </p>
-          <!-- <p class="scroll_fetch_test_page-scroll_fetch-content-item-full_name">
+          <!-- <p class="scroll_fetch_test_page-list-content-item-full_name">
             {{ displayData.full_name }}
           </p> -->
-          <p class="scroll_fetch_test_page-scroll_fetch-content-item-name">
+          <p class="scroll_fetch_test_page-list-content-item-name">
             respo名稱: {{ displayData.name }}
           </p>
-          <p
-            class="scroll_fetch_test_page-scroll_fetch-content-item-description"
-          >
+          <p class="scroll_fetch_test_page-list-content-item-description">
             repo描述: {{ displayData.description }}
           </p>
-          <div
-            class="scroll_fetch_test_page-scroll_fetch-content-item-html_link"
-          >
+          <div class="scroll_fetch_test_page-list-content-item-html_link">
             <p>repo連結:</p>
             <a
-              class="scroll_fetch_test_page-scroll_fetch-content-item-html_link-repo_link"
+              class="scroll_fetch_test_page-list-content-item-html_link-repo_link"
               target="_blank"
               :href="displayData.html_url"
             >
@@ -126,8 +122,8 @@
           </div>
         </div>
       </div>
-    </ScrollFetch>
-  </div>
+    </div>
+  </ScrollFetch>
 </template>
 
 <script setup>
@@ -315,7 +311,7 @@ async function handleInfinityFetch(done) {
     margin-bottom: 16px;
   }
 
-  &-scroll_fetch {
+  &-list {
     margin-top: 16px;
     padding-top: 16px;
 
