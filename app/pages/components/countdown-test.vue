@@ -139,29 +139,50 @@ function handleDateDemo() {
 
   const nowDayjs = dayjs();
   const newDemoDayjs = dayjs(demoDate.value);
-  const newCountdownYear = newDemoDayjs.diff(nowDayjs, 'year');
-  const newCountdownMonth = newDemoDayjs.diff(nowDayjs, 'month');
-  const newCountdownDay = newDemoDayjs.diff(nowDayjs, 'day');
-  const newCountdownHour = newDemoDayjs.diff(nowDayjs, 'hour');
-  const newCountdownMinute = newDemoDayjs.diff(nowDayjs, 'minute');
-  const newCountdownSecond = newDemoDayjs.diff(nowDayjs, 'Second');
+
+  // Calculate the difference iteratively
+  let tempDate = nowDayjs;
+
+  // Years
+  const years = newDemoDayjs.diff(tempDate, 'year');
+  tempDate = tempDate.add(years, 'year');
+
+  // Months
+  const months = newDemoDayjs.diff(tempDate, 'month');
+  tempDate = tempDate.add(months, 'month');
+
+  // Days
+  const days = newDemoDayjs.diff(tempDate, 'day');
+  tempDate = tempDate.add(days, 'day');
+
+  // Hours
+  const hours = newDemoDayjs.diff(tempDate, 'hour');
+  tempDate = tempDate.add(hours, 'hour');
+
+  // Minutes
+  const minutes = newDemoDayjs.diff(tempDate, 'minute');
+  tempDate = tempDate.add(minutes, 'minute');
+
+  // Seconds
+  const seconds = newDemoDayjs.diff(tempDate, 'second');
 
   demoDayjs.value = newDemoDayjs;
-  // demoCountdownYear.value = newCountdownYear;
-  // demoCountdownMonth.value = newCountdownMonth;
-  // demoCountdownDay.value = newCountdownDay;
-  // demoCountdownHour.value = newCountdownHour;
-  // demoCountdownMinute.value = newCountdownMinute;
-  // demoCountdownSecond.value = newCountdownSecond;
+  demoCountdownYear.value = years;
+  demoCountdownMonth.value = months;
+  demoCountdownDay.value = days;
+  demoCountdownHour.value = hours;
+  demoCountdownMinute.value = minutes;
+  demoCountdownSecond.value = seconds;
+
   console.log({
     demoDate: demoDate.value,
     nowDayjs,
-    newCountdownYear,
-    newCountdownMonth,
-    newCountdownDay,
-    newCountdownHour,
-    newCountdownMinute,
-    newCountdownSecond
+    years,
+    months,
+    days,
+    hours,
+    minutes,
+    seconds
   });
 }
 </script>
