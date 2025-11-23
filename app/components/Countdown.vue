@@ -427,6 +427,12 @@ const COUNTDOWN_TYPE_LIST = [
   // COUNTDOWN_TYPE_FADE_VALUE
 ];
 
+const currentNumber = defineModel({
+  name: 'modelValue',
+  type: Number,
+  default: null
+});
+
 const props = defineProps({
   countdownType: {
     type: String,
@@ -440,7 +446,7 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  autoStart: {
+  isCountdownStart: {
     type: Boolean,
     default: true
   },
@@ -466,9 +472,12 @@ const props = defineProps({
     default: '#000'
   }
 });
-
-const currentNumber = ref(null);
-const isCountdownStart = ref(false);
+const emits = defineEmits([
+  'update:isCountdownStart',
+  'countdownStart',
+  'countdownStep',
+  'countdownEnd'
+]);
 
 const cssVariable = computed(() => {
   const safeCssVariable = {};
@@ -543,35 +552,45 @@ const contdownCard = computed(() => {
 
 watch(
   () => [
-    props.autoStart,
+    props.isCountdownStart,
     props.initialSeconds,
     props.endSecond,
     props.countdownType
   ],
-  async ([newAutoStart, newInitialSeconds, newEndSecond, newCountdownType]) => {
+  async ([
+    newCountdownStart,
+    newInitialSeconds,
+    newEndSecond,
+    newCountdownType
+  ]) => {
     if (
-      newAutoStart === true &&
+      newCountdownStart === true &&
       typeof newInitialSeconds === 'number' &&
       Math.abs(newInitialSeconds - newEndSecond) > 0
     ) {
-      isCountdownStart.value = false;
       currentNumber.value = newInitialSeconds;
 
       await nextTick();
-      window.requestAnimationFrame(() => (isCountdownStart.value = true));
+      window.requestAnimationFrame(() => {
+        emits('update:isCountdownStart', true);
+        emits('countdownStart');
+      });
     }
   }
 );
 
 onMounted(async () => {
   if (
-    props.autoStart === true &&
+    props.isCountdownStart === true &&
     typeof props.initialSeconds === 'number' &&
     Math.abs(props.initialSeconds - props.endSecond) > 0
   ) {
     currentNumber.value = props.initialSeconds;
     await nextTick();
-    window.requestAnimationFrame(() => (isCountdownStart.value = true));
+    window.requestAnimationFrame(() => {
+      emits('update:isCountdownStart', true);
+      emits('countdownStart');
+    });
   }
 });
 
@@ -582,13 +601,29 @@ async function handleNumberAnimationEnd(e) {
 
   window.requestAnimationFrame(() => {
     if (currentNumber.value === 0) {
-      isCountdownStart.value = false;
-      // 由大至小的數數
-    } else if (props.initialSeconds > props.endSecond) {
-      currentNumber.value = currentNumber.value - 1;
+      emits('countdownEnd');
+      emits('update:isCountdownStart', false);
+      return;
+    }
+
+    emits('update:isCountdownStart', true);
+    emits('countdownStart');
+
+    // 由大至小的數數
+    if (props.initialSeconds > props.endSecond) {
+      const newCurrrentNumber = currentNumber.value - 1;
+
+      emits('countdownStep', newCurrrentNumber);
+
+      currentNumber.value = newCurrrentNumber;
+
       // TODO:由小至大的數數
     } else if (props.initialSeconds < props.endSecond) {
-      currentNumber.value = currentNumber.value + 1;
+      const newCurrrentNumber = currentNumber.value + 1;
+
+      emits('countdownStep', newCurrrentNumber);
+
+      currentNumber.value = newCurrrentNumber;
     }
   });
 }

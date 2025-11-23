@@ -58,42 +58,44 @@
 
     <div class="countdown_test_page-count_down_date">
       <Countdown
-        :initial-seconds="demoCountdownYear"
+        v-model="demoCountdownYear"
+        v-model:is-countdown-start="demoCountdownYearStart"
+        :initial-seconds="demoCountdownLimitYear"
         :countdown-type="demoCountdownType"
       />
       <p>/</p>
       <Countdown
-        :initial-seconds="demoCountdownMonth"
+        v-model="demoCountdownMonth"
+        v-model:is-countdown-start="demoCountdownMonthStart"
+        :initial-seconds="demoCountdownLimitMonth"
         :countdown-type="demoCountdownType"
       />
       <p>/</p>
       <Countdown
-        :initial-seconds="demoCountdownMonth"
+        v-model="demoCountdownDay"
+        v-model:is-countdown-start="demoCountdownDayStart"
+        :initial-seconds="demoCountdownLimitDay"
         :countdown-type="demoCountdownType"
       />
       <p>/</p>
       <Countdown
-        :initial-seconds="demoCountdownDay"
-        :countdown-type="demoCountdownType"
-      />
-      <p>/</p>
-      <Countdown
-        :initial-seconds="demoCountdownDay"
-        :countdown-type="demoCountdownType"
-      />
-      <p></p>
-      <Countdown
-        :initial-seconds="demoCountdownHour"
+        v-model="demoCountdownHour"
+        v-model:is-countdown-start="demoCountdownHourStart"
+        :initial-seconds="demoCountdownLimitHour"
         :countdown-type="demoCountdownType"
       />
       <p>:</p>
       <Countdown
-        :initial-seconds="demoCountdownMinute"
+        v-model="demoCountdownMinute"
+        v-model:is-countdown-start="demoCountdownMinuteStart"
+        :initial-seconds="demoCountdownLimitMinute"
         :countdown-type="demoCountdownType"
       />
       <p>:</p>
       <Countdown
-        :initial-seconds="demoCountdownSecond"
+        v-model="demoCountdownSecond"
+        v-model:is-countdown-start="demoCountdownSecondStart"
+        :initial-seconds="demoCountdownLimitSecond"
         :countdown-type="demoCountdownType"
       />
     </div>
@@ -119,11 +121,23 @@ const demoDateRadio = ref('up');
 const demoDateCountdownType = ref('up');
 const demoDayjs = ref(null);
 const demoCountdownYear = ref(0);
+const demoCountdownLimitYear = ref(0);
+const demoCountdownYearStart = ref(false);
 const demoCountdownMonth = ref(0);
+const demoCountdownLimitMonth = ref(0);
+const demoCountdownMonthStart = ref(false);
 const demoCountdownDay = ref(0);
+const demoCountdownLimitDay = ref(0);
+const demoCountdownDayStart = ref(false);
 const demoCountdownHour = ref(0);
+const demoCountdownLimitHour = ref(0);
+const demoCountdownHourStart = ref(false);
 const demoCountdownMinute = ref(0);
+const demoCountdownLimitMinute = ref(0);
+const demoCountdownMinuteStart = ref(false);
 const demoCountdownSecond = ref(0);
+const demoCountdownLimitSecond = ref(0);
+const demoCountdownSecondStart = ref(true);
 
 function handleSecondDemo() {
   if (typeof demoInput.value !== 'number') {
@@ -169,21 +183,10 @@ function handleDateDemo() {
   demoDayjs.value = newDemoDayjs;
   demoCountdownYear.value = years;
   demoCountdownMonth.value = months;
-  demoCountdownDay.value = days;
-  demoCountdownHour.value = hours;
-  demoCountdownMinute.value = minutes;
-  demoCountdownSecond.value = seconds;
-
-  console.log({
-    demoDate: demoDate.value,
-    nowDayjs,
-    years,
-    months,
-    days,
-    hours,
-    minutes,
-    seconds
-  });
+  demoCountdownLimitDay.value = days;
+  demoCountdownLimitHour.value = hours;
+  demoCountdownLimitMinute.value = minutes;
+  demoCountdownLimitSecond.value = seconds;
 }
 </script>
 
