@@ -30,6 +30,10 @@ logs
 /blob-report/
 /playwright/.cache/
 
+# Test coverage
+coverage/
+.nyc_output/
+
 # firebase
 *-firebase-adminsdk-*.json
 .vercel

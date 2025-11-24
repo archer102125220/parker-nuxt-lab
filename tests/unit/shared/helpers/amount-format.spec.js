@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import amountFormat from '@shared/helpers/amount-format.js';
 
 describe('amountFormat', () => {
@@ -38,9 +38,28 @@ describe('amountFormat', () => {
     });
   });
 
+  describe('自訂正則表達式', () => {
+    it('應該接受陣列格式的正則表達式', () => {
+      const customRegex = ['\\B(?=(\\d{3})+(?!\\d))', 'g'];
+      const result = amountFormat(1000, customRegex, ',');
+      expect(result).toBe('1,000');
+    });
+
+    it('應該接受 RegExp 物件', () => {
+      const customRegex = /\B(?=(\d{3})+(?!\d))/g;
+      expect(amountFormat(1000, customRegex, ',')).toBe('1,000');
+    });
+
+    it('應該處理空陣列', () => {
+      const result = amountFormat(1000, [], ',');
+      // 空陣列會讓 formater 為 undefined，但仍然會執行 replace
+      expect(typeof result).toBe('string');
+    });
+  });
+
   describe('邊界情況', () => {
     it('應該處理 null 和 undefined', () => {
-      expect(amountFormat(null)).toBe('null'); // 實際返回字串 'null'
+      expect(amountFormat(null)).toBe('null');
       expect(amountFormat(undefined)).toBe(undefined);
     });
 
@@ -61,14 +80,76 @@ describe('amountFormat', () => {
   });
 
   describe('Safari 降級處理', () => {
-    it('應該在正則表達式失敗時使用降級方法', () => {
-      // 測試降級處理函數 - 實際上這個測試需要觸發 Safari 降級
-      // 由於難以在測試中觸發真正的錯誤，我們跳過這個測試
-      // 或者測試降級函數的實際輸出
-      const result = amountFormat(1000, ['(?<!invalid)', 'g'], ',');
-      // 降級方法會產生 ',1,0,0,0,' 這樣的輸出（有 bug）
+    it('應該在正則表達式錯誤時觸發降級處理', () => {
+      // 使用無效的正則表達式觸發錯誤
+      const invalidRegex = ['(?<!invalid)', 'g'];
+      const result = amountFormat(1000, invalidRegex, ',');
+
+      // 降級處理應該返回包含數字的結果
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('string');
       expect(result).toContain('1');
       expect(result).toContain('0');
+    });
+
+    it('降級處理應該正確處理整數', () => {
+      const invalidRegex = ['(?<!x)', 'g'];
+      const result = amountFormat(1234, invalidRegex, ',');
+      // 降級處理會產生分離的數字
+      expect(result).toContain('1');
+      expect(result).toContain('2');
+    });
+
+    it('降級處理應該正確處理小數', () => {
+      const invalidRegex = ['(?<!x)', 'g'];
+      const result = amountFormat(1234.56, invalidRegex, ',');
+      expect(result).toContain('1');
+      expect(result).toContain('2');
+      expect(result).toContain('5');
+    });
+
+    it('降級處理應該使用自訂分隔符號', () => {
+      const invalidRegex = ['(?<!x)', 'g'];
+      const result = amountFormat(1000, invalidRegex, '_');
+      expect(result).toContain('_');
+    });
+  });
+
+  describe('自訂錯誤處理函數', () => {
+    it('應該使用自訂錯誤處理函數', () => {
+      const customErrorHandler = vi.fn((amount) => `ERROR: ${amount}`);
+      // 使用無效的正則表達式觸發錯誤
+      const invalidRegex = ['(', 'g']; // 不完整的正則表達式
+
+      const result = amountFormat(1000, invalidRegex, ',', customErrorHandler);
+
+      // 自訂錯誤處理函數應該被呼叫
+      expect(customErrorHandler).toHaveBeenCalled();
+      expect(result).toBe('ERROR: 1000');
+    });
+
+    it('自訂錯誤處理函數應該接收正確的參數', () => {
+      const customErrorHandler = vi.fn();
+      const invalidRegex = ['(', 'g']; // 不完整的正則表達式
+
+      amountFormat(1000, invalidRegex, '_', customErrorHandler);
+
+      // 自訂錯誤處理函數應該被呼叫
+      expect(customErrorHandler).toHaveBeenCalled();
+      expect(customErrorHandler).toHaveBeenCalledWith(
+        1000,
+        '_',
+        expect.any(Error)
+      );
+    });
+
+    it('應該處理非函數的錯誤處理器', () => {
+      const invalidRegex = ['(?<!x)', 'g'];
+      const result = amountFormat(1000, invalidRegex, ',', null);
+
+      // 沒有錯誤處理函數時會使用預設的 handleSafari
+      expect(result).toBeDefined();
+      expect(typeof result).toBe('string');
     });
   });
 

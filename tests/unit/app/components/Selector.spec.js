@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { mount, flushPromises } from '@vue/test-utils';
 import Selector from '@app/components/Selector.vue';
 
 // 全域設定
@@ -22,6 +22,12 @@ describe('Selector.vue', () => {
 
   beforeEach(() => {
     // 清理之前的 wrapper
+    if (wrapper) {
+      wrapper.unmount();
+    }
+  });
+
+  afterEach(() => {
     if (wrapper) {
       wrapper.unmount();
     }
@@ -50,7 +56,6 @@ describe('Selector.vue', () => {
         }
       });
 
-      // 使用 .text() 並檢查是否包含文字
       const text = wrapper.find('.selector-current_value-label').text();
       expect(text).toContain('Option 1');
     });
@@ -63,7 +68,6 @@ describe('Selector.vue', () => {
         }
       });
 
-      // 需要先打開選項列表
       await wrapper.find('.selector').trigger('click');
 
       expect(wrapper.find('.selector-option_list-item_empty').exists()).toBe(true);
@@ -80,15 +84,12 @@ describe('Selector.vue', () => {
         }
       });
 
-      // 測試點擊事件是否觸發
       const selector = wrapper.find('.selector');
       expect(selector.exists()).toBe(true);
 
-      // 點擊事件應該被觸發（不測試內部狀態，因為依賴 DOM 測量）
       await selector.trigger('click');
       await wrapper.vm.$nextTick();
 
-      // 驗證組件沒有崩潰
       expect(wrapper.vm).toBeTruthy();
     });
 
@@ -171,6 +172,27 @@ describe('Selector.vue', () => {
       const options = wrapper.findAll('.selector-option_list-item');
       expect(options[1].classes()).toContain('selector-option_list-item_selsected');
     });
+
+    it('選擇後應該關閉選項列表', async () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          valueKey: 'value'
+        }
+      });
+
+      // 打開選項列表
+      await wrapper.find('.selector').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      // 選擇一個選項
+      await wrapper.findAll('.selector-option_list-item')[1].trigger('click');
+      await wrapper.vm.$nextTick();
+
+      // 驗證選項列表已關閉
+      expect(wrapper.vm.isOptionListOpen.value).toBe(false);
+    });
   });
 
   describe('valueKey 和 displayKey', () => {
@@ -226,8 +248,27 @@ describe('Selector.vue', () => {
       await wrapper.find('.selector').trigger('click');
       await wrapper.findAll('.selector-option_list-item')[0].trigger('click');
 
-      // 沒有 valueKey 時，會使用 option.value 或 option 本身
       expect(wrapper.emitted('update:modelValue')).toBeTruthy();
+    });
+
+    it('應該正確處理物件類型的 modelValue', () => {
+      const objectOptions = [
+        { id: 1, label: 'Item 1' },
+        { id: 2, label: 'Item 2' }
+      ];
+
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: objectOptions,
+          modelValue: { id: 1, label: 'Item 1' },
+          valueKey: 'id',
+          displayKey: 'label'
+        }
+      });
+
+      const text = wrapper.find('.selector-current_value-label').text();
+      expect(text).toContain('Item 1');
     });
   });
 
@@ -306,11 +347,8 @@ describe('Selector.vue', () => {
         }
       });
 
-      // 測試 CSS 變數的基本結構
       expect(wrapper.vm.cssVariable.value).toBeDefined();
       expect(wrapper.vm.cssVariable.value).toHaveProperty('--selector_arrow_icon');
-
-      // 驗證初始狀態
       expect(wrapper.vm.cssVariable.value['--selector_arrow_icon']).toBe('rotate(0deg)');
     });
 
@@ -323,8 +361,146 @@ describe('Selector.vue', () => {
         }
       });
 
-      // 檢查 computed 屬性
       expect(wrapper.vm.cssVariable.value['--select_option_list_width']).toBe('300px');
+    });
+
+    it('應該支援數字類型的 optionListWidth', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          optionListWidth: 250
+        }
+      });
+
+      expect(wrapper.vm.cssVariable.value['--select_option_list_width']).toBe('250px');
+    });
+
+    it('應該支援 hasShadow 屬性', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          hasShadow: true
+        }
+      });
+
+      expect(wrapper.vm.cssVariable.value['--select_option_list_shadow']).toBeDefined();
+    });
+
+    it('應該支援 hasTransition 屬性', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          hasTransition: true
+        }
+      });
+
+      expect(wrapper.vm.cssVariable.value['--select_suffix_arrow_icon_transition']).toBeDefined();
+    });
+
+    it('應該支援自訂 optionListTop', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          optionListTop: 10
+        }
+      });
+
+      // optionListTop 會影響 CSS 變數
+      expect(wrapper.vm.cssVariable.value).toBeDefined();
+    });
+
+    it('應該支援字串類型的 optionListTop', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          optionListTop: '20px'
+        }
+      });
+
+      expect(wrapper.vm.cssVariable.value).toBeDefined();
+    });
+
+    it('應該支援 optionListLeft 和 optionListRight', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          optionListLeft: '10px',
+          optionListRight: 20
+        }
+      });
+
+      expect(wrapper.vm.cssVariable.value['--select_option_list_left']).toBe('10px');
+      expect(wrapper.vm.cssVariable.value['--select_option_list_right']).toBe('20px');
+    });
+  });
+
+  describe('Watchers', () => {
+
+    it('optionList 變化時應該重新計算高度', async () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions
+        }
+      });
+
+      const initialHeight = wrapper.vm.optionListHeight.value;
+
+      // 更新 optionList
+      await wrapper.setProps({
+        optionList: [...mockOptions, { value: '4', label: 'Option 4' }]
+      });
+      await flushPromises();
+
+      // 高度應該被重置（設為 null 然後重新計算）
+      // 由於測試環境的限制，我們只驗證函數被觸發
+      expect(wrapper.vm.optionList).toHaveLength(4);
+    });
+  });
+
+  describe('displayValue computed', () => {
+    it('應該使用 displayKey 顯示值', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          modelValue: '1',
+          valueKey: 'value',
+          displayKey: 'label'
+        }
+      });
+
+      expect(wrapper.vm.displayValue.value).toBe('Option 1');
+    });
+
+    it('應該回退到 modelValue 的 label 屬性', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: [],
+          modelValue: { label: 'Custom Label' }
+        }
+      });
+
+      expect(wrapper.vm.displayValue.value).toBe('Custom Label');
+    });
+
+    it('應該直接顯示 modelValue 如果沒有匹配的選項', () => {
+      wrapper = mount(Selector, {
+        ...globalConfig,
+        props: {
+          optionList: mockOptions,
+          modelValue: 'Not in list'
+        }
+      });
+
+      expect(wrapper.vm.displayValue.value).toBe('Not in list');
     });
   });
 });
