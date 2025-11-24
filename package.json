@@ -12,9 +12,14 @@
     "preview": "nuxt preview",
     "analyze": "npx nuxi analyze ",
     "pretest": "yarn build --dotenv .env.e2e && yarn start",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.config.ts tests/integration",
     "test:codegen": "playwright codegen http://localhost:3001",
     "test:e2e": "playwright test",
     "test:e2e-ui": "playwright test --ui",
+    "test:all": "yarn test:unit && yarn test:integration && yarn pretest && yarn test:e2e",
     "start": "cross-env NITRO_PORT=3001 node ./.output/server/index.mjs",
     "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs",
     "initDB": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
@@ -89,6 +94,9 @@
     "@pinia/nuxt": "^0.5.1",
     "@playwright/test": "^1.47.2",
     "@types/node": "^22.7.4",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@vitest/coverage-v8": "^4.0.13",
+    "@vue/test-utils": "^2.4.6",
     "axios-mock-adapter": "^1.22.0",
     "babel-plugin-module-extension-resolver": "^1.0.0",
     "codemod": "0.18.7",
@@ -100,6 +108,8 @@
     "eslint-plugin-vue": "^9.27.0",
     "flat": "^6.0.1",
     "fs-extra": "^11.3.0",
+    "happy-dom": "^20.0.10",
+    "jsdom": "^27.2.0",
     "nuxt-security": "^2.2.0",
     "prettier": "^3.3.2",
     "sass": "^1.77.6",
@@ -107,6 +117,7 @@
     "sass-loader": "^14.2.1",
     "sequelize-cli": "^6.6.3",
     "spreadsheet-to-json": "^2.0.0",
-    "vite-plugin-vuetify": "^2.0.3"
+    "vite-plugin-vuetify": "^2.0.3",
+    "vitest": "^4.0.13"
   }
 }
