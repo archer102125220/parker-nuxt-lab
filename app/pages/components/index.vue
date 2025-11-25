@@ -13,7 +13,7 @@
       max-height="400"
       src="/img/components-page/components-page-v.05.webp"
     />
-    <nav class="components_page-content">
+    <nav class="components_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"

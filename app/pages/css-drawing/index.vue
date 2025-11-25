@@ -8,7 +8,7 @@
       src="/img/css-drawing/css-drawing-v.05.webp"
     />
 
-    <nav class="css_animejs_page-content">
+    <nav class="css_animejs_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"

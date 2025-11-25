@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('home page link test', async ({ page }) => {
-  await page.goto('http://localhost:3001/');
+  await page.goto('/');
   await page.getByRole('main').locator('div').nth(4).click();
   await page.getByRole('link', { name: '關於本站' }).click();
   await expect(

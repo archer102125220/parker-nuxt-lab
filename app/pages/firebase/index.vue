@@ -20,7 +20,7 @@
       src="/img/firebase/firebase-v.07.webp"
     />
 
-    <nav class="firebase_page-link_list">
+    <nav class="firebase_page-link_list" role="navigation">
       <!-- <NuxtLink
         class="firebase_page-link_list-link"
         :to="localePath('/firebase/cloud-messaging')"

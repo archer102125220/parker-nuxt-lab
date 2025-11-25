@@ -10,7 +10,7 @@
       src="/img/server-sent-event/server-sent-event-v.04.webp"
     />
 
-    <nav class="server_sent_event_test_page-content">
+    <nav class="server_sent_event_test_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"

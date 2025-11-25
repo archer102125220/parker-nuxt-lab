@@ -10,7 +10,7 @@
       src="/img/vue-directives/vue-directives-v.04.webp"
     />
 
-    <nav class="directives_page-content">
+    <nav class="directives_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"

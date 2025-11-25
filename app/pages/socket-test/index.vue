@@ -20,7 +20,7 @@
       *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
     </p>
 
-    <nav class="socket_test_page-content">
+    <nav class="socket_test_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"

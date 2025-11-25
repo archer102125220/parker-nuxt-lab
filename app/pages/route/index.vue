@@ -8,7 +8,7 @@
       src="/img/route/route-v.05.webp"
     />
 
-    <nav class="route_test_page-content">
+    <nav class="route_test_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"

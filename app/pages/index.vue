@@ -1,6 +1,6 @@
 <template>
   <section class="index_page">
-    <nav class="index_page-content">
+    <nav class="index_page-content" role="navigation">
       <!-- <NuxtLink
       v-for="link in linkList"
       :key="link.to"

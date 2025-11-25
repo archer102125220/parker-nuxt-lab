@@ -12,7 +12,7 @@
 
     <p class="web_rtc_page-description">WebRTC的實作測試，主要分爲：</p>
 
-    <nav class="web_rtc_page-content">
+    <nav class="web_rtc_page-content" role="navigation">
       <!-- <NuxtLink
         v-for="link in linkList"
         :key="link.to"
