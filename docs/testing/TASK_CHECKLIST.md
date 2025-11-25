@@ -19,9 +19,15 @@
 - [x] Selector.vue (30 tests) - 61.05% coverage
 - [x] PhoneInput.vue (18 tests) - 50% coverage
 
+### 整合測試 (12 tests)
+- [x] helpers-integration.spec.js (8 tests) ✅
+- [x] phone-validation-integration.spec.js (4 tests) ✅
+
 ## 📊 最終統計
 
-**總測試數：191 tests ✅**
+**總測試數：203 tests ✅**
+- 單元測試：191 tests
+- 整合測試：12 tests
 - 通過率：100%
 - 整體覆蓋率：67.73%
 - 執行時間：~1s
@@ -39,5 +45,4 @@
 ## 📝 待完成
 - [ ] Dialog.vue 測試
 - [ ] Drawer.vue 測試
-- [ ] 整合測試
 - [ ] E2E 測試增強
