@@ -104,14 +104,14 @@ describe('checkPhone', () => {
       const result = checkPhone('0912345678', '');
       expect(result.isValid).toBe(false);
       expect(result.countryCodeError).toBe(true);
-      expect(result.errorMessage).toBe('無效的國碼');
+      expect(result.errorMessage).toBe('無效的電話國碼');
     });
 
     it('應該拒絕非數字國碼', () => {
       const result = checkPhone('0912345678', 'abc');
       expect(result.isValid).toBe(false);
       expect(result.countryCodeError).toBe(true);
-      expect(result.errorMessage).toBe('無效的國碼');
+      expect(result.errorMessage).toBe('無法識別的電話國碼');
     });
 
     it('應該拒絕非字串國碼', () => {
@@ -124,7 +124,7 @@ describe('checkPhone', () => {
       const result = checkPhone('0912345678', '999999');
       expect(result.isValid).toBe(false);
       expect(result.countryCodeError).toBe(true);
-      expect(result.errorMessage).toBe('無法識別的國碼');
+      expect(result.errorMessage).toBe('無法識別的電話國碼');
     });
   });
 
@@ -166,12 +166,12 @@ describe('checkPhone', () => {
 
     it('無效國碼應該返回正確的錯誤訊息', () => {
       const result = checkPhone('0912345678', '');
-      expect(result.errorMessage).toBe('無效的國碼');
+      expect(result.errorMessage).toBe('無效的電話國碼');
     });
 
     it('無法識別的國碼應該返回正確的錯誤訊息', () => {
       const result = checkPhone('0912345678', '999');
-      expect(result.errorMessage).toBe('無法識別的國碼');
+      expect(result.errorMessage).toBe('無法識別的電話國碼');
     });
 
     it('格式錯誤的電話號碼應該返回正確的錯誤訊息', () => {
