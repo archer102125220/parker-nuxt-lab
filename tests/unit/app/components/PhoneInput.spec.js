@@ -2,8 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import PhoneInput from '@app/components/PhoneInput.vue';
 
-// 簡化版測試 - 專注於可測試的核心功能
-describe('PhoneInput.vue - Simplified Tests', () => {
+describe('PhoneInput.vue', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -17,10 +16,7 @@ describe('PhoneInput.vue - Simplified Tests', () => {
       wrapper = mount(PhoneInput, {
         global: {
           stubs: {
-            Selector: {
-              template: '<div class="selector-stub"></div>',
-              props: ['modelValue', 'optionList', 'valueKey', 'displayKey']
-            }
+            Selector: true
           }
         }
       });
