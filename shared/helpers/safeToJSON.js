@@ -18,8 +18,17 @@ export function safeParseJSON(data) {
     return JSON.parse(data, (key, value) => {
       // 檢查值的型別是否為字串，且以 "n" 結尾
       if (typeof value === 'string' && value.endsWith("n")) {
-        // 移除 "n"，並轉換為 bigint
-        return BigInt(value.slice(0, -1));
+        const numPart = value.slice(0, -1);
+        // 檢查去掉 'n' 後是否為純數字（包括負數）
+        // 使用正則表達式確保是有效的數字格式
+        if (/^-?\d+$/.test(numPart)) {
+          try {
+            return BigInt(numPart);
+          } catch {
+            // 如果 BigInt 轉換失敗，返回原始值
+            return value;
+          }
+        }
       }
       return value;
     });
