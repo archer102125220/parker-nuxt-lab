@@ -23,17 +23,17 @@
 - [x] Create tests for utility functions
   - [x] `tests/unit/shared/helpers/amount-format.spec.js` (23 tests) ✅
   - [x] `tests/unit/shared/helpers/number-unit.spec.js` (10 tests) ✅
-  - [x] `tests/unit/shared/helpers/safeToJSON.spec.js` (24 tests) ✅
+  - [x] `tests/unit/shared/helpers/safeToJSON.spec.js` (34 tests, +10 BigInt tests) ✅
   - [x] `tests/unit/shared/third-party/check-phone.spec.js` (45 tests) ✅
-- [x] All 102 utility tests passing
+- [x] All 112 utility tests passing
 
 ### 階段三：Vue 組件單元測試
 - [x] Create tests for Vue components
   - [x] `tests/unit/app/components/Selector.spec.js` (30 tests) ✅
-  - [ ] `tests/unit/app/components/PhoneInput.spec.js`
+  - [x] `tests/unit/app/components/SwitchButton.spec.js` (31 tests) ✅
+  - [ ] `tests/unit/app/components/PhoneInput.spec.js` (需要進一步重構)
   - [ ] `tests/unit/app/components/Dialog.spec.js`
   - [ ] `tests/unit/app/components/Drawer.spec.js`
-  - [ ] `tests/unit/app/components/SwitchButton.spec.js`
 
 ### 階段四：整合測試
 - [ ] Create integration tests
@@ -52,16 +52,29 @@
   - [ ] `tests/mocks/phone-country-code.js`
 
 ## Current Status
-**Total Tests: 132 ✅**
-- ✅ Passing: 132 (100%)
+**Total Tests: 173 ✅**
+- ✅ Passing: 173 (100%)
 - ❌ Failing: 0
 
-**Coverage: 70.3%** (+5.46% from initial 64.84%)
+**Coverage: 76.27%** (+11.43% from initial 64.84%)
+
+### Coverage Details
+- `phoneCountryCode.js`: 100%
+- `number-unit.js`: 100%
+- `SwitchButton.vue`: 97.5% ⭐
+- `safeToJSON.js`: 93.75%
+- `check-phone.js`: 90.9%
+- `amount-format.js`: 78.57%
+- `Selector.vue`: 61.05%
 
 ## Verification Phase
-- [x] Run all unit tests (132/132 passing)
-- [x] Improve test coverage
+- [x] Run all unit tests (173/173 passing)
+- [x] Improve test coverage (+11.43%)
+- [x] Fix BigInt handling in safeToJSON tests
+- [x] Create SwitchButton component tests (97.5% coverage)
+- [ ] Create PhoneInput component tests (complex, needs refactoring)
+- [ ] Create Dialog component tests
+- [ ] Create Drawer component tests
 - [ ] Run all integration tests
 - [ ] Run all E2E tests
-- [ ] Review test coverage
 - [ ] Create walkthrough documentation
