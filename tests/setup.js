@@ -1,9 +1,21 @@
 // Vitest setup file
+import { vi } from 'vitest';
 import { config } from '@vue/test-utils';
 
-// Configure Vue Test Utils globally
+// Mock Vue Router globally
+global.onBeforeRouteLeave = vi.fn();
+
+// 設定全局 config
 config.global.mocks = {
-  $t: (key) => key, // Mock i18n
+  $t: (key) => key, // i18n mock
+  $route: {
+    params: {},
+    query: {}
+  },
+  $router: {
+    push: vi.fn(),
+    replace: vi.fn()
+  }
 };
 
 // Mock Nuxt auto-imports
@@ -14,7 +26,10 @@ global.reactive = (obj) => obj;
 global.watch = () => { };
 global.watchEffect = () => { };
 global.onMounted = () => { };
+global.onActivated = () => { };
+global.onDeactivated = () => { };
 global.onBeforeUnmount = () => { };
+global.onBeforeRouteLeave = () => { };
 global.nextTick = () => Promise.resolve();
 global.useTemplateRef = (name) => ({ value: null });
 
