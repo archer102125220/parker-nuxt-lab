@@ -79,8 +79,8 @@ test.describe('PhoneInput 組件測試', () => {
   test('應該能夠輸入電話號碼', async ({ page }) => {
     await page.goto('/components/phone-input');
 
-    // 查找電話輸入框
-    const phoneInput = page.locator('input[type="tel"]').first();
+    // 查找電話輸入框 - 使用 BEM 規範的 CSS class
+    const phoneInput = page.locator('.phone-input__number__field').first();
     await expect(phoneInput).toBeVisible();
 
     // 輸入電話號碼
@@ -93,9 +93,9 @@ test.describe('PhoneInput 組件測試', () => {
   test('應該能夠選擇國家代碼', async ({ page }) => {
     await page.goto('/components/phone-input');
 
-    // 點擊國家選擇器
+    // 點擊國家選擇器 - 使用 BEM 規範的 CSS class
     const countrySelector = page
-      .locator('.phone_input-country_selector')
+      .locator('.phone-input__country-selector')
       .first();
     await countrySelector.click();
 

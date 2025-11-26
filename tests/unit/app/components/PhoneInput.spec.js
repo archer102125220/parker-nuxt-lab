@@ -21,7 +21,7 @@ describe('PhoneInput.vue', () => {
         }
       });
 
-      expect(wrapper.find('.phone_input').exists()).toBe(true);
+      expect(wrapper.find('.phone-input').exists()).toBe(true);
     });
 
     it('應該包含電話號碼輸入框', () => {
@@ -253,7 +253,9 @@ describe('PhoneInput.vue', () => {
         }
       });
 
-      expect(wrapper.vm.cssVariable.value['--phone_input-border-color']).toBe('#d5d5d5');
+      // cssVariable 是 computed ref，需要用 .value 訪問
+      const cssVars = wrapper.vm.cssVariable.value;
+      expect(cssVars['--phone-input-border-color']).toBe('#d5d5d5');
     });
   });
 

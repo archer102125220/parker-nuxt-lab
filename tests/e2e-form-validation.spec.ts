@@ -24,8 +24,10 @@ test.describe('電話號碼輸入驗證', () => {
   });
 
   test('應該顯示國碼選擇器', async ({ page }) => {
-    // 查找國碼選擇器 - 使用正確的 CSS class
-    const countrySelector = page.locator('.phone_input').first();
+    // 查找國碼選擇器 - 使用 BEM 規範的 CSS class
+    const countrySelector = page
+      .locator('.phone-input__country-selector')
+      .first();
     await expect(countrySelector).toBeVisible();
   });
 
@@ -33,8 +35,8 @@ test.describe('電話號碼輸入驗證', () => {
     // 等待頁面完全載入
     await page.waitForTimeout(500);
 
-    // 查找電話輸入框
-    const phoneInput = page.locator('input[type="tel"]').first();
+    // 查找電話輸入框 - 使用 BEM 規範的 CSS class
+    const phoneInput = page.locator('.phone-input__number__field').first();
 
     if (await phoneInput.isVisible()) {
       // 點擊輸入框以確保獲得焦點
@@ -51,7 +53,7 @@ test.describe('電話號碼輸入驗證', () => {
   });
 
   test('應該驗證台灣手機號碼格式', async ({ page }) => {
-    const phoneInput = page.locator('input[type="tel"]').first();
+    const phoneInput = page.locator('.phone-input__number__field').first();
 
     if (await phoneInput.isVisible()) {
       // 輸入有效的台灣手機號碼
@@ -61,20 +63,17 @@ test.describe('電話號碼輸入驗證', () => {
       // 等待驗證
       await page.waitForTimeout(500);
 
-      // 檢查是否沒有錯誤訊息
-      const errorMessage = page.locator('.error, .v-messages__message').first();
+      // 檢查是否沒有錯誤訊息 - 使用 BEM 規範的 CSS class
+      const errorMessage = page.locator('.phone-input__error').first();
       const hasError = await errorMessage.isVisible().catch(() => false);
 
       // 有效號碼不應該顯示錯誤
-      if (hasError) {
-        const errorText = await errorMessage.textContent();
-        expect(errorText).not.toContain('無效');
-      }
+      expect(hasError).toBe(false);
     }
   });
 
   test('應該拒絕無效的電話號碼', async ({ page }) => {
-    const phoneInput = page.locator('input[type="tel"]').first();
+    const phoneInput = page.locator('.phone-input__number__field').first();
 
     if (await phoneInput.isVisible()) {
       // 輸入無效的電話號碼
@@ -84,33 +83,39 @@ test.describe('電話號碼輸入驗證', () => {
       // 等待驗證
       await page.waitForTimeout(500);
 
-      // 可能會顯示錯誤訊息（取決於組件實作）
-      const errorMessage = page.locator('.error, .v-messages__message');
-      const count = await errorMessage.count();
+      // 檢查錯誤訊息 - 使用 BEM 規範的 CSS class
+      const errorMessage = page.locator('.phone-input__error');
+      const hasError = await errorMessage.isVisible().catch(() => false);
 
-      // 至少應該有某種視覺反饋
-      expect(count).toBeGreaterThanOrEqual(0);
+      // 無效號碼應該顯示錯誤
+      expect(hasError).toBe(true);
     }
   });
 
   test('應該能夠切換國碼', async ({ page }) => {
     // 查找國碼選擇器按鈕
     const countrySelectorButton = page
-      .locator('button')
-      .filter({ hasText: /\+886|\+1|\+86/ })
+      .locator('.phone-input__country-selector button')
       .first();
 
     if (await countrySelectorButton.isVisible()) {
       await countrySelectorButton.click();
 
       // 等待選單出現
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(500);
 
-      // 檢查是否有選單項目
-      const menuItems = page.locator('.v-list-item, .menu-item');
+      // 檢查是否有選單項目 - 使用 BEM 規範的 CSS class
+      const menuItems = page.locator('.phone-input__country-selector__option');
       const count = await menuItems.count();
 
       expect(count).toBeGreaterThan(0);
+
+      // 驗證合併後的國家名稱（例如：美國 / 加拿大）
+      const firstOption = menuItems.first();
+      const optionText = await firstOption.textContent();
+
+      // 檢查是否包含國碼
+      expect(optionText).toMatch(/\+\d+/);
     }
   });
 
@@ -123,7 +128,7 @@ test.describe('電話號碼輸入驗證', () => {
   });
 
   test('應該能夠清空輸入', async ({ page }) => {
-    const phoneInput = page.locator('input[type="tel"]').first();
+    const phoneInput = page.locator('.phone-input__number__field').first();
 
     if (await phoneInput.isVisible()) {
       // 點擊並輸入號碼

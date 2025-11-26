@@ -1,6 +1,6 @@
 <template>
-  <div class="phone_input" :style="cssVariable">
-    <div class="phone_input-country_selector">
+  <div class="phone-input">
+    <div class="phone-input__container" :style="cssVariable">
       <Selector
         v-model="selectedCountry"
         :option-list="countryList"
@@ -9,10 +9,11 @@
         :has-shadow="true"
         :has-transition="true"
         :option-list-width="optionListWidth"
+        class="phone-input__country-selector"
         @change="handleCountryChange"
       >
-        <template #prefix="{ isOptionOpen }">
-          <div class="phone_input-country_selector-flag">
+        <template #prefix>
+          <div class="phone-input__country-selector__flag">
             <span
               :class="[
                 'fi',
@@ -22,57 +23,55 @@
           </div>
         </template>
         <template #value="{ value }">
-          <span class="phone_input-country_selector-code">
+          <span class="phone-input__country-selector__code">
             +{{ value?.phoneCode || selectedCountry?.phoneCode || '886' }}
           </span>
         </template>
         <template #default="{ option, selected }">
-          <div class="phone_input-country_selector-option">
+          <div class="phone-input__country-selector__option">
             <span
               :class="[
                 'fi',
                 `fi-${option.countryCode?.toLowerCase()}`,
-                'phone_input-country_selector-option-flag'
+                'phone-input__country-selector__option__flag'
               ]"
             />
-            <span class="phone_input-country_selector-option-name">
+            <span class="phone-input__country-selector__option__name">
               {{ option.countryName }}
             </span>
             <span
-              :class="[
-                'phone_input-country_selector-option-code',
-                selected ? 'selected' : ''
-              ]"
+              :css-selected="selected"
+              class="phone-input__country-selector__option__code"
             >
               +{{ option.phoneCode }}
             </span>
           </div>
         </template>
       </Selector>
+      <div class="phone-input__divider" />
+      <div class="phone-input__number">
+        <input
+          v-model="phoneNumber"
+          type="tel"
+          :placeholder="placeholder"
+          class="phone-input__number__field"
+          @input="handlePhoneNumberInput"
+          @blur="handleBlur"
+          @focus="handleFocus"
+        />
+      </div>
     </div>
-    <div class="phone_input-divider" />
-    <div class="phone_input-number">
-      <input
-        v-model="phoneNumber"
-        type="tel"
-        :placeholder="placeholder"
-        class="phone_input-number-field"
-        @input="handlePhoneNumberInput"
-        @blur="handleBlur"
-        @focus="handleFocus"
-      />
-    </div>
+    <transition name="error-fade">
+      <div v-if="showError && validationError" class="phone-input__error">
+        {{ validationError }}
+      </div>
+    </transition>
   </div>
-  <transition name="error-fade">
-    <div v-if="showError && validationError" class="phone_input-error">
-      {{ validationError }}
-    </div>
-  </transition>
 </template>
 
 <script setup>
-import PHONE_AREA_CODE from '@app/assets/phoneCountryCode.js';
-import { checkPhone } from '@shared/third-party/check-phone.js';
+import PHONE_AREA_CODE from '@app/assets/phoneCountryCode';
+import { checkPhone } from '@shared/third-party/check-phone';
 
 const props = defineProps({
   modelValue: {
@@ -117,19 +116,28 @@ const emit = defineEmits([
 ]);
 
 const countryList = computed(() => {
-  // 去重複的國碼（有些國家共用同一個國碼）
-  const uniqueCountries = [];
-  const seenCodes = new Set();
+  // 合併相同國碼的國家，以第一個國家的 icon 為基準，串接國家名稱
+  const phoneCodeMap = new Map();
 
   PHONE_AREA_CODE.forEach((country) => {
-    const key = `${country.countryCode}-${country.phoneCode}`;
-    if (!seenCodes.has(key)) {
-      seenCodes.add(key);
-      uniqueCountries.push(country);
+    if (!phoneCodeMap.has(country.phoneCode)) {
+      // 第一次遇到這個國碼，直接加入
+      phoneCodeMap.set(country.phoneCode, {
+        countryCode: country.countryCode, // 使用第一個國家的 icon
+        countryName: country.countryName,
+        phoneCode: country.phoneCode,
+        countryNames: [country.countryName] // 保存所有國家名稱
+      });
+    } else {
+      // 已經存在這個國碼，將國家名稱加入
+      const existing = phoneCodeMap.get(country.phoneCode);
+      existing.countryNames.push(country.countryName);
+      // 更新串接後的國家名稱
+      existing.countryName = existing.countryNames.join(' / ');
     }
   });
 
-  return uniqueCountries;
+  return Array.from(phoneCodeMap.values());
 });
 
 const selectedCountry = ref(null);
@@ -143,14 +151,14 @@ const cssVariable = computed(() => {
   // 錯誤狀態優先
   if (hasError.value && showError.value) {
     return {
-      '--phone_input-border-color': '#dc3545',
-      '--phone_input-box-shadow': '0 0 0 2px rgba(220, 53, 69, 0.1)'
+      '--phone-input-border-color': '#dc3545',
+      '--phone-input-box-shadow': '0 0 0 2px rgba(220, 53, 69, 0.1)'
     };
   }
 
   return {
-    '--phone_input-border-color': isFocused.value ? '#2c64e3' : '#d5d5d5',
-    '--phone_input-box-shadow': isFocused.value
+    '--phone-input-border-color': isFocused.value ? '#2c64e3' : '#d5d5d5',
+    '--phone-input-box-shadow': isFocused.value
       ? '0 0 0 2px rgba(44, 100, 227, 0.1)'
       : 'none'
   };
@@ -207,15 +215,27 @@ function parseModelValue() {
     const value = String(props.modelValue);
     if (value.startsWith('+')) {
       // 格式如 +886912345678
-      const match = value.match(/^\+(\d+)(.*)$/);
-      if (match) {
-        const code = match[1];
-        const number = match[2];
-        const country = countryList.value.find((c) => c.phoneCode === code);
-        if (country) {
+      // 嘗試匹配已知的國際碼（從最長到最短）
+      let matched = false;
+      const numberPart = value.substring(1); // 移除 +
+
+      // 按照國際碼長度排序（從長到短），避免短碼誤匹配
+      const sortedCountries = [...countryList.value].sort(
+        (a, b) => b.phoneCode.length - a.phoneCode.length
+      );
+
+      for (const country of sortedCountries) {
+        if (numberPart.startsWith(country.phoneCode)) {
           selectedCountry.value = country;
+          phoneNumber.value = numberPart.substring(country.phoneCode.length);
+          matched = true;
+          break;
         }
-        phoneNumber.value = number;
+      }
+
+      // 如果沒有匹配到任何國際碼，保留原值
+      if (!matched) {
+        phoneNumber.value = value;
       }
     } else {
       phoneNumber.value = value;
@@ -318,103 +338,133 @@ function emitValue() {
 // 引入 flag-icons 樣式
 @import 'flag-icons/css/flag-icons.min.css';
 
-.phone_input {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--phone_input-border-color, #d5d5d5);
-  border-radius: 8px;
-  padding: 8px 12px;
-  background-color: #fff;
-  transition: all 0.3s ease;
-  box-shadow: var(--phone_input-box-shadow, none);
+.phone-input {
+  &__container {
+    // Display & Box Model
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid var(--phone-input-border-color, #d5d5d5);
+    border-radius: 8px;
 
-  &:hover {
-    border-color: #999;
+    // Visual
+    background-color: #fff;
+    box-shadow: var(--phone-input-box-shadow, none);
+
+    // Animation
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #999;
+    }
   }
 
-  &-country_selector {
+  &__country-selector {
+    // Display & Box Model
     display: flex;
     align-items: center;
     min-width: 100px;
+    min-height: auto;
+    padding: 0;
+    border: none;
 
-    .selector {
-      border: none;
-      padding: 0;
-      min-height: auto;
-    }
-
-    &-flag {
+    &__flag {
+      // Display & Box Model
       display: flex;
       align-items: center;
       margin-right: 8px;
 
       .fi {
+        // Display & Box Model
         width: 24px;
         height: 18px;
         border-radius: 2px;
+
+        // Visual
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
     }
 
-    &-code {
+    &__code {
+      // Typography
       font-family: 'PingFang SC', sans-serif;
       font-size: 14px;
       font-weight: 500;
       color: #111;
     }
 
-    &-option {
+    &__option {
+      // Display & Box Model
       display: flex;
       align-items: center;
       gap: 8px;
       width: 100%;
 
-      &-flag {
+      &__flag {
+        // Display & Box Model
+        flex-shrink: 0;
         width: 20px;
         height: 15px;
         border-radius: 2px;
+
+        // Visual
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
       }
 
-      &-name {
+      &__name {
+        // Display & Box Model
         flex: 1;
+
+        // Typography
         font-size: 13px;
         color: #333;
       }
 
-      &-code {
+      &__code {
+        // Typography
         font-size: 12px;
-        color: #666;
         font-weight: 500;
+        color: #666;
 
-        &.selected {
+        &[css-selected='true'] {
           color: $primary;
         }
       }
     }
   }
 
-  &-divider {
+  &__divider {
+    // Display & Box Model
     width: 1px;
     height: 24px;
-    background-color: #e0e0e0;
     margin: 0 12px;
+
+    // Visual
+    background-color: #e0e0e0;
   }
 
-  &-number {
+  &__number {
+    // Display & Box Model
     flex: 1;
     display: flex;
     align-items: center;
 
-    &-field {
+    &__field {
+      // Display & Box Model
       width: 100%;
+      padding: 0;
       border: none;
-      outline: none;
+
+      // Typography
       font-family: 'PingFang SC', sans-serif;
       font-size: 14px;
       color: #111;
+
+      // Visual
       background: transparent;
+
+      // Misc
+      outline: none;
 
       &::placeholder {
         color: #999;
@@ -422,8 +472,8 @@ function emitValue() {
 
       &::-webkit-outer-spin-button,
       &::-webkit-inner-spin-button {
-        -webkit-appearance: none;
         margin: 0;
+        -webkit-appearance: none;
       }
 
       &[type='number'] {
@@ -432,18 +482,24 @@ function emitValue() {
     }
   }
 
-  &-error {
-    margin-top: 6px;
-    font-size: 13px;
-    color: #dc3545;
-    font-weight: 500;
+  &__error {
+    // Display & Box Model
     display: flex;
     align-items: center;
     gap: 4px;
+    margin-top: 6px;
+
+    // Typography
+    font-size: 13px;
+    font-weight: 500;
+    color: #dc3545;
 
     &::before {
-      content: '⚠';
+      // Typography
       font-size: 14px;
+
+      // Misc
+      content: '⚠';
     }
   }
 }
@@ -456,7 +512,10 @@ function emitValue() {
 
 .error-fade-enter-from,
 .error-fade-leave-to {
+  // Visual
   opacity: 0;
+
+  // Animation
   transform: translateY(-4px);
 }
 </style>

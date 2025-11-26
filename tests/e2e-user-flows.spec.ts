@@ -45,9 +45,9 @@ test.describe('表單互動流程', () => {
   test('電話號碼輸入完整流程', async ({ page }) => {
     await page.goto('/components/phone-input');
 
-    // 1. 選擇國家
+    // 1. 選擇國家 - 使用 BEM 規範的 CSS class
     const countrySelector = page
-      .locator('.phone_input-country_selector')
+      .locator('.phone-input__country-selector')
       .first();
     if (await countrySelector.isVisible()) {
       await countrySelector.click();
@@ -60,8 +60,8 @@ test.describe('表單互動流程', () => {
       }
     }
 
-    // 2. 輸入電話號碼
-    const phoneInput = page.locator('input[type="tel"]').first();
+    // 2. 輸入電話號碼 - 使用 BEM 規範的 CSS class
+    const phoneInput = page.locator('.phone-input__number__field').first();
     await phoneInput.fill('912345678');
 
     // 3. 驗證輸入
