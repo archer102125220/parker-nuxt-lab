@@ -301,11 +301,22 @@ export default defineNuxtConfig({
     injectManifest: {
       // https://vite-pwa-org-zh.netlify.app/guide/faq.html#missing-assets-from-sw-precache-manifest
       // https://www.elecfans.com/tools/zijiehuansuan.html
-      maximumFileSizeToCacheInBytes: 1024 * 1024 * 22, // 22MB
+      maximumFileSizeToCacheInBytes: 1024 * 1024 * 5, // 5MB - 降低限制，只快取核心資源
 
       // https://vite-pwa-org.netlify.app/guide/static-assets.html#globpatterns
-      // Only precache these files - html should be excluded
-      globPatterns: ['**/*'],
+      // 只預快取核心應用資源，大型文件使用運行時快取
+      globPatterns: [
+        '**/*.{js,css,html}',
+        'img/ico/**/*.{png,ico,svg}', // 只快取圖標
+        'robots.txt'
+      ],
+
+      // 排除大型文件和不必要的資源
+      globIgnores: [
+        '**/models/**', // 排除 face-api 模型文件（15MB），改用運行時快取
+        '**/node_modules/**',
+        '**/*.map',
+      ],
     },
 
     devOptions: {

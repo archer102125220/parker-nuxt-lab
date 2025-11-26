@@ -52,9 +52,11 @@ export default defineNuxtPlugin({
       watchEffect(() => {
         if ($pwa.swActivated === false) {
           // $infoMessage('PWA開始安裝...');
+          $infoMessage('正在安裝 PWA 核心資源...');
           $store.system.setPwaLoading(true);
         } else {
           // $successMessage('PWA安裝並啟用完成');
+          $successMessage('PWA 已就緒！其他資源將在需要時自動載入。');
           $store.system.setPwaLoading(false);
         }
       }, { immediate: true });
