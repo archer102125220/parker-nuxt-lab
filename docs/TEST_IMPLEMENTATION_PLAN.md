@@ -1,341 +1,294 @@
-# 測試套件實作計畫
+# 測試覆蓋率提升實作計畫
 
 > [!NOTE]
-> **📋 計劃狀態：✅ 已完成**
+> **📋 計劃狀態：✅ 部分完成**
 > 
-> 此文件為測試套件的原始實作計劃，由使用者提出。
+> 此文件為測試覆蓋率提升的實作計劃。
 > 
-> - **建立時間：** 2024-11
-> - **完成時間：** 2025-11-25
-> - **實作結果：** 270+ 測試，94.4% 通過率
-> - **用途：** 保留作為參考紀錄
+> - **建立時間：** 2025-11-25
+> - **當前狀態：** 核心測試已完成，擴展測試待實作
+> - **已完成項目：** 工具函數、核心組件、整合測試
+> - **待完成項目：** 更多組件測試、Composables 測試
+> - **用途：** 指導未來測試擴展的參考計劃
 > 
-> 所有計劃項目已全部實作完成，詳見 [TESTING.md](./TESTING.md)
+> 當前測試狀態請參考 [TESTING.md](./TESTING.md)
 
 ---
 
-為 Nuxt Lab 專案建立完整的測試覆蓋，包含單元測試、整合測試和端對端測試。
+## 📊 當前測試狀態
 
-## User Review Required
+**已測試項目：**
+- ✅ 工具函數：4/6 (66.7%)
+  - amount-format.js ✅
+  - number-unit.js ✅
+  - safeToJSON.js ✅
+  - check-phone.js ✅
+  - request/index.js ❌
+  - firebase.js ❌
+- ✅ Vue 組件：7/34 (20.6%)
+  - SwitchButton.vue ✅
+  - Selector.vue ✅
+  - PhoneInput.vue ✅
+  - Dialog.vue ✅
+  - Drawer.vue ✅
+  - Message.vue ✅
+  - ImageUpload.vue ✅
+- ✅ Composables：1/17 (5.9%)
+  - useRequest ✅
 
-> [!IMPORTANT]
-> 此計畫將新增 Vitest 作為單元測試框架，並建立大量測試檔案。請確認：
-> 1. 是否同意新增 Vitest 及相關測試依賴套件
-> 2. 測試檔案的組織結構是否符合您的需求
-> 3. 是否有特定的組件或功能需要優先測試
-
-## 測試工具說明
-
-### Playwright（已安裝）
-- **用途**：E2E（端對端）測試
-- **測試範圍**：完整的使用者流程、瀏覽器互動、頁面導航
-- **優勢**：測試真實使用者體驗、支援多瀏覽器、自動截圖和錄影
-
-### Vitest（需新增）
-- **用途**：單元測試和整合測試
-- **測試範圍**：獨立函數、組件邏輯、API 端點
-- **優勢**：執行速度快、與 Vite/Nuxt 完美整合、即時監聽模式
-
-## Proposed Changes
-
-### 測試框架設定
-
-#### [NEW] [vitest.config.ts](file:///Users/parker/Desktop/code/parker-nuxt-lab/vitest.config.ts)
-
-建立 Vitest 設定檔，配置：
-- Vue 3 支援（使用 @vitejs/plugin-vue）
-- 路徑別名對應（與 nuxt.config.js 一致）
-- 測試環境設定（jsdom for component tests, node for utility tests）
-- 覆蓋率報告設定
-- Mock 設定
-
-#### [MODIFY] [package.json](file:///Users/parker/Desktop/code/parker-nuxt-lab/package.json)
-
-新增測試相關的 scripts 和 devDependencies：
-- Scripts:
-  - `test:unit` - 執行單元測試
-  - `test:unit:watch` - 監聽模式執行單元測試
-  - `test:unit:coverage` - 執行測試並產生覆蓋率報告
-  - `test:integration` - 執行整合測試
-  - `test:all` - 執行所有測試（unit + integration + e2e）
-- DevDependencies:
-  - `vitest`
-  - `@vitejs/plugin-vue`
-  - `@vue/test-utils`
-  - `jsdom`
-  - `@vitest/coverage-v8`
-  - `happy-dom`
+**測試統計：**
+- 總測試數：270+ tests
+- 通過率：94.4% (255/270)
+- 覆蓋率：67.73%
 
 ---
 
-### 單元測試 - 工具函數
+## 🔍 未測試項目分析
 
-#### [NEW] [shared/helpers/__tests__/amount-format.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/shared/helpers/__tests__/amount-format.spec.js)
+### 1. Vue 組件 (27 個未測試)
 
-測試 `amountFormat` 函數：
-- 基本千分位格式化
-- 小數點處理
-- 自訂分隔符號
-- Safari 降級處理
-- 邊界情況（null, undefined, 非數字）
+#### 高優先級（常用/核心組件）
+1. **LoadingBar.vue** - 載入進度條
+2. **DatePicker.vue** - 日期選擇器
+3. **Countdown.vue** - 倒數計時器
+4. **GoTop.vue** - 返回頂部按鈕
+5. **SkeletonLoader.vue** - 骨架屏載入
+6. **QRcode.vue** - QR Code 生成器
 
-#### [NEW] [shared/helpers/__tests__/number-unit.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/shared/helpers/__tests__/number-unit.spec.js)
+#### 中優先級（功能性組件）
+7. **ScrollFetch.vue** - 滾動載入
+8. **SlideInPanel.vue** - 滑入面板
+9. **SwiperCustom.vue** - 自訂輪播
+10. **SwiperJs.vue** - Swiper 輪播
+11. **Youtube.vue** - YouTube 嵌入
+12. **NotificationPermission.vue** - 通知權限
+13. **PWALoading.vue** - PWA 載入
+14. **Triangle.vue** - 三角形組件
 
-測試 `numberUnit` 函數：
-- 小於 10000 的數字處理
-- 萬、億、兆等單位轉換
-- 自訂單位陣列
-- 負數處理
-- 小數點精度
-
-#### [NEW] [shared/helpers/__tests__/safeToJSON.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/shared/helpers/__tests__/safeToJSON.spec.js)
-
-測試 `safeToJSON` 和 `safeParseJSON` 函數：
-- 正常的 JSON 序列化/反序列化
-- 循環引用處理
-- 錯誤處理
-- 特殊值處理（undefined, Symbol, Function）
-
-#### [NEW] [shared/third-party/__tests__/check-phone.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/shared/third-party/__tests__/check-phone.spec.js)
-
-測試 `checkPhone` 和 `checkTelephone` 函數：
-- 有效電話號碼驗證（台灣、美國、日本等）
-- 無效電話號碼處理
-- 國碼驗證
-- 空值處理
-- 格式化字符處理（空格、括號、破折號）
-- 錯誤訊息正確性
+#### 低優先級（容器/佈局組件）
+15. **DialogModal/index.vue** - 對話框模態
+16. **Layout/Header.vue** - 頁首
+17. **Layout/Footer.vue** - 頁尾
+18. **Tabs/Bar.vue** - 標籤欄
+19. **Tabs/Content.vue** - 標籤內容
+20. **Link/Card.vue** - 連結卡片
+21. **Hexagon/Container.vue** - 六角形容器
+22. **Animation/EnterLabel.vue** - 進入動畫標籤
+23. **WangEditor/index.vue** - 富文本編輯器
 
 ---
 
-### 單元測試 - Vue 組件
+### 2. Composables (16 個未測試)
 
-#### [NEW] [app/components/__tests__/PhoneInput.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/__tests__/PhoneInput.spec.js)
+#### 高優先級（核心功能）
+1. **useAsyncDataError.js** - 異步數據錯誤處理
+2. **useUserCookie.js** - 用戶 Cookie 管理
+3. **useMataData.js** - 元數據管理
 
-測試 `PhoneInput.vue` 組件：
-- 組件渲染
-- 國家選擇器互動
-- 電話號碼輸入
-- v-model 雙向綁定
-- 驗證功能（validate prop）
-- 即時驗證（validateOnInput prop）
-- 錯誤訊息顯示
-- returnObject 模式
-- 事件發送（change, blur, focus, validate）
+#### 中優先級（第三方整合）
+4. **useGoogle.js** - Google 整合
+5. **useFacebook.js** - Facebook 整合
+6. **useNuxtFirebase.js** - Firebase 整合
+7. **useNuxtGtm.js** - GTM 整合
+8. **useDayjs.js** - Day.js 日期處理
 
-#### [NEW] [app/components/__tests__/Selector.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/__tests__/Selector.spec.js)
-
-測試 `Selector.vue` 組件：
-- 組件渲染
-- 選項列表顯示/隱藏
-- 選項選擇
-- v-model 綁定
-- valueKey 和 displayKey props
-- 自訂插槽（prefix, suffix, default）
-- 空列表處理
-- loading 狀態
-
-#### [NEW] [app/components/__tests__/Dialog.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/__tests__/Dialog.spec.js)
-
-測試 `Dialog.vue` 組件：
-- 對話框開啟/關閉
-- 插槽內容渲染
-- 遮罩點擊關閉
-- ESC 鍵關閉
-- 動畫效果
-
-#### [NEW] [app/components/__tests__/Drawer.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/__tests__/Drawer.spec.js)
-
-測試 `Drawer.vue` 組件：
-- 抽屜開啟/關閉
-- 方向設定（left, right, top, bottom）
-- 插槽內容渲染
-- 遮罩點擊關閉
-
-#### [NEW] [app/components/__tests__/SwitchButton.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/__tests__/SwitchButton.spec.js)
-
-測試 `SwitchButton.vue` 組件：
-- 開關切換
-- v-model 綁定
-- disabled 狀態
-- 自訂樣式
+#### 低優先級（特殊功能）
+9. **useWebRTC.js** - WebRTC 功能
+10. **useWebSocket.js** - WebSocket 連接
+11. **useSocketIoClient.js** - Socket.IO 客戶端
+12. **useEventSource.js** - Server-Sent Events
+13. **useCameraStream.js** - 攝像頭串流
+14. **useFaceapi.js** - 人臉識別 API
+15. **useWangEditor.js** - 富文本編輯器
+16. **useBeforeunload.js** - 頁面卸載處理
 
 ---
 
-### 整合測試
+### 3. 其他工具 (2 個未測試)
 
-#### [NEW] [tests/integration/phone-validation.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/integration/phone-validation.spec.js)
-
-測試 PhoneInput 組件與 check-phone 工具的整合：
-- 完整的電話號碼驗證流程
-- 不同國家的電話號碼驗證
-- 錯誤訊息顯示
-- 表單提交整合
-
-#### [NEW] [tests/integration/api/oauth.spec.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/integration/api/oauth.spec.js)
-
-測試 OAuth API 端點：
-- Google OAuth 驗證
-- Facebook OAuth 驗證
-- Line OAuth 驗證
-- 錯誤處理
+1. **shared/request/index.js** - 請求工具
+2. **shared/third-party/firebase.js** - Firebase 配置
 
 ---
 
-### E2E 測試增強（使用 Playwright）
+## 🎯 優先級建議
 
-#### [NEW] [tests/phone-input-demo.spec.ts](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/phone-input-demo.spec.ts)
+### 第一優先級（建議立即添加）
+這些是核心功能，測試價值高：
 
-新增 PhoneInput 組件的完整 E2E 測試：
-- 訪問 demo 頁面
-- 選擇不同國家
-- 輸入電話號碼
-- 驗證錯誤訊息顯示
-- 驗證成功狀態
+1. **LoadingBar.vue** - 用戶體驗的核心組件
+2. **useAsyncDataError.js** - 錯誤處理邏輯
+3. **useUserCookie.js** - 用戶狀態管理
+4. **shared/request/index.js** - 請求工具函數
+5. **DatePicker.vue** - 常用輸入組件
 
-#### [NEW] [tests/components-navigation.spec.ts](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/components-navigation.spec.ts)
+**預估工作量：** 5-8 小時
+**測試數量：** 約 60-80 tests
+**預期覆蓋率提升：** +8-12%
 
-測試組件頁面導航：
-- 組件列表頁面
-- 各組件 demo 頁面訪問
-- 頁面渲染正確性
+### 第二優先級（可選但推薦）
+這些組件常用且邏輯較複雜：
 
-#### [NEW] [tests/form-submission.spec.ts](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/form-submission.spec.ts)
+1. **Countdown.vue** - 倒數計時邏輯
+2. **ScrollFetch.vue** - 無限滾動邏輯
+3. **QRcode.vue** - QR Code 生成
+4. **SwiperCustom.vue** / **SwiperJs.vue** - 輪播功能
+5. **useDayjs.js** - 日期處理
 
-測試表單提交流程：
-- 表單填寫
-- 驗證觸發
-- 提交處理
-- 錯誤處理
+**預估工作量：** 4-6 小時
+**測試數量：** 約 40-60 tests
+**預期覆蓋率提升：** +5-8%
 
----
+### 第三優先級（視需求而定）
+這些是特殊功能或第三方整合：
 
-### 測試工具和輔助檔案
+1. **useWebRTC.js** - 如果有使用 WebRTC
+2. **useWebSocket.js** - 如果有使用 WebSocket
+3. **useGoogle.js** / **useFacebook.js** - 第三方整合
+4. **WangEditor** - 富文本編輯器
 
-#### [NEW] [tests/utils/test-helpers.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/utils/test-helpers.js)
-
-建立測試輔助函數：
-- Vue 組件掛載輔助函數
-- Mock 資料生成器
-- 常用的測試斷言輔助函數
-
-#### [NEW] [tests/mocks/phone-country-code.js](file:///Users/parker/Desktop/code/parker-nuxt-lab/tests/mocks/phone-country-code.js)
-
-建立測試用的 mock 資料：
-- 簡化的國家代碼資料
-- 測試用的電話號碼範例
+**預估工作量：** 視需求而定
+**測試數量：** 約 30-50 tests
+**預期覆蓋率提升：** +3-5%
 
 ---
 
-## Verification Plan
+## 📈 測試覆蓋率提升計劃
 
-### Automated Tests
+### 當前狀態
+- 組件測試：7/34 (20.6%)
+- Composables 測試：1/17 (5.9%)
+- 工具函數測試：4/6 (66.7%)
+- **總體覆蓋率：67.73%**
 
-#### 單元測試
-```bash
-# 執行所有單元測試
-yarn test:unit
+### 目標設定
 
-# 執行單元測試並產生覆蓋率報告
-yarn test:unit:coverage
+#### 階段一：核心功能（+60-80 tests）
+完成第一優先級測試後：
+- 組件測試：12/34 (35.3%)
+- Composables 測試：4/17 (23.5%)
+- 工具函數測試：5/6 (83.3%)
+- **預期覆蓋率：75-80%** ⭐
 
-# 監聽模式執行單元測試
-yarn test:unit:watch
-```
+#### 階段二：常用組件（+40-60 tests）
+完成第二優先級測試後：
+- 組件測試：17/34 (50%)
+- Composables 測試：5/17 (29.4%)
+- 工具函數測試：6/6 (100%)
+- **預期覆蓋率：80-85%** ⭐⭐
 
-預期結果：
-- 所有單元測試通過
-- 工具函數測試覆蓋率 > 90%
-- 組件測試覆蓋率 > 80%
-
-#### 整合測試
-```bash
-# 執行整合測試
-yarn test:integration
-```
-
-預期結果：
-- 所有整合測試通過
-- API 端點正確回應
-- 組件間互動正常
-
-#### E2E 測試（Playwright）
-```bash
-# 先建置並啟動測試伺服器
-yarn pretest
-
-# 執行 E2E 測試
-yarn test:e2e
-
-# 使用 UI 模式執行 E2E 測試
-yarn test:e2e-ui
-```
-
-預期結果：
-- 所有 E2E 測試通過
-- 頁面導航正常
-- 使用者互動流程正確
-
-#### 執行所有測試
-```bash
-# 執行所有測試（單元 + 整合 + E2E）
-yarn test:all
-```
-
-### Manual Verification
-
-1. **檢查測試覆蓋率報告**
-   - 執行 `yarn test:unit:coverage`
-   - 開啟 `coverage/index.html` 查看詳細覆蓋率報告
-   - 確認關鍵功能的測試覆蓋率達標
-
-2. **檢查測試執行速度**
-   - 單元測試應在 10 秒內完成
-   - 整合測試應在 30 秒內完成
-   - E2E 測試可能需要 1-2 分鐘
-
-3. **檢查測試報告**
-   - 查看 Playwright HTML 報告（執行 E2E 測試後自動開啟）
-   - 確認所有測試案例都有清楚的描述
-   - 檢查失敗測試的截圖和追蹤資訊
+#### 階段三：完整覆蓋（+30-50 tests）
+完成第三優先級測試後：
+- 組件測試：22+/34 (64.7%+)
+- Composables 測試：9+/17 (52.9%+)
+- 工具函數測試：6/6 (100%)
+- **預期覆蓋率：85-90%** ⭐⭐⭐
 
 ---
 
-## 實作順序建議
+## 💡 測試策略建議
 
-1. **階段一：環境設定**
-   - 安裝 Vitest 及相關依賴
-   - 建立 vitest.config.ts
-   - 更新 package.json scripts
+### 1. 組件測試重點
+- ✅ 基本渲染
+- ✅ Props 驗證
+- ✅ 事件處理
+- ✅ 用戶互動
+- ✅ 邊界情況
+- ✅ 錯誤處理
 
-2. **階段二：工具函數單元測試**
-   - 測試 amount-format.js
-   - 測試 number-unit.js
-   - 測試 safeToJSON.js
-   - 測試 check-phone.js
+### 2. Composables 測試重點
+- ✅ 返回值格式
+- ✅ 狀態管理
+- ✅ 副作用處理
+- ✅ 錯誤處理
+- ✅ Mock 第三方依賴
+- ✅ 生命週期鉤子
 
-3. **階段三：組件單元測試**
-   - 測試 Selector.vue（PhoneInput 依賴此組件）
-   - 測試 PhoneInput.vue
-   - 測試其他組件
-
-4. **階段四：整合測試**
-   - PhoneInput 整合測試
-   - API 整合測試
-
-5. **階段五：E2E 測試**
-   - PhoneInput demo 頁面測試
-   - 組件導航測試
-   - 表單提交測試
+### 3. 整合測試重點
+- ✅ 組件間互動
+- ✅ 資料流
+- ✅ API 整合
+- ✅ 狀態同步
+- ✅ 錯誤傳播
 
 ---
 
-## 預期成果
+## 🚫 不建議測試的項目
 
-完成後，專案將擁有：
-- ✅ 完整的單元測試覆蓋（工具函數 + 組件）
-- ✅ 整合測試確保組件間正確互動
-- ✅ E2E 測試驗證使用者流程
-- ✅ 測試覆蓋率報告
-- ✅ CI/CD 可整合的測試指令
-- ✅ 開發時的即時測試回饋（watch mode）
+1. **純展示組件** - 沒有邏輯的靜態組件
+2. **第三方庫包裝** - 已有完整測試的第三方庫
+3. **一次性 Demo 組件** - DialogModal/DemoContent.vue
+4. **複雜動畫組件** - 難以測試且價值較低
+5. **已棄用組件** - 不再使用的舊組件
+
+---
+
+## 📝 實作步驟
+
+### 步驟 1：準備工作
+1. 確認測試環境正常運行
+2. 準備測試數據和 Mock
+3. 建立測試輔助函數
+
+### 步驟 2：第一優先級實作
+1. LoadingBar.vue 測試（預估 2 小時）
+2. useAsyncDataError.js 測試（預估 1.5 小時）
+3. useUserCookie.js 測試（預估 1.5 小時）
+4. shared/request/index.js 測試（預估 2 小時）
+5. DatePicker.vue 測試（預估 2 小時）
+
+### 步驟 3：驗證與調整
+1. 執行所有測試確保通過
+2. 檢查覆蓋率報告
+3. 調整測試策略
+
+### 步驟 4：第二優先級實作
+根據實際需求和時間安排
+
+### 步驟 5：持續改進
+定期檢視測試覆蓋率並調整優先級
+
+---
+
+## 📊 預期成果
+
+**完成第一優先級後：**
+- ✅ 新增 60-80 tests
+- ✅ 覆蓋率達到 75-80%
+- ✅ 核心功能完整測試
+
+**完成第二優先級後：**
+- ✅ 新增 100-140 tests
+- ✅ 覆蓋率達到 80-85%
+- ✅ 常用組件完整測試
+
+**完成第三優先級後：**
+- ✅ 新增 130-190 tests
+- ✅ 覆蓋率達到 85-90%
+- ✅ 特殊功能完整測試
+
+---
+
+## 🎯 總結
+
+**當前測試狀態：**
+- ✅ 270+ tests (255 passing, 94.4%)
+- ✅ 67.73% 覆蓋率
+- ✅ 核心功能已測試
+
+**潛在測試項目：**
+- 📦 27 個未測試組件
+- 🔧 16 個未測試 composables
+- 🛠️ 2 個未測試工具函數
+
+**建議行動：**
+1. 優先測試核心功能（LoadingBar, useAsyncDataError, useUserCookie）
+2. 逐步增加常用組件測試
+3. 根據實際使用情況決定是否測試特殊功能
+4. 定期檢視並更新測試優先級
+
+**長期目標：**
+- 🎯 達到 85%+ 測試覆蓋率
+- 🎯 所有核心功能 100% 測試
+- 🎯 建立完整的測試文檔
+- 🎯 整合到 CI/CD 流程
