@@ -18,7 +18,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env.e2e') });
  */
 export default defineConfig({
   testDir: './tests',
-  testMatch: /.*\.spec\.ts$/, // Only match .spec.ts files (E2E tests)
+  testMatch: /.*\.spec\.js$/, // Changed from .ts to .js
   testIgnore: ['**/unit/**', '**/integration/**'],
   /* Run tests in files in parallel */
   fullyParallel: true,
