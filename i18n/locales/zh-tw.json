@@ -284,5 +284,18 @@
         "changeFormat": "變更顏色格式"
       }
     }
+  },
+  "offline": {
+    "title": "目前沒有網路連線",
+    "description": "請檢查您的網路連線，或稍後再試。",
+    "backOnline": "網路已恢復！",
+    "canRetry": "您現在可以重新載入頁面了。",
+    "online": "已連線",
+    "offline": "離線",
+    "retry": "重新載入",
+    "goHome": "返回首頁",
+    "tipTitle": "提示",
+    "tipMessage": "已訪問過的頁面可以在離線狀態下瀏覽。",
+    "autoDetect": "系統會自動偵測網路狀態變化"
   }
 }

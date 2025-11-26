@@ -28,7 +28,7 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
   // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
-  'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com', 'https://vercel.live'],
+  // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com', 'https://vercel.live'],
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
   'connect-src': ["'self'", 'https://assets.vercel.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com', 'https://*.google-analytics.com', 'https://*.googleapis.com', 'https://api.github.com'],
   'frame-ancestors': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
@@ -70,7 +70,8 @@ export default defineNuxtConfig({
     // '/components/**': { isr: true },
 
     // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
-    '/**': { prerender: true },
+    // '/**': { prerender: true },
+    '/offline': { prerender: true },
     '/api/nuxt-server/swagger-docs': { prerender: true },
     '/': { isr: true },
     '/zh': { isr: true },
@@ -318,6 +319,12 @@ export default defineNuxtConfig({
         '**/node_modules/**',
         '**/*.map',
       ],
+
+      // 注意：離線頁面 /offline 已經通過 globPatterns 中的 '**/*.html' 自動包含
+      // 不需要使用 additionalManifestEntries 重複添加
+      // additionalManifestEntries: [
+      //   { url: '/offline', revision: null }
+      // ],
     },
 
     devOptions: {

@@ -284,5 +284,18 @@
         "changeFormat": "Change color format"
       }
     }
+  },
+  "offline": {
+    "title": "No Internet Connection",
+    "description": "Please check your internet connection and try again later.",
+    "backOnline": "You're back online!",
+    "canRetry": "You can now reload the page.",
+    "online": "Online",
+    "offline": "Offline",
+    "retry": "Reload",
+    "goHome": "Go Home",
+    "tipTitle": "Tip",
+    "tipMessage": "Previously visited pages can be browsed offline.",
+    "autoDetect": "Network status changes will be detected automatically"
   }
 }

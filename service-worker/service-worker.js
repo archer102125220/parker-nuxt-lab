@@ -1,7 +1,7 @@
 
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
+import { registerRoute, setCatchHandler } from 'workbox-routing';
+import { CacheFirst, StaleWhileRevalidate, NetworkOnly } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 
 import '@service-worker/firebase-messaging';
@@ -179,4 +179,39 @@ registerRoute(
     },
   }),
   'GET'
+);
+
+// 設置全局錯誤處理器 - 當所有路由都失敗時的 fallback
+// 這會在用戶離線且訪問未快取的頁面時顯示離線頁面
+setCatchHandler(async ({ event }) => {
+  // 只處理導航請求（頁面請求）
+  if (event.request.destination === 'document') {
+    try {
+      // 嘗試從快取中獲取離線頁面
+      // 遍歷所有快取尋找離線頁面
+      const cacheNames = await caches.keys();
+      for (const cacheName of cacheNames) {
+        if (cacheName.startsWith('workbox-precache')) {
+          const cache = await caches.open(cacheName);
+          const cachedResponse = await cache.match('/offline');
+
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to get offline page from cache:', error);
+    }
+  }
+
+  // 對於其他類型的請求，返回錯誤
+  return Response.error();
+});
+
+// 為導航請求設置 Network Only 策略
+// 失敗時會觸發上面的 catchHandler 顯示離線頁面
+registerRoute(
+  ({ request }) => request.mode === 'navigate',
+  new NetworkOnly()
 );
