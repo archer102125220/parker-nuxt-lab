@@ -12,34 +12,36 @@
 
 <style lang="scss">
 .full_screen_layout {
+  // Positioning
   position: relative;
-  // height: 100vh;
+
+  // Display & Box Model
   width: 100vw;
-  // width: 1210px;
-  // margin: auto;
   overflow: auto;
+
   @include mobile {
-    // height: auto;
     overflow: unset;
-    // width: 327px;
   }
 
   &-header {
+    // Positioning
     position: absolute;
     top: 16px;
     left: 16px;
     z-index: 3;
   }
+
   &-content {
+    // Display & Box Model
     width: 1210px;
     max-width: 100%;
     min-height: 100vh;
-    // margin: 0 40px;
     margin: auto;
+
     @include mobile {
       width: 327px;
-      // margin: 0 20px;
     }
+
     @include tabletOnly {
       width: calc(100% - 20px);
       margin: 20px 10px;

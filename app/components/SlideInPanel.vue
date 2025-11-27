@@ -1,5 +1,9 @@
 <template>
-  <div class="slide_in_panel_list" :style="cssVariable" :css-left-enter="leftEnter">
+  <div
+    class="slide_in_panel_list"
+    :style="cssVariable"
+    :css-left-enter="leftEnter"
+  >
     <div
       v-for="(message, index) in messageList"
       :key="message.timestamp"
@@ -332,7 +336,8 @@ async function handleMessageHidden() {
       messageList.value = messageList.value.filter((message, removeIndex) => {
         const isNotRemove =
           _isElement(messageEl.value?.[removeIndex]) === false ||
-          messageEl.value[removeIndex].getAttribute('css-message-ended') !== 'true';
+          messageEl.value[removeIndex].getAttribute('css-message-ended') !==
+            'true';
         if (isNotRemove === true) {
           emit('remove', message, removeIndex);
         }
@@ -530,34 +535,47 @@ async function handleUserRemoveEnd(message, index) {
 </script>
 <style lang="scss" scoped>
 .slide_in_panel_list {
+  // Positioning
   position: var(--slide_in_panel_list_container_position, fixed);
   top: var(--slide_in_panel_list_top);
   bottom: var(--slide_in_panel_list_bottom);
   z-index: var(--slide_in_panel_list_zIndex);
+
+  // Display & Box Model
   width: var(--slide_in_panel_list_width, 100vw);
+
+  // Misc
   user-select: none;
 
   &[css-left-enter='true'] {
     left: var(--slide_in_panel_list_left, -100vw);
   }
+
   &:not([css-left-enter='true']) {
     right: var(--slide_in_panel_list_right, -100vw);
   }
 
   &-message {
+    // Positioning
     position: absolute;
     bottom: calc(var(--message_bottom) + var(--message_item_spacing, 0px));
     z-index: var(--message_z_index);
+
+    // Display & Box Model
     height: var(--message_item_height);
+
+    // Typography
+    word-break: keep-all;
+
+    // Visual
     opacity: 1;
 
+    // Animation
     transition:
       left 0.5s linear,
       right 0.5s linear,
       bottom 0.15s,
       opacity 0.4s;
-
-    word-break: keep-all;
 
     &[css-left-enter='true'] {
       left: var(--message_left, 0px);

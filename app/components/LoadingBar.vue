@@ -24,27 +24,39 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .loading_bar {
+  // Positioning
   position: var(--loading_position);
   top: 0;
   left: 0;
   z-index: 10;
-  width: var(--loading_width);
 
+  // Display & Box Model
+  width: var(--loading_width);
   height: var(--loading_height);
-  background-color: rgb(217 217 217 / 25%);
   border-radius: 2px;
-  transition: 0.4s linear;
-  transition-property: width, background-color;
   overflow: hidden;
 
+  // Visual
+  background-color: rgb(217 217 217 / 25%);
+
+  // Animation
+  transition: 0.4s linear;
+  transition-property: width, background-color;
+
   &::after {
-    content: '';
+    // Display & Box Model
     display: block;
-    height: var(--loading_height);
     width: 50%;
-    // background-color: #fcbc51;
+    height: var(--loading_height);
+
+    // Visual
     background-color: $primary;
+
+    // Animation
     animation: progressAnimationStrike 1.5s infinite;
+
+    // Misc
+    content: '';
   }
 }
 @keyframes progressAnimationStrike {

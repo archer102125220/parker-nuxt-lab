@@ -144,12 +144,17 @@ async function handleClose(removeTimeId) {
 
 <style lang="scss">
 .message {
-  z-index: 200000;
+  // Positioning
   position: fixed;
   top: var(--message_top);
   left: 0;
+  z-index: 200000;
+
+  // Display & Box Model
   width: 100vw;
-  transition: top, 0.15s;
+
+  // Animation
+  transition: top 0.15s;
   &-block {
     z-index: 10;
     .v-snackbar__content {

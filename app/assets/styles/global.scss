@@ -16,12 +16,15 @@
 }
 
 html {
+  // Typography
   font-family: 'Noto Sans TC', sans-serif;
+  font-size: 16px;
   line-height: 1.15;
+
+  // Misc
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  font-size: 16px;
 
   *:not(
     .wang_editor_view,
@@ -45,12 +48,17 @@ html {
 
 a {
   &[target='_blank']::after {
-    content: '';
+    // Display & Box Model
     display: inline-block;
     width: var(--link_blank_width, 16px);
     height: var(--link_blank_height, 16px);
+
+    // Visual
     background-image: url('/img/icon/external-link/outbound-link-icon.webp');
     background-size: 100%;
+
+    // Misc
+    content: '';
   }
 }
 
@@ -64,7 +72,10 @@ button[disabled] {
 }
 
 body {
+  // Display & Box Model
   margin: 0;
+
+  // Typography
   font-weight: 400;
   line-height: 1.5;
   color: #212529;

@@ -32,37 +32,49 @@
   // padding: 0 16px;
 
   .v-overlay {
-    // position: sticky;
+    // Positioning
     bottom: 32px;
     right: 8px;
     z-index: 9 !important;
   }
   &-block {
     .v-snackbar__content {
+      // Display & Box Model
       padding: 0;
       border-radius: 4px;
+
       .v-alert__prepend {
-        align-self: unset;
+        // Display & Box Model
         margin-right: 8px;
+
+        // Misc
+        align-self: unset;
       }
+
       .v-alert__content {
+        // Display & Box Model
         display: flex;
         align-items: center;
+
         .v-progress-circular {
+          // Display & Box Model
           margin-left: 8px;
         }
       }
+
       .v-alert--density-default {
-        max-width: 100vw;
-        padding: 0 10px;
+        // Display & Box Model
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
+        max-width: 100vw;
+        padding: 0 10px;
       }
     }
+
     .v-snackbar__wrapper {
-      // width: 60%;
+      // Display & Box Model
       min-width: unset;
       min-height: unset;
       max-width: unset;
