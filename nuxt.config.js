@@ -250,7 +250,7 @@ export default defineNuxtConfig({
     // default -> 'sw.js'
     filename: 'service-worker.js',
 
-    registerType: 'autoUpdate',
+    // registerType: 'autoUpdate',
 
     // https://www.fotor.com/tw/features/crop.html 圖片編輯（包含裁切功能）
     // https://www.photoroom.com/zh-tw/tools/background-remover 去除背景
