@@ -309,7 +309,8 @@ export default defineNuxtConfig({
       // 只預快取核心應用資源，大型文件使用運行時快取
       globPatterns: [
         '**/*.{js,css,html}',
-        'img/ico/**/*.{png,ico,svg}', // 只快取圖標
+        // 'img/ico/**/*.{png,ico,svg}', // 只快取圖標
+        'img/**/*.{jpg,jpeg,png,ico,svg,webp}', // 只快取圖片
         'robots.txt'
       ],
 

@@ -209,9 +209,17 @@ setCatchHandler(async ({ event }) => {
   return Response.error();
 });
 
-// 為導航請求設置 Network Only 策略
-// 失敗時會觸發上面的 catchHandler 顯示離線頁面
+// 為導航請求設置 Network First 策略
+// 優先從網路獲取，失敗時從快取獲取，都失敗時觸發 catchHandler 顯示離線頁面
 registerRoute(
   ({ request }) => request.mode === 'navigate',
-  new NetworkOnly()
+  new StaleWhileRevalidate({
+    cacheName: 'pages-cache',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60 * 2, // 2 小時
+      }),
+    ],
+  })
 );
