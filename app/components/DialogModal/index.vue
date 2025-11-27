@@ -165,12 +165,14 @@ async function handleChange(newValue) {
   --dialog_content_opacity: 1;
   --dialog_bg_color: #fff;
   --dialog_radius: 4px;
-  opacity: var(--dialog_content_opacity);
-  // background: transparent;
-  background: var(--dialog_bg_color);
-  // border-radius: 4px;
-  border-radius: var(--dialog_radius);
+
+  // Display & Box Model
   overflow-y: auto;
+  border-radius: var(--dialog_radius);
+
+  // Visual
+  background: var(--dialog_bg_color);
+  opacity: var(--dialog_content_opacity);
   box-shadow:
     0 0.6875rem 0.9375rem -0.4375rem
       var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
@@ -178,8 +180,5 @@ async function handleChange(newValue) {
       var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
     0 0.5625rem 2.875rem 0.5rem
       var(--v-shadow-key-ambient-opacity, rgba(0, 0, 0, 0.12));
-  // > * {
-  //   background-color: #fff;
-  // }
 }
 </style>

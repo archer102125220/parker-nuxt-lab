@@ -34,15 +34,19 @@ onMounted(() => {
 
 .layout_footer {
   &[css-animation='true'] {
+    // Animation
     animation-name: footerEnterAnimation;
     animation-duration: 0.3s;
   }
   &-copyright {
-    padding: 16px;
-    text-align: right;
+    // Display & Box Model
     margin-top: 32px;
-    color: #666;
+    padding: 16px;
+
+    // Typography
     font-size: 14px;
+    text-align: right;
+    color: #666;
   }
 }
 </style>

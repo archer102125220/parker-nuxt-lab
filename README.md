@@ -150,6 +150,13 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - PostCSS includes `autoprefixer` and `postcss-pxtorem` (all properties)
 - Custom `postcss-zerorem` fix to avoid `+ 0` unit issues
 - Global SCSS: `style/global.scss`, `style/animation.scss`; `variable.scss` and `mixin.scss` injected via `additionalData`
+- **CSS Property Order**: The project follows a mainstream CSS property sort order for consistency and maintainability:
+  1. **Positioning** (position, top, left, z-index...)
+  2. **Display & Box Model** (display, flex, width, margin, padding, border...)
+  3. **Typography** (font, color, text-align...)
+  4. **Visual** (background, box-shadow, opacity...)
+  5. **Animation** (transition, animation...)
+  6. **Misc** (cursor, content...)
 
 
 ## Realtime / Media Pages

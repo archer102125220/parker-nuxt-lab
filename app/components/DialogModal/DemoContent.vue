@@ -36,44 +36,58 @@ const emit = defineEmits(['close']);
 
 <style lang="scss" scoped>
 .dialog_coupon_qr_code {
-  border-radius: 16px;
-  background: #4f26de;
-  box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.15),
-    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  // Display & Box Model
   padding-top: 24px;
+  border-radius: 16px;
+
+  // Typography
   text-align: center;
+
+  // Visual
+  background: #4f26de;
+  box-shadow:
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
   &-title {
+    // Display & Box Model
     padding-bottom: 8px;
-    text-align: center;
-    color: #fff;
-    font-size: 1.5rem;
-    // font-family: Taipei Sans TC Beta;
+
+    // Typography
     font-family: Noto Sans TC;
+    font-size: 1.5rem;
     font-style: normal;
     font-weight: 700;
-  }
-  &-subtitle {
-    padding-bottom: 24px;
     text-align: center;
     color: #fff;
-    font-size: 1rem;
-    // font-family: Taipei Sans TC Beta;
+  }
+  &-subtitle {
+    // Display & Box Model
+    padding-bottom: 24px;
+
+    // Typography
     font-family: Noto Sans TC;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 400;
+    text-align: center;
+    color: #fff;
   }
   &-qr_code {
     margin: 0 auto 40px auto;
   }
   &-action {
-    background: #fff;
-    font-size: 1.5rem;
-    // font-family: Taipei Sans TC Beta;
+    // Display & Box Model
+    padding: 0 140px 0 140px;
+
+    // Typography
     font-family: Noto Sans TC;
+    font-size: 1.5rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    padding: 0 140px 0 140px;
+
+    // Visual
+    background: #fff;
   }
 }
 </style>
@@ -88,14 +102,16 @@ const emit = defineEmits(['close']);
   }
   &-action {
     .v-btn.v-btn--density-default {
-      color: #2c64e3;
-      // font-family: Taipei Sans TC Beta;
+      // Display & Box Model
+      height: 80px;
+
+      // Typography
       font-family: Noto Sans TC;
       font-size: 1.5rem;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
-      height: 80px;
+      color: #2c64e3;
     }
   }
 }

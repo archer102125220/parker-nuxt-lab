@@ -160,41 +160,45 @@ onMounted(() => {
   }
 }
 .layout_header {
-  // position: relative;
-
+  // Display & Box Model
   display: flex;
   flex-direction: row;
   align-items: stretch;
-
-  // margin: 8px;
   padding: 8px 16px;
 
+  // Visual
   background-color: #f8f9fa;
 
   &[css-animation='true'] {
+    // Animation
     animation-name: headerEnterAnimation;
     animation-duration: 0.3s;
   }
 
   &-back {
-    // position: absolute;
-    // left: 0px;
-    // top: 0;
-    font-size: 24px;
-
+    // Display & Box Model
     width: 0px;
-    opacity: 0;
-
     overflow: hidden;
 
+    // Typography
+    font-size: 24px;
+
+    // Visual
+    opacity: 0;
+
+    // Animation
     animation-name: backWidthAnimation, backOpacityAnimation;
     animation-duration: 0.2s, 0.3s;
     animation-direction: reverse, reverse;
 
     &[css-has-back='true'] {
+      // Display & Box Model
       width: 32px;
+
+      // Visual
       opacity: 1;
 
+      // Animation
       animation-name: backWidthAnimation, backOpacityAnimation;
       animation-duration: 0.2s, 0.3s;
       animation-direction: normal, normal;
@@ -202,31 +206,37 @@ onMounted(() => {
   }
 
   &-name {
+    // Display & Box Model
     flex: 1;
-
     padding-left: 8px;
 
     &-link {
+      // Display & Box Model
       display: inline-flex;
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
       gap: 13px;
 
+      // Typography
       text-decoration: none;
 
       &-logo {
-        height: 30px;
+        // Display & Box Model
         width: 30px;
+        height: 30px;
         object-fit: contain;
       }
 
       &-label {
-        // font-size: 24px;
-        color: #343a40;
+        // Display & Box Model
         margin: 0;
 
+        // Typography
+        color: #343a40;
+
         &[css-animation='true'] {
+          // Animation
           animation-name: enterLabelAnimation;
           animation-duration: 0.3s;
         }

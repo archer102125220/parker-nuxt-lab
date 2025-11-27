@@ -57,86 +57,96 @@ const cssVariable = computed(() => {
   // --hexagon_mask_bg_color: #007bff;
   --hexagon_mask_bg_color: #fff;
 
+  // Positioning
   position: relative;
 
+  // Display & Box Model
   width: var(--hexagon_width);
-  // height: 120px;
   height: var(--hexagon_height);
 
   &-top {
+    // Positioning
     position: absolute;
     top: 0px;
     left: 0;
     right: 0;
 
     &::after {
-      content: '';
-
+      // Positioning
       position: absolute;
       right: 0;
 
+      // Display & Box Model
       width: 0;
-      // width: 100%;
       height: 0;
       border-style: solid;
       border-width: 0 var(--triangle_width) var(--triangle_height) 0;
       border-color: transparent var(--hexagon_mask_bg_color) transparent
         transparent;
+
+      // Misc
+      content: '';
     }
 
     &::before {
-      content: '';
-
+      // Positioning
       position: absolute;
       left: 0;
 
+      // Display & Box Model
       width: 0;
-      // width: 100%;
       height: 0;
       border-style: solid;
       border-width: var(--triangle_height) var(--triangle_width) 0 0;
       border-color: var(--hexagon_mask_bg_color) transparent transparent
         transparent;
+
+      // Misc
+      content: '';
     }
   }
 
   &-bottom {
+    // Positioning
     position: absolute;
     bottom: 0px;
-    // top: calc(100% + );
     left: 0;
     right: 0;
 
     &::after {
-      content: '';
-
+      // Positioning
       position: absolute;
-      bottom: 0;
       right: 0;
+      bottom: 0;
 
+      // Display & Box Model
       width: 0;
-      // width: 100%;
       height: 0;
       border-style: solid;
       border-width: 0 0 var(--triangle_height) var(--triangle_width);
       border-color: transparent transparent var(--hexagon_mask_bg_color)
         transparent;
+
+      // Misc
+      content: '';
     }
 
     &::before {
-      content: '';
-
+      // Positioning
       position: absolute;
       bottom: 0;
       left: 0;
 
+      // Display & Box Model
       width: 0;
-      // width: 100%;
       height: 0;
       border-style: solid;
       border-width: var(--triangle_height) 0 0 var(--triangle_width);
       border-color: transparent transparent transparent
         var(--hexagon_mask_bg_color);
+
+      // Misc
+      content: '';
     }
   }
 }

@@ -151,6 +151,13 @@ yarn test:codegen
 - **PostCSS** 內含 `autoprefixer` 與 `postcss-pxtorem`（全屬性轉換）
 - 另有自訂 `postcss-zerorem` 處理，避免 `+ 0` 單位錯誤
 - 全域 SCSS：`style/global.scss`、`style/animation.scss`，並透過 `additionalData` 注入 `variable.scss` 與 `mixin.scss`
+- **CSS 屬性順序規範**: 專案遵循主流 CSS 屬性排序標準，以確保代碼一致性與可維護性：
+  1. **Positioning** (position, top, left, z-index...)
+  2. **Display & Box Model** (display, flex, width, margin, padding, border...)
+  3. **Typography** (font, color, text-align...)
+  4. **Visual** (background, box-shadow, opacity...)
+  5. **Animation** (transition, animation...)
+  6. **Misc** (cursor, content...)
 
 
 ## 即時通訊 / 影音相關頁面

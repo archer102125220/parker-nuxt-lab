@@ -217,16 +217,19 @@ function resetRefreshDisable() {
 
 <style lang="scss" scoped>
 .tabs_content {
+  // Positioning
   position: relative;
+
+  // Display & Box Model
   flex: 1;
-  // height: 100%;
   height: var(--tabs_content_height);
 
   &-swiper {
-    // height: 100%;
+    // Display & Box Model
     height: var(--tabs_content_swiper_height);
 
     :deep(.tabs_content-swiper-scroll_fetch.scroll_fetch) {
+      // Positioning
       position: static;
     }
   }

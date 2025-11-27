@@ -38,31 +38,31 @@ const props = defineProps({
   }
 
   &-loading {
+    // Positioning
     position: relative;
 
-    height: 100%;
+    // Display & Box Model
     width: 100%;
-    // aspect-ratio: 1;
-    // border-radius: 1rem;
-
+    height: 100%;
     overflow: hidden;
-    // background-color: #dcdcdc;
+
+    // Visual
     background: repeating-linear-gradient(126deg, #ededed, #dcdcdc, #ededed);
 
     &:after {
-      content: '';
-
+      // Positioning
       position: absolute;
       top: 0;
-      bottom: 0;
       right: 0;
+      bottom: 0;
 
+      // Display & Box Model
       display: block;
       width: 100%;
       height: 100%;
-
       border-radius: 100%;
 
+      // Visual
       background: repeating-linear-gradient(
         126deg,
         #ededed 30%,
@@ -70,6 +70,10 @@ const props = defineProps({
         #ededed 70%
       );
 
+      // Misc
+      content: '';
+
+      // Animation
       animation: skeleton_after_animation 2.5s infinite linear;
     }
   }

@@ -11,14 +11,20 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .wang_editor_view {
+  // Display & Box Model
   width: 100%;
   height: 100%;
+
   :deep([data-w-e-is-void]) {
+    // Typography
     text-align: center;
+
     iframe {
+      // Display & Box Model
       width: 70vw;
-      height: 50vh;
       max-width: 100%;
+      height: 50vh;
+
       @include tablet {
         width: 90vw;
         min-height: 90vw;

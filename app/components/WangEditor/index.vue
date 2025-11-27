@@ -564,60 +564,82 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .wang_editor {
-  // min-height: 400px;
+  // Positioning
   z-index: 2;
+
   --editor_border: 1px;
   --editor_border_color: #a5a6a9;
   --toolbar_bg_color: #fff;
   --editor_hover_bg_color: #eeeeee;
   --editor_hover_border_color: #3c3f43;
+
   [is-loading='false'] {
+    // Display & Box Model
     display: block;
   }
   // :deep(.v-skeleton-loader) {
   //   height: 100%;
   // }
   :deep(.v-skeleton-loader__bone) {
+    // Display & Box Model
     height: calc(var(--editor_height) + 75px);
   }
   :deep(.w-e-text-container) {
+    // Typography
+    white-space: pre-wrap;
     word-wrap: break-word;
     word-break: break-word;
-    white-space: pre-wrap;
+
     p {
+      // Display & Box Model
       margin: 0;
     }
   }
   &-toolbar {
+    // Display & Box Model
     border-bottom: 1px solid #ccc;
+
     :deep(.w-e-toolbar) {
+      // Visual
       background-color: var(--toolbar_bg_color);
     }
   }
   &-editor {
-    height: var(--editor_height);
-    width: 100%;
-    cursor: text;
+    // Display & Box Model
     flex: 1;
+    width: 100%;
+    height: var(--editor_height);
+
+    // Misc
+    cursor: text;
     &:not([is-disabled='true']) {
+      // Display & Box Model
       border-bottom: var(--editor_border) solid var(--editor_border_color);
+
       &:hover {
+        // Visual
         border-bottom-color: var(--editor_hover_border_color);
       }
       :hover {
         :deep(.w-e-scroll) {
+          // Visual
           background-color: var(--editor_hover_bg_color);
         }
       }
     }
     :deep(.w-e-scroll) {
+      // Visual
       background-color: var(--editor_bg_color);
     }
     :deep([data-slate-void='true']) {
+      // Typography
       text-align: center;
+
       iframe {
+        // Display & Box Model
         width: 70vw;
         height: 50vh;
+
         @include tablet {
           width: 90vw;
           min-height: 90vw;
@@ -625,6 +647,7 @@ onBeforeUnmount(() => {
       }
     }
     :deep([data-menu-key='editVideoSize']) {
+      // Display & Box Model
       display: none;
     }
   }
