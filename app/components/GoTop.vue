@@ -123,43 +123,50 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .go_top {
-  // position: fixed;
+  // Positioning
   position: var(--go_top_position, fixed);
-  left: var(--go_top_left);
-  // right: 25px;
   right: var(--go_top_right);
-  // bottom: -50px;
   bottom: var(--go_top_hidden_bottom);
+  left: var(--go_top_left);
   z-index: 10;
 
+  // Display & Box Model
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 60px;
   height: 60px;
-
   border-radius: 100%;
 
+  // Typography
   font-size: 60px;
 
+  // Visual
   opacity: 0;
   background-color: #fff;
+
+  // Animation
   transition: 0.3s;
 
   @include tablet {
+    // Display & Box Model
     width: 30px;
     height: 30px;
+
+    // Typography
     font-size: 30px;
   }
 
   &[css-is-show='true'] {
-    opacity: 1;
-    // bottom: 25px;
+    // Positioning
     bottom: var(--go_top_show_bottom);
+
+    // Visual
+    opacity: 1;
   }
 
   &-btn {
+    // Display & Box Model
     width: 100%;
     height: 100%;
   }

@@ -599,32 +599,33 @@ function handleDragEnd(e) {
   position: var(--drawer_root_position);
 
   &-wrapping {
+    // Positioning
     position: var(--drawer_wrapping_position, fixed);
-    // top: 0px;
-    // right: 0px;
-    // bottom: 0px;
-    // left: 0px;
-    // z-index: 1;
     top: var(--drawer_wrapping_top, 0px);
     right: var(--drawer_wrapping_right, 0px);
     bottom: var(--drawer_wrapping_bottom, 0px);
     left: var(--drawer_wrapping_left, 0px);
     z-index: var(--drawer_wrapping_z_index, 1);
 
+    // Visual
     opacity: var(--drawer_opacity);
 
+    // Animation
     transition: opacity 0.01s;
 
     &-mask {
+      // Positioning
       position: var(--drawer_mask_position, absolute);
       top: 0px;
       right: 0px;
       bottom: 0px;
       left: 0px;
 
+      // Visual
       background-color: #00000080;
     }
     &-mask_animation {
+      // Animation
       animation-name: drawer_open;
       animation-duration: 0.3s;
     }
@@ -642,6 +643,7 @@ function handleDragEnd(e) {
       animation-name: drawer_content_anchor_right;
     }
     &-drawer {
+      // Positioning
       position: var(--drawer_position, absolute);
       top: var(--drawer_top);
       right: var(--drawer_right);
@@ -649,67 +651,79 @@ function handleDragEnd(e) {
       left: var(--drawer_left);
       z-index: var(--drawer_z_index, 2);
 
+      // Display & Box Model
       max-width: var(--drawer_max_width, 100vw);
       max-height: var(--drawer_max_height, 100vh);
+      overflow: auto;
 
-      // animation: var(--drawer_animation);
+      // Animation
       animation-direction: var(--drawer_animation_direction);
       animation-duration: var(--drawer_animation_duration);
       animation-iteration-count: var(--drawer_animation_count);
-
-      overflow: auto;
-
       transform: var(--drawer_drag_transform);
       transition: var(--drawer_drag_transition);
 
       &-drag_bar {
+        // Positioning
         position: absolute;
 
+        // Display & Box Model
         display: flex;
         flex-direction: row;
         justify-content: center;
-
         padding-top: 5px;
 
+        // Visual
         background-color: #fff;
 
         &:after {
-          content: '';
-
+          // Display & Box Model
           border-radius: 8px;
 
+          // Visual
           background-color: #e4e4e4;
+
+          // Misc
+          content: '';
         }
         &[css-is-vertical='true'] {
+          // Display & Box Model
           width: 100%;
           height: 20px;
 
           &[css-anchor='top'] {
+            // Positioning
             bottom: 0px;
           }
           &[css-anchor='bottom'] {
+            // Positioning
             top: 0px;
           }
           &:after {
+            // Display & Box Model
             width: 31px;
             height: 3px;
           }
         }
         &[css-is-horizontal='true'] {
-          width: 20px;
-          // height: 100%;
+          // Positioning
           top: 0px;
           bottom: 0px;
 
+          // Display & Box Model
+          width: 20px;
           align-items: center;
 
           &[css-anchor='left'] {
+            // Positioning
             right: 0px;
           }
           &[css-anchor='right'] {
+            // Positioning
             left: 0px;
           }
           &:after {
+            // Display & Box Model
             width: 3px;
             height: 31px;
           }
@@ -717,14 +731,16 @@ function handleDragEnd(e) {
       }
 
       &-container {
+        // Display & Box Model
         width: var(--drawer_width);
         height: var(--drawer_height);
         min-width: var(--drawer_min_width);
         min-height: var(--drawer_min_height);
         max-width: 100%;
         max-height: 100%;
-
         overflow: auto;
+
+        // Visual
         background-color: #fff;
       }
     }

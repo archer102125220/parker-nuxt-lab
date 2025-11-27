@@ -137,66 +137,84 @@ function handleValueChange(e) {
 
 <style lang="scss" scoped>
 .switch_button {
+  // Positioning
   position: relative;
+
+  // Display & Box Model
   display: inline-flex;
   flex-direction: row;
   align-items: center;
   padding: 12px 18px;
-  // border-radius: 999px;
   border-radius: var(--switch_button_radius);
+  overflow: hidden;
 
+  // Typography
   color: var(--switch_button_color);
+
+  // Visual
   background-color: var(--switch_button_bg_color);
   opacity: var(--switch_button_opacity);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset;
 
-  overflow: hidden;
+  // Misc
   cursor: pointer;
+
+  // Animation
   transition:
     color 0.2s,
     background-color 0.2s,
     opacity 0.2s;
 
   &-check {
+    // Positioning
     position: absolute;
-    width: 100%;
-    height: 100%;
     top: 0;
     left: 0;
     z-index: 1;
-    // display: none;
 
+    // Display & Box Model
+    width: 100%;
+    height: 100%;
+
+    // Visual
     opacity: 0;
-    // cursor: pointer;
+
+    // Misc
     cursor: var(--switch_button_cursor);
   }
   &-icon {
+    // Positioning
     position: absolute;
     top: 8px;
+    right: var(--switch_button_icon_right);
     bottom: 8px;
     left: var(--switch_button_icon_left);
-    right: var(--switch_button_icon_right);
+
+    // Display & Box Model
     display: flex;
     align-items: center;
     justify-content: center;
     align-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
-
-    // height: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 100%;
+
+    // Visual
     background-color: #fff;
-    // box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 
+    // Animation
     transition:
       left 0.2s,
       right 0.2s;
   }
   &-label {
+    // Display & Box Model
     padding-right: var(--switch_button_label_padding_right);
     padding-left: var(--switch_button_label_padding_left);
+
+    // Animation
     transition: padding 0.2s;
   }
 }

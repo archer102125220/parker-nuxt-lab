@@ -145,22 +145,14 @@ onMounted(() => {
 
 .animation_enter_label {
   --enter_label_anime: blink;
-  // position: relative;
 
   &:after {
-    content: '';
-
-    // display: inline-block;
-    // position: absolute;
-    // top: 0px;
-    // left: 0px;
-    // width: 100%;
-    // height: 100%;
-    // border: 0px;
-
+    // Animation
     animation: var(--animation_enter_label_anime) 1s infinite;
-    // animation: blink 1s infinite;
     transition: none;
+
+    // Misc
+    content: '';
   }
 }
 </style>

@@ -296,96 +296,112 @@ function handleChange(option, index) {
 
 <style lang="scss">
 .selector {
+  // Positioning
   position: relative;
+
+  // Display & Box Model
   display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 100%;
 
   &-prefix {
+    // Display & Box Model
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
   &-current_value {
+    // Display & Box Model
     flex: 1;
-    color: #111;
+    overflow: hidden;
 
-    /* Body/12px */
+    // Typography
     font-family: 'PingFang SC';
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: 20px; /* 166.667% */
+    color: #111;
 
-    overflow: hidden;
     &-label {
+      // Display & Box Model
       width: 100%;
       overflow: hidden;
+
+      // Typography
       text-overflow: ellipsis;
       white-space: nowrap;
     }
   }
   &-option_list {
+    // Positioning
     position: absolute;
     top: var(--select_option_list_top, 500vh);
     left: var(--select_option_list_left);
     right: var(--select_option_list_right);
     z-index: 2;
+
+    // Display & Box Model
     width: var(--select_option_list_width, 100%);
     height: var(--select_option_list_heigth);
     max-height: 45vh;
     overflow: auto;
-    background-color: #fff;
-
-    // box-shadow: -1px 3px 6px 0px #00000033;
-    box-shadow: var(--select_option_list_shadow);
-
     border-radius: var(--select_option_list_border_radius);
     border: var(--select_option_list_border);
 
-    // transition: height 0.3s ease-in-out;
+    // Visual
+    background-color: #fff;
+    box-shadow: var(--select_option_list_shadow);
+
+    // Animation
     transition: var(--select_option_list_transition);
 
     &-item {
+      // Display & Box Model
       padding: 8px;
 
-      color: #111;
-
-      /* Body/12px */
+      // Typography
       font-family: 'PingFang SC';
       font-size: 12px;
       font-style: normal;
       font-weight: 400;
       line-height: 20px; /* 166.667% */
+      color: #111;
     }
     &-item_selsected {
+      // Typography
       color: $primary;
+
+      // Visual
       background-color: $secondary;
-      // transition: color, background-color 0.4s ease-in-out;
+
+      // Animation
       transition: var(--select_option_list_item_selsected_transition);
     }
     &-item_empty {
+      // Display & Box Model
       padding: 8px;
 
-      color: #111;
-
-      /* Body/12px */
+      // Typography
       font-family: 'PingFang SC';
       font-size: 12px;
       font-style: normal;
       font-weight: 400;
       line-height: 20px; /* 166.667% */
       text-align: center;
+      color: #111;
     }
   }
   &-suffix {
+    // Display & Box Model
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     &-arrow_icon {
-      // transition: transform 0.3s ease-in-out;
+      // Animation
       transition: var(--select_suffix_arrow_icon_transition);
       transform: var(--selector_arrow_icon, rotate(0deg));
     }

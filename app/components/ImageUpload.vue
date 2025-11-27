@@ -220,23 +220,29 @@ defineExpose({
 
 <style lang="scss" scoped>
 .image_upload {
+  // Positioning
   position: relative;
-  width: 100%;
-  height: 100%;
+
+  // Display & Box Model
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
+  height: 100%;
   border-radius: 2px;
   border: 1px solid #d9d9d9;
+
+  // Misc
   cursor: pointer;
 
   &-btn {
+    // Display & Box Model
     min-width: 144px;
     min-height: 52px;
 
-    // font-family: Taipei Sans TC Beta;
+    // Typography
     font-family: Noto Sans TC;
     font-size: 20px;
     font-style: normal;
@@ -244,56 +250,67 @@ defineExpose({
     line-height: normal;
   }
   &-label {
-    color: #2c64e3;
-    text-align: center;
-    // font-family: Taipei Sans TC Beta;
+    // Typography
     font-family: Noto Sans TC;
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: 24px; /* 150% */
+    text-align: center;
+    color: #2c64e3;
   }
   &-preview {
+    // Positioning
     position: absolute;
     top: 0px;
     left: 0px;
+
+    // Display & Box Model
     width: 100%;
     height: 100%;
 
-    // background-color: #fff;
+    // Visual
     background-color: var(--preview_bg_color);
     opacity: var(--preview_opacity);
 
     &-img {
+      // Display & Box Model
       width: 100%;
       height: 100%;
+
+      // Visual
       object-fit: contain;
     }
   }
   &-mask {
+    // Positioning
     position: absolute;
     top: 0px;
     left: 0px;
+
+    // Display & Box Model
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     width: 100%;
     height: 100%;
-    color: #2c64e3;
-    text-align: center;
-    // font-family: Taipei Sans TC Beta;
+    border: 3px dashed #d9d9d9;
+
+    // Typography
     font-family: Noto Sans TC;
     font-size: 2rem;
     font-style: normal;
     font-weight: 700;
     line-height: 24px;
-    border: 3px dashed #d9d9d9;
-    cursor: pointer;
+    text-align: center;
+    color: #2c64e3;
+
+    // Visual
     background-color: #fff;
-    // opacity: 0.8;
     opacity: var(--mask_opacity);
 
+    // Misc
     cursor: var(--image_upload_cursor);
   }
 }

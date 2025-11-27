@@ -182,32 +182,30 @@ onMounted(() => {
 <style lang="scss" scoped>
 .animation_triangle_enter {
   &-triangle_background_left {
+    // Positioning
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1;
   }
   &-triangle_left {
+    // Positioning
     position: fixed;
-    // top: -2px;
-    // left: -2px;
-
     top: calc(100vh - 10px);
     left: calc(-100vw - 10px);
     z-index: 1;
   }
 
   &-triangle_background_right {
+    // Positioning
     position: fixed;
     right: 0;
     bottom: 0;
     z-index: 1;
   }
   &-triangle_right {
+    // Positioning
     position: fixed;
-    // right: -2px;
-    // bottom: -2px;
-
     right: calc(-100vw - 10px);
     bottom: calc(100vh - 10px);
     z-index: 1;

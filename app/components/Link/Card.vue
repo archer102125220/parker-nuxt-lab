@@ -42,16 +42,17 @@ function handleBannerError() {
 <style lang="scss">
 .link_card {
   &-card {
+    // Display & Box Model
     margin: auto;
 
     &-page_name.v-card-subtitle {
+      // Display & Box Model
       display: -webkit-box;
-
       height: 54px;
       padding: 4px;
 
+      // Typography
       line-height: 54px;
-
       white-space: break-spaces;
       line-clamp: 2;
       -webkit-line-clamp: 2;

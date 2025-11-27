@@ -82,14 +82,15 @@ defineExpose({
 // https://www.cnblogs.com/weiqinl/p/7048205.html
 // http://tool.uis.cc/sjmaker/
 .triangle {
+  // Positioning
   position: relative;
 
+  // Display & Box Model
   width: 0px;
   height: 0px;
   border-color: var(--triangle_color);
   border-width: var(--triangle_border_width);
   border-style: solid;
-
   overflow: visible;
 }
 </style>

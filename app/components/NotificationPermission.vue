@@ -89,9 +89,11 @@ function handleCofirm() {
 <style lang="scss" scoped>
 .notification_permission {
   &-content {
+    // Display & Box Model
     width: 100%;
   }
   &-actions {
+    // Display & Box Model
     display: flex;
     justify-content: flex-end;
     gap: 16px;

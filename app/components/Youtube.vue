@@ -163,9 +163,12 @@ defineExpose({
 
 <style lang="scss">
 .youtube {
+  // Display & Box Model
   width: 100%;
   height: 100%;
+
   &-player {
+    // Display & Box Model
     width: 100%;
     height: 100%;
   }
