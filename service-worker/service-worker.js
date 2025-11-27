@@ -1,10 +1,19 @@
 
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute, setCatchHandler } from 'workbox-routing';
-import { CacheFirst, StaleWhileRevalidate, NetworkOnly } from 'workbox-strategies';
+// import { CacheFirst, StaleWhileRevalidate, NetworkOnly } from 'workbox-strategies';
+import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 
 import '@service-worker/firebase-messaging';
+
+self.addEventListener('message', function (event) {
+  if (event?.data?.type === 'SKIP_WAITING') {
+    setTimeout(() => {
+      self.skipWaiting();
+    }, 4000);
+  }
+});
 
 // https://unminify.com/ // minify 還原用網址
 
@@ -213,6 +222,7 @@ setCatchHandler(async ({ event }) => {
 // 優先從網路獲取，失敗時從快取獲取，都失敗時觸發 catchHandler 顯示離線頁面
 registerRoute(
   ({ request }) => request.mode === 'navigate',
+  // new NetworkOnly()
   new StaleWhileRevalidate({
     cacheName: 'pages-cache',
     plugins: [

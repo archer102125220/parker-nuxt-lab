@@ -34,6 +34,17 @@ export default defineNuxtPlugin({
     //   const nuxtApp = useNuxtApp();
     //   // do something in the hook
     // }
+    // async 'app:mounted'() {
+    //   const { $infoMessage, $successMessage } = useNuxtApp();
+    //   // do something in the hook
+
+    //   $infoMessage('偵測到PWA資源可更新，將更新PWA資源，並在更新完成後重新載入。');
+
+    //   await nextTick();
+    //   await new Promise((resolve) => window.requestAnimationFrame(() => setTimeout(resolve, 1000)));
+
+    //   $successMessage('PWA資源更新完成，網站將重新載入。');
+    // },
 
     // 'service-worker:registered'(serviceWorkerRegisteredEvent) {
     'service-worker:registered'() {
@@ -62,7 +73,7 @@ export default defineNuxtPlugin({
       // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
       watchEffect(async () => {
         if ($pwa.needRefresh === true) {
-          $infoMessage('偵測到PWA資源可更新，將在背景更新PWA資源。');
+          $infoMessage('偵測到PWA資源可更新，將更新PWA資源，並在更新完成後重新載入。');
           $store.system.setPwaLoading(true);
 
           // await $pwa.updateServiceWorker();
@@ -70,9 +81,9 @@ export default defineNuxtPlugin({
           // await $pwa.updateServiceWorker(false);
 
           await nextTick();
-          await new Promise((resolve) => window.requestAnimationFrame(resolve));
+          await new Promise((resolve) => window.requestAnimationFrame(() => setTimeout(resolve, 1000)));
 
-          $successMessage('PWA 更新完成。');
+          $successMessage('PWA PWA資源更新完成，網站將重新載入。');
           $store.system.setPwaLoading(false);
         }
       }, { immediate: true });
