@@ -6,26 +6,50 @@ import pg from 'pg';
 
 //https://github.com/sequelize/cli/issues/766
 
-const envConfig = {
-  dialect: process.env.DB_CONNECTION,
-  dialectModule: pg, // I've added this.
-  host: process.env.POSTGRES_HOST,
+const processEnvDialect = process.env.DB_CONNECTION || process.env.VITE_DB_CONNECTION;
+const importMetaEnvDialect = import.meta?.env?.VITE_DB_CONNECTION;
 
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
+const processEnvHost = process.env.POSTGRES_HOST || process.env.VITE_POSTGRES_HOST;
+const importMetaEnvHost = import.meta?.env?.VITE_POSTGRES_HOST;
+
+const processEnvUsername = process.env.POSTGRES_USER || process.env.VITE_POSTGRES_USER;
+const importMetaEnvUsername = import.meta?.env?.VITE_POSTGRES_USER;
+
+const processEnvPassword = process.env.POSTGRES_PASSWORD || process.env.VITE_POSTGRES_PASSWORD;
+const importMetaEnvPassword = import.meta?.env?.VITE_POSTGRES_PASSWORD;
+
+const processEnvDatabase = process.env.POSTGRES_DATABASE || process.env.VITE_POSTGRES_DATABASE;
+const importMetaEnvDatabase = import.meta?.env?.VITE_POSTGRES_DATABASE;
+
+const processEnvCharset = process.env.DB_DEFINE_CHARSET || process.env.VITE_DB_DEFINE_CHARSET;
+const importMetaEnvCharset = import.meta?.env?.VITE_DB_DEFINE_CHARSET;
+
+const processEnvCollate = process.env.DB_DEFINE_COLLATE || process.env.VITE_DB_DEFINE_COLLATE;
+const importMetaEnvCollate = import.meta?.env?.VITE_DB_DEFINE_COLLATE;
+
+const processEnvServerName = process.env.DB_SERVER_NAME || process.env.VITE_DB_SERVER_NAME;
+const importMetaEnvServerName = import.meta?.env?.VITE_DB_SERVER_NAME;
+
+const envConfig = {
+  dialect: processEnvDialect || importMetaEnvDialect,
+  dialectModule: pg, // I've added this.
+  host: processEnvHost || importMetaEnvHost,
+
+  username: processEnvUsername || importMetaEnvUsername,
+  password: processEnvPassword || importMetaEnvPassword,
+  database: processEnvDatabase || importMetaEnvDatabase,
 
   operatorsAliases: '0',
   define: {
-    charset: process.env.DB_DEFINE_CHARSET,
-    collate: process.env.DB_DEFINE_COLLATE
+    charset: processEnvCharset || importMetaEnvCharset,
+    collate: processEnvCollate || importMetaEnvCollate
   },
 
   dialectOptions: {
-    dialect: process.env.DB_CONNECTION,
-    charset: process.env.DB_DIALECT_OPTIONS_CHARSET,
-    collate: process.env.DB_DIALECT_OPTIONSE_COLLATE,
-    instanceName: process.env.DB_SERVER_NAME,
+    dialect: processEnvDialect || importMetaEnvDialect,
+    charset: processEnvCharset || importMetaEnvCharset,
+    collate: processEnvCollate || importMetaEnvCollate,
+    instanceName: processEnvServerName || importMetaEnvServerName,
     enableArithAbort: false,
     encrypt: true,
     ssl: true

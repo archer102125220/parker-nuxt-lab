@@ -8,7 +8,7 @@ const pluginBatabases = {
   FirebaseMessaging: createFirebaseMessaging
 };
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || (import.meta?.dev ? 'development' : 'production');
 const config = databaseConfig[env] || {};
 
 let _sequelize = null;

@@ -1,6 +1,6 @@
 import { googleGtagInit } from '@app/utils/third-party/gtag';
 
-export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === 'development', log = false, callback) {
+export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === 'development' || import.meta.dev, log = false, callback) {
   if (typeof googleGAID !== 'string' || googleGAID === '') {
     console.error('缺少google ga id');
     return;
