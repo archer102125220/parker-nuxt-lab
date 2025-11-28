@@ -492,16 +492,24 @@ function handleSliderMoveEnd() {
 
 <style lang="scss" scoped>
 .swiper {
+  /* Positioning */
   position: relative;
+
   &-prev {
+    /* Positioning */
     position: absolute;
+    top: 0;
     left: 5px;
     z-index: 2;
-    height: 100%;
+
+    /* Display & Box Model */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 100%;
+
     &-btn {
+      /* Display & Box Model */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -509,23 +517,34 @@ function handleSliderMoveEnd() {
       width: 24px;
       height: 24px;
       border-radius: 100%;
+
+      /* Typography */
       color: #fff;
+
+      /* Visual */
       background-color: #008cff;
     }
   }
+
   &-next {
     @extend .swiper-prev;
+
+    /* Positioning */
     left: unset;
     right: 5px;
+
     &-btn {
       @extend .swiper-prev-btn;
     }
   }
+
   &-content {
+    /* Display & Box Model */
     // height: 100%;
     height: var(--content_wrapper_slide_height);
     width: var(--content_wrapper_slide_width, 100%);
 
+    /* Animation */
     // transition-delay: 0ms;
     // transition-duration: 0ms;
     // transition-duration: 50ms;
@@ -533,32 +552,42 @@ function handleSliderMoveEnd() {
     transform: var(--wrapper_transform);
 
     &-wrapper {
+      /* Display & Box Model */
       // height: 100%;
-      height: var(--content_wrapper_slide_height);
       display: flex;
+      height: var(--content_wrapper_slide_height);
 
       &-slide {
-        // height: 100%;
-        // overflow-y: auto;
-        // overflow-x: hidden;
-        flex-shrink: 0;
+        /* Positioning */
         position: relative;
+
+        /* Display & Box Model */
+        // height: 100%;
+        flex-shrink: 0;
         width: var(--slide_width, 100%);
         height: var(--content_wrapper_slide_height);
-
-        overflow-y: var(--slide_overflow_y);
         overflow-x: var(--slide_overflow_x);
+        overflow-y: var(--slide_overflow_y);
+        // overflow-y: auto;
+        // overflow-x: hidden;
 
         &-center {
+          /* Positioning */
           position: relative;
+
+          /* Display & Box Model */
           display: flex;
           height: var(--content_wrapper_slide_height);
+
           &-middle {
-            flex: 1;
+            /* Positioning */
             position: relative;
+
+            /* Display & Box Model */
+            flex: 1;
             height: var(--content_wrapper_slide_height);
-            overflow-y: var(--slide_overflow_y);
             overflow-x: var(--slide_overflow_x);
+            overflow-y: var(--slide_overflow_y);
           }
         }
       }

@@ -158,33 +158,47 @@ useHead({
 
 <style lang="scss" scoped>
 .offline-page {
+  /* Display & Box Model */
   min-height: 100vh;
+
+  /* Visual */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .offline-card {
+  /* Display & Box Model */
   border-radius: 16px;
+
+  /* Visual */
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.95);
 }
 
 .offline-icon {
+  /* Animation */
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%,
   100% {
+    /* Visual */
     opacity: 1;
+
+    /* Animation */
     transform: scale(1);
   }
   50% {
+    /* Visual */
     opacity: 0.7;
+
+    /* Animation */
     transform: scale(0.95);
   }
 }
 
 .gap-3 {
+  /* Display & Box Model */
   gap: 12px;
 }
 </style>

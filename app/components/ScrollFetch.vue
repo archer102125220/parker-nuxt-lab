@@ -897,12 +897,15 @@ function windowScrollEnd(e) {
 
 <style lang="scss">
 html {
+  /* Misc */
   overscroll-behavior: var(--root_overscroll_behavior);
 }
 .scroll_fetching {
+  /* Display & Box Model */
   overflow: hidden;
 
   *:not(.scroll_fetch):not(.scroll_fetch *) {
+    /* Display & Box Model */
     overflow: hidden;
   }
 }
@@ -915,48 +918,60 @@ html {
   }
 }
 .scroll_fetch {
+  /* Positioning */
   position: relative;
+
+  /* Display & Box Model */
   height: var(--refresh_height);
   overflow: var(--refresh_overflow);
+
+  /* Misc */
   user-select: var(--refresh_user_select);
 
   &-trigger {
+    /* Positioning */
     position: absolute;
     top: 0;
     // z-index: 2;
     z-index: var(--refresh_trigger_z_index);
+
+    /* Display & Box Model */
     min-height: 30px;
     width: 100%;
 
     &-pull_label {
+      /* Display & Box Model */
+      margin: 0;
+
+      /* Typography */
       font-size: 14px;
       color: rgba(69, 90, 100, 0.6);
       text-align: center;
-      margin: 0;
     }
     &-refreshing {
+      /* Display & Box Model */
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: row;
       flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
       gap: 5px;
       margin-top: 10px;
       margin-bottom: 20px;
 
       &-loading_icon {
+        /* Display & Box Model */
         // width: 23px;
         // height: 23px;
-        // border: 4px solid lightgray;
-        // border-top: 4px solid $primary;
-
         width: var(--refresh_ios_type_icon_size);
         height: var(--refresh_ios_type_icon_size);
+        border-radius: 50%;
+        // border: 4px solid lightgray;
+        // border-top: 4px solid $primary;
         border: var(--refresh_ios_type_icon_stroke_width) solid lightgray;
         border-top: var(--refresh_ios_type_icon_stroke_width) solid $primary;
 
-        border-radius: 50%;
-
+        /* Animation */
         @include refresh_animation;
       }
       &-label {
@@ -964,62 +979,82 @@ html {
       }
     }
     &-icon_center {
-      width: 100%;
+      /* Display & Box Model */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      width: 100%;
+
+      /* Animation */
       transition: all var(--refresh_icon_transition);
       transform: var(--refresh_icon_transform);
 
       &-icon {
         @extend .scroll_fetch-trigger-refreshing-loading_icon;
-        margin: auto;
-        transition: var(--refresh_icon_transition);
 
+        /* Display & Box Model */
+        margin: auto;
+
+        /* Animation */
+        transition: var(--refresh_icon_transition);
         @include refresh_animation;
       }
       &-icon_img_bg {
-        margin: auto;
+        /* Display & Box Model */
+        display: flex;
         width: 40px;
         height: 40px;
-        display: flex;
+        margin: auto;
         border-radius: 50%;
+
+        /* Visual */
         background-color: #fff;
         box-shadow:
           0 1px 6px rgba(0, 0, 0, 0.117647),
           0 1px 4px rgba(0, 0, 0, 0.117647);
 
         &[css-activate-animation='true'] {
+          /* Animation */
           animation: activate_refresh_animation 0.2s;
         }
 
         &-icon_img {
+          /* Display & Box Model */
           display: block;
           width: 23px;
           height: 23px;
           margin: auto;
+
+          /* Animation */
           transition: var(--refresh_icon_transition);
           transform: var(--refresh_icon_rotate);
-
           @include refresh_animation;
         }
       }
     }
   }
   &-container {
+    /* Display & Box Model */
     height: var(--refresh_container_height);
+
+    /* Animation */
     transition: all var(--refresh_transition);
     transform: var(--refresh_transform);
   }
   &-empty {
-    height: var(--refresh_container_height, 100%);
+    /* Display & Box Model */
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    height: var(--refresh_container_height, 100%);
+
     &-label {
+      /* Display & Box Model */
       margin: auto;
       // margin-top: 50%;
+
+      /* Typography */
       text-align: center;
     }
   }

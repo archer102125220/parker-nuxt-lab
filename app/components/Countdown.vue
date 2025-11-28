@@ -649,9 +649,11 @@ $countdownDownEnterTotal: 59;
   box-sizing: border-box;
 }
 .conutdow_block {
+  /* Display & Box Model */
   display: inline-block;
   // margin: 40px 50px;
 
+  /* Misc */
   vertical-align: top;
 
   // box-shadow:
@@ -659,44 +661,62 @@ $countdownDownEnterTotal: 59;
   //   8px 8px 0 8px #c0392b;
 }
 .number {
+  /* Positioning */
   position: absolute;
   left: 0;
   right: 0;
 
+  /* Display & Box Model */
+  overflow: hidden;
+
+  /* Typography */
   // color: #e74c3c;
   color: var(--countdown_color);
   text-align: center;
 
-  overflow: hidden;
+  /* Misc */
   backface-visibility: hidden;
 }
 .number_up {
+  /* Positioning */
   top: 0;
   bottom: 50%;
 
+  /* Display & Box Model */
   // border-bottom: 1px solid;
   // border-bottom-style: dotted;
 
-  transform-origin: 50% 100%;
+  /* Visual */
   // background: linear-gradient(to bottom, #000000 0%, #111 100%); /* W3C */
   background-color: var(--countdown_bg_color);
+
+  /* Animation */
+  transform-origin: 50% 100%;
 }
 .number_down {
+  /* Positioning */
   top: 50%;
   bottom: 0;
 
+  /* Display & Box Model */
   border-top: 1px solid;
 
+  /* Typography */
   line-height: 0px;
-  transform-origin: 50% 0%;
 
+  /* Visual */
   // background: black;
   background-color: var(--countdown_bg_color);
+
+  /* Animation */
+  transform-origin: 50% 0%;
 }
 .debug_log {
+  /* Positioning */
   position: relative;
-
   z-index: 999999;
+
+  /* Typography */
   color: #36a300;
 }
 
@@ -718,8 +738,11 @@ $countdownDownEnterTotal: 59;
 
   &-down_enter {
     @extend .conutdow_block;
+
+    /* Positioning */
     position: relative;
 
+    /* Display & Box Model */
     width: var(--countdown_width, var(--countdown_down_enter_width));
     height: var(--countdown_height, var(--countdown_down_enter_height));
     padding: var(--countdown_padding, var(--countdown_down_enter_padding));
@@ -727,9 +750,11 @@ $countdownDownEnterTotal: 59;
     // height: $countdownDownEnterHeight;
     // padding: $countdownDownEnterPadding;
 
+    /* Visual */
     // background: black;
     background-color: var(--countdown_bg_color);
 
+    /* Misc */
     perspective: 1000px;
 
     &-debug_log {
@@ -740,18 +765,20 @@ $countdownDownEnterTotal: 59;
       @extend .number;
       @extend .number_up;
 
+      /* Positioning */
       z-index: var(--down_enter_up_z_index);
 
+      /* Typography */
       font-size: calc(
         var(--countdown_height, var(--countdown_down_enter_height)) - var(
             --countdown_down_enter_padding
           )
       );
       // font-size: $countdownDownEnterHeight - $countdownDownEnterPadding;
-
       line-height: var(--countdown_height, var(--countdown_down_enter_height));
       // line-height: $countdownDownEnterHeight;
 
+      /* Animation */
       &[css-is-anime-start='true']:not([css-is-end-second='true']) {
         animation: flip-up 1s 1;
         animation-fill-mode: forwards;
@@ -773,8 +800,10 @@ $countdownDownEnterTotal: 59;
       @extend .number;
       @extend .number_down;
 
+      /* Positioning */
       z-index: var(--down_enter_down_z_index);
 
+      /* Typography */
       font-size: calc(
         var(--countdown_height, var(--countdown_down_enter_height)) - var(
             --countdown_down_enter_padding
@@ -782,7 +811,9 @@ $countdownDownEnterTotal: 59;
       );
       // font-size: $countdownDownEnterHeight - $countdownDownEnterPadding;
 
+      /* Animation */
       transform: rotate3d(-1, 0, 0, 180deg);
+
       &[css-is-anime-start='true']:not([css-is-initial-seconds='true']) {
         animation: flip-up-back 1s 1;
         animation-fill-mode: forwards;
@@ -807,8 +838,11 @@ $countdownDownEnterTotal: 59;
 
   &-up_leave {
     @extend .conutdow_block;
+
+    /* Positioning */
     position: relative;
 
+    /* Display & Box Model */
     width: var(--countdown_width, var(--countdown_up_leave_width));
     height: var(--countdown_height, var(--countdown_up_leave_height));
     padding: var(--countdown_padding, var(--countdown_up_leave_padding));
@@ -816,10 +850,12 @@ $countdownDownEnterTotal: 59;
     // height: $countdownUpLeaveHeight;
     // padding: $countdownUpLeavePadding;
 
-    perspective: 1000px;
-
+    /* Visual */
     // background: black;
     background-color: var(--countdown_bg_color);
+
+    /* Misc */
+    perspective: 1000px;
 
     &-debug_log {
       @extend .debug_log;
@@ -829,8 +865,10 @@ $countdownDownEnterTotal: 59;
       @extend .number;
       @extend .number_up;
 
+      /* Positioning */
       z-index: var(--up_leave_up_z_index);
 
+      /* Typography */
       font-size: calc(
         var(--countdown_height, var(--countdown_up_leave_height)) - var(
             --countdown_up_leave_padding
@@ -840,7 +878,9 @@ $countdownDownEnterTotal: 59;
       line-height: var(--countdown_height, var(--countdown_up_leave_height));
       // line-height: $countdownUpLeaveHeight;
 
+      /* Animation */
       transform: rotate3d(-1, 0, 0, 180deg);
+
       &[css-is-anime-start='true']:not([css-is-initial-seconds='true']) {
         animation: flip-up-back 1s 1;
         animation-fill-mode: forwards;
@@ -865,8 +905,10 @@ $countdownDownEnterTotal: 59;
       @extend .number;
       @extend .number_down;
 
+      /* Positioning */
       z-index: var(--up_leave_down_z_index);
 
+      /* Typography */
       font-size: calc(
         var(--countdown_height, var(--countdown_up_leave_height)) - var(
             --countdown_up_leave_padding
@@ -874,6 +916,7 @@ $countdownDownEnterTotal: 59;
       );
       // font-size: $countdownUpLeaveHeight - $countdownUpLeavePadding;
 
+      /* Animation */
       &[css-is-anime-start='true']:not([css-is-end-second='true']) {
         animation: flip-up 1s 1;
         animation-fill-mode: forwards;

@@ -692,35 +692,44 @@ function resetSwiperScroll() {
 
 <style lang="scss" scoped>
 .swiper_js {
+  /* Positioning */
   position: relative;
 
   &-prev {
+    /* Positioning */
     position: absolute;
+    top: 0;
     left: 5px;
     z-index: 2;
 
+    /* Display & Box Model */
     display: flex;
     flex-direction: column;
     justify-content: center;
-
     height: 100%;
 
     &-btn {
+      /* Display & Box Model */
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
       width: 24px;
       height: 24px;
       border-radius: 100%;
 
+      /* Typography */
       color: #fff;
+
+      /* Visual */
       background-color: #008cff;
     }
   }
+
   &-next {
     @extend .swiper_js-prev;
+
+    /* Positioning */
     left: unset;
     right: 5px;
 
@@ -730,45 +739,46 @@ function resetSwiperScroll() {
   }
 
   &-content {
+    /* Display & Box Model */
     // height: 100%;
     height: var(--content_wrapper_slide_height);
 
     &-wrapper {
+      /* Display & Box Model */
       // height: 100%;
       height: var(--content_wrapper_slide_height);
 
       &-slide {
+        /* Display & Box Model */
         display: var(--slide_display);
         flex-direction: var(--slide_flex_direction);
-
         // height: 100%;
         // height: var(--content_wrapper_slide_height);
         height: var(--slide_height);
-
         // overflow-y: auto;
         // overflow-x: hidden;
 
         &-center {
+          /* Positioning */
           position: relative;
 
+          /* Display & Box Model */
           flex: var(--center_flex);
-
           display: flex;
-
           height: var(--content_wrapper_slide_height);
           max-height: var(--content_wrapper_slide_height);
           width: var(--slide_center_width);
 
           &-middle {
-            flex: 1;
-
+            /* Positioning */
             position: relative;
 
+            /* Display & Box Model */
+            flex: 1;
             height: var(--content_wrapper_slide_height);
             width: var(--slide_center_middle_width);
-
-            overflow-y: var(--slide_overflow_y);
             overflow-x: var(--slide_overflow_x);
+            overflow-y: var(--slide_overflow_y);
           }
         }
       }

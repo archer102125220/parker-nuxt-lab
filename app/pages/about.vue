@@ -82,48 +82,65 @@ useHeadMataData({
 
 <style lang="scss">
 .about_page {
+  /* Display & Box Model */
   // padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 
   &-title {
-    font-size: 2.5rem;
+    /* Display & Box Model */
     margin-bottom: 1rem;
+
+    /* Typography */
+    font-size: 2.5rem;
     color: #333;
   }
 
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-section {
+    /* Display & Box Model */
     margin-bottom: 2rem;
 
     &-sub_title {
-      font-size: 1.8rem;
+      /* Display & Box Model */
       margin: 1.5rem 0 1rem;
+
+      /* Typography */
+      font-size: 1.8rem;
       color: #444;
     }
 
     &-description {
+      /* Display & Box Model */
       display: flex;
-      align-items: center;
       flex-direction: row;
       flex-wrap: wrap;
-
+      align-items: center;
       margin-bottom: 1rem;
-      color: #666;
+
+      /* Typography */
       line-height: 1.6;
+      color: #666;
     }
 
     &-list {
-      list-style-type: disc;
-      padding-left: 2rem;
+      /* Display & Box Model */
       margin-bottom: 1rem;
+      padding-left: 2rem;
+
+      /* Misc */
+      list-style-type: disc;
 
       &-item {
+        /* Display & Box Model */
         margin-bottom: 0.5rem;
+
+        /* Typography */
         line-height: 1.6;
         color: #666;
       }

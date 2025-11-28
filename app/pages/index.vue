@@ -128,16 +128,17 @@ const linkList = computed(() => [
 <style lang="scss">
 .index_page {
   &-content {
+    /* Display & Box Model */
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     row-gap: 24px;
     column-gap: 8px;
-
     // width: 80%;
     // margin: auto;
 
     &-link {
+      /* Display & Box Model */
       flex: 1;
       flex-basis: 150px;
     }
