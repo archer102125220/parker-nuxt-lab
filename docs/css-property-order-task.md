@@ -1,13 +1,13 @@
 # CSS 屬性順序修正 - 全專案任務清單
 
-## 總體進度：42/101 完成 (41.6%)
+## 總體進度：47/101 完成 (46.5%)
 
-**已完成：** 42 個檔案 ✅
+**已完成：** 47 個檔案 ✅
 **進行中：** 0 個檔案 🔄
-**待處理：** 59 個檔案 ⏳
+**待處理：** 54 個檔案 ⏳
 **延後處理：** 0 個超大檔案 🔶
 
-**最後更新：** 2025-11-29 19:48
+**最後更新：** 2025-11-29 21:30
 
 ---
 
@@ -71,7 +71,7 @@
 
 ---
 
-## 🔄 第五階段：頁面檔案（11/62 完成 - 17.7%）
+## 🔄 第五階段：頁面檔案（16/62 完成 - 25.8%）
 
 ### 5A. 根目錄頁面（8/10 - 80%）
 - [x] about.vue ✅
@@ -85,18 +85,18 @@
 - [x] web-authn.vue ✅
 - [x] web-cam.vue ✅
 
-### 5B. 子目錄頁面（3/51 - 5.9%）
-#### components/* (測試頁面) - 3/21 完成
+### 5B. 子目錄頁面（8/51 - 15.7%）
+#### components/* (測試頁面) - 8/21 完成 (38.1%)
 - [ ] components/base-button-test.vue
 - [x] components/components-test.vue ✅
 - [x] components/countdown-test.vue ✅
 - [ ] components/date-picker-test.vue
+- [x] components/dialog.vue ✅
 - [ ] components/dialog-modal-test.vue
 - [ ] components/dialog-test.vue
-- [ ] components/dialog.vue
+- [x] components/drawer.vue ✅
 - [ ] components/drawer-test.vue
-- [ ] components/drawer.vue
-- [ ] components/enter-label.vue
+- [x] components/enter-label.vue ✅
 - [ ] components/go-top-test.vue
 - [ ] components/go-top.vue
 - [ ] components/hexagon-test.vue
@@ -173,8 +173,8 @@
 | 第一、二階段 | 7 | 7 | 100% ✅ |
 | 第三階段 | 8 | 8 | 100% ✅ |
 | 第四階段 | 19 | 19 | 100% ✅ |
-| 第五階段 | 62 | 11 | 17.7% |
-| **總計** | **101** | **42** | **41.6%** |
+| 第五階段 | 62 | 16 | 25.8% |
+| **總計** | **101** | **47** | **46.5%** |
 
 ---
 

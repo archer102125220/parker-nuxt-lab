@@ -47,6 +47,7 @@ function handleVuetifyDialogOpen() {
 <style lang="scss" scoped>
 .dialog_page {
   &-trigger {
+    /* Display & Box Model */
     margin: 10px 0;
   }
 }

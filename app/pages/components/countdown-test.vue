@@ -201,11 +201,12 @@ function handleDateDemo() {
     }
   }
   &-count_down_date {
+    /* Display & Box Model */
     display: flex;
-    align-items: center;
-    align-content: center;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
   }
 }
 </style>

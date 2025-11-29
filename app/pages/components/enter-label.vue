@@ -39,6 +39,7 @@ function handleDemoLabel() {
   &-demo_title {
   }
   &-demo {
+    /* Display & Box Model */
     min-height: 24px;
     margin-bottom: 16px;
   }

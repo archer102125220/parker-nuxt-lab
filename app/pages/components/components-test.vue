@@ -101,35 +101,45 @@ function handleInfinityFetch(done) {
 
 <style lang="scss" scoped>
 .components_test_page {
+  /* Display & Box Model */
   display: flex;
-  flex-wrap: wrap;
   flex-direction: row;
+  flex-wrap: wrap;
   height: 100dvh;
+
   &-bar {
+    /* Display & Box Model */
     flex: 1;
     flex-basis: 100%;
   }
   &-menu {
+    /* Display & Box Model */
     flex-shrink: 0;
     flex-basis: 40px;
     max-height: 93%;
     overflow: hidden;
   }
   &-content {
+    /* Display & Box Model */
     flex: 1;
     flex-basis: calc(100% - 40px);
     max-height: 93%;
+
+    /* Visual */
     background-color: #fff;
     &-scroll_fetch {
       // min-height: 100dvh;
       &-text {
+        /* Display & Box Model */
         height: 200px;
       }
       &-wang_editor {
+        /* Display & Box Model */
         // height: 350px;
         margin-bottom: 8px;
       }
       &-youtube {
+        /* Display & Box Model */
         height: 80dvh;
       }
     }
