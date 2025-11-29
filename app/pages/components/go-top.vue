@@ -12,6 +12,7 @@ useHeadMataData({
 
 <style lang="scss" scoped>
 .go_top_page {
+  /* Display & Box Model */
   height: 200vh;
 }
 </style>

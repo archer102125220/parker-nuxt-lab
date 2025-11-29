@@ -13,6 +13,7 @@ const identifyImage = ref('');
 
 <style lang="scss" scoped>
 .image_upload_test_page {
+  /* Display & Box Model */
   min-height: 100vh;
 }
 </style>
