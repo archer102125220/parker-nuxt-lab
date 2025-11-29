@@ -85,8 +85,8 @@
 - [x] web-authn.vue ✅
 - [x] web-cam.vue ✅
 
-### 5B. 子目錄頁面（15/51 - 29.4%）
-#### components/* (測試頁面) - 15/21 完成 (71.4%)
+### 5B. 子目錄頁面（18/51 - 35.3%）
+#### components/* (測試頁面) - 18/21 完成 (85.7%)
 - [ ] components/base-button-test.vue
 - [x] components/components-test.vue ✅
 - [x] components/countdown-test.vue ✅
@@ -103,14 +103,14 @@
 - [x] components/image-upload-test.vue ✅
 - [x] components/index.vue ✅
 - [ ] components/phone-input.vue
-- [ ] components/qr-code-test.vue
-- [ ] components/scroll-fetch.vue
-- [ ] components/selector.vue
+- [x] components/qr-code-test.vue ✅ (空 CSS)
+- [x] components/scroll-fetch.vue ✅
+- [x] components/selector.vue ✅ (空 CSS)
 - [ ] components/skeleton-loader-test.vue
 - [ ] components/skeleton-loader.vue
 - [ ] components/slide-in-panel-test.vue
 - [ ] components/slide-in-panel.vue
-- [ ] components/switch-button.vue
+- [x] components/switch-button.vue ✅ (空 CSS)
 - [ ] components/swiper-custom-test.vue
 - [ ] components/swiper-js-test.vue
 - [ ] components/swiper-test.vue
