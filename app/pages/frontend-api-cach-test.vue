@@ -153,15 +153,17 @@ async function handleGetApi() {
 <style lang="scss" scoped>
 .frontend_api_cach_test_page {
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-outbound_link {
+    /* Display & Box Model */
     display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
   }
 
   &-form {
@@ -182,6 +184,7 @@ async function handleGetApi() {
   }
 
   &-content {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

@@ -407,18 +407,22 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
 </script>
 <style lang="scss">
 .face_api_page {
+  /* Typography */
   font-family: sans-serif;
 
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-form {
+    /* Display & Box Model */
     margin-bottom: 16px;
   }
 
   &-row {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -426,11 +430,14 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
     margin-bottom: 16px;
 
     &-origin_video {
+      /* Display & Box Model */
       // display: none;
       width: 480px;
       height: 360px;
       max-width: 100%;
       max-height: 100%;
+
+      /* Misc */
       object-fit: contain;
     }
     &-canvas {
@@ -440,10 +447,14 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
 
     &-face_output {
       @extend .face_api_page-row-origin_video;
+
+      /* Positioning */
       position: relative;
+
+      /* Display & Box Model */
       display: block;
-      border: 1px solid;
       margin-bottom: 8px;
+      border: 1px solid;
 
       &-canvas {
         @extend .face_api_page-row-origin_video;
@@ -451,6 +462,8 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
       }
       &-face_video {
         @extend .face_api_page-row-origin_video;
+
+        /* Positioning */
         position: absolute;
         top: 0;
         left: 0;
@@ -458,13 +471,16 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
       }
     }
     &-data_output {
+      /* Display & Box Model */
       flex: 1;
       width: 100%;
 
       &-title {
+        /* Typography */
         font-size: 24px;
       }
       &-content {
+        /* Display & Box Model */
         width: 480px;
         max-width: 100%;
         height: 360px;

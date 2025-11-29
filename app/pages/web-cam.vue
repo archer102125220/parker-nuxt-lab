@@ -57,23 +57,30 @@ function handleFrameFromVideo() {
 </script>
 <style lang="scss">
 .web_cam_page {
+  /* Typography */
   font-family: sans-serif;
 
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-video {
+    /* Display & Box Model */
     display: none;
     width: 480px;
     height: 360px;
     max-width: 100%;
     max-height: 100%;
+
+    /* Misc */
     object-fit: contain;
   }
   &-canvas {
     @extend .web_cam_page-video;
+
+    /* Display & Box Model */
     display: block;
     border: 1px solid;
   }

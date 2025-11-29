@@ -390,44 +390,59 @@ async function handleFido2LibLogin() {
 <style lang="scss" scoped>
 .fido2_lib_page {
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-outbound_link {
+    /* Display & Box Model */
     display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
   }
 
   &-register {
+    /* Display & Box Model */
     margin-bottom: 16px;
+
     &-title {
+      /* Display & Box Model */
       margin-bottom: 16px;
     }
     &-id {
+      /* Display & Box Model */
       margin-bottom: 8px;
     }
     &-account {
+      /* Display & Box Model */
       margin-bottom: 8px;
     }
     &-name {
+      /* Display & Box Model */
       margin-bottom: 8px;
     }
     &-submit {
+      /* Display & Box Model */
       margin-bottom: 16px;
+
+      /* Typography */
       text-align: center;
     }
     &-output_title {
+      /* Display & Box Model */
       margin-bottom: 16px;
     }
     &-output {
+      /* Display & Box Model */
       max-width: 100%;
       max-height: 400px;
-      word-wrap: break-word;
-      overflow: auto;
       margin-bottom: 16px;
+      overflow: auto;
+
+      /* Typography */
+      word-wrap: break-word;
     }
   }
 
