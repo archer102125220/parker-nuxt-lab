@@ -111,6 +111,7 @@ onMounted(() => {
 
 <style lang="scss">
 .slide_in_panel_list_page {
+  /* Display & Box Model */
   display: flex;
   flex-direction: column;
   height: 80vh;
@@ -125,13 +126,17 @@ onMounted(() => {
     }
   }
   &-content {
+    /* Display & Box Model */
     flex: 1;
     // flex-basis: 150px;
 
     &-tab_content {
       // height: 30%;
       &-item {
+        /* Positioning */
         position: relative;
+
+        /* Display & Box Model */
         // height: 80%;
         overflow: hidden;
       }

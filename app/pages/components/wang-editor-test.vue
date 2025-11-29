@@ -13,6 +13,7 @@ useHeadMataData({
 <style lang="scss" scoped>
 .wang_editor_test_page {
   &-content {
+    /* Display & Box Model */
     margin-bottom: 8px;
   }
 }

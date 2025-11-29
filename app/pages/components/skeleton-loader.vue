@@ -22,6 +22,7 @@ const loading = ref(true);
 <style lang="scss" scoped>
 .skeleton_loader_page {
   &-skeleton {
+    /* Display & Box Model */
     width: 100%;
     height: 323px;
   }

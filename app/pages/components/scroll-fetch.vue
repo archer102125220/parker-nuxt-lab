@@ -286,6 +286,7 @@ async function handleInfinityFetch(done) {
   }
 
   &-description {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -296,6 +297,7 @@ async function handleInfinityFetch(done) {
 
     &-token_type {
       &-token_input {
+        /* Display & Box Model */
         flex: 1;
         margin-bottom: 16px;
       }
@@ -303,6 +305,7 @@ async function handleInfinityFetch(done) {
 
     &-account_type {
       &-account_input {
+        /* Display & Box Model */
         flex: 1;
         margin-bottom: 16px;
       }
@@ -310,30 +313,35 @@ async function handleInfinityFetch(done) {
   }
 
   &-pull_Refresh_disabled {
+    /* Display & Box Model */
     margin-bottom: 16px;
   }
 
   &-list {
+    /* Display & Box Model */
     margin-top: 16px;
     padding-top: 16px;
 
+    /* Visual */
     background-color: #f7f7f7;
 
     &-content {
       // min-height: 100dvh;
 
       &-item {
+        /* Display & Box Model */
         // height: 200px;
         margin: 0 8px;
         margin-bottom: 16px;
         padding: 8px;
-
         border: 1px solid #afafaf;
         border-radius: 10px;
 
+        /* Typography */
         word-break: break-all;
 
         &-html_link {
+          /* Display & Box Model */
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;

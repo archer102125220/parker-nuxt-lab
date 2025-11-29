@@ -14,8 +14,11 @@ useHeadMataData({
 
 <style lang="scss" scoped>
 .youtube_test_page {
+  /* Display & Box Model */
   // height: 100dvh;
+
   &-content {
+    /* Display & Box Model */
     height: 80dvh;
   }
 }

@@ -32,10 +32,13 @@ const slideList = computed(() => {
 
 <style lang="scss" scoped>
 .swiper_test_page {
+  /* Display & Box Model */
   // width: 100dvw;
   height: 90dvh;
   // min-height: 100dvh;
+
   &-content {
+    /* Display & Box Model */
     // width: 100%;
     height: 100%;
     overflow-x: hidden;
