@@ -104,19 +104,21 @@ const linkList = computed(() => [
 <style lang="scss">
 .components_page {
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-content {
+    /* Display & Box Model */
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
-
     margin-top: 8px;
 
     &-link {
+      /* Display & Box Model */
       flex: 1;
       flex-basis: 150px;
     }

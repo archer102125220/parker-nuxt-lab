@@ -140,53 +140,63 @@ function handleInfinityFetch(done) {
 
 <style lang="scss" scoped>
 .tab_test_page {
+  /* Display & Box Model */
   height: 150dvh;
   overflow: hidden;
+
   &-bar {
     // flex: 1;
     // flex-basis: 100%;
     &-prev {
-      flex-shrink: 0;
-      width: var(--navigation_width);
-      min-height: 24px;
+      /* Display & Box Model */
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      flex-shrink: 0;
+      width: var(--navigation_width);
+      min-height: 24px;
+      overflow: hidden;
       border-top-right-radius: var(--navigation_top_right_radius);
       border-bottom-right-radius: var(--navigation_bottom_right_radius);
       border-bottom-left-radius: var(--navigation_bottom_left_radius);
 
-      overflow: hidden;
-
+      /* Animation */
       transform: rotate(180deg);
 
       &-img {
+        /* Display & Box Model */
         width: var(--navigation_img_size);
         height: var(--navigation_img_size);
       }
     }
   }
   &-tab_content {
+    /* Display & Box Model */
     // flex: 1;
     // flex-basis: 100%;
     height: 30%;
   }
   &-complex {
+    /* Display & Box Model */
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     height: 50%;
     &-menu {
+      /* Display & Box Model */
       flex-shrink: 0;
       flex-basis: 40px;
       max-height: 93%;
       overflow: hidden;
     }
     &-content {
+      /* Display & Box Model */
       flex: 1;
       flex-basis: calc(100% - 40px);
       max-height: 90%;
+
+      /* Visual */
       background-color: #fff;
     }
   }

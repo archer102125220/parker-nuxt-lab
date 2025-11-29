@@ -66,11 +66,15 @@ function pageScroll(e) {
 <style lang="scss">
 .virtual_scroller_page {
   &-title {
+    /* Display & Box Model */
     margin-bottom: 16px;
   }
   &-scroller {
+    /* Display & Box Model */
     border: 1px solid #000;
+
     &-item {
+      /* Display & Box Model */
       height: var(--item_height);
     }
   }

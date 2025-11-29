@@ -1,13 +1,13 @@
 # CSS 屬性順序修正 - 全專案任務清單
 
-## 總體進度：39/101 完成 (38.6%)
+## 總體進度：42/101 完成 (41.6%)
 
-**已完成：** 39 個檔案 ✅
+**已完成：** 42 個檔案 ✅
 **進行中：** 0 個檔案 🔄
-**待處理：** 62 個檔案 ⏳
+**待處理：** 59 個檔案 ⏳
 **延後處理：** 0 個超大檔案 🔶
 
-**最後更新：** 2025-11-29 19:50
+**最後更新：** 2025-11-29 19:48
 
 ---
 
@@ -71,7 +71,7 @@
 
 ---
 
-## 🔄 第五階段：頁面檔案（3/62 完成 - 4.8%）
+## 🔄 第五階段：頁面檔案（11/62 完成 - 17.7%）
 
 ### 5A. 根目錄頁面（8/10 - 80%）
 - [x] about.vue ✅
@@ -85,30 +85,39 @@
 - [x] web-authn.vue ✅
 - [x] web-cam.vue ✅
 
-### 5B. 子目錄頁面（0/51）
-#### components/* (測試頁面)
+### 5B. 子目錄頁面（3/51 - 5.9%）
+#### components/* (測試頁面) - 3/21 完成
 - [ ] components/base-button-test.vue
-- [ ] components/countdown-test.vue
+- [x] components/components-test.vue ✅
+- [x] components/countdown-test.vue ✅
 - [ ] components/date-picker-test.vue
 - [ ] components/dialog-modal-test.vue
 - [ ] components/dialog-test.vue
+- [ ] components/dialog.vue
 - [ ] components/drawer-test.vue
+- [ ] components/drawer.vue
+- [ ] components/enter-label.vue
 - [ ] components/go-top-test.vue
+- [ ] components/go-top.vue
 - [ ] components/hexagon-test.vue
 - [ ] components/image-upload-test.vue
-- [ ] components/index.vue
+- [x] components/index.vue ✅
 - [ ] components/phone-input.vue
 - [ ] components/qr-code-test.vue
-- [ ] components/scroll-fetch-test.vue
-- [ ] components/selector-test.vue
+- [ ] components/scroll-fetch.vue
+- [ ] components/selector.vue
 - [ ] components/skeleton-loader-test.vue
+- [ ] components/skeleton-loader.vue
 - [ ] components/slide-in-panel-test.vue
+- [ ] components/slide-in-panel.vue
 - [ ] components/switch-button.vue
 - [ ] components/swiper-custom-test.vue
 - [ ] components/swiper-js-test.vue
-- [ ] components/tab-test.vue
-- [ ] components/virtual-scroller.vue
+- [ ] components/swiper-test.vue
+- [x] components/tab-test.vue ✅
+- [x] components/virtual-scroller.vue ✅
 - [ ] components/wang-editor-test.vue
+- [ ] components/youtube-test.vue
 
 #### css-drawing/*
 - [ ] css-drawing/hexagon-test.vue
@@ -164,8 +173,8 @@
 | 第一、二階段 | 7 | 7 | 100% ✅ |
 | 第三階段 | 8 | 8 | 100% ✅ |
 | 第四階段 | 19 | 19 | 100% ✅ |
-| 第五階段 | 62 | 8 | 12.9% |
-| **總計** | **101** | **39** | **38.6%** |
+| 第五階段 | 62 | 11 | 17.7% |
+| **總計** | **101** | **42** | **41.6%** |
 
 ---
 
