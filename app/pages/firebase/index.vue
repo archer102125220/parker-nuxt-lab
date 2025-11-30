@@ -59,26 +59,29 @@ const linkList = computed(() => [
 <style lang="scss" scoped>
 .firebase_page {
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-content {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
-
     margin-bottom: 16px;
   }
 
   &-link_list {
+    /* Display & Box Model */
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
 
     &-link {
+      /* Display & Box Model */
       flex: 1;
       flex-basis: 150px;
     }
