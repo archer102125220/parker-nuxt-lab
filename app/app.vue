@@ -199,7 +199,10 @@ onUnmounted(() => {
 
 <style lang="scss">
 .root_style {
+  /* Misc */
   --loading_cursor: var(--root_cursor);
+
+  /* Misc */
   cursor: var(--root_cursor);
   // * {
   //   cursor: var(--root_cursor);
@@ -209,20 +212,24 @@ onUnmounted(() => {
 .page-leave-active,
 .layout-enter-active,
 .layout-leave-active {
+  /* Animation */
   transition: all 0.2s ease-out;
 }
 .page-enter-from,
 .page-leave-to,
 .layout-enter-from,
 .layout-leave-to {
+  /* Visual */
   filter: blur(1rem);
 }
 .page-enter-from,
 .layout-enter-from {
+  /* Visual */
   opacity: 0;
 }
 .page-leave-to,
 .layout-leave-to {
+  /* Visual */
   opacity: 1;
 }
 </style>
