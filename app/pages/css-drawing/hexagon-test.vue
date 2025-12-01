@@ -41,29 +41,35 @@ useHeadMataData({
 
 <style lang="scss" scoped>
 @mixin triangle {
-  content: ''; /* 偽元素必須有 content 屬性 */
-  position: absolute; /* 絕對定位，相對於 .hexagon */
+  /* Positioning */
+  position: absolute; /* 絕對定位,相對於 .hexagon */
+
+  /* Display & Box Model */
   width: 0;
-  // border-left: 50px solid transparent; /* 三角形的左邊框，寬度是 .hexagon 寬度的一半 */
-  // border-right: 50px solid transparent; /* 三角形的右邊框，寬度是 .hexagon 寬度的一半 */
-  border-left: calc(var(--hexagon_width) / 2) solid transparent; /* 三角形的左邊框，寬度是 .hexagon 寬度的一半 */
-  border-right: calc(var(--hexagon_width) / 2) solid transparent; /* 三角形的右邊框，寬度是 .hexagon 寬度的一半 */
+  border-left: calc(var(--hexagon_width) / 2) solid transparent; /* 三角形的左邊框,寬度是 .hexagon 寬度的一半 */
+  border-right: calc(var(--hexagon_width) / 2) solid transparent; /* 三角形的右邊框,寬度是 .hexagon 寬度的一半 */
+
+  /* Misc */
+  content: ''; /* 偽元素必須有 content 屬性 */
 }
 .hexagon_page {
   &-component {
+    /* Display & Box Model */
     margin-bottom: 100px;
   }
 
   &-hexagon_container {
+    /* Display & Box Model */
     margin-bottom: 100px;
+    overflow: hidden;
 
+    /* Visual */
     // background-color: #6a0dad;
     background-color: #f8f9fa;
-
-    overflow: hidden;
   }
 
   &-drawing_container {
+    /* Display & Box Model */
     --hexagon_width: 100px;
     // height: 200px;
     width: var(--hexagon_width);
@@ -71,35 +77,42 @@ useHeadMataData({
     // margin-top: 100px;
 
     &-drawing {
-      // --hexagon_height: 58px;
+      /* Positioning */
+      position: relative; /* 為了讓偽元素可以相對於它定位 */
+
+      /* Display & Box Model */
       --hexagon_height: calc(
         var(--hexagon_width) * 1.73205 / 3
       ); /* sqrt(3) 的近似值約為 1.73205 */
 
-      position: relative; /* 為了讓偽元素可以相對於它定位 */
-
       // width: 100px; /* 六邊形中間矩形部分的寬度 */
-      // height: 57.735px; /* 六邊形中間矩形部分的高度 (寬度 * sqrt(3)/2 的一半，再乘以2) */
+      // height: 57.735px; /* 六邊形中間矩形部分的高度 (寬度 * sqrt(3)/2 的一半,再乘以2) */
       width: var(--hexagon_width);
       // height: calc(var(--hexagon_width) * 1.73205 / 2);
       height: var(--hexagon_height);
+      margin: calc(var(--hexagon_height) / 2) 0; /* 上下邊距,用來容納偽元素的高度 (高度的一半) */
 
+      /* Visual */
       background-color: #6a0dad; /* 六邊形的顏色 (這裡用紫色作範例) */
-      // margin: 28.8675px 0; /* 上下邊距，用來容納偽元素的高度 (高度的一半) */
-      margin: calc(var(--hexagon_height) / 2) 0; /* 上下邊距，用來容納偽元素的高度 (高度的一半) */
 
       &::before {
         @include triangle;
+        /* Positioning */
         bottom: 99%; /* 定位在 .hexagon 的下方 */
-        // border-bottom: 28.8675px solid #6a0dad; /* 上方三角形的底邊，高度是 .hexagon 高度的一半，顏色與六邊形相同 */
-        border-bottom: calc(var(--hexagon_height) / 2) solid #6a0dad; /* 上方三角形的底邊，高度是 .hexagon 高度的一半，顏色與六邊形相同 */
+
+        /* Display & Box Model */
+        // border-bottom: 28.8675px solid #6a0dad; /* 上方三角形的底邊,高度是 .hexagon 高度的一半,顏色與六邊形相同 */
+        border-bottom: calc(var(--hexagon_height) / 2) solid #6a0dad; /* 上方三角形的底邊,高度是 .hexagon 高度的一半,顏色與六邊形相同 */
       }
       &::after {
         @include triangle;
+        /* Positioning */
         top: 99%; /* 定位在 .hexagon 的上方 */
+
+        /* Display & Box Model */
         width: 0;
-        // border-top: 28.8675px solid #6a0dad; /* 下方三角形的頂邊，高度是 .hexagon 高度的一半，顏色與六邊形相同 */
-        border-top: calc(var(--hexagon_height) / 2) solid #6a0dad; /* 下方三角形的頂邊，高度是 .hexagon 高度的一半，顏色與六邊形相同 */
+        // border-top: 28.8675px solid #6a0dad; /* 下方三角形的頂邊,高度是 .hexagon 高度的一半,顏色與六邊形相同 */
+        border-top: calc(var(--hexagon_height) / 2) solid #6a0dad; /* 下方三角形的頂邊,高度是 .hexagon 高度的一半,顏色與六邊形相同 */
       }
     }
   }

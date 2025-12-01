@@ -29,60 +29,68 @@ useHeadMataData({
 <style lang="scss">
 // https://www.cnblogs.com/weiqinl/p/7048205.html
 .triangle_test_page {
+  /* Display & Box Model */
   display: flex;
   flex-direction: column;
   gap: 16px;
 
   &-cases_1 {
+    /* Display & Box Model */
     width: 0px;
     height: 0px;
-    border-color: rgb(255, 121, 121) rgb(147, 147, 255) rgb(147, 147, 255)
-      rgb(255, 121, 121);
     border-width: 50px 50px 50px 50px;
     border-style: solid;
+    border-color: rgb(255, 121, 121) rgb(147, 147, 255) rgb(147, 147, 255)
+      rgb(255, 121, 121);
   }
 
   &-cases_2 {
+    /* Display & Box Model */
     width: 0px;
     height: 0px;
-    border-color: transparent rgb(255, 121, 121);
     border-width: 0px 0px 50px 50px;
     border-style: solid;
+    border-color: transparent rgb(255, 121, 121);
   }
 
   &-cases_3 {
+    /* Display & Box Model */
     width: 0px;
     height: 0px;
-    border-color: rgb(255, 121, 121) transparent;
     border-width: 0px 0px 50px 50px;
     border-style: solid;
+    border-color: rgb(255, 121, 121) transparent;
   }
 
   &-cases_4 {
+    /* Display & Box Model */
     width: 0px;
     height: 0px;
-    border-color: rgb(255, 121, 121) transparent;
     border-width: 50px 50px 0px 0px;
     border-style: solid;
+    border-color: rgb(255, 121, 121) transparent;
   }
 
   &-cases_5 {
+    /* Display & Box Model */
     width: 0px;
     height: 0px;
-    border-color: transparent rgb(255, 121, 121);
     border-width: 0px 50px 50px 0px;
     border-style: solid;
+    border-color: transparent rgb(255, 121, 121);
   }
 
   &-cases_6 {
+    /* Display & Box Model */
     width: 0px;
     height: 0px;
-    border-color: rgb(255, 121, 121) transparent;
     border-width: 0px 50px 50px 0px;
     border-style: solid;
+    border-color: rgb(255, 121, 121) transparent;
   }
 
   &-cases_7 {
+    /* Display & Box Model */
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;

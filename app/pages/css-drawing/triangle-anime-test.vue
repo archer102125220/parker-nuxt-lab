@@ -14,7 +14,10 @@ useHeadMataData({
 
 <style lang="scss">
 .triangle_anime_test_page {
-  background-color: #f2f9ff;
+  /* Display & Box Model */
   height: 100vh;
+
+  /* Visual */
+  background-color: #f2f9ff;
 }
 </style>

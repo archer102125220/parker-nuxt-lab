@@ -25,12 +25,14 @@ useHeadMataData({
 <style lang="scss">
 .triangle_full_test_page {
   &-left {
+    /* Positioning */
     position: fixed;
     top: 0;
     left: 0;
   }
 
   &-right {
+    /* Positioning */
     position: fixed;
     right: 0;
     bottom: 0;

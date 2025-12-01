@@ -21,15 +21,21 @@ const color = ref('#000000');
 // https://codepen.io/noahblon/post/coloring-svgs-in-css-background-images
 .svg_color_change_page {
   &-pseudo_elements {
+    /* Display & Box Model */
     display: flex;
+
     &::after {
-      content: '';
+      /* Display & Box Model */
       display: block;
       width: 24px;
       height: 24px;
 
+      /* Visual */
       background-color: var(--change_color, #fff);
       // background-image: url('@app/static/android.svg');
+
+      /* Misc */
+      content: '';
       mask: url('/img/svg-color-change/android.svg');
     }
   }

@@ -68,31 +68,37 @@ const linkList = computed(() => [
 <style lang="scss">
 .socket_test_page {
   &-description {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-
     margin-bottom: 8px;
   }
 
   &-warning {
+    /* Display & Box Model */
+    margin-bottom: 8px;
+
+    /* Typography */
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 8px;
   }
 
   &-banner {
+    /* Display & Box Model */
     width: 100%;
     margin-bottom: 8px;
   }
 
   &-content {
+    /* Display & Box Model */
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
 
     &-link {
+      /* Display & Box Model */
       flex: 1;
       flex-basis: 150px;
     }

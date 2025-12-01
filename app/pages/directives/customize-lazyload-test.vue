@@ -21,19 +21,23 @@ useHeadMataData({
 <style lang="scss" scoped>
 .customize_lazyload_test_page {
   &-normal {
-    height: 100vh;
+    /* Display & Box Model */
     width: 100%;
+    height: 100vh;
     margin-bottom: 100px;
 
-    object-fit: contain;
+    /* Visual */
     background-color: #89afff;
+    object-fit: contain;
   }
   &-lazyload {
-    height: 200px;
+    /* Display & Box Model */
     width: 100%;
+    height: 200px;
 
-    object-fit: contain;
+    /* Visual */
     background-color: #89afff;
+    object-fit: contain;
   }
 }
 </style>

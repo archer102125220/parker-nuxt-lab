@@ -397,103 +397,117 @@ async function handleDeleteToken(token) {
 <style lang="scss" scoped>
 @mixin mobile_td {
   @include mobile {
+    /* Display & Box Model */
     --v-table-row-height: auto;
     --v-border-opacity: 0;
-
     margin-bottom: 10px;
 
     @content;
 
     &::before {
-      content: attr(data-title);
-      flex-shrink: 0;
+      /* Display & Box Model */
       display: inline-block;
+      flex-shrink: 0;
       // width: 100%;
+
+      /* Misc */
+      content: attr(data-title);
     }
   }
 }
 @mixin os {
+  /* Display & Box Model */
   width: 30%;
 
+  /* Typography */
   word-break: keep-all;
 
   @include mobile_td {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-
     width: 100%;
   }
 }
 @mixin token {
+  /* Display & Box Model */
   width: 60%;
-
   overflow: auto;
 
+  /* Typography */
   word-break: break-all;
 
   @include mobile_td {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-
     width: 100%;
   }
 }
 @mixin action {
+  /* Display & Box Model */
   width: 10%;
 
   @include mobile_td {
+    /* Display & Box Model */
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-
     width: 100%;
   }
 }
 @mixin tr {
+  /* Display & Box Model */
   width: 100%;
 
   @include mobile {
+    /* Display & Box Model */
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-
     padding: 10px 0px 0px 10px;
     margin-bottom: 10px;
     // border-bottom: thin solid
     //   rgba(var(--v-border-color), var(--v-border-opacity));
     border-radius: 10px;
 
+    /* Visual */
     background-color: #00000014;
 
     &::before {
-      content: attr(data-title);
+      /* Display & Box Model */
       display: block;
-
       margin-right: 10px;
       margin-bottom: 10px;
+
+      /* Misc */
+      content: attr(data-title);
     }
   }
 }
 
 .cloud_messaging_page {
+  /* Display & Box Model */
   width: 100%;
   min-height: 500px;
 
   &-form {
     :deep(.v-btn) {
+      /* Display & Box Model */
       padding: 0 16px;
 
       &.v-col {
         &:not(:last-child) {
+          /* Display & Box Model */
           margin-right: 16px;
 
           @include mobile {
+            /* Display & Box Model */
             flex: 1;
             flex-basis: 100%;
-
             margin-right: unset;
             margin-bottom: 16px;
           }
@@ -507,30 +521,37 @@ async function handleDeleteToken(token) {
     //   display: none;
     // }
     :deep(.v-btn) {
+      /* Display & Box Model */
       padding: 0 16px;
     }
   }
 
   &-skeleton_loader {
+    /* Display & Box Model */
     height: 100%;
 
     &-scroll_fetch {
-      height: 100%;
+      /* Display & Box Model */
       width: 100%;
+      height: 100%;
 
       &-token_table {
+        /* Display & Box Model */
         width: 100%;
         height: 100%;
         margin: 10px 0;
 
         @include mobile {
+          /* Misc */
           user-select: none;
         }
 
         &-thead {
+          /* Display & Box Model */
           width: 100%;
 
           @include mobile {
+            /* Display & Box Model */
             display: none;
           }
           &-title_row {
@@ -549,6 +570,7 @@ async function handleDeleteToken(token) {
         }
 
         &-tbody {
+          /* Display & Box Model */
           width: 100%;
 
           &-tr {
