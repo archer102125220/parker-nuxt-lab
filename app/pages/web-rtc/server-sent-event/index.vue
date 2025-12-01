@@ -57,27 +57,31 @@ const rules = computed(
 
 <style lang="scss">
 .web_rtc_server_sent_event_page {
+  /* Display & Box Model */
   padding-top: 16px;
 
   &-description {
+    /* Display & Box Model */
     margin-bottom: 32px;
   }
 
   &-context {
+    /* Display & Box Model */
     display: flex;
-    gap: 16px;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
-
+    gap: 16px;
     width: 70dvw;
     margin: auto;
 
     &-initiate {
+      /* Display & Box Model */
       flex: 1;
       // height: 100%;
       &-link {
+        /* Display & Box Model */
         display: block;
         // width: 100%;
         // height: 100%;
@@ -85,8 +89,10 @@ const rules = computed(
     }
 
     &-join {
+      /* Display & Box Model */
       flex: 1;
       &-link {
+        /* Display & Box Model */
         display: block;
         // height: 100%;
       }

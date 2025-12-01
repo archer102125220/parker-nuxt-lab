@@ -45,15 +45,15 @@ watch(
 
 <style lang="scss">
 .server_sent_event_route_param_page {
-  &-description {
-  }
   &-content {
+    /* Display & Box Model */
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
 
     &-link {
+      /* Display & Box Model */
       flex: 1;
       flex-basis: 150px;
     }

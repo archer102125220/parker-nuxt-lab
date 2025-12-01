@@ -209,23 +209,28 @@ onBeforeMount(async function () {
 <style lang="scss">
 .web_rtc_server_sent_event_room_page {
   &-description {
+    /* Display & Box Model */
     margin-bottom: 8px;
   }
 
   &-video_list {
+    /* Display & Box Model */
     display: flex;
-    gap: 8px;
     flex-direction: row;
     align-items: flex-end;
-
+    gap: 8px;
     margin-bottom: 8px;
+
+    /* Visual */
     background-color: #f0f8ff;
 
     &-self {
+      /* Display & Box Model */
       aspect-ratio: 1/1;
       // opacity: 0;
     }
     &-other {
+      /* Display & Box Model */
       flex: 1;
       aspect-ratio: 1 / 1;
       // opacity: 0;
