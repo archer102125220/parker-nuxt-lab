@@ -158,6 +158,33 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
   5. **Animation** (transition, animation...)
   6. **Misc** (cursor, content...)
 
+- **CSS Naming Convention**: The project adopts a modified BEM methodology that cleverly sacrifices the standard BEM visual separator (`__`) in favor of better double-click selection efficiency in development tools, while ensuring CSS specificity and state management semantic integrity through SCSS concatenation and HTML attributes.
+  - **Block**: Use a single name, e.g., `.countdown`
+  - **Element**: Connect Block and Element with a single hyphen `-`, e.g., `.countdown-down_enter`, `.countdown-up_leave`
+  - **Sub-Element**: Connect parent and child elements with a single hyphen `-`, use underscores `_` within element names to separate semantic words, e.g.:
+    - `.countdown-down_enter-down_enter_up`
+    - `.countdown-up_leave-up_leave_down`
+  - **State Modifiers**: Manage states via HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-end-second='true']`
+  - **Advantages**:
+    - Double-click selects the entire class name (no `__` interruption)
+    - Maintains semantic hierarchy through SCSS nesting (`&-element`)
+    - Uses HTML attributes instead of modifier classes for state management, reducing class count
+    - Preserves readability and maintainability
+  - **Example**:
+    ```scss
+    .countdown {
+      &-down_enter {
+        // .countdown-down_enter
+        &-down_enter_up {
+          // .countdown-down_enter-down_enter_up
+          &[css-is-anime-start='true'] {
+            animation: flip-up 1s;
+          }
+        }
+      }
+    }
+    ```
+
 
 ## Realtime / Media Pages
 

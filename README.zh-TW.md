@@ -159,6 +159,33 @@ yarn test:codegen
   5. **Animation** (transition, animation...)
   6. **Misc** (cursor, content...)
 
+- **CSS 命名規範**: 專案採用改良式 BEM 命名法，巧妙地犧牲了標準 BEM 的視覺符號（`__`），以換取更高的開發工具雙擊選取效率，並透過 SCSS 拼接和 HTML 屬性來確保其 CSS 權重和狀態管理的語義完整性。
+  - **Block（區塊）**: 使用單一名稱，如 `.countdown`
+  - **Element（元素）**: 使用單個連字符 `-` 連接 Block 與 Element，如 `.countdown-down_enter`、`.countdown-up_leave`
+  - **Sub-Element（子元素）**: 使用單個連字符 `-` 連接父元素與子元素，元素名稱內部使用底線 `_` 分隔語義單詞，如：
+    - `.countdown-down_enter-down_enter_up`
+    - `.countdown-up_leave-up_leave_down`
+  - **狀態修飾**: 透過 HTML 屬性選擇器管理狀態，如 `[css-is-anime-start='true']`、`[css-is-end-second='true']`
+  - **優勢**:
+    - 雙擊可完整選取類別名稱（無 `__` 中斷）
+    - 透過 SCSS 巢狀結構（`&-element`）維持語義層級關係
+    - 使用 HTML 屬性而非 modifier 類別來管理狀態，減少類別數量
+    - 保持良好的可讀性與維護性
+  - **範例**:
+    ```scss
+    .countdown {
+      &-down_enter {
+        // .countdown-down_enter
+        &-down_enter_up {
+          // .countdown-down_enter-down_enter_up
+          &[css-is-anime-start='true'] {
+            animation: flip-up 1s;
+          }
+        }
+      }
+    }
+    ```
+
 
 ## 即時通訊 / 影音相關頁面
 
