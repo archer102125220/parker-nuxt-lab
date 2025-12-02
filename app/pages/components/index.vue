@@ -97,7 +97,8 @@ const linkList = computed(() => [
   { to: localePath('/components/selector'), label: '下拉選單組件' },
   { to: localePath('/components/countdown-test'), label: '倒數計時組件' },
   { to: localePath('/components/skeleton-loader'), label: 'skeleton組件' },
-  { to: localePath('/components/phone-input'), label: '電話號碼輸入組件' }
+  { to: localePath('/components/phone-input'), label: '電話號碼輸入組件' },
+  { to: localePath('/components/banner-demo'), label: 'Banner 輪播組件測試' }
 ]);
 </script>
 

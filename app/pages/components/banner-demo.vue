@@ -74,11 +74,11 @@
         <div class="banner-demo-grid">
           <div class="banner-demo-grid-item">
             <h3 class="banner-demo-grid-title">高度 200px</h3>
-            <Banner :banners="twoBanners" height="200px" />
+            <Banner :banners="twoBanners" :autoplay="true" height="200px" />
           </div>
           <div class="banner-demo-grid-item">
             <h3 class="banner-demo-grid-title">高度 400px</h3>
-            <Banner :banners="twoBanners" height="400px" />
+            <Banner :banners="twoBanners" :autoplay="true" height="400px" />
           </div>
         </div>
       </section>

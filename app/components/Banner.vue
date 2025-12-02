@@ -187,35 +187,54 @@ function getSlideClass(index) {
     } else if (index !== currentIndex.value) {
       classes.push('banner-slide-hidden');
     }
+  } else {
+    // For 2 banners (no 3D effect), hide non-active slides
+    if (index !== currentIndex.value) {
+      classes.push('banner-slide-hidden');
+    }
   }
 
   return classes;
 }
 
 function getSlideStyle(index) {
-  if (!has3DEffect.value) return {};
-
   const style = {};
 
-  if (index === getPrevIndex()) {
-    // 左側 Banner：在後面，向左偏移，縮小
-    style.transform = 'translate(-50%, -50%) translateX(-35%) scale(0.85)';
-    style.zIndex = 1;
-    style.opacity = 0.7;
-  } else if (index === getNextIndex()) {
-    // 右側 Banner：在後面，向右偏移，縮小
-    style.transform = 'translate(-50%, -50%) translateX(35%) scale(0.85)';
-    style.zIndex = 1;
-    style.opacity = 0.7;
-  } else if (index === currentIndex.value) {
-    // 當前 Banner：在前面，正中央，正常大小
-    style.transform = 'translate(-50%, -50%) translateX(0) scale(1)';
-    style.zIndex = 3;
-    style.opacity = 1;
+  if (has3DEffect.value) {
+    // 3 張以上：使用 3D 預覽效果
+    if (index === getPrevIndex()) {
+      // 左側 Banner：在後面，向左偏移，縮小
+      style.transform = 'translate(-50%, -50%) translateX(-35%) scale(0.85)';
+      style.zIndex = 1;
+      style.opacity = 0.7;
+    } else if (index === getNextIndex()) {
+      // 右側 Banner：在後面，向右偏移，縮小
+      style.transform = 'translate(-50%, -50%) translateX(35%) scale(0.85)';
+      style.zIndex = 1;
+      style.opacity = 0.7;
+    } else if (index === currentIndex.value) {
+      // 當前 Banner：在前面，正中央，正常大小
+      style.transform = 'translate(-50%, -50%) translateX(0) scale(1)';
+      style.zIndex = 3;
+      style.opacity = 1;
+    } else {
+      // 其他 Banner：完全隱藏
+      style.opacity = 0;
+      style.zIndex = 0;
+    }
   } else {
-    // 其他 Banner：完全隱藏
-    style.opacity = 0;
-    style.zIndex = 0;
+    // 2 張或更少：使用淡入淡出效果
+    if (index === currentIndex.value) {
+      // 當前 Banner：完全可見，在最上層
+      style.transform = 'translate(-50%, -50%)';
+      style.zIndex = 3;
+      style.opacity = 1;
+    } else {
+      // 非當前 Banner：完全隱藏
+      style.transform = 'translate(-50%, -50%)';
+      style.zIndex = 0;
+      style.opacity = 0;
+    }
   }
 
   return style;
