@@ -3,8 +3,14 @@
     ref="bannerContainer"
     class="banner"
     :style="cssVariables"
+    tabindex="0"
+    :aria-label="`Banner 輪播，共 ${banners.length} 張，目前第 ${currentIndex + 1} 張`"
+    aria-roledescription="carousel"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @keydown="handleKeyDown"
+    @focus="handleFocus"
+    @blur="handleBlur"
   >
     <!-- Navigation Buttons -->
     <div
@@ -146,6 +152,7 @@ const startY = ref(0);
 const moveX = ref(0);
 const autoplayTimer = ref(null);
 const isHovered = ref(false);
+const isFocused = ref(false);
 
 // Computed
 const cssVariables = computed(() => {
@@ -397,6 +404,53 @@ function resetAutoplay() {
   if (shouldAutoplay.value && !isHovered.value) {
     startAutoplay();
   }
+}
+
+function handleKeyDown(e) {
+  if (!isFocused.value || props.banners.length <= 1) return;
+
+  switch (e.key) {
+    case 'ArrowLeft':
+      e.preventDefault();
+      handlePrev();
+      break;
+
+    case 'ArrowRight':
+      e.preventDefault();
+      handleNext();
+      break;
+
+    case ' ':
+      e.preventDefault();
+      toggleAutoplay();
+      break;
+
+    case 'Home':
+      e.preventDefault();
+      goToSlide(0);
+      break;
+
+    case 'End':
+      e.preventDefault();
+      goToSlide(props.banners.length - 1);
+      break;
+  }
+}
+
+function toggleAutoplay() {
+  if (autoplayTimer.value) {
+    stopAutoplay();
+  } else if (shouldAutoplay.value) {
+    startAutoplay();
+  }
+}
+
+function handleFocus() {
+  isFocused.value = true;
+}
+
+function handleBlur() {
+  isFocused.value = false;
 }
 
 // Lifecycle
@@ -688,6 +742,17 @@ defineExpose({
       /* Visual */
       background-color: #fff;
     }
+  }
+
+  &:focus {
+    /* Visual */
+    outline: 3px solid rgba(102, 126, 234, 0.6);
+    outline-offset: 2px;
+  }
+
+  &:focus:not(:focus-visible) {
+    /* Visual */
+    outline: none;
   }
 }
 </style>

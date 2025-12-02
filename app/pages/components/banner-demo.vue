@@ -93,6 +93,37 @@
           height="250px"
         />
       </section>
+
+      <!-- 鍵盤導航 -->
+      <section class="banner-demo-section">
+        <h2 class="banner-demo-section-title">鍵盤導航測試</h2>
+        <p class="banner-demo-info">
+          點擊 Banner 使其獲得焦點（會顯示藍色邊框），然後使用以下按鍵操作：
+        </p>
+        <div class="banner-demo-keyboard-guide">
+          <div class="keyboard-item">
+            <kbd>←</kbd>
+            <span>上一張</span>
+          </div>
+          <div class="keyboard-item">
+            <kbd>→</kbd>
+            <span>下一張</span>
+          </div>
+          <div class="keyboard-item">
+            <kbd>Space</kbd>
+            <span>暫停/繼續</span>
+          </div>
+          <div class="keyboard-item">
+            <kbd>Home</kbd>
+            <span>第一張</span>
+          </div>
+          <div class="keyboard-item">
+            <kbd>End</kbd>
+            <span>最後一張</span>
+          </div>
+        </div>
+        <Banner :banners="fiveBanners" height="300px" />
+      </section>
     </div>
   </div>
 </template>
@@ -479,6 +510,52 @@ useHead({
   .custom-banner-text {
     /* Typography */
     font-size: 16px;
+  }
+
+  .banner-demo-keyboard-guide {
+    /* Display & Box Model */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+
+    .keyboard-item {
+      /* Display & Box Model */
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
+
+      /* Visual */
+      background: rgba(102, 126, 234, 0.1);
+
+      kbd {
+        /* Display & Box Model */
+        display: inline-block;
+        min-width: 40px;
+        padding: 5px 10px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        border-radius: 4px;
+
+        /* Typography */
+        font-family: monospace;
+        font-size: 14px;
+        font-weight: 600;
+        color: #667eea;
+        text-align: center;
+
+        /* Visual */
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      span {
+        /* Typography */
+        font-size: 14px;
+        color: #555;
+      }
+    }
   }
 }
 </style>
