@@ -42,7 +42,8 @@
           v-for="(banner, index) in banners"
           :key="banner.id || index"
           class="banner-slide"
-          :class="{ 'banner-slide-active': index === currentIndex }"
+          :class="getSlideClass(index)"
+          :style="getSlideStyle(index)"
         >
           <slot
             :banner="banner"
@@ -166,7 +167,72 @@ const shouldAutoplay = computed(() => {
   return props.autoplay && props.banners.length >= 2;
 });
 
+const has3DEffect = computed(() => {
+  return props.banners.length >= 3;
+});
+
 // Methods
+function getSlideClass(index) {
+  const classes = [];
+
+  if (index === currentIndex.value) {
+    classes.push('banner-slide-active');
+  }
+
+  if (has3DEffect.value) {
+    if (index === getPrevIndex()) {
+      classes.push('banner-slide-prev');
+    } else if (index === getNextIndex()) {
+      classes.push('banner-slide-next');
+    } else if (index !== currentIndex.value) {
+      classes.push('banner-slide-hidden');
+    }
+  }
+
+  return classes;
+}
+
+function getSlideStyle(index) {
+  if (!has3DEffect.value) return {};
+
+  const style = {};
+
+  if (index === getPrevIndex()) {
+    // 左側 Banner：在後面，向左偏移，縮小
+    style.transform = 'translate(-50%, -50%) translateX(-35%) scale(0.85)';
+    style.zIndex = 1;
+    style.opacity = 0.7;
+  } else if (index === getNextIndex()) {
+    // 右側 Banner：在後面，向右偏移，縮小
+    style.transform = 'translate(-50%, -50%) translateX(35%) scale(0.85)';
+    style.zIndex = 1;
+    style.opacity = 0.7;
+  } else if (index === currentIndex.value) {
+    // 當前 Banner：在前面，正中央，正常大小
+    style.transform = 'translate(-50%, -50%) translateX(0) scale(1)';
+    style.zIndex = 3;
+    style.opacity = 1;
+  } else {
+    // 其他 Banner：完全隱藏
+    style.opacity = 0;
+    style.zIndex = 0;
+  }
+
+  return style;
+}
+
+function getPrevIndex() {
+  return currentIndex.value === 0
+    ? props.banners.length - 1
+    : currentIndex.value - 1;
+}
+
+function getNextIndex() {
+  return currentIndex.value === props.banners.length - 1
+    ? 0
+    : currentIndex.value + 1;
+}
+
 function calculateTranslateX() {
   if (!bannerWrapper.value) return 0;
 
@@ -399,6 +465,8 @@ defineExpose({
 
     /* Display & Box Model */
     display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
 
@@ -406,7 +474,6 @@ defineExpose({
     transition-property: transform;
     transition-duration: var(--banner-transition-duration, 300ms);
     transition-timing-function: ease-out;
-    transform: translateX(var(--banner-translate-x, 0));
 
     /* Misc */
     user-select: none;
@@ -414,12 +481,42 @@ defineExpose({
 
   &-slide {
     /* Positioning */
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
 
     /* Display & Box Model */
     flex-shrink: 0;
-    width: 100%;
-    height: 100%;
+    width: 70%;
+    max-width: 800px;
+    height: 85%;
+
+    /* Visual */
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+
+    /* Animation */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate(-50%, -50%);
+
+    &-hidden {
+      /* Visual */
+      opacity: 0;
+
+      /* Misc */
+      pointer-events: none;
+    }
+
+    &-prev,
+    &-next {
+      /* Misc */
+      pointer-events: none;
+    }
+
+    &-active {
+      /* Misc */
+      pointer-events: auto;
+    }
 
     &-content {
       /* Positioning */
