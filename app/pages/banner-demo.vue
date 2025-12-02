@@ -105,7 +105,7 @@ const currentBannerIndex = ref(0);
 const singleBanner = ref([
   {
     id: 1,
-    image: 'https://picsum.photos/1200/400?random=1',
+    image: '/img/test-img/mimi033-1603188493.jpg',
     title: '單張 Banner',
     description: '這是唯一的一張 Banner，不會自動播放'
   }
