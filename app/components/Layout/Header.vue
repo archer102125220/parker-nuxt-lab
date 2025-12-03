@@ -14,7 +14,7 @@
       <NuxtLink :to="$localePath('/')" class="layout_header-name-link">
         <v-img
           class="layout_header-name-link-logo"
-          src="/img/icon/NuxtRock.v.02.svg"
+          src="/img/icon/NuxtRock.v.10.4.webp"
           :alt="$t('system.systemName')"
           :transition="imgTransition"
         />

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-const DEFAULT_IMG = '/img/icon/NuxtRock.v.02.webp';
+const DEFAULT_IMG = '/img/icon/NuxtRock.v.10.4.webp';
 
 const props = defineProps({
   to: { type: String, default: '' },

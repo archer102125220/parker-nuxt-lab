@@ -3,7 +3,9 @@ import os from 'os';
 import fs from 'fs-extra';
 import path from 'path';
 
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+import vuetify, {
+  transformAssetUrls
+} from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
 
@@ -51,7 +53,9 @@ if (osType.includes('windows') === true) {
   }
 
   if (fs.existsSync(sourceDir) === true) {
-    fs.copySync(sourceDir, path.join(targetDir, '/tensorflow.dll'), { overwrite: true });
+    fs.copySync(sourceDir, path.join(targetDir, '/tensorflow.dll'), {
+      overwrite: true
+    });
   } else {
     console.warn('Source models directory not found:', sourceDir);
   }
@@ -60,7 +64,9 @@ if (osType.includes('windows') === true) {
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: IS_DEV },
+  devtools: {
+    enabled: IS_DEV
+  },
   routeRules: {
     // '/': { isr: true },
     // '/en': { isr: true },
@@ -71,30 +77,78 @@ export default defineNuxtConfig({
 
     // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
     // '/**': { prerender: true },
-    '/offline': { prerender: true },
-    '/api/nuxt-server/swagger-docs': { prerender: true },
-    '/': { isr: true },
-    '/zh': { isr: true },
-    '/zh/**': { isr: 60 * 60 * 24 },
-    '/en': { isr: true },
-    '/en/**': { isr: 60 * 60 * 24 },
-    '/components': { isr: 60 * 60 * 24 },
-    '/components/**': { isr: 60 * 60 * 24 },
-    '/directives': { isr: 60 * 60 * 24 },
-    '/directives/**': { isr: 60 * 60 * 24 },
-    '/css-drawing': { isr: 60 * 60 * 24 },
-    '/css-drawing/**': { isr: 60 * 60 * 24 },
-    '/route': { isr: 60 * 60 * 24 },
-    '/route/**': { isr: 60 * 60 * 24 },
-    '/components-test': { isr: 60 * 60 * 24 },
-    '/face-api': { isr: 60 * 60 * 24 },
-    '/fido2-lib': { isr: 60 * 60 * 24 },
-    '/frontend-api-cach-test': { isr: 60 * 60 * 24 },
-    '/home': { isr: 60 * 60 * 24 },
-    '/web-authn': { isr: 60 * 60 * 24 },
-    '/web-cam': { isr: 60 * 60 * 24 },
-    '/firebase': { isr: 60 * 60 * 24 },
-    '/firebase/cloud-messaging': { swr: 15 },
+    '/offline': {
+      prerender: true
+    },
+    '/api/nuxt-server/swagger-docs': {
+      prerender: true
+    },
+    '/': {
+      isr: true
+    },
+    '/zh': {
+      isr: true
+    },
+    '/zh/**': {
+      isr: 60 * 60 * 24
+    },
+    '/en': {
+      isr: true
+    },
+    '/en/**': {
+      isr: 60 * 60 * 24
+    },
+    '/components': {
+      isr: 60 * 60 * 24
+    },
+    '/components/**': {
+      isr: 60 * 60 * 24
+    },
+    '/directives': {
+      isr: 60 * 60 * 24
+    },
+    '/directives/**': {
+      isr: 60 * 60 * 24
+    },
+    '/css-drawing': {
+      isr: 60 * 60 * 24
+    },
+    '/css-drawing/**': {
+      isr: 60 * 60 * 24
+    },
+    '/route': {
+      isr: 60 * 60 * 24
+    },
+    '/route/**': {
+      isr: 60 * 60 * 24
+    },
+    '/components-test': {
+      isr: 60 * 60 * 24
+    },
+    '/face-api': {
+      isr: 60 * 60 * 24
+    },
+    '/fido2-lib': {
+      isr: 60 * 60 * 24
+    },
+    '/frontend-api-cach-test': {
+      isr: 60 * 60 * 24
+    },
+    '/home': {
+      isr: 60 * 60 * 24
+    },
+    '/web-authn': {
+      isr: 60 * 60 * 24
+    },
+    '/web-cam': {
+      isr: 60 * 60 * 24
+    },
+    '/firebase': {
+      isr: 60 * 60 * 24
+    },
+    '/firebase/cloud-messaging': {
+      swr: 15
+    },
 
     // '/articles/*': { swr: 3600 },
     // '/admin/**': { ssr: false }
@@ -161,8 +215,7 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler', // or "modern", "legacy"
-          additionalData:
-            '@use "@app/assets/styles/variable.scss" as *; @use "@app/assets/styles/mixin.scss" as *;'
+          additionalData: '@use "@app/assets/styles/variable.scss" as *; @use "@app/assets/styles/mixin.scss" as *;'
         }
       },
       postcss: {
@@ -192,10 +245,16 @@ export default defineNuxtConfig({
         lang: defaultLang || 'zh-TW',
       },
       // https://realfavicongenerator.net/
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/img/ico/favicon.ico' }],
+      link: [{
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/img/ico/favicon.ico'
+      }],
       noscript: [
         // Google Tag Manager (noscript)
-        { textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${process.env.VITE_GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }
+        {
+          textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${process.env.VITE_GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`
+        }
       ]
     }
   },
@@ -263,40 +322,39 @@ export default defineNuxtConfig({
       short_name: 'Parker Chen\'s Nuxt Lab',
       // lang: 'zh-tw',
       lang: defaultLang,
-      icons: [
-        {
-          src: '/img/ico/apple-touch-icon.png',
-          sizes: '180x180',
-          type: 'image/png',
-          purpose: 'maskable'
-        },
-        {
-          src: '/img/ico/web-app-manifest-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-          purpose: 'maskable'
-        },
-        {
-          src: '/img/ico/web-app-manifest-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-          purpose: 'maskable'
-        },
-        {
-          src: '/img/ico/web-app-manifest-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-          purpose: 'any',
-        },
-        {
-          src: '/img/ico/favicon.ico',
-          sizes: '48x48',
-          type: 'image/png',
-          purpose: 'monochrome'
-        }
+      icons: [{
+        src: '/img/ico/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+        purpose: 'maskable'
+      },
+      {
+        src: '/img/ico/web-app-manifest-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'maskable'
+      },
+      {
+        src: '/img/ico/web-app-manifest-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable'
+      },
+      {
+        src: '/img/ico/web-app-manifest-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/img/ico/favicon.ico',
+        sizes: '48x48',
+        type: 'image/png',
+        purpose: 'monochrome'
+      }
       ],
-      theme_color: '#2c64e3',
-      background_color: '#2c64e3',
+      theme_color: '#d5fff8',
+      background_color: '#d5fff8',
       display: 'standalone'
     },
 
@@ -348,15 +406,15 @@ export default defineNuxtConfig({
       permissionsPolicy: {
         // notifications: ['self'], // 允許同源使用通知
         accelerometer: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube使用加速計
-        autoplay: ['self', '"https://*.youtube.com"'],      // 允許同源和YouTube自動播放媒體
-        camera: ['self', '"https://*.youtube.com"'],       // 允許同源使用攝影機和YouTube自動播放媒體
+        autoplay: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube自動播放媒體
+        camera: ['self', '"https://*.youtube.com"'], // 允許同源使用攝影機和YouTube自動播放媒體
         // 'cross-origin-isolated': [], // 根據需求設定
         // displaycapture: [],      // 螢幕截取，謹慎使用
-        fullscreen: ['self', '"https://*.youtube.com"'],    // 允許同源和YouTube使用全螢幕和YouTube自動播放媒體
-        geolocation: ['self'],   // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
+        fullscreen: ['self', '"https://*.youtube.com"'], // 允許同源和YouTube使用全螢幕和YouTube自動播放媒體
+        geolocation: ['self'], // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
         // gyroscope: ['self'],     // 允許同源使用陀螺儀
         // magnetometer: ['self'],  // 允許同源使用磁力計
-        microphone: ['self', '"https://*.youtube.com"'],   // 允許同源使用麥克風和YouTube自動播放媒體
+        microphone: ['self', '"https://*.youtube.com"'], // 允許同源使用麥克風和YouTube自動播放媒體
         // midi: [],                // MIDI 裝置
         // payment: ['self'],       // 允許同源使用支付請求 API
         // usb: [],                 // USB 裝置
@@ -391,8 +449,7 @@ export default defineNuxtConfig({
       // VITE_LINE_CLIENT_SECRET: process.env.VITE_LINE_CLIENT_SECRET,
       // VITE_LINE_CALLBACK_URI: process.env.VITE_LINE_CALLBACK_URI,
 
-      HTTPS:
-        process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
+      HTTPS: process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
       isDev: IS_DEV,
     }
   },
