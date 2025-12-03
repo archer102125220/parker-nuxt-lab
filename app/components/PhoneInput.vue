@@ -1,6 +1,6 @@
 <template>
-  <div class="phone-input">
-    <div class="phone-input__container" :style="cssVariable">
+  <div class="phone_input">
+    <div class="phone_input-container" :style="cssVariable">
       <Selector
         v-model="selectedCountry"
         :option-list="countryList"
@@ -9,11 +9,11 @@
         :has-shadow="true"
         :has-transition="true"
         :option-list-width="optionListWidth"
-        class="phone-input__country-selector"
+        class="phone_input-country_selector"
         @change="handleCountryChange"
       >
         <template #prefix>
-          <div class="phone-input__country-selector__flag">
+          <div class="phone_input-country_selector-flag">
             <span
               :class="[
                 'fi',
@@ -23,38 +23,38 @@
           </div>
         </template>
         <template #value="{ value }">
-          <span class="phone-input__country-selector__code">
+          <span class="phone_input-country_selector-code">
             +{{ value?.phoneCode || selectedCountry?.phoneCode || '886' }}
           </span>
         </template>
         <template #default="{ option, selected }">
-          <div class="phone-input__country-selector__option">
+          <div class="phone_input-country_selector-option">
             <span
               :class="[
                 'fi',
                 `fi-${option.countryCode?.toLowerCase()}`,
-                'phone-input__country-selector__option__flag'
+                'phone_input-country_selector-option-flag'
               ]"
             />
-            <span class="phone-input__country-selector__option__name">
+            <span class="phone_input-country_selector-option-name">
               {{ option.countryName }}
             </span>
             <span
               :css-selected="selected"
-              class="phone-input__country-selector__option__code"
+              class="phone_input-country_selector-option-code"
             >
               +{{ option.phoneCode }}
             </span>
           </div>
         </template>
       </Selector>
-      <div class="phone-input__divider" />
-      <div class="phone-input__number">
+      <div class="phone_input-divider" />
+      <div class="phone_input-number">
         <input
           v-model="phoneNumber"
           type="tel"
           :placeholder="placeholder"
-          class="phone-input__number__field"
+          class="phone_input-number-field"
           @input="handlePhoneNumberInput"
           @blur="handleBlur"
           @focus="handleFocus"
@@ -62,7 +62,7 @@
       </div>
     </div>
     <transition name="error-fade">
-      <div v-if="showError && validationError" class="phone-input__error">
+      <div v-if="showError && validationError" class="phone_input-error">
         {{ validationError }}
       </div>
     </transition>
@@ -338,8 +338,8 @@ function emitValue() {
 // 引入 flag-icons 樣式
 @import 'flag-icons/css/flag-icons.min.css';
 
-.phone-input {
-  &__container {
+.phone_input {
+  &-container {
     // Display & Box Model
     display: flex;
     align-items: center;
@@ -359,7 +359,7 @@ function emitValue() {
     }
   }
 
-  &__country-selector {
+  &-country_selector {
     // Display & Box Model
     display: flex;
     align-items: center;
@@ -368,7 +368,7 @@ function emitValue() {
     padding: 0;
     border: none;
 
-    &__flag {
+    &-flag {
       // Display & Box Model
       display: flex;
       align-items: center;
@@ -385,7 +385,7 @@ function emitValue() {
       }
     }
 
-    &__code {
+    &-code {
       // Typography
       font-family: 'PingFang SC', sans-serif;
       font-size: 14px;
@@ -393,14 +393,14 @@ function emitValue() {
       color: #111;
     }
 
-    &__option {
+    &-option {
       // Display & Box Model
       display: flex;
       align-items: center;
       gap: 8px;
       width: 100%;
 
-      &__flag {
+      &-flag {
         // Display & Box Model
         flex-shrink: 0;
         width: 20px;
@@ -411,7 +411,7 @@ function emitValue() {
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
 
-      &__name {
+      &-name {
         // Display & Box Model
         flex: 1;
 
@@ -420,7 +420,7 @@ function emitValue() {
         color: #333;
       }
 
-      &__code {
+      &-code {
         // Typography
         font-size: 12px;
         font-weight: 500;
@@ -433,7 +433,7 @@ function emitValue() {
     }
   }
 
-  &__divider {
+  &-divider {
     // Display & Box Model
     width: 1px;
     height: 24px;
@@ -443,13 +443,13 @@ function emitValue() {
     background-color: #e0e0e0;
   }
 
-  &__number {
+  &-number {
     // Display & Box Model
     flex: 1;
     display: flex;
     align-items: center;
 
-    &__field {
+    &-field {
       // Display & Box Model
       width: 100%;
       padding: 0;
@@ -482,7 +482,7 @@ function emitValue() {
     }
   }
 
-  &__error {
+  &-error {
     // Display & Box Model
     display: flex;
     align-items: center;
