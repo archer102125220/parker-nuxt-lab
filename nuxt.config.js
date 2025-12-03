@@ -21,21 +21,94 @@ import {
 const IS_DEBUG = process.env.VITE_DEBUG === 'true';
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
-const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
-  'default-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
+const CONTENT_SECURITY_POLICY = IS_DEV !== true ? { // 1. 核心與預設
+  'default-src': ["'self'"],
+  'object-src': ["'none'"], // 禁用 Flash 等過時技術
   'base-uri': ["'self'"],
-  'font-src': ["'self'", 'data:', 'blob:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
-  'form-action': ["'self'", 'https://*.facebook.com'],
-  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com', 'https://validator.swagger.io'],
-  'object-src': ["'none'"],
-  'script-src-attr': ["'none'"],
-  // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
-  // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com', 'https://vercel.live'],
-  'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
-  'connect-src': ["'self'", 'https://assets.vercel.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com', 'https://*.google-analytics.com', 'https://*.googleapis.com', 'https://api.github.com'],
-  'frame-ancestors': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
-  'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
-  'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
+
+  // 2. 腳本 (Scripts)
+  'script-src': [
+    "'self'",
+    // ⚠️ Nuxt Security Module 會自動加入 Nonce 或 Hash
+
+    // Google/GA/Firebase GStatic 資源
+    'https://www.google-analytics.com',
+    'https://www.googletagmanager.com',
+    'https://www.gstatic.com',
+
+    // 社交服務
+    'https://connect.facebook.net',
+    'https://d.line-scdn.net',
+
+    // Vercel
+    'https://vitals.vercel-insights.com',
+  ],
+
+  // 3. 連線 (API, XHR, WebSocket)
+  'connect-src': [
+    "'self'",
+    // Google/GA
+    'https://www.google-analytics.com',
+    'https://*.analytics.google.com',
+
+    // Firebase APIs
+    'https://*.firebaseio.com',
+    'https://*.firebaseapp.com',
+    'https://securetoken.googleapis.com',
+    'https://fcmregistrations.googleapis.com',
+    'https://fcmtokenmanagement.googleapis.com',
+
+    // 社交服務
+    'https://graph.facebook.com',
+
+    // Vercel
+    'https://vitals.vercel-insights.com',
+  ],
+
+  // 4. iFrame 嵌入 (用於登入彈窗或第三方內容)
+  'frame-src': [
+    "'self'",
+    'https://accounts.google.com',
+    'https://www.youtube.com',
+    'https://www.facebook.com',
+    'https://access.line.me',
+    'https://github.com',
+    'https://*.firebaseapp.com', // Firebase 認證 iFrame
+    'https://*.firebaseui.com',
+  ],
+
+  // 5. 樣式與字體
+  'style-src': [
+    "'self'",
+    // ⚠️ Nuxt Security Module 會自動加入 Nonce 或 Hash
+    'https://fonts.googleapis.com', // Vuetify/Google Fonts CSS
+  ],
+  'font-src': [
+    "'self'",
+    'data:',
+    'https://fonts.gstatic.com', // Google Fonts 檔案
+  ],
+
+  // 6. 圖片與媒體
+  'img-src': [
+    "'self'",
+    'data:', // 允許 Base64 內嵌圖片
+    'blob:',
+    'https://www.google-analytics.com', // GA 的追蹤像素
+    'https://firebasestorage.googleapis.com', // Firebase Storage
+    // 社交媒體圖片
+    'https://scontent.cdninstagram.com',
+    'https://*.fbcdn.net',
+  ],
+
+  // 7. PWA/Service Worker 特有
+  'worker-src': [
+    "'self'",
+    'blob:', // 允許 Service Worker 腳本
+  ],
+  'manifest-src': [
+    "'self'", // 允許 Manifest 檔案
+  ],
   'upgrade-insecure-requests': true
 } : {
   'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
@@ -394,6 +467,7 @@ export default defineNuxtConfig({
 
   security: {
     removeLoggers: IS_DEBUG === false,
+    reportOnly: IS_DEBUG,
 
     headers: {
       contentSecurityPolicy: CONTENT_SECURITY_POLICY,
