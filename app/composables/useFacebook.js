@@ -1,4 +1,6 @@
 export function useFacebook(initFn = () => { }) {
+  const nonceValue = useSecurityNonce('__facebookNonce');
+
   const runtimeConfig = useRuntimeConfig();
   const APP_ID = runtimeConfig.public.VITE_FACEBOOK_APP_ID;
   const API_VERSION = runtimeConfig.public.VITE_FACEBOOK_API_VERSION;
@@ -31,6 +33,7 @@ export function useFacebook(initFn = () => { }) {
       script.src = 'https://connect.facebook.net/zh_TW/sdk.js';
       script.crossorigin = 'anonymous';
       script.setAttribute('crossorigin', 'anonymous');
+      script.setAttribute('nonce', nonceValue.value);
       document.head.append(script);
     } else if (typeof window.FB === 'object') {
       facebook.value = window.FB;

@@ -63,6 +63,25 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? { // 1. 核心與預設
 
     // Vercel
     'https://vitals.vercel-insights.com',
+
+    // 📢 新增 WebRTC STUN/TURN 協議
+    'stun:', // 允許 STUN 連線
+    'turn:', // 允許 TURN 連線
+
+    // 📢 新增您使用的 STUN/TURN 伺服器網域 (如果非公共)
+    "stun.l.google.com:19302",
+    "stun1.l.google.com:19302",
+    "stun2.l.google.com:19302",
+    "stun3.l.google.com:19302",
+    "stun4.l.google.com:19302",
+    "stun.ekiga.net",
+    "stun.ideasip.com",
+    "stun.schlund.de",
+    "stun.stunprotocol.org:3478",
+    "stun.voiparound.com",
+    "stun.voipbuster.com",
+    "stun.voipstunt.com",
+    "stun.voxgratia.org" // Google 公共 STUN 服務
   ],
 
   // 4. iFrame 嵌入 (用於登入彈窗或第三方內容)
@@ -108,6 +127,7 @@ const CONTENT_SECURITY_POLICY = IS_DEV !== true ? { // 1. 核心與預設
   ],
   'manifest-src': [
     "'self'", // 允許 Manifest 檔案
+    'blob:', // 📢 新增：允許載入 Service Worker 腳本
   ],
   'upgrade-insecure-requests': true
 } : {

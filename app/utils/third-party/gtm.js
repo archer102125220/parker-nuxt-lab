@@ -1,6 +1,8 @@
 import { googleGtagInit } from '@app/utils/third-party/gtag';
 
 export function googleGTMInit(googleGTMID = '', log = false, callback) {
+  const nonceValue = useSecurityNonce('__gtmNonce');
+
   if (typeof googleGTMID !== 'string' || googleGTMID === '') {
     console.error('缺少google gtm id');
     return;
@@ -13,6 +15,7 @@ export function googleGTMInit(googleGTMID = '', log = false, callback) {
   // window.dataLayer = window.dataLayer || [];
   // window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
   const gtmScript = document.createElement('script');
+  gtmScript.setAttribute('nonce', nonceValue.value);
   function init(gtag, gtm, ...arg) {
     if (typeof gtm === 'function') {
       gtm({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });

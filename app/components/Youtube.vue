@@ -29,6 +29,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['ready', 'stateChange']);
 
+const nonceValue = useSecurityNonce('__youtubeNonce');
 const player = ref(null);
 const youtubePlayerEl = ref(null);
 
@@ -122,6 +123,7 @@ onMounted(async () => {
       el.setAttribute('src', 'https://www.youtube.com/iframe_api');
       el.setAttribute('async', '');
       el.setAttribute('defer', '');
+      el.setAttribute('nonce', nonceValue.value);
       document.body.appendChild(el);
       init();
     } else if (props.videoId !== '') {

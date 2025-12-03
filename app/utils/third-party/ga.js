@@ -1,6 +1,8 @@
 import { googleGtagInit } from '@app/utils/third-party/gtag';
 
 export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === 'development' || import.meta.dev, log = false, callback) {
+  const nonceValue = useSecurityNonce('__gaNonce');
+
   if (typeof googleGAID !== 'string' || googleGAID === '') {
     console.error('缺少google ga id');
     return;
@@ -11,6 +13,8 @@ export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === '
   const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
 
   const script = document.createElement('script');
+  script.setAttribute('nonce', nonceValue.value);
+
   function init(gtag, gtm, ...arg) {
     if (typeof gtag === 'function') {
       gtag('js', new Date());

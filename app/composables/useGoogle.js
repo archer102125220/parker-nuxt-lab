@@ -1,10 +1,12 @@
 export function useGoogle(_config = {}) {
+  const nonceValue = useSecurityNonce('__googleNonce');
+
   const config = typeof _config === 'function' ? _config() : _config;
   const {
-    beforInit = () => {},
-    init = () => {},
+    beforInit = () => { },
+    init = () => { },
     disabled,
-    getDisabled = () => {},
+    getDisabled = () => { },
     mapInit
   } = config;
   const runtimeConfig = useRuntimeConfig();
@@ -22,6 +24,7 @@ export function useGoogle(_config = {}) {
       const script = document.createElement('script');
       script.id = 'googleOAuth';
       script.src = 'https://accounts.google.com/gsi/client';
+      script.setAttribute('nonce', nonceValue.value);
       document.head.append(script);
     }
     if (
@@ -39,6 +42,7 @@ export function useGoogle(_config = {}) {
         src += `&callback=${mapInit}`;
       }
       script.src = src;
+      script.setAttribute('nonce', nonceValue.value);
       document.head.append(script);
     }
   });
@@ -46,6 +50,7 @@ export function useGoogle(_config = {}) {
     const _disabled = disabled || getDisabled();
     initGoogleApi(_disabled);
   });
+
   function initGoogleApi(_disabled) {
     if (_disabled === true) return;
 
