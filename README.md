@@ -185,6 +185,11 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
     }
     ```
 
+**Detailed Documentation**:
+- [CSS Naming Convention Audit Plan](./docs/in-progress/css-naming-audit-plan.md)
+- [CSS Naming Convention Quick Reference](./docs/in-progress/css-naming-quick-reference.md)
+- [CSS Naming Convention Progress](./docs/in-progress/css-naming-progress.md)
+
 
 ## Realtime / Media Pages
 

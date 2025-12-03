@@ -186,6 +186,11 @@ yarn test:codegen
     }
     ```
 
+**詳細文檔**:
+- [CSS 命名規範審查與修正計劃](./docs/in-progress/css-naming-audit-plan.md)
+- [CSS 命名規範快速參考](./docs/in-progress/css-naming-quick-reference.md)
+- [CSS 命名規範修正進度](./docs/in-progress/css-naming-progress.md)
+
 
 ## 即時通訊 / 影音相關頁面
 
