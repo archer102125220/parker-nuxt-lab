@@ -19,12 +19,14 @@ docs/
 
 ## 📊 統計資訊
 
-- **總文檔數：** 8 個
+- **總文檔數：** 13 個
   - 主索引：1 個
   - 子索引：2 個
-  - 專案文檔：5 個
+  - 專案文檔：10 個
 
-- **已完成專案：** 1 個（CSS 屬性順序標準化）
+- **已完成專案：** 2 個
+  - CSS 屬性順序標準化
+  - Banner 輪播組件
 - **進行中專案：** 1 個（測試覆蓋率提升）
 
 ## 🎯 快速訪問
@@ -36,6 +38,11 @@ docs/
 - [已完成項目索引](./completed/README.md)
 - [CSS 屬性順序計劃](./completed/css-property-order-plan.md)
 - [CSS 屬性順序任務](./completed/css-property-order-task.md)
+- [Banner 輪播組件計劃](./completed/banner-carousel-plan.md)
+- [Banner 輪播組件任務](./completed/banner-carousel-task.md)
+- [Banner 輪播組件 Walkthrough](./completed/banner-carousel-walkthrough.md)
+- [Banner 輪播組件總結](./completed/banner-carousel-summary.md)
+- [Banner 輪播組件完成報告](./completed/banner-carousel-completion-report.md)
 
 ### 進行中專案
 - [進行中項目索引](./in-progress/README.md)
@@ -45,4 +52,5 @@ docs/
 
 ---
 
-*建立時間：2025-12-01*
+*建立時間：2025-12-01*  
+*最後更新：2025-12-03*
