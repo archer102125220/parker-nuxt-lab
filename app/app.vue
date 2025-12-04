@@ -43,6 +43,8 @@ import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 import { Analytics } from '@vercel/analytics/nuxt';
 import _debounce from 'lodash/debounce';
 
+useSecurityNonce();
+
 const NO_GO_TOP = [];
 
 // const runtimeConfig = useRuntimeConfig();

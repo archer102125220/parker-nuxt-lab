@@ -2,20 +2,16 @@ const NONCE_STATE_KEY = '__securityNonce';
 
 export function useSecurityNonce(nonceStateKey = NONCE_STATE_KEY) {
   const nonceValue = useState(nonceStateKey, () => null);
+  const defaultNonceValue = useState(NONCE_STATE_KEY, () => null);
 
   if (import.meta.server) {
     const event = useRequestEvent();
 
-    console.log(event?.context?.security?.nonce);
-    console.log(event?.node?.res?.locals?.nonce);
-    console.log(event?.context?.security?.nonce || event?.node?.res?.locals?.nonce);
-
-    nonceValue.value = event?.context?.security?.nonce || event?.node?.res?.locals?.nonce || null;
+    defaultNonceValue.value = event?.context?.security?.nonce || event?.node?.res?.locals?.nonce || defaultNonceValue.value || null;
+    nonceValue.value = event?.context?.security?.nonce || event?.node?.res?.locals?.nonce || nonceValue.value || defaultNonceValue.value || null;
   }
 
-  console.log(nonceValue.value);
-
-  return nonceValue;
+  return nonceValue || defaultNonceValue;
 }
 
 export default useSecurityNonce;
