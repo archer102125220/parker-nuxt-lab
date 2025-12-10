@@ -120,8 +120,8 @@ const linkList = computed(() => [
     banner: '/img/web-rtc/web-rtc-v.04.webp',
     // label: 'WebRTC測試',
     label: t('index.web_rtc')
-  }
-  // { to: localePath('/face-swap'), label: 'AI 換臉 測試' }
+  },
+  { to: localePath('/face-swap'), label: 'AI 換臉 測試' }
 ]);
 </script>
 

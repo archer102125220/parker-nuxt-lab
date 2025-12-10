@@ -13,7 +13,7 @@
     <div class="face_swap_index_page-cards">
       <v-card
         class="face_swap_index_page-cards-card"
-        to="/face-swap/frontend"
+        :to="localePath('/face-swap/frontend')"
         hover
       >
         <v-card-item>
@@ -32,7 +32,7 @@
 
       <v-card
         class="face_swap_index_page-cards-card face_swap_index_page-cards-card--coming_soon"
-        to="/face-swap/backend"
+        :to="localePath('/face-swap/backend')"
         hover
       >
         <v-chip
@@ -60,6 +60,8 @@
 </template>
 
 <script setup>
+const localePath = useLocalePath();
+
 useHeadMataData({
   title: 'AI 人臉替換'
 });
