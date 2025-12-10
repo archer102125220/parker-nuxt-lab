@@ -4,9 +4,27 @@
       配合 Server-Sent Event 及 @upstash/redis 實作
     </p>
 
-    <p class="web_rtc_server_sent_event_room_page-uuid">
-      目前配對ID為: {{ uuId }}
-    </p>
+    <div class="web_rtc_server_sent_event_room_page-uuid">
+      <span>目前配對ID為: {{ uuId }}</span>
+      <v-btn
+        icon
+        size="small"
+        variant="text"
+        :title="copiedId ? '已複製!' : '複製 ID'"
+        @click="handleCopyId"
+      >
+        <v-icon>{{ copiedId ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        size="small"
+        variant="text"
+        :title="copiedUrl ? '已複製!' : '複製連結'"
+        @click="handleCopyUrl"
+      >
+        <v-icon>{{ copiedUrl ? 'mdi-check' : 'mdi-link' }}</v-icon>
+      </v-btn>
+    </div>
 
     <div class="web_rtc_server_sent_event_room_page-video_list">
       <video
@@ -47,6 +65,37 @@ const route = useRoute();
 
 const uuId = computed(() => route.params.uuId);
 const userId = computed(() => nanoid());
+
+// 複製功能
+const copiedId = ref(false);
+const copiedUrl = ref(false);
+
+async function handleCopyId() {
+  if (copiedId.value === true) return;
+  try {
+    await navigator.clipboard.writeText(uuId.value);
+    copiedId.value = true;
+    setTimeout(() => {
+      copiedId.value = false;
+    }, 2000);
+  } catch (error) {
+    console.error('複製失敗:', error);
+  }
+}
+
+async function handleCopyUrl() {
+  if (copiedUrl.value === true) return;
+  try {
+    const url = window.location.href;
+    await navigator.clipboard.writeText(url);
+    copiedUrl.value = true;
+    setTimeout(() => {
+      copiedUrl.value = false;
+    }, 2000);
+  } catch (error) {
+    console.error('複製失敗:', error);
+  }
+}
 
 const streamObj = useCameraStream({ audio: true });
 const webRTC = useWebRTC(
@@ -210,6 +259,14 @@ onBeforeMount(async function () {
 .web_rtc_server_sent_event_room_page {
   &-description {
     /* Display & Box Model */
+    margin-bottom: 8px;
+  }
+
+  &-uuid {
+    /* Display & Box Model */
+    display: flex;
+    align-items: center;
+    gap: 4px;
     margin-bottom: 8px;
   }
 
