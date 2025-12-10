@@ -36,8 +36,8 @@ export default defineEventHandler(async function (event) {
         userId,
         memberCandidateList,
         memberDescriptionList,
-        isOffer: memberType.isOffer,
-        isAnswer: memberType.isAnswer
+        isOffer: memberType?.isOffer,
+        isAnswer: memberType?.isAnswer
       }
 
       await eventStream.push({ event: 'webrtc', data: safeToJSON(webRTCSetting) });

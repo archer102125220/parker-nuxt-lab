@@ -112,11 +112,15 @@ export default defineNitroPlugin((nitroApp) => {
   }
 
 
-  nitroApp.$adaptSocketIO = function adaptSocketIO(peer) {
+  nitroApp.$adaptSocketIO = function adaptSocketIO(peer, callback) {
     const _nitroApp = useNitroApp();
 
     _nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
     _nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
+
+    if (typeof callback === 'function') {
+      callback(peer, _nitroApp);
+    }
   }
 
   nitroApp.hooks.hook('close', () => {
