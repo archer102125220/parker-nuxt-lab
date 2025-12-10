@@ -25,9 +25,14 @@
 - [x] Implement face swap core functionality
 - [x] Update styling for better UX
 
-### Phase 3: Backend Version (Future)
+### Phase 3: Backend Version
 - [x] Placeholder page with coming soon notice
-- [ ] Plan Node.js backend integration (future)
+- [/] Plan Node.js backend integration
+  - [x] Research AI technologies (InsightFace, Roop)
+  - [x] Design architecture options
+  - [ ] User selects preferred approach
+- [ ] Implement backend API
+- [ ] Update frontend to use backend API
 
 ### Verification
 - [x] Test navigation between pages
