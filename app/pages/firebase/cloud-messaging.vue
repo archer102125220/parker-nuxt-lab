@@ -256,7 +256,7 @@ const { pending, data, error, refresh } = await useAsyncData(
   },
   { watch: [() => system.firebaseMessagingInited] }
 );
-if (error.value) {
+if (typeof error.value === 'object' && error.value !== null) {
   console.error('Error fetching cloud messaging tokens:', error.value);
 }
 

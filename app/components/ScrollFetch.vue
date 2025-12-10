@@ -377,7 +377,7 @@ watch(
     console.log({ newIsMobile });
     if (newIsMobile === true) {
       const htmlDom = document.querySelector('html');
-      if (htmlDom) {
+      if (typeof htmlDom === 'object' && htmlDom instanceof HTMLElement) {
         htmlDom.style.setProperty('--root_overscroll_behavior', 'none');
       }
 
@@ -393,7 +393,7 @@ watch(
       window.addEventListener('scroll', windowScroll);
     } else if (newIsMobile === false) {
       const htmlDom = document.querySelector('html');
-      if (htmlDom) {
+      if (typeof htmlDom === 'object' && htmlDom instanceof HTMLElement) {
         htmlDom.style.setProperty('--root_overscroll_behavior', '');
         htmlDom.style.removeProperty('--root_overscroll_behavior');
       }
@@ -421,7 +421,7 @@ onMounted(() => {
   console.log({ ['props.isMobile']: props.isMobile });
   if (props.isMobile === true) {
     const htmlDom = document.querySelector('html');
-    if (htmlDom) {
+    if (typeof htmlDom === 'object' && htmlDom instanceof HTMLElement) {
       htmlDom.style.setProperty('--root_overscroll_behavior', 'none');
     }
 
@@ -456,7 +456,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (props.isMobile === true) {
     const htmlDom = document.querySelector('html');
-    if (htmlDom) {
+    if (typeof htmlDom === 'object' && htmlDom instanceof HTMLElement) {
       htmlDom.style.setProperty('--root_overscroll_behavior', '');
       htmlDom.style.removeProperty('--root_overscroll_behavior');
     }

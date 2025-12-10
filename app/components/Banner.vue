@@ -260,7 +260,14 @@ function getNextIndex() {
 }
 
 function calculateTranslateX() {
-  if (!bannerWrapper.value) return 0;
+  if (
+    typeof bannerWrapper.value !== 'object' ||
+    bannerWrapper.value === null ||
+    (typeof HTMLElement !== 'undefined' &&
+      bannerWrapper.value instanceof HTMLElement === false)
+  ) {
+    return 0;
+  }
 
   const wrapperWidth = bannerWrapper.value.clientWidth;
   let baseTranslate = -currentIndex.value * wrapperWidth;
@@ -326,7 +333,7 @@ function handleDragStart(e) {
 }
 
 function handleDragMove(e) {
-  if (!isDragging.value) return;
+  if (isDragging.value === false) return;
 
   const eventX = e.pageX || e.touches?.[0]?.pageX || 0;
   const eventY = e.pageY || e.touches?.[0]?.pageY || 0;
@@ -337,7 +344,7 @@ function handleDragMove(e) {
     { clientX: eventX, clientY: eventY }
   );
 
-  if (!isHorizontal) {
+  if (isHorizontal === false) {
     isDragging.value = false;
     return;
   }
@@ -347,7 +354,7 @@ function handleDragMove(e) {
 }
 
 function handleDragEnd(e) {
-  if (!isDragging.value) return;
+  if (isDragging.value === false) return;
 
   const dragDistance = moveX.value - startX.value;
   const threshold = bannerWrapper.value?.clientWidth * 0.2 || 50;
@@ -365,27 +372,27 @@ function handleDragEnd(e) {
   startY.value = 0;
   moveX.value = 0;
 
-  if (shouldAutoplay.value && !isHovered.value) {
+  if (shouldAutoplay.value === true && isHovered.value === false) {
     startAutoplay();
   }
 }
 
 function handleMouseEnter() {
   isHovered.value = true;
-  if (shouldAutoplay.value) {
+  if (shouldAutoplay.value === true) {
     stopAutoplay();
   }
 }
 
 function handleMouseLeave() {
   isHovered.value = false;
-  if (shouldAutoplay.value) {
+  if (shouldAutoplay.value === true) {
     startAutoplay();
   }
 }
 
 function startAutoplay() {
-  if (!shouldAutoplay.value) return;
+  if (shouldAutoplay.value === false) return;
 
   stopAutoplay();
   autoplayTimer.value = setInterval(() => {
@@ -394,20 +401,20 @@ function startAutoplay() {
 }
 
 function stopAutoplay() {
-  if (autoplayTimer.value) {
+  if (autoplayTimer.value !== null) {
     clearInterval(autoplayTimer.value);
     autoplayTimer.value = null;
   }
 }
 
 function resetAutoplay() {
-  if (shouldAutoplay.value && !isHovered.value) {
+  if (shouldAutoplay.value === true && isHovered.value === false) {
     startAutoplay();
   }
 }
 
 function handleKeyDown(e) {
-  if (!isFocused.value || props.banners.length <= 1) return;
+  if (isFocused.value === false || props.banners.length <= 1) return;
 
   switch (e.key) {
     case 'ArrowLeft':
@@ -438,9 +445,9 @@ function handleKeyDown(e) {
 }
 
 function toggleAutoplay() {
-  if (autoplayTimer.value) {
+  if (autoplayTimer.value !== null) {
     stopAutoplay();
-  } else if (shouldAutoplay.value) {
+  } else if (shouldAutoplay.value === true) {
     startAutoplay();
   }
 }
@@ -460,7 +467,7 @@ onMounted(() => {
   document.addEventListener('touchmove', handleDragMove, { passive: false });
   document.addEventListener('touchend', handleDragEnd);
 
-  if (shouldAutoplay.value) {
+  if (shouldAutoplay.value === true) {
     startAutoplay();
   }
 });
@@ -494,7 +501,7 @@ watch(
 );
 
 watch(shouldAutoplay, (newValue) => {
-  if (newValue) {
+  if (newValue === true) {
     startAutoplay();
   } else {
     stopAutoplay();

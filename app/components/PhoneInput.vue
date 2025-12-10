@@ -149,7 +149,7 @@ const hasError = ref(false);
 
 const cssVariable = computed(() => {
   // 錯誤狀態優先
-  if (hasError.value && showError.value) {
+  if (hasError.value === true && showError.value === true) {
     return {
       '--phone-input-border-color': '#dc3545',
       '--phone-input-box-shadow': '0 0 0 2px rgba(220, 53, 69, 0.1)'
@@ -157,10 +157,10 @@ const cssVariable = computed(() => {
   }
 
   return {
-    '--phone-input-border-color': isFocused.value ? '#2c64e3' : '#d5d5d5',
-    '--phone-input-box-shadow': isFocused.value
-      ? '0 0 0 2px rgba(44, 100, 227, 0.1)'
-      : 'none'
+    '--phone-input-border-color':
+      isFocused.value === true ? '#2c64e3' : '#d5d5d5',
+    '--phone-input-box-shadow':
+      isFocused.value === true ? '0 0 0 2px rgba(44, 100, 227, 0.1)' : 'none'
   };
 });
 
@@ -180,7 +180,7 @@ watch(
 watch(
   () => props.defaultCountryCode,
   () => {
-    if (!selectedCountry.value) {
+    if (selectedCountry.value === null || selectedCountry.value === undefined) {
       initializeCountry();
     }
   }
@@ -194,18 +194,26 @@ function initializeCountry() {
 }
 
 function parseModelValue() {
-  if (!props.modelValue) {
+  if (
+    (typeof props.modelValue !== 'object' &&
+      typeof props.modelValue !== 'string') ||
+    props.modelValue === '' ||
+    props.modelValue === null
+  ) {
     phoneNumber.value = '';
     return;
   }
 
   if (typeof props.modelValue === 'object') {
     // 如果是對象格式
-    if (props.modelValue.countryCode) {
+    if (
+      typeof props.modelValue.countryCode === 'string' &&
+      props.modelValue.countryCode !== ''
+    ) {
       const country = countryList.value.find(
         (c) => c.countryCode === props.modelValue.countryCode
       );
-      if (country) {
+      if (typeof country === 'object' && country !== null) {
         selectedCountry.value = country;
       }
     }
@@ -234,7 +242,7 @@ function parseModelValue() {
       }
 
       // 如果沒有匹配到任何國際碼，保留原值
-      if (!matched) {
+      if (matched === false) {
         phoneNumber.value = value;
       }
     } else {
@@ -249,7 +257,7 @@ function handleCountryChange(newCountryCode) {
   const country = countryList.value.find(
     (c) => c.countryCode === newCountryCode
   );
-  if (country) {
+  if (typeof country === 'object' && country !== null) {
     selectedCountry.value = country;
   }
   emitValue();
@@ -473,10 +481,12 @@ function emitValue() {
       &::-webkit-outer-spin-button,
       &::-webkit-inner-spin-button {
         margin: 0;
+        appearance: none;
         -webkit-appearance: none;
       }
 
       &[type='number'] {
+        appearance: textfield;
         -moz-appearance: textfield;
       }
     }

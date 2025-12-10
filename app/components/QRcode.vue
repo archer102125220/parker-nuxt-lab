@@ -25,7 +25,7 @@ function handleQRCode(_qrCodeValue) {
   QRCode.toDataURL(_qrCodeValue, function (error, url) {
     emit('created');
     emit('loading', false);
-    if (error) {
+    if (typeof error === 'object' && error !== null) {
       console.error(error);
       emit('error', error);
       return;
