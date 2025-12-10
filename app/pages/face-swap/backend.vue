@@ -144,8 +144,6 @@
 </template>
 
 <script setup>
-import { POST_faceSwapProcess } from '@/services/client/face-swap';
-
 useHeadMataData({
   title: '後端 AI 人臉替換'
 });
@@ -190,7 +188,8 @@ async function handleFaceSwap() {
     const targetBase64 = await getImageBase64(targetFaceEl.value?.previewEl);
 
     // Call API using service
-    const response = await POST_faceSwapProcess({
+    const { $faceSwap } = useNuxtApp();
+    const response = await $faceSwap.POST_faceSwapProcess({
       sourceImage: sourceBase64,
       targetImage: targetBase64
     });
