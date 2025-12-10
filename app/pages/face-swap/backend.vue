@@ -2,7 +2,7 @@
   <section class="face_swap_backend_page">
     <v-btn
       class="face_swap_backend_page-back_btn"
-      to="/face-swap"
+      :to="localePath('/face-swap')"
       variant="text"
     >
       <v-icon start>mdi-arrow-left</v-icon>
@@ -17,49 +17,243 @@
     />
 
     <h1 class="face_swap_backend_page-title">後端 AI 人臉替換</h1>
+    <p class="face_swap_backend_page-subtitle">
+      使用 Node.js + TensorFlow.js 伺服器端處理
+    </p>
 
-    <v-alert
-      class="face_swap_backend_page-alert"
-      type="info"
-      variant="tonal"
-      prominent
-    >
-      <v-alert-title>功能開發中</v-alert-title>
-      此功能正在開發中，敬請期待！
-    </v-alert>
+    <!-- Upload Section -->
+    <div class="face_swap_backend_page-upload_section">
+      <div class="face_swap_backend_page-upload_section-source">
+        <h3>來源臉部</h3>
+        <ImageUpload
+          ref="sourceFaceEl"
+          v-model="sourceFaceImage"
+          btn-label="選取來源照片"
+          label="點擊或拖拉來源照片到此區塊"
+          mask-label="拖拉來源照片到此區塊"
+          class="face_swap_backend_page-upload_section-upload"
+        />
+      </div>
 
-    <div class="face_swap_backend_page-info">
-      <h2>預計使用技術</h2>
-      <v-list>
-        <v-list-item prepend-icon="mdi-nodejs">
-          <v-list-item-title>Node.js 後端 API</v-list-item-title>
-        </v-list-item>
-        <v-list-item prepend-icon="mdi-face-recognition">
-          <v-list-item-title
-            >InsightFace / DeepFaceLab AI 模型</v-list-item-title
+      <div class="face_swap_backend_page-upload_section-target">
+        <h3>目標圖片</h3>
+        <ImageUpload
+          ref="targetFaceEl"
+          v-model="targetFaceImage"
+          btn-label="選取目標照片"
+          label="點擊或拖拉目標照片到此區塊"
+          mask-label="拖拉目標照片到此區塊"
+          class="face_swap_backend_page-upload_section-upload"
+        />
+      </div>
+
+      <div class="face_swap_backend_page-upload_section-result">
+        <h3>替換結果</h3>
+        <div class="face_swap_backend_page-upload_section-result-container">
+          <img
+            v-if="resultImage !== ''"
+            :src="resultImage"
+            class="face_swap_backend_page-upload_section-result-img"
+            alt="Face swap result"
+          />
+          <div
+            v-else
+            class="face_swap_backend_page-upload_section-result-placeholder"
           >
-        </v-list-item>
-        <v-list-item prepend-icon="mdi-gpu">
-          <v-list-item-title>伺服器端 GPU 加速處理</v-list-item-title>
-        </v-list-item>
-      </v-list>
+            <v-icon size="48" color="grey">mdi-image-outline</v-icon>
+            <p>結果將顯示在此</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <v-btn
-      class="face_swap_backend_page-action_btn"
-      to="/face-swap/frontend"
-      color="primary"
-      size="large"
+    <!-- Control Buttons -->
+    <div class="face_swap_backend_page-controls">
+      <v-btn
+        color="primary"
+        size="large"
+        :loading="isProcessing"
+        :disabled="!canProcess"
+        @click="handleFaceSwap"
+      >
+        <v-icon start>mdi-face-recognition</v-icon>
+        執行替換
+      </v-btn>
+
+      <v-btn
+        color="secondary"
+        size="large"
+        variant="outlined"
+        @click="resetSwap"
+      >
+        <v-icon start>mdi-refresh</v-icon>
+        重置
+      </v-btn>
+
+      <v-btn
+        color="success"
+        size="large"
+        variant="outlined"
+        :disabled="resultImage === ''"
+        @click="downloadResult"
+      >
+        <v-icon start>mdi-download</v-icon>
+        下載結果
+      </v-btn>
+    </div>
+
+    <!-- Status Message -->
+    <v-alert
+      v-if="statusMessage !== ''"
+      :type="statusType"
+      class="face_swap_backend_page-status"
+      closable
+      @click:close="statusMessage = ''"
     >
-      先試試純前端版本
-    </v-btn>
+      {{ statusMessage }}
+    </v-alert>
+
+    <!-- Tech Info -->
+    <v-expansion-panels class="face_swap_backend_page-info">
+      <v-expansion-panel title="技術說明">
+        <v-expansion-panel-text>
+          <v-list density="compact">
+            <v-list-item prepend-icon="mdi-nodejs">
+              <v-list-item-title>Nitro Server API</v-list-item-title>
+              <v-list-item-subtitle
+                >POST /api/face-swap/process</v-list-item-subtitle
+              >
+            </v-list-item>
+            <v-list-item prepend-icon="mdi-face-recognition">
+              <v-list-item-title>face-api.js + TensorFlow.js</v-list-item-title>
+              <v-list-item-subtitle
+                >Server-side face detection</v-list-item-subtitle
+              >
+            </v-list-item>
+            <v-list-item prepend-icon="mdi-palette">
+              <v-list-item-title>node-canvas</v-list-item-title>
+              <v-list-item-subtitle
+                >Server-side image processing</v-list-item-subtitle
+              >
+            </v-list-item>
+          </v-list>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </section>
 </template>
 
 <script setup>
+import { POST_faceSwapProcess } from '@/services/client/face-swap';
+
 useHeadMataData({
-  title: '後端 AI 人臉替換 - 開發中'
+  title: '後端 AI 人臉替換'
 });
+
+const localePath = useLocalePath();
+
+// Refs
+const sourceFaceEl = useTemplateRef('sourceFaceEl');
+const targetFaceEl = useTemplateRef('targetFaceEl');
+
+// State
+const sourceFaceImage = ref('');
+const targetFaceImage = ref('');
+const resultImage = ref('');
+const isProcessing = ref(false);
+const statusMessage = ref('');
+const statusType = ref('info');
+
+// Computed
+const canProcess = computed(() => {
+  return (
+    sourceFaceImage.value !== '' &&
+    sourceFaceImage.value !== null &&
+    targetFaceImage.value !== '' &&
+    targetFaceImage.value !== null
+  );
+});
+
+// Methods
+async function handleFaceSwap() {
+  if (!canProcess.value) {
+    showStatus('請先上傳來源照片和目標照片', 'warning');
+    return;
+  }
+
+  isProcessing.value = true;
+  showStatus('正在處理中，請稍候...', 'info');
+
+  try {
+    // Get base64 from preview elements
+    const sourceBase64 = await getImageBase64(sourceFaceEl.value?.previewEl);
+    const targetBase64 = await getImageBase64(targetFaceEl.value?.previewEl);
+
+    // Call API using service
+    const response = await POST_faceSwapProcess({
+      sourceImage: sourceBase64,
+      targetImage: targetBase64
+    });
+
+    if (response.success === true) {
+      resultImage.value = response.resultImage;
+      showStatus('人臉替換完成！', 'success');
+    } else {
+      throw new Error(response.error || '處理失敗');
+    }
+  } catch (error) {
+    console.error('Face swap error:', error);
+    showStatus(
+      error.message || error?.response?.data?.message || '人臉替換處理失敗',
+      'error'
+    );
+  } finally {
+    isProcessing.value = false;
+  }
+}
+
+function getImageBase64(imgEl) {
+  return new Promise((resolve) => {
+    if (imgEl === null || imgEl === undefined) {
+      resolve('');
+      return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = imgEl.naturalWidth || imgEl.width;
+    canvas.height = imgEl.naturalHeight || imgEl.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(imgEl, 0, 0);
+
+    resolve(canvas.toDataURL('image/png'));
+  });
+}
+
+function resetSwap() {
+  sourceFaceImage.value = '';
+  targetFaceImage.value = '';
+  resultImage.value = '';
+  statusMessage.value = '';
+}
+
+function downloadResult() {
+  if (resultImage.value === '') {
+    return;
+  }
+
+  const link = document.createElement('a');
+  link.download = `face-swap-backend-${Date.now()}.png`;
+  link.href = resultImage.value;
+  link.click();
+
+  showStatus('圖片已下載', 'success');
+}
+
+function showStatus(message, type = 'info') {
+  statusMessage.value = message;
+  statusType.value = type;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -84,16 +278,15 @@ useHeadMataData({
     /* Display & Box Model */
     width: 100%;
     max-width: 600px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 
     /* Visual */
     border-radius: 8px;
-    opacity: 0.7;
   }
 
   &-title {
     /* Display & Box Model */
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 
     /* Typography */
     font-size: 1.8rem;
@@ -101,32 +294,112 @@ useHeadMataData({
     text-align: center;
   }
 
-  &-alert {
+  &-subtitle {
+    /* Display & Box Model */
+    margin-bottom: 24px;
+
+    /* Typography */
+    font-size: 1rem;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &-upload_section {
+    /* Display & Box Model */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 24px;
+    padding: 24px;
+
+    /* Visual */
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+
+    h3 {
+      /* Display & Box Model */
+      margin-bottom: 12px;
+
+      /* Typography */
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    &-upload {
+      /* Display & Box Model */
+      min-height: 250px;
+    }
+
+    &-source,
+    &-target {
+      /* Display & Box Model */
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-result {
+      /* Display & Box Model */
+      display: flex;
+      flex-direction: column;
+
+      &-container {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 250px;
+
+        /* Visual */
+        background-color: #f5f5f5;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+      }
+
+      &-img {
+        /* Display & Box Model */
+        max-width: 100%;
+        max-height: 300px;
+
+        /* Visual */
+        object-fit: contain;
+        border-radius: 8px;
+      }
+
+      &-placeholder {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        /* Typography */
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+
+  &-controls {
+    /* Display & Box Model */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  &-status {
     /* Display & Box Model */
     width: 100%;
-    max-width: 500px;
-    margin-bottom: 32px;
+    max-width: 600px;
+    margin-bottom: 24px;
   }
 
   &-info {
     /* Display & Box Model */
     width: 100%;
-    max-width: 500px;
-    margin-bottom: 32px;
-
-    h2 {
-      /* Display & Box Model */
-      margin-bottom: 16px;
-
-      /* Typography */
-      font-size: 1.2rem;
-      text-align: center;
-    }
-  }
-
-  &-action_btn {
-    /* Display & Box Model */
-    margin-top: auto;
+    max-width: 600px;
   }
 }
 </style>
