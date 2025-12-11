@@ -183,16 +183,18 @@ async function handleFaceSwap() {
   showStatus('正在處理中，請稍候...', 'info');
 
   try {
-    // Get base64 from preview elements
-    const sourceBase64 = await getImageBase64(sourceFaceEl.value?.previewEl);
-    const targetBase64 = await getImageBase64(targetFaceEl.value?.previewEl);
+    // Get blobs from preview elements
+    const sourceBlob = await getImageBlob(sourceFaceEl.value?.previewEl);
+    const targetBlob = await getImageBlob(targetFaceEl.value?.previewEl);
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('sourceImage', sourceBlob, 'source.png');
+    formData.append('targetImage', targetBlob, 'target.png');
 
     // Call API using service
     const { $faceSwap } = useNuxtApp();
-    const response = await $faceSwap.POST_faceSwapProcess({
-      sourceImage: sourceBase64,
-      targetImage: targetBase64
-    });
+    const response = await $faceSwap.POST_faceSwapProcess(formData);
 
     if (response.success === true) {
       resultImage.value = response.resultImage;
@@ -211,10 +213,10 @@ async function handleFaceSwap() {
   }
 }
 
-function getImageBase64(imgEl) {
-  return new Promise((resolve) => {
+function getImageBlob(imgEl) {
+  return new Promise((resolve, reject) => {
     if (imgEl === null || imgEl === undefined) {
-      resolve('');
+      reject(new Error('圖片元素不存在'));
       return;
     }
 
@@ -225,7 +227,13 @@ function getImageBase64(imgEl) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(imgEl, 0, 0);
 
-    resolve(canvas.toDataURL('image/png'));
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('無法轉換圖片為 Blob'));
+      }
+    }, 'image/png');
   });
 }
 

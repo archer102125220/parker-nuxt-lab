@@ -3,9 +3,7 @@ import os from 'os';
 import fs from 'fs-extra';
 import path from 'path';
 
-import vuetify, {
-  transformAssetUrls
-} from 'vite-plugin-vuetify';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
 
@@ -21,105 +19,124 @@ import {
 const IS_DEBUG = process.env.VITE_DEBUG === 'true';
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
-const CONTENT_SECURITY_POLICY = IS_DEV !== true ? { // 1. 核心與預設
-  'default-src': ["'self'"],
-  'object-src': ["'none'"], // 禁用 Flash 等過時技術
-  'base-uri': ["'self'"],
+const CONTENT_SECURITY_POLICY =
+  IS_DEV !== true
+    ? {
+        // 1. 核心與預設
+        'default-src': ["'self'"],
+        'object-src': ["'none'"], // 禁用 Flash 等過時技術
+        'base-uri': ["'self'"],
 
-  // 2. 腳本 (Scripts)
-  'script-src': [
-    "'self'",
-    // ⚠️ Nuxt Security Module 會自動加入 Nonce 或 Hash
+        // 2. 腳本 (Scripts)
+        'script-src': [
+          "'self'",
+          // ⚠️ Nuxt Security Module 會自動加入 Nonce 或 Hash
 
-    // Google/GA/Firebase GStatic 資源
-    'https://www.google-analytics.com',
-    'https://www.googletagmanager.com',
-    'https://www.gstatic.com',
+          // Google/GA/Firebase GStatic 資源
+          'https://www.google-analytics.com',
+          'https://www.googletagmanager.com',
+          'https://www.gstatic.com',
 
-    // 社交服務
-    'https://connect.facebook.net',
-    'https://d.line-scdn.net',
+          // 社交服務
+          'https://connect.facebook.net',
+          'https://d.line-scdn.net',
 
-    // Vercel
-    'https://vitals.vercel-insights.com',
-  ],
+          // Vercel
+          'https://vitals.vercel-insights.com'
+        ],
 
-  // 3. 連線 (API, XHR, WebSocket)
-  'connect-src': [
-    "'self'",
-    // Google/GA
-    'https://www.google-analytics.com',
-    'https://*.analytics.google.com',
+        // 3. 連線 (API, XHR, WebSocket)
+        'connect-src': [
+          "'self'",
+          // Google/GA
+          'https://www.google-analytics.com',
+          'https://*.analytics.google.com',
 
-    // Firebase APIs
-    'https://*.firebaseio.com',
-    'https://*.firebaseapp.com',
-    'https://securetoken.googleapis.com',
-    'https://fcmregistrations.googleapis.com',
-    'https://fcmtokenmanagement.googleapis.com',
+          // Firebase APIs
+          'https://*.firebaseio.com',
+          'https://*.firebaseapp.com',
+          'https://securetoken.googleapis.com',
+          'https://fcmregistrations.googleapis.com',
+          'https://fcmtokenmanagement.googleapis.com',
 
-    // 社交服務
-    'https://graph.facebook.com',
+          // 社交服務
+          'https://graph.facebook.com',
 
-    // Vercel
-    'https://vitals.vercel-insights.com',
-  ],
+          // Vercel
+          'https://vitals.vercel-insights.com'
+        ],
 
-  // 4. iFrame 嵌入 (用於登入彈窗或第三方內容)
-  'frame-src': [
-    "'self'",
-    'https://accounts.google.com',
-    'https://www.youtube.com',
-    'https://www.facebook.com',
-    'https://access.line.me',
-    'https://github.com',
-    'https://*.firebaseapp.com', // Firebase 認證 iFrame
-    'https://*.firebaseui.com',
-  ],
+        // 4. iFrame 嵌入 (用於登入彈窗或第三方內容)
+        'frame-src': [
+          "'self'",
+          'https://accounts.google.com',
+          'https://www.youtube.com',
+          'https://www.facebook.com',
+          'https://access.line.me',
+          'https://github.com',
+          'https://*.firebaseapp.com', // Firebase 認證 iFrame
+          'https://*.firebaseui.com'
+        ],
 
-  // 5. 樣式與字體
-  'style-src': [
-    "'self'",
-    // ⚠️ Nuxt Security Module 會自動加入 Nonce 或 Hash
-    'https://fonts.googleapis.com', // Vuetify/Google Fonts CSS
-  ],
-  'font-src': [
-    "'self'",
-    'data:',
-    'https://fonts.gstatic.com', // Google Fonts 檔案
-  ],
+        // 5. 樣式與字體
+        'style-src': [
+          "'self'",
+          // ⚠️ Nuxt Security Module 會自動加入 Nonce 或 Hash
+          'https://fonts.googleapis.com' // Vuetify/Google Fonts CSS
+        ],
+        'font-src': [
+          "'self'",
+          'data:',
+          'https://fonts.gstatic.com' // Google Fonts 檔案
+        ],
 
-  // 6. 圖片與媒體
-  'img-src': [
-    "'self'",
-    'data:', // 允許 Base64 內嵌圖片
-    'blob:',
-    'https://www.google-analytics.com', // GA 的追蹤像素
-    'https://firebasestorage.googleapis.com', // Firebase Storage
-    // 社交媒體圖片
-    'https://scontent.cdninstagram.com',
-    'https://*.fbcdn.net',
-  ],
+        // 6. 圖片與媒體
+        'img-src': [
+          "'self'",
+          'data:', // 允許 Base64 內嵌圖片
+          'blob:',
+          'https://www.google-analytics.com', // GA 的追蹤像素
+          'https://firebasestorage.googleapis.com', // Firebase Storage
+          // 社交媒體圖片
+          'https://scontent.cdninstagram.com',
+          'https://*.fbcdn.net'
+        ],
 
-  // 7. PWA/Service Worker 特有
-  'worker-src': [
-    "'self'",
-    'blob:', // 允許 Service Worker 腳本
-  ],
-  'manifest-src': [
-    "'self'", // 允許 Manifest 檔案
-  ],
-  'upgrade-insecure-requests': true
-} : {
-  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
-};
+        // 7. PWA/Service Worker 特有
+        'worker-src': [
+          "'self'",
+          'blob:' // 允許 Service Worker 腳本
+        ],
+        'manifest-src': [
+          "'self'" // 允許 Manifest 檔案
+        ],
+        'upgrade-insecure-requests': true
+      }
+    : {
+        'img-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://*.ytimg.com',
+          'https://*.youtube.com',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net',
+          'https://*.googletagmanager.com'
+        ]
+      };
 
 const osType = os.type().toLocaleLowerCase();
 // const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 
 if (osType.includes('windows') === true) {
-  const targetDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v8');
-  const sourceDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v9/tensorflow.dll');
+  const targetDir = path.join(
+    __dirname,
+    'node_modules/@tensorflow/tfjs-node/lib/napi-v8'
+  );
+  const sourceDir = path.join(
+    __dirname,
+    'node_modules/@tensorflow/tfjs-node/lib/napi-v9/tensorflow.dll'
+  );
 
   if (fs.existsSync(targetDir) === false) {
     fs.ensureDirSync(targetDir);
@@ -221,14 +238,16 @@ export default defineNuxtConfig({
     },
     '/firebase/cloud-messaging': {
       swr: 15
-    },
+    }
 
     // '/articles/*': { swr: 3600 },
     // '/admin/**': { ssr: false }
   },
   nitro: {
     experimental: {
-      websocket: true
+      websocket: true,
+      // Allow larger file uploads (10MB) for face swap images
+      bodySizeLimit: 10 * 1024 * 1024 // 10MB
     },
     hooks: {
       'prerender:generate'(route) {
@@ -249,7 +268,6 @@ export default defineNuxtConfig({
     '@models': path.join(__dirname, 'models'),
     '@services': path.join(__dirname, 'services'),
     '@shared': path.join(__dirname, 'shared'),
-    '@utils': path.join(__dirname, 'utils'),
     '@service-worker': path.join(__dirname, 'service-worker'),
     '@modules': path.join(__dirname, 'modules'),
 
@@ -262,19 +280,20 @@ export default defineNuxtConfig({
     '~models': path.join(__dirname, 'models'),
     '~services': path.join(__dirname, 'services'),
     '~shared': path.join(__dirname, 'shared'),
-    '~utils': path.join(__dirname, 'utils'),
     '~service-worker': path.join(__dirname, 'service-worker'),
-    '~modules': path.join(__dirname, 'modules'),
+    '~modules': path.join(__dirname, 'modules')
   },
   vite: {
-    ...(IS_DEBUG === true ? {
-      esbuild: {
-        // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
-        // 明确设置为不移除 'console.log' 等
-        drop: ['debugger'], // 仍然移除 debugger
-        pure: [],
-      }
-    } : {}),
+    ...(IS_DEBUG === true
+      ? {
+          esbuild: {
+            // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
+            // 明确设置为不移除 'console.log' 等
+            drop: ['debugger'], // 仍然移除 debugger
+            pure: []
+          }
+        }
+      : {}),
 
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
@@ -288,7 +307,8 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler', // or "modern", "legacy"
-          additionalData: '@use "@app/assets/styles/variable.scss" as *; @use "@app/assets/styles/mixin.scss" as *;'
+          additionalData:
+            '@use "@app/assets/styles/variable.scss" as *; @use "@app/assets/styles/mixin.scss" as *;'
         }
       },
       postcss: {
@@ -315,14 +335,16 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: defaultLang || 'zh-TW',
+        lang: defaultLang || 'zh-TW'
       },
       // https://realfavicongenerator.net/
-      link: [{
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/img/ico/favicon.ico'
-      }],
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/img/ico/favicon.ico'
+        }
+      ],
       noscript: [
         // Google Tag Manager (noscript)
         {
@@ -392,39 +414,40 @@ export default defineNuxtConfig({
     // https://realfavicongenerator.net/
     manifest: {
       name: 'Parker Chen 的Nuxt實驗室',
-      short_name: 'Parker Chen\'s Nuxt Lab',
+      short_name: "Parker Chen's Nuxt Lab",
       // lang: 'zh-tw',
       lang: defaultLang,
-      icons: [{
-        src: '/img/ico/apple-touch-icon.png',
-        sizes: '180x180',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: '/img/ico/web-app-manifest-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: '/img/ico/web-app-manifest-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: '/img/ico/web-app-manifest-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any',
-      },
-      {
-        src: '/img/ico/favicon.ico',
-        sizes: '48x48',
-        type: 'image/png',
-        purpose: 'monochrome'
-      }
+      icons: [
+        {
+          src: '/img/ico/apple-touch-icon.png',
+          sizes: '180x180',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any'
+        },
+        {
+          src: '/img/ico/favicon.ico',
+          sizes: '48x48',
+          type: 'image/png',
+          purpose: 'monochrome'
+        }
       ],
       theme_color: '#d5fff8',
       background_color: '#d5fff8',
@@ -449,8 +472,8 @@ export default defineNuxtConfig({
       globIgnores: [
         '**/models/**', // 排除 face-api 模型文件（15MB），改用運行時快取
         '**/node_modules/**',
-        '**/*.map',
-      ],
+        '**/*.map'
+      ]
 
       // 注意：離線頁面 /offline 已經通過 globPatterns 中的 '**/*.html' 自動包含
       // 不需要使用 additionalManifestEntries 重複添加
@@ -461,7 +484,7 @@ export default defineNuxtConfig({
 
     devOptions: {
       enabled: IS_DEV,
-      suppressWarnings: true,
+      suppressWarnings: true
     }
   },
 
@@ -488,17 +511,20 @@ export default defineNuxtConfig({
         geolocation: ['self'], // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
         // gyroscope: ['self'],     // 允許同源使用陀螺儀
         // magnetometer: ['self'],  // 允許同源使用磁力計
-        microphone: ['self', '"https://*.youtube.com"'], // 允許同源使用麥克風和YouTube自動播放媒體
+        microphone: ['self', '"https://*.youtube.com"'] // 允許同源使用麥克風和YouTube自動播放媒體
         // midi: [],                // MIDI 裝置
         // payment: ['self'],       // 允許同源使用支付請求 API
         // usb: [],                 // USB 裝置
         // xrspatialtracking: [],   // XR 空間追蹤
-      },
+      }
     }
   },
 
   build: {
-    transpile: IS_DEV === true ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker'] : ['vuetify', 'date-fns', 'lodash', '@vuepic/vue-datepicker']
+    transpile:
+      IS_DEV === true
+        ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker']
+        : ['vuetify', 'date-fns', 'lodash', '@vuepic/vue-datepicker']
   },
 
   runtimeConfig: {
@@ -523,8 +549,9 @@ export default defineNuxtConfig({
       // VITE_LINE_CLIENT_SECRET: process.env.VITE_LINE_CLIENT_SECRET,
       // VITE_LINE_CALLBACK_URI: process.env.VITE_LINE_CALLBACK_URI,
 
-      HTTPS: process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
-      isDev: IS_DEV,
+      HTTPS:
+        process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
+      isDev: IS_DEV
     }
-  },
+  }
 });
