@@ -255,8 +255,49 @@ export default defineNuxtConfig({
         if (routesToSkip.includes(route.route)) {
           route.skip = true;
         }
+      },
+      // Copy AI models to output directory during build
+      async compiled(nitro) {
+        console.log('🔧 Nitro compiled hook: Copying AI model files...');
+
+        try {
+          const sourceModelsDir = path.join(__dirname, 'public/models');
+          const targetModelsDir = path.join(
+            nitro.options.output.dir,
+            'public/models'
+          );
+
+          // Check if source models directory exists
+          if (fs.existsSync(sourceModelsDir)) {
+            // Ensure target directory exists
+            await fs.ensureDir(targetModelsDir);
+
+            // Copy all model files
+            await fs.copy(sourceModelsDir, targetModelsDir, {
+              overwrite: true,
+              errorOnExist: false
+            });
+
+            console.log('✅ AI models copied successfully');
+            console.log('   Source:', sourceModelsDir);
+            console.log('   Target:', targetModelsDir);
+          } else {
+            console.warn('⚠️  Models directory not found:', sourceModelsDir);
+            console.warn('   Models will need to be added before deployment');
+          }
+        } catch (error) {
+          console.error('❌ Failed to copy AI models:', error);
+          // Don't throw - allow build to continue even if models aren't present yet
+        }
       }
-    }
+    },
+    // Ensure public assets are properly handled
+    publicAssets: [
+      {
+        dir: 'public',
+        maxAge: 60 * 60 * 24 * 365 // 1 year cache for static assets
+      }
+    ]
   },
   alias: {
     // ...windowsAlias,

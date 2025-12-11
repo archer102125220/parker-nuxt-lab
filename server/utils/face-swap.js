@@ -5,31 +5,51 @@ import * as faceapi from 'face-api.js';
 
 // Patch node environment for face-api.js
 const { Canvas, Image, ImageData } = canvas;
-faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
+faceapi.env.monkeyPatch({
+  Canvas,
+  Image,
+  ImageData
+});
 
 let modelsLoaded = false;
 
 /**
  * Load face-api models
+ * Handles different paths for development and production environments
  */
 export async function loadModels() {
   if (modelsLoaded) {
     return;
   }
 
-  // Use process.cwd() for consistent path resolution in Nitro
-  const modelsPath = join(process.cwd(), 'public/models');
+  // Determine models path based on environment
+  let modelsPath;
 
+  if (process.env.NODE_ENV === 'production') {
+    // Production: models are in .output/public/models after build
+    modelsPath = join(process.cwd(), 'public/models');
+  } else {
+    // Development: models are in project root public/models
+    modelsPath = join(process.cwd(), 'public/models');
+  }
+
+  console.log('Environment:', process.env.NODE_ENV);
   console.log('Loading face-api models from:', modelsPath);
 
-  await Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath),
-    faceapi.nets.faceLandmark68Net.loadFromDisk(modelsPath),
-    faceapi.nets.faceRecognitionNet.loadFromDisk(modelsPath)
-  ]);
+  try {
+    await Promise.all([
+      faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath),
+      faceapi.nets.faceLandmark68Net.loadFromDisk(modelsPath),
+      faceapi.nets.faceRecognitionNet.loadFromDisk(modelsPath)
+    ]);
 
-  console.log('Face-api models loaded successfully');
-  modelsLoaded = true;
+    console.log('✅ Face-api models loaded successfully');
+    modelsLoaded = true;
+  } catch (error) {
+    console.error('❌ Failed to load face-api models:', error);
+    console.error('Attempted path:', modelsPath);
+    throw error;
+  }
 }
 
 /**
@@ -59,9 +79,7 @@ export async function loadImageFromBase64(base64) {
  * @returns {Promise<FaceDetectionWithLandmarks|null>}
  */
 export async function detectFace(image) {
-  const detection = await faceapi
-    .detectSingleFace(image)
-    .withFaceLandmarks();
+  const detection = await faceapi.detectSingleFace(image).withFaceLandmarks();
 
   return detection || null;
 }
