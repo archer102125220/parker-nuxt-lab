@@ -257,15 +257,21 @@ export default defineNuxtConfig({
         }
       },
       // Copy AI models to output directory during build
-      async compiled(nitro) {
-        console.log('🔧 Nitro compiled hook: Copying AI model files...');
+      // Using 'close' hook instead of 'compiled' for better Vercel compatibility
+      async close() {
+        // Skip in Vercel build environment to avoid conflicts
+        if (process.env.VERCEL) {
+          console.log(
+            '⏭️  Skipping model copy in Vercel environment (models in public/ are auto-deployed)'
+          );
+          return;
+        }
+
+        console.log('🔧 Nitro close hook: Copying AI model files...');
 
         try {
           const sourceModelsDir = path.join(__dirname, 'public/models');
-          const targetModelsDir = path.join(
-            nitro.options.output.dir,
-            'public/models'
-          );
+          const targetModelsDir = path.join(__dirname, '.output/public/models');
 
           // Check if source models directory exists
           if (fs.existsSync(sourceModelsDir)) {
