@@ -28,17 +28,17 @@ const modelsPath = join(process.cwd(), 'public/models');
 console.log('Face-api plugin - Loading models from:', modelsPath);
 console.log('Environment:', process.env.NODE_ENV);
 
-try {
-  faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath);
-  console.log('✅ Face-api plugin - Models loaded');
-} catch (error) {
-  console.error('❌ Face-api plugin - Failed to load models:', error);
-}
-
 export default defineNitroPlugin((nitroApp) => {
   console.log('faceapi plugin');
 
   nitroApp.$faceapi = faceapi;
+
+  try {
+    faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath);
+    console.log('✅ Face-api plugin - Models loaded');
+  } catch (error) {
+    console.error('❌ Face-api plugin - Failed to load models:', error);
+  }
 
   nitroApp.hooks.hook('request', (event) => {
     console.log('faceapi plugin request');
