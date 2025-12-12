@@ -14,7 +14,7 @@
 1. **[css-property-order-plan.md](./css-property-order-plan.md)**
    - **類型：** 實施計劃
    - **內容：** CSS 屬性順序修正的全專案實施計劃
-   - **包含：** 
+   - **包含：**
      - 專案概述（101 個 Vue 檔案）
      - 實施階段劃分
      - 修正標準說明
@@ -39,6 +39,7 @@
 #### 修正標準
 
 所有檔案遵循以下 CSS 屬性順序：
+
 1. **Positioning** - `position`, `top`, `right`, `bottom`, `left`, `z-index`
 2. **Display & Box Model** - `display`, `flex-*`, `width`, `height`, `margin`, `padding`, `border`, `overflow`
 3. **Typography** - `font-*`, `line-height`, `color`, `text-*`, `word-break`
@@ -58,7 +59,7 @@
 1. **[banner-carousel-plan.md](./banner-carousel-plan.md)**
    - **類型：** 實施計劃
    - **內容：** Banner 輪播組件的全專案實施計劃
-   - **包含：** 
+   - **包含：**
      - 需求分析和技術規格
      - 組件設計和 API 定義
      - 實施階段劃分
@@ -120,11 +121,58 @@
 
 ---
 
+### Face Swap 模型路徑解決方案 ✅
+
+**狀態：** 100% 完成  
+**完成時間：** 2025-12-12
+
+#### 相關文檔
+
+1. **[face-swap-model-path-solution.md](./face-swap-model-path-solution.md)**
+   - **類型：** 技術解決方案文檔
+   - **內容：** AI 模型檔案路徑在開發與生產環境的統一解決方案
+   - **包含：**
+     - 問題描述與分析
+     - 雙重保障策略（環境感知 + 自動複製）
+     - 實作細節與程式碼範例
+     - 測試方法與驗證步驟
+
+#### 專案成果
+
+- ✅ **解決問題：** 開發與生產環境模型路徑不一致
+- ✅ **修改檔案：** 3 個檔案（face-swap.js, face-api.js, nuxt.config.js）
+- ✅ **自動化：** Nitro hooks 自動複製模型檔案
+- ✅ **容錯性：** 完整的錯誤處理與日誌
+- ✅ **可擴展：** 適用於未來的 InsightFace 模型
+
+#### 技術方案
+
+**環境感知路徑解析：**
+
+- 開發環境：`project-root/public/models/`
+- 生產環境：`.output/public/models/`
+- 統一使用 `process.cwd()` + 環境判斷
+
+**自動複製機制：**
+
+- Nitro `compiled` hook 在打包時觸發
+- 自動複製 `public/models/` → `.output/public/models/`
+- 支援所有 AI 模型（face-api.js、InsightFace）
+
+**優勢：**
+
+- ✅ 環境一致性
+- ✅ 零手動操作
+- ✅ 詳細日誌
+- ✅ 建置不中斷
+
+---
+
 ## 📊 統計資訊
 
-- **已完成專案數：** 2 個
-- **總文檔數：** 7 個文檔
-- **最後更新：** 2025-12-03
+- **已完成專案數：** 3 個
+- **總文檔數：** 8 個文檔
+- **最後更新：** 2025-12-12
 
 ---
 

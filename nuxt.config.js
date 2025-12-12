@@ -3,9 +3,7 @@ import os from 'os';
 import fs from 'fs-extra';
 import path from 'path';
 
-import vuetify, {
-  transformAssetUrls
-} from 'vite-plugin-vuetify';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
 
@@ -21,32 +19,113 @@ import {
 const IS_DEBUG = process.env.VITE_DEBUG === 'true';
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
-const CONTENT_SECURITY_POLICY = IS_DEV !== true ? {
-  'default-src': ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net'],
-  'base-uri': ["'self'"],
-  'font-src': ["'self'", 'data:', 'blob:', 'https://fonts.gstatic.com', 'https://*.fbcdn.net'],
-  'form-action': ["'self'", 'https://*.facebook.com'],
-  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com', 'https://validator.swagger.io'],
-  'object-src': ["'none'"],
-  'script-src-attr': ["'none'"],
-  // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
-  // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com', 'https://vercel.live'],
-  'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
-  'connect-src': ["'self'", 'https://assets.vercel.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://graph.facebook.com', 'https://*.google-analytics.com', 'https://*.googleapis.com', 'https://api.github.com'],
-  'frame-ancestors': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com'],
-  'frame-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://www.googletagmanager.com', 'https://*.facebook.com'],
-  'media-src': ["'self'", 'https://*.youtube.com', 'https://*.ytimg.com', 'https://*.facebook.com', 'https://*.fbcdn.net'],
-  'upgrade-insecure-requests': true
-} : {
-  'img-src': ["'self'", 'data:', 'blob:', 'https://*.ytimg.com', 'https://*.youtube.com', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googletagmanager.com'],
-};
+const CONTENT_SECURITY_POLICY =
+  IS_DEV !== true
+    ? {
+        'default-src': [
+          "'self'",
+          'https://fonts.googleapis.com',
+          'https://fonts.gstatic.com',
+          'https://www.googletagmanager.com',
+          'https://*.youtube.com',
+          'https://*.ytimg.com',
+          'https://connect.facebook.net',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net'
+        ],
+        'base-uri': ["'self'"],
+        'font-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://fonts.gstatic.com',
+          'https://*.fbcdn.net'
+        ],
+        'form-action': ["'self'", 'https://*.facebook.com'],
+        'img-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://*.ytimg.com',
+          'https://*.youtube.com',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net',
+          'https://*.googletagmanager.com',
+          'https://validator.swagger.io'
+        ],
+        'object-src': ["'none'"],
+        'script-src-attr': ["'none'"],
+        // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
+        // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com', 'https://vercel.live'],
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'https://fonts.googleapis.com',
+          'https://*.youtube.com',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net'
+        ],
+        'connect-src': [
+          "'self'",
+          'https://assets.vercel.com',
+          'https://fonts.googleapis.com',
+          'https://fonts.gstatic.com',
+          'https://*.youtube.com',
+          'https://*.ytimg.com',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net',
+          'https://graph.facebook.com',
+          'https://*.google-analytics.com',
+          'https://*.googleapis.com',
+          'https://api.github.com'
+        ],
+        'frame-ancestors': [
+          "'self'",
+          'https://*.youtube.com',
+          'https://*.ytimg.com',
+          'https://*.facebook.com'
+        ],
+        'frame-src': [
+          "'self'",
+          'https://*.youtube.com',
+          'https://*.ytimg.com',
+          'https://www.googletagmanager.com',
+          'https://*.facebook.com'
+        ],
+        'media-src': [
+          "'self'",
+          'https://*.youtube.com',
+          'https://*.ytimg.com',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net'
+        ],
+        'upgrade-insecure-requests': true
+      }
+    : {
+        'img-src': [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://*.ytimg.com',
+          'https://*.youtube.com',
+          'https://*.facebook.com',
+          'https://*.fbcdn.net',
+          'https://*.googletagmanager.com'
+        ]
+      };
 
 const osType = os.type().toLocaleLowerCase();
 // const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 
 if (osType.includes('windows') === true) {
-  const targetDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v8');
-  const sourceDir = path.join(__dirname, 'node_modules/@tensorflow/tfjs-node/lib/napi-v9/tensorflow.dll');
+  const targetDir = path.join(
+    __dirname,
+    'node_modules/@tensorflow/tfjs-node/lib/napi-v8'
+  );
+  const sourceDir = path.join(
+    __dirname,
+    'node_modules/@tensorflow/tfjs-node/lib/napi-v9/tensorflow.dll'
+  );
 
   if (fs.existsSync(targetDir) === false) {
     fs.ensureDirSync(targetDir);
@@ -148,14 +227,16 @@ export default defineNuxtConfig({
     },
     '/firebase/cloud-messaging': {
       swr: 15
-    },
+    }
 
     // '/articles/*': { swr: 3600 },
     // '/admin/**': { ssr: false }
   },
   nitro: {
     experimental: {
-      websocket: true
+      websocket: true,
+      // Allow larger file uploads (10MB) for face swap images
+      bodySizeLimit: 10 * 1024 * 1024 // 10MB
     },
     hooks: {
       'prerender:generate'(route) {
@@ -163,8 +244,55 @@ export default defineNuxtConfig({
         if (routesToSkip.includes(route.route)) {
           route.skip = true;
         }
+      },
+      // Copy AI models to output directory during build
+      // Using 'close' hook instead of 'compiled' for better Vercel compatibility
+      async close() {
+        // Skip in Vercel build environment to avoid conflicts
+        if (process.env.VERCEL) {
+          console.log(
+            '⏭️  Skipping model copy in Vercel environment (models in public/ are auto-deployed)'
+          );
+          return;
+        }
+
+        console.log('🔧 Nitro close hook: Copying AI model files...');
+
+        try {
+          const sourceModelsDir = path.join(__dirname, 'public/models');
+          const targetModelsDir = path.join(__dirname, '.output/public/models');
+
+          // Check if source models directory exists
+          if (fs.existsSync(sourceModelsDir)) {
+            // Ensure target directory exists
+            await fs.ensureDir(targetModelsDir);
+
+            // Copy all model files
+            await fs.copy(sourceModelsDir, targetModelsDir, {
+              overwrite: true,
+              errorOnExist: false
+            });
+
+            console.log('✅ AI models copied successfully');
+            console.log('   Source:', sourceModelsDir);
+            console.log('   Target:', targetModelsDir);
+          } else {
+            console.warn('⚠️  Models directory not found:', sourceModelsDir);
+            console.warn('   Models will need to be added before deployment');
+          }
+        } catch (error) {
+          console.error('❌ Failed to copy AI models:', error);
+          // Don't throw - allow build to continue even if models aren't present yet
+        }
       }
-    }
+    },
+    // Ensure public assets are properly handled
+    publicAssets: [
+      {
+        dir: 'public',
+        maxAge: 60 * 60 * 24 * 365 // 1 year cache for static assets
+      }
+    ]
   },
   alias: {
     // ...windowsAlias,
@@ -176,7 +304,6 @@ export default defineNuxtConfig({
     '@models': path.join(__dirname, 'models'),
     '@services': path.join(__dirname, 'services'),
     '@shared': path.join(__dirname, 'shared'),
-    '@utils': path.join(__dirname, 'utils'),
     '@service-worker': path.join(__dirname, 'service-worker'),
     '@modules': path.join(__dirname, 'modules'),
 
@@ -189,19 +316,20 @@ export default defineNuxtConfig({
     '~models': path.join(__dirname, 'models'),
     '~services': path.join(__dirname, 'services'),
     '~shared': path.join(__dirname, 'shared'),
-    '~utils': path.join(__dirname, 'utils'),
     '~service-worker': path.join(__dirname, 'service-worker'),
-    '~modules': path.join(__dirname, 'modules'),
+    '~modules': path.join(__dirname, 'modules')
   },
   vite: {
-    ...(IS_DEBUG === true ? {
-      esbuild: {
-        // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
-        // 明确设置为不移除 'console.log' 等
-        drop: ['debugger'], // 仍然移除 debugger
-        pure: [],
-      }
-    } : {}),
+    ...(IS_DEBUG === true
+      ? {
+          esbuild: {
+            // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
+            // 明确设置为不移除 'console.log' 等
+            drop: ['debugger'], // 仍然移除 debugger
+            pure: []
+          }
+        }
+      : {}),
 
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false
@@ -215,7 +343,8 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler', // or "modern", "legacy"
-          additionalData: '@use "@app/assets/styles/variable.scss" as *; @use "@app/assets/styles/mixin.scss" as *;'
+          additionalData:
+            '@use "@app/assets/styles/variable.scss" as *; @use "@app/assets/styles/mixin.scss" as *;'
         }
       },
       postcss: {
@@ -242,14 +371,16 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: defaultLang || 'zh-TW',
+        lang: defaultLang || 'zh-TW'
       },
       // https://realfavicongenerator.net/
-      link: [{
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/img/ico/favicon.ico'
-      }],
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/img/ico/favicon.ico'
+        }
+      ],
       noscript: [
         // Google Tag Manager (noscript)
         {
@@ -319,39 +450,40 @@ export default defineNuxtConfig({
     // https://realfavicongenerator.net/
     manifest: {
       name: 'Parker Chen 的Nuxt實驗室',
-      short_name: 'Parker Chen\'s Nuxt Lab',
+      short_name: "Parker Chen's Nuxt Lab",
       // lang: 'zh-tw',
       lang: defaultLang,
-      icons: [{
-        src: '/img/ico/apple-touch-icon.png',
-        sizes: '180x180',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: '/img/ico/web-app-manifest-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: '/img/ico/web-app-manifest-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable'
-      },
-      {
-        src: '/img/ico/web-app-manifest-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any',
-      },
-      {
-        src: '/img/ico/favicon.ico',
-        sizes: '48x48',
-        type: 'image/png',
-        purpose: 'monochrome'
-      }
+      icons: [
+        {
+          src: '/img/ico/apple-touch-icon.png',
+          sizes: '180x180',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable'
+        },
+        {
+          src: '/img/ico/web-app-manifest-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any'
+        },
+        {
+          src: '/img/ico/favicon.ico',
+          sizes: '48x48',
+          type: 'image/png',
+          purpose: 'monochrome'
+        }
       ],
       theme_color: '#d5fff8',
       background_color: '#d5fff8',
@@ -376,8 +508,8 @@ export default defineNuxtConfig({
       globIgnores: [
         '**/models/**', // 排除 face-api 模型文件（15MB），改用運行時快取
         '**/node_modules/**',
-        '**/*.map',
-      ],
+        '**/*.map'
+      ]
 
       // 注意：離線頁面 /offline 已經通過 globPatterns 中的 '**/*.html' 自動包含
       // 不需要使用 additionalManifestEntries 重複添加
@@ -388,7 +520,7 @@ export default defineNuxtConfig({
 
     devOptions: {
       enabled: IS_DEV,
-      suppressWarnings: true,
+      suppressWarnings: true
     }
   },
 
@@ -415,17 +547,20 @@ export default defineNuxtConfig({
         geolocation: ['self'], // 允許同源獲取地理位置，若需特定外部來源，可加入如 "https://example.com"
         // gyroscope: ['self'],     // 允許同源使用陀螺儀
         // magnetometer: ['self'],  // 允許同源使用磁力計
-        microphone: ['self', '"https://*.youtube.com"'], // 允許同源使用麥克風和YouTube自動播放媒體
+        microphone: ['self', '"https://*.youtube.com"'] // 允許同源使用麥克風和YouTube自動播放媒體
         // midi: [],                // MIDI 裝置
         // payment: ['self'],       // 允許同源使用支付請求 API
         // usb: [],                 // USB 裝置
         // xrspatialtracking: [],   // XR 空間追蹤
-      },
+      }
     }
   },
 
   build: {
-    transpile: IS_DEV === true ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker'] : ['vuetify', 'date-fns', 'lodash', '@vuepic/vue-datepicker']
+    transpile:
+      IS_DEV === true
+        ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker']
+        : ['vuetify', 'date-fns', 'lodash', '@vuepic/vue-datepicker']
   },
 
   runtimeConfig: {
@@ -450,8 +585,9 @@ export default defineNuxtConfig({
       // VITE_LINE_CLIENT_SECRET: process.env.VITE_LINE_CLIENT_SECRET,
       // VITE_LINE_CALLBACK_URI: process.env.VITE_LINE_CALLBACK_URI,
 
-      HTTPS: process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
-      isDev: IS_DEV,
+      HTTPS:
+        process.env.HTTPS === 'true' || process.env.NODE_ENV === 'production',
+      isDev: IS_DEV
     }
-  },
+  }
 });

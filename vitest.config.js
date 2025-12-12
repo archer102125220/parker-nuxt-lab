@@ -1,9 +1,14 @@
-import { defineConfig } from 'vitest/config';
+import {
+  defineConfig
+} from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {
+  fileURLToPath
+} from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(
+  import.meta.url));
 
 export default defineConfig({
   plugins: [vue()],
@@ -51,7 +56,6 @@ export default defineConfig({
       '@models': path.join(__dirname, 'models'),
       '@services': path.join(__dirname, 'services'),
       '@shared': path.join(__dirname, 'shared'),
-      '@utils': path.join(__dirname, 'utils'),
       '@service-worker': path.join(__dirname, 'service-worker'),
       '@modules': path.join(__dirname, 'modules'),
       '~': __dirname,
@@ -63,7 +67,6 @@ export default defineConfig({
       '~models': path.join(__dirname, 'models'),
       '~services': path.join(__dirname, 'services'),
       '~shared': path.join(__dirname, 'shared'),
-      '~utils': path.join(__dirname, 'utils'),
       '~service-worker': path.join(__dirname, 'service-worker'),
       '~modules': path.join(__dirname, 'modules')
     }

@@ -4,6 +4,7 @@ import * as webAuthn from '@services/client/web-authn';
 import * as fido2Lib from '@services/client/fido2-lib';
 import * as clientFirebaseAdmin from '@services/client/firebase-admin';
 import * as serverSentEvent from '@services/client/server-sent-event';
+import * as faceSwap from '@services/client/face-swap';
 
 export default defineNuxtPlugin(() => {
   const clientServices = {
@@ -12,7 +13,8 @@ export default defineNuxtPlugin(() => {
     webAuthn,
     fido2Lib,
     clientFirebaseAdmin,
-    serverSentEvent
+    serverSentEvent,
+    faceSwap
   }
 
   return {

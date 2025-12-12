@@ -17,26 +17,31 @@ const __dirname = dirname(__filename);
 // patch nodejs environment, we need to provide an implementation of
 // HTMLCanvasElement and HTMLImageElement
 const { Canvas, Image, ImageData } = canvas;
-faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
-if (process.env.NODE_ENV === 'production') {
-  // faceapi.nets.ssdMobilenetv1.loadFromDisk('./public/models');
-} else {
-  faceapi.nets.ssdMobilenetv1.loadFromDisk(join(__dirname, '../public/models'));
-}
+faceapi.env.monkeyPatch({
+  Canvas,
+  Image,
+  ImageData
+});
 
-// console.log(import.meta.url);
-// console.log({ __dirname, __filename });
-// console.log('./public/models');
-// console.log(fs.existsSync('./public/models'));
-// console.log(join(__dirname, '../public/models'));
+// Load models with environment-aware path
+const modelsPath = join(process.cwd(), 'public/models');
+console.log('Face-api plugin - Loading models from:', modelsPath);
+console.log('Environment:', process.env.NODE_ENV);
+
+try {
+  faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath);
+  console.log('✅ Face-api plugin - Models loaded');
+} catch (error) {
+  console.error('❌ Face-api plugin - Failed to load models:', error);
+}
 
 export default defineNitroPlugin((nitroApp) => {
   console.log('faceapi plugin');
 
   nitroApp.$faceapi = faceapi;
 
-  nitroApp.hooks.hook("request", (event) => {
+  nitroApp.hooks.hook('request', (event) => {
     console.log('faceapi plugin request');
     event.context.$faceapi = faceapi;
   });
-})
+});
