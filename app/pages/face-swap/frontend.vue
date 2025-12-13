@@ -445,16 +445,22 @@ async function drawTargetOverlay() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   try {
-    const detection = await faceapi.detectSingleFace(
-      videoEl.value,
-      new faceapi.TinyFaceDetectorOptions()
-    );
+    // Use ssdMobilenetv1 for accurate face detection (same as face-api.vue)
+    await faceapi.nets.ssdMobilenetv1.load(MODELS_PATH);
+
+    const displaySize = {
+      width: canvas.width,
+      height: canvas.height
+    };
+
+    // Detect face without TinyFaceDetectorOptions (same as face-api.vue)
+    const detection = await faceapi.detectSingleFace(videoEl.value);
 
     if (detection !== undefined) {
-      const box = detection.box;
-      ctx.strokeStyle = '#00ff00';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(box.x, box.y, box.width, box.height);
+      // Use face-api's built-in method to draw detection box
+      faceapi.matchDimensions(canvas, displaySize);
+      const resizedDetection = faceapi.resizeResults(detection, displaySize);
+      faceapi.draw.drawDetections(canvas, [resizedDetection]);
     }
   } catch (error) {
     // Silently ignore detection errors
@@ -477,6 +483,10 @@ async function handleDetections(modelsPath = MODELS_PATH) {
   await faceapi.nets.ssdMobilenetv1.load(modelsPath);
 
   const canvas = detectionsVideo.value;
+  // Skip if canvas not rendered (expansion panel collapsed)
+  if (canvas === null || detectionsOutput.value === null) {
+    return;
+  }
   handleFrameFromVideo(canvas);
 
   try {
@@ -508,6 +518,10 @@ async function handleDetectionsWithLandmarks(modelsPath = MODELS_PATH) {
   await faceapi.loadFaceLandmarkModel(modelsPath);
 
   const canvas = detectionsWithLandmarksVideo.value;
+  // Skip if canvas not rendered (expansion panel collapsed)
+  if (canvas === null || detectionsWithLandmarksOutput.value === null) {
+    return;
+  }
   handleFrameFromVideo(canvas);
 
   try {
@@ -555,6 +569,10 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
   await faceapi.loadFaceExpressionModel(modelsPath);
 
   const canvas = detectionsWithExpressionsVideo.value;
+  // Skip if canvas not rendered (expansion panel collapsed)
+  if (canvas === null || detectionsWithExpressionsOutput.value === null) {
+    return;
+  }
   handleFrameFromVideo(canvas);
 
   try {
