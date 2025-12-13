@@ -8,9 +8,9 @@
     refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
     :user-select-none="userSelect"
     :infinity-end="infinityEnd"
-    :is-empty="displayDataList.length <= 0"
     :is-mobile="$store.system.isMobile"
     :loading="pending"
+    :infinity-disable="displayDataList.length <= 0"
     @refresh="handleRefresh"
     @infinityFetch="handleInfinityFetch"
     class="scroll_fetch_test_page"
@@ -94,7 +94,10 @@
     />
 
     <div class="scroll_fetch_test_page-list">
-      <div class="scroll_fetch_test_page-list-content">
+      <div
+        class="scroll_fetch_test_page-list-content"
+        :css-is-empty="displayDataList.length <= 0"
+      >
         <div
           v-for="(displayData, index) in displayDataList"
           :key="displayData.id"
@@ -123,6 +126,13 @@
             </a>
           </div>
         </div>
+
+        <p
+          v-if="displayDataList.length <= 0"
+          class="scroll_fetch_test_page-list-content-empty"
+        >
+          目前沒有資料
+        </p>
       </div>
     </div>
   </ScrollFetch>
@@ -326,7 +336,13 @@ async function handleInfinityFetch(done) {
     background-color: #f7f7f7;
 
     &-content {
-      // min-height: 100dvh;
+      &[css-is-empty='true'] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        min-height: 45dvh;
+      }
 
       &-item {
         /* Display & Box Model */
@@ -346,6 +362,11 @@ async function handleInfinityFetch(done) {
           flex-direction: row;
           flex-wrap: wrap;
         }
+      }
+
+      &-empty {
+        /* Display & Box Model */
+        margin: auto;
       }
     }
   }
