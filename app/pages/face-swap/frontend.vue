@@ -1,15 +1,6 @@
 <template>
   <!-- TODO:人工測試換臉功能是否正常運作 -->
   <section class="face_swap_frontend_page">
-    <v-btn
-      class="face_swap_frontend_page-back_btn"
-      to="/face-swap"
-      variant="text"
-    >
-      <v-icon start>mdi-arrow-left</v-icon>
-      返回
-    </v-btn>
-
     <v-img
       class="face_swap_frontend_page-banner"
       max-height="200"
@@ -707,12 +698,6 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
 
   /* Typography */
   font-family: sans-serif;
-
-  &-back_btn {
-    /* Display & Box Model */
-    align-self: flex-start;
-    margin-bottom: 16px;
-  }
 
   &-banner {
     /* Display & Box Model */
