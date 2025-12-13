@@ -19,8 +19,20 @@
 
     <h1 class="face_swap_frontend_page-title">純前端人臉替換</h1>
     <p class="face_swap_frontend_page-subtitle">
-      使用 face-api.js + Canvas 實現
+      使用瀏覽器端 face-api.js 進行即時人臉替換
     </p>
+
+    <!-- Usage Tip -->
+    <v-alert
+      type="info"
+      variant="tonal"
+      class="face_swap_frontend_page-tip"
+      closable
+    >
+      <strong>使用提示：</strong
+      >為獲得最佳效果，建議來源照片的尺寸與目標畫面相近。如需處理不同尺寸的圖片，請使用「後端
+      AI 人臉替換」功能。
+    </v-alert>
 
     <!-- Face Swap Section -->
     <div class="face_swap_frontend_page-swap_section">
@@ -33,6 +45,7 @@
           label="點擊或拖拉來源照片到此區塊"
           mask-label="拖拉來源照片到此區塊"
           class="face_swap_frontend_page-swap_section-source-upload"
+          @change="handleSourceImageChange"
         />
       </div>
 
@@ -68,6 +81,12 @@
         />
       </div>
     </div>
+
+    <!-- Image Size Warning -->
+    <v-alert v-if="imageSizeWarning" type="warning" variant="tonal" class="m-3">
+      <p>⚠️ <strong>圖片尺寸可能不適合</strong></p>
+      <p>建議使用與攝影機相近的尺寸（約 640x480）以獲得最佳效果。</p>
+    </v-alert>
 
     <!-- Control Buttons -->
     <div class="face_swap_frontend_page-controls">
@@ -255,6 +274,7 @@ const isSwapping = ref(false);
 const hasResult = ref(false);
 const statusMessage = ref('');
 const statusType = ref('info');
+const imageSizeWarning = ref(false); // Track if source image size is problematic
 const expansionPanels = ref([]);
 
 // Computed
@@ -277,18 +297,17 @@ async function performFaceSwap() {
   showStatus('正在偵測人臉...', 'info');
 
   try {
+    // Use ssdMobilenetv1 to match the detection box display
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODELS_PATH),
+      faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_PATH),
       faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_PATH),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_PATH)
     ]);
 
-    // Detect source face
+    // Detect source face on preview element
+    // NOTE: For best results, source image should have similar dimensions to target video
     const sourceDetection = await faceapi
-      .detectSingleFace(
-        sourceFaceEl.value?.previewEl,
-        new faceapi.TinyFaceDetectorOptions()
-      )
+      .detectSingleFace(sourceFaceEl.value?.previewEl)
       .withFaceLandmarks();
 
     if (sourceDetection === undefined) {
@@ -297,7 +316,7 @@ async function performFaceSwap() {
 
     // Detect target face from video
     const targetDetection = await faceapi
-      .detectSingleFace(videoEl.value, new faceapi.TinyFaceDetectorOptions())
+      .detectSingleFace(videoEl.value)
       .withFaceLandmarks();
 
     if (targetDetection === undefined) {
@@ -319,6 +338,16 @@ async function performFaceSwap() {
   }
 }
 
+// Helper function to load image from base64 (same as backend)
+function loadImageFromBase64(base64) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = base64;
+  });
+}
+
 async function blendFaces(sourceDetection, targetDetection) {
   const canvas = resultCanvas.value;
   const ctx = canvas.getContext('2d');
@@ -332,16 +361,36 @@ async function blendFaces(sourceDetection, targetDetection) {
   // Draw video frame as background
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Get source face bounding box with padding
+  // Get face bounding boxes
   const sourceBox = sourceDetection.detection.box;
+  const targetBox = targetDetection.detection.box;
+
+  // LIMITATION: This simple approach works best when source and target images
+  // have similar dimensions. For production use, consider using backend API
+  // which handles coordinate scaling properly.
+
   const padding = 20;
+
+  // Extract source face region
   const sx = Math.max(0, sourceBox.x - padding);
   const sy = Math.max(0, sourceBox.y - padding);
-  const sw = sourceBox.width + padding * 2;
-  const sh = sourceBox.height + padding * 2;
+  let sw = Math.min(sourceImg.width - sx, sourceBox.width + padding * 2);
+  let sh = Math.min(sourceImg.height - sy, sourceBox.height + padding * 2);
 
-  // Get target face position
-  const targetBox = targetDetection.detection.box;
+  // If dimensions are invalid, use fallback values to prevent errors
+  // (User has already been warned via UI alert)
+  if (sw <= 0 || sh <= 0) {
+    console.warn('Invalid face region dimensions, using fallback:', {
+      original: { sw, sh },
+      sourceImg: { w: sourceImg.width, h: sourceImg.height },
+      sourceBox
+    });
+    // Use minimum safe dimensions as fallback
+    sw = Math.max(10, Math.min(sourceImg.width, sourceBox.width));
+    sh = Math.max(10, Math.min(sourceImg.height, sourceBox.height));
+  }
+
+  // Target placement region
   const tx = targetBox.x - padding;
   const ty = targetBox.y - padding;
   const tw = targetBox.width + padding * 2;
@@ -356,7 +405,7 @@ async function blendFaces(sourceDetection, targetDetection) {
   // Draw source face region
   tempCtx.drawImage(sourceImg, sx, sy, sw, sh, 0, 0, sw, sh);
 
-  // Apply elliptical mask for smoother blending
+  // Apply elliptical mask
   tempCtx.globalCompositeOperation = 'destination-in';
   tempCtx.beginPath();
   tempCtx.ellipse(sw / 2, sh / 2, sw / 2.2, sh / 2.2, 0, 0, Math.PI * 2);
@@ -368,6 +417,36 @@ async function blendFaces(sourceDetection, targetDetection) {
   ctx.globalAlpha = 1;
 }
 
+// Check source image dimensions and show warning if needed
+function handleSourceImageChange(file) {
+  if (!file || !file.width || !file.height) {
+    imageSizeWarning.value = false;
+    return;
+  }
+
+  // Target video dimensions (typical webcam resolution)
+  const targetWidth = 640;
+  const targetHeight = 480;
+
+  // Check if image dimensions differ significantly from target
+  const widthRatio = file.width / targetWidth;
+  const heightRatio = file.height / targetHeight;
+
+  // Show warning if dimensions are very different (more than 2x or less than 0.5x)
+  const isDifferent =
+    widthRatio > 2 || widthRatio < 0.5 || heightRatio > 2 || heightRatio < 0.5;
+
+  imageSizeWarning.value = isDifferent;
+
+  if (isDifferent) {
+    console.log('Image size warning:', {
+      source: { w: file.width, h: file.height },
+      target: { w: targetWidth, h: targetHeight },
+      ratio: { w: widthRatio.toFixed(2), h: heightRatio.toFixed(2) }
+    });
+  }
+}
+
 function resetSwap() {
   const canvas = resultCanvas.value;
   if (canvas !== null) {
@@ -376,6 +455,7 @@ function resetSwap() {
   }
   hasResult.value = false;
   statusMessage.value = '';
+  imageSizeWarning.value = false; // Reset warning
 }
 
 function downloadResult() {
@@ -764,6 +844,7 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
     flex-wrap: wrap;
     justify-content: center;
     gap: 16px;
+    margin-top: 16px;
     margin-bottom: 24px;
   }
 
