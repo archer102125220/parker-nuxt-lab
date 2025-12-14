@@ -231,6 +231,7 @@ export default defineNuxtConfig({
       swr: 15
     },
     '/face-swap/backend': {
+      ssr: false,
       swr: false,
       isr: false
     }
