@@ -244,47 +244,47 @@ export default defineNuxtConfig({
         if (routesToSkip.includes(route.route)) {
           route.skip = true;
         }
-      }
+      },
       // Copy AI models to output directory during build
       // Using 'close' hook instead of 'compiled' for better Vercel compatibility
-      // async close() {
-      //   // Skip in Vercel build environment to avoid conflicts
-      //   if (process.env.VERCEL) {
-      //     console.log(
-      //       '⏭️  Skipping model copy in Vercel environment (models in public/ are auto-deployed)'
-      //     );
-      //     return;
-      //   }
+      async close() {
+        // Skip in Vercel build environment to avoid conflicts
+        if (process.env.VERCEL) {
+          console.log(
+            '⏭️  Skipping model copy in Vercel environment (models in public/ are auto-deployed)'
+          );
+          return;
+        }
 
-      //   console.log('🔧 Nitro close hook: Copying AI model files...');
+        console.log('🔧 Nitro close hook: Copying AI model files...');
 
-      //   try {
-      //     const sourceModelsDir = path.join(__dirname, 'public/models');
-      //     const targetModelsDir = path.join(__dirname, '.output/public/models');
+        try {
+          const sourceModelsDir = path.join(__dirname, 'public/models');
+          const targetModelsDir = path.join(__dirname, '.output/public/models');
 
-      //     // Check if source models directory exists
-      //     if (fs.existsSync(sourceModelsDir)) {
-      //       // Ensure target directory exists
-      //       await fs.ensureDir(targetModelsDir);
+          // Check if source models directory exists
+          if (fs.existsSync(sourceModelsDir)) {
+            // Ensure target directory exists
+            await fs.ensureDir(targetModelsDir);
 
-      //       // Copy all model files
-      //       await fs.copy(sourceModelsDir, targetModelsDir, {
-      //         overwrite: true,
-      //         errorOnExist: false
-      //       });
+            // Copy all model files
+            await fs.copy(sourceModelsDir, targetModelsDir, {
+              overwrite: true,
+              errorOnExist: false
+            });
 
-      //       console.log('✅ AI models copied successfully');
-      //       console.log('   Source:', sourceModelsDir);
-      //       console.log('   Target:', targetModelsDir);
-      //     } else {
-      //       console.warn('⚠️  Models directory not found:', sourceModelsDir);
-      //       console.warn('   Models will need to be added before deployment');
-      //     }
-      //   } catch (error) {
-      //     console.error('❌ Failed to copy AI models:', error);
-      //     // Don't throw - allow build to continue even if models aren't present yet
-      //   }
-      // }
+            console.log('✅ AI models copied successfully');
+            console.log('   Source:', sourceModelsDir);
+            console.log('   Target:', targetModelsDir);
+          } else {
+            console.warn('⚠️  Models directory not found:', sourceModelsDir);
+            console.warn('   Models will need to be added before deployment');
+          }
+        } catch (error) {
+          console.error('❌ Failed to copy AI models:', error);
+          // Don't throw - allow build to continue even if models aren't present yet
+        }
+      }
     },
     // Ensure public assets are properly handled
     publicAssets: [
