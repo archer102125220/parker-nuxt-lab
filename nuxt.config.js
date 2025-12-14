@@ -148,97 +148,97 @@ export default defineNuxtConfig({
   devtools: {
     enabled: IS_DEV
   },
-  routeRules: {
-    // '/': { isr: true },
-    // '/en': { isr: true },
-    // '/': { prerender: true },
-    // '/en': { prerender: true },
-    // '/components/**': { prerender: true },
-    // '/components/**': { isr: true },
+  // routeRules: {
+  //   // '/': { isr: true },
+  //   // '/en': { isr: true },
+  //   // '/': { prerender: true },
+  //   // '/en': { prerender: true },
+  //   // '/components/**': { prerender: true },
+  //   // '/components/**': { isr: true },
 
-    // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
-    // '/**': { prerender: true },
-    '/offline': {
-      prerender: true
-    },
-    '/api/nuxt-server/swagger-docs': {
-      prerender: true
-    },
-    '/': {
-      isr: true
-    },
-    '/zh': {
-      isr: true
-    },
-    '/zh/**': {
-      isr: 60 * 60 * 24
-    },
-    '/en': {
-      isr: true
-    },
-    '/en/**': {
-      isr: 60 * 60 * 24
-    },
-    '/components': {
-      isr: 60 * 60 * 24
-    },
-    '/components/**': {
-      isr: 60 * 60 * 24
-    },
-    '/directives': {
-      isr: 60 * 60 * 24
-    },
-    '/directives/**': {
-      isr: 60 * 60 * 24
-    },
-    '/css-drawing': {
-      isr: 60 * 60 * 24
-    },
-    '/css-drawing/**': {
-      isr: 60 * 60 * 24
-    },
-    '/route': {
-      isr: 60 * 60 * 24
-    },
-    '/route/**': {
-      isr: 60 * 60 * 24
-    },
-    '/components-test': {
-      isr: 60 * 60 * 24
-    },
-    '/face-api': {
-      isr: 60 * 60 * 24
-    },
-    '/fido2-lib': {
-      isr: 60 * 60 * 24
-    },
-    '/frontend-api-cach-test': {
-      isr: 60 * 60 * 24
-    },
-    '/home': {
-      isr: 60 * 60 * 24
-    },
-    '/web-authn': {
-      isr: 60 * 60 * 24
-    },
-    '/web-cam': {
-      isr: 60 * 60 * 24
-    },
-    '/firebase': {
-      isr: 60 * 60 * 24
-    },
-    '/firebase/cloud-messaging': {
-      swr: 15
-    },
-    '/face-swap/backend': {
-      ssr: false,
-      swr: false,
-      isr: false
-    }
+  //   // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
+  //   // '/**': { prerender: true },
+  //   '/offline': {
+  //     prerender: true
+  //   },
+  //   '/api/nuxt-server/swagger-docs': {
+  //     prerender: true
+  //   },
+  //   '/': {
+  //     isr: true
+  //   },
+  //   '/zh': {
+  //     isr: true
+  //   },
+  //   '/zh/**': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/en': {
+  //     isr: true
+  //   },
+  //   '/en/**': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/components': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/components/**': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/directives': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/directives/**': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/css-drawing': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/css-drawing/**': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/route': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/route/**': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/components-test': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/face-api': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/fido2-lib': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/frontend-api-cach-test': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/home': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/web-authn': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/web-cam': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/firebase': {
+  //     isr: 60 * 60 * 24
+  //   },
+  //   '/firebase/cloud-messaging': {
+  //     swr: 15
+  //   },
+  //   '/face-swap/backend': {
+  //     ssr: false,
+  //     swr: false,
+  //     isr: false
+  //   }
 
-    // '/articles/*': { swr: 3600 },
-    // '/admin/**': { ssr: false }
-  },
+  //   // '/articles/*': { swr: 3600 },
+  //   // '/admin/**': { ssr: false }
+  // },
   nitro: {
     experimental: {
       websocket: true,
