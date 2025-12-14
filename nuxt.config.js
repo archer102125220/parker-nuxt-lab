@@ -259,8 +259,8 @@ export default defineNuxtConfig({
         try {
           const sourceModelsDir = path.join(__dirname, 'public/models');
           const targetModelsDir = path.join(
-            nitro.options.output.dir,
-            'public/models'
+            nitro.options.output.publicDir,
+            'models'
           );
 
           // Check if source models directory exists
