@@ -1,17 +1,50 @@
 // Server utility for face swap operations using face-api.js
 import { join } from 'path';
-import * as canvas from 'canvas';
-import * as faceapi from 'face-api.js';
 
-// Patch node environment for face-api.js
-const { Canvas, Image, ImageData } = canvas;
-faceapi.env.monkeyPatch({
-  Canvas,
-  Image,
-  ImageData
-});
-
+// Use dynamic imports to avoid loading heavy dependencies during cold start
+let canvas = null;
+let faceapi = null;
 let modelsLoaded = false;
+let dependenciesLoaded = false;
+
+/**
+ * Load canvas and face-api.js dependencies dynamically
+ * This prevents loading during Vercel cold start
+ */
+async function loadDependencies() {
+  if (dependenciesLoaded) {
+    return {
+      canvas,
+      faceapi
+    };
+  }
+
+  console.log('Loading face-swap dependencies...');
+
+  // Dynamic import to avoid cold start overhead
+  const canvasModule = await import('canvas');
+  const faceapiModule = await import('face-api.js');
+
+  // Store the modules
+  canvas = canvasModule;
+  faceapi = faceapiModule;
+
+  // Patch node environment for face-api.js
+  const { Canvas, Image, ImageData } = canvasModule;
+  faceapi.env.monkeyPatch({
+    Canvas,
+    Image,
+    ImageData
+  });
+
+  dependenciesLoaded = true;
+  console.log('✅ Face-swap dependencies loaded');
+
+  return {
+    canvas,
+    faceapi
+  };
+}
 
 /**
  * Load face-api models
@@ -21,6 +54,9 @@ export async function loadModels() {
   if (modelsLoaded) {
     return;
   }
+
+  // Load dependencies first
+  const deps = await loadDependencies();
 
   // Determine models path based on environment
   let modelsPath;
@@ -38,9 +74,9 @@ export async function loadModels() {
 
   try {
     await Promise.all([
-      faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath),
-      faceapi.nets.faceLandmark68Net.loadFromDisk(modelsPath),
-      faceapi.nets.faceRecognitionNet.loadFromDisk(modelsPath)
+      deps.faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath),
+      deps.faceapi.nets.faceLandmark68Net.loadFromDisk(modelsPath),
+      deps.faceapi.nets.faceRecognitionNet.loadFromDisk(modelsPath)
     ]);
 
     console.log('✅ Face-api models loaded successfully');
@@ -58,6 +94,10 @@ export async function loadModels() {
  * @returns {Promise<Image>}
  */
 export async function loadImageFromBase64(base64) {
+  // Ensure dependencies are loaded
+  const deps = await loadDependencies();
+  const { Image } = deps.canvas;
+
   const img = new Image();
 
   return new Promise((resolve, reject) => {
@@ -79,7 +119,12 @@ export async function loadImageFromBase64(base64) {
  * @returns {Promise<FaceDetectionWithLandmarks|null>}
  */
 export async function detectFace(image) {
-  const detection = await faceapi.detectSingleFace(image).withFaceLandmarks();
+  // Ensure dependencies are loaded
+  const deps = await loadDependencies();
+
+  const detection = await deps.faceapi
+    .detectSingleFace(image)
+    .withFaceLandmarks();
 
   return detection || null;
 }
@@ -91,6 +136,8 @@ export async function detectFace(image) {
  * @returns {Promise<string>} - Base64 result image
  */
 export async function performFaceSwap(sourceBase64, targetBase64) {
+  // Load dependencies and models
+  const deps = await loadDependencies();
   await loadModels();
 
   // Load images
@@ -110,7 +157,10 @@ export async function performFaceSwap(sourceBase64, targetBase64) {
   }
 
   // Create result canvas
-  const resultCanvas = canvas.createCanvas(targetImg.width, targetImg.height);
+  const resultCanvas = deps.canvas.createCanvas(
+    targetImg.width,
+    targetImg.height
+  );
   const ctx = resultCanvas.getContext('2d');
 
   // Draw target image as background
@@ -133,7 +183,7 @@ export async function performFaceSwap(sourceBase64, targetBase64) {
   const th = targetBox.height + padding * 2;
 
   // Create temporary canvas for source face with elliptical mask
-  const tempCanvas = canvas.createCanvas(sw, sh);
+  const tempCanvas = deps.canvas.createCanvas(sw, sh);
   const tempCtx = tempCanvas.getContext('2d');
 
   // Draw source face region
@@ -153,5 +203,3 @@ export async function performFaceSwap(sourceBase64, targetBase64) {
   // Return as base64
   return resultCanvas.toDataURL('image/png');
 }
-
-export { faceapi, canvas };

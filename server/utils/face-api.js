@@ -1,17 +1,50 @@
 // Server utility for face-api.js operations
 import { join } from 'path';
-import * as canvas from 'canvas';
-import * as faceapi from 'face-api.js';
 
-// Patch node environment for face-api.js
-const { Canvas, Image, ImageData } = canvas;
-faceapi.env.monkeyPatch({
-  Canvas,
-  Image,
-  ImageData
-});
-
+// Use dynamic imports to avoid loading heavy dependencies during cold start
+let canvas = null;
+let faceapi = null;
 let modelsLoaded = false;
+let dependenciesLoaded = false;
+
+/**
+ * Load canvas and face-api.js dependencies dynamically
+ * This prevents loading during Vercel cold start
+ */
+async function loadDependencies() {
+  if (dependenciesLoaded) {
+    return {
+      canvas,
+      faceapi
+    };
+  }
+
+  console.log('Loading face-api dependencies...');
+
+  // Dynamic import to avoid cold start overhead
+  const canvasModule = await import('canvas');
+  const faceapiModule = await import('face-api.js');
+
+  // Store the modules
+  canvas = canvasModule;
+  faceapi = faceapiModule;
+
+  // Patch node environment for face-api.js
+  const { Canvas, Image, ImageData } = canvasModule;
+  faceapi.env.monkeyPatch({
+    Canvas,
+    Image,
+    ImageData
+  });
+
+  dependenciesLoaded = true;
+  console.log('✅ Face-api dependencies loaded');
+
+  return {
+    canvas,
+    faceapi
+  };
+}
 
 /**
  * Load face-api models
@@ -21,6 +54,9 @@ export async function loadModels() {
   if (modelsLoaded) {
     return;
   }
+
+  // Load dependencies first
+  const deps = await loadDependencies();
 
   // Determine models path based on environment
   let modelsPath;
@@ -37,7 +73,7 @@ export async function loadModels() {
   console.log('Loading face-api models from:', modelsPath);
 
   try {
-    await faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath);
+    await deps.faceapi.nets.ssdMobilenetv1.loadFromDisk(modelsPath);
 
     console.log('✅ Face-api models loaded successfully');
     modelsLoaded = true;
@@ -47,5 +83,3 @@ export async function loadModels() {
     throw error;
   }
 }
-
-export { faceapi, canvas };
