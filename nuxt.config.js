@@ -117,7 +117,9 @@ const CONTENT_SECURITY_POLICY =
 const osType = os.type().toLocaleLowerCase();
 // const windowsAlias = osType.includes('windows') && IS_DEV ? { '@': new URL('./', import.meta.url).href } : {};
 
-if (osType.includes('windows') === true) {
+// Only run TensorFlow setup in development on Windows
+// Vercel uses Linux and doesn't need this
+if (IS_DEV && osType.includes('windows') === true) {
   const targetDir = path.join(
     __dirname,
     'node_modules/@tensorflow/tfjs-node/lib/napi-v8'
@@ -227,6 +229,10 @@ export default defineNuxtConfig({
     },
     '/firebase/cloud-messaging': {
       swr: 15
+    },
+    '/face-swap/backend': {
+      swr: false,
+      isr: false
     }
 
     // '/articles/*': { swr: 3600 },
