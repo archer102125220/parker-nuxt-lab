@@ -129,8 +129,10 @@ export default defineNitroPlugin((nitroApp) => {
   };
 
   nitroApp.hooks.hook('close', () => {
+    console.log('server plugins socket.io close');
     io.close();
     engine.close();
+    console.log('server plugins socket.io close end');
   });
 
   console.log('server plugins socket.io hooks registered');

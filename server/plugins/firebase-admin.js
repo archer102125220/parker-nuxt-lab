@@ -22,7 +22,9 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.$firebaseAdminApp = firebaseAdminApp;
 
   nitroApp.hooks.hook('request', (event) => {
+    console.log('firebase-admin.js request');
     event.context.$firebaseAdminApp = firebaseAdminApp;
+    console.log('firebase-admin.js request end');
   });
 
   console.log('firebase-admin.js hooks registered');
