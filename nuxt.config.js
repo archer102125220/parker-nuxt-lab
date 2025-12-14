@@ -148,97 +148,97 @@ export default defineNuxtConfig({
   devtools: {
     enabled: IS_DEV
   },
-  // routeRules: {
-  //   // '/': { isr: true },
-  //   // '/en': { isr: true },
-  //   // '/': { prerender: true },
-  //   // '/en': { prerender: true },
-  //   // '/components/**': { prerender: true },
-  //   // '/components/**': { isr: true },
+  routeRules: {
+    // '/': { isr: true },
+    // '/en': { isr: true },
+    // '/': { prerender: true },
+    // '/en': { prerender: true },
+    // '/components/**': { prerender: true },
+    // '/components/**': { isr: true },
 
-  //   // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
-  //   // '/**': { prerender: true },
-  //   '/offline': {
-  //     prerender: true
-  //   },
-  //   '/api/nuxt-server/swagger-docs': {
-  //     prerender: true
-  //   },
-  //   '/': {
-  //     isr: true
-  //   },
-  //   '/zh': {
-  //     isr: true
-  //   },
-  //   '/zh/**': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/en': {
-  //     isr: true
-  //   },
-  //   '/en/**': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/components': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/components/**': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/directives': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/directives/**': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/css-drawing': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/css-drawing/**': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/route': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/route/**': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/components-test': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/face-api': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/fido2-lib': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/frontend-api-cach-test': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/home': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/web-authn': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/web-cam': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/firebase': {
-  //     isr: 60 * 60 * 24
-  //   },
-  //   '/firebase/cloud-messaging': {
-  //     swr: 15
-  //   },
-  //   '/face-swap/backend': {
-  //     ssr: false,
-  //     swr: false,
-  //     isr: false
-  //   }
+    // 若ISR 為整份專案，則可能導致部分api出現異常，prerender整份專案能使PWA快取整份專案至service worker
+    // '/**': { prerender: true },
+    '/offline': {
+      prerender: true
+    },
+    '/api/nuxt-server/swagger-docs': {
+      prerender: true
+    },
+    '/': {
+      isr: true
+    },
+    '/zh': {
+      isr: true
+    },
+    '/zh/**': {
+      isr: 60 * 60 * 24
+    },
+    '/en': {
+      isr: true
+    },
+    '/en/**': {
+      isr: 60 * 60 * 24
+    },
+    '/components': {
+      isr: 60 * 60 * 24
+    },
+    '/components/**': {
+      isr: 60 * 60 * 24
+    },
+    '/directives': {
+      isr: 60 * 60 * 24
+    },
+    '/directives/**': {
+      isr: 60 * 60 * 24
+    },
+    '/css-drawing': {
+      isr: 60 * 60 * 24
+    },
+    '/css-drawing/**': {
+      isr: 60 * 60 * 24
+    },
+    '/route': {
+      isr: 60 * 60 * 24
+    },
+    '/route/**': {
+      isr: 60 * 60 * 24
+    },
+    '/components-test': {
+      isr: 60 * 60 * 24
+    },
+    '/face-api': {
+      isr: 60 * 60 * 24
+    },
+    '/fido2-lib': {
+      isr: 60 * 60 * 24
+    },
+    '/frontend-api-cach-test': {
+      isr: 60 * 60 * 24
+    },
+    '/home': {
+      isr: 60 * 60 * 24
+    },
+    '/web-authn': {
+      isr: 60 * 60 * 24
+    },
+    '/web-cam': {
+      isr: 60 * 60 * 24
+    },
+    '/firebase': {
+      isr: 60 * 60 * 24
+    },
+    '/firebase/cloud-messaging': {
+      swr: 15
+    },
+    '/face-swap/backend': {
+      ssr: false,
+      swr: false,
+      isr: false
+    }
 
-  //   // '/articles/*': { swr: 3600 },
-  //   // '/admin/**': { ssr: false }
-  // },
+    // '/articles/*': { swr: 3600 },
+    // '/admin/**': { ssr: false }
+  },
   nitro: {
     experimental: {
       websocket: true,
@@ -251,47 +251,41 @@ export default defineNuxtConfig({
         if (routesToSkip.includes(route.route)) {
           route.skip = true;
         }
-      }
+      },
       // Copy AI models to output directory during build
-      // Using 'close' hook instead of 'compiled' for better Vercel compatibility
-      // async close() {
-      //   // Skip in Vercel build environment to avoid conflicts
-      //   if (process.env.VERCEL) {
-      //     console.log(
-      //       '⏭️  Skipping model copy in Vercel environment (models in public/ are auto-deployed)'
-      //     );
-      //     return;
-      //   }
+      async compiled(nitro) {
+        console.log('🔧 Nitro compiled hook: Copying AI model files...');
 
-      //   console.log('🔧 Nitro close hook: Copying AI model files...');
+        try {
+          const sourceModelsDir = path.join(__dirname, 'public/models');
+          const targetModelsDir = path.join(
+            nitro.options.output.dir,
+            'public/models'
+          );
 
-      //   try {
-      //     const sourceModelsDir = path.join(__dirname, 'public/models');
-      //     const targetModelsDir = path.join(__dirname, '.output/public/models');
+          // Check if source models directory exists
+          if (fs.existsSync(sourceModelsDir)) {
+            // Ensure target directory exists
+            await fs.ensureDir(targetModelsDir);
 
-      //     // Check if source models directory exists
-      //     if (fs.existsSync(sourceModelsDir)) {
-      //       // Ensure target directory exists
-      //       await fs.ensureDir(targetModelsDir);
+            // Copy all model files
+            await fs.copy(sourceModelsDir, targetModelsDir, {
+              overwrite: true,
+              errorOnExist: false
+            });
 
-      //       // Copy all model files
-      //       await fs.copy(sourceModelsDir, targetModelsDir, {
-      //         overwrite: true,
-      //         errorOnExist: false
-      //       });
-
-      //       console.log('✅ AI models copied successfully');
-      //       console.log('   Source:', sourceModelsDir);
-      //       console.log('   Target:', targetModelsDir);
-      //     } else {
-      //       console.warn('⚠️  Models directory not found:', sourceModelsDir);
-      //       console.warn('   Models will need to be added before deployment');
-      //     }
-      //   } catch (error) {
-      //     console.error('❌ Failed to copy AI models:', error);
-      //     // Don't throw - allow build to continue even if models aren't present yet
-      //   }
-      // }
+            console.log('✅ AI models copied successfully');
+            console.log('   Source:', sourceModelsDir);
+            console.log('   Target:', targetModelsDir);
+          } else {
+            console.warn('⚠️  Models directory not found:', sourceModelsDir);
+            console.warn('   Models will need to be added before deployment');
+          }
+        } catch (error) {
+          console.error('❌ Failed to copy AI models:', error);
+          // Don't throw - allow build to continue even if models aren't present yet
+        }
+      }
     },
     // Ensure public assets are properly handled
     publicAssets: [
