@@ -165,9 +165,9 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/': {
-      isr: true
-      // isr: false,
-      // ssr: false
+      // isr: true
+      isr: false,
+      ssr: false
     },
     '/zh': {
       isr: true
