@@ -7,24 +7,28 @@ const LAYOUT_SETTING = [
 ];
 
 export default defineNuxtRouteMiddleware((to) => {
+  console.log('03.layout-switch.global.js', to);
+
   const getRouteBaseName = useRouteBaseName();
   const getLocalePath = useLocalePath();
 
-  const newLayoutName = LAYOUT_SETTING.find(
-    ({ path, exact, name }) => {
-      const toHrefLocalePath = typeof path === 'string' && path !== '' ? getLocalePath(path) : undefined;
-      // const toHrefLocalePath = typeof path === 'string' && path !== '' ? path : undefined;
-      // console.log({ toHrefLocalePath });
+  const newLayoutName = LAYOUT_SETTING.find(({ path, exact, name }) => {
+    const toHrefLocalePath =
+      typeof path === 'string' && path !== '' ? getLocalePath(path) : undefined;
+    // const toHrefLocalePath = typeof path === 'string' && path !== '' ? path : undefined;
+    // console.log({ toHrefLocalePath });
 
-      return (exact === true
+    return (
+      (exact === true
         ? toHrefLocalePath === to.href
-        : to.href?.includes(toHrefLocalePath)) ||
-        getRouteBaseName(to) === name
-      // to.name === name
-    }
-  )?.layout;
+        : to.href?.includes(toHrefLocalePath)) || getRouteBaseName(to) === name
+    );
+    // to.name === name
+  })?.layout;
 
-  setPageLayout(typeof newLayoutName === 'string' || newLayoutName === false
-    ? newLayoutName
-    : 'default');
-})
+  setPageLayout(
+    typeof newLayoutName === 'string' || newLayoutName === false
+      ? newLayoutName
+      : 'default'
+  );
+});

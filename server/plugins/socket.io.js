@@ -102,29 +102,36 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.$socketIoServer = io;
   nitroApp.$socketIo = socketIo;
 
-  nitroApp.$registerSocketIOHandlers = function registerSocketIOHandlers(event) {
+  nitroApp.$registerSocketIOHandlers = function registerSocketIOHandlers(
+    event
+  ) {
     const _nitroApp = useNitroApp();
 
     event.node.req.context = event.context;
 
     _nitroApp.$socketEngine.handleRequest(event.node.req, event.node.res);
     event._handled = true;
-  }
-
+  };
 
   nitroApp.$adaptSocketIO = function adaptSocketIO(peer, callback) {
     const _nitroApp = useNitroApp();
 
     _nitroApp.$socketEngine.prepare(peer._internal.nodeReq);
-    _nitroApp.$socketEngine.onWebSocket(peer._internal.nodeReq, peer._internal.nodeReq.socket, peer.websocket);
+    _nitroApp.$socketEngine.onWebSocket(
+      peer._internal.nodeReq,
+      peer._internal.nodeReq.socket,
+      peer.websocket
+    );
 
     if (typeof callback === 'function') {
       callback(peer, _nitroApp);
     }
-  }
+  };
 
   nitroApp.hooks.hook('close', () => {
     io.close();
     engine.close();
   });
+
+  console.log('server plugins socket.io hooks registered');
 });

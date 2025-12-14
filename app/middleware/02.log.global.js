@@ -1,4 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  console.log('02.log.global.js', to, from);
   if (import.meta.client) return;
   const nuxtApp = useNuxtApp();
   const i18nLocale = nuxtApp.$getLocalLanguage('');

@@ -1,4 +1,6 @@
 export default defineNuxtRouteMiddleware(async () => {
+  console.log('04.store.global.js');
+
   const { $store } = useNuxtApp();
 
   if (import.meta.client) {

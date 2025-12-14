@@ -5,6 +5,8 @@ import {
 } from '@server/utils/firebase-admin';
 
 export default defineNitroPlugin((nitroApp) => {
+  console.log('firebase-admin.js');
+
   const firebaseAdminApp = {
     get web() {
       return getFirebaseAdminWeb();
@@ -19,7 +21,9 @@ export default defineNitroPlugin((nitroApp) => {
 
   nitroApp.$firebaseAdminApp = firebaseAdminApp;
 
-  nitroApp.hooks.hook("request", (event) => {
+  nitroApp.hooks.hook('request', (event) => {
     event.context.$firebaseAdminApp = firebaseAdminApp;
   });
-})
+
+  console.log('firebase-admin.js hooks registered');
+});
