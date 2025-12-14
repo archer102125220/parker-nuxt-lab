@@ -240,7 +240,6 @@ export default defineNuxtConfig({
     // '/admin/**': { ssr: false }
   },
   nitro: {
-    preset: 'vercel-edge',
     experimental: {
       websocket: true,
       // Allow larger file uploads (10MB) for face swap images
