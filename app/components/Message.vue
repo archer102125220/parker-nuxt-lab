@@ -34,6 +34,8 @@
   </div>
 </template>
 <script setup>
+console.log('components Message');
+
 const props = defineProps({
   timeout: { type: Number, default: 5000 },
   messageState: {
@@ -140,6 +142,8 @@ async function handleClose(removeTimeId) {
     );
   }, 500);
 }
+
+console.log('components Message end');
 </script>
 
 <style lang="scss">

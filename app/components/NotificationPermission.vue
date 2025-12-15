@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+console.log('components NotificationPermission');
 // const props = defineProps({});
 // const emit = defineEmits([]);
 
@@ -84,6 +85,8 @@ function handleCofirm() {
   processing.value = true;
   system.setAgreeNotification(true);
 }
+
+console.log('components NotificationPermission end');
 </script>
 
 <style lang="scss" scoped>

@@ -10,6 +10,8 @@ export function useHeadMataData({
   type: _metaDataType = 'website',
   copyright: _metaDataCopyright = ''
 } = {}) {
+  console.log('useHeadMataData');
+
   const { $i18n } = useNuxtApp();
   const dayjs = useDayjs();
 
@@ -37,7 +39,7 @@ export function useHeadMataData({
       `Copyright © ${dayjs().year()} Parker Chen. All rights reserved.`
   );
 
-  return useHead({
+  const head = useHead({
     titleTemplate: titleTemplate.value,
     title: metaDataTitle.value,
     meta: [
@@ -94,6 +96,9 @@ export function useHeadMataData({
       }
     ]
   });
-}
 
+  console.log('useHeadMataData end');
+
+  return head;
+}
 export default useHeadMataData;

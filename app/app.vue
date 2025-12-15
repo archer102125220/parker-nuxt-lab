@@ -42,6 +42,7 @@
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 import { Analytics } from '@vercel/analytics/nuxt';
 import _debounce from 'lodash/debounce';
+console.log('app.vue');
 
 useSecurityNonce();
 
@@ -129,6 +130,7 @@ watch(() => [route.path, gtm.value, firebase.value], handleTrackData);
 watch(
   () => $i18n.locale.value,
   (newLocale) => {
+    console.log('watch $i18n.locale.value', newLocale);
     $setLocalLanguage(newLocale);
 
     $dayjs.locale(newLocale.includes('en') ? 'en' : 'zh-tw');
@@ -145,6 +147,8 @@ watch(
         metaLang.language = _newLocale;
       }
     }
+
+    console.log('watch $i18n.locale.value end');
   },
   { immediate: true }
 );
@@ -197,6 +201,8 @@ onUnmounted(() => {
     removeWindowEventListener.value();
   }
 });
+
+console.log('app.vue end');
 </script>
 
 <style lang="scss">

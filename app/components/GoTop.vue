@@ -18,6 +18,8 @@
   </div>
 </template>
 <script setup>
+console.log('components GoTop');
+
 const el = useTemplateRef('el');
 
 const props = defineProps({
@@ -119,6 +121,8 @@ onBeforeUnmount(() => {
     el.value.parentElement.removeEventListener('scroll', handleScroll);
   }
 });
+
+console.log('components GoTop end');
 </script>
 
 <style lang="scss" scoped>
