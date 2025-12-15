@@ -419,8 +419,8 @@ export default defineNuxtConfig({
       );
     },
     '@nuxtjs/i18n',
-    '@vite-pwa/nuxt'
-    // 'nuxt-security' // 測試: 暫時禁用
+    '@vite-pwa/nuxt',
+    'nuxt-security' // 測試: 暫時禁用
   ],
   i18n: {
     strategy,
