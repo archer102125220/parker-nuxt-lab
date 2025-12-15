@@ -273,7 +273,7 @@ export default defineNuxtConfig({
     // '/admin/**': { ssr: false }
   },
   nitro: {
-    // preset: 'vercel',
+    preset: 'vercel',
     experimental: {
       websocket: true,
       // Allow larger file uploads (10MB) for face swap images
@@ -420,8 +420,8 @@ export default defineNuxtConfig({
       );
     },
     '@nuxtjs/i18n',
-    '@vite-pwa/nuxt'
-    // 'nuxt-security'  // 暫時禁用測試
+    '@vite-pwa/nuxt',
+    'nuxt-security'
   ],
   i18n: {
     strategy,

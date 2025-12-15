@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 60
+    },
+    ".output/server/**/*.mjs": {
+      "maxDuration": 60
+    }
+  },
+  "buildCommand": "yarn build",
+  "outputDirectory": ".output",
+  "framework": "nuxtjs"
+}
