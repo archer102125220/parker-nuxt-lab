@@ -194,8 +194,8 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/': {
-      prerender: true // 使用預渲染避免 Vercel Hobby 方案的 SSR 超時
-      // isr: true
+      // prerender: true // 使用預渲染避免 Vercel Hobby 方案的 SSR 超時
+      isr: true
       // ssr: true
     },
     '/zh': {

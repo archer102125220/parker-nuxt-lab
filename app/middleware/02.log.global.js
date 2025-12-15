@@ -1,12 +1,23 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   console.log('02.log.global.js', to, from);
   if (import.meta.client) return;
+  console.log('02.log.global.js SSR start');
+
   const nuxtApp = useNuxtApp();
+  console.log('02.log.global.js useNuxtApp done');
+
   const i18nLocale = nuxtApp.$getLocalLanguage('');
+  console.log('02.log.global.js getLocalLanguage done');
+
   const cookieLocale = useCookieLocale();
+  console.log('02.log.global.js useCookieLocale done');
 
   const url = useRequestURL();
+  console.log('02.log.global.js useRequestURL done');
+
   const headers = useRequestHeaders();
+  console.log('02.log.global.js useRequestHeaders done');
+
   const acceptLanguage = headers['accept-language'];
 
   console.log(`user-agent: ${headers['user-agent']}`);
