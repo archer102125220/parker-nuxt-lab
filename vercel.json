@@ -1,7 +1,5 @@
 {
-  "functions": {
-    ".output/server/**/*.mjs": {
-      "maxDuration": 60
-    }
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nuxtjs",
+  "maxDuration": 60
 }
