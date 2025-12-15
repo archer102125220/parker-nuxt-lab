@@ -197,9 +197,9 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/': {
-      // isr: true
-      isr: false,
-      ssr: false
+      isr: true
+      // isr: false,
+      // ssr: false
     },
     '/zh': {
       isr: true
@@ -265,9 +265,10 @@ export default defineNuxtConfig({
       swr: 15
     },
     '/face-swap/backend': {
-      ssr: false,
-      swr: false,
-      isr: false
+      isr: 60 * 60 * 24
+      // ssr: false,
+      // swr: false,
+      // isr: false
     }
 
     // '/articles/*': { swr: 3600 },
