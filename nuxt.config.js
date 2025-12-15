@@ -194,9 +194,9 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/': {
-      isr: true
+      // isr: true  // 測試：暫時關閉 ISR
       // isr: false,
-      // ssr: true
+      ssr: true // 測試：純 SSR 模式
       // ssr: false
     },
     '/zh': {
