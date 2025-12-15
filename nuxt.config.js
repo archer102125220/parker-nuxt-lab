@@ -194,10 +194,9 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/': {
-      // isr: true  // 測試：暫時關閉 ISR
-      // isr: false,
-      ssr: true // 測試：純 SSR 模式
-      // ssr: false
+      prerender: true // 使用預渲染避免 Vercel Hobby 方案的 SSR 超時
+      // isr: true
+      // ssr: true
     },
     '/zh': {
       isr: true
