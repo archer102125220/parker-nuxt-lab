@@ -27,5 +27,17 @@ export default defineNitroPlugin((nitroApp) => {
     console.log('firebase-admin.js request end');
   });
 
+  nitroApp.hooks.hook('beforeResponse', (event, response) => {
+    console.log('firebase-admin.js beforeResponse');
+  });
+
+  nitroApp.hooks.hook('afterResponse', (event, response) => {
+    console.log('firebase-admin.js afterResponse');
+  });
+
+  nitroApp.hooks.hook('render:html', (html, { event }) => {
+    console.log('firebase-admin.js render:html');
+  });
+
   console.log('firebase-admin.js hooks registered');
 });
