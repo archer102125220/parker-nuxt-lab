@@ -1,6 +1,8 @@
 import { handleBindScrollEnd } from '@app/utils/polyfill/scroll-end';
 
 export const pluginScrollEnd = defineNuxtPlugin((nuxtApp) => {
+  console.log('scroll-end plugin loading...');
+
   const scrollEnd = {
     mounted(el, binding) {
       const handler = binding.value?.handler || binding.value;
@@ -9,14 +11,15 @@ export const pluginScrollEnd = defineNuxtPlugin((nuxtApp) => {
 
       handleBindScrollEnd(el, handler, wait);
     }
-  }
+  };
   nuxtApp.vueApp.directive('scrollEnd', scrollEnd);
   nuxtApp.vueApp.directive('scroll-end', scrollEnd);
 
+  console.log('scroll-end plugin loaded');
   return {
     provide: {
       bindScrollEnd: handleBindScrollEnd
-    },
+    }
   };
 });
 

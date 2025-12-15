@@ -7,6 +7,8 @@ import * as serverSentEvent from '@services/client/server-sent-event';
 import * as faceSwap from '@services/client/face-swap';
 
 export default defineNuxtPlugin(() => {
+  console.log('services client plugin loading...');
+
   const clientServices = {
     lineOauth,
     nuxtServer,
@@ -15,12 +17,14 @@ export default defineNuxtPlugin(() => {
     clientFirebaseAdmin,
     serverSentEvent,
     faceSwap
-  }
+  };
+
+  console.log('services client plugin loaded');
 
   return {
     provide: {
       ...clientServices,
       clientServices
-    },
+    }
   };
 });

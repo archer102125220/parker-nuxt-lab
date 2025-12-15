@@ -1,9 +1,15 @@
 const config = {};
 export default defineNuxtPlugin((nuxtApp) => {
+  console.log('customize lazyload plugin loading...');
+
   let observer = null;
   if (typeof window?.IntersectionObserver === 'function') {
     function handleLazyload(element) {
-      const src = element.getAttribute('lazy-src') || element.src || element.removeAttribute('lazy-error-img') || '';
+      const src =
+        element.getAttribute('lazy-src') ||
+        element.src ||
+        element.removeAttribute('lazy-error-img') ||
+        '';
       if (src !== '') {
         element.src = src;
         element.removeAttribute('lazy-src');
@@ -24,7 +30,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       });
     }
     observer = new window.IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           handleLazyload(entry.target);
           entry.target.addEventListener('error', handleImgError);
@@ -52,13 +58,21 @@ export default defineNuxtPlugin((nuxtApp) => {
   const customizeLazyload = {
     mounted(el, binding) {
       const src = el.src || '';
-      const lazySrc = (typeof binding.value?.src === 'string' ? binding.value?.src : binding.value) || src;
+      const lazySrc =
+        (typeof binding.value?.src === 'string'
+          ? binding.value?.src
+          : binding.value) || src;
       if (typeof observer?.observe !== 'function') {
         el.src = lazySrc;
         return;
       }
 
-      if ((typeof binding.value?.loading !== 'string' && typeof binding.value?.loading !== 'object') || binding.value?.loading === '' || binding.value?.loading === null) {
+      if (
+        (typeof binding.value?.loading !== 'string' &&
+          typeof binding.value?.loading !== 'object') ||
+        binding.value?.loading === '' ||
+        binding.value?.loading === null
+      ) {
         el.style.opacity = 0;
         el.setAttribute('has-loading-src', false);
       } else {
@@ -75,17 +89,28 @@ export default defineNuxtPlugin((nuxtApp) => {
         el.addEventListener('error', binding.value.error);
       }
 
-      if ((typeof src === 'string' && src === '' || (src !== lazySrc && src !== errorImg)) && typeof observer.observe === 'function') {
+      if (
+        ((typeof src === 'string' && src === '') ||
+          (src !== lazySrc && src !== errorImg)) &&
+        typeof observer.observe === 'function'
+      ) {
         observer.observe(el);
       }
     },
     updated(el, binding) {
-      if ((binding.value === binding.oldValue || binding.value?.src === binding.oldValue?.src) && binding.value?.error === binding.oldValue?.error) {
+      if (
+        (binding.value === binding.oldValue ||
+          binding.value?.src === binding.oldValue?.src) &&
+        binding.value?.error === binding.oldValue?.error
+      ) {
         return;
       }
 
       if (el.getAttribute('lazy-finish') === 'true') {
-        const newLazySrc = (typeof binding.value?.src === 'string' ? binding.value?.src : binding.value) || '';
+        const newLazySrc =
+          (typeof binding.value?.src === 'string'
+            ? binding.value?.src
+            : binding.value) || '';
         const newErrorSrc = binding.value?.error || newLazySrc;
 
         if (el.getAttribute('lazy-error') === 'true') {
@@ -94,17 +119,25 @@ export default defineNuxtPlugin((nuxtApp) => {
           el.src = newLazySrc;
         }
 
-        return
+        return;
       }
 
       const src = el.src || '';
-      const lazySrc = (typeof binding.value?.src === 'string' ? binding.value?.src : binding.value) || src;
+      const lazySrc =
+        (typeof binding.value?.src === 'string'
+          ? binding.value?.src
+          : binding.value) || src;
       if (typeof observer?.observe !== 'function') {
         el.src = lazySrc;
         return;
       }
 
-      if ((typeof binding.value?.loading !== 'string' && typeof binding.value?.loading !== 'object') || binding.value?.loading === '' || binding.value?.loading === null) {
+      if (
+        (typeof binding.value?.loading !== 'string' &&
+          typeof binding.value?.loading !== 'object') ||
+        binding.value?.loading === '' ||
+        binding.value?.loading === null
+      ) {
         el.style.opacity = 0;
         el.setAttribute('has-loading-src', false);
       } else {
@@ -129,7 +162,9 @@ export default defineNuxtPlugin((nuxtApp) => {
         observer.unobserve(el);
       }
     }
-  }
+  };
   nuxtApp.vueApp.directive('customize-lazyload', customizeLazyload);
   nuxtApp.vueApp.directive('customizeLazyload', customizeLazyload);
+
+  console.log('customize lazyload plugin loaded');
 });

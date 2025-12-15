@@ -5,7 +5,7 @@ import {
   getCurrentPosition,
   distanceCalculation,
   handleDistanceCalculation,
-  handleCurrentCalculation,
+  handleCurrentCalculation
 } from '@app/utils/helpers/distance-between-points';
 import { googleGAInit } from '@app/utils/third-party/ga';
 import { googleGTMInit } from '@app/utils/third-party/gtm';
@@ -16,7 +16,10 @@ import getScrollEndLimit from '@app/utils/helpers/get-scroll-end-limit';
 import getLocalLanguage from '@app/utils/third-party/get-local-language';
 import setLocalLanguage from '@app/utils/third-party/set-local-language';
 import { classifySwipeDirection } from '@app/utils/helpers/classify-swipe-direction';
-import { findLastIndex, handleFindLastIndexPolyfill } from '@app/utils/polyfill/array-find-last-index-polyfill';
+import {
+  findLastIndex,
+  handleFindLastIndexPolyfill
+} from '@app/utils/polyfill/array-find-last-index-polyfill';
 
 handleFindLastIndexPolyfill();
 if (typeof window !== 'undefined') {
@@ -25,6 +28,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default defineNuxtPlugin(() => {
+  console.log('utils plugin loaded');
   return {
     provide: {
       amountFormat,
@@ -41,7 +45,7 @@ export default defineNuxtPlugin(() => {
       getLocalLanguage,
       setLocalLanguage,
       classifySwipeDirection,
-      findLastIndex,
-    },
+      findLastIndex
+    }
   };
 });

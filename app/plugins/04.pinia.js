@@ -1,8 +1,11 @@
 import { useSystemStore } from '@app/store/system';
 
 export default defineNuxtPlugin(({ $pinia }) => {
+  console.log('pinia plugin loading...');
+
   const system = useSystemStore($pinia);
 
+  console.log('pinia plugin loaded');
   return {
     provide: {
       successMessage(text) {
@@ -41,9 +44,13 @@ export default defineNuxtPlugin(({ $pinia }) => {
           }
 
           if (typeof window._pluginwareHandleResize_ !== 'function') {
-            return () => window.removeEventListener('resize', window._pluginwareHandleResize_);
+            return () =>
+              window.removeEventListener(
+                'resize',
+                window._pluginwareHandleResize_
+              );
           }
-          return () => { };
+          return () => {};
         }
       }
     }

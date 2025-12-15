@@ -6,11 +6,15 @@ export default defineNuxtPlugin({
   name: 'firebase-plugin',
 
   async setup() {
+    console.log('firebase plugin loading...');
+
     const Firebase = new firebase();
 
     const provide = { firebase };
 
-    provide.firebaseFirestoreUpdate = function firebaseFirestoreUpdate(firebaseFirestore) {
+    provide.firebaseFirestoreUpdate = function firebaseFirestoreUpdate(
+      firebaseFirestore
+    ) {
       this.firebaseFirestore = firebaseFirestore;
     }.bind(provide);
 
@@ -23,9 +27,10 @@ export default defineNuxtPlugin({
       provide.firebaseFirestoreUpdate(Firebase.store);
     }
 
+    console.log('firebase plugin loaded');
     return {
       provide
-    }
+    };
   },
 
   hooks: {
@@ -58,42 +63,62 @@ export default defineNuxtPlugin({
     },
     // async 'service-worker:activated'(serviceWorkerActivatedEvent) {
     async 'service-worker:activated'() {
-      const { $store, $successMessage, $infoMessage, $pwa, $Firebase, $firebaseFirestoreUpdate } = useNuxtApp();
+      const {
+        $store,
+        $successMessage,
+        $infoMessage,
+        $pwa,
+        $Firebase,
+        $firebaseFirestoreUpdate
+      } = useNuxtApp();
 
-      watchEffect(() => {
-        if ($pwa.swActivated === false) {
-          // $infoMessage('正在安裝 PWA 核心資源...');
-          $store.system.setPwaLoading(true);
-        } else {
-          // $successMessage('PWA 已就緒！其他資源將在需要時自動載入。');
-          $store.system.setPwaLoading(false);
-        }
-      }, { immediate: true });
+      watchEffect(
+        () => {
+          if ($pwa.swActivated === false) {
+            // $infoMessage('正在安裝 PWA 核心資源...');
+            $store.system.setPwaLoading(true);
+          } else {
+            // $successMessage('PWA 已就緒！其他資源將在需要時自動載入。');
+            $store.system.setPwaLoading(false);
+          }
+        },
+        { immediate: true }
+      );
 
       // https://cn.vuejs.org/guide/essentials/watchers#watcheffect
-      watchEffect(async () => {
-        if ($pwa.needRefresh === true) {
-          $infoMessage('偵測到PWA資源可更新，將更新PWA資源，並在更新完成後重新載入。');
-          $store.system.setPwaLoading(true);
+      watchEffect(
+        async () => {
+          if ($pwa.needRefresh === true) {
+            $infoMessage(
+              '偵測到PWA資源可更新，將更新PWA資源，並在更新完成後重新載入。'
+            );
+            $store.system.setPwaLoading(true);
 
-          // await $pwa.updateServiceWorker();
-          await $pwa.updateServiceWorker(true);
-          // await $pwa.updateServiceWorker(false);
+            // await $pwa.updateServiceWorker();
+            await $pwa.updateServiceWorker(true);
+            // await $pwa.updateServiceWorker(false);
 
-          await nextTick();
-          await new Promise((resolve) => window.requestAnimationFrame(() => setTimeout(resolve, 1000)));
+            await nextTick();
+            await new Promise((resolve) =>
+              window.requestAnimationFrame(() => setTimeout(resolve, 1000))
+            );
 
-          $successMessage('PWA PWA資源更新完成，網站將重新載入。');
-          $store.system.setPwaLoading(false);
-        }
-      }, { immediate: true });
+            $successMessage('PWA PWA資源更新完成，網站將重新載入。');
+            $store.system.setPwaLoading(false);
+          }
+        },
+        { immediate: true }
+      );
 
-      watchEffect(() => {
-        if ($pwa.offlineReady === true) {
-          // $successMessage('PWA資源載入完成');
-          $successMessage('PWA 已就緒！其他資源將在需要時自動載入。');
-        }
-      }, { immediate: true });
+      watchEffect(
+        () => {
+          if ($pwa.offlineReady === true) {
+            // $successMessage('PWA資源載入完成');
+            $successMessage('PWA 已就緒！其他資源將在需要時自動載入。');
+          }
+        },
+        { immediate: true }
+      );
 
       $store.system.setAgreeNotification($Firebase.getNotificationPermission());
 
@@ -111,5 +136,5 @@ export default defineNuxtPlugin({
       const Firebase = new firebase();
       nuxtApp.provide('Firebase', Firebase);
     }
-  },
+  }
 });
