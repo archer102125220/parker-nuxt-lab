@@ -20,9 +20,7 @@
   </div>
 </template>
 
-<script setup>
-console.log('components PWALoading');
-</script>
+<script setup></script>
 
 <style lang="scss">
 .pwa_loading {

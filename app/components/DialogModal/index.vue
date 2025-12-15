@@ -18,8 +18,6 @@
 </template>
 
 <script setup>
-console.log('components DialogModal');
-
 const modules = {
   ...import.meta.glob('@app/components/DialogModal/*.vue'),
   ...import.meta.glob('@app/components/DialogModal/*/*.vue')
@@ -160,8 +158,6 @@ async function handleChange(newValue) {
   }
   emit('handleTrigger', payload, newValue);
 }
-
-console.log('components DialogModal end');
 </script>
 
 <style lang="scss" scoped>

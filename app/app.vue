@@ -42,7 +42,6 @@
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 import { Analytics } from '@vercel/analytics/nuxt';
 import _debounce from 'lodash/debounce';
-console.log('app.vue');
 
 useSecurityNonce();
 
@@ -201,8 +200,6 @@ onUnmounted(() => {
     removeWindowEventListener.value();
   }
 });
-
-console.log('app.vue end');
 </script>
 
 <style lang="scss">

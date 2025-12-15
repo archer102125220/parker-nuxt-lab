@@ -1,7 +1,5 @@
 // https://www.jianshu.com/p/d0aadf5cdf57
 export default defineNuxtPlugin(async (nuxtApp) => {
-  console.log('vue-lazyload plugin loading...');
-
   if (import.meta.server === true) {
     nuxtApp.vueApp.directive('lazy', {});
     return;
@@ -27,6 +25,4 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       }
     }
   });
-
-  console.log('vue-lazyload plugin loaded');
 });

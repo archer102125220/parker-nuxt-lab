@@ -1,8 +1,6 @@
 'use strict';
 import { Model } from 'sequelize';
 
-console.log('models/firebasemessaging.js');
-
 export function createFirebaseMessaging(sequelize, DataTypes) {
   class FirebaseMessaging extends Model {
     /**
@@ -27,7 +25,5 @@ export function createFirebaseMessaging(sequelize, DataTypes) {
   );
   return FirebaseMessaging;
 }
-
-console.log('models/firebasemessaging.js end');
 
 export default createFirebaseMessaging;

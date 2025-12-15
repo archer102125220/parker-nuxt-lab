@@ -51,8 +51,6 @@ import { Server } from 'socket.io';
 import * as socketIo from 'socket.io';
 
 export default defineNitroPlugin((nitroApp) => {
-  console.log('server plugins socket.io');
-
   const engine = new Engine();
   const io = new Server();
 
@@ -129,11 +127,7 @@ export default defineNitroPlugin((nitroApp) => {
   };
 
   nitroApp.hooks.hook('close', () => {
-    console.log('server plugins socket.io close');
     io.close();
     engine.close();
-    console.log('server plugins socket.io close end');
   });
-
-  console.log('server plugins socket.io hooks registered');
 });

@@ -28,7 +28,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default defineNuxtPlugin(() => {
-  console.log('utils plugin loaded');
   return {
     provide: {
       amountFormat,

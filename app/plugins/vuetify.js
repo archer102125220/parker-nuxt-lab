@@ -10,8 +10,6 @@ import '@mdi/font/css/materialdesignicons.css';
 
 // https://nuxt.com/docs/migration/plugins-and-middleware#plugins-and-middleware
 export default defineNuxtPlugin((nuxtApp) => {
-  console.log('vuetify plugin loading...');
-
   const i18n = { global: nuxtApp.$i18n };
 
   const vuetify = createVuetify({
@@ -50,6 +48,4 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   nuxtApp.vueApp.use(vuetify);
-
-  console.log('vuetify plugin loaded');
 });

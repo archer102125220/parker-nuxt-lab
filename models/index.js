@@ -1,8 +1,6 @@
 import _Sequelize from 'sequelize';
 import process from 'process';
 
-console.log('models/index.js');
-
 import databaseConfig from '@models/config/database';
 import createFirebaseMessaging from '@models/firebasemessaging';
 
@@ -47,5 +45,3 @@ export const Sequelize = selfeDatabases.Sequelize;
 
 export const database = selfeDatabases;
 export default database;
-
-console.log('models/index.js end');

@@ -7,8 +7,6 @@ const LAYOUT_SETTING = [
 ];
 
 export default defineNuxtRouteMiddleware((to) => {
-  console.log('03.layout-switch.global.js', to);
-
   const getRouteBaseName = useRouteBaseName();
   const getLocalePath = useLocalePath();
 

@@ -6,8 +6,6 @@ export default defineNuxtPlugin({
   name: 'firebase-plugin',
 
   async setup() {
-    console.log('firebase plugin loading...');
-
     const Firebase = new firebase();
 
     const provide = { firebase };
@@ -27,7 +25,6 @@ export default defineNuxtPlugin({
       provide.firebaseFirestoreUpdate(Firebase.store);
     }
 
-    console.log('firebase plugin loaded');
     return {
       provide
     };

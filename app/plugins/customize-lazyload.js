@@ -1,7 +1,5 @@
 const config = {};
 export default defineNuxtPlugin((nuxtApp) => {
-  console.log('customize lazyload plugin loading...');
-
   let observer = null;
   if (typeof window?.IntersectionObserver === 'function') {
     function handleLazyload(element) {
@@ -165,6 +163,4 @@ export default defineNuxtPlugin((nuxtApp) => {
   };
   nuxtApp.vueApp.directive('customize-lazyload', customizeLazyload);
   nuxtApp.vueApp.directive('customizeLazyload', customizeLazyload);
-
-  console.log('customize lazyload plugin loaded');
 });

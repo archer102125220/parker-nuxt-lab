@@ -150,32 +150,35 @@ export default defineNuxtConfig({
   },
   hooks: {
     // Copy AI models to output directory during build
-    // async 'nitro:build:public-assets'(nitro) {
-    //   console.log('🔧 Nitro compiled hook: Copying AI model files...');
-    //   try {
-    //     const sourceModelsDir = path.join(__dirname, 'public/ai_models');
-    //     const targetModelsDir = path.join(nitro.options.output.dir, 'ai_models');
-    //     // Check if source models directory exists
-    //     if (fs.existsSync(sourceModelsDir)) {
-    //       // Ensure target directory exists
-    //       await fs.ensureDir(targetModelsDir);
-    //       // Copy all model files
-    //       await fs.copy(sourceModelsDir, targetModelsDir, {
-    //         overwrite: true,
-    //         errorOnExist: false
-    //       });
-    //       console.log('✅ AI models copied successfully');
-    //       console.log('   Source:', sourceModelsDir);
-    //       console.log('   Target:', targetModelsDir);
-    //     } else {
-    //       console.warn('⚠️  Models directory not found:', sourceModelsDir);
-    //       console.warn('   Models will need to be added before deployment');
-    //     }
-    //   } catch (error) {
-    //     console.error('❌ Failed to copy AI models:', error);
-    //     // Don't throw - allow build to continue even if models aren't present yet
-    //   }
-    // }
+    async 'nitro:build:public-assets'(nitro) {
+      console.log('🔧 Nitro compiled hook: Copying AI model files...');
+      try {
+        const sourceModelsDir = path.join(__dirname, 'public/ai_models');
+        const targetModelsDir = path.join(
+          nitro.options.output.dir,
+          'ai_models'
+        );
+        // Check if source models directory exists
+        if (fs.existsSync(sourceModelsDir)) {
+          // Ensure target directory exists
+          await fs.ensureDir(targetModelsDir);
+          // Copy all model files
+          await fs.copy(sourceModelsDir, targetModelsDir, {
+            overwrite: true,
+            errorOnExist: false
+          });
+          console.log('✅ AI models copied successfully');
+          console.log('   Source:', sourceModelsDir);
+          console.log('   Target:', targetModelsDir);
+        } else {
+          console.warn('⚠️  Models directory not found:', sourceModelsDir);
+          console.warn('   Models will need to be added before deployment');
+        }
+      } catch (error) {
+        console.error('❌ Failed to copy AI models:', error);
+        // Don't throw - allow build to continue even if models aren't present yet
+      }
+    }
   },
   routeRules: {
     // '/': { isr: true },
@@ -194,9 +197,7 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/': {
-      // prerender: true // 使用預渲染避免 Vercel Hobby 方案的 SSR 超時
       isr: true
-      // ssr: true
     },
     '/zh': {
       isr: true
@@ -272,7 +273,6 @@ export default defineNuxtConfig({
     // '/admin/**': { ssr: false }
   },
   nitro: {
-    preset: 'vercel',
     experimental: {
       websocket: true,
       // Allow larger file uploads (10MB) for face swap images
@@ -420,7 +420,7 @@ export default defineNuxtConfig({
     },
     '@nuxtjs/i18n',
     '@vite-pwa/nuxt',
-    'nuxt-security' // 測試: 暫時禁用
+    'nuxt-security'
   ],
   i18n: {
     strategy,

@@ -12,8 +12,6 @@ import 'dayjs/locale/zh-tw';
 export const dayjs = _dayjs;
 
 export default defineNuxtPlugin(() => {
-  console.log('dayjs plugin loading...');
-
   dayjs.extend(relativeTime);
   dayjs.extend(isBetween);
   dayjs.extend(isToday);
@@ -22,7 +20,6 @@ export default defineNuxtPlugin(() => {
   dayjs.extend(calendar);
   dayjs.extend(duration);
 
-  console.log('dayjs plugin loaded');
   return {
     provide: {
       dayjs

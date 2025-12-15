@@ -14,16 +14,12 @@
   />
 </template>
 <script setup>
-console.log('components LoadingBar');
-
 const props = defineProps({
   position: { type: String, default: 'absolute' },
   loading: { type: Boolean, default: false },
   height: { type: String, default: '6' },
   width: { type: String, default: '100%' }
 });
-
-console.log('components LoadingBar end');
 </script>
 
 <style lang="scss" scoped>

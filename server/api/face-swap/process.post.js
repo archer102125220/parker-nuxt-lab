@@ -3,8 +3,6 @@
 import { performFaceSwap } from '@server/utils/face-swap';
 
 export default defineEventHandler(async (event) => {
-  console.log('face-swap/process.post.js');
-
   try {
     // Read multipart form data
     const formData = await readMultipartFormData(event);
@@ -70,7 +68,5 @@ export default defineEventHandler(async (event) => {
       statusCode: 500,
       message: error.message || '人臉替換處理失敗'
     });
-  } finally {
-    console.log('face-swap/process.post.js - end');
   }
 });
