@@ -6,6 +6,17 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const nuxtApp = useNuxtApp();
   console.log('02.log.global.js useNuxtApp done');
 
+  const localeCodes = nuxtApp.$i18n?.localeCodes?.value || [];
+  const hrefArray = to?.href?.split?.('/') || [];
+
+  // 如果當前路徑已經包含 locale 前綴，直接返回，避免無限循環
+  if (hrefArray.length > 1 && localeCodes.includes(hrefArray[1])) {
+    console.log(
+      '02.log.global.js: path already has locale prefix, skipping redirect'
+    );
+    return;
+  }
+
   const i18nLocale = nuxtApp.$getLocalLanguage('');
   console.log('02.log.global.js getLocalLanguage done');
 
@@ -27,38 +38,22 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   console.log(`url: ${url.href}`);
 
   const headersLocale = acceptLanguage?.includes?.('zh-TW') ? 'zh' : 'en';
-  const localeCodes = nuxtApp.$i18n?.localeCodes?.value || [];
-  const hrefArray = to?.href?.split?.('/');
-  // console.log({ hrefArray, localeCodes });
 
   if (
     typeof acceptLanguage === 'string' &&
     acceptLanguage !== '' &&
     (typeof i18nLocale !== 'string' || i18nLocale === '') &&
-    headersLocale !== i18nLocale &&
-    localeCodes.includes(hrefArray[1]) === true
+    headersLocale !== i18nLocale
   ) {
     const locale = i18nLocale || headersLocale;
     const localePath = useLocalePath();
     const localeHref = localePath(to.href, locale);
-    // console.log({
-    //   pathname: url.pathname,
-    //   href: to.href,
-    //   localeHref,
-    //   locales: nuxtApp.$i18n?.locales?.value,
-    //   localeCodes,
-    //   headersLocale,
-    //   i18nLocale,
-    //   cookieLocale: cookieLocale.value,
-    //   hrefArray
-    // });
 
     if (url.pathname !== localeHref) {
-      // nuxtApp.$setLocalLanguage(locale);
+      console.log('02.log.global.js: redirecting to', localeHref);
       return await navigateTo(localeHref);
     }
   }
 
-  // const h = useRequestHeaders(['x-forwarded-for', 'x-real-ip', 'user-agent']);
-  // console.log(h);
+  console.log('02.log.global.js: no redirect needed');
 });
