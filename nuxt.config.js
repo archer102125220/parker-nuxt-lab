@@ -154,10 +154,7 @@ export default defineNuxtConfig({
       console.log('🔧 Nitro compiled hook: Copying AI model files...');
       try {
         const sourceModelsDir = path.join(__dirname, 'public/models');
-        const targetModelsDir = path.join(
-          nitro.options.output.publicDir,
-          'models'
-        );
+        const targetModelsDir = path.join(nitro.options.output.dir, 'models');
         // Check if source models directory exists
         if (fs.existsSync(sourceModelsDir)) {
           // Ensure target directory exists
