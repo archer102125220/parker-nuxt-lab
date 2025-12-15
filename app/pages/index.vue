@@ -23,8 +23,6 @@
 </template>
 
 <script setup>
-console.log('pages index.vue');
-
 useHeadMataData();
 definePageMeta({
   title: 'system.defaultTitle'
@@ -125,8 +123,6 @@ const linkList = computed(() => [
   },
   { to: localePath('/face-swap'), label: 'AI 換臉 測試' }
 ]);
-
-console.log('pages index.vue end');
 </script>
 
 <style lang="scss">
