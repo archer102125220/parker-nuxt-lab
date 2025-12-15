@@ -85,7 +85,7 @@ face-api.js 處理通常在 10 秒內完成，但 InsightFace 可能需要更長
 
    ```
    Environment: production
-   Loading face-api models from: /var/task/public/models
+   Loading face-api models from: /var/task/public/ai_models
    ✅ Face-api models loaded successfully
    ```
 

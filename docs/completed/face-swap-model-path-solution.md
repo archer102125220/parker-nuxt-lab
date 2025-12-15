@@ -17,11 +17,11 @@
 let modelsPath;
 
 if (process.env.NODE_ENV === 'production') {
-  // 生產環境：使用 .output/public/models
-  modelsPath = join(process.cwd(), 'public/models');
+  // 生產環境：使用 .output/public/ai_models
+  modelsPath = join(process.cwd(), 'public/ai_models');
 } else {
-  // 開發環境：使用專案根目錄 public/models
-  modelsPath = join(process.cwd(), 'public/models');
+  // 開發環境：使用專案根目錄 public/ai_models
+  modelsPath = join(process.cwd(), 'public/ai_models');
 }
 ```
 
@@ -34,8 +34,8 @@ if (process.env.NODE_ENV === 'production') {
 nitro: {
   hooks: {
     async 'compiled'(nitro) {
-      const sourceModelsDir = path.join(__dirname, 'public/models');
-      const targetModelsDir = path.join(nitro.options.output.dir, 'public/models');
+      const sourceModelsDir = path.join(__dirname, 'public/ai_models');
+      const targetModelsDir = path.join(nitro.options.output.dir, 'public/ai_models');
 
       if (fs.existsSync(sourceModelsDir)) {
         await fs.ensureDir(targetModelsDir);
@@ -80,16 +80,16 @@ nitro: {
 
 ### 開發模式
 
-1. 模型位於：`project-root/public/models/`
+1. 模型位於：`project-root/public/ai_models/`
 2. `process.cwd()` 指向專案根目錄
-3. 路徑解析為：`project-root/public/models/`
+3. 路徑解析為：`project-root/public/ai_models/`
 
 ### 生產模式
 
 1. 打包時 `compiled` hook 觸發
-2. 自動複製 `public/models/` → `.output/public/models/`
+2. 自動複製 `public/ai_models/` → `.output/public/ai_models/`
 3. 運行時 `process.cwd()` 指向 `.output/`
-4. 路徑解析為：`.output/public/models/`
+4. 路徑解析為：`.output/public/ai_models/`
 
 ## 優勢
 
@@ -107,7 +107,7 @@ nitro: {
 yarn dev
 # 檢查控制台輸出：
 # Environment: development
-# Loading face-api models from: /path/to/project/public/models
+# Loading face-api models from: /path/to/project/public/ai_models
 # ✅ Face-api models loaded successfully
 ```
 
@@ -122,7 +122,7 @@ yarn build
 yarn preview
 # 檢查運行日誌：
 # Environment: production
-# Loading face-api models from: /path/to/.output/public/models
+# Loading face-api models from: /path/to/.output/public/ai_models
 # ✅ Face-api models loaded successfully
 ```
 
@@ -134,8 +134,8 @@ yarn preview
 // 未來的 server/utils/face-swap-insightface.js
 const modelsPath =
   process.env.NODE_ENV === 'production'
-    ? join(process.cwd(), 'public/models/insightface')
-    : join(process.cwd(), 'public/models/insightface');
+    ? join(process.cwd(), 'public/ai_models/insightface')
+    : join(process.cwd(), 'public/ai_models/insightface');
 ```
 
 模型會在打包時自動複製到正確位置。

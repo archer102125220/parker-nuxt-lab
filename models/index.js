@@ -1,6 +1,8 @@
 import _Sequelize from 'sequelize';
 import process from 'process';
 
+console.log('models/index.js');
+
 import databaseConfig from '@models/config/database';
 import createFirebaseMessaging from '@models/firebasemessaging';
 
@@ -8,7 +10,8 @@ const pluginBatabases = {
   FirebaseMessaging: createFirebaseMessaging
 };
 
-const env = process.env.NODE_ENV || (import.meta?.dev ? 'development' : 'production');
+const env =
+  process.env.NODE_ENV || (import.meta?.dev ? 'development' : 'production');
 const config = databaseConfig[env] || {};
 
 let _sequelize = null;
@@ -25,8 +28,11 @@ if (config.use_env_variable) {
 
 const selfeDatabases = {};
 
-Object.keys(pluginBatabases).forEach(modelName => {
-  selfeDatabases[modelName] = pluginBatabases[modelName](_sequelize, _Sequelize.DataTypes);
+Object.keys(pluginBatabases).forEach((modelName) => {
+  selfeDatabases[modelName] = pluginBatabases[modelName](
+    _sequelize,
+    _Sequelize.DataTypes
+  );
   if (selfeDatabases[modelName].associate) {
     selfeDatabases[modelName].associate(selfeDatabases);
   }
@@ -41,3 +47,5 @@ export const Sequelize = selfeDatabases.Sequelize;
 
 export const database = selfeDatabases;
 export default database;
+
+console.log('models/index.js end');

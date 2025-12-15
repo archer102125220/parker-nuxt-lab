@@ -1,4 +1,3 @@
-
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute, setCatchHandler } from 'workbox-routing';
 // import { CacheFirst, StaleWhileRevalidate, NetworkOnly } from 'workbox-strategies';
@@ -119,15 +118,15 @@ precacheAndRoute(self.__WB_MANIFEST);
 // 為 face-api 模型文件添加運行時快取
 // 這些文件不會在 PWA 安裝時預快取，而是在首次使用時才下載並快取
 registerRoute(
-  /\/models\/.*\.(json|shard\d+)$/,
+  /\/ai_models\/.*\.(json|shard\d+)$/,
   new CacheFirst({
-    cacheName: 'face-api-models',
+    cacheName: 'face-api-ai_models',
     plugins: [
       new ExpirationPlugin({
         maxEntries: 50, // 最多快取 50 個模型文件
-        maxAgeSeconds: 60 * 60 * 24 * 30, // 30 天
-      }),
-    ],
+        maxAgeSeconds: 60 * 60 * 24 * 30 // 30 天
+      })
+    ]
   })
 );
 
@@ -148,14 +147,14 @@ registerRoute(
           const request = cacheKeyResponse.request;
           if (
             cacheKeyResponse.mode === 'write' ||
-            (typeof request?.headers?.get === 'function' && request.headers.get('X-Is-Cacheable') === 'true')
+            (typeof request?.headers?.get === 'function' &&
+              request.headers.get('X-Is-Cacheable') === 'true')
           ) {
-
             return cacheKeyResponse.request;
           }
         }
-      },
-    ],
+      }
+    ]
   }),
   'GET'
 );
@@ -185,7 +184,7 @@ registerRoute(
     },
     cacheableResponse: {
       statuses: [0, 200]
-    },
+    }
   }),
   'GET'
 );
@@ -228,8 +227,8 @@ registerRoute(
     plugins: [
       new ExpirationPlugin({
         maxEntries: 50,
-        maxAgeSeconds: 60 * 60 * 2, // 2 小時
-      }),
-    ],
+        maxAgeSeconds: 60 * 60 * 2 // 2 小時
+      })
+    ]
   })
 );

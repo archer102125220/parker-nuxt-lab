@@ -135,7 +135,7 @@ graph TB
 
 ### 模型檔案 (待下載)
 
-需要下載至 `public/models/insightface/`：
+需要下載至 `public/ai_models/insightface/`：
 
 | 模型                 | 用途       | 大小   | 狀態 |
 | -------------------- | ---------- | ------ | ---- |
@@ -189,7 +189,7 @@ graph TB
 
 - [ ] 安裝 `onnxruntime-node` 和 `sharp`
 - [ ] 下載 InsightFace 模型檔案
-- [ ] 建立模型目錄結構 `public/models/insightface/`
+- [ ] 建立模型目錄結構 `public/ai_models/insightface/`
 - [ ] 測試模型載入
 
 #### Phase 4.2: 核心功能實作

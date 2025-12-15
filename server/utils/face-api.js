@@ -62,11 +62,11 @@ export async function loadModels() {
   let modelsPath;
 
   if (process.env.NODE_ENV === 'production') {
-    // Production: models are in .output/public/models after build
-    modelsPath = join(process.cwd(), 'public/models');
+    // Production: models are in .output/public/ai_models after build
+    modelsPath = join(process.cwd(), 'public/ai_models');
   } else {
-    // Development: models are in project root public/models
-    modelsPath = join(process.cwd(), 'public/models');
+    // Development: models are in project root public/ai_models
+    modelsPath = join(process.cwd(), 'public/ai_models');
   }
 
   console.log('Environment:', process.env.NODE_ENV);

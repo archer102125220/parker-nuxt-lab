@@ -153,8 +153,8 @@ export default defineNuxtConfig({
     // async 'nitro:build:public-assets'(nitro) {
     //   console.log('🔧 Nitro compiled hook: Copying AI model files...');
     //   try {
-    //     const sourceModelsDir = path.join(__dirname, 'public/models');
-    //     const targetModelsDir = path.join(nitro.options.output.dir, 'models');
+    //     const sourceModelsDir = path.join(__dirname, 'public/ai_models');
+    //     const targetModelsDir = path.join(nitro.options.output.dir, 'ai_models');
     //     // Check if source models directory exists
     //     if (fs.existsSync(sourceModelsDir)) {
     //       // Ensure target directory exists
@@ -507,7 +507,7 @@ export default defineNuxtConfig({
 
       // 排除大型文件和不必要的資源
       globIgnores: [
-        '**/models/**', // 排除 face-api 模型文件（15MB），改用運行時快取
+        '**/ai_models/**', // 排除 face-api 模型文件（15MB），改用運行時快取
         '**/node_modules/**',
         '**/*.map'
       ]

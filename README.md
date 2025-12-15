@@ -19,7 +19,6 @@ An experimental Nuxt 4 project that integrates PWA, i18n, Pinia, Vuetify, Socket
 - **Additional Libraries**: WangEditor 5.1 (rich text editor), FIDO2, QR Code, Swiper 11.1, Day.js, Axios 1.7
 - **Analytics**: Vercel Analytics & Speed Insights
 
-
 ## Key Directories
 
 - `pages/`: Example pages such as `web-rtc/`, `socket-test/`, `server-sent-event-test/`
@@ -27,8 +26,7 @@ An experimental Nuxt 4 project that integrates PWA, i18n, Pinia, Vuetify, Socket
 - `server/`: Nitro server APIs, routes, plugins
 - `service-worker/`: PWA Service Worker and Firebase Messaging SW
 - `models/`: Sequelize setup and migrations
-- `public/models/`: `face-api.js` weight files
-
+- `public/ai_models/`: `face-api.js` weight files
 
 ## Requirements
 
@@ -37,13 +35,11 @@ An experimental Nuxt 4 project that integrates PWA, i18n, Pinia, Vuetify, Socket
 - PostgreSQL (if you use Sequelize features)
 - On macOS, see node-canvas install notes in references
 
-
 ## Install
 
 ```bash
 yarn install
 ```
-
 
 ## Development
 
@@ -61,7 +57,6 @@ yarn dev-https
 
 > Provide your own `local-ssl/cert.pem` and `local-ssl/key.pem` if needed.
 
-
 ## Build & Preview
 
 Build:
@@ -78,7 +73,6 @@ yarn preview
 # or run the built output
 yarn start
 ```
-
 
 ## Scripts Overview
 
@@ -114,7 +108,6 @@ yarn test:e2e-ui
 yarn test:codegen
 ```
 
-
 ## Env & Config
 
 Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes placeholders under `runtimeConfig.public` (mostly commented for opt-in):
@@ -129,7 +122,6 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 
 > Some routes (e.g., Firebase Cloud Messaging) are skipped during prerender via `nitro.hooks['prerender:generate']`.
 
-
 ## PWA Highlights
 
 - `@vite-pwa/nuxt` with `injectManifest`; SW file: `./service-worker/service-worker.js`
@@ -137,12 +129,10 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - Cache size cap: `maximumFileSizeToCacheInBytes: 22MB`
 - PWA can be enabled in dev (`devOptions.enabled`)
 
-
 ## Security & Headers
 
 - Integrated `nuxt-security`; production vs dev CSP variants
 - Multiple Permissions Policy directives (`camera`, `microphone`, `fullscreen`, etc.)
-
 
 ## Styling & DX
 
@@ -186,10 +176,10 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
     ```
 
 **Detailed Documentation**:
+
 - [CSS Naming Convention Audit Plan](./docs/in-progress/css-naming-audit-plan.md)
 - [CSS Naming Convention Quick Reference](./docs/in-progress/css-naming-quick-reference.md)
 - [CSS Naming Convention Progress](./docs/in-progress/css-naming-progress.md)
-
 
 ## Realtime / Media Pages
 
@@ -200,12 +190,10 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 
 > Socket.IO server-side routes in `server/`; client setup in `plugins/07.socket.client.js` and `composables/useSocketIoClient.js`.
 
-
 ## API & Swagger
 
 - Swagger JSON: `/api/nuxt-server/swagger-docs` (prerendered via `routeRules`)
 - Also see `pages/swagger-doc.vue` for UI rendering
-
 
 ## Testing (Playwright)
 
@@ -213,18 +201,15 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - `yarn pretest` builds with `.env.e2e` and starts on port 3001 before tests
 - Config: `playwright.config.ts`; specs in `tests/`
 
-
 ## Platform Notes
 
 - Windows: on startup, `@tensorflow/tfjs-node`'s `tensorflow.dll` is copied from `napi-v9` to `napi-v8` to avoid load issues (see logic at top of `nuxt.config.js`).
 - macOS: see node-canvas install notes in references.
 
-
 ## Assets & Models
 
-- `public/models`: `face-api.js` weight files
+- `public/ai_models`: `face-api.js` weight files
   - Reference: <https://github.com/justadudewhohacks/face-api.js/tree/master>
-
 
 ## References
 

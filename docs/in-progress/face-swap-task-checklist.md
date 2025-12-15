@@ -62,7 +62,7 @@
 - [ ] Download InsightFace model files
   - [ ] Download buffalo_l models (det_10g, w600k_r50, 2d106det)
   - [ ] Download inswapper_128.onnx model
-- [ ] Create model directory structure `public/models/insightface/`
+- [ ] Create model directory structure `public/ai_models/insightface/`
 - [ ] Test model loading
 
 #### Phase 4.2: Core Implementation

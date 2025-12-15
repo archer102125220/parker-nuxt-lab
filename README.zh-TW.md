@@ -19,7 +19,6 @@
 - **額外套件**: WangEditor 5.1（富文本編輯器）、FIDO2、QR Code、Swiper 11.1、Day.js、Axios 1.7
 - **分析工具**: Vercel Analytics & Speed Insights
 
-
 ## 目錄重點
 
 - `pages/`：多個示範頁（如 `web-rtc/`、`socket-test/`、`server-sent-event-test/`）
@@ -27,8 +26,7 @@
 - `server/`：Nitro 端 API、路由、外掛
 - `service-worker/`：PWA Service Worker 與 Firebase Messaging SW
 - `models/`：Sequelize 設定與 migrations
-- `public/models/`：`face-api.js` 權重檔案（weights）
-
+- `public/ai_models/`：`face-api.js` 權重檔案（weights）
 
 ## 環境需求
 
@@ -37,13 +35,11 @@
 - PostgreSQL（若使用 Sequelize 相關功能）
 - macOS 安裝 `node-canvas` 依賴可參考官方文件
 
-
 ## 安裝依賴
 
 ```bash
 yarn install
 ```
-
 
 ## 開發模式
 
@@ -61,7 +57,6 @@ yarn dev-https
 
 > 若需自備憑證，請將 `local-ssl/cert.pem`、`local-ssl/key.pem` 放入對應路徑。
 
-
 ## 打包與預覽
 
 建置：
@@ -78,7 +73,6 @@ yarn preview
 # 或使用正式輸出後的 Node 啟動（會用 3001 埠）
 yarn start
 ```
-
 
 ## 重要指令總覽
 
@@ -114,7 +108,6 @@ yarn test:e2e-ui
 yarn test:codegen
 ```
 
-
 ## 環境變數與設定
 
 請將敏感金鑰與 API 端點置於 `.env`（或透過部署平台的環境變數）。
@@ -130,7 +123,6 @@ yarn test:codegen
 
 > 部分頁面（如 Firebase Cloud Messaging）在預先產生（prerender）時會被跳過，相關行為已於 `nuxt.config.js` 的 `nitro.hooks['prerender:generate']` 中處理。
 
-
 ## PWA 設定重點
 
 - 使用 `@vite-pwa/nuxt`，策略為 `injectManifest`，Service Worker 來源：`./service-worker/service-worker.js`
@@ -138,12 +130,10 @@ yarn test:codegen
 - 快取容量上限：`maximumFileSizeToCacheInBytes: 22MB`
 - 開發模式可啟用 PWA（`devOptions.enabled`）
 
-
 ## 安全性與標頭
 
 - 已整合 `nuxt-security`，並在生產與開發區分不同的 **CSP** 設定
 - 設定了多項 **Permissions Policy**（如 `camera`、`microphone`、`fullscreen` 等）
-
 
 ## 前端體驗與樣式
 
@@ -187,10 +177,10 @@ yarn test:codegen
     ```
 
 **詳細文檔**:
+
 - [CSS 命名規範審查與修正計劃](./docs/in-progress/css-naming-audit-plan.md)
 - [CSS 命名規範快速參考](./docs/in-progress/css-naming-quick-reference.md)
 - [CSS 命名規範修正進度](./docs/in-progress/css-naming-progress.md)
-
 
 ## 即時通訊 / 影音相關頁面
 
@@ -201,12 +191,10 @@ yarn test:codegen
 
 > Socket.IO 伺服器端路由與設定可在 `server/` 下查看，客戶端設定則在 `plugins/07.socket.client.js` 與 `composables/useSocketIoClient.js`。
 
-
 ## API 與 Swagger
 
 - Swagger JSON：`/api/nuxt-server/swagger-docs`（已在 `routeRules` 中設定 prerender）
 - 亦有 `pages/swagger-doc.vue` 可視化查看 API 文件
-
 
 ## 測試（Playwright）
 
@@ -214,18 +202,15 @@ yarn test:codegen
 - `yarn pretest` 會先以 `.env.e2e` 建置並啟動於 3001 埠，之後再執行測試
 - 測試配置：`playwright.config.ts`，測試案例位於 `tests/`
 
-
 ## 平台相容性備註
 
 - Windows：專案啟動時會自動將 `@tensorflow/tfjs-node` 的 `tensorflow.dll` 自 `napi-v9` 複製到 `napi-v8` 以避免載入問題（見 `nuxt.config.js` 開頭邏輯）
 - macOS：安裝 `canvas`（node-canvas）請參考官方文件或下方連結
 
-
 ## 資料與模型
 
-- `public/models`：`face-api.js` 權重檔案（weights）
+- `public/ai_models`：`face-api.js` 權重檔案（weights）
   - 來源參考：<https://github.com/justadudewhohacks/face-api.js/tree/master>
-
 
 ## 參考連結
 
@@ -233,5 +218,3 @@ yarn test:codegen
 - 部署文件：<https://nuxt.com/docs/getting-started/deployment>
 - face-api.js models（weights）：<https://github.com/justadudewhohacks/face-api.js/tree/master>
 - mac 安裝 node-canvas：<https://github.com/Automattic/node-canvas>
-
-

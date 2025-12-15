@@ -125,7 +125,7 @@ useHeadMataData({
 // https://justadudewhohacks.github.io/face-api.js/docs/globals.html
 // https://gitee.com/tongjh/face-api-demo
 
-const MODELS_PATH = '/models';
+const MODELS_PATH = '/ai_models';
 
 const system = useSystemStore();
 

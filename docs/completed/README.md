@@ -149,14 +149,14 @@
 
 **環境感知路徑解析：**
 
-- 開發環境：`project-root/public/models/`
-- 生產環境：`.output/public/models/`
+- 開發環境：`project-root/public/ai_models/`
+- 生產環境：`.output/public/ai_models/`
 - 統一使用 `process.cwd()` + 環境判斷
 
 **自動複製機制：**
 
 - Nitro `compiled` hook 在打包時觸發
-- 自動複製 `public/models/` → `.output/public/models/`
+- 自動複製 `public/ai_models/` → `.output/public/ai_models/`
 - 支援所有 AI 模型（face-api.js、InsightFace）
 
 **優勢：**
