@@ -150,7 +150,7 @@ export default defineNuxtConfig({
   },
   hooks: {
     // Copy AI models to output directory during build
-    async compiled(nitro) {
+    async 'nitro:build:public-assets'(nitro) {
       console.log('🔧 Nitro compiled hook: Copying AI model files...');
       try {
         const sourceModelsDir = path.join(__dirname, 'public/models');
