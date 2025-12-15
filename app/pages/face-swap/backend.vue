@@ -4,7 +4,7 @@
       class="face_swap_backend_page-banner"
       max-height="200"
       cover
-      src="/img/face-api/face-api-v.04.webp"
+      src="/img/face-swap/face-swap-v.02.png"
     />
 
     <h1 class="face_swap_backend_page-title">後端 AI 人臉替換</h1>
