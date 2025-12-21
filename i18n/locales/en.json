@@ -1,301 +1,354 @@
 {
-  "en": "English",
-  "zh-tw": "Chinese",
-  "system": {
-    "systemName": "Parker's Nuxt lab",
-    "defaultTitle": "Parker's Nuxt lab",
-    "titleTemplate": "Parker's Nuxt lab",
-    "description": "Parker's Nuxt Laboratory"
-  },
-  "index": {
-    "about": "About",
-    "components": "Custom components and third-party integrations",
-    "directives": "Custom Vue directives",
-    "route": "Route-related tests",
-    "css_drawing": "CSS drawing tests",
-    "web_authn": "Biometric authentication test (native)",
-    "fido2_lib": "Biometric authentication test (fido2-lib)",
-    "web_cam": "WebCam test",
-    "face_api": "face_api test",
-    "frontend_cach_api": "Frontend API cache test",
-    "firebase": "Firebase integration test",
-    "socket": "Socket tests",
-    "server_sent_event": "Server-Sent Event tests",
-    "web_rtc": "WebRTC tests"
-  },
-  "components": {
-    "description": {
-      "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
-      "span2": "Others are integrated because no official Vue version exists; we wrap vanilla JS libraries as components."
+    "en": "English",
+    "zh-tw": "Chinese",
+    "system": {
+        "systemName": "Parker's Nuxt lab",
+        "defaultTitle": "Parker's Nuxt lab",
+        "titleTemplate": "Parker's Nuxt lab",
+        "description": "Parker's Nuxt Laboratory"
     },
-    "tab": "Tabs component test",
-    "scroll_fetch": "Pull-to-refresh / Infinite scroll test",
-    "wang_editor": "WangEditor (HTML editor) test",
-    "youtube": "YouTube test",
-    "components": "Combined components test (Tabs, Pull-to-refresh / Infinite scroll, WangEditor (HTML editor), YouTube)",
-    "swiper_js": "SwiperJs test",
-    "swiper": "Custom Swiper test",
-    "qrcode": "QR code test",
-    "slide_in_panel": "Message queue test",
-    "switch": "Switch component test",
-    "go_top": "Back to top component test",
-    "virtual_scroller": "virtual-scroller component test",
-    "enter_label": "Text effect test",
-    "image_upload": "Image upload selector test",
-    "dialog": "Dialog component",
-    "drawer": "Drawer expand/collapse component",
-    "selector": "Dropdown selector component"
-  },
-  "css_drawing": {
-    "description": {
-      "span1": "Mainly CSS drawing and anime.js integration tests"
+    "index": {
+        "about": "About",
+        "components": "Custom components and third-party integrations",
+        "directives": "Custom Vue directives",
+        "route": "Route-related tests",
+        "css_drawing": "CSS drawing tests",
+        "web_authn": "Biometric authentication test (native)",
+        "fido2_lib": "Biometric authentication test (fido2-lib)",
+        "web_cam": "WebCam test",
+        "face_api": "face_api test",
+        "frontend_cach_api": "Frontend API cache test",
+        "firebase": "Firebase integration test",
+        "socket": "Socket tests",
+        "server_sent_event": "Server-Sent Event tests",
+        "web_rtc": "WebRTC tests"
     },
-    "triangle": "CSS triangle test",
-    "triangle_full": "Fullscreen CSS triangle test",
-    "triangle_anime": "Fullscreen CSS triangle animation test",
-    "hexagon": "CSS hexagon test",
-    "svg_color": "SVG color replacement test"
-  },
-  "directives": {
-    "description": {
-      "span1": "To avoid incompatibility or project mismatch with npm tools, we implement directives ourselves."
+    "home": {
+        "hero": {
+            "subtitle": "Explore the Infinite Possibilities of Nuxt 4",
+            "description": "An experimental project built on Nuxt 4, integrating PWA, real-time communication, AI/ML, comprehensive testing suite, and other modern frontend and backend technologies",
+            "cta_explore": "Start Exploring",
+            "cta_about": "Learn More"
+        },
+        "features": {
+            "title": "Core Features",
+            "pwa": {
+                "title": "PWA Support",
+                "description": "Complete Progressive Web App support including Service Worker, offline caching, and push notifications"
+            },
+            "realtime": {
+                "title": "Real-time Communication",
+                "description": "Integration of multiple real-time technologies including WebRTC, Socket.IO, WebSocket, and Server-Sent Events"
+            },
+            "ai": {
+                "title": "AI/ML Integration",
+                "description": "Integration with face-api.js, TensorFlow.js and other ML frameworks for facial recognition, face swapping, and more"
+            },
+            "testing": {
+                "title": "Comprehensive Testing",
+                "description": "E2E testing with Playwright to ensure project quality and stability"
+            }
+        },
+        "navigation": {
+            "title": "Feature Navigation"
+        },
+        "nav": {
+            "about_desc": "Learn about the project's technical architecture, tech stack, and development philosophy",
+            "components_desc": "Explore custom components and third-party integration examples",
+            "directives_desc": "View custom Vue directives implementation and usage",
+            "route_desc": "Test Nuxt routing features and capabilities",
+            "css_drawing_desc": "Visual effects created with CSS and animation libraries",
+            "web_authn_desc": "Native WebAuthn API biometric authentication implementation",
+            "fido2_lib_desc": "Biometric authentication using fido2-lib",
+            "web_cam_desc": "WebCam video stream application testing",
+            "face_api_desc": "face-api.js facial recognition feature demonstration",
+            "frontend_cach_api_desc": "Frontend API caching strategy implementation and testing",
+            "firebase_desc": "Firebase service integration including Cloud Messaging push notifications",
+            "socket_desc": "Socket.IO and WebSocket real-time communication testing",
+            "server_sent_event_desc": "Server-Sent Events unidirectional real-time communication",
+            "web_rtc_desc": "WebRTC peer-to-peer video call functionality testing",
+            "face_swap_desc": "AI face swapping technology implementation showcase"
+        },
+        "stats": {
+            "components": "Components",
+            "pages": "Pages",
+            "features": "Feature Modules",
+            "tests": "Test Cases"
+        }
     },
-    "ripple": "Custom ripple directive test",
-    "lazyload": "Custom lazyload directive test"
-  },
-  "firebase": {
-    "description": {
-      "span1": "Originally implemented in the",
-      "span2": "e-Resume",
-      "span3": "project, but since that project does not implement PWA or other Service Worker features, this project integrates Service Worker for testing."
+    "components": {
+        "description": {
+            "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
+            "span2": "Others are integrated because no official Vue version exists; we wrap vanilla JS libraries as components."
+        },
+        "tab": "Tabs component test",
+        "scroll_fetch": "Pull-to-refresh / Infinite scroll test",
+        "wang_editor": "WangEditor (HTML editor) test",
+        "youtube": "YouTube test",
+        "components": "Combined components test (Tabs, Pull-to-refresh / Infinite scroll, WangEditor (HTML editor), YouTube)",
+        "swiper_js": "SwiperJs test",
+        "swiper": "Custom Swiper test",
+        "qrcode": "QR code test",
+        "slide_in_panel": "Message queue test",
+        "switch": "Switch component test",
+        "go_top": "Back to top component test",
+        "virtual_scroller": "virtual-scroller component test",
+        "enter_label": "Text effect test",
+        "image_upload": "Image upload selector test",
+        "dialog": "Dialog component",
+        "drawer": "Drawer expand/collapse component",
+        "selector": "Dropdown selector component"
     },
-    "cloud_messaging": "FCM push notification admin"
-  },
-  "route": {
-    "description": {
-      "span1": "Mainly for reproductions and note-taking tests"
+    "css_drawing": {
+        "description": {
+            "span1": "Mainly CSS drawing and anime.js integration tests"
+        },
+        "triangle": "CSS triangle test",
+        "triangle_full": "Fullscreen CSS triangle test",
+        "triangle_anime": "Fullscreen CSS triangle animation test",
+        "hexagon": "CSS hexagon test",
+        "svg_color": "SVG color replacement test"
     },
-    "query_back": "Route query and back navigation test",
-    "params_back": "Route params and back navigation test"
-  },
-  "server_sent_event_test": {
-    "description": {
-      "span1": "Test global and route-param grouped Server-Sent Event"
+    "directives": {
+        "description": {
+            "span1": "To avoid incompatibility or project mismatch with npm tools, we implement directives ourselves."
+        },
+        "ripple": "Custom ripple directive test",
+        "lazyload": "Custom lazyload directive test"
     },
-    "global_get": "Server-Sent Event global test",
-    "global_post": "Server-Sent Event POST global test",
-    "room_get": "Server-Sent Event route param group test",
-    "room_post": "Server-Sent Event POST route param group test",
-    "page": {
-      "get_data": "Received data:"
+    "firebase": {
+        "description": {
+            "span1": "Originally implemented in the",
+            "span2": "e-Resume",
+            "span3": "project, but since that project does not implement PWA or other Service Worker features, this project integrates Service Worker for testing."
+        },
+        "cloud_messaging": "FCM push notification admin"
+    },
+    "route": {
+        "description": {
+            "span1": "Mainly for reproductions and note-taking tests"
+        },
+        "query_back": "Route query and back navigation test",
+        "params_back": "Route params and back navigation test"
+    },
+    "server_sent_event_test": {
+        "description": {
+            "span1": "Test global and route-param grouped Server-Sent Event"
+        },
+        "global_get": "Server-Sent Event global test",
+        "global_post": "Server-Sent Event POST global test",
+        "room_get": "Server-Sent Event route param group test",
+        "room_post": "Server-Sent Event POST route param group test",
+        "page": {
+            "get_data": "Received data:"
+        }
+    },
+    "socket": {
+        "description": {
+            "span1": "Record results of native + Nuxt4 built-in websocket and",
+            "span2": "socket.io",
+            "span3": "implementations on both frontend and backend"
+        },
+        "warning": "Current deployment may not support WebSocket (e.g., Vercel), so it may not work",
+        "socket_io": "Frontend and backend handled by socket.io",
+        "websocket": "Frontend native / backend Nuxt4 built-in",
+        "page": {
+            "get_data": "Received data:"
+        }
+    },
+    "web_rtc": {
+        "description": {
+            "span1": "The video feature is basically done, but the detailed flow is incomplete. To test, copy the URL manually.",
+            "span2": "WebRTC implementation tests mainly include:"
+        },
+        "socket_io": "Implemented with socket.io",
+        "websocket": "Implemented with frontend native / backend Nuxt4 built-in",
+        "server_sent_event": "Implemented with SSE"
+    },
+    "$vuetify": {
+        "badge": "Badge",
+        "open": "Open",
+        "close": "Close",
+        "dismiss": "Dismiss",
+        "confirmEdit": {
+            "ok": "OK",
+            "cancel": "Cancel"
+        },
+        "dataIterator": {
+            "noResultsText": "No matching records found",
+            "loadingText": "Loading items..."
+        },
+        "dataTable": {
+            "itemsPerPageText": "Rows per page:",
+            "ariaLabel": {
+                "sortDescending": "Sorted descending.",
+                "sortAscending": "Sorted ascending.",
+                "sortNone": "Not sorted.",
+                "activateNone": "Activate to remove sorting.",
+                "activateDescending": "Activate to sort descending.",
+                "activateAscending": "Activate to sort ascending."
+            },
+            "sortBy": "Sort by"
+        },
+        "dataFooter": {
+            "itemsPerPageText": "Items per page:",
+            "itemsPerPageAll": "All",
+            "nextPage": "Next page",
+            "prevPage": "Previous page",
+            "firstPage": "First page",
+            "lastPage": "Last page",
+            "pageText": "{0}-{1} of {2}"
+        },
+        "dateRangeInput": {
+            "divider": "to"
+        },
+        "datePicker": {
+            "itemsSelected": "{0} selected",
+            "range": {
+                "title": "Select dates",
+                "header": "Enter dates"
+            },
+            "title": "Select date",
+            "header": "Enter date",
+            "input": {
+                "placeholder": "Enter date"
+            },
+            "ariaLabel": {
+                "previousMonth": "Previous month",
+                "nextMonth": "Next month",
+                "selectYear": "Select year",
+                "selectDate": "{0}",
+                "currentDate": "Today, {0}"
+            }
+        },
+        "noDataText": "No data available",
+        "carousel": {
+            "prev": "Previous visual",
+            "next": "Next visual",
+            "ariaLabel": {
+                "delimiter": "Carousel slide {0} of {1}"
+            }
+        },
+        "calendar": {
+            "moreEvents": "{0} more",
+            "today": "Today"
+        },
+        "input": {
+            "clear": "Clear {0}",
+            "prependAction": "{0} prepended action",
+            "appendAction": "{0} appended action",
+            "otp": "Please enter OTP character {0}"
+        },
+        "fileInput": {
+            "counter": "{0} files",
+            "counterSize": "{0} files ({1} in total)"
+        },
+        "fileUpload": {
+            "title": "Drag and drop files here",
+            "divider": "or",
+            "browse": "Browse Files"
+        },
+        "timePicker": {
+            "am": "AM",
+            "pm": "PM",
+            "title": "Select Time"
+        },
+        "pagination": {
+            "ariaLabel": {
+                "root": "Pagination Navigation",
+                "next": "Next page",
+                "previous": "Previous page",
+                "page": "Go to page {0}",
+                "currentPage": "Page {0}, Current page",
+                "first": "First page",
+                "last": "Last page"
+            }
+        },
+        "stepper": {
+            "next": "Next",
+            "prev": "Previous"
+        },
+        "rating": {
+            "ariaLabel": {
+                "item": "Rating {0} of {1}"
+            }
+        },
+        "loading": "Loading...",
+        "infiniteScroll": {
+            "loadMore": "Load more",
+            "empty": "No more"
+        },
+        "rules": {
+            "required": "This field is required",
+            "email": "Please enter a valid email",
+            "number": "This field can only contain numbers",
+            "integer": "This field can only contain integer values",
+            "capital": "This field can only contain uppercase letters",
+            "maxLength": "You must enter a maximum of {0} characters",
+            "minLength": "You must enter a minimum of {0} characters",
+            "strictLength": "The length of the entered field is invalid",
+            "exclude": "The {0} character is not allowed",
+            "notEmpty": "Please choose at least one value",
+            "pattern": "Invalid format"
+        },
+        "hotkey": {
+            "then": "then",
+            "ctrl": "Ctrl",
+            "command": "Command",
+            "space": "Space",
+            "shift": "Shift",
+            "alt": "Alt",
+            "enter": "Enter",
+            "escape": "Escape",
+            "upArrow": "Up Arrow",
+            "downArrow": "Down Arrow",
+            "leftArrow": "Left Arrow",
+            "rightArrow": "Right Arrow",
+            "backspace": "Backspace",
+            "option": "Option",
+            "plus": "plus",
+            "shortcut": "Keyboard shortcut: {0}"
+        },
+        "video": {
+            "play": "Play",
+            "pause": "Pause",
+            "seek": "Seek",
+            "volume": "Volume",
+            "showVolume": "Show volume control",
+            "mute": "Mute",
+            "unmute": "Unmute",
+            "enterFullscreen": "Full screen",
+            "exitFullscreen": "Exit full screen"
+        },
+        "colorPicker": {
+            "ariaLabel": {
+                "eyedropper": "Select color with eyedropper",
+                "hueSlider": "Hue",
+                "alphaSlider": "Alpha",
+                "redInput": "Red value",
+                "greenInput": "Green value",
+                "blueInput": "Blue value",
+                "alphaInput": "Alpha value",
+                "hueInput": "Hue value",
+                "saturationInput": "Saturation value",
+                "lightnessInput": "Lightness value",
+                "hexInput": "HEX value",
+                "hexaInput": "HEX with alpha value",
+                "changeFormat": "Change color format"
+            }
+        }
+    },
+    "offline": {
+        "title": "No Internet Connection",
+        "description": "Please check your internet connection and try again later.",
+        "backOnline": "You're back online!",
+        "canRetry": "You can now reload the page.",
+        "online": "Online",
+        "offline": "Offline",
+        "retry": "Reload",
+        "goHome": "Go Home",
+        "tipTitle": "Tip",
+        "tipMessage": "Previously visited pages can be browsed offline.",
+        "autoDetect": "Network status changes will be detected automatically"
     }
-  },
-  "socket": {
-    "description": {
-      "span1": "Record results of native + Nuxt4 built-in websocket and",
-      "span2": "socket.io",
-      "span3": "implementations on both frontend and backend"
-    },
-    "warning": "Current deployment may not support WebSocket (e.g., Vercel), so it may not work",
-    "socket_io": "Frontend and backend handled by socket.io",
-    "websocket": "Frontend native / backend Nuxt4 built-in",
-    "page": {
-      "get_data": "Received data:"
-    }
-  },
-  "web_rtc": {
-    "description": {
-      "span1": "The video feature is basically done, but the detailed flow is incomplete. To test, copy the URL manually.",
-      "span2": "WebRTC implementation tests mainly include:"
-    },
-    "socket_io": "Implemented with socket.io",
-    "websocket": "Implemented with frontend native / backend Nuxt4 built-in",
-    "server_sent_event": "Implemented with SSE"
-  },
-  "$vuetify": {
-    "badge": "Badge",
-    "open": "Open",
-    "close": "Close",
-    "dismiss": "Dismiss",
-    "confirmEdit": {
-      "ok": "OK",
-      "cancel": "Cancel"
-    },
-    "dataIterator": {
-      "noResultsText": "No matching records found",
-      "loadingText": "Loading items..."
-    },
-    "dataTable": {
-      "itemsPerPageText": "Rows per page:",
-      "ariaLabel": {
-        "sortDescending": "Sorted descending.",
-        "sortAscending": "Sorted ascending.",
-        "sortNone": "Not sorted.",
-        "activateNone": "Activate to remove sorting.",
-        "activateDescending": "Activate to sort descending.",
-        "activateAscending": "Activate to sort ascending."
-      },
-      "sortBy": "Sort by"
-    },
-    "dataFooter": {
-      "itemsPerPageText": "Items per page:",
-      "itemsPerPageAll": "All",
-      "nextPage": "Next page",
-      "prevPage": "Previous page",
-      "firstPage": "First page",
-      "lastPage": "Last page",
-      "pageText": "{0}-{1} of {2}"
-    },
-    "dateRangeInput": {
-      "divider": "to"
-    },
-    "datePicker": {
-      "itemsSelected": "{0} selected",
-      "range": {
-        "title": "Select dates",
-        "header": "Enter dates"
-      },
-      "title": "Select date",
-      "header": "Enter date",
-      "input": {
-        "placeholder": "Enter date"
-      },
-      "ariaLabel": {
-        "previousMonth": "Previous month",
-        "nextMonth": "Next month",
-        "selectYear": "Select year",
-        "selectDate": "{0}",
-        "currentDate": "Today, {0}"
-      }
-    },
-    "noDataText": "No data available",
-    "carousel": {
-      "prev": "Previous visual",
-      "next": "Next visual",
-      "ariaLabel": {
-        "delimiter": "Carousel slide {0} of {1}"
-      }
-    },
-    "calendar": {
-      "moreEvents": "{0} more",
-      "today": "Today"
-    },
-    "input": {
-      "clear": "Clear {0}",
-      "prependAction": "{0} prepended action",
-      "appendAction": "{0} appended action",
-      "otp": "Please enter OTP character {0}"
-    },
-    "fileInput": {
-      "counter": "{0} files",
-      "counterSize": "{0} files ({1} in total)"
-    },
-    "fileUpload": {
-      "title": "Drag and drop files here",
-      "divider": "or",
-      "browse": "Browse Files"
-    },
-    "timePicker": {
-      "am": "AM",
-      "pm": "PM",
-      "title": "Select Time"
-    },
-    "pagination": {
-      "ariaLabel": {
-        "root": "Pagination Navigation",
-        "next": "Next page",
-        "previous": "Previous page",
-        "page": "Go to page {0}",
-        "currentPage": "Page {0}, Current page",
-        "first": "First page",
-        "last": "Last page"
-      }
-    },
-    "stepper": {
-      "next": "Next",
-      "prev": "Previous"
-    },
-    "rating": {
-      "ariaLabel": {
-        "item": "Rating {0} of {1}"
-      }
-    },
-    "loading": "Loading...",
-    "infiniteScroll": {
-      "loadMore": "Load more",
-      "empty": "No more"
-    },
-    "rules": {
-      "required": "This field is required",
-      "email": "Please enter a valid email",
-      "number": "This field can only contain numbers",
-      "integer": "This field can only contain integer values",
-      "capital": "This field can only contain uppercase letters",
-      "maxLength": "You must enter a maximum of {0} characters",
-      "minLength": "You must enter a minimum of {0} characters",
-      "strictLength": "The length of the entered field is invalid",
-      "exclude": "The {0} character is not allowed",
-      "notEmpty": "Please choose at least one value",
-      "pattern": "Invalid format"
-    },
-    "hotkey": {
-      "then": "then",
-      "ctrl": "Ctrl",
-      "command": "Command",
-      "space": "Space",
-      "shift": "Shift",
-      "alt": "Alt",
-      "enter": "Enter",
-      "escape": "Escape",
-      "upArrow": "Up Arrow",
-      "downArrow": "Down Arrow",
-      "leftArrow": "Left Arrow",
-      "rightArrow": "Right Arrow",
-      "backspace": "Backspace",
-      "option": "Option",
-      "plus": "plus",
-      "shortcut": "Keyboard shortcut: {0}"
-    },
-    "video": {
-      "play": "Play",
-      "pause": "Pause",
-      "seek": "Seek",
-      "volume": "Volume",
-      "showVolume": "Show volume control",
-      "mute": "Mute",
-      "unmute": "Unmute",
-      "enterFullscreen": "Full screen",
-      "exitFullscreen": "Exit full screen"
-    },
-    "colorPicker": {
-      "ariaLabel": {
-        "eyedropper": "Select color with eyedropper",
-        "hueSlider": "Hue",
-        "alphaSlider": "Alpha",
-        "redInput": "Red value",
-        "greenInput": "Green value",
-        "blueInput": "Blue value",
-        "alphaInput": "Alpha value",
-        "hueInput": "Hue value",
-        "saturationInput": "Saturation value",
-        "lightnessInput": "Lightness value",
-        "hexInput": "HEX value",
-        "hexaInput": "HEX with alpha value",
-        "changeFormat": "Change color format"
-      }
-    }
-  },
-  "offline": {
-    "title": "No Internet Connection",
-    "description": "Please check your internet connection and try again later.",
-    "backOnline": "You're back online!",
-    "canRetry": "You can now reload the page.",
-    "online": "Online",
-    "offline": "Offline",
-    "retry": "Reload",
-    "goHome": "Go Home",
-    "tipTitle": "Tip",
-    "tipMessage": "Previously visited pages can be browsed offline.",
-    "autoDetect": "Network status changes will be detected automatically"
-  }
 }

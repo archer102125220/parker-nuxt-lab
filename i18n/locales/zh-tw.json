@@ -1,301 +1,354 @@
 {
-  "en": "英文",
-  "zh-tw": "繁體中文",
-  "system": {
-    "systemName": "Parker 的 Nuxt實驗室",
-    "defaultTitle": "Parker 的 Nuxt實驗室",
-    "titleTemplate": "Parker 的 Nuxt 實驗室",
-    "description": "Parker 的 Nuxt實驗室"
-  },
-  "index": {
-    "about": "關於本站",
-    "components": "自製組件及第三方整合組件",
-    "directives": "自製vue指令",
-    "route": "route相關測試",
-    "css_drawing": "css繪圖相關測試",
-    "web_authn": "生物辨識測試（原生）",
-    "fido2_lib": "生物辨識測試（fido2-lib）",
-    "web_cam": "WebCam測試",
-    "face_api": "face-api測試",
-    "frontend_cach_api": "前端api快取測試",
-    "firebase": "firebase整合測試",
-    "socket": "socket測試",
-    "server_sent_event": "Server Sent Event測試",
-    "web_rtc": "WebRTC測試"
-  },
-  "components": {
-    "description": {
-      "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
-      "span2": "其餘主要是因為該套件並未提供vue版本，因此整合供純js之版本為組件的方式做實作"
+    "en": "英文",
+    "zh-tw": "繁體中文",
+    "system": {
+        "systemName": "Parker 的 Nuxt實驗室",
+        "defaultTitle": "Parker 的 Nuxt實驗室",
+        "titleTemplate": "Parker 的 Nuxt 實驗室",
+        "description": "Parker 的 Nuxt實驗室"
     },
-    "tab": "Tabs組件測試",
-    "scroll_fetch": "下拉重載/無限滾動測試",
-    "wang_editor": "WangEditor（HTML編輯器）測試",
-    "youtube": "Youtube測試",
-    "components": "組件綜合測試（Tabs組件、下拉重載/無限滾動測試、WangEditor（HTML編輯器）、Youtube測試）",
-    "swiper_js": "SwiperJs測試",
-    "swiper": "自製Swiper測試",
-    "qrcode": "QRcode測試",
-    "slide_in_panel": "訊息佇列測試",
-    "switch": "switch組件測試",
-    "go_top": "返回置頂組件測試",
-    "virtual_scroller": "virtual-scroller組件測試",
-    "enter_label": "文字特效測試",
-    "image_upload": "選擇圖片組件測試",
-    "dialog": "彈窗組件",
-    "drawer": "抽屜收展組件",
-    "selector": "下拉選單組件"
-  },
-  "css_drawing": {
-    "description": {
-      "span1": "主要以css繪圖及anime.js整合測試為主"
+    "index": {
+        "about": "關於本站",
+        "components": "自製組件及第三方整合組件",
+        "directives": "自製vue指令",
+        "route": "route相關測試",
+        "css_drawing": "css繪圖相關測試",
+        "web_authn": "生物辨識測試（原生）",
+        "fido2_lib": "生物辨識測試（fido2-lib）",
+        "web_cam": "WebCam測試",
+        "face_api": "face-api測試",
+        "frontend_cach_api": "前端api快取測試",
+        "firebase": "firebase整合測試",
+        "socket": "socket測試",
+        "server_sent_event": "Server Sent Event測試",
+        "web_rtc": "WebRTC測試"
     },
-    "triangle": "css三角形測試",
-    "triangle_full": "css三角形滿版測試",
-    "triangle_anime": "css三角形滿版動畫測試",
-    "hexagon": "css六邊形測試",
-    "svg_color": "svg替換顏色測試"
-  },
-  "directives": {
-    "description": {
-      "span1": "為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關directives"
+    "home": {
+        "hero": {
+            "subtitle": "探索 Nuxt 4 的無限可能",
+            "description": "一個以 Nuxt 4 為核心的實驗型專案，整合 PWA、即時通訊、AI/ML、完整測試套件等現代化前後端技術",
+            "cta_explore": "開始探索",
+            "cta_about": "了解更多"
+        },
+        "features": {
+            "title": "核心特色",
+            "pwa": {
+                "title": "PWA 支援",
+                "description": "完整的漸進式網頁應用支援，包含 Service Worker、離線快取、推播通知等功能"
+            },
+            "realtime": {
+                "title": "即時通訊",
+                "description": "整合 WebRTC、Socket.IO、WebSocket 和 Server-Sent Events 等多種即時通訊技術"
+            },
+            "ai": {
+                "title": "AI/ML 整合",
+                "description": "整合 face-api.js、TensorFlow.js 等機器學習框架，實現人臉辨識、換臉等 AI 功能"
+            },
+            "testing": {
+                "title": "完整測試",
+                "description": "使用 Playwright 進行 E2E 測試，確保專案品質與穩定性"
+            }
+        },
+        "navigation": {
+            "title": "功能導覽"
+        },
+        "nav": {
+            "about_desc": "了解專案的技術架構、使用的技術棧和開發理念",
+            "components_desc": "探索自製組件和第三方整合組件的實作範例",
+            "directives_desc": "查看自製 Vue 指令的實作和使用方式",
+            "route_desc": "測試 Nuxt 路由相關功能和特性",
+            "css_drawing_desc": "使用 CSS 和動畫庫創作的視覺效果展示",
+            "web_authn_desc": "原生 WebAuthn API 的生物辨識實作",
+            "fido2_lib_desc": "使用 fido2-lib 實作的生物辨識功能",
+            "web_cam_desc": "WebCam 視訊串流的應用測試",
+            "face_api_desc": "face-api.js 人臉辨識功能展示",
+            "frontend_cach_api_desc": "前端 API 快取策略的實作與測試",
+            "firebase_desc": "Firebase 服務整合，包含 Cloud Messaging 推播通知",
+            "socket_desc": "Socket.IO 和 WebSocket 即時通訊測試",
+            "server_sent_event_desc": "Server-Sent Events 單向即時通訊實作",
+            "web_rtc_desc": "WebRTC 點對點視訊通話功能測試",
+            "face_swap_desc": "AI 人臉交換技術的實作展示"
+        },
+        "stats": {
+            "components": "組件數量",
+            "pages": "頁面數量",
+            "features": "功能模組",
+            "tests": "測試案例"
+        }
     },
-    "ripple": "自製ripple directive測試",
-    "lazyload": "自製lazyload directive測試"
-  },
-  "firebase": {
-    "description": {
-      "span1": "原本在",
-      "span2": "電子履歷",
-      "span3": "中實作並測試的功能，但由於該專案並沒有實作PWA等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試"
+    "components": {
+        "description": {
+            "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
+            "span2": "其餘主要是因為該套件並未提供vue版本，因此整合供純js之版本為組件的方式做實作"
+        },
+        "tab": "Tabs組件測試",
+        "scroll_fetch": "下拉重載/無限滾動測試",
+        "wang_editor": "WangEditor（HTML編輯器）測試",
+        "youtube": "Youtube測試",
+        "components": "組件綜合測試（Tabs組件、下拉重載/無限滾動測試、WangEditor（HTML編輯器）、Youtube測試）",
+        "swiper_js": "SwiperJs測試",
+        "swiper": "自製Swiper測試",
+        "qrcode": "QRcode測試",
+        "slide_in_panel": "訊息佇列測試",
+        "switch": "switch組件測試",
+        "go_top": "返回置頂組件測試",
+        "virtual_scroller": "virtual-scroller組件測試",
+        "enter_label": "文字特效測試",
+        "image_upload": "選擇圖片組件測試",
+        "dialog": "彈窗組件",
+        "drawer": "抽屜收展組件",
+        "selector": "下拉選單組件"
     },
-    "cloud_messaging": "FCM推播通知後台"
-  },
-  "route": {
-    "description": {
-      "span1": "主要用作複現狀況，篇筆記用途的測試"
+    "css_drawing": {
+        "description": {
+            "span1": "主要以css繪圖及anime.js整合測試為主"
+        },
+        "triangle": "css三角形測試",
+        "triangle_full": "css三角形滿版測試",
+        "triangle_anime": "css三角形滿版動畫測試",
+        "hexagon": "css六邊形測試",
+        "svg_color": "svg替換顏色測試"
     },
-    "query_back": "路由query與上一頁測試",
-    "params_back": "路由參數與上一頁測試"
-  },
-  "server_sent_event_test": {
-    "description": {
-      "span1": "測試全域及依照route param做分組的 Server-Sent Event"
+    "directives": {
+        "description": {
+            "span1": "為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關directives"
+        },
+        "ripple": "自製ripple directive測試",
+        "lazyload": "自製lazyload directive測試"
     },
-    "global_get": "Server Sent Event全域測試",
-    "global_post": "Server Sent Event Post全域測試",
-    "room_get": "Server Sent Event route param分組測試",
-    "room_post": "Server Sent Event Post route param分組測試",
-    "page": {
-      "get_data": "接收到的data："
+    "firebase": {
+        "description": {
+            "span1": "原本在",
+            "span2": "電子履歷",
+            "span3": "中實作並測試的功能，但由於該專案並沒有實作PWA等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試"
+        },
+        "cloud_messaging": "FCM推播通知後台"
+    },
+    "route": {
+        "description": {
+            "span1": "主要用作複現狀況，篇筆記用途的測試"
+        },
+        "query_back": "路由query與上一頁測試",
+        "params_back": "路由參數與上一頁測試"
+    },
+    "server_sent_event_test": {
+        "description": {
+            "span1": "測試全域及依照route param做分組的 Server-Sent Event"
+        },
+        "global_get": "Server Sent Event全域測試",
+        "global_post": "Server Sent Event Post全域測試",
+        "room_get": "Server Sent Event route param分組測試",
+        "room_post": "Server Sent Event Post route param分組測試",
+        "page": {
+            "get_data": "接收到的data："
+        }
+    },
+    "socket": {
+        "description": {
+            "span1": "紀錄原生配合Nuxt4內建的websocket以及前後端皆由",
+            "span2": "socket.io",
+            "span3": "實作的結果"
+        },
+        "warning": "*當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效",
+        "socket_io": "前後端皆由socket.io做處理",
+        "websocket": "前端原生/後端Nuxt4內建",
+        "page": {
+            "get_data": "接收到的data："
+        }
+    },
+    "web_rtc": {
+        "description": {
+            "span1": "目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試",
+            "span2": "WebRTC的實作測試，主要分爲："
+        },
+        "socket_io": "配合socket.io實作",
+        "websocket": "配合前端原生/後端Nuxt4內建實作",
+        "server_sent_event": "配合SSE實作"
+    },
+    "$vuetify": {
+        "badge": "徽章",
+        "open": "開啟",
+        "close": "關閉",
+        "dismiss": "關閉",
+        "confirmEdit": {
+            "ok": "確定",
+            "cancel": "取消"
+        },
+        "dataIterator": {
+            "noResultsText": "沒有符合條件的結果",
+            "loadingText": "讀取中..."
+        },
+        "dataTable": {
+            "itemsPerPageText": "每頁列數：",
+            "ariaLabel": {
+                "sortDescending": "：降序排列。",
+                "sortAscending": "：升序排列。",
+                "sortNone": "無排序方式。點擊以升序排列。",
+                "activateNone": "點擊以移除排序方式。",
+                "activateDescending": "點擊以降序排列。",
+                "activateAscending": "點擊以移除排序方式。"
+            },
+            "sortBy": "排序方式"
+        },
+        "dataFooter": {
+            "itemsPerPageText": "每頁項目：",
+            "itemsPerPageAll": "全部",
+            "nextPage": "下一頁",
+            "prevPage": "上一頁",
+            "firstPage": "第一頁",
+            "lastPage": "最後頁",
+            "pageText": "{2} 條中的 {0}~{1} 條"
+        },
+        "dateRangeInput": {
+            "divider": "至"
+        },
+        "datePicker": {
+            "itemsSelected": "已選擇 {0} 個日期",
+            "range": {
+                "title": "選擇日期範圍",
+                "header": "輸入日期範圍"
+            },
+            "title": "選擇日期",
+            "header": "輸入日期",
+            "input": {
+                "placeholder": "請輸入日期"
+            },
+            "ariaLabel": {
+                "previousMonth": "上個月",
+                "nextMonth": "下個月",
+                "selectYear": "選擇年份",
+                "selectDate": "{0}",
+                "currentDate": "今天，{0}"
+            }
+        },
+        "noDataText": "沒有資料",
+        "carousel": {
+            "prev": "上一張",
+            "next": "下一張",
+            "ariaLabel": {
+                "delimiter": "第 {0} 張 / 共 {1} 張"
+            }
+        },
+        "calendar": {
+            "moreEvents": "還有其他 {0} 項",
+            "today": "今天"
+        },
+        "input": {
+            "clear": "清除 {0}",
+            "prependAction": "{0} 前置操作",
+            "appendAction": "{0} 附加操作",
+            "otp": "請輸入第 {0} 個 OTP 字元"
+        },
+        "fileInput": {
+            "counter": "{0} 個檔案",
+            "counterSize": "{0} 個檔案（共 {1}）"
+        },
+        "fileUpload": {
+            "title": "拖曳檔案至此",
+            "divider": "或",
+            "browse": "瀏覽檔案"
+        },
+        "timePicker": {
+            "am": "上午",
+            "pm": "下午",
+            "title": "選擇時間"
+        },
+        "pagination": {
+            "ariaLabel": {
+                "root": "分頁導航",
+                "next": "下一頁",
+                "previous": "上一頁",
+                "page": "轉到頁面 {0}",
+                "currentPage": "當前頁 {0}",
+                "first": "第一頁",
+                "last": "最後一頁"
+            }
+        },
+        "stepper": {
+            "next": "下一步",
+            "prev": "上一步"
+        },
+        "rating": {
+            "ariaLabel": {
+                "item": "評分 {0} / {1}"
+            }
+        },
+        "loading": "載入中...",
+        "infiniteScroll": {
+            "loadMore": "載入更多",
+            "empty": "沒有更多內容"
+        },
+        "rules": {
+            "required": "此欄位為必填項",
+            "email": "請輸入有效的電子郵件地址",
+            "number": "此欄位只能包含數字",
+            "integer": "此欄位只能包含整數",
+            "capital": "此欄位只能包含大寫字母",
+            "maxLength": "您最多可以輸入{0}個字符",
+            "minLength": "您必須至少輸入{0}個字符",
+            "strictLength": "輸入欄位的長度無效",
+            "exclude": "字符{0}是不允許的",
+            "notEmpty": "請至少選擇一個值",
+            "pattern": "格式無效"
+        },
+        "hotkey": {
+            "then": "然後",
+            "ctrl": "Ctrl",
+            "command": "Command",
+            "shift": "Shift",
+            "alt": "Alt",
+            "option": "Option",
+            "enter": "Enter",
+            "escape": "Escape",
+            "upArrow": "上箭頭",
+            "downArrow": "下箭頭",
+            "leftArrow": "左箭頭",
+            "rightArrow": "右箭頭",
+            "backspace": "退格",
+            "space": "空格",
+            "plus": "加",
+            "shortcut": "鍵盤快捷鍵：{0}"
+        },
+        "video": {
+            "play": "播放",
+            "pause": "暫停",
+            "seek": "搜尋",
+            "volume": "音量",
+            "showVolume": "顯示音量控制",
+            "mute": "靜音",
+            "unmute": "取消靜音",
+            "enterFullscreen": "全螢幕",
+            "exitFullscreen": "退出全螢幕"
+        },
+        "colorPicker": {
+            "ariaLabel": {
+                "eyedropper": "從螢幕上選取顏色",
+                "hueSlider": "色相",
+                "alphaSlider": "透明度",
+                "redInput": "紅色",
+                "greenInput": "綠色",
+                "blueInput": "藍色",
+                "alphaInput": "透明度",
+                "hueInput": "色相",
+                "saturationInput": "飽和度",
+                "lightnessInput": "亮度",
+                "hexInput": "十六進位值",
+                "hexaInput": "帶透明度的十六進位值",
+                "changeFormat": "變更顏色格式"
+            }
+        }
+    },
+    "offline": {
+        "title": "目前沒有網路連線",
+        "description": "請檢查您的網路連線，或稍後再試。",
+        "backOnline": "網路已恢復！",
+        "canRetry": "您現在可以重新載入頁面了。",
+        "online": "已連線",
+        "offline": "離線",
+        "retry": "重新載入",
+        "goHome": "返回首頁",
+        "tipTitle": "提示",
+        "tipMessage": "已訪問過的頁面可以在離線狀態下瀏覽。",
+        "autoDetect": "系統會自動偵測網路狀態變化"
     }
-  },
-  "socket": {
-    "description": {
-      "span1": "紀錄原生配合Nuxt4內建的websocket以及前後端皆由",
-      "span2": "socket.io",
-      "span3": "實作的結果"
-    },
-    "warning": "*當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效",
-    "socket_io": "前後端皆由socket.io做處理",
-    "websocket": "前端原生/後端Nuxt4內建",
-    "page": {
-      "get_data": "接收到的data："
-    }
-  },
-  "web_rtc": {
-    "description": {
-      "span1": "目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試",
-      "span2": "WebRTC的實作測試，主要分爲："
-    },
-    "socket_io": "配合socket.io實作",
-    "websocket": "配合前端原生/後端Nuxt4內建實作",
-    "server_sent_event": "配合SSE實作"
-  },
-  "$vuetify": {
-    "badge": "徽章",
-    "open": "開啟",
-    "close": "關閉",
-    "dismiss": "關閉",
-    "confirmEdit": {
-      "ok": "確定",
-      "cancel": "取消"
-    },
-    "dataIterator": {
-      "noResultsText": "沒有符合條件的結果",
-      "loadingText": "讀取中..."
-    },
-    "dataTable": {
-      "itemsPerPageText": "每頁列數：",
-      "ariaLabel": {
-        "sortDescending": "：降序排列。",
-        "sortAscending": "：升序排列。",
-        "sortNone": "無排序方式。點擊以升序排列。",
-        "activateNone": "點擊以移除排序方式。",
-        "activateDescending": "點擊以降序排列。",
-        "activateAscending": "點擊以移除排序方式。"
-      },
-      "sortBy": "排序方式"
-    },
-    "dataFooter": {
-      "itemsPerPageText": "每頁項目：",
-      "itemsPerPageAll": "全部",
-      "nextPage": "下一頁",
-      "prevPage": "上一頁",
-      "firstPage": "第一頁",
-      "lastPage": "最後頁",
-      "pageText": "{2} 條中的 {0}~{1} 條"
-    },
-    "dateRangeInput": {
-      "divider": "至"
-    },
-    "datePicker": {
-      "itemsSelected": "已選擇 {0} 個日期",
-      "range": {
-        "title": "選擇日期範圍",
-        "header": "輸入日期範圍"
-      },
-      "title": "選擇日期",
-      "header": "輸入日期",
-      "input": {
-        "placeholder": "請輸入日期"
-      },
-      "ariaLabel": {
-        "previousMonth": "上個月",
-        "nextMonth": "下個月",
-        "selectYear": "選擇年份",
-        "selectDate": "{0}",
-        "currentDate": "今天，{0}"
-      }
-    },
-    "noDataText": "沒有資料",
-    "carousel": {
-      "prev": "上一張",
-      "next": "下一張",
-      "ariaLabel": {
-        "delimiter": "第 {0} 張 / 共 {1} 張"
-      }
-    },
-    "calendar": {
-      "moreEvents": "還有其他 {0} 項",
-      "today": "今天"
-    },
-    "input": {
-      "clear": "清除 {0}",
-      "prependAction": "{0} 前置操作",
-      "appendAction": "{0} 附加操作",
-      "otp": "請輸入第 {0} 個 OTP 字元"
-    },
-    "fileInput": {
-      "counter": "{0} 個檔案",
-      "counterSize": "{0} 個檔案（共 {1}）"
-    },
-    "fileUpload": {
-      "title": "拖曳檔案至此",
-      "divider": "或",
-      "browse": "瀏覽檔案"
-    },
-    "timePicker": {
-      "am": "上午",
-      "pm": "下午",
-      "title": "選擇時間"
-    },
-    "pagination": {
-      "ariaLabel": {
-        "root": "分頁導航",
-        "next": "下一頁",
-        "previous": "上一頁",
-        "page": "轉到頁面 {0}",
-        "currentPage": "當前頁 {0}",
-        "first": "第一頁",
-        "last": "最後一頁"
-      }
-    },
-    "stepper": {
-      "next": "下一步",
-      "prev": "上一步"
-    },
-    "rating": {
-      "ariaLabel": {
-        "item": "評分 {0} / {1}"
-      }
-    },
-    "loading": "載入中...",
-    "infiniteScroll": {
-      "loadMore": "載入更多",
-      "empty": "沒有更多內容"
-    },
-    "rules": {
-      "required": "此欄位為必填項",
-      "email": "請輸入有效的電子郵件地址",
-      "number": "此欄位只能包含數字",
-      "integer": "此欄位只能包含整數",
-      "capital": "此欄位只能包含大寫字母",
-      "maxLength": "您最多可以輸入{0}個字符",
-      "minLength": "您必須至少輸入{0}個字符",
-      "strictLength": "輸入欄位的長度無效",
-      "exclude": "字符{0}是不允許的",
-      "notEmpty": "請至少選擇一個值",
-      "pattern": "格式無效"
-    },
-    "hotkey": {
-      "then": "然後",
-      "ctrl": "Ctrl",
-      "command": "Command",
-      "shift": "Shift",
-      "alt": "Alt",
-      "option": "Option",
-      "enter": "Enter",
-      "escape": "Escape",
-      "upArrow": "上箭頭",
-      "downArrow": "下箭頭",
-      "leftArrow": "左箭頭",
-      "rightArrow": "右箭頭",
-      "backspace": "退格",
-      "space": "空格",
-      "plus": "加",
-      "shortcut": "鍵盤快捷鍵：{0}"
-    },
-    "video": {
-      "play": "播放",
-      "pause": "暫停",
-      "seek": "搜尋",
-      "volume": "音量",
-      "showVolume": "顯示音量控制",
-      "mute": "靜音",
-      "unmute": "取消靜音",
-      "enterFullscreen": "全螢幕",
-      "exitFullscreen": "退出全螢幕"
-    },
-    "colorPicker": {
-      "ariaLabel": {
-        "eyedropper": "從螢幕上選取顏色",
-        "hueSlider": "色相",
-        "alphaSlider": "透明度",
-        "redInput": "紅色",
-        "greenInput": "綠色",
-        "blueInput": "藍色",
-        "alphaInput": "透明度",
-        "hueInput": "色相",
-        "saturationInput": "飽和度",
-        "lightnessInput": "亮度",
-        "hexInput": "十六進位值",
-        "hexaInput": "帶透明度的十六進位值",
-        "changeFormat": "變更顏色格式"
-      }
-    }
-  },
-  "offline": {
-    "title": "目前沒有網路連線",
-    "description": "請檢查您的網路連線，或稍後再試。",
-    "backOnline": "網路已恢復！",
-    "canRetry": "您現在可以重新載入頁面了。",
-    "online": "已連線",
-    "offline": "離線",
-    "retry": "重新載入",
-    "goHome": "返回首頁",
-    "tipTitle": "提示",
-    "tipMessage": "已訪問過的頁面可以在離線狀態下瀏覽。",
-    "autoDetect": "系統會自動偵測網路狀態變化"
-  }
 }
