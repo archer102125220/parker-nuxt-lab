@@ -76,6 +76,70 @@
             "tests": "Test Cases"
         }
     },
+    "about": {
+        "hero": {
+            "title": "About",
+            "subtitle": "Exploring Nuxt 4 Experimental Project",
+            "description": "A laboratory focused on exploring and practicing modern frontend technologies"
+        },
+        "overview": {
+            "title": "Project Overview",
+            "intro": "Parker's Nuxt Lab is an experimental project built on Nuxt 4, aimed at exploring and practicing modern frontend and backend technologies.",
+            "purpose": "The main purpose of this project is to test and integrate various cutting-edge technologies, including PWA, real-time communication, AI/ML, and establish a complete set of development practice examples.",
+            "features": "Through custom components and third-party integrations, we have built a feature-rich, well-structured technology showcase platform."
+        },
+        "tech_stack": {
+            "title": "Tech Stack",
+            "frontend": {
+                "title": "Frontend",
+                "items": ["Nuxt 4", "Vue 3", "Vuetify 3", "TypeScript", "SCSS"]
+            },
+            "backend": {
+                "title": "Backend",
+                "items": ["Nuxt Server", "H3", "Nitro", "Node.js"]
+            },
+            "tools": {
+                "title": "Development Tools",
+                "items": ["Vite", "Playwright", "ESLint", "Git"]
+            },
+            "features_tech": {
+                "title": "Featured Technologies",
+                "items": ["PWA", "i18n", "WebRTC", "Socket.IO", "face-api.js"]
+            }
+        },
+        "features": {
+            "title": "Core Features",
+            "pwa": {
+                "title": "PWA Support",
+                "description": "Complete Progressive Web App support including Service Worker, offline caching, and push notifications"
+            },
+            "realtime": {
+                "title": "Real-time Communication",
+                "description": "Integration of multiple real-time technologies including WebRTC, Socket.IO, WebSocket, and Server-Sent Events"
+            },
+            "ai": {
+                "title": "AI/ML Integration",
+                "description": "Integration with face-api.js, TensorFlow.js and other ML frameworks for facial recognition, face swapping, and more"
+            },
+            "testing": {
+                "title": "Comprehensive Testing",
+                "description": "E2E testing with Playwright to ensure project quality and stability"
+            },
+            "components": {
+                "title": "Custom Components",
+                "description": "To avoid package compatibility issues, we implement multiple common components ourselves to ensure project stability and controllability"
+            },
+            "i18n": {
+                "title": "Internationalization",
+                "description": "Complete multilingual support with Traditional Chinese and English interfaces"
+            }
+        },
+        "development": {
+            "title": "Development Philosophy",
+            "philosophy": "This project adheres to the philosophy of 'Experiment, Learn, Share', deepening understanding of various technologies through practice.",
+            "approach": "We value code quality, user experience, and technological innovation, continuously exploring best practices in frontend development."
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

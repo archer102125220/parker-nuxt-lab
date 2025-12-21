@@ -4,7 +4,7 @@
       ref="buttonRef"
       class="language_switcher-button" 
       @click="toggleMenu"
-      :aria-label="$t('en')"
+      aria-label="Language Switcher"
     >
       <img
         src="/img/icon/i18n/i18n.v-04.webp"
@@ -13,27 +13,29 @@
       />
     </button>
     
-    <Teleport to="body">
-      <div 
-        v-if="isOpen" 
-        ref="menuRef"
-        class="language_switcher-menu"
-        :style="menuStyle"
-      >
-        <div class="language_switcher-menu-backdrop" @click="closeMenu"></div>
-        <div class="language_switcher-menu-content">
-          <button
-            v-for="lang in localeList"
-            :key="lang.code"
-            class="language_switcher-menu-item"
-            :class="{ 'language_switcher-menu-item--active': locale === lang.code }"
-            @click="handleLanguageSwitch(lang.code)"
-          >
-            {{ $t(lang.label) }}
-          </button>
+    <ClientOnly>
+      <Teleport to="body">
+        <div 
+          v-if="isOpen" 
+          ref="menuRef"
+          class="language_switcher-menu"
+          :style="menuStyle"
+        >
+          <div class="language_switcher-menu-backdrop" @click="closeMenu"></div>
+          <div class="language_switcher-menu-content">
+            <button
+              v-for="lang in localeList"
+              :key="lang.code"
+              class="language_switcher-menu-item"
+              :class="{ 'language_switcher-menu-item--active': locale === lang.code }"
+              @click="handleLanguageSwitch(lang.code)"
+            >
+              {{ $t(lang.label) }}
+            </button>
+          </div>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
+    </ClientOnly>
   </div>
 </template>
 

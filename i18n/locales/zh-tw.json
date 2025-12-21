@@ -76,6 +76,70 @@
             "tests": "測試案例"
         }
     },
+    "about": {
+        "hero": {
+            "title": "關於本站",
+            "subtitle": "探索 Nuxt 4 的實驗性專案",
+            "description": "一個專注於現代化前端技術探索與實踐的實驗室"
+        },
+        "overview": {
+            "title": "專案概述",
+            "intro": "Parker 的 Nuxt 實驗室是一個以 Nuxt 4 為核心的實驗型專案，旨在探索和實踐現代化的前後端技術。",
+            "purpose": "本專案的主要目的是測試和整合各種前沿技術，包括 PWA、即時通訊、AI/ML 等，並建立一套完整的開發實踐範例。",
+            "features": "透過自製組件和第三方整合，我們打造了一個功能豐富、架構清晰的技術展示平台。"
+        },
+        "tech_stack": {
+            "title": "技術棧",
+            "frontend": {
+                "title": "前端技術",
+                "items": ["Nuxt 4", "Vue 3", "Vuetify 3", "TypeScript", "SCSS"]
+            },
+            "backend": {
+                "title": "後端技術",
+                "items": ["Nuxt Server", "H3", "Nitro", "Node.js"]
+            },
+            "tools": {
+                "title": "開發工具",
+                "items": ["Vite", "Playwright", "ESLint", "Git"]
+            },
+            "features_tech": {
+                "title": "特色功能",
+                "items": ["PWA", "i18n", "WebRTC", "Socket.IO", "face-api.js"]
+            }
+        },
+        "features": {
+            "title": "核心功能",
+            "pwa": {
+                "title": "PWA 支援",
+                "description": "完整的漸進式網頁應用支援，包含 Service Worker、離線快取、推播通知等功能"
+            },
+            "realtime": {
+                "title": "即時通訊",
+                "description": "整合 WebRTC、Socket.IO、WebSocket 和 Server-Sent Events 等多種即時通訊技術"
+            },
+            "ai": {
+                "title": "AI/ML 整合",
+                "description": "整合 face-api.js、TensorFlow.js 等機器學習框架，實現人臉辨識、換臉等 AI 功能"
+            },
+            "testing": {
+                "title": "完整測試",
+                "description": "使用 Playwright 進行 E2E 測試，確保專案品質與穩定性"
+            },
+            "components": {
+                "title": "自製組件",
+                "description": "為避免套件相容性問題，自行實作多個常用組件，確保專案的穩定性和可控性"
+            },
+            "i18n": {
+                "title": "國際化",
+                "description": "完整的多語言支援，提供繁體中文和英文介面"
+            }
+        },
+        "development": {
+            "title": "開發理念",
+            "philosophy": "本專案秉持「實驗、學習、分享」的理念，透過實作來深入理解各種技術的運作原理。",
+            "approach": "我們重視程式碼品質、使用者體驗和技術創新，持續探索前端開發的最佳實踐。"
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
