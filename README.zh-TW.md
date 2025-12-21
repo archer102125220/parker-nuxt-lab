@@ -121,6 +121,15 @@ yarn test:codegen
 - `VITE_FIREBASE_*`（API KEY、VAPID KEY、CREDENTIAL 等）
 - `HTTPS`（若需以環境變數控制 HTTPS 行為）
 
+### Upstash Redis 設定
+
+專案使用 Upstash Redis 作為 WebRTC 功能的即時資料儲存。請在 `.env` 中設定：
+
+- `UPSTASH_REDIS_REST_URL`：Upstash Redis REST API URL
+- `UPSTASH_REDIS_REST_TOKEN`：Upstash Redis REST API Token
+
+> **Redis Key 前綴**：所有 Redis keys 都使用 `nuxt-lab:` 前綴（例如 `nuxt-lab:web-rtc-member-list-{roomId}`），以避免與其他共用同一 Redis 實例的專案產生 key 衝突。
+
 > 部分頁面（如 Firebase Cloud Messaging）在預先產生（prerender）時會被跳過，相關行為已於 `nuxt.config.js` 的 `nitro.hooks['prerender:generate']` 中處理。
 
 ## PWA 設定重點
@@ -187,9 +196,13 @@ yarn test:codegen
 - `pages/socket-test/`（Socket.IO）
 - `pages/server-sent-event-test/`（SSE）
 - `pages/web-rtc/`（WebRTC / Socket.IO / WebSocket / SSE variant）
+  - WebRTC SSE 實作使用 Upstash Redis 儲存房間狀態與成員資訊
+  - 所有 Redis keys 使用 `nuxt-lab:` 前綴以避免多專案共用時的衝突
 - `pages/firebase/`（FCM 示範）
 
 > Socket.IO 伺服器端路由與設定可在 `server/` 下查看，客戶端設定則在 `plugins/07.socket.client.js` 與 `composables/useSocketIoClient.js`。
+> 
+> WebRTC SSE 相關的伺服器端路由位於 `server/routes/server-sent-event/web-rtc/`，使用 `@upstash/redis` 進行即時資料同步。
 
 ## API 與 Swagger
 

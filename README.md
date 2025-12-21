@@ -120,6 +120,15 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - `VITE_FIREBASE_*` (API KEY, VAPID KEY, CREDENTIAL, etc.)
 - `HTTPS` (control HTTPS behavior if needed)
 
+### Upstash Redis Configuration
+
+The project uses Upstash Redis for real-time data storage in WebRTC features. Configure in `.env`:
+
+- `UPSTASH_REDIS_REST_URL`: Upstash Redis REST API URL
+- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis REST API Token
+
+> **Redis Key Prefix**: All Redis keys use the `nuxt-lab:` prefix (e.g., `nuxt-lab:web-rtc-member-list-{roomId}`) to prevent key collisions when sharing the same Redis instance with other projects.
+
 > Some routes (e.g., Firebase Cloud Messaging) are skipped during prerender via `nitro.hooks['prerender:generate']`.
 
 ## PWA Highlights
@@ -186,9 +195,13 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - `pages/socket-test/` (Socket.IO)
 - `pages/server-sent-event-test/` (SSE)
 - `pages/web-rtc/` (WebRTC / Socket.IO / WebSocket / SSE variants)
+  - WebRTC SSE implementation uses Upstash Redis to store room state and member information
+  - All Redis keys use the `nuxt-lab:` prefix to avoid conflicts when sharing with other projects
 - `pages/firebase/` (FCM demo)
 
 > Socket.IO server-side routes in `server/`; client setup in `plugins/07.socket.client.js` and `composables/useSocketIoClient.js`.
+> 
+> WebRTC SSE server routes are located in `server/routes/server-sent-event/web-rtc/`, using `@upstash/redis` for real-time data synchronization.
 
 ## API & Swagger
 
