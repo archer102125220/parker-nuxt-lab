@@ -28,54 +28,11 @@
       </NuxtLink>
     </div>
 
-    <v-btn color="primary" variant="text" rounded>
-      <!-- <p>{{ $t(currentLocaleLabel) }}</p> -->
-      <v-img
-        src="/img/icon/i18n/i18n.v-04.webp"
-        cover
-        width="20"
-        height="20"
-        alt="i18n"
-        :transition="imgTransition"
-      />
-      <v-menu
-        activator="parent"
-        target="parent"
-        location="start"
-        scroll-strategy="none"
-      >
-        <v-list :value="locale">
-          <v-list-item
-            v-for="lang in localeList"
-            :key="lang.code"
-            :value="lang.code"
-            :active="locale === lang.code"
-            color="primary"
-          >
-            <NuxtLink
-              :to="$switchLocalePath(lang.code)"
-              disabled
-              @click="router.replace($switchLocalePath(lang.code))"
-            >
-              <v-list-item-title>
-                {{ $t(lang.label) }}
-              </v-list-item-title>
-            </NuxtLink>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-btn>
+    <LanguageSwitcher />
   </header>
 </template>
 <script setup>
 const router = useRouter();
-const { locale } = useI18n();
-// const switchLocalePath = useSwitchLocalePath();
-
-const localeList = [
-  { code: 'en', label: 'en' },
-  { code: 'zh', label: 'zh-tw' }
-];
 
 const props = defineProps({
   hasBack: { type: Boolean, default: true }
@@ -94,13 +51,6 @@ const imgTransition = computed(() => {
   }
   return false;
 });
-
-// const currentLocaleLabel = computed(() => {
-//   const found = localeList.find(
-//     (localeItem) => localeItem.code === locale.value
-//   );
-//   return found ? found.label : locale.value;
-// });
 
 function handleGoBack() {
   router.back();
@@ -160,14 +110,25 @@ onMounted(() => {
   }
 }
 .layout_header {
+  // Positioning
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  
   // Display & Box Model
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  padding: 8px 16px;
+  padding: 12px 24px;
 
   // Visual
-  background-color: #f8f9fa;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  
+  // Animation
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &[css-animation='true'] {
     // Animation
@@ -233,7 +194,8 @@ onMounted(() => {
         margin: 0;
 
         // Typography
-        color: #343a40;
+        font-weight: 600;
+        color: #2d3748;
 
         &[css-animation='true'] {
           // Animation

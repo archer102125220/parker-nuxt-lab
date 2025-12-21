@@ -28,15 +28,15 @@
   min-height: 100dvh;
 
   &-content {
+    // Display & Box Model
     flex: 1;
-    // min-height: 100vh;
-    width: 90%;
-    margin: auto;
-    padding: 8px;
-
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    
+    // Visual
+    background: transparent;
   }
 }
 </style>
