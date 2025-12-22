@@ -167,32 +167,34 @@ yarn test:codegen
 **範例**：
 ```scss
 .example {
-  /* Positioning */
+  // Positioning
   position: relative;
   top: 0;
   z-index: 10;
 
-  /* Display & Box Model */
+  // Display & Box Model
   display: flex;
   width: 100%;
   padding: 20px;
   border: 1px solid #ccc;
 
-  /* Typography */
+  // Typography
   font-size: 16px;
   color: #333;
 
-  /* Visual */
+  // Visual
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
-  /* Animation */
+  // Animation
   transition: all 0.3s;
 
-  /* Misc */
+  // Misc
   cursor: pointer;
 }
 ```
+
+> 💡 **注意**：在實際開發中，為了保持代碼簡潔，通常不需要在每個屬性分類前加上註解。只有在複雜的樣式中才建議使用註解來提高可讀性。
 
 ### CSS 命名規範
 
@@ -265,6 +267,134 @@ yarn test:codegen
 .hooks_test_page { }
 .description { }
 .grid { }
+```
+
+---
+
+### SCSS Placeholders 樣式複用
+
+專案使用 **SCSS Placeholders（`%name`）** 來實現樣式複用，減少重複代碼並提高可維護性。
+
+#### 為什麼使用 Placeholders？
+
+1. ✅ **減少重複** - 多個選擇器可以繼承相同的樣式
+2. ✅ **提高可維護性** - 修改一處即可影響所有繼承的地方
+3. ✅ **更好的組織** - 將共用樣式集中管理
+4. ✅ **支援響應式** - Placeholders 內可以使用 mixins
+
+#### 使用範例
+
+**定義 Placeholders**：
+```scss
+// 在組件或頁面的 <style> 區塊頂部定義
+%data_block {
+  padding: 40px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+%section_title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+
+  @include tablet {
+    font-size: 20px;
+  }
+  @include mobile {
+    font-size: 18px;
+  }
+}
+
+%data_field {
+  padding: 16px;
+  text-align: left;
+
+  @include tablet {
+    padding: 12px 8px;
+  }
+  @include mobile {
+    padding: 8px 4px;
+  }
+}
+```
+
+**使用 Placeholders**：
+```scss
+.index_page {
+  &-list_section {
+    &-section_title {
+      @extend %section_title;  // 繼承共用樣式
+    }
+
+    &-loading {
+      @extend %data_block;     // 繼承共用樣式
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    &-error {
+      @extend %data_block;     // 繼承共用樣式
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    &-table {
+      &-header {
+        @extend %data_field;   // 繼承共用樣式
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      &-cell {
+        @extend %data_field;   // 繼承共用樣式
+        color: #e1e1e1;
+      }
+    }
+  }
+}
+```
+
+#### Placeholders vs Mixins
+
+**使用 Placeholders 的時機**：
+- ✅ 多個選擇器需要完全相同的樣式
+- ✅ 樣式不需要參數（靜態樣式）
+- ✅ 想要減少 CSS 輸出大小（選擇器會被合併）
+
+**使用 Mixins 的時機**：
+- ✅ 需要參數化的樣式
+- ✅ 需要根據使用情況客製化
+- ✅ 需要在樣式中使用條件邏輯
+
+**Mixins 範例**（響應式設計）：
+```scss
+// assets/css/mixin.scss
+@mixin mobile {
+  @media (max-width: 707px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 1140px) {
+    @content;
+  }
+}
+
+// 使用方式
+.index_page {
+  padding: 20px;
+
+  @include tablet {
+    padding: 12px;
+  }
+  @include mobile {
+    padding: 8px;
+  }
+}
 ```
 
 ---
