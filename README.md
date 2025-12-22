@@ -140,40 +140,349 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - PostCSS includes `autoprefixer` and `postcss-pxtorem` (all properties)
 - Custom `postcss-zerorem` fix to avoid `+ 0` unit issues
 - Global SCSS: `style/global.scss`, `style/animation.scss`; `variable.scss` and `mixin.scss` injected via `additionalData`
-- **CSS Property Order**: The project follows a mainstream CSS property sort order for consistency and maintainability:
-  1. **Positioning** (position, top, left, z-index...)
-  2. **Display & Box Model** (display, flex, width, margin, padding, border...)
-  3. **Typography** (font, color, text-align...)
-  4. **Visual** (background, box-shadow, opacity...)
-  5. **Animation** (transition, animation...)
-  6. **Misc** (cursor, content...)
 
-- **CSS Naming Convention**: The project adopts a modified BEM methodology that cleverly sacrifices the standard BEM visual separator (`__`) in favor of better double-click selection efficiency in development tools, while ensuring CSS specificity and state management semantic integrity through SCSS concatenation and HTML attributes.
-  - **Block**: Use a single name, e.g., `.countdown`
-  - **Element**: Connect Block and Element with a single hyphen `-`, e.g., `.countdown-down_enter`, `.countdown-up_leave`
-  - **Sub-Element**: Connect parent and child elements with a single hyphen `-`, use underscores `_` within element names to separate semantic words, e.g.:
-    - `.countdown-down_enter-down_enter_up`
-    - `.countdown-up_leave-up_leave_down`
-  - **State Modifiers**: Manage states via HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-end-second='true']`
-  - **Advantages**:
-    - Double-click selects the entire class name (no `__` interruption)
-    - Maintains semantic hierarchy through SCSS nesting (`&-element`)
-    - Uses HTML attributes instead of modifier classes for state management, reducing class count
-    - Preserves readability and maintainability
-  - **Example**:
-    ```scss
-    .countdown {
-      &-down_enter {
-        // .countdown-down_enter
-        &-down_enter_up {
-          // .countdown-down_enter-down_enter_up
-          &[css-is-anime-start='true'] {
-            animation: flip-up 1s;
-          }
-        }
-      }
+## 🎨 CSS Development Standards
+
+### CSS Property Order Convention
+
+The project follows mainstream CSS property ordering standards to ensure code consistency and maintainability:
+
+1. **Positioning** (position, top, left, z-index...)
+2. **Display & Box Model** (display, flex, width, margin, padding, border...)
+3. **Typography** (font, color, text-align...)
+4. **Visual** (background, box-shadow, opacity...)
+5. **Animation** (transition, animation...)
+6. **Misc** (cursor, content...)
+
+**Example**:
+```scss
+.example {
+  /* Positioning */
+  position: relative;
+  top: 0;
+  z-index: 10;
+
+  /* Display & Box Model */
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+
+  /* Typography */
+  font-size: 16px;
+  color: #333;
+
+  /* Visual */
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  /* Animation */
+  transition: all 0.3s;
+
+  /* Misc */
+  cursor: pointer;
+}
+```
+
+### CSS Naming Convention
+
+The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing standard BEM's visual symbols (`__`) for better double-click selection efficiency in development tools, while maintaining CSS specificity and state management semantic integrity through SCSS concatenation and HTML attributes.
+
+#### Naming Structure
+
+- **Block**: Single name, e.g., `.countdown`
+- **Element**: Single hyphen `-` connecting Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
+- **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within element names, e.g.:
+  - `.countdown-down_enter-down_enter_up`
+  - `.image_upload-preview-img`
+- **State Modifiers**: Managed through HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+
+#### Root Element Naming Convention
+
+To quickly identify problematic elements in browser dev tools, the project uses the following root element naming convention:
+
+- **Page Root Elements**: Use `[page_name]_page` format
+  - Examples: `.hooks_test_page`, `.socket_io_page`, `.web_rtc_page`
+- **Component Root Elements**: Use `[component_name]` format
+  - Examples: `.scroll_fetch`, `.image_upload`, `.countdown`
+
+**Examples**:
+```scss
+// Page SCSS (pages/hooks-test/index.vue)
+.hooks_test_page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Component SCSS (components/ScrollFetch.vue)
+.scroll_fetch {
+  position: relative;
+  width: 100%;
+}
+```
+
+#### Advantages
+
+1. ✅ **Double-click Selection** - No `__` interruption, complete class name selection
+2. ✅ **SCSS Nesting** - Maintains semantic hierarchy through `&-element`
+3. ✅ **Semantic Clarity** - Underscores separate multiple semantic words
+4. ✅ **State Management** - Uses HTML attributes instead of modifier classes, reducing class count
+5. ✅ **Maintainability** - Preserves good readability and maintainability
+
+#### Examples
+
+**Example 1: Basic Block and Element**
+```scss
+.section {
+  /* Block styles */
+  padding: 20px;
+  background-color: #f5f5f5;
+  
+  &-title {
+    // .section-title (Element connected with hyphen -)
+    margin-top: 0;
+    font-size: 18px;
+  }
+  
+  &-description {
+    // .section-description
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  &-content_box {
+    // .section-content_box (Multiple semantic words within element name use underscore _)
+    padding: 15px;
+    background: white;
+  }
+}
+```
+
+**Example 2: Block with Multiple Semantic Words**
+```scss
+.image_upload {
+  // Block name uses underscore _ for multiple words
+  position: relative;
+  
+  &-preview {
+    // .image_upload-preview (Element connected with hyphen -)
+    width: 100%;
+    
+    &-img {
+      // .image_upload-preview-img (Sub-Element connected with hyphen -)
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
-    ```
+  }
+  
+  &-mask {
+    // .image_upload-mask
+    &[css-is-dragging='true'] {
+      opacity: 0.8;
+    }
+  }
+}
+```
+
+**Example 3: State Management**
+```scss
+.dropdown {
+  position: relative;
+  
+  &-menu {
+    // .dropdown-menu
+    position: absolute;
+    
+    &-item {
+      // .dropdown-menu-item (Sub-Element)
+      padding: 8px;
+      cursor: pointer;
+    }
+  }
+}
+
+.key_status {
+  padding: 10px;
+  
+  &[data-pressed='true'] {
+    // State managed via HTML attributes
+    color: white;
+  }
+}
+```
+
+#### HTML Usage Example
+
+**Using Vue Scoped Styles**:
+```vue
+<template>
+  <!-- Example 1: Basic usage -->
+  <div class="section">
+    <h2 class="section-title">Title</h2>
+    <p class="section-description">Description</p>
+    <div class="section-content_box">
+      Content
+    </div>
+  </div>
+
+  <!-- Example 2: Nested structure -->
+  <div class="image_upload">
+    <div class="image_upload-preview">
+      <img class="image_upload-preview-img" src="..." />
+    </div>
+    <div class="image_upload-mask" css-is-dragging="true">
+      <p>Drop image here</p>
+    </div>
+  </div>
+
+  <!-- Example 3: Dropdown menu -->
+  <div class="dropdown">
+    <div class="dropdown-menu">
+      <div class="dropdown-menu-item">Option 1</div>
+      <div class="dropdown-menu-item">Option 2</div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+// Component styles here
+</style>
+```
+
+#### Key Principles
+
+1. **Each element uses only one className** - Don't combine multiple classes
+2. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
+3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
+4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
+
+
+All components in this project follow these CSS conventions to ensure code style consistency.
+
+### CSS File Organization
+
+The project adopts a **Hybrid Style Organization** strategy, combining centralized global tool management with component-specific styles placed nearby:
+
+#### Directory Structure
+
+```
+parker-nuxt-lab/
+├── app/
+│   ├── assets/
+│   │   └── styles/           # Global style tools (centralized)
+│   │       ├── global.scss   # Global styles
+│   │       ├── mixin.scss    # Mixins (reusable style functions)
+│   │       ├── variable.scss # Variable definitions
+│   │       ├── animation.scss # Animation utilities
+│   │       └── customize-ripple.scss # Ripple effect customization
+│   │
+│   ├── components/            # Component-specific styles (co-located)
+│   │   ├── Button.vue
+│   │   │   └── <style scoped> # Component styles
+│   │   └── Tabs/
+│   │       └── Bar.vue
+│   │           └── <style scoped>
+│   │
+│   └── pages/                 # Page-specific styles (co-located)
+    └── index.vue
+        └── <style scoped>    # Page styles
+```
+
+#### Style Placement Principles
+
+1. **Global Tools** → `app/assets/styles/` directory
+   - ✅ Mixins (`@mixin`) - Parameterized style functions
+   - ✅ Variable definitions
+   - ✅ Global styles
+   - ✅ Animation utilities
+
+2. **Component Styles** → Within component file
+   - ✅ Co-located with component template
+   - ✅ Use `<style scoped lang="scss">`
+   - ✅ Contains only component-specific styles
+
+3. **Page Styles** → Within `pages/` directory
+   - ✅ Co-located with page files
+   - ✅ Use `<style scoped lang="scss">` to avoid global pollution
+   - ✅ Contains only page-specific styles
+
+#### Mixins & Placeholders Usage
+
+**Mixins (`@mixin`)** - Currently Used:
+```scss
+// app/assets/styles/mixin.scss
+@mixin flex-layout($gap: 12px) {
+  display: flex;
+  gap: $gap;
+}
+
+// Usage in component
+.my-class {
+  @include flex-layout(16px);  // Accepts parameters, more flexible
+}
+```
+
+**Placeholders (`%name`)** - Optional for Future Needs:
+
+> **Note**: If you need reusable style inheritance for future maintenance, create `app/assets/styles/placeholders.scss`.
+
+```scss
+// app/assets/styles/placeholders.scss (create when needed)
+%flex {
+  display: flex;
+}
+
+%text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Usage in component
+.my-class {
+  @extend %flex;           // Merges selectors, reduces duplicate CSS
+  @extend %text-ellipsis;  // Reusable style inheritance
+}
+```
+
+**When to Use Placeholders**:
+- ✅ When you need the same exact styles across multiple components
+- ✅ When you want to reduce CSS output size (selectors are merged)
+- ✅ When styles don't need parameters (static styles)
+
+**When to Use Mixins**:
+- ✅ When you need parameterized styles
+- ✅ When styles need to be customized per usage
+- ✅ When you need conditional logic in styles
+
+#### Usage Example
+
+```scss
+// Import global tools in component SCSS
+@use '@/assets/styles/mixin' as *;
+@use '@/assets/styles/variable' as *;
+
+.my-component {
+  @include flex-layout(16px);       // Use mixin
+  color: $primary-color;            // Use variable
+  
+  &_item {
+    font-size: $font-size-base;
+  }
+}
+```
+
+#### Advantages
+
+1. ✅ **Centralized Management** - Global tools are easy to maintain and update
+2. ✅ **Co-location** - Component and page styles are easy to find
+3. ✅ **Flexibility** - Mixins provide parameterized style functions
+4. ✅ **Consistency** - Variables ensure consistent design tokens
+5. ✅ **Maintainability** - Clear separation of concerns
+
+All style files in this project follow these organizational principles to ensure consistency and maintainability in style management.
 
 **Detailed Documentation**:
 
