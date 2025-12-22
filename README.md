@@ -239,6 +239,35 @@ To quickly identify problematic elements in browser dev tools, the project uses 
 4. ✅ **State Management** - Uses HTML attributes instead of modifier classes, reducing class count
 5. ✅ **Maintainability** - Preserves good readability and maintainability
 
+**Benefits**:
+- ✅ Instantly identify element source in browser DevTools
+- ✅ Quickly locate problematic files
+- ✅ Easier debugging and maintenance
+
+**Important Rule**:
+> 📌 **All elements belonging to a page must be nested under the page root class**, making the hierarchy clear in the code.
+
+```scss
+// ✅ Correct: All elements nested under hooks_test_page
+.hooks_test_page {
+  @extend %test_page;
+  
+  &-description { }      // .hooks_test_page-description
+  &-grid { }             // .hooks_test_page-grid
+  &-section {            // .hooks_test_page-section
+    &-title { }          // .hooks_test_page-section-title
+    &-description { }    // .hooks_test_page-section-description
+  }
+}
+
+// ❌ Wrong: Can't tell which page description and grid belong to
+.hooks_test_page { }
+.description { }
+.grid { }
+```
+
+---
+
 #### Examples
 
 **Example 1: Basic Block and Element**

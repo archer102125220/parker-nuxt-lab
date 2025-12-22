@@ -240,6 +240,35 @@ yarn test:codegen
 4. ✅ **狀態管理** - 使用 HTML 屬性而非 modifier 類別來管理狀態，減少類別數量
 5. ✅ **可維護性** - 保持良好的可讀性與維護性
 
+**好處**：
+- ✅ 在瀏覽器開發工具中立即識別元素來源
+- ✅ 快速定位問題檔案
+- ✅ 更容易除錯和維護
+
+**重要規則**：
+> 📌 **所有屬於頁面的元素都必須嵌套在頁面根類別下**，使代碼中的層級關係清晰明確。
+
+```scss
+// ✅ 正確：所有元素都嵌套在 hooks_test_page 下
+.hooks_test_page {
+  @extend %test_page;
+  
+  &-description { }      // .hooks_test_page-description
+  &-grid { }             // .hooks_test_page-grid
+  &-section {            // .hooks_test_page-section
+    &-title { }          // .hooks_test_page-section-title
+    &-description { }    // .hooks_test_page-section-description
+  }
+}
+
+// ❌ 錯誤：無法判斷 description 和 grid 屬於哪個頁面
+.hooks_test_page { }
+.description { }
+.grid { }
+```
+
+---
+
 #### 範例
 
 **範例 1：基本 Block 與 Element**
