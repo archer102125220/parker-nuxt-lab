@@ -141,6 +141,23 @@
             "design_credit": "Website visual design is AI-assisted. All functionality is originally developed."
         }
     },
+    "components_page": {
+        "hero": {
+            "title": "Components Showcase",
+            "subtitle": "Custom Components & Third-party Integrations",
+            "description": "To avoid package compatibility issues, we implement common components ourselves, ensuring project stability and control"
+        },
+        "categories": {
+            "ui": "UI Components",
+            "functional": "Functional Components",
+            "integration": "Third-party Integrations",
+            "combined": "Combined Tests"
+        },
+        "intro": {
+            "custom": "Custom components are built to avoid compatibility issues with npm packages or when project requirements don't fit existing tools.",
+            "integration": "Third-party integrations wrap vanilla JS libraries as Vue components when no official Vue version exists."
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
