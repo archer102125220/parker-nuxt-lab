@@ -525,6 +525,8 @@ The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, reducin
 2. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
 3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
 4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
+5. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`, to clearly distinguish CSS state attributes from other HTML attributes, and to explicitly indicate the purpose of the variable when passing props down through component hierarchies
+6. **CSS variable names must use underscore `_` instead of hyphen `-`** - e.g., `--color_primary`, `--font_size_base`, enabling complete variable name selection via double-click in code editors
 
 
 All components in this project follow these CSS conventions to ensure code style consistency.
