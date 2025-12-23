@@ -137,7 +137,8 @@
         "development": {
             "title": "Development Philosophy",
             "philosophy": "This project adheres to the philosophy of 'Experiment, Learn, Share', deepening understanding of various technologies through practice.",
-            "approach": "We value code quality, user experience, and technological innovation, continuously exploring best practices in frontend development."
+            "approach": "We value code quality, user experience, and technological innovation, continuously exploring best practices in frontend development.",
+            "design_credit": "Website visual design is AI-assisted. All functionality is originally developed."
         }
     },
     "components": {

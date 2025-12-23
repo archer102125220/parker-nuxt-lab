@@ -152,6 +152,9 @@
           <p class="about_page-development-content-text">
             {{ $t('about.development.approach') }}
           </p>
+          <p class="about_page-development-content-text about_page-development-content-credit">
+            {{ $t('about.development.design_credit') }}
+          </p>
         </div>
       </div>
     </section>
@@ -578,6 +581,18 @@ useHeadMataData({
       &:last-child {
         margin-bottom: 0;
       }
+    }
+    
+    &-credit {
+      // Typography
+      font-style: italic;
+      font-size: 16px;
+      color: var(--color-text-tertiary, #718096);
+      
+      // Display & Box Model
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
     }
   }
 }

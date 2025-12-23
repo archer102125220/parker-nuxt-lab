@@ -2,14 +2,14 @@
 
 ## 📋 專案概述
 
-根據 [README.zh-TW.md](file:///Users/parker/Desktop/code/parker-nuxt-lab/README.zh-TW.md#L162-L187) 中定義的 CSS 命名規範,本專案採用**改良式 BEM 命名法**,具有以下特點:
+根據 [README.zh-TW.md](file:///c:/Users/User/Desktop/code/parker-nuxt-lab/README.zh-TW.md#L162-L187) 中定義的 CSS 命名規範,本專案採用**改良式 BEM 命名法**,具有以下特點:
 
 ### 命名規範要點
 
 **參考檔案**: 
-- [Drawer.vue](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/Drawer.vue) ✅
-- [GoTop.vue](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/GoTop.vue) ✅
-- [Countdown.vue](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/Countdown.vue) ✅
+- [Drawer.vue](file:///c:/Users/User/Desktop/code/parker-nuxt-lab/app/components/Drawer.vue) ✅
+- [GoTop.vue](file:///c:/Users/User/Desktop/code/parker-nuxt-lab/app/components/GoTop.vue) ✅
+- [Countdown.vue](file:///c:/Users/User/Desktop/code/parker-nuxt-lab/app/components/Countdown.vue) ✅
 
 1. **Block(區塊)**: 使用底線 `_` 分隔多個語義單詞
    - 單一單詞: `.countdown`
@@ -446,8 +446,8 @@ yarn fix-css-naming:global
 
 ## 📚 參考資源
 
-- [README.zh-TW.md - CSS 命名規範](file:///Users/parker/Desktop/code/parker-nuxt-lab/README.zh-TW.md#L162-L187)
-- [Banner.vue - 命名範例](file:///Users/parker/Desktop/code/parker-nuxt-lab/app/components/Banner.vue) (已符合規範)
+- [README.zh-TW.md - CSS 命名規範](file:///c:/Users/User/Desktop/code/parker-nuxt-lab/README.zh-TW.md#L162-L187)
+- [Banner.vue - 命名範例](file:///c:/Users/User/Desktop/code/parker-nuxt-lab/app/components/Banner.vue) (已符合規範)
 - [BEM 官方文件](https://getbem.com/)
 - [SCSS 巢狀結構最佳實踐](https://sass-lang.com/documentation/style-rules/parent-selector)
 
@@ -530,5 +530,5 @@ yarn fix-css-naming:global
 ---
 
 **建立日期**: 2025-12-03  
-**最後更新**: 2025-12-03  
-**版本**: 1.0.0
+**最後更新**: 2025-12-23  
+**版本**: 1.1.0
