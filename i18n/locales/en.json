@@ -158,6 +158,14 @@
             "integration": "Third-party integrations wrap vanilla JS libraries as Vue components when no official Vue version exists."
         }
     },
+    "directives_page": {
+        "hero": {
+            "title": "Custom Directives",
+            "subtitle": "Vue Custom Directives Showcase",
+            "description": "To avoid package compatibility issues, we implement common Vue directives ourselves, providing more flexible DOM manipulation capabilities"
+        },
+        "intro": "Custom Vue directives are built to avoid compatibility issues with npm packages or when project requirements don't fit existing tools."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

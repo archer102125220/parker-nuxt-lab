@@ -1,81 +1,285 @@
 <template>
-  <section class="directives_page">
-    <p>
-      為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關directives
-    </p>
+  <div class="directives_page">
+    <!-- Hero Section -->
+    <section class="directives_page-hero">
+      <div class="directives_page-hero-background">
+        <img 
+          src="/img/vue-directives/vue-directives-v.04.webp" 
+          alt="Directives" 
+          class="directives_page-hero-background-image"
+        />
+        <div class="directives_page-hero-background-overlay"></div>
+      </div>
+      
+      <div class="directives_page-hero-content">
+        <h1 class="directives_page-hero-content-title">
+          {{ $t('directives_page.hero.title') }}
+        </h1>
+        <p class="directives_page-hero-content-subtitle">
+          {{ $t('directives_page.hero.subtitle') }}
+        </p>
+        <p class="directives_page-hero-content-description">
+          {{ $t('directives_page.hero.description') }}
+        </p>
+      </div>
+    </section>
 
-    <v-img
-      class="directives_page-banner"
-      max-height="400"
-      src="/img/vue-directives/vue-directives-v.04.webp"
-    />
+    <!-- Introduction -->
+    <section class="directives_page-section directives_page-intro">
+      <div class="directives_page-section-container">
+        <p class="directives_page-intro-text">
+          {{ $t('directives_page.intro') }}
+        </p>
+      </div>
+    </section>
 
-    <nav class="directives_page-content" role="navigation">
-      <!-- <NuxtLink
-        v-for="link in linkList"
-        :key="link.to"
-        class="directives_page-content-link"
-        :to="link.to"
-      >
-        {{ link.label }}
-      </NuxtLink> -->
-
-      <LinkCard
-        v-for="link in linkList"
-        :key="link.to"
-        :to="link.to"
-        :banner="link.banner"
-        :label="link.label"
-        class="directives_page-content-link"
-      />
-    </nav>
-  </section>
+    <!-- Directives List -->
+    <section class="directives_page-section">
+      <div class="directives_page-section-container">
+        <h2 class="directives_page-section-title">
+          自製指令列表
+        </h2>
+        <div class="directives_page-grid">
+          <LinkCard
+            v-for="directive in directivesList"
+            :key="directive.to"
+            :to="directive.to"
+            :label="directive.label"
+            :banner="directive.banner"
+            class="directives_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useHeadMataData({
-  title: '自製vue指令列表',
-  titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} | 自製vue指令` : '自製vue指令';
-  }
+  title: t('directives_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('directives_page.hero.description')
+    }
+  ]
 });
 
-// https://www.cnblogs.com/ganto/articles/17917868.html
-const nuxtApp = useNuxtApp();
-
-const localePath = useLocalePath();
-const linkList = computed(() => [
+// Directives List
+const directivesList = computed(() => [
   {
     to: localePath('/directives/customize-ripple-test'),
-    label: '自製ripple directive測試'
+    label: '自製 Ripple 指令測試'
   },
   {
     to: localePath('/directives/customize-lazyload-test'),
-    label: '自製lazyload directive測試'
+    label: '自製 Lazyload 指令測試'
   }
 ]);
 </script>
 
-<style lang="scss">
-.directives_page {
-  &-banner {
-    /* Display & Box Model */
+<style lang="scss" scoped>
+// ========================================
+// Hero Section
+// ========================================
+.directives_page-hero {
+  // Positioning
+  position: relative;
+  
+  // Display & Box Model
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  
+  // Visual
+  overflow: hidden;
+  
+  &-background {
+    // Positioning
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    
+    // Display & Box Model
     width: 100%;
-    margin-bottom: 8px;
-  }
-
-  &-content {
-    /* Display & Box Model */
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-
-    &-link {
-      /* Display & Box Model */
-      flex: 1;
-      flex-basis: 150px;
+    height: 100%;
+    
+    &-image {
+      // Display & Box Model
+      width: 100%;
+      height: 100%;
+      
+      // Visual
+      object-fit: cover;
     }
+    
+    &-overlay {
+      // Positioning
+      position: absolute;
+      top: 0;
+      left: 0;
+      
+      // Display & Box Model
+      width: 100%;
+      height: 100%;
+      
+      // Visual
+      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+    }
+  }
+  
+  &-content {
+    // Positioning
+    position: relative;
+    z-index: 1;
+    
+    // Display & Box Model
+    max-width: 800px;
+    text-align: center;
+    
+    &-title {
+      // Display & Box Model
+      margin: 0 0 16px 0;
+      
+      // Typography
+      font-size: 48px;
+      font-weight: 800;
+      color: #ffffff;
+      
+      // Animation
+      animation: fade-in-up 0.6s ease-out;
+      
+      @media (max-width: 768px) {
+        font-size: 36px;
+      }
+    }
+    
+    &-subtitle {
+      // Display & Box Model
+      margin: 0 0 24px 0;
+      
+      // Typography
+      font-size: 24px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.95);
+      
+      // Animation
+      animation: fade-in-up 0.6s ease-out 0.1s both;
+      
+      @media (max-width: 768px) {
+        font-size: 20px;
+      }
+    }
+    
+    &-description {
+      // Display & Box Model
+      margin: 0;
+      
+      // Typography
+      font-size: 18px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      
+      // Animation
+      animation: fade-in-up 0.6s ease-out 0.2s both;
+      
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// ========================================
+// Common Section Styles
+// ========================================
+.directives_page-section {
+  // Display & Box Model
+  padding: 60px 20px;
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  &-title {
+    // Display & Box Model
+    margin: 0 0 40px 0;
+    
+    // Typography
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-text-primary, #2d3748);
+    text-align: center;
+    
+    @media (max-width: 768px) {
+      font-size: 28px;
+      margin-bottom: 32px;
+    }
+  }
+}
+
+// ========================================
+// Introduction
+// ========================================
+.directives_page-intro {
+  // Visual
+  background: var(--color-bg-secondary, #f7fafc);
+  
+  &-text {
+    // Typography
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--color-text-secondary, #4a5568);
+    text-align: center;
+    
+    // Display & Box Model
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+// ========================================
+// Directives Grid
+// ========================================
+.directives_page-grid {
+  // Display & Box Model
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  &-item {
+    // Animation
+    animation: fade-in-up 0.5s ease-out both;
+    
+    &:nth-child(1) { animation-delay: 0.05s; }
+    &:nth-child(2) { animation-delay: 0.1s; }
+  }
+}
+
+// ========================================
+// Animations
+// ========================================
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

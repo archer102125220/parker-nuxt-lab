@@ -158,6 +158,14 @@
             "integration": "第三方整合主要是因為該套件並未提供 Vue 版本，因此整合純 JS 版本為組件的方式做實作。"
         }
     },
+    "directives_page": {
+        "hero": {
+            "title": "自製指令",
+            "subtitle": "Vue 自訂指令展示",
+            "description": "為避免套件相容性問題，自行實作常用的 Vue 指令，提供更靈活的 DOM 操作能力"
+        },
+        "intro": "自製 Vue 指令主要是為了避免因套件版本相容性或專案性質不合適使用 npm 上相關工具之狀況，因此自己實作相關指令。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
