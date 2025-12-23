@@ -638,8 +638,16 @@ parker-nuxt-lab/
   @include flex-layout(16px);       // Use mixin
   color: $primary-color;            // Use variable
   
-  &_item {
+  &-item {
     font-size: $font-size-base;
+
+    &-item_title {
+      //  style
+    }
+  }
+
+  &-title {
+    //  style
   }
 }
 ```
