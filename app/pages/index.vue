@@ -1,6 +1,67 @@
 <template>
-  <section class="index_page">
-    <nav class="index_page-content" role="navigation">
+  <div class="home_page">
+    <!-- Hero Section -->
+    <section class="hero_section">
+      <div class="hero_section-background">
+        <div class="hero_section-background-gradient"></div>
+      </div>
+      
+      <div class="hero_section-content">
+        <h1 class="hero_section-content-title">
+          Parker Nuxt Lab
+        </h1>
+        <p class="hero_section-content-subtitle">
+          {{ t('home.hero.subtitle') }}
+        </p>
+        <p class="hero_section-content-description">
+          {{ t('home.hero.description') }}
+        </p>
+        <div class="hero_section-content-actions">
+          <NuxtLink 
+            :to="localePath('/components')" 
+            class="hero_section-content-actions-btn hero_section-content-actions-btn--primary"
+          >
+            {{ t('home.hero.cta_explore') }}
+          </NuxtLink>
+          <NuxtLink 
+            :to="localePath('/about')" 
+            class="hero_section-content-actions-btn hero_section-content-actions-btn--secondary"
+          >
+            {{ t('home.hero.cta_about') }}
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features_section">
+      <div class="features_section-container">
+        <h2 class="features_section-title">{{ t('home.features.title') }}</h2>
+        <div class="features_section-grid">
+          <div 
+            v-for="feature in features" 
+            :key="feature.key"
+            class="feature_card"
+          >
+            <div class="feature_card-icon">
+              <img 
+                :src="`/img/home/features/${feature.icon}.svg`" 
+                :alt="feature.title"
+                @error="handleIconError"
+              >
+            </div>
+            <h3 class="feature_card-title">{{ feature.title }}</h3>
+            <p class="feature_card-description">{{ feature.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Grid Section -->
+    <section class="navigation_section">
+      <div class="navigation_section-container">
+        <h2 class="navigation_section-title">{{ t('home.navigation.title') }}</h2>
+        <nav class="navigation_section-grid" role="navigation">
       <!-- <NuxtLink
       v-for="link in linkList"
       :key="link.to"
@@ -10,16 +71,33 @@
       {{ link.label }}
     </NuxtLink> -->
 
-      <LinkCard
-        v-for="link in linkList"
-        :key="link.to"
-        :to="link.to"
-        :banner="link.banner"
-        :label="link.label"
-        class="index_page-content-link"
-      />
-    </nav>
-  </section>
+          <LinkCard
+            v-for="link in linkList"
+            :key="link.to"
+            :to="link.to"
+            :banner="link.banner"
+            :label="link.label"
+            :description="link.description"
+            class="navigation_section-grid-item"
+          />
+        </nav>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats_section">
+      <div class="stats_section-container">
+        <div 
+          v-for="stat in stats" 
+          :key="stat.key"
+          class="stat_card"
+        >
+          <div class="stat_card-value">{{ stat.value }}</div>
+          <div class="stat_card-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script setup>
@@ -31,117 +109,532 @@ definePageMeta({
 const localePath = useLocalePath();
 const { t } = useI18n();
 
+// Features data
+const features = computed(() => [
+  {
+    key: 'pwa',
+    icon: 'feature-pwa',
+    title: t('home.features.pwa.title'),
+    description: t('home.features.pwa.description')
+  },
+  {
+    key: 'realtime',
+    icon: 'feature-realtime',
+    title: t('home.features.realtime.title'),
+    description: t('home.features.realtime.description')
+  },
+  {
+    key: 'ai',
+    icon: 'feature-ai',
+    title: t('home.features.ai.title'),
+    description: t('home.features.ai.description')
+  },
+  {
+    key: 'testing',
+    icon: 'feature-testing',
+    title: t('home.features.testing.title'),
+    description: t('home.features.testing.description')
+  }
+]);
+
+// Stats data
+const stats = computed(() => [
+  {
+    key: 'components',
+    value: '30+',
+    label: t('home.stats.components')
+  },
+  {
+    key: 'pages',
+    value: '60+',
+    label: t('home.stats.pages')
+  },
+  {
+    key: 'features',
+    value: '15+',
+    label: t('home.stats.features')
+  },
+  {
+    key: 'tests',
+    value: '100+',
+    label: t('home.stats.tests')
+  }
+]);
+
 const linkList = computed(() => [
   {
     to: localePath('/about'),
     banner: '/img/about/about-v.10.webp',
-    // label: '關於本站',
-    label: t('index.about')
+    label: t('index.about'),
+    description: t('home.nav.about_desc')
   },
   {
     to: localePath('/components'),
     banner: '/img/components-page/components-page-v.05.webp',
-    // label: '自製組件及第三方整合組件',
-    label: t('index.components')
+    label: t('index.components'),
+    description: t('home.nav.components_desc')
   },
-  // {
-  //   to: localePath('/components-test'),
-  //   banner: '/img/components-test/components-test-v.05.webp',
-  //   label: '組件綜合測試'
-  // },
   {
     to: localePath('/directives'),
     banner: '/img/vue-directives/vue-directives-v.04.webp',
-    // label: '自製vue指令',
-    label: t('index.directives')
+    label: t('index.directives'),
+    description: t('home.nav.directives_desc')
   },
   {
     to: localePath('/route'),
     banner: '/img/route/route-v.05.webp',
-    // label: 'route相關測試',
-    label: t('index.route')
+    label: t('index.route'),
+    description: t('home.nav.route_desc')
   },
   {
     to: localePath('/css-drawing'),
     banner: '/img/css-drawing/css-drawing-v.05.webp',
-    // label: 'css繪圖相關測試',
-    label: t('index.css_drawing')
+    label: t('index.css_drawing'),
+    description: t('home.nav.css_drawing_desc')
   },
   {
     to: localePath('/web-authn'),
     banner: '/img/web-authn/web-authn-v.06.webp',
-    // label: '生物辨識測試（原生）',
-    label: t('index.web_authn')
+    label: t('index.web_authn'),
+    description: t('home.nav.web_authn_desc')
   },
   {
     to: localePath('/fido2-lib'),
     banner: '/img/fido2-lib/fido2-lib-v.09.webp',
-    // label: '生物辨識測試（fido2-lib）',
-    label: t('index.fido2_lib')
+    label: t('index.fido2_lib'),
+    description: t('home.nav.fido2_lib_desc')
   },
   {
     to: localePath('/web-cam'),
     banner: '/img/web-cam/web-cam-v.05.webp',
-    // label: 'WebCam測試',
-    label: t('index.web_cam')
+    label: t('index.web_cam'),
+    description: t('home.nav.web_cam_desc')
   },
   {
     to: localePath('/face-api'),
     banner: '/img/face-api/face-api-v.04.webp',
-    // label: 'face-api測試',
-    label: t('index.face_api')
+    label: t('index.face_api'),
+    description: t('home.nav.face_api_desc')
   },
   {
     to: localePath('/frontend-api-cach-test'),
     banner: '/img/frontend-api-cach/frontend-api-cach-v.06.webp',
-    // label: '前端api快取測試',
-    label: t('index.frontend_cach_api')
+    label: t('index.frontend_cach_api'),
+    description: t('home.nav.frontend_cach_api_desc')
   },
   {
     to: localePath('/firebase'),
     banner: '/img/firebase/firebase-v.07.webp',
-    // label: 'firebase整合測試',
-    label: t('index.firebase')
+    label: t('index.firebase'),
+    description: t('home.nav.firebase_desc')
   },
   {
     to: localePath('/socket-test'),
     banner: '/img/socket/socket-v.05.webp',
-    // label: 'socket測試',
-    label: t('index.socket')
+    label: t('index.socket'),
+    description: t('home.nav.socket_desc')
   },
   {
     to: localePath('/server-sent-event-test'),
     banner: '/img/server-sent-event/server-sent-event-v.04.webp',
-    // label: 'Server Sent Event測試',
-    label: t('index.server_sent_event')
+    label: t('index.server_sent_event'),
+    description: t('home.nav.server_sent_event_desc')
   },
   {
     to: localePath('/web-rtc'),
     banner: '/img/web-rtc/web-rtc-v.04.webp',
-    // label: 'WebRTC測試',
-    label: t('index.web_rtc')
+    label: t('index.web_rtc'),
+    description: t('home.nav.web_rtc_desc')
   },
-  { to: localePath('/face-swap'), label: 'AI 換臉 測試' }
+  {
+    to: localePath('/face-swap'),
+    label: 'AI 換臉 測試',
+    description: t('home.nav.face_swap_desc')
+  }
 ]);
+
+function handleIconError(event) {
+  // Fallback to default icon if feature icon fails to load
+  event.target.src = '/img/icon/NuxtRock.v.10.4.webp';
+}
 </script>
 
 <style lang="scss">
-.index_page {
+.home_page {
+  /* Display & Box Model */
+  min-height: 100vh;
+  
+  /* Visual */
+  background: var(--color-bg-primary, #ffffff);
+}
+
+// ========================================
+// Hero Section
+// ========================================
+.hero_section {
+  /* Positioning */
+  position: relative;
+  
+  /* Display & Box Model */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 80px 24px;
+  overflow: hidden;
+  
+  &-background {
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    
+    /* Display & Box Model */
+    width: 100%;
+    height: 100%;
+    
+    &-gradient {
+      /* Display & Box Model */
+      width: 100%;
+      height: 100%;
+      
+      /* Visual */
+      background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+      opacity: 0.85;
+      
+      /* Animation */
+      animation: gradient-shift 15s ease infinite;
+    }
+  }
+  
   &-content {
+    /* Positioning */
+    position: relative;
+    z-index: 1;
+    
     /* Display & Box Model */
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    row-gap: 24px;
-    column-gap: 8px;
-    // width: 80%;
-    // margin: auto;
-
-    &-link {
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
+    text-align: center;
+    
+    &-title {
       /* Display & Box Model */
-      flex: 1;
-      flex-basis: 150px;
+      margin-bottom: 24px;
+      
+      /* Typography */
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      
+      /* Animation */
+      animation: fade-in-up 0.8s ease-out;
+      
+      @media (max-width: 768px) {
+        font-size: 48px;
+      }
     }
+    
+    &-subtitle {
+      /* Display & Box Model */
+      margin-bottom: 16px;
+      
+      /* Typography */
+      font-size: 28px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.95);
+      
+      /* Animation */
+      animation: fade-in-up 0.8s ease-out 0.2s backwards;
+      
+      @media (max-width: 768px) {
+        font-size: 22px;
+      }
+    }
+    
+    &-description {
+      /* Display & Box Model */
+      margin-bottom: 40px;
+      max-width: 600px;
+      
+      /* Typography */
+      font-size: 18px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      
+      /* Animation */
+      animation: fade-in-up 0.8s ease-out 0.4s backwards;
+      
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+    }
+    
+    &-actions {
+      /* Display & Box Model */
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      
+      /* Animation */
+      animation: fade-in-up 0.8s ease-out 0.6s backwards;
+      
+      &-btn {
+        /* Display & Box Model */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 32px;
+        border-radius: 12px;
+        
+        /* Typography */
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        
+        /* Animation */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &--primary {
+          /* Visual */
+          background: #ffffff;
+          color: #44A08D;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+          
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+          }
+        }
+        
+        &--secondary {
+          /* Visual */
+          background: rgba(255, 255, 255, 0.1);
+          color: #ffffff;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          backdrop-filter: blur(10px);
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// Features Section
+// ========================================
+.features_section {
+  /* Display & Box Model */
+  padding: 100px 24px;
+  
+  /* Visual */
+  background: var(--color-bg-secondary, #f8f9fa);
+  
+  &-container {
+    /* Display & Box Model */
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  &-title {
+    /* Display & Box Model */
+    margin-bottom: 60px;
+    
+    /* Typography */
+    font-size: 42px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-text-primary, #1a1a1a);
+    
+    @media (max-width: 768px) {
+      font-size: 32px;
+    }
+  }
+  
+  &-grid {
+    /* Display & Box Model */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 32px;
+  }
+}
+
+.feature_card {
+  /* Display & Box Model */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px;
+  border-radius: 16px;
+  text-align: center;
+  
+  /* Visual */
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  
+  /* Animation */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  &-icon {
+    /* Display & Box Model */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 24px;
+    border-radius: 16px;
+    
+    /* Visual */
+    background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
+    
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+  
+  &-title {
+    /* Display & Box Model */
+    margin-bottom: 12px;
+    
+    /* Typography */
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-text-primary, #1a1a1a);
+  }
+  
+  &-description {
+    /* Typography */
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-text-secondary, #6c757d);
+  }
+}
+
+// ========================================
+// Navigation Section
+// ========================================
+.navigation_section {
+  /* Display & Box Model */
+  padding: 100px 24px;
+  
+  &-container {
+    /* Display & Box Model */
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  &-title {
+    /* Display & Box Model */
+    margin-bottom: 60px;
+    
+    /* Typography */
+    font-size: 42px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-text-primary, #1a1a1a);
+    
+    @media (max-width: 768px) {
+      font-size: 32px;
+    }
+  }
+  
+  &-grid {
+    /* Display & Box Model */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+  }
+}
+
+// ========================================
+// Stats Section
+// ========================================
+.stats_section {
+  /* Display & Box Model */
+  padding: 80px 24px;
+  
+  /* Visual */
+  background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+  
+  &-container {
+    /* Display & Box Model */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+.stat_card {
+  /* Display & Box Model */
+  text-align: center;
+  
+  &-value {
+    /* Display & Box Model */
+    margin-bottom: 8px;
+    
+    /* Typography */
+    font-size: 48px;
+    font-weight: 800;
+    color: #ffffff;
+    
+    @media (max-width: 768px) {
+      font-size: 36px;
+    }
+  }
+  
+  &-label {
+    /* Typography */
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// ========================================
+// Animations
+// ========================================
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 </style>

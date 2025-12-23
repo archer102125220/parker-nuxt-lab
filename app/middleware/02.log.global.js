@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return;
   }
 
-  const i18nLocale = nuxtApp.$getLocalLanguage('');
+  const i18nLocale = nuxtApp.$getLocalLanguage();
   const cookieLocale = useCookieLocale();
   const url = useRequestURL();
   const headers = useRequestHeaders();
@@ -23,7 +23,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   console.log(`host: ${headers.host}`);
   console.log(`url: ${url.href}`);
 
-  const headersLocale = acceptLanguage?.includes?.('zh-TW') ? 'zh' : 'en';
+  // 改進中文語系檢測，支援所有中文變體 (zh, zh-TW, zh-CN, zh-HK)
+  const headersLocale = acceptLanguage?.match?.(/zh(-[A-Z]{2})?/i)
+    ? 'zh'
+    : 'en';
 
   if (
     typeof acceptLanguage === 'string' &&
@@ -31,7 +34,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     (typeof i18nLocale !== 'string' || i18nLocale === '') &&
     headersLocale !== i18nLocale
   ) {
-    const locale = i18nLocale || headersLocale;
+    // 優先使用 cookieLocale，其次才是 headersLocale
+    const locale = i18nLocale || cookieLocale?.value || headersLocale;
     const localePath = useLocalePath();
     const localeHref = localePath(to.href, locale);
 

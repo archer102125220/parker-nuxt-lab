@@ -1,80 +1,217 @@
 <template>
-  <section class="about_page">
-    <v-img
-      class="about_page-banner"
-      max-height="400"
-      src="/img/about/about-v.10.webp"
-    />
-    <v-skeleton-loader
-      v-if="pending"
-      class="mx-auto"
-      type="heading, subtitle, paragraph, list-item-three-line@3, divider, subtitle, text@2, list-item-three-line@4, divider, subtitle, list-item-three-line@2"
-      boilerplate
-    />
-    <p v-else-if="error">無法載入內容：{{ error.message }}</p>
-    <template v-else-if="data">
-      <!-- <h1 class="about_page-title">關於本站</h1> -->
-      <section
-        v-for="(section, index) in sectionList"
-        :key="index"
-        class="about_page-section"
-      >
-        <h2 class="about_page-section-sub_title">
-          {{ section.title }}
+  <div class="about_page">
+    <!-- Hero Section -->
+    <section class="about_page-hero">
+      <div class="about_page-hero-background">
+        <img 
+          src="/img/about/about-v.10.webp" 
+          alt="About Banner"
+          class="about_page-hero-background-image"
+        />
+        <div class="about_page-hero-background-overlay"></div>
+      </div>
+      <div class="about_page-hero-content">
+        <h1 class="about_page-hero-content-title">
+          {{ $t('about.hero.title') }}
+        </h1>
+        <p class="about_page-hero-content-subtitle">
+          {{ $t('about.hero.subtitle') }}
+        </p>
+        <p class="about_page-hero-content-description">
+          {{ $t('about.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Project Overview -->
+    <section class="about_page-section about_page-overview">
+      <div class="about_page-section-container">
+        <h2 class="about_page-section-title">
+          {{ $t('about.overview.title') }}
         </h2>
-        <div v-if="section.description" class="about_page-section-description">
-          <template
-            v-for="(descItem, descIndex) in section.description"
-            :key="descIndex"
-          >
-            <del v-if="descItem.isDel">{{ descItem.text }}</del>
-            <p v-else>{{ descItem.text }}</p>
-          </template>
+        <div class="about_page-overview-content">
+          <p class="about_page-overview-content-text">
+            {{ $t('about.overview.intro') }}
+          </p>
+          <p class="about_page-overview-content-text">
+            {{ $t('about.overview.purpose') }}
+          </p>
+          <p class="about_page-overview-content-text">
+            {{ $t('about.overview.features') }}
+          </p>
         </div>
-        <ul
-          v-if="Array.isArray(section.listItemList)"
-          class="about_page-section-list"
-        >
-          <li
-            v-for="(item, itemIndex) in section.listItemList"
-            :key="itemIndex"
-            class="about_page-section-list-item"
+      </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="about_page-section about_page-tech_stack">
+      <div class="about_page-section-container">
+        <h2 class="about_page-section-title">
+          {{ $t('about.tech_stack.title') }}
+        </h2>
+        <div class="about_page-tech_stack-grid">
+          <div class="tech_stack-card">
+            <h3 class="tech_stack-card-title">
+              {{ $t('about.tech_stack.frontend.title') }}
+            </h3>
+            <ul class="tech_stack-card-list">
+              <li 
+                v-for="(item, index) in frontendItems"
+                :key="index"
+                class="tech_stack-card-list-item"
+              >
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+          
+          <div class="tech_stack-card">
+            <h3 class="tech_stack-card-title">
+              {{ $t('about.tech_stack.backend.title') }}
+            </h3>
+            <ul class="tech_stack-card-list">
+              <li 
+                v-for="(item, index) in backendItems"
+                :key="index"
+                class="tech_stack-card-list-item"
+              >
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+          
+          <div class="tech_stack-card">
+            <h3 class="tech_stack-card-title">
+              {{ $t('about.tech_stack.tools.title') }}
+            </h3>
+            <ul class="tech_stack-card-list">
+              <li 
+                v-for="(item, index) in toolsItems"
+                :key="index"
+                class="tech_stack-card-list-item"
+              >
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+          
+          <div class="tech_stack-card">
+            <h3 class="tech_stack-card-title">
+              {{ $t('about.tech_stack.features_tech.title') }}
+            </h3>
+            <ul class="tech_stack-card-list">
+              <li 
+                v-for="(item, index) in featuresTechItems"
+                :key="index"
+                class="tech_stack-card-list-item"
+              >
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="about_page-section about_page-features">
+      <div class="about_page-section-container">
+        <h2 class="about_page-section-title">
+          {{ $t('about.features.title') }}
+        </h2>
+        <div class="about_page-features-grid">
+          <div 
+            v-for="feature in features" 
+            :key="feature.key"
+            class="feature_card"
           >
-            {{ item }}
-          </li>
-        </ul>
-      </section>
-    </template>
-  </section>
+            <div class="feature_card-icon">
+              <div class="feature_card-icon-circle"></div>
+            </div>
+            <h3 class="feature_card-title">
+              {{ $t(`about.features.${feature.key}.title`) }}
+            </h3>
+            <p class="feature_card-description">
+              {{ $t(`about.features.${feature.key}.description`) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Development Philosophy -->
+    <section class="about_page-section about_page-development">
+      <div class="about_page-section-container">
+        <h2 class="about_page-section-title">
+          {{ $t('about.development.title') }}
+        </h2>
+        <div class="about_page-development-content">
+          <p class="about_page-development-content-text">
+            {{ $t('about.development.philosophy') }}
+          </p>
+          <p class="about_page-development-content-text">
+            {{ $t('about.development.approach') }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="about_page-stats">
+      <div class="about_page-stats-container">
+        <div 
+          v-for="stat in stats" 
+          :key="stat.key"
+          class="stat_card"
+        >
+          <div class="stat_card-value">{{ stat.value }}</div>
+          <div class="stat_card-label">{{ $t(`home.stats.${stat.key}`) }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script setup>
-const systemStore = useSystemStore();
-const { $nuxtServer } = useNuxtApp();
-const { locale } = useI18n();
+const { t } = useI18n();
 
-const { data, pending, error } = await useAsyncData(
-  'about-content',
-  () => $nuxtServer.GET_aboutContent({ locale: locale.value }),
-  { watch: [locale] }
-);
+// Tech Stack Items - defined directly to avoid i18n array handling issues
+const techStack = {
+  frontend: ['Nuxt 4', 'Vue 3', 'Vuetify 3', 'TypeScript', 'SCSS'],
+  backend: ['Nuxt Server', 'H3', 'Nitro', 'Node.js'],
+  tools: ['Vite', 'Playwright', 'ESLint', 'Git'],
+  features_tech: ['PWA', 'i18n', 'WebRTC', 'Socket.IO', 'face-api.js']
+};
 
-const sectionList = computed(() => {
-  const _sectionList = data.value;
-  return Array.isArray(_sectionList) ? _sectionList : [];
-});
+const frontendItems = computed(() => techStack.frontend);
+const backendItems = computed(() => techStack.backend);
+const toolsItems = computed(() => techStack.tools);
+const featuresTechItems = computed(() => techStack.features_tech);
 
-watchEffect(() => {
-  systemStore.setLoading(pending.value);
-});
+// Features
+const features = [
+  { key: 'pwa' },
+  { key: 'realtime' },
+  { key: 'ai' },
+  { key: 'testing' },
+  { key: 'components' },
+  { key: 'i18n' }
+];
+
+// Statistics
+const stats = [
+  { key: 'components', value: '30+' },
+  { key: 'pages', value: '60+' },
+  { key: 'features', value: '15+' },
+  { key: 'tests', value: '100+' }
+];
 
 useHeadMataData({
-  title: '關於本站 - Nuxt實驗室',
+  title: t('about.hero.title'),
   meta: [
     {
       name: 'description',
-      content:
-        '這是一個用於測試和實驗的專案，主要聚焦於客製化組件、Nuxt4套件整合以及PWA實驗。'
+      content: t('about.hero.description')
     }
   ]
 });
@@ -82,69 +219,426 @@ useHeadMataData({
 
 <style lang="scss">
 .about_page {
-  /* Display & Box Model */
-  // padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  // Display & Box Model
+  min-height: 100vh;
+  
+  // Visual
+  background: var(--color-bg-primary, #ffffff);
+}
 
-  &-title {
-    /* Display & Box Model */
-    margin-bottom: 1rem;
-
-    /* Typography */
-    font-size: 2.5rem;
-    color: #333;
-  }
-
-  &-banner {
-    /* Display & Box Model */
+// ========================================
+// Hero Section
+// ========================================
+.about_page-hero {
+  // Positioning
+  position: relative;
+  
+  // Display & Box Model
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 80px 24px;
+  overflow: hidden;
+  
+  &-background {
+    // Positioning
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    
+    // Display & Box Model
     width: 100%;
-    margin-bottom: 8px;
+    height: 100%;
+    
+    &-image {
+      // Display & Box Model
+      width: 100%;
+      height: 100%;
+      
+      // Visual
+      object-fit: cover;
+    }
+    
+    &-overlay {
+      // Positioning
+      position: absolute;
+      top: 0;
+      left: 0;
+      
+      // Display & Box Model
+      width: 100%;
+      height: 100%;
+      
+      // Visual
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.9) 0%, rgba(68, 160, 141, 0.9) 100%);
+    }
   }
-
-  &-section {
-    /* Display & Box Model */
-    margin-bottom: 2rem;
-
-    &-sub_title {
-      /* Display & Box Model */
-      margin: 1.5rem 0 1rem;
-
-      /* Typography */
-      font-size: 1.8rem;
-      color: #444;
-    }
-
-    &-description {
-      /* Display & Box Model */
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 1rem;
-
-      /* Typography */
-      line-height: 1.6;
-      color: #666;
-    }
-
-    &-list {
-      /* Display & Box Model */
-      margin-bottom: 1rem;
-      padding-left: 2rem;
-
-      /* Misc */
-      list-style-type: disc;
-
-      &-item {
-        /* Display & Box Model */
-        margin-bottom: 0.5rem;
-
-        /* Typography */
-        line-height: 1.6;
-        color: #666;
+  
+  &-content {
+    // Positioning
+    position: relative;
+    z-index: 1;
+    
+    // Display & Box Model
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
+    text-align: center;
+    
+    &-title {
+      // Display & Box Model
+      margin-bottom: 24px;
+      
+      // Typography
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      
+      // Animation
+      animation: fade-in-up 0.8s ease-out;
+      
+      @media (max-width: 768px) {
+        font-size: 42px;
       }
     }
+    
+    &-subtitle {
+      // Display & Box Model
+      margin-bottom: 16px;
+      
+      // Typography
+      font-size: 24px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.95);
+      
+      // Animation
+      animation: fade-in-up 0.8s ease-out 0.2s backwards;
+      
+      @media (max-width: 768px) {
+        font-size: 20px;
+      }
+    }
+    
+    &-description {
+      // Display & Box Model
+      max-width: 600px;
+      
+      // Typography
+      font-size: 18px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      
+      // Animation
+      animation: fade-in-up 0.8s ease-out 0.4s backwards;
+      
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// ========================================
+// Common Section Styles
+// ========================================
+.about_page-section {
+  // Display & Box Model
+  padding: 80px 24px;
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  &-title {
+    // Display & Box Model
+    margin-bottom: 48px;
+    
+    // Typography
+    font-size: 42px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-text-primary, #1a1a1a);
+    
+    @media (max-width: 768px) {
+      font-size: 32px;
+    }
+  }
+}
+
+// ========================================
+// Project Overview
+// ========================================
+.about_page-overview {
+  // Visual
+  background: var(--color-bg-secondary, #f8f9fa);
+  
+  &-content {
+    // Display & Box Model
+    max-width: 800px;
+    margin: 0 auto;
+    
+    &-text {
+      // Display & Box Model
+      margin-bottom: 24px;
+      
+      // Typography
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--color-text-secondary, #4a5568);
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// ========================================
+// Tech Stack
+// ========================================
+.about_page-tech_stack {
+  &-grid {
+    // Display & Box Model
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+  }
+}
+
+.tech_stack-card {
+  // Display & Box Model
+  padding: 32px 24px;
+  border-radius: 16px;
+  
+  // Visual
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  
+  // Animation
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  &-title {
+    // Display & Box Model
+    margin-bottom: 20px;
+    
+    // Typography
+    font-size: 20px;
+    font-weight: 600;
+    color: #44A08D;
+  }
+  
+  &-list {
+    // Display & Box Model
+    padding-left: 0;
+    
+    // Misc
+    list-style: none;
+    
+    &-item {
+      // Display & Box Model
+      padding: 8px 0;
+      padding-left: 24px;
+      
+      // Positioning
+      position: relative;
+      
+      // Typography
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--color-text-secondary, #6c757d);
+      
+      &::before {
+        // Positioning
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        
+        // Display & Box Model
+        content: '▸';
+        
+        // Typography
+        color: #4ECDC4;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// ========================================
+// Features
+// ========================================
+.about_page-features {
+  // Visual
+  background: var(--color-bg-secondary, #f8f9fa);
+  
+  &-grid {
+    // Display & Box Model
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+  }
+}
+
+.feature_card {
+  // Display & Box Model
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px;
+  border-radius: 16px;
+  text-align: center;
+  
+  // Visual
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  
+  // Animation
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  &-icon {
+    // Display & Box Model
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 24px;
+    border-radius: 50%;
+    
+    // Visual
+    background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
+    
+    &-circle {
+      // Display & Box Model
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      
+      // Visual
+      background: white;
+    }
+  }
+  
+  &-title {
+    // Display & Box Model
+    margin-bottom: 12px;
+    
+    // Typography
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-text-primary, #1a1a1a);
+  }
+  
+  &-description {
+    // Typography
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-text-secondary, #6c757d);
+  }
+}
+
+// ========================================
+// Development Philosophy
+// ========================================
+.about_page-development {
+  &-content {
+    // Display & Box Model
+    max-width: 800px;
+    margin: 0 auto;
+    
+    &-text {
+      // Display & Box Model
+      margin-bottom: 24px;
+      
+      // Typography
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--color-text-secondary, #4a5568);
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// ========================================
+// Statistics
+// ========================================
+.about_page-stats {
+  // Display & Box Model
+  padding: 80px 24px;
+  
+  // Visual
+  background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+  
+  &-container {
+    // Display & Box Model
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+.stat_card {
+  // Display & Box Model
+  text-align: center;
+  
+  &-value {
+    // Display & Box Model
+    margin-bottom: 8px;
+    
+    // Typography
+    font-size: 48px;
+    font-weight: 800;
+    color: #ffffff;
+    
+    @media (max-width: 768px) {
+      font-size: 36px;
+    }
+  }
+  
+  &-label {
+    // Typography
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// ========================================
+// Animations
+// ========================================
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>
