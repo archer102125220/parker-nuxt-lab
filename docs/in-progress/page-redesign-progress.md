@@ -9,8 +9,8 @@
 
 **專案狀態：**
 - **優先級**: 🔥 P0 (最高)
-- **完成度**: 40% (7/17+ 頁面)
-- **最後更新**: 2025-12-24
+- **完成度**: 53% (9/17 頁面)
+- **最後更新**: 2025-12-25
 
 ---
 
@@ -134,6 +134,31 @@
     - Route Param 分組 GET 測試
     - Route Param 分組 POST 測試
 
+### 8. Web RTC 頁面
+- **路徑**: `/web-rtc`
+- **狀態**: ✅ 已完成
+- **完成日期**: 2025-12-25
+- **內容**:
+  - Hero Section
+  - 簡介區塊
+  - 藍色資訊提示框（測試流程說明）
+  - 3個測試頁面：
+    - Socket.IO 實作
+    - WebSocket 實作
+    - SSE 實作
+
+### 9. Firebase 頁面
+- **路徑**: `/firebase`
+- **狀態**: ✅ 已完成
+- **完成日期**: 2025-12-25
+- **內容**:
+  - Hero Section
+  - 簡介區塊（包含外部連結）
+  - 1個測試頁面：
+    - FCM 推播通知後台
+- **特殊功能**: 
+  - 外部連結有 hover 效果
+
 ---
 
 ## 待設計頁面 📋
@@ -142,10 +167,10 @@
 - [ ] Web Authn 頁面 (`/web-authn`)
 - [ ] FIDO2 Lib 頁面 (`/fido2-lib`)
 - [ ] Web Cam 頁面 (`/web-cam`)
-- [ ] Face API 頁面 (`/face-api`)
-- [ ] Frontend API Cache Test 頁面 (`/frontend-api-cach-test`)
-- [ ] Firebase 頁面 (`/firebase`)
-- [ ] Web RTC 頁面 (`/web-rtc`)
+- [ ] Face API 頁面 (`/face-api`) - 功能性測試頁面，不需要重新設計
+- [ ] Frontend API Cache Test 頁面 (`/frontend-api-cach-test`) - 單一檔案頁面
+- [x] Firebase 頁面 (`/firebase`) - ✅ 已完成
+- [x] Web RTC 頁面 (`/web-rtc`) - ✅ 已完成
 - [ ] Face Swap 頁面 (`/face-swap`)
 - [ ] Offline 頁面 (`/offline`)
 - [ ] Swagger Doc 頁面 (`/swagger-doc`)
@@ -171,12 +196,12 @@
 ## 統計數據
 
 ### 完成進度
-- **已完成**: 7 個頁面
-- **待完成**: 約 10+ 個頁面
-- **完成率**: 約 40%
+- **已完成**: 9 個頁面
+- **待完成**: 約 8+ 個頁面（含功能性頁面）
+- **完成率**: 約 53%
 
 ### i18n 翻譯
-- **已添加翻譯**: 14 個檔案（中英文各 7 個頁面）
+- **已添加翻譯**: 18 個檔案（中英文各 9 個頁面）
 - **翻譯覆蓋率**: 100%（已完成頁面）
 
 ---
