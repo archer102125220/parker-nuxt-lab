@@ -208,6 +208,14 @@
         "intro": "WebRTC 的實作測試，主要分為配合 Socket.IO、WebSocket 和 Server-Sent Events 三種信令傳輸方式。",
         "note": "目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試。"
     },
+    "firebase_page": {
+        "hero": {
+            "title": "Firebase 整合",
+            "subtitle": "Firebase 雲端服務整合測試",
+            "description": "整合 Firebase 雲端服務，包含 FCM 推播通知、Service Worker 等功能測試"
+        },
+        "intro": "原本在電子履歷中實作並測試的功能，但由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

@@ -208,6 +208,14 @@
         "intro": "WebRTC implementation tests, primarily divided into three signaling transport methods: Socket.IO, WebSocket, and Server-Sent Events.",
         "note": "The video functionality is currently in its initial completion stage, but the detailed workflow is not yet complete. Manual URL copying is required for testing."
     },
+    "firebase_page": {
+        "hero": {
+            "title": "Firebase Integration",
+            "subtitle": "Firebase Cloud Services Integration Testing",
+            "description": "Integrating Firebase cloud services, including FCM push notifications, Service Worker, and other functionality tests"
+        },
+        "intro": "Originally implemented and tested in the electronic resume, but since that project did not implement PWA or other features requiring Service Worker, this project attempts to integrate Service Worker and conduct tests."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
