@@ -17,12 +17,12 @@
           {{ t('home.hero.description') }}
         </p>
         <div class="hero_section-content-actions">
-          <NuxtLink 
-            :to="localePath('/components')" 
+          <button 
+            @click="scrollToNavigation" 
             class="hero_section-content-actions-btn hero_section-content-actions-btn--primary"
           >
             {{ t('home.hero.cta_explore') }}
-          </NuxtLink>
+          </button>
           <NuxtLink 
             :to="localePath('/about')" 
             class="hero_section-content-actions-btn hero_section-content-actions-btn--secondary"
@@ -58,7 +58,7 @@
     </section>
 
     <!-- Navigation Grid Section -->
-    <section class="navigation_section">
+    <section id="navigation" class="navigation_section">
       <div class="navigation_section-container">
         <h2 class="navigation_section-title">{{ t('home.navigation.title') }}</h2>
         <nav class="navigation_section-grid" role="navigation">
@@ -108,6 +108,17 @@ definePageMeta({
 
 const localePath = useLocalePath();
 const { t } = useI18n();
+
+// Smooth scroll to navigation section
+function scrollToNavigation() {
+  const navigationSection = document.getElementById('navigation');
+  if (navigationSection) {
+    navigationSection.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
 
 // Features data
 const features = computed(() => [
@@ -390,12 +401,16 @@ function handleIconError(event) {
         align-items: center;
         justify-content: center;
         padding: 14px 32px;
+        border: none;
         border-radius: 12px;
         
         /* Typography */
         font-size: 16px;
         font-weight: 600;
         text-decoration: none;
+        
+        /* Misc */
+        cursor: pointer;
         
         /* Animation */
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
