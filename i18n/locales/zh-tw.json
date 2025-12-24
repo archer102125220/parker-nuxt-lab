@@ -166,6 +166,22 @@
         },
         "intro": "自製 Vue 指令主要是為了避免因套件版本相容性或專案性質不合適使用 npm 上相關工具之狀況，因此自己實作相關指令。"
     },
+    "route_page": {
+        "hero": {
+            "title": "路由測試",
+            "subtitle": "Nuxt 路由功能測試",
+            "description": "用於複現特定路由狀況，作為筆記用途的測試頁面"
+        },
+        "intro": "主要用作複現路由相關狀況，包含 query 參數、params 參數與上一頁導航等功能測試。"
+    },
+    "css_drawing_page": {
+        "hero": {
+            "title": "CSS 繪圖",
+            "subtitle": "CSS 繪圖與 Anime.js 整合",
+            "description": "以 CSS 繪圖技術與 Anime.js 動畫庫整合為主的測試頁面"
+        },
+        "intro": "主要以 CSS 繪圖及 Anime.js 整合測試為主，包含三角形、六邊形等幾何圖形繪製與動畫效果。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

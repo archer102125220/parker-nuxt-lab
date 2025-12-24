@@ -166,6 +166,22 @@
         },
         "intro": "Custom Vue directives are built to avoid compatibility issues with npm packages or when project requirements don't fit existing tools."
     },
+    "route_page": {
+        "hero": {
+            "title": "Route Tests",
+            "subtitle": "Nuxt Routing Features Testing",
+            "description": "Test pages for reproducing specific routing scenarios and serving as reference notes"
+        },
+        "intro": "Used for reproducing routing-related scenarios, including query parameters, params parameters, and back navigation functionality tests."
+    },
+    "css_drawing_page": {
+        "hero": {
+            "title": "CSS Drawing",
+            "subtitle": "CSS Drawing & Anime.js Integration",
+            "description": "Test pages focusing on CSS drawing techniques and Anime.js animation library integration"
+        },
+        "intro": "Primarily focused on CSS drawing and Anime.js integration tests, including geometric shapes like triangles and hexagons with animation effects."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
