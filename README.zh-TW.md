@@ -523,11 +523,14 @@ yarn test:codegen
 #### 重要原則
 
 1. **每個元素只使用一個 className** - 不要組合多個類別
-2. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
-3. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`、`value_display`
-4. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`、`[data-pressed='true']`
-5. **CSS 相關的 HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`、`css-is-dragging`，以明確區分 CSS 狀態屬性與其他 HTML 屬性，並在高階組件向下傳遞 props 時，可以明確識別該變數是供 CSS 使用
-6. **CSS 變數名稱必須使用底線 `_` 而非連字符 `-`** - 如 `--color_primary`、`--font_size_base`，這樣可以在編輯器中雙擊快選完整變數名稱
+2. **每個元素必須有唯一的 className** - 用於快速除錯
+   - 唯一的 class name 能幫助快速識別哪個 DOM 元素有問題
+   - 除了 CSS 樣式設定外，唯一的 class name 還能在 DevTools 中快速定位問題
+3. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
+4. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`、`value_display`
+5. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`、`[data-pressed='true']`
+6. **CSS 相關的 HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`、`css-is-dragging`，以明確區分 CSS 狀態屬性與其他 HTML 屬性，並在高階組件向下傳遞 props 時，可以明確識別該變數是供 CSS 使用
+7. **CSS 變數名稱必須使用底線 `_` 而非連字符 `-`** - 如 `--color_primary`、`--font_size_base`，這樣可以在編輯器中雙擊快選完整變數名稱
 
 #### 內聯樣式例外情況
 

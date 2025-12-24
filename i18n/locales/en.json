@@ -182,6 +182,15 @@
         },
         "intro": "Primarily focused on CSS drawing and Anime.js integration tests, including geometric shapes like triangles and hexagons with animation effects."
     },
+    "socket_test_page": {
+        "hero": {
+            "title": "Socket Tests",
+            "subtitle": "WebSocket & Socket.IO Testing",
+            "description": "Recording results of native WebSocket with Nuxt 4 built-in features, and Socket.IO implementation on both frontend and backend"
+        },
+        "intro": "Recording results of native WebSocket with Nuxt 4 built-in features, and Socket.IO implementation on both frontend and backend.",
+        "warning": "The current deployment environment may not support WebSocket (e.g., Vercel and other deployment platforms), which may cause it to be ineffective."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

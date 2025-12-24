@@ -522,11 +522,14 @@ The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, reducin
 #### Key Principles
 
 1. **Each element uses only one className** - Don't combine multiple classes
-2. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
-3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
-4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
-5. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`, to clearly distinguish CSS state attributes from other HTML attributes, and to explicitly indicate the purpose of the variable when passing props down through component hierarchies
-6. **CSS variable names must use underscore `_` instead of hyphen `-`** - e.g., `--color_primary`, `--font_size_base`, enabling complete variable name selection via double-click in code editors
+2. **Each element MUST have a UNIQUE className** - For fast debugging
+   - Unique class names help quickly identify which DOM element has issues
+   - Besides CSS styling, unique class names enable fast debugging in DevTools
+3. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
+4. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
+5. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
+6. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`, to clearly distinguish CSS state attributes from other HTML attributes, and to explicitly indicate the purpose of the variable when passing props down through component hierarchies
+7. **CSS variable names must use underscore `_` instead of hyphen `-`** - e.g., `--color_primary`, `--font_size_base`, enabling complete variable name selection via double-click in code editors
 
 #### Inline Styles Exceptions
 

@@ -37,10 +37,13 @@ globs: ["**/*.scss", "**/*.css", "**/*.vue"]
 
 ## Key Rules
 1. Each element uses ONLY ONE className
-2. All elements MUST be nested under Block root class
-3. Do NOT share CSS class names between pages
-4. Use Placeholders (`%name`) for static shared styles
-5. Use Mixins (`@mixin`) for parameterized styles
+2. Each element MUST have a UNIQUE className for debugging
+   - Unique class names help quickly identify which DOM element has issues
+   - Besides CSS styling, unique class names enable fast debugging in DevTools
+3. All elements MUST be nested under Block root class
+4. Do NOT share CSS class names between pages
+5. Use Placeholders (`%name`) for static shared styles
+6. Use Mixins (`@mixin`) for parameterized styles
 
 ## SCSS Example
 
