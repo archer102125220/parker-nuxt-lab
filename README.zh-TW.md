@@ -604,13 +604,19 @@ parker-nuxt-lab/
 
 2. **組件樣式** → 組件檔案內
    - ✅ 與組件模板放在一起
-   - ✅ 使用 `<style scoped lang="scss">`
+   - ✅ 使用 `<style lang="scss">` 撰寫組件專屬樣式（使用 BEM 命名規範時不需要 `scoped`）
+   - ✅ 僅在需要覆蓋套件組件或現有組件樣式時，才使用 `<style scoped lang="scss">`（需搭配 `:deep()` 進行樣式穿透）
    - ✅ 只包含該組件特定的樣式
 
 3. **頁面樣式** → `pages/` 目錄內
    - ✅ 與頁面檔案放在同一目錄
    - ✅ 使用 `<style scoped lang="scss">` 避免全域污染
    - ✅ 只包含該頁面特定的樣式
+   - ✅ **每個頁面必須有獨立的根類別名稱**（例如：`.hooks_test_page`、`.socket_io_page`）
+
+> ⚠️ **重要規則**：
+> - 禁止在多個頁面間共用相同的 CSS 類別名稱（例如：不要在多個頁面使用 `.web_rtc_room_page`）。這有助於在瀏覽器 DevTools 中快速找到對應的檔案。
+> - 如果多個頁面有相似的 DOM 結構，請在 `components/` 中建立**可重用組件**，並透過 props 接收 CSS 類別名稱，而非共用單一 CSS 檔案。
 
 #### Mixins 與 Placeholders 使用方式
 

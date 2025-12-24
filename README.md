@@ -602,13 +602,19 @@ parker-nuxt-lab/
 
 2. **Component Styles** → Within component file
    - ✅ Co-located with component template
-   - ✅ Use `<style scoped lang="scss">`
+   - ✅ Use `<style lang="scss">` for component-specific styles (no `scoped` needed with BEM naming)
+   - ✅ Use `<style scoped lang="scss">` only when overriding external package components or existing components (requires `:deep()` for style penetration)
    - ✅ Contains only component-specific styles
 
 3. **Page Styles** → Within `pages/` directory
    - ✅ Co-located with page files
    - ✅ Use `<style scoped lang="scss">` to avoid global pollution
    - ✅ Contains only page-specific styles
+   - ✅ **Each page must have a unique root class name** (e.g., `.hooks_test_page`, `.socket_io_page`)
+
+> ⚠️ **Important Rules**:
+> - Do NOT share CSS class names between pages (e.g., don't use `.web_rtc_room_page` in multiple pages). This helps quickly identify the corresponding file when debugging in browser DevTools.
+> - If multiple pages have similar DOM structures, create a **reusable component** in `components/` that accepts CSS class names as props, rather than sharing a single CSS file.
 
 #### Mixins & Placeholders Usage
 
