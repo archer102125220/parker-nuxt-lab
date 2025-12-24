@@ -25,7 +25,7 @@
     </section>
 
     <!-- Introduction -->
-    <section class="sse_page-section sse_page-intro">
+    <section class="sse_page-intro">
       <div class="sse_page-section-container">
         <p class="sse_page-intro-text">
           {{ $t('sse_page.intro') }}
@@ -238,8 +238,17 @@ const sseTests = computed(() => [
 // Introduction
 // ========================================
 .sse_page-intro {
+  // Display & Box Model
+  padding: 60px 20px;
+  
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   &-text {
     // Typography

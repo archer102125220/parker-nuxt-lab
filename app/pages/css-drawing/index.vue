@@ -25,7 +25,7 @@
     </section>
 
     <!-- Introduction -->
-    <section class="css_drawing_page-section css_drawing_page-intro">
+    <section class="css_drawing_page-intro">
       <div class="css_drawing_page-section-container">
         <p class="css_drawing_page-intro-text">
           {{ $t('css_drawing_page.intro') }}
@@ -242,8 +242,17 @@ const drawingTests = computed(() => [
 // Introduction
 // ========================================
 .css_drawing_page-intro {
+  // Display & Box Model
+  padding: 60px 20px;
+  
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   &-text {
     // Typography

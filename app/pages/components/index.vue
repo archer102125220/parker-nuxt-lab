@@ -25,7 +25,7 @@
     </section>
 
     <!-- Introduction -->
-    <section class="components_page-section components_page-intro">
+    <section class="components_page-intro">
       <div class="components_page-section-container">
         <p class="components_page-intro-text">
           {{ $t('components_page.intro.custom') }}
@@ -37,7 +37,7 @@
     </section>
 
     <!-- UI Components -->
-    <section class="components_page-section components_page-category">
+    <section class="components_page-category">
       <div class="components_page-section-container">
         <h2 class="components_page-section-title">
           {{ $t('components_page.categories.ui') }}
@@ -56,7 +56,7 @@
     </section>
 
     <!-- Functional Components -->
-    <section class="components_page-section components_page-category">
+    <section class="components_page-category">
       <div class="components_page-section-container">
         <h2 class="components_page-section-title">
           {{ $t('components_page.categories.functional') }}
@@ -75,7 +75,7 @@
     </section>
 
     <!-- Third-party Integrations -->
-    <section class="components_page-section components_page-category">
+    <section class="components_page-category">
       <div class="components_page-section-container">
         <h2 class="components_page-section-title">
           {{ $t('components_page.categories.integration') }}
@@ -94,7 +94,7 @@
     </section>
 
     <!-- Combined Tests -->
-    <section class="components_page-section components_page-category">
+    <section class="components_page-category">
       <div class="components_page-section-container">
         <h2 class="components_page-section-title">
           {{ $t('components_page.categories.combined') }}
@@ -319,8 +319,17 @@ const combinedComponents = computed(() => [
 // Introduction
 // ========================================
 .components_page-intro {
+  // Display & Box Model
+  padding: 60px 20px;
+  
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   &-text {
     // Display & Box Model
@@ -333,6 +342,41 @@ const combinedComponents = computed(() => [
     
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+}
+
+// ========================================
+// Category Sections
+// ========================================
+.components_page-category {
+  // Display & Box Model
+  padding: 60px 20px;
+  
+  &:nth-child(even) {
+    // Visual
+    background: var(--color-bg-secondary, #f7fafc);
+  }
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  &-title {
+    // Display & Box Model
+    margin: 0 0 40px 0;
+    
+    // Typography
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-text-primary, #2d3748);
+    text-align: center;
+    
+    @media (max-width: 768px) {
+      font-size: 28px;
+      margin-bottom: 32px;
     }
   }
 }

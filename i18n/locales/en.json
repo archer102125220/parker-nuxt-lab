@@ -199,6 +199,15 @@
         },
         "intro": "Testing global and route param-based grouped Server-Sent Events, including GET and POST methods."
     },
+    "web_rtc_page": {
+        "hero": {
+            "title": "WebRTC Tests",
+            "subtitle": "WebRTC Real-time Video Communication Testing",
+            "description": "WebRTC implementation tests with different signaling transport methods (Socket.IO, WebSocket, SSE)"
+        },
+        "intro": "WebRTC implementation tests, primarily divided into three signaling transport methods: Socket.IO, WebSocket, and Server-Sent Events.",
+        "note": "The video functionality is currently in its initial completion stage, but the detailed workflow is not yet complete. Manual URL copying is required for testing."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

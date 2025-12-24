@@ -25,7 +25,7 @@
     </section>
 
     <!-- Introduction -->
-    <section class="socket_test_page-section socket_test_page-intro">
+    <section class="socket_test_page-intro">
       <div class="socket_test_page-section-container">
         <p class="socket_test_page-intro-text">
           {{ $t('socket_test_page.intro') }}
@@ -236,8 +236,17 @@ const socketTests = computed(() => [
 // Introduction
 // ========================================
 .socket_test_page-intro {
+  // Display & Box Model
+  padding: 60px 20px;
+  
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   &-text {
     // Typography

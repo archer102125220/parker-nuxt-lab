@@ -25,7 +25,7 @@
     </section>
 
     <!-- Introduction -->
-    <section class="directives_page-section directives_page-intro">
+    <section class="directives_page-intro">
       <div class="directives_page-section-container">
         <p class="directives_page-intro-text">
           {{ $t('directives_page.intro') }}
@@ -230,8 +230,17 @@ const directivesList = computed(() => [
 // Introduction
 // ========================================
 .directives_page-intro {
+  // Display & Box Model
+  padding: 60px 20px;
+  
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   &-text {
     // Typography

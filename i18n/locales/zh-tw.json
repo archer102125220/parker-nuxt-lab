@@ -199,6 +199,15 @@
         },
         "intro": "測試全域及依照 route param 做分組的 Server-Sent Events，包含 GET 與 POST 方法。"
     },
+    "web_rtc_page": {
+        "hero": {
+            "title": "WebRTC 測試",
+            "subtitle": "WebRTC 即時視訊通訊測試",
+            "description": "WebRTC 的實作測試，配合不同的信令傳輸方式（Socket.IO、WebSocket、SSE）"
+        },
+        "intro": "WebRTC 的實作測試，主要分為配合 Socket.IO、WebSocket 和 Server-Sent Events 三種信令傳輸方式。",
+        "note": "目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

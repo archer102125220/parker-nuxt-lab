@@ -25,7 +25,7 @@
     </section>
 
     <!-- Introduction -->
-    <section class="route_page-section route_page-intro">
+    <section class="route_page-intro">
       <div class="route_page-section-container">
         <p class="route_page-intro-text">
           {{ $t('route_page.intro') }}
@@ -230,8 +230,17 @@ const routeTests = computed(() => [
 // Introduction
 // ========================================
 .route_page-intro {
+  // Display & Box Model
+  padding: 60px 20px;
+  
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
+  
+  &-container {
+    // Display & Box Model
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   &-text {
     // Typography
