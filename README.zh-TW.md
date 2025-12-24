@@ -529,6 +529,38 @@ yarn test:codegen
 5. **CSS 相關的 HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`、`css-is-dragging`，以明確區分 CSS 狀態屬性與其他 HTML 屬性，並在高階組件向下傳遞 props 時，可以明確識別該變數是供 CSS 使用
 6. **CSS 變數名稱必須使用底線 `_` 而非連字符 `-`** - 如 `--color_primary`、`--font_size_base`，這樣可以在編輯器中雙擊快選完整變數名稱
 
+#### 內聯樣式例外情況
+
+雖然專案遵循 CSS 模組化和 BEM 命名規範，但以下情況允許使用內聯樣式：
+
+1. **CSS 變數傳遞**（包含動態計算值）
+   ```vue
+   <!-- ✅ 允許：CSS 變數傳遞靜態或動態值 -->
+   <div :style="{ '--editor_height': `${height}px` }">
+   <div :style="{ '--offset_y': `${offsetY}px` }">
+   ```
+   > 💡 **原因**：透過 CSS 變數實現動態值，保持樣式邏輯在 CSS 中，提高組件彈性
+   
+   ```scss
+   // 在 SCSS 中使用 CSS 變數
+   .element {
+     height: var(--editor_height);
+     transform: translateY(var(--offset_y));
+   }
+   ```
+
+2. **第三方庫要求**
+   ```vue
+   <!-- ✅ 允許：Google Tag Manager 等第三方庫要求 -->
+   <noscript :style="{ display: 'none', visibility: 'hidden' }">
+   ```
+
+**❌ 應避免的內聯樣式**：
+- 靜態樣式值（應使用 CSS 類別）
+- 動態計算值（應使用 CSS 變數傳遞）
+- 可預測的條件樣式（應使用 CSS 屬性選擇器）
+- 重複的樣式模式（應提取為 placeholders 或 mixins）
+
 
 本專案所有組件都遵循這些 CSS 規範，確保代碼風格一致性。
 

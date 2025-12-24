@@ -528,6 +528,38 @@ The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, reducin
 5. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`, to clearly distinguish CSS state attributes from other HTML attributes, and to explicitly indicate the purpose of the variable when passing props down through component hierarchies
 6. **CSS variable names must use underscore `_` instead of hyphen `-`** - e.g., `--color_primary`, `--font_size_base`, enabling complete variable name selection via double-click in code editors
 
+#### Inline Styles Exceptions
+
+While the project follows CSS modularization and BEM naming conventions, inline styles are allowed in the following cases:
+
+1. **CSS Variable Passing** (including dynamic calculated values)
+   ```vue
+   <!-- ✅ Allowed: Passing static or dynamic values via CSS variables -->
+   <div :style="{ '--editor_height': `${height}px` }">
+   <div :style="{ '--offset_y': `${offsetY}px` }">
+   ```
+   > 💡 **Reason**: Implement dynamic values through CSS variables, keeping style logic in CSS and improving component flexibility
+   
+   ```scss
+   // Use CSS variables in SCSS
+   .element {
+     height: var(--editor_height);
+     transform: translateY(var(--offset_y));
+   }
+   ```
+
+2. **Third-party Library Requirements**
+   ```vue
+   <!-- ✅ Allowed: Google Tag Manager and other third-party requirements -->
+   <noscript :style="{ display: 'none', visibility: 'hidden' }">
+   ```
+
+**❌ Inline Styles to Avoid**:
+- Static style values (should use CSS classes)
+- Dynamic calculated values (should use CSS variable passing)
+- Predictable conditional styles (should use CSS attribute selectors)
+- Repeated style patterns (should extract as placeholders or mixins)
+
 
 All components in this project follow these CSS conventions to ensure code style consistency.
 
