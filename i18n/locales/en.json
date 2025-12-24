@@ -191,6 +191,14 @@
         "intro": "Recording results of native WebSocket with Nuxt 4 built-in features, and Socket.IO implementation on both frontend and backend.",
         "warning": "The current deployment environment may not support WebSocket (e.g., Vercel and other deployment platforms), which may cause it to be ineffective."
     },
+    "sse_page": {
+        "hero": {
+            "title": "Server-Sent Events Tests",
+            "subtitle": "SSE Real-time Push Testing",
+            "description": "Testing global and route param-based grouped Server-Sent Events functionality"
+        },
+        "intro": "Testing global and route param-based grouped Server-Sent Events, including GET and POST methods."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

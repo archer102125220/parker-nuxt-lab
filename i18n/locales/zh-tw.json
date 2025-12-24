@@ -191,6 +191,14 @@
         "intro": "紀錄原生配合 Nuxt 4 內建的 WebSocket 以及前後端皆由 Socket.IO 實作的結果。",
         "warning": "當前部署環境可能不支援 WebSocket（如：Vercel 等部署平台），可能會無效。"
     },
+    "sse_page": {
+        "hero": {
+            "title": "Server-Sent Events 測試",
+            "subtitle": "SSE 即時推送測試",
+            "description": "測試全域及依照 route param 做分組的 Server-Sent Events 功能"
+        },
+        "intro": "測試全域及依照 route param 做分組的 Server-Sent Events，包含 GET 與 POST 方法。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
