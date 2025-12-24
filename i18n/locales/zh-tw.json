@@ -216,6 +216,14 @@
         },
         "intro": "原本在電子履歷中實作並測試的功能，但由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試。"
     },
+    "face_swap_page": {
+        "hero": {
+            "title": "AI 人臉替換",
+            "subtitle": "AI 人臉識別與替換技術",
+            "description": "使用 AI 技術實現人臉識別與替換功能，提供前端與後端兩種實作版本"
+        },
+        "intro": "使用 face-api.js 和 AI 模型實現人臉識別與替換功能，提供純前端與後端 AI 兩種實作方式。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

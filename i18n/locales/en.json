@@ -216,6 +216,14 @@
         },
         "intro": "Originally implemented and tested in the electronic resume, but since that project did not implement PWA or other features requiring Service Worker, this project attempts to integrate Service Worker and conduct tests."
     },
+    "face_swap_page": {
+        "hero": {
+            "title": "AI Face Swap",
+            "subtitle": "AI Face Recognition & Swap Technology",
+            "description": "Using AI technology to implement face recognition and swap functionality, providing both frontend and backend implementation versions"
+        },
+        "intro": "Using face-api.js and AI models to implement face recognition and swap functionality, providing both pure frontend and backend AI implementation methods."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
