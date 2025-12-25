@@ -41,17 +41,17 @@
           <div 
             v-for="feature in features" 
             :key="feature.key"
-            class="feature_card"
+            class="features_section-grid-card"
           >
-            <div class="feature_card-icon">
+            <div class="features_section-grid-card-icon">
               <img 
-                :src="`/img/home/features/${feature.icon}.svg`" 
+                class="features_section-grid-card-icon-image"
+                v-lazy="`/img/home/features/${feature.icon}.svg`" 
                 :alt="feature.title"
-                @error="handleIconError"
               >
             </div>
-            <h3 class="feature_card-title">{{ feature.title }}</h3>
-            <p class="feature_card-description">{{ feature.description }}</p>
+            <h3 class="features_section-grid-card-title">{{ feature.title }}</h3>
+            <p class="features_section-grid-card-description">{{ feature.description }}</p>
           </div>
         </div>
       </div>
@@ -268,11 +268,6 @@ const linkList = computed(() => [
     description: t('home.nav.swagger_doc_desc')
   }
 ]);
-
-function handleIconError(event) {
-  // Fallback to default icon if feature icon fails to load
-  event.target.src = '/img/icon/NuxtRock.v.10.4.webp';
-}
 </script>
 
 <style lang="scss">
@@ -486,65 +481,65 @@ function handleIconError(event) {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 32px;
-  }
-}
 
-.feature_card {
-  /* Display & Box Model */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 24px;
-  border-radius: 16px;
-  text-align: center;
-  
-  /* Visual */
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  
-  /* Animation */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-  }
-  
-  &-icon {
-    /* Display & Box Model */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    margin-bottom: 24px;
-    border-radius: 16px;
-    
-    /* Visual */
-    background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
-    
-    img {
-      width: 48px;
-      height: 48px;
+    &-card {
+      /* Display & Box Model */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      border-radius: 16px;
+      text-align: center;
+      
+      /* Visual */
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      
+      /* Animation */
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+      }
+      
+      &-icon {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 24px;
+        border-radius: 16px;
+        
+        /* Visual */
+        background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
+        
+        &-image {
+          width: 48px;
+          height: 48px;
+        }
+      }
+      
+      &-title {
+        /* Display & Box Model */
+        margin-bottom: 12px;
+        
+        /* Typography */
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-text-primary, #1a1a1a);
+      }
+      
+      &-description {
+        /* Typography */
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--color-text-secondary, #6c757d);
+      }
     }
-  }
-  
-  &-title {
-    /* Display & Box Model */
-    margin-bottom: 12px;
-    
-    /* Typography */
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-text-primary, #1a1a1a);
-  }
-  
-  &-description {
-    /* Typography */
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--color-text-secondary, #6c757d);
   }
 }
 

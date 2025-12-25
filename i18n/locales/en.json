@@ -431,6 +431,72 @@
             "error": "Processing failed"
         }
     },
+    "cloud_messaging_page": {
+        "hero": {
+            "title": "Firebase Cloud Messaging",
+            "subtitle": "Push Notification Admin Panel",
+            "description": "Manage push tokens and send notifications to registered devices"
+        },
+        "intro": "Wait for PWA installation to complete before triggering notification permission request. Notifications will work after permission is granted.",
+        "form": {
+            "title_label": "Notification Title",
+            "message_label": "Notification Message",
+            "image_label": "Notification Image URL",
+            "reset": "Reset",
+            "submit": "Submit",
+            "title_error": "Please check notification title",
+            "message_error": "Please check notification message"
+        },
+        "table": {
+            "os": "Operating System",
+            "token": "Token",
+            "action": "Action",
+            "delete": "Delete",
+            "refresh": "Refresh",
+            "no_data": "No Data",
+            "no_data_hint": "Please try again later"
+        },
+        "status": {
+            "success": "Completed, successfully sent to {success} devices, {failure} devices failed",
+            "delete_success": "Deleted successfully",
+            "delete_error": "Delete failed"
+        }
+    },
+    "dialog_page": {
+        "hero": {
+            "title": "Dialog Component Test",
+            "subtitle": "Custom Dialog Component Demo",
+            "description": "Testing custom dialog component vs Vuetify Dialog"
+        },
+        "buttons": {
+            "open": "Open",
+            "vuetify_dialog": "Vuetify Dialog Comparison"
+        }
+    },
+    "drawer_page": {
+        "hero": {
+            "title": "Drawer Component Test",
+            "subtitle": "Custom Drawer Component Demo",
+            "description": "Testing custom side drawer component functionality"
+        },
+        "buttons": {
+            "left": "Left",
+            "right": "Right",
+            "top": "Top",
+            "bottom": "Bottom"
+        }
+    },
+    "slide_in_panel_page": {
+        "hero": {
+            "title": "Slide-in Panel Component Test",
+            "subtitle": "Custom Slide-in Panel Component Demo",
+            "description": "Testing custom slide-in side panel component functionality"
+        },
+        "buttons": {
+            "left": "Left",
+            "right": "Right"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

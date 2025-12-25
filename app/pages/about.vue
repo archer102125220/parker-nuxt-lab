@@ -123,15 +123,15 @@
           <div 
             v-for="feature in features" 
             :key="feature.key"
-            class="feature_card"
+            class="about_page-features-grid-card"
           >
-            <div class="feature_card-icon">
-              <div class="feature_card-icon-circle"></div>
+            <div class="about_page-features-grid-card-icon">
+              <div class="about_page-features-grid-card-icon-circle"></div>
             </div>
-            <h3 class="feature_card-title">
+            <h3 class="about_page-features-grid-card-title">
               {{ $t(`about.features.${feature.key}.title`) }}
             </h3>
-            <p class="feature_card-description">
+            <p class="about_page-features-grid-card-description">
               {{ $t(`about.features.${feature.key}.description`) }}
             </p>
           </div>
@@ -493,70 +493,70 @@ useHeadMataData({
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 32px;
-  }
-}
 
-.feature_card {
-  // Display & Box Model
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 24px;
-  border-radius: 16px;
-  text-align: center;
-  
-  // Visual
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  
-  // Animation
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-  }
-  
-  &-icon {
-    // Display & Box Model
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    margin-bottom: 24px;
-    border-radius: 50%;
-    
-    // Visual
-    background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
-    
-    &-circle {
+    &-card {
       // Display & Box Model
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      border-radius: 16px;
+      text-align: center;
       
       // Visual
-      background: white;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      
+      // Animation
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+      }
+      
+      &-icon {
+        // Display & Box Model
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 24px;
+        border-radius: 50%;
+        
+        // Visual
+        background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
+        
+        &-circle {
+          // Display & Box Model
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          
+          // Visual
+          background: white;
+        }
+      }
+      
+      &-title {
+        // Display & Box Model
+        margin-bottom: 12px;
+        
+        // Typography
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-text-primary, #1a1a1a);
+      }
+      
+      &-description {
+        // Typography
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--color-text-secondary, #6c757d);
+      }
     }
-  }
-  
-  &-title {
-    // Display & Box Model
-    margin-bottom: 12px;
-    
-    // Typography
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-text-primary, #1a1a1a);
-  }
-  
-  &-description {
-    // Typography
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--color-text-secondary, #6c757d);
   }
 }
 
