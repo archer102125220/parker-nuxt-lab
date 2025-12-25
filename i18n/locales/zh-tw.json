@@ -357,6 +357,79 @@
             "expressions": "表情分析資料"
         }
     },
+    "face_swap_frontend": {
+        "hero": {
+            "title": "純前端人臉替換",
+            "subtitle": "使用瀏覽器端 face-api.js 進行即時人臉替換",
+            "description": "此功能完全在前端運行，不需要後端伺服器支援"
+        },
+        "tip": {
+            "title": "使用提示：",
+            "content": "為獲得最佳效果，建議來源照片的尺寸與目標畫面相近。如需處理不同尺寸的圖片，請使用「後端 AI 人臉替換」功能。"
+        },
+        "sections": {
+            "source": "來源臉部",
+            "target": "目標畫面",
+            "result": "替換結果"
+        },
+        "upload": {
+            "button": "選取來源照片",
+            "label": "點擊或拖拉來源照片到此區塊",
+            "mask": "拖拉來源照片到此區塊"
+        },
+        "buttons": {
+            "swap": "執行替換",
+            "reset": "重置",
+            "download": "下載結果"
+        },
+        "size_warning": {
+            "title": "圖片尺寸可能不適合",
+            "content": "建議使用與攝影機相近的尺寸（約 640x480）以獲得最佳效果。"
+        },
+        "panels": {
+            "detection": "人臉偵測詳細資訊",
+            "landmarks": "臉部特徵點 (Landmarks)",
+            "expressions": "表情辨識結果"
+        },
+        "status": {
+            "detecting": "正在偵測人臉...",
+            "swapping": "正在執行人臉替換...",
+            "success": "人臉替換完成！",
+            "downloaded": "圖片已下載",
+            "no_source": "請先上傳來源照片並確認攝影機已啟動",
+            "no_source_face": "無法在來源照片中偵測到人臉",
+            "no_target_face": "無法在攝影機畫面中偵測到人臉"
+        }
+    },
+    "face_swap_backend": {
+        "hero": {
+            "title": "後端 AI 人臉替換",
+            "subtitle": "使用後端 AI 服務進行高品質人臉替換",
+            "description": "支援不同尺寸的圖片，提供更精確的人臉替換效果"
+        },
+        "sections": {
+            "source": "來源照片",
+            "target": "目標照片",
+            "result": "替換結果"
+        },
+        "upload": {
+            "source_button": "選取來源照片",
+            "source_label": "點擊或拖拉來源照片到此區塊",
+            "target_button": "選取目標照片",
+            "target_label": "點擊或拖拉目標照片到此區塊"
+        },
+        "buttons": {
+            "swap": "執行替換",
+            "reset": "重置",
+            "download": "下載結果"
+        },
+        "status": {
+            "uploading": "正在上傳圖片...",
+            "processing": "正在處理中...",
+            "success": "人臉替換完成！",
+            "error": "處理失敗"
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

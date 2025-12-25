@@ -358,6 +358,79 @@
             "expressions": "Expression Analysis Data"
         }
     },
+    "face_swap_frontend": {
+        "hero": {
+            "title": "Frontend Face Swap",
+            "subtitle": "Real-time face swap using browser-side face-api.js",
+            "description": "This feature runs entirely in the frontend without backend server support"
+        },
+        "tip": {
+            "title": "Usage Tip:",
+            "content": "For best results, the source photo dimensions should be similar to the target frame. For different sized images, please use 'Backend AI Face Swap' feature."
+        },
+        "sections": {
+            "source": "Source Face",
+            "target": "Target Frame",
+            "result": "Swap Result"
+        },
+        "upload": {
+            "button": "Select Source Photo",
+            "label": "Click or drag source photo here",
+            "mask": "Drag source photo here"
+        },
+        "buttons": {
+            "swap": "Perform Swap",
+            "reset": "Reset",
+            "download": "Download Result"
+        },
+        "size_warning": {
+            "title": "Image size may not be suitable",
+            "content": "Recommend using dimensions similar to webcam (approx. 640x480) for best results."
+        },
+        "panels": {
+            "detection": "Face Detection Details",
+            "landmarks": "Face Landmarks",
+            "expressions": "Expression Recognition Results"
+        },
+        "status": {
+            "detecting": "Detecting faces...",
+            "swapping": "Performing face swap...",
+            "success": "Face swap completed!",
+            "downloaded": "Image downloaded",
+            "no_source": "Please upload source photo and confirm camera is active",
+            "no_source_face": "Cannot detect face in source photo",
+            "no_target_face": "Cannot detect face in camera frame"
+        }
+    },
+    "face_swap_backend": {
+        "hero": {
+            "title": "Backend AI Face Swap",
+            "subtitle": "High quality face swap using backend AI service",
+            "description": "Supports different image sizes and provides more accurate face swap results"
+        },
+        "sections": {
+            "source": "Source Photo",
+            "target": "Target Photo",
+            "result": "Swap Result"
+        },
+        "upload": {
+            "source_button": "Select Source Photo",
+            "source_label": "Click or drag source photo here",
+            "target_button": "Select Target Photo",
+            "target_label": "Click or drag target photo here"
+        },
+        "buttons": {
+            "swap": "Perform Swap",
+            "reset": "Reset",
+            "download": "Download Result"
+        },
+        "status": {
+            "uploading": "Uploading images...",
+            "processing": "Processing...",
+            "success": "Face swap completed!",
+            "error": "Processing failed"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
