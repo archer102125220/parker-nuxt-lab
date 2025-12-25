@@ -13,6 +13,28 @@
 // onMounted(() => {
 //   console.log({ $pwa });
 // });
+
+const { $ripplesAnimation } = useNuxtApp();
+
+onMounted(() => {
+  console.log('layout default mounted');
+  $ripplesAnimation.ripples('body', {
+    resolution: 512,
+    dropRadius: 20, //px
+    perturbance: 0.04
+  });
+
+  // Automatic drops
+  setInterval(() => {
+    console.log('automatic drops');
+    const $el = document.querySelector('main');
+    const x = Math.random() * $el.getBoundingClientRect().width;
+    const y = Math.random() * $el.getBoundingClientRect().height;
+    const dropRadius = 20;
+    const strength = 0.04 + Math.random() * 0.04;
+    $ripplesAnimation.ripples('main', 'drop', x, y, dropRadius, strength);
+  }, 400);
+});
 </script>
 
 <style lang="scss" scoped>

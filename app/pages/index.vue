@@ -1,15 +1,21 @@
 <template>
   <div class="home_page">
     <!-- Hero Section -->
-    <section class="hero_section">
+    <section
+      class="hero_section"
+      v-ripples-animation="{
+        resolution: 128,
+        dropRadius: 10,
+        perturbance: 0.04,
+        interactive: false
+      }"
+    >
       <div class="hero_section-background">
         <div class="hero_section-background-gradient"></div>
       </div>
-      
+
       <div class="hero_section-content">
-        <h1 class="hero_section-content-title">
-          Parker Nuxt Lab
-        </h1>
+        <h1 class="hero_section-content-title">Parker Nuxt Lab</h1>
         <p class="hero_section-content-subtitle">
           {{ t('home.hero.subtitle') }}
         </p>
@@ -17,14 +23,14 @@
           {{ t('home.hero.description') }}
         </p>
         <div class="hero_section-content-actions">
-          <button 
-            @click="scrollToNavigation" 
+          <button
+            @click="scrollToNavigation"
             class="hero_section-content-actions-btn hero_section-content-actions-btn--primary"
           >
             {{ t('home.hero.cta_explore') }}
           </button>
-          <NuxtLink 
-            :to="localePath('/about')" 
+          <NuxtLink
+            :to="localePath('/about')"
             class="hero_section-content-actions-btn hero_section-content-actions-btn--secondary"
           >
             {{ t('home.hero.cta_about') }}
@@ -38,17 +44,17 @@
       <div class="features_section-container">
         <h2 class="features_section-title">{{ t('home.features.title') }}</h2>
         <div class="features_section-grid">
-          <div 
-            v-for="feature in features" 
+          <div
+            v-for="feature in features"
             :key="feature.key"
             class="feature_card"
           >
             <div class="feature_card-icon">
-              <img 
-                :src="`/img/home/features/${feature.icon}.svg`" 
+              <img
+                :src="`/img/home/features/${feature.icon}.svg`"
                 :alt="feature.title"
                 @error="handleIconError"
-              >
+              />
             </div>
             <h3 class="feature_card-title">{{ feature.title }}</h3>
             <p class="feature_card-description">{{ feature.description }}</p>
@@ -60,9 +66,11 @@
     <!-- Navigation Grid Section -->
     <section id="navigation" class="navigation_section">
       <div class="navigation_section-container">
-        <h2 class="navigation_section-title">{{ t('home.navigation.title') }}</h2>
+        <h2 class="navigation_section-title">
+          {{ t('home.navigation.title') }}
+        </h2>
         <nav class="navigation_section-grid" role="navigation">
-      <!-- <NuxtLink
+          <!-- <NuxtLink
       v-for="link in linkList"
       :key="link.to"
       class="index_page-content-link"
@@ -87,11 +95,7 @@
     <!-- Stats Section -->
     <section class="stats_section">
       <div class="stats_section-container">
-        <div 
-          v-for="stat in stats" 
-          :key="stat.key"
-          class="stat_card"
-        >
+        <div v-for="stat in stats" :key="stat.key" class="stat_card">
           <div class="stat_card-value">{{ stat.value }}</div>
           <div class="stat_card-label">{{ stat.label }}</div>
         </div>
@@ -113,7 +117,7 @@ const { t } = useI18n();
 function scrollToNavigation() {
   const navigationSection = document.getElementById('navigation');
   if (navigationSection) {
-    navigationSection.scrollIntoView({ 
+    navigationSection.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
@@ -279,7 +283,7 @@ function handleIconError(event) {
 .home_page {
   /* Display & Box Model */
   min-height: 100vh;
-  
+
   /* Visual */
   background: var(--color-bg-primary, #ffffff);
 }
@@ -290,7 +294,7 @@ function handleIconError(event) {
 .hero_section {
   /* Positioning */
   position: relative;
-  
+
   /* Display & Box Model */
   display: flex;
   align-items: center;
@@ -298,108 +302,108 @@ function handleIconError(event) {
   min-height: 100vh;
   padding: 80px 24px;
   overflow: hidden;
-  
+
   &-background {
     /* Positioning */
     position: absolute;
     top: 0;
     left: 0;
     z-index: 0;
-    
+
     /* Display & Box Model */
     width: 100%;
     height: 100%;
-    
+
     &-gradient {
       /* Display & Box Model */
       width: 100%;
       height: 100%;
-      
+
       /* Visual */
-      background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+      background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
       opacity: 0.85;
-      
+
       /* Animation */
       animation: gradient-shift 15s ease infinite;
     }
   }
-  
+
   &-content {
     /* Positioning */
     position: relative;
     z-index: 1;
-    
+
     /* Display & Box Model */
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 900px;
     text-align: center;
-    
+
     &-title {
       /* Display & Box Model */
       margin-bottom: 24px;
-      
+
       /* Typography */
       font-size: 64px;
       font-weight: 800;
       line-height: 1.1;
       color: #ffffff;
       letter-spacing: -0.02em;
-      
+
       /* Animation */
       animation: fade-in-up 0.8s ease-out;
-      
+
       @media (max-width: 768px) {
         font-size: 48px;
       }
     }
-    
+
     &-subtitle {
       /* Display & Box Model */
       margin-bottom: 16px;
-      
+
       /* Typography */
       font-size: 28px;
       font-weight: 600;
       color: rgba(255, 255, 255, 0.95);
-      
+
       /* Animation */
       animation: fade-in-up 0.8s ease-out 0.2s backwards;
-      
+
       @media (max-width: 768px) {
         font-size: 22px;
       }
     }
-    
+
     &-description {
       /* Display & Box Model */
       margin-bottom: 40px;
       max-width: 600px;
-      
+
       /* Typography */
       font-size: 18px;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.85);
-      
+
       /* Animation */
       animation: fade-in-up 0.8s ease-out 0.4s backwards;
-      
+
       @media (max-width: 768px) {
         font-size: 16px;
       }
     }
-    
+
     &-actions {
       /* Display & Box Model */
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
       justify-content: center;
-      
+
       /* Animation */
       animation: fade-in-up 0.8s ease-out 0.6s backwards;
-      
+
       &-btn {
         /* Display & Box Model */
         display: inline-flex;
@@ -408,37 +412,37 @@ function handleIconError(event) {
         padding: 14px 32px;
         border: none;
         border-radius: 12px;
-        
+
         /* Typography */
         font-size: 16px;
         font-weight: 600;
         text-decoration: none;
-        
+
         /* Misc */
         cursor: pointer;
-        
+
         /* Animation */
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        
+
         &--primary {
           /* Visual */
           background: #ffffff;
-          color: #44A08D;
+          color: #44a08d;
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-          
+
           &:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
           }
         }
-        
+
         &--secondary {
           /* Visual */
           background: rgba(255, 255, 255, 0.1);
           color: #ffffff;
           border: 2px solid rgba(255, 255, 255, 0.3);
           backdrop-filter: blur(10px);
-          
+
           &:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
@@ -456,31 +460,31 @@ function handleIconError(event) {
 .features_section {
   /* Display & Box Model */
   padding: 100px 24px;
-  
+
   /* Visual */
   background: var(--color-bg-secondary, #f8f9fa);
-  
+
   &-container {
     /* Display & Box Model */
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   &-title {
     /* Display & Box Model */
     margin-bottom: 60px;
-    
+
     /* Typography */
     font-size: 42px;
     font-weight: 700;
     text-align: center;
     color: var(--color-text-primary, #1a1a1a);
-    
+
     @media (max-width: 768px) {
       font-size: 32px;
     }
   }
-  
+
   &-grid {
     /* Display & Box Model */
     display: grid;
@@ -497,20 +501,20 @@ function handleIconError(event) {
   padding: 40px 24px;
   border-radius: 16px;
   text-align: center;
-  
+
   /* Visual */
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  
+
   /* Animation */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   }
-  
+
   &-icon {
     /* Display & Box Model */
     display: flex;
@@ -520,26 +524,26 @@ function handleIconError(event) {
     height: 80px;
     margin-bottom: 24px;
     border-radius: 16px;
-    
+
     /* Visual */
     background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
-    
+
     img {
       width: 48px;
       height: 48px;
     }
   }
-  
+
   &-title {
     /* Display & Box Model */
     margin-bottom: 12px;
-    
+
     /* Typography */
     font-size: 20px;
     font-weight: 600;
     color: var(--color-text-primary, #1a1a1a);
   }
-  
+
   &-description {
     /* Typography */
     font-size: 15px;
@@ -554,34 +558,34 @@ function handleIconError(event) {
 .navigation_section {
   /* Display & Box Model */
   padding: 100px 24px;
-  
+
   &-container {
     /* Display & Box Model */
     max-width: 1400px;
     margin: 0 auto;
   }
-  
+
   &-title {
     /* Display & Box Model */
     margin-bottom: 60px;
-    
+
     /* Typography */
     font-size: 42px;
     font-weight: 700;
     text-align: center;
     color: var(--color-text-primary, #1a1a1a);
-    
+
     @media (max-width: 768px) {
       font-size: 32px;
     }
   }
-  
+
   &-grid {
     /* Display & Box Model */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
-    
+
     @media (max-width: 768px) {
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 16px;
@@ -595,10 +599,10 @@ function handleIconError(event) {
 .stats_section {
   /* Display & Box Model */
   padding: 80px 24px;
-  
+
   /* Visual */
-  background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
-  
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+
   &-container {
     /* Display & Box Model */
     display: grid;
@@ -612,21 +616,21 @@ function handleIconError(event) {
 .stat_card {
   /* Display & Box Model */
   text-align: center;
-  
+
   &-value {
     /* Display & Box Model */
     margin-bottom: 8px;
-    
+
     /* Typography */
     font-size: 48px;
     font-weight: 800;
     color: #ffffff;
-    
+
     @media (max-width: 768px) {
       font-size: 36px;
     }
   }
-  
+
   &-label {
     /* Typography */
     font-size: 16px;
@@ -650,7 +654,8 @@ function handleIconError(event) {
 }
 
 @keyframes gradient-shift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
