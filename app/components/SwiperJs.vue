@@ -1,3 +1,4 @@
+<!-- TODO: loop fix -->
 <template>
   <div
     class="swiper_js"

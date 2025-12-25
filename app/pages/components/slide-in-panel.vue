@@ -22,9 +22,9 @@
     <!-- Main Content -->
     <section class="slide_in_panel_page-section">
       <div class="slide_in_panel_page-describe">
-        <p class="slide_in_panel_page-describe-text">為了避免公司專案上的套件衝突，因此手刻一版訊息佇列</p>
+        <p class="slide_in_panel_page-describe-text">{{ $t('slide_in_panel_page.describe.text') }}</p>
         <span class="slide_in_panel_page-describe-note">（</span>
-        <del class="slide_in_panel_page-describe-strikethrough">我也想既優雅又輕鬆愜意的使用套件，但現實不允許</del>
+        <del class="slide_in_panel_page-describe-strikethrough">{{ $t('slide_in_panel_page.describe.strikethrough') }}</del>
         <span class="slide_in_panel_page-describe-note">）</span>
       </div>
 

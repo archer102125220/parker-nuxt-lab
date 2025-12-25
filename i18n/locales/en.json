@@ -492,6 +492,10 @@
             "subtitle": "Custom Slide-in Panel Component Demo",
             "description": "Testing custom slide-in side panel component functionality"
         },
+        "describe": {
+            "text": "Handcrafted message queue component to avoid package conflicts in company projects",
+            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        },
         "buttons": {
             "left": "Left",
             "right": "Right"
@@ -582,6 +586,41 @@
             "title": "Countdown Component Test",
             "subtitle": "Custom Flip Countdown Timer Demo",
             "description": "Testing custom flip-style countdown timer component functionality"
+        }
+    },
+    "virtual_scroller_page": {
+        "hero": {
+            "title": "Virtual Scroller Component Test",
+            "subtitle": "Vuetify Virtual Scroll Component Demo",
+            "description": "Testing Vuetify v-virtual-scroll for efficient rendering of large datasets"
+        },
+        "describe": {
+            "text": "Testing whether items of different sizes display correctly"
+        }
+    },
+    "youtube_test_page": {
+        "hero": {
+            "title": "YouTube Integration Test",
+            "subtitle": "Custom YouTube Player Component Demo",
+            "description": "Testing custom embedded YouTube player component"
+        }
+    },
+    "swiper_test_page": {
+        "hero": {
+            "title": "Custom Swiper Test",
+            "subtitle": "Custom Carousel Component Demo",
+            "description": "Testing custom touch-enabled carousel component"
+        },
+        "describe": {
+            "text": "Handcrafted carousel component to avoid package conflicts in company projects",
+            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        }
+    },
+    "swiper_js_test_page": {
+        "hero": {
+            "title": "Swiper.js Integration Test",
+            "subtitle": "Swiper.js Library Integration Demo",
+            "description": "Testing Swiper.js integration with loop and autoplay features"
         }
     },
     "components": {

@@ -491,6 +491,10 @@
             "subtitle": "自製 Slide-in Panel 組件展示",
             "description": "測試自製滑入側邊面板組件功能"
         },
+        "describe": {
+            "text": "為了避免公司專案上的套件衝突，因此手刻一版訊息佇列",
+            "strikethrough": "我也想既優雅又輕鬆愜意的使用套件，但現實不允許"
+        },
         "buttons": {
             "left": "左側",
             "right": "右側"
@@ -581,6 +585,41 @@
             "title": "倒數計時組件測試",
             "subtitle": "自製翻頁式倒數計時器展示",
             "description": "測試自製翻頁式倒數計時器組件功能"
+        }
+    },
+    "virtual_scroller_page": {
+        "hero": {
+            "title": "Virtual Scroller 組件測試",
+            "subtitle": "Vuetify 虛擬滾動組件展示",
+            "description": "測試 Vuetify v-virtual-scroll 組件高效渲染大量數據"
+        },
+        "describe": {
+            "text": "測試不同大小的 item 是否能正常顯示"
+        }
+    },
+    "youtube_test_page": {
+        "hero": {
+            "title": "YouTube 整合測試",
+            "subtitle": "自製 YouTube 播放器組件展示",
+            "description": "測試自製 YouTube 嵌入式播放器組件"
+        }
+    },
+    "swiper_test_page": {
+        "hero": {
+            "title": "自製 Swiper 測試",
+            "subtitle": "自製輪播圖組件展示",
+            "description": "測試自製觸控滑動輪播圖組件"
+        },
+        "describe": {
+            "text": "為了避免公司專案上的套件衝突，因此手刻一版輪播圖",
+            "strikethrough": "我也想既優雅又輕鬆愜意的使用套件，但現實不允許"
+        }
+    },
+    "swiper_js_test_page": {
+        "hero": {
+            "title": "Swiper.js 整合測試",
+            "subtitle": "Swiper.js 套件整合展示",
+            "description": "測試 Swiper.js 套件整合，支援循環播放、自動播放等功能"
         }
     },
     "components": {
