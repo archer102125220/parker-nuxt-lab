@@ -67,7 +67,8 @@
             "socket_desc": "Socket.IO 和 WebSocket 即時通訊測試",
             "server_sent_event_desc": "Server-Sent Events 單向即時通訊實作",
             "web_rtc_desc": "WebRTC 點對點視訊通話功能測試",
-            "face_swap_desc": "AI 人臉交換技術的實作展示"
+            "face_swap_desc": "AI 人臉交換技術的實作展示",
+            "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔"
         },
         "stats": {
             "components": "組件數量",
@@ -223,6 +224,14 @@
             "description": "使用 AI 技術實現人臉識別與替換功能，提供前端與後端兩種實作版本"
         },
         "intro": "使用 face-api.js 和 AI 模型實現人臉識別與替換功能，提供純前端與後端 AI 兩種實作方式。"
+    },
+    "swagger_doc_page": {
+        "hero": {
+            "title": "Swagger API 文檔",
+            "subtitle": "API 文檔互動式查詢介面",
+            "description": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔，支援互動式測試和查詢"
+        },
+        "intro": "此頁面展示 Nuxt Server API 的 Swagger 文檔，您可以直接在此查看 API 端點、參數和回應格式，並進行互動式測試。"
     },
     "components": {
         "description": {

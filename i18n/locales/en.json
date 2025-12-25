@@ -17,6 +17,8 @@
         "fido2_lib": "Biometric authentication test (fido2-lib)",
         "web_cam": "WebCam test",
         "face_api": "face_api test",
+        "face_swap": "AI Face Swap Test",
+        "swagger_doc": "Swagger API Documentation",
         "frontend_cach_api": "Frontend API cache test",
         "firebase": "Firebase integration test",
         "socket": "Socket tests",
@@ -67,7 +69,8 @@
             "socket_desc": "Socket.IO and WebSocket real-time communication testing",
             "server_sent_event_desc": "Server-Sent Events unidirectional real-time communication",
             "web_rtc_desc": "WebRTC peer-to-peer video call functionality testing",
-            "face_swap_desc": "AI face swapping technology implementation showcase"
+            "face_swap_desc": "AI face swapping technology implementation showcase",
+            "swagger_doc_desc": "Using Swagger UI to display complete documentation for Nuxt Server APIs"
         },
         "stats": {
             "components": "Components",
@@ -223,6 +226,14 @@
             "description": "Using AI technology to implement face recognition and swap functionality, providing both frontend and backend implementation versions"
         },
         "intro": "Using face-api.js and AI models to implement face recognition and swap functionality, providing both pure frontend and backend AI implementation methods."
+    },
+    "swagger_doc_page": {
+        "hero": {
+            "title": "Swagger API Documentation",
+            "subtitle": "Interactive API Documentation Interface",
+            "description": "Using Swagger UI to display complete documentation for Nuxt Server APIs, supporting interactive testing and queries"
+        },
+        "intro": "This page displays Swagger documentation for Nuxt Server APIs. You can directly view API endpoints, parameters, and response formats, and perform interactive testing."
     },
     "components": {
         "description": {

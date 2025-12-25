@@ -261,6 +261,11 @@ const linkList = computed(() => [
     to: localePath('/face-swap'),
     label: 'AI 換臉 測試',
     description: t('home.nav.face_swap_desc')
+  },
+  {
+    to: localePath('/swagger-doc'),
+    label: t('index.swagger_doc'),
+    description: t('home.nav.swagger_doc_desc')
   }
 ]);
 
