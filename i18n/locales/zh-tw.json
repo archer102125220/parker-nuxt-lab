@@ -241,6 +241,16 @@
         },
         "intro": "此頁面用於測試網站的離線功能，系統會自動偵測網路狀態變化，並顯示相應的提示訊息。"
     },
+    "web_cam_page": {
+        "hero": {
+            "title": "WebCam 測試",
+            "subtitle": "網頁攝影機視訊串流測試",
+            "description": "測試網頁攝影機 API，包含視訊串流擷取和 Canvas 繪製功能"
+        },
+        "intro": "此頁面用於測試網頁攝影機功能，系統會自動請求攝影機權限，並將視訊串流顯示在 Canvas 上。",
+        "permission_required": "需要攝影機權限",
+        "permission_desc": "請允許瀏覽器存取您的攝影機以顯示視訊串流。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

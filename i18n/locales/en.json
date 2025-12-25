@@ -243,6 +243,16 @@
         },
         "intro": "This page is used to test the website's offline functionality. The system will automatically detect network status changes and display corresponding prompt messages."
     },
+    "web_cam_page": {
+        "hero": {
+            "title": "WebCam Test",
+            "subtitle": "Web Camera Video Stream Testing",
+            "description": "Testing web camera API, including video stream capture and Canvas rendering functionality"
+        },
+        "intro": "This page is used to test web camera functionality. The system will automatically request camera permissions and display the video stream on Canvas.",
+        "permission_required": "Camera Permission Required",
+        "permission_desc": "Please allow the browser to access your camera to display the video stream."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
