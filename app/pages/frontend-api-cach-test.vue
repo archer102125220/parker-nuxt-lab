@@ -55,53 +55,41 @@
             @submit.prevent="handleSubmit"
           >
             <!-- Input Fields -->
-            <div class="frontend_api_cache_page-test_card-form-group">
-              <label class="frontend_api_cache_page-test_card-form-group-label">
-                {{ $t('frontend_api_cache_page.form.get_param') }}
-              </label>
-              <input
-                type="text"
-                v-model="queryData"
-                class="frontend_api_cache_page-test_card-form-group-input"
-              />
-            </div>
+            <v-text-field
+              v-model="queryData"
+              :label="$t('frontend_api_cache_page.form.get_param')"
+              variant="outlined"
+              color="primary"
+              density="comfortable"
+              class="frontend_api_cache_page-test_card-form-group"
+            />
 
-            <div class="frontend_api_cache_page-test_card-form-group">
-              <label class="frontend_api_cache_page-test_card-form-group-label">
-                {{ $t('frontend_api_cache_page.form.post_param') }}
-              </label>
-              <input
-                type="text"
-                v-model="payloadData"
-                class="frontend_api_cache_page-test_card-form-group-input"
-              />
-            </div>
+            <v-text-field
+              v-model="payloadData"
+              :label="$t('frontend_api_cache_page.form.post_param')"
+              variant="outlined"
+              color="primary"
+              density="comfortable"
+              class="frontend_api_cache_page-test_card-form-group"
+            />
 
             <!-- Radio Group -->
-            <div class="frontend_api_cache_page-test_card-form-radio_group">
-              <label class="frontend_api_cache_page-test_card-form-radio_group-item">
-                <input
-                  type="radio"
-                  :value="true"
-                  v-model="isPost"
-                  class="frontend_api_cache_page-test_card-form-radio_group-item-input"
-                />
-                <span class="frontend_api_cache_page-test_card-form-radio_group-item-label">
-                  {{ $t('frontend_api_cache_page.form.use_post') }}
-                </span>
-              </label>
-              <label class="frontend_api_cache_page-test_card-form-radio_group-item">
-                <input
-                  type="radio"
-                  :value="false"
-                  v-model="isPost"
-                  class="frontend_api_cache_page-test_card-form-radio_group-item-input"
-                />
-                <span class="frontend_api_cache_page-test_card-form-radio_group-item-label">
-                  {{ $t('frontend_api_cache_page.form.use_get') }}
-                </span>
-              </label>
-            </div>
+            <v-radio-group
+              v-model="isPost"
+              color="primary"
+              inline
+              hide-details
+              class="frontend_api_cache_page-test_card-form-radio_group"
+            >
+              <v-radio
+                :value="true"
+                :label="$t('frontend_api_cache_page.form.use_post')"
+              />
+              <v-radio
+                :value="false"
+                :label="$t('frontend_api_cache_page.form.use_get')"
+              />
+            </v-radio-group>
 
             <!-- Checkboxes -->
             <div class="frontend_api_cache_page-test_card-form-checkbox_group">
@@ -468,79 +456,12 @@ async function handleGetApi() {
     
     &-group {
       // Display & Box Model
-      margin-bottom: 24px;
-      
-      &-label {
-        // Display & Box Model
-        display: block;
-        margin-bottom: 8px;
-        
-        // Typography
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-text-primary, #2d3748);
-      }
-      
-      &-input {
-        // Display & Box Model
-        width: 100%;
-        padding: 12px 16px;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        
-        // Typography
-        font-size: 16px;
-        color: var(--color-text-primary, #2d3748);
-        
-        // Animation
-        transition: border-color 0.3s;
-        
-        &:focus {
-          // Visual
-          border-color: var(--color-primary, #44A08D);
-          outline: none;
-        }
-      }
+      margin-bottom: 16px;
     }
     
     &-radio_group {
       // Display & Box Model
-      display: flex;
-      gap: 24px;
-      margin-bottom: 24px;
-      
-      @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 12px;
-      }
-      
-      &-item {
-        // Display & Box Model
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        
-        // Misc
-        cursor: pointer;
-        
-        &-input {
-          // Display & Box Model
-          width: 20px;
-          height: 20px;
-          
-          // Misc
-          cursor: pointer;
-        }
-        
-        &-label {
-          // Typography
-          font-size: 16px;
-          color: var(--color-text-primary, #2d3748);
-          
-          // Misc
-          cursor: pointer;
-        }
-      }
+      margin-bottom: 16px;
     }
     
     &-checkbox_group {
