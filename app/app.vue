@@ -8,12 +8,12 @@
     <!-- <NuxtPwaManifest /> -->
     <NuxtPwaAssets />
 
+    <LoadingBar :loading="loading" position="sticky" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
 
     <client-only>
-      <LoadingBar :loading="loading" position="fixed" />
       <Message
         :message-state="messageState"
         @reset-message-state="resetMessageState"

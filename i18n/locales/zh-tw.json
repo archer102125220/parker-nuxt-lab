@@ -517,6 +517,21 @@
             "description": "測試自製下拉選擇器組件功能"
         }
     },
+    "lazyload_test_page": {
+        "hero": {
+            "title": "自製 Lazyload 指令測試",
+            "subtitle": "自製圖片懶加載指令展示",
+            "description": "測試自製 v-customize-lazyload 指令功能"
+        }
+    },
+    "ripple_test_page": {
+        "hero": {
+            "title": "自製 Ripple 指令測試",
+            "subtitle": "自製點擊波紋效果指令展示",
+            "description": "測試自製 v-customize-ripple 指令功能"
+        },
+        "click_me": "點擊我測試自製的 ripple 效果"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

@@ -518,6 +518,21 @@
             "description": "Test custom dropdown selector component functionality"
         }
     },
+    "lazyload_test_page": {
+        "hero": {
+            "title": "Custom Lazyload Directive Test",
+            "subtitle": "Custom Image Lazy Loading Directive Demo",
+            "description": "Testing custom v-customize-lazyload directive functionality"
+        }
+    },
+    "ripple_test_page": {
+        "hero": {
+            "title": "Custom Ripple Directive Test",
+            "subtitle": "Custom Click Ripple Effect Directive Demo",
+            "description": "Testing custom v-customize-ripple directive functionality"
+        },
+        "click_me": "Click me to test custom ripple effect"
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
