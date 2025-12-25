@@ -233,6 +233,14 @@
         },
         "intro": "此頁面展示 Nuxt Server API 的 Swagger 文檔，您可以直接在此查看 API 端點、參數和回應格式，並進行互動式測試。"
     },
+    "offline_page": {
+        "hero": {
+            "title": "離線模式測試",
+            "subtitle": "網路狀態偵測與離線處理",
+            "description": "測試網站在離線狀態下的表現，包含網路狀態偵測和自動重連功能"
+        },
+        "intro": "此頁面用於測試網站的離線功能，系統會自動偵測網路狀態變化，並顯示相應的提示訊息。"
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

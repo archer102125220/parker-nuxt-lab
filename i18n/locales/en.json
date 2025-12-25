@@ -235,6 +235,14 @@
         },
         "intro": "This page displays Swagger documentation for Nuxt Server APIs. You can directly view API endpoints, parameters, and response formats, and perform interactive testing."
     },
+    "offline_page": {
+        "hero": {
+            "title": "Offline Mode Test",
+            "subtitle": "Network Status Detection & Offline Handling",
+            "description": "Testing website behavior in offline state, including network status detection and automatic reconnection functionality"
+        },
+        "intro": "This page is used to test the website's offline functionality. The system will automatically detect network status changes and display corresponding prompt messages."
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
