@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="lazyload_test_page-hero">
       <div class="lazyload_test_page-hero-background">
-        <div class="lazyload_test_page-hero-background-overlay"></div>
+        <div class="lazyload_test_page-hero-background-overlay" />
       </div>
       
       <div class="lazyload_test_page-hero-content">

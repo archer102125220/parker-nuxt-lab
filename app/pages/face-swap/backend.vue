@@ -8,7 +8,7 @@
           alt="Face Swap Backend" 
           class="face_swap_backend_page-hero-background-image"
         />
-        <div class="face_swap_backend_page-hero-background-overlay"></div>
+        <div class="face_swap_backend_page-hero-background-overlay" />
       </div>
       
       <div class="face_swap_backend_page-hero-content">

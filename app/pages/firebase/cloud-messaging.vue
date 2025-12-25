@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="cloud_messaging_page-hero">
       <div class="cloud_messaging_page-hero-background">
-        <div class="cloud_messaging_page-hero-background-overlay"></div>
+        <div class="cloud_messaging_page-hero-background-overlay" />
       </div>
       
       <div class="cloud_messaging_page-hero-content">

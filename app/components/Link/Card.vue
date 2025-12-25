@@ -8,7 +8,7 @@
           :alt="label"
           @error="handleBannerError" 
         />
-        <div class="link_card-image_container-overlay"></div>
+        <div class="link_card-image_container-overlay" />
       </div>
       
       <div class="link_card-content">

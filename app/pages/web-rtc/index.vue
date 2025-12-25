@@ -8,7 +8,7 @@
           alt="WebRTC Tests" 
           class="web_rtc_page-hero-background-image"
         />
-        <div class="web_rtc_page-hero-background-overlay"></div>
+        <div class="web_rtc_page-hero-background-overlay" />
       </div>
       
       <div class="web_rtc_page-hero-content">

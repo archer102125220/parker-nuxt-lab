@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="swagger_doc_page-hero">
       <div class="swagger_doc_page-hero-background">
-        <div class="swagger_doc_page-hero-background-overlay"></div>
+        <div class="swagger_doc_page-hero-background-overlay" />
       </div>
       
       <div class="swagger_doc_page-hero-content">

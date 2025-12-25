@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="ripple_test_page-hero">
       <div class="ripple_test_page-hero-background">
-        <div class="ripple_test_page-hero-background-overlay"></div>
+        <div class="ripple_test_page-hero-background-overlay" />
       </div>
       
       <div class="ripple_test_page-hero-content">

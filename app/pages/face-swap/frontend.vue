@@ -9,7 +9,7 @@
           alt="Face Swap Frontend" 
           class="face_swap_frontend_page-hero-background-image"
         />
-        <div class="face_swap_frontend_page-hero-background-overlay"></div>
+        <div class="face_swap_frontend_page-hero-background-overlay" />
       </div>
       
       <div class="face_swap_frontend_page-hero-content">

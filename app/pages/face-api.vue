@@ -8,7 +8,7 @@
           alt="Face API Test" 
           class="face_api_page-hero-background-image"
         />
-        <div class="face_api_page-hero-background-overlay"></div>
+        <div class="face_api_page-hero-background-overlay" />
       </div>
       
       <div class="face_api_page-hero-content">

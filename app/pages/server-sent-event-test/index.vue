@@ -8,7 +8,7 @@
           alt="Server-Sent Events" 
           class="sse_page-hero-background-image"
         />
-        <div class="sse_page-hero-background-overlay"></div>
+        <div class="sse_page-hero-background-overlay" />
       </div>
       
       <div class="sse_page-hero-content">

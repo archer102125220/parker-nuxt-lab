@@ -8,7 +8,7 @@
           alt="Route Tests" 
           class="route_page-hero-background-image"
         />
-        <div class="route_page-hero-background-overlay"></div>
+        <div class="route_page-hero-background-overlay" />
       </div>
       
       <div class="route_page-hero-content">

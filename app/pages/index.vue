@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="hero_section">
       <div class="hero_section-background">
-        <div class="hero_section-background-gradient"></div>
+        <div class="hero_section-background-gradient" />
       </div>
       
       <div class="hero_section-content">

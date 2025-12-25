@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="dialog_page-hero">
       <div class="dialog_page-hero-background">
-        <div class="dialog_page-hero-background-overlay"></div>
+        <div class="dialog_page-hero-background-overlay" />
       </div>
       
       <div class="dialog_page-hero-content">

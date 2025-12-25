@@ -532,6 +532,57 @@
         },
         "click_me": "點擊我測試自製的 ripple 效果"
     },
+    "go_top_page": {
+        "hero": {
+            "title": "返回置頂組件測試",
+            "subtitle": "自製 GoTop 組件展示",
+            "description": "測試自製返回頂部按鈕組件功能"
+        },
+        "scroll_hint": "請向下滾動以查看返回頂部按鈕"
+    },
+    "switch_button_page": {
+        "hero": {
+            "title": "Switch 組件測試",
+            "subtitle": "自製開關按鈕組件展示",
+            "description": "測試自製開關切換按鈕組件功能"
+        },
+        "current_value": "目前狀態",
+        "label": "僅直播"
+    },
+    "enter_label_page": {
+        "hero": {
+            "title": "文字特效測試",
+            "subtitle": "自製動畫文字組件展示",
+            "description": "測試自製文字逐字進入動畫特效"
+        },
+        "demo_title": "展示",
+        "test_title": "測試文字",
+        "update": "更新"
+    },
+    "qr_code_page": {
+        "hero": {
+            "title": "QR Code 組件測試",
+            "subtitle": "自製 QR Code 組件展示",
+            "description": "測試自製 QR Code 生成器組件功能"
+        },
+        "input_label": "輸入 QR Code 內容"
+    },
+    "skeleton_loader_page": {
+        "hero": {
+            "title": "Skeleton 組件測試",
+            "subtitle": "自製骨架屏載入器展示",
+            "description": "測試自製骨架屏載入器組件功能"
+        },
+        "toggle_loading": "開啟載入中狀態",
+        "loaded_content": "載入完成區塊"
+    },
+    "countdown_page": {
+        "hero": {
+            "title": "倒數計時組件測試",
+            "subtitle": "自製翻頁式倒數計時器展示",
+            "description": "測試自製翻頁式倒數計時器組件功能"
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

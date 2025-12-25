@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="drawer_page-hero">
       <div class="drawer_page-hero-background">
-        <div class="drawer_page-hero-background-overlay"></div>
+        <div class="drawer_page-hero-background-overlay" />
       </div>
       
       <div class="drawer_page-hero-content">

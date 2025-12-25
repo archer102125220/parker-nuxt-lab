@@ -8,7 +8,7 @@
           alt="About Banner"
           class="about_page-hero-background-image"
         />
-        <div class="about_page-hero-background-overlay"></div>
+        <div class="about_page-hero-background-overlay" />
       </div>
       <div class="about_page-hero-content">
         <h1 class="about_page-hero-content-title">
@@ -126,7 +126,7 @@
             class="about_page-features-grid-card"
           >
             <div class="about_page-features-grid-card-icon">
-              <div class="about_page-features-grid-card-icon-circle"></div>
+              <div class="about_page-features-grid-card-icon-circle" />
             </div>
             <h3 class="about_page-features-grid-card-title">
               {{ $t(`about.features.${feature.key}.title`) }}

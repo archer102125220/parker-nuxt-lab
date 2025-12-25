@@ -8,7 +8,7 @@
           alt="Web Authn Test" 
           class="web_authn_page-hero-background-image"
         />
-        <div class="web_authn_page-hero-background-overlay"></div>
+        <div class="web_authn_page-hero-background-overlay" />
       </div>
       
       <div class="web_authn_page-hero-content">

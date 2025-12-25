@@ -533,6 +533,57 @@
         },
         "click_me": "Click me to test custom ripple effect"
     },
+    "go_top_page": {
+        "hero": {
+            "title": "Go Top Component Test",
+            "subtitle": "Custom GoTop Component Demo",
+            "description": "Testing custom scroll-to-top button component functionality"
+        },
+        "scroll_hint": "Scroll down to see the go-to-top button"
+    },
+    "switch_button_page": {
+        "hero": {
+            "title": "Switch Component Test",
+            "subtitle": "Custom Switch Button Component Demo",
+            "description": "Testing custom toggle switch button component functionality"
+        },
+        "current_value": "Current State",
+        "label": "Live Only"
+    },
+    "enter_label_page": {
+        "hero": {
+            "title": "Text Animation Test",
+            "subtitle": "Custom Animated Text Component Demo",
+            "description": "Testing custom character-by-character text animation effect"
+        },
+        "demo_title": "Demo",
+        "test_title": "Test Text",
+        "update": "Update"
+    },
+    "qr_code_page": {
+        "hero": {
+            "title": "QR Code Component Test",
+            "subtitle": "Custom QR Code Component Demo",
+            "description": "Testing custom QR code generator component functionality"
+        },
+        "input_label": "Enter QR Code content"
+    },
+    "skeleton_loader_page": {
+        "hero": {
+            "title": "Skeleton Component Test",
+            "subtitle": "Custom Skeleton Loader Demo",
+            "description": "Testing custom skeleton screen loader component functionality"
+        },
+        "toggle_loading": "Enable loading state",
+        "loaded_content": "Content loaded"
+    },
+    "countdown_page": {
+        "hero": {
+            "title": "Countdown Component Test",
+            "subtitle": "Custom Flip Countdown Timer Demo",
+            "description": "Testing custom flip-style countdown timer component functionality"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

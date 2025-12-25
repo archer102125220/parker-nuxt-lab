@@ -21,7 +21,7 @@
           class="language_switcher-menu"
           :style="menuStyle"
         >
-          <div class="language_switcher-menu-backdrop" @click="closeMenu"></div>
+          <div class="language_switcher-menu-backdrop" @click="closeMenu" />
           <div class="language_switcher-menu-content">
             <button
               v-for="lang in localeList"

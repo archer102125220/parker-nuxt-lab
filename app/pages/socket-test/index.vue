@@ -8,7 +8,7 @@
           alt="Socket Tests" 
           class="socket_test_page-hero-background-image"
         />
-        <div class="socket_test_page-hero-background-overlay"></div>
+        <div class="socket_test_page-hero-background-overlay" />
       </div>
       
       <div class="socket_test_page-hero-content">

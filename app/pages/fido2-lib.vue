@@ -8,7 +8,7 @@
           alt="FIDO2 Lib Test" 
           class="fido2_lib_page-hero-background-image"
         />
-        <div class="fido2_lib_page-hero-background-overlay"></div>
+        <div class="fido2_lib_page-hero-background-overlay" />
       </div>
       
       <div class="fido2_lib_page-hero-content">

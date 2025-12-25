@@ -8,7 +8,7 @@
           alt="AI Face Swap" 
           class="face_swap_page-hero-background-image"
         />
-        <div class="face_swap_page-hero-background-overlay"></div>
+        <div class="face_swap_page-hero-background-overlay" />
       </div>
       
       <div class="face_swap_page-hero-content">
