@@ -602,6 +602,9 @@
             "title": "YouTube 整合測試",
             "subtitle": "自製 YouTube 播放器組件展示",
             "description": "測試自製 YouTube 嵌入式播放器組件"
+        },
+        "describe": {
+            "text": "將 YouTube iframe 嵌入封裝成組件，便於統一管理與調整樣式"
         }
     },
     "swiper_test_page": {
@@ -620,6 +623,16 @@
             "title": "Swiper.js 整合測試",
             "subtitle": "Swiper.js 套件整合展示",
             "description": "測試 Swiper.js 套件整合，支援循環播放、自動播放等功能"
+        }
+    },
+    "wang_editor_page": {
+        "hero": {
+            "title": "Wang Editor 整合測試",
+            "subtitle": "Wang Editor 富文字編輯器展示",
+            "description": "測試 Wang Editor 富文字編輯器套件整合"
+        },
+        "describe": {
+            "text": "因公司專案需求整合 Wang Editor 作為富文字編輯器"
         }
     },
     "components": {

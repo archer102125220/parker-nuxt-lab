@@ -603,6 +603,9 @@
             "title": "YouTube Integration Test",
             "subtitle": "Custom YouTube Player Component Demo",
             "description": "Testing custom embedded YouTube player component"
+        },
+        "describe": {
+            "text": "Wrapped YouTube iframe into a component for unified management and styling"
         }
     },
     "swiper_test_page": {
@@ -621,6 +624,16 @@
             "title": "Swiper.js Integration Test",
             "subtitle": "Swiper.js Library Integration Demo",
             "description": "Testing Swiper.js integration with loop and autoplay features"
+        }
+    },
+    "wang_editor_page": {
+        "hero": {
+            "title": "Wang Editor Integration Test",
+            "subtitle": "Wang Editor Rich Text Editor Demo",
+            "description": "Testing Wang Editor rich text editor integration"
+        },
+        "describe": {
+            "text": "Integrated Wang Editor as rich text editor for company project requirements"
         }
     },
     "components": {

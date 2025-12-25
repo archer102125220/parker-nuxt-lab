@@ -21,6 +21,10 @@
 
     <!-- Main Content -->
     <section class="youtube_test_page-section">
+      <div class="youtube_test_page-describe">
+        <p class="youtube_test_page-describe-text">{{ $t('youtube_test_page.describe.text') }}</p>
+      </div>
+
       <div class="youtube_test_page-player">
         <Youtube video-id="RTtmcqPXwuw" autoplay />
       </div>
@@ -111,6 +115,19 @@ useHeadMataData({
     padding: 60px 20px;
     max-width: 1000px;
     margin: 0 auto;
+  }
+
+  &-describe {
+    margin-bottom: 24px;
+    text-align: center;
+
+    &-text {
+      display: inline;
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #333;
+    }
   }
 
   &-player {
