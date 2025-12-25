@@ -21,7 +21,8 @@
         "firebase": "firebase整合測試",
         "socket": "socket測試",
         "server_sent_event": "Server Sent Event測試",
-        "web_rtc": "WebRTC測試"
+        "web_rtc": "WebRTC測試",
+        "swagger_doc": "Swagger API 文檔"
     },
     "home": {
         "hero": {
@@ -273,6 +274,32 @@
             "time_label": "耗時約：",
             "time_unit": "ms",
             "response_label": "回傳值："
+        }
+    },
+    "web_authn_page": {
+        "hero": {
+            "title": "Web Authn 生物辨識測試",
+            "subtitle": "原生 Web Authentication API 實作",
+            "description": "使用原生 Web Authentication API 進行生物辨識認證，支援指紋、臉部識別等多種認證方式"
+        },
+        "intro": "此頁面使用原生 Web Authentication API 實作生物辨識功能，支援註冊和登入流程。",
+        "note_label": "記錄筆記：",
+        "notion_link": "notion筆記連結",
+        "register": {
+            "title": "向伺服器註冊生物辨識資料",
+            "id_label": "ID",
+            "account_label": "帳號",
+            "name_label": "名稱",
+            "submit_button": "註冊",
+            "webapi_output": "Web Authn 回傳：",
+            "server_output": "伺服端回傳："
+        },
+        "login": {
+            "title": "執行身份驗證",
+            "account_label": "帳號",
+            "submit_button": "驗證",
+            "webapi_output": "Web Authn 回傳：",
+            "server_output": "伺服端回傳："
         }
     },
     "components": {

@@ -20,10 +20,10 @@
         "face_swap": "AI Face Swap Test",
         "swagger_doc": "Swagger API Documentation",
         "frontend_cach_api": "Frontend API cache test",
-        "firebase": "Firebase integration test",
-        "socket": "Socket tests",
-        "server_sent_event": "Server-Sent Event tests",
-        "web_rtc": "WebRTC tests"
+        "firebase": "Firebase Integration Test",
+        "socket": "Socket Test",
+        "server_sent_event": "Server Sent Event Test",
+        "web_rtc": "WebRTC Test"
     },
     "home": {
         "hero": {
@@ -275,6 +275,32 @@
             "time_label": "Time Consumed:",
             "time_unit": "ms",
             "response_label": "Response:"
+        }
+    },
+    "web_authn_page": {
+        "hero": {
+            "title": "Web Authn Biometric Test",
+            "subtitle": "Native Web Authentication API Implementation",
+            "description": "Using native Web Authentication API for biometric authentication, supporting fingerprint, facial recognition and other authentication methods"
+        },
+        "intro": "This page implements biometric authentication using the native Web Authentication API, supporting both registration and login flows.",
+        "note_label": "Notes:",
+        "notion_link": "Notion Notes Link",
+        "register": {
+            "title": "Register Biometric Data to Server",
+            "id_label": "ID",
+            "account_label": "Account",
+            "name_label": "Name",
+            "submit_button": "Register",
+            "webapi_output": "Web Authn Response:",
+            "server_output": "Server Response:"
+        },
+        "login": {
+            "title": "Perform Identity Verification",
+            "account_label": "Account",
+            "submit_button": "Verify",
+            "webapi_output": "Web Authn Response:",
+            "server_output": "Server Response:"
         }
     },
     "components": {
