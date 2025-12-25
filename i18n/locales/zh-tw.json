@@ -496,6 +496,27 @@
             "right": "右側"
         }
     },
+    "image_upload_page": {
+        "hero": {
+            "title": "圖片上傳組件測試",
+            "subtitle": "自製 ImageUpload 組件展示",
+            "description": "測試圖片上傳組件功能，支援拖拉上傳與預覽"
+        }
+    },
+    "phone_input_page": {
+        "hero": {
+            "title": "電話號碼輸入組件",
+            "subtitle": "帶國碼選擇器的電話輸入組件",
+            "description": "使用 flag-icons 顯示國旗，支援多國國碼選擇"
+        }
+    },
+    "selector_page": {
+        "hero": {
+            "title": "下拉選擇器測試",
+            "subtitle": "自製 Selector 組件展示",
+            "description": "測試自製下拉選擇器組件功能"
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

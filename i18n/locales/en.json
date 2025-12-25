@@ -497,6 +497,27 @@
             "right": "Right"
         }
     },
+    "image_upload_page": {
+        "hero": {
+            "title": "Image Upload Component Test",
+            "subtitle": "Custom ImageUpload Component Demo",
+            "description": "Test image upload component with drag-and-drop and preview support"
+        }
+    },
+    "phone_input_page": {
+        "hero": {
+            "title": "Phone Number Input Component",
+            "subtitle": "Phone input with country code selector",
+            "description": "Using flag-icons to display country flags with multi-country code support"
+        }
+    },
+    "selector_page": {
+        "hero": {
+            "title": "Dropdown Selector Test",
+            "subtitle": "Custom Selector Component Demo",
+            "description": "Test custom dropdown selector component functionality"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
