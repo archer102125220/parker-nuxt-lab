@@ -23,6 +23,7 @@
    - Element: `block-element`（用 `-` 連接）
    - Sub-Element: `block-element-sub`（繼續用 `-`）
    - State: `[css-is-active='true']`（用 HTML 屬性）
+   - Color/Size variants: `[css-color='red']`, `[css-size='small']`（用 HTML 屬性）
 
 3. **根元素命名**：
    - 頁面: `.page_name_page`
@@ -39,8 +40,19 @@
    - ❌ 錯誤: `--color-primary`, `--font-size-base`
 
 6. **HTML 狀態屬性**：
-   - ✅ 正確: `css-is-active`, `css-is-dragging`
+   - ✅ 正確: `css-is-active`, `css-is-dragging`, `css-color='red'`
    - ❌ 錯誤: `is-active`, `isActive`
+
+7. **每個元素必須有唯一 class** - 關鍵原因：
+   - CSS 主要依賴 class name 進行樣式設定
+   - 快速定位 DOM 問題
+   - ❌ 不好：`.footer-links a { ... }`
+   - ✅ 好：`.footer-link { ... }`
+   - ✅ 例外：動態內容區域、第三方內容
+
+8. **組件組織規範**：
+   - 單一頁面組件：以雙駝峰頁面名稱資料夾儲存（如 `components/HooksTest/`）
+   - 多頁面共用組件：以分歧路由作為雙駝峰資料夾名稱（如 `components/WebRtc/`）
 
 ---
 

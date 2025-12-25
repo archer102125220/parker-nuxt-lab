@@ -60,6 +60,24 @@ CSS 屬性必須按照以下順序排列：
 | **Element** | 用 `-` 連接 Block | `.countdown-timer`, `.image_upload-preview` |
 | **Sub-Element** | 繼續用 `-` 連接 | `.image_upload-preview-img` |
 | **State** | 用 HTML 屬性 | `[css-is-active='true']` |
+| **Color/Size** | 用 HTML 屬性 | `[css-color='red']`, `[css-size='small']` |
+
+### HTML 屬性使用規範
+
+**何時使用 HTML 屬性**：
+1. **狀態**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **顏色變體**: `[css-color='red']`, `[css-color='blue']`
+3. **大小變體**: `[css-size='small']`, `[css-size='large']`
+
+**何時使用獨立 class**：
+當 class name 本身具有**明確語義**時（不只描述外觀）：
+```scss
+// ✅ 語義化的 class name
+.alert {
+  &-success { }  // 成功提示（語義明確）
+  &-error { }    // 錯誤提示（語義明確）
+}
+```
 
 ### 根元素命名
 
@@ -90,11 +108,18 @@ CSS 屬性必須按照以下順序排列：
 ### 關鍵原則
 
 1. **每個元素只使用一個 className** - 禁止組合多個類別
-2. **Block 內的所有元素都必須是 Block 的子元素** - 使用 `-` 連接
-3. **Element 名稱內部的多個語義詞使用 `_`** - 如 `content_box`, `value_display`
-4. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`, `[data-pressed='true']`
-5. **CSS 相關的 HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`, `css-is-dragging`
-6. **CSS 變數名稱必須使用 `_` 而非 `-`** - 如 `--color_primary`, `--font_size_base`
+2. **每個元素必須有唯一的 className** - 這對於以下兩個關鍵原因至關重要：
+   - **CSS 主要依賴 class name 進行樣式設定**（而非標籤選擇器）
+   - **快速定位 DOM 問題** - 在瀏覽器 DevTools 中立即識別哪個元素有問題
+   - ❌ 不好：`.footer-links a { ... }`（針對標籤）
+   - ✅ 好：`.footer-link { ... }`（唯一 class）
+   - ✅ 例外：動態內容區域（如：`.content p { ... }`）
+   - ✅ 例外：第三方內容（如：WangEditor）
+3. **Block 內的所有元素都必須是 Block 的子元素** - 使用 `-` 連接
+4. **Element 名稱內部的多個語義詞使用 `_`** - 如 `content_box`, `value_display`
+5. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`, `[data-pressed='true']`
+6. **CSS 相關的 HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`, `css-is-dragging`
+7. **CSS 變數名稱必須使用 `_` 而非 `-`** - 如 `--color_primary`, `--font_size_base`
 
 ---
 
@@ -165,6 +190,26 @@ app/
 > ⚠️ **禁止在多個頁面間共用相同的 CSS 類別名稱**
 > 
 > 如果多個頁面有相似的 DOM 結構，請在 `components/` 中建立可重用組件。
+
+### 組件組織規範
+
+為了提高代碼的可維護性和可讀性，專案採用以下組件組織規範：
+
+**單一頁面重複使用的組件**：
+- 以雙駝峰頁面名稱的資料夾統一儲存
+- 範例：`components/HooksTest/` 僅供 hooks-test 頁面使用
+
+**兩個以上頁面使用的組件**：
+- 依照共用頁面的分歧路由為基準，以該路由作為雙駝峰資料夾名稱
+- 範例：`components/WebRtc/` 供 web-rtc 相關頁面共用
+
+```
+components/
+├── HooksTest/          # 僅 hooks-test 頁面使用的組件
+├── SocketTest/         # 僅 socket-test 頁面使用的組件
+├── WebRtc/            # web-rtc 相關頁面共用的組件（分歧路由）
+└── ScrollFetch/       # 通用組件（多個不相關頁面使用）
+```
 
 ---
 

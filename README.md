@@ -203,10 +203,28 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 
 - **Block**: Single name, e.g., `.countdown`
 - **Element**: Single hyphen `-` connecting Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
-- **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within element names, e.g.:
+- **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within names, e.g.:
   - `.countdown-down_enter-down_enter_up`
   - `.image_upload-preview-img`
-- **State Modifiers**: Managed through HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+- **State Modifiers**: Managed via HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+- **Color/Size Variants**: Use HTML attributes, e.g., `[css-color='red']`, `[css-size='small']`
+
+#### HTML Attribute Usage Guidelines
+
+**When to use HTML attributes**:
+1. **States**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **Color variants**: `[css-color='red']`, `[css-color='blue']`
+3. **Size variants**: `[css-size='small']`, `[css-size='large']`
+
+**When to use separate classes**:
+When the class name itself has **clear semantic meaning** (not just describing appearance):
+```scss
+// ✅ Semantic class names
+.alert {
+  &-success { }  // Success message (semantic)
+  &-error { }    // Error message (semantic)
+}
+```
 
 #### Root Element Naming Convention
 
@@ -522,14 +540,18 @@ The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, reducin
 #### Key Principles
 
 1. **Each element uses only one className** - Don't combine multiple classes
-2. **Each element MUST have a UNIQUE className** - For fast debugging
-   - Unique class names help quickly identify which DOM element has issues
-   - Besides CSS styling, unique class names enable fast debugging in DevTools
+2. **Each element MUST have a UNIQUE className** - Critical for two reasons:
+   - **CSS relies primarily on class names** for styling (not tag selectors)
+   - **Quick DOM debugging** - Instantly identify which element has issues in DevTools
+   - ❌ Bad: `.footer-links a { ... }` (targeting tag)
+   - ✅ Good: `.footer-link { ... }` (unique class)
+   - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
+   - ✅ Exception: Third-party content (e.g., WangEditor)
 3. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
 4. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
 5. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
-6. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`, to clearly distinguish CSS state attributes from other HTML attributes, and to explicitly indicate the purpose of the variable when passing props down through component hierarchies
-7. **CSS variable names must use underscore `_` instead of hyphen `-`** - e.g., `--color_primary`, `--font_size_base`, enabling complete variable name selection via double-click in code editors
+6. **CSS-related HTML attributes must start with `css-` prefix** - e.g., `css-is-active`, `css-is-dragging`, to avoid conflicts with native attributes and to clearly identify that the prop is intended for CSS usage when passing through component hierarchies
+7. **CSS variable names must use underscore `_` instead of hyphen `-`** - e.g., `--color_primary`, `--font_size_base`, enabling double-click selection of complete variable names in editorsion via double-click in code editors
 
 #### Inline Styles Exceptions
 
@@ -618,6 +640,26 @@ parker-nuxt-lab/
 > ⚠️ **Important Rules**:
 > - Do NOT share CSS class names between pages (e.g., don't use `.web_rtc_room_page` in multiple pages). This helps quickly identify the corresponding file when debugging in browser DevTools.
 > - If multiple pages have similar DOM structures, create a **reusable component** in `components/` that accepts CSS class names as props, rather than sharing a single CSS file.
+
+#### Component Organization
+
+To improve code maintainability and readability, the project follows these component organization guidelines:
+
+**Single-page components**:
+- Store in PascalCase folder named after the page
+- Example: `components/HooksTest/` for hooks-test page only
+
+**Multi-page shared components**:
+- Use PascalCase folder named after the divergent route
+- Example: `components/WebRtc/` for web-rtc related pages
+
+```
+components/
+├── HooksTest/          # Only for hooks-test page
+├── SocketTest/         # Only for socket-test page
+├── WebRtc/            # Shared by web-rtc related pages (divergent route)
+└── ScrollFetch/       # Generic component (used by multiple unrelated pages)
+```
 
 #### Mixins & Placeholders Usage
 

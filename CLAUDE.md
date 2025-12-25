@@ -17,6 +17,24 @@
 - Element: `block-element` (connected with `-`)
 - Sub-Element: `block-element-sub` (continue with `-`)
 - State: `[css-is-active='true']` (HTML attributes)
+- Color/Size variants: `[css-color='red']`, `[css-size='small']` (HTML attributes)
+
+#### HTML Attribute Usage Guidelines:
+
+**When to use HTML attributes**:
+1. **States**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **Color variants**: `[css-color='red']`, `[css-color='blue']`
+3. **Size variants**: `[css-size='small']`, `[css-size='large']`
+
+**When to use separate classes**:
+When the class name itself has **clear semantic meaning** (not just describing appearance):
+```scss
+// ✅ Semantic class names
+.alert {
+  &-success { }  // Success message (semantic)
+  &-error { }    // Error message (semantic)
+}
+```
 
 ### Root Element Naming
 - Pages: `.page_name_page` (e.g., `.hooks_test_page`)
@@ -31,20 +49,31 @@
 - ❌ NOT: `is-active`, `isActive`
 
 ### Inline Styles
-- ✅ ALLOWED: CSS variable passing `{ '--height': height }`
-- ✅ ALLOWED: Third-party library requirements
+- ✅ ALLOWED: CSS variable passing `{ '--editor_height': `${height}px` }`
+- ✅ ALLOWED: Third-party library requirements (e.g., GTM)
 - ❌ PROHIBITED: Static values, dynamic calculations without CSS vars
+- ❌ PROHIBITED: Repeated style patterns (extract as placeholders)
 
 ### File Organization
 - Global tools → `app/assets/styles/`
 - Component styles → Inside `.vue` file with `<style lang="scss">`
 - Page styles → Inside `.vue` file with `<style scoped lang="scss">`
 
+### Component Organization
+- **Single-page components**: Store in PascalCase folder named after the page
+  - Example: `components/HooksTest/` for hooks-test page only
+- **Multi-page shared components**: Use PascalCase folder named after the divergent route
+  - Example: `components/WebRtc/` for web-rtc related pages
+
 ### Key Rules
 1. Each element uses ONLY ONE className
-2. Each element MUST have a UNIQUE className for debugging
-   - Unique class names help quickly identify which DOM element has issues
-   - Besides CSS styling, unique class names enable fast debugging in DevTools
+2. Each element MUST have a UNIQUE className - Critical for two reasons:
+   - **CSS relies primarily on class names** for styling (not tag selectors)
+   - **Quick DOM debugging** - Instantly identify which element has issues in DevTools
+   - ❌ Bad: `.footer-links a { ... }` (targeting tag)
+   - ✅ Good: `.footer-link { ... }` (unique class)
+   - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
+   - ✅ Exception: Third-party content (e.g., WangEditor)
 3. All elements MUST be nested under Block root class
 4. Do NOT share CSS class names between pages
 5. Use Placeholders (`%name`) for static shared styles

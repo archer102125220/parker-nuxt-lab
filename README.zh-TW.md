@@ -208,6 +208,24 @@ yarn test:codegen
   - `.countdown-down_enter-down_enter_up`
   - `.image_upload-preview-img`
 - **狀態修飾**：透過 HTML 屬性選擇器管理狀態，如 `[css-is-anime-start='true']`、`[css-is-active='true']`
+- **顏色/大小變體**：使用 HTML 屬性，如 `[css-color='red']`、`[css-size='small']`
+
+#### HTML 屬性使用規範
+
+**何時使用 HTML 屬性**：
+1. **狀態**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **顏色變體**: `[css-color='red']`, `[css-color='blue']`
+3. **大小變體**: `[css-size='small']`, `[css-size='large']`
+
+**何時使用獨立 class**：
+當 class name 本身具有**明確語義**時（不只描述外觀）：
+```scss
+// ✅ 語義化的 class name
+.alert {
+  &-success { }  // 成功提示（語義明確）
+  &-error { }    // 錯誤提示（語義明確）
+}
+```
 
 #### 根元素命名規範
 
@@ -523,9 +541,13 @@ yarn test:codegen
 #### 重要原則
 
 1. **每個元素只使用一個 className** - 不要組合多個類別
-2. **每個元素必須有唯一的 className** - 用於快速除錯
-   - 唯一的 class name 能幫助快速識別哪個 DOM 元素有問題
-   - 除了 CSS 樣式設定外，唯一的 class name 還能在 DevTools 中快速定位問題
+2. **每個元素必須有唯一的 className** - 這對於以下兩個關鍵原因至關重要：
+   - **CSS 主要依賴 class name 進行樣式設定**（而非標籤選擇器）
+   - **快速定位 DOM 問題** - 在瀏覽器 DevTools 中立即識別哪個元素有問題
+   - ❌ 不好：`.footer-links a { ... }`（針對標籤）
+   - ✅ 好：`.footer-link { ... }`（唯一 class）
+   - ✅ 例外：動態內容區域（如：`.content p { ... }`）
+   - ✅ 例外：第三方內容（如：WangEditor）
 3. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
 4. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`、`value_display`
 5. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`、`[data-pressed='true']`
@@ -620,6 +642,26 @@ parker-nuxt-lab/
 > ⚠️ **重要規則**：
 > - 禁止在多個頁面間共用相同的 CSS 類別名稱（例如：不要在多個頁面使用 `.web_rtc_room_page`）。這有助於在瀏覽器 DevTools 中快速找到對應的檔案。
 > - 如果多個頁面有相似的 DOM 結構，請在 `components/` 中建立**可重用組件**，並透過 props 接收 CSS 類別名稱，而非共用單一 CSS 檔案。
+
+#### 組件組織規範
+
+為了提高代碼的可維護性和可讀性，專案採用以下組件組織規範：
+
+**單一頁面重複使用的組件**：
+- 以雙駝峰頁面名稱的資料夾統一儲存
+- 範例：`components/HooksTest/` 僅供 hooks-test 頁面使用
+
+**兩個以上頁面使用的組件**：
+- 依照共用頁面的分歧路由為基準，以該路由作為雙駝峰資料夾名稱
+- 範例：`components/WebRtc/` 供 web-rtc 相關頁面共用
+
+```
+components/
+├── HooksTest/          # 僅 hooks-test 頁面使用的組件
+├── SocketTest/         # 僅 socket-test 頁面使用的組件
+├── WebRtc/            # web-rtc 相關頁面共用的組件（分歧路由）
+└── ScrollFetch/       # 通用組件（多個不相關頁面使用）
+```
 
 #### Mixins 與 Placeholders 使用方式
 

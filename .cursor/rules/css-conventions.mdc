@@ -18,6 +18,22 @@ globs: ["**/*.scss", "**/*.css", "**/*.vue"]
 - Element: `block-element` (connected with `-`)
 - Sub-Element: `block-element-sub` (continue with `-`)
 - State: `[css-is-active='true']` (HTML attributes)
+- Color/Size variants: `[css-color='red']`, `[css-size='small']` (HTML attributes)
+
+### HTML Attribute Usage:
+**When to use**:
+1. States: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. Color variants: `[css-color='red']`, `[css-color='blue']`
+3. Size variants: `[css-size='small']`, `[css-size='large']`
+
+**When to use separate classes**:
+When class name has clear semantic meaning:
+```scss
+.alert {
+  &-success { }  // Semantic
+  &-error { }    // Semantic
+}
+```
 
 ## Root Element Naming
 - Pages: `.page_name_page` (e.g., `.hooks_test_page`)
@@ -32,14 +48,20 @@ globs: ["**/*.scss", "**/*.css", "**/*.vue"]
 - ❌ NOT: `is-active`, `isActive`
 
 ## Inline Styles
-- ✅ ALLOWED: CSS variable passing `{ '--height': height }`
+- ✅ ALLOWED: CSS variable passing `{ '--editor_height': `${height}px` }`
+- ✅ ALLOWED: Third-party library requirements (e.g., GTM)
 - ❌ PROHIBITED: Static values
+- ❌ PROHIBITED: Repeated patterns (extract as placeholders)
 
 ## Key Rules
 1. Each element uses ONLY ONE className
-2. Each element MUST have a UNIQUE className for debugging
-   - Unique class names help quickly identify which DOM element has issues
-   - Besides CSS styling, unique class names enable fast debugging in DevTools
+2. Each element MUST have a UNIQUE className - Critical for:
+   - **CSS relies on class names** (not tag selectors)
+   - **Quick DOM debugging** in DevTools
+   - ❌ Bad: `.footer-links a { ... }` (targeting tag)
+   - ✅ Good: `.footer-link { ... }` (unique class)
+   - ✅ Exception: Dynamic content (`.content p { ... }`)
+   - ✅ Exception: Third-party content (WangEditor)
 3. All elements MUST be nested under Block root class
 4. Do NOT share CSS class names between pages
 5. Use Placeholders (`%name`) for static shared styles

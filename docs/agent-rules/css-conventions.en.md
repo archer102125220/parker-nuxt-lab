@@ -60,6 +60,24 @@ The project adopts a **Modified BEM Naming Convention** to improve double-click 
 | **Element** | Connect with `-` | `.countdown-timer`, `.image_upload-preview` |
 | **Sub-Element** | Continue with `-` | `.image_upload-preview-img` |
 | **State** | Use HTML attributes | `[css-is-active='true']` |
+| **Color/Size** | Use HTML attributes | `[css-color='red']`, `[css-size='small']` |
+
+### HTML Attribute Usage Guidelines
+
+**When to use HTML attributes**:
+1. **States**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **Color variants**: `[css-color='red']`, `[css-color='blue']`
+3. **Size variants**: `[css-size='small']`, `[css-size='large']`
+
+**When to use separate classes**:
+When the class name itself has **clear semantic meaning** (not just describing appearance):
+```scss
+// ✅ Semantic class names
+.alert {
+  &-success { }  // Success message (semantic)
+  &-error { }    // Error message (semantic)
+}
+```
 
 ### Root Element Naming
 
@@ -90,11 +108,18 @@ The project adopts a **Modified BEM Naming Convention** to improve double-click 
 ### Key Principles
 
 1. **Each element uses only one className** - Do not combine multiple classes
-2. **All elements within a Block must be children of that Block** - Connected with `-`
-3. **Multiple semantic words within element names use `_`** - e.g., `content_box`, `value_display`
-4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
-5. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`
-6. **CSS variable names must use `_` instead of `-`** - e.g., `--color_primary`, `--font_size_base`
+2. **Each element MUST have a UNIQUE className** - Critical for two reasons:
+   - **CSS relies primarily on class names** for styling (not tag selectors)
+   - **Quick DOM debugging** - Instantly identify which element has issues in DevTools
+   - ❌ Bad: `.footer-links a { ... }` (targeting tag)
+   - ✅ Good: `.footer-link { ... }` (unique class)
+   - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
+   - ✅ Exception: Third-party content (e.g., WangEditor)
+3. **All elements within a Block must be children of that Block** - Connected with `-`
+4. **Multiple semantic words within element names use `_`** - e.g., `content_box`, `value_display`
+5. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
+6. **CSS-related HTML attributes must start with `css-`** - e.g., `css-is-active`, `css-is-dragging`
+7. **CSS variable names must use `_` instead of `-`** - e.g., `--color_primary`, `--font_size_base`
 
 ---
 
@@ -165,6 +190,26 @@ app/
 > ⚠️ **Do NOT share CSS class names between pages**
 > 
 > If multiple pages have similar DOM structures, create reusable components in `components/`.
+
+### Component Organization
+
+To improve code maintainability and readability, the project follows these component organization guidelines:
+
+**Single-page components**:
+- Store in PascalCase folder named after the page
+- Example: `components/HooksTest/` for hooks-test page only
+
+**Multi-page shared components**:
+- Use PascalCase folder named after the divergent route
+- Example: `components/WebRtc/` for web-rtc related pages
+
+```
+components/
+├── HooksTest/          # Only for hooks-test page
+├── SocketTest/         # Only for socket-test page
+├── WebRtc/            # Shared by web-rtc related pages (divergent route)
+└── ScrollFetch/       # Generic component (used by multiple unrelated pages)
+```
 
 ---
 
