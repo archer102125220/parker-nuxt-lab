@@ -653,6 +653,20 @@
             "description": "測試多個自製組件在同一頁面中的整合與互動"
         }
     },
+    "tab_test_page": {
+        "hero": {
+            "title": "自製 Tab 測試",
+            "subtitle": "自製 TabsBar/TabsContent 組件展示",
+            "description": "測試自製標籤切換組件各種配置與效果"
+        }
+    },
+    "scroll_fetch_page": {
+        "hero": {
+            "title": "下拉更新組件測試",
+            "subtitle": "自製 ScrollFetch 組件展示",
+            "description": "測試自製下拉更新與無限滾動組件，整合 GitHub API 實例"
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",

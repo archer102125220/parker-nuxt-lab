@@ -654,6 +654,20 @@
             "description": "Testing multiple custom components integration and interaction on a single page"
         }
     },
+    "tab_test_page": {
+        "hero": {
+            "title": "Custom Tab Test",
+            "subtitle": "Custom TabsBar/TabsContent Component Demo",
+            "description": "Testing custom tab switching component configurations and effects"
+        }
+    },
+    "scroll_fetch_page": {
+        "hero": {
+            "title": "Pull-to-Refresh Component Test",
+            "subtitle": "Custom ScrollFetch Component Demo",
+            "description": "Testing custom pull-to-refresh and infinite scroll component with GitHub API integration"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
