@@ -253,6 +253,30 @@
         "permission_required": "Camera Permission Required",
         "permission_desc": "Please allow the browser to access your camera to display the video stream."
     },
+    "frontend_api_cache_page": {
+        "hero": {
+            "title": "Frontend API Cache Test",
+            "subtitle": "API Caching Strategy & Performance Testing",
+            "description": "Testing frontend API caching functionality, including memory cache and Service Worker caching strategies"
+        },
+        "intro": "This page is used to test frontend API caching functionality. You can test different caching strategies and compare performance differences.",
+        "pwa_note": "Progressive Web Apps (PWA) Notes:",
+        "notion_link": "Notion Notes Link",
+        "form": {
+            "get_param": "GET Parameter",
+            "post_param": "POST Parameter",
+            "use_post": "Use HTTP POST",
+            "use_get": "Use HTTP GET",
+            "enable_cache": "Enable Cache (takes priority when both are enabled)",
+            "enable_sw_cache": "Enable ServiceWorker Cache (only works for HTTP GET in production mode)",
+            "test_button": "Test"
+        },
+        "results": {
+            "time_label": "Time Consumed:",
+            "time_unit": "ms",
+            "response_label": "Response:"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

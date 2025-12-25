@@ -251,6 +251,30 @@
         "permission_required": "需要攝影機權限",
         "permission_desc": "請允許瀏覽器存取您的攝影機以顯示視訊串流。"
     },
+    "frontend_api_cache_page": {
+        "hero": {
+            "title": "前端 API 快取測試",
+            "subtitle": "API 快取策略與效能測試",
+            "description": "測試前端 API 快取功能，包含內存快取和 Service Worker 快取策略"
+        },
+        "intro": "此頁面用於測試前端 API 快取功能，您可以測試不同的快取策略並比較效能差異。",
+        "pwa_note": "漸進式網頁（Progressive Web Apps，PWA）記錄筆記：",
+        "notion_link": "notion筆記連結",
+        "form": {
+            "get_param": "GET參數",
+            "post_param": "POST參數",
+            "use_post": "使用HTTP POST",
+            "use_get": "使用HTTP GET",
+            "enable_cache": "啟用快取(同時使用情況下優先生效)",
+            "enable_sw_cache": "啟用ServiceWorker快取(只適用production模式底下的HTTP GET方法)",
+            "test_button": "測試"
+        },
+        "results": {
+            "time_label": "耗時約：",
+            "time_unit": "ms",
+            "response_label": "回傳值："
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
