@@ -303,6 +303,33 @@
             "server_output": "Server Response:"
         }
     },
+    "fido2_lib_page": {
+        "hero": {
+            "title": "FIDO2 Lib Biometric Test",
+            "subtitle": "Implementation Using fido2-lib Package",
+            "description": "Using fido2-lib package for biometric authentication, supporting fingerprint, facial recognition and other authentication methods"
+        },
+        "intro": "This page implements biometric authentication using the fido2-lib package, supporting both registration and login flows.",
+        "note_label": "Notes:",
+        "notion_link": "Notion Notes Link",
+        "register": {
+            "title": "Register Biometric Data to Server",
+            "id_label": "ID",
+            "account_label": "Account",
+            "name_label": "Name",
+            "submit_button": "Register",
+            "webapi_output": "Web Authn Response:",
+            "server_output": "Server Response:"
+        },
+        "login": {
+            "title": "Perform Identity Verification",
+            "saved_account_label": "Simulated Server Saved Account",
+            "remember_me_label": "Simulate 'Remember Me' Login (Forced on Mobile)",
+            "submit_button": "Verify",
+            "webapi_output": "Web Authn Response:",
+            "server_output": "Server Response:"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

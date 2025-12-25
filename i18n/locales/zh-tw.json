@@ -302,6 +302,33 @@
             "server_output": "伺服端回傳："
         }
     },
+    "fido2_lib_page": {
+        "hero": {
+            "title": "FIDO2 Lib 生物辨識測試",
+            "subtitle": "使用 fido2-lib 套件實作",
+            "description": "使用 fido2-lib 套件進行生物辨識認證，支援指紋、臉部識別等多種認證方式"
+        },
+        "intro": "此頁面使用 fido2-lib 套件實作生物辨識功能，支援註冊和登入流程。",
+        "note_label": "記錄筆記：",
+        "notion_link": "notion筆記連結",
+        "register": {
+            "title": "向伺服器註冊生物辨識資料",
+            "id_label": "ID",
+            "account_label": "帳號",
+            "name_label": "名稱",
+            "submit_button": "註冊",
+            "webapi_output": "Web Authn 回傳：",
+            "server_output": "伺服端回傳："
+        },
+        "login": {
+            "title": "執行身份驗證",
+            "saved_account_label": "模擬伺服器已儲存的帳號",
+            "remember_me_label": "模擬啟用“記住我”的登入(手機強制啟用)",
+            "submit_button": "驗證",
+            "webapi_output": "Web Authn 回傳：",
+            "server_output": "伺服端回傳："
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
