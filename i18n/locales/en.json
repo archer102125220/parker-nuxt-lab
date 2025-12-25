@@ -330,6 +330,34 @@
             "server_output": "Server Response:"
         }
     },
+    "face_api_page": {
+        "hero": {
+            "title": "Face API Recognition Test",
+            "subtitle": "face-api.js Face Recognition Demo",
+            "description": "Using face-api.js for face detection, landmark recognition, expression analysis and face comparison"
+        },
+        "intro": "This page demonstrates various face recognition features of face-api.js, including real-time face detection, landmark recognition, expression analysis and face comparison.",
+        "form": {
+            "upload_label": "Click or drag photo here for recognition",
+            "upload_button": "Select Recognition Photo",
+            "upload_mask": "Drag recognition photo here",
+            "submit_button": "Recognize",
+            "similarity_label": "Similarity:",
+            "same_person": "Same Person",
+            "different_person": "Different Person"
+        },
+        "sections": {
+            "video_preview": "Real-time Video Preview",
+            "bounding_boxes": "Face Bounding Box Detection",
+            "landmarks": "Face Landmark Recognition",
+            "expressions": "Face Expression Analysis"
+        },
+        "data": {
+            "bounding_boxes": "Bounding Box Data",
+            "landmarks": "Landmark Data",
+            "expressions": "Expression Analysis Data"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",

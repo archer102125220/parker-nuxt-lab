@@ -329,6 +329,34 @@
             "server_output": "伺服端回傳："
         }
     },
+    "face_api_page": {
+        "hero": {
+            "title": "Face API 人臉辨識測試",
+            "subtitle": "face-api.js 人臉辨識功能展示",
+            "description": "使用 face-api.js 進行人臉偵測、特徵點識別、表情分析及人臉比對"
+        },
+        "intro": "此頁面展示 face-api.js 的各種人臉辨識功能，包含即時人臉偵測、特徵點識別、表情分析及人臉比對。",
+        "form": {
+            "upload_label": "點擊或拖拉識別照片到此區塊",
+            "upload_button": "選取辨識照片",
+            "upload_mask": "拖拉識別照片到此區塊",
+            "submit_button": "辨識",
+            "similarity_label": "近似值：",
+            "same_person": "相同人",
+            "different_person": "不同人"
+        },
+        "sections": {
+            "video_preview": "即時視訊預覽",
+            "bounding_boxes": "人臉邊界框偵測",
+            "landmarks": "人臉特徵點識別",
+            "expressions": "人臉表情分析"
+        },
+        "data": {
+            "bounding_boxes": "邊界框資料",
+            "landmarks": "特徵點資料",
+            "expressions": "表情分析資料"
+        }
+    },
     "components": {
         "description": {
             "span1": "自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components",
