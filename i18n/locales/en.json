@@ -636,6 +636,24 @@
             "text": "Integrated Wang Editor as rich text editor for company project requirements"
         }
     },
+    "countdown_test_page": {
+        "hero": {
+            "title": "Countdown Timer Test",
+            "subtitle": "Custom Countdown Component Demo",
+            "description": "Testing custom flip-style countdown timer component functionality"
+        },
+        "describe": {
+            "text": "Handcrafted flip-style countdown timer to avoid package conflicts in company projects",
+            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        }
+    },
+    "components_test_page": {
+        "hero": {
+            "title": "Components Integration Test",
+            "subtitle": "Multi-Component Integration Demo",
+            "description": "Testing multiple custom components integration and interaction on a single page"
+        }
+    },
     "components": {
         "description": {
             "span1": "Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.",
