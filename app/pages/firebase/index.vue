@@ -36,6 +36,7 @@
             href="https://resume-web-orpin.vercel.app/portfolio/firebase-admin" 
             target="_blank"
             rel="noopener noreferrer"
+            class="firebase_page-intro-link-anchor"
           >
             電子履歷
           </a> 
@@ -271,7 +272,7 @@ const firebaseTests = computed(() => [
     max-width: 800px;
     margin: 0 auto;
     
-    a {
+    &-anchor {
       // Typography
       color: var(--color-primary, #44A08D);
       text-decoration: none;
