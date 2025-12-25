@@ -143,7 +143,40 @@ docs/
 
 **相關文檔：**
 
-- [進度追蹤](./in-progress/page-redesign-progress.md)
+- [完成報告](./completed/navigation-pages-redesign.md)
+
+---
+
+### 3. 功能性測試頁面重新設計 🔥
+
+> [!IMPORTANT]
+> **最高優先級專案** - 此專案優先於其他所有進行中的專案。
+
+**開始時間：** 2025-12-25  
+**當前狀態：** 規劃中  
+**優先級：** 🔥 **P0 (最高)**  
+**當前進度：** 0/7 頁面完成（0%）
+
+**目標：**
+
+- 🎯 為功能性測試頁面添加統一的 Hero Section
+- 🎯 保留所有原有功能
+- 🎯 採用保守設計方案，降低風險
+
+**待設計頁面：**
+
+- ☐ Swagger Doc 頁面
+- ☐ Offline 頁面
+- ☐ Web Cam 頁面
+- ☐ Frontend API Cache Test 頁面
+- ☐ Web Authn 頁面
+- ☐ FIDO2 Lib 頁面
+- ☐ Face API 頁面
+
+**相關文檔：**
+
+- [實作計劃](./in-progress/functional-pages-redesign-plan.md)
+- [進度追蹤](./in-progress/functional-pages-redesign-progress.md)
 
 ---
 
