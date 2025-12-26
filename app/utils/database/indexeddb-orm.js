@@ -106,9 +106,12 @@ class IndexedDBORM {
                 const indexName = Array.isArray(index.fields)
                   ? index.fields.join('_')
                   : index.fields;
+                // For single field indexes, use string instead of array
                 const keyPath = Array.isArray(index.fields)
-                  ? index.fields
-                  : [index.fields];
+                  ? index.fields.length === 1
+                    ? index.fields[0]
+                    : index.fields
+                  : index.fields;
 
                 objectStore.createIndex(indexName, keyPath, {
                   unique: index.unique || false,

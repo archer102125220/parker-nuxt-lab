@@ -1070,5 +1070,44 @@
         "tipTitle": "Tip",
         "tipMessage": "Previously visited pages can be browsed offline.",
         "autoDetect": "Network status changes will be detected automatically"
+    },
+    "indexeddb_demo_page": {
+        "hero": {
+            "title": "IndexedDB ORM Demo",
+            "subtitle": "Local Database Operations",
+            "description": "Lightweight ORM utility for IndexedDB operations, supporting both Sequelize-style and chainable API"
+        },
+        "status": {
+            "label": "Database",
+            "connected": "Connected",
+            "disconnected": "Disconnected"
+        },
+        "form": {
+            "title": "Add User",
+            "name": "Name",
+            "email": "Email",
+            "age": "Age",
+            "add": "Add"
+        },
+        "query": {
+            "title": "Query Users",
+            "min_age": "Min Age",
+            "max_age": "Max Age",
+            "search": "Search",
+            "load_all": "Load All"
+        },
+        "list": {
+            "title": "User List",
+            "empty": "No data available",
+            "years": "years old"
+        },
+        "bulk": {
+            "title": "Bulk Operations",
+            "add_sample": "Add Sample Data",
+            "clear_all": "Clear All"
+        },
+        "log": {
+            "title": "Activity Log"
+        }
     }
 }
