@@ -177,6 +177,20 @@
         },
         "intro": "Used for reproducing routing-related scenarios, including query parameters, params parameters, and back navigation functionality tests."
     },
+    "query_back_test_page": {
+        "hero": {
+            "title": "Query Parameter Test",
+            "subtitle": "Route Query Parameters & Back Navigation",
+            "description": "Testing route query parameter changes and browser history behavior"
+        }
+    },
+    "params_back_test_page": {
+        "hero": {
+            "title": "Params Parameter Test",
+            "subtitle": "Route Params Parameters & Back Navigation",
+            "description": "Testing dynamic route params parameter changes and browser history behavior"
+        }
+    },
     "css_drawing_page": {
         "hero": {
             "title": "CSS Drawing",

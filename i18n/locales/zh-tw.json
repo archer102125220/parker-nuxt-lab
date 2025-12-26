@@ -176,6 +176,20 @@
         },
         "intro": "主要用作複現路由相關狀況，包含 query 參數、params 參數與上一頁導航等功能測試。"
     },
+    "query_back_test_page": {
+        "hero": {
+            "title": "Query 參數測試",
+            "subtitle": "路由 Query 參數與上一頁導航",
+            "description": "測試路由的 query 參數變化與瀏覽器歷史紀錄行為"
+        }
+    },
+    "params_back_test_page": {
+        "hero": {
+            "title": "Params 參數測試",
+            "subtitle": "路由 Params 參數與上一頁導航",
+            "description": "測試路由的動態 params 參數變化與瀏覽器歷史紀錄行為"
+        }
+    },
     "css_drawing_page": {
         "hero": {
             "title": "CSS 繪圖",
