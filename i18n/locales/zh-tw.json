@@ -184,6 +184,41 @@
         },
         "intro": "主要以 CSS 繪圖及 Anime.js 整合測試為主，包含三角形、六邊形等幾何圖形繪製與動畫效果。"
     },
+    "triangle_test_page": {
+        "hero": {
+            "title": "CSS 三角形測試",
+            "subtitle": "CSS Border 繪製三角形展示",
+            "description": "使用 CSS border 屬性繪製各種方向的三角形"
+        }
+    },
+    "triangle_full_test_page": {
+        "hero": {
+            "title": "CSS 三角形滿版測試",
+            "subtitle": "CSS 全螢幕三角形展示",
+            "description": "測試 CSS 三角形在滿版布局中的應用"
+        }
+    },
+    "triangle_anime_test_page": {
+        "hero": {
+            "title": "CSS 三角形動畫測試",
+            "subtitle": "CSS 三角形動畫效果展示",
+            "description": "測試 CSS 三角形搭配動畫的效果"
+        }
+    },
+    "hexagon_test_page": {
+        "hero": {
+            "title": "CSS 六邊形測試",
+            "subtitle": "CSS 六邊形繪製展示",
+            "description": "使用 CSS 繪製六邊形圖形"
+        }
+    },
+    "svg_color_change_page": {
+        "hero": {
+            "title": "SVG 變色測試",
+            "subtitle": "SVG 動態變色展示",
+            "description": "測試 SVG 圖片的動態變色效果"
+        }
+    },
     "socket_test_page": {
         "hero": {
             "title": "Socket 測試",

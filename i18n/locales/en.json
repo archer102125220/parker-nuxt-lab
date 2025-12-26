@@ -185,6 +185,41 @@
         },
         "intro": "Primarily focused on CSS drawing and Anime.js integration tests, including geometric shapes like triangles and hexagons with animation effects."
     },
+    "triangle_test_page": {
+        "hero": {
+            "title": "CSS Triangle Test",
+            "subtitle": "CSS Border Triangle Drawing Demo",
+            "description": "Drawing triangles in various directions using CSS border property"
+        }
+    },
+    "triangle_full_test_page": {
+        "hero": {
+            "title": "CSS Triangle Fullscreen Test",
+            "subtitle": "CSS Fullscreen Triangle Demo",
+            "description": "Testing CSS triangle application in fullscreen layout"
+        }
+    },
+    "triangle_anime_test_page": {
+        "hero": {
+            "title": "CSS Triangle Animation Test",
+            "subtitle": "CSS Triangle Animation Effect Demo",
+            "description": "Testing CSS triangle with animation effects"
+        }
+    },
+    "hexagon_test_page": {
+        "hero": {
+            "title": "CSS Hexagon Test",
+            "subtitle": "CSS Hexagon Drawing Demo",
+            "description": "Drawing hexagon shapes using CSS"
+        }
+    },
+    "svg_color_change_page": {
+        "hero": {
+            "title": "SVG Color Change Test",
+            "subtitle": "SVG Dynamic Color Change Demo",
+            "description": "Testing dynamic color change effects on SVG images"
+        }
+    },
     "socket_test_page": {
         "hero": {
             "title": "Socket Tests",
