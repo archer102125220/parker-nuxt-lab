@@ -307,6 +307,16 @@
             "title": "WebRTC + Socket.IO",
             "subtitle": "Using Socket.IO for Signaling",
             "description": "WebRTC peer-to-peer video communication with Socket.IO signaling exchange"
+        },
+        "room": {
+            "title": "Video Chat Room",
+            "current_id": "Current Pairing ID",
+            "copy_id": "Copy ID",
+            "copy_url": "Copy Link",
+            "copied": "Copied!",
+            "your_video": "Your Video",
+            "remote_video": "Remote Video",
+            "waiting": "Waiting for others to join..."
         }
     },
     "web_rtc_websocket_page": {
@@ -314,6 +324,9 @@
             "title": "WebRTC + WebSocket",
             "subtitle": "Using Native WebSocket for Signaling",
             "description": "WebRTC signaling exchange using Nuxt 4 built-in WebSocket features"
+        },
+        "room": {
+            "title": "Video Chat Room"
         }
     },
     "web_rtc_sse_page": {
@@ -321,6 +334,9 @@
             "title": "WebRTC + SSE",
             "subtitle": "Using Server-Sent Events for Signaling",
             "description": "WebRTC signaling exchange via Server-Sent Events with POST requests"
+        },
+        "room": {
+            "title": "Video Chat Room"
         }
     },
     "firebase_page": {

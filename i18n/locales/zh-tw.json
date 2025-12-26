@@ -306,6 +306,16 @@
             "title": "WebRTC + Socket.IO",
             "subtitle": "使用 Socket.IO 作為信令傳輸",
             "description": "透過 Socket.IO 實現 WebRTC 點對點視訊通訊的信令交換"
+        },
+        "room": {
+            "title": "視訊聊天室",
+            "current_id": "目前配對 ID",
+            "copy_id": "複製 ID",
+            "copy_url": "複製連結",
+            "copied": "已複製!",
+            "your_video": "您的視訊",
+            "remote_video": "對方視訊",
+            "waiting": "等待對方加入..."
         }
     },
     "web_rtc_websocket_page": {
@@ -313,6 +323,9 @@
             "title": "WebRTC + WebSocket",
             "subtitle": "使用原生 WebSocket 作為信令傳輸",
             "description": "透過 Nuxt 4 內建的 WebSocket 功能實現 WebRTC 信令交換"
+        },
+        "room": {
+            "title": "視訊聊天室"
         }
     },
     "web_rtc_sse_page": {
@@ -320,6 +333,9 @@
             "title": "WebRTC + SSE",
             "subtitle": "使用 Server-Sent Events 作為信令傳輸",
             "description": "透過 Server-Sent Events 配合 POST 請求實現 WebRTC 信令交換"
+        },
+        "room": {
+            "title": "視訊聊天室"
         }
     },
     "firebase_page": {
