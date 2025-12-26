@@ -229,6 +229,20 @@
         "intro": "Recording results of native WebSocket with Nuxt 4 built-in features, and Socket.IO implementation on both frontend and backend.",
         "warning": "The current deployment environment may not support WebSocket (e.g., Vercel and other deployment platforms), which may cause it to be ineffective."
     },
+    "socket_io_page": {
+        "hero": {
+            "title": "Socket.IO Test",
+            "subtitle": "Socket.IO Bidirectional Communication Test",
+            "description": "Using Socket.IO for real-time bidirectional communication between frontend and backend"
+        }
+    },
+    "websocket_page": {
+        "hero": {
+            "title": "Native WebSocket Test",
+            "subtitle": "Nuxt 4 Built-in WebSocket Test",
+            "description": "Testing native WebSocket communication using Nuxt 4 built-in features"
+        }
+    },
     "sse_page": {
         "hero": {
             "title": "Server-Sent Events Tests",

@@ -228,6 +228,20 @@
         "intro": "紀錄原生配合 Nuxt 4 內建的 WebSocket 以及前後端皆由 Socket.IO 實作的結果。",
         "warning": "當前部署環境可能不支援 WebSocket（如：Vercel 等部署平台），可能會無效。"
     },
+    "socket_io_page": {
+        "hero": {
+            "title": "Socket.IO 測試",
+            "subtitle": "Socket.IO 雙向通訊測試",
+            "description": "使用 Socket.IO 實現前後端即時雙向通訊"
+        }
+    },
+    "websocket_page": {
+        "hero": {
+            "title": "原生 WebSocket 測試",
+            "subtitle": "Nuxt 4 內建 WebSocket 測試",
+            "description": "使用 Nuxt 4 內建的 WebSocket 功能進行原生通訊測試"
+        }
+    },
     "sse_page": {
         "hero": {
             "title": "Server-Sent Events 測試",
