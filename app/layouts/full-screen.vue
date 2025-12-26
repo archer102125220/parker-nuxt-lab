@@ -38,14 +38,14 @@
     min-height: 100vh;
     margin: auto;
 
-    @include mobile {
-      width: 327px;
-    }
+    // @include mobile {
+    //   width: 327px;
+    // }
 
-    @include tabletOnly {
-      width: calc(100% - 20px);
-      margin: 20px 10px;
-    }
+    // @include tabletOnly {
+    //   width: calc(100% - 20px);
+    //   margin: 20px 10px;
+    // }
   }
 }
 </style>
