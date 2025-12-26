@@ -237,6 +237,34 @@
         },
         "intro": "Testing global and route param-based grouped Server-Sent Events, including GET and POST methods."
     },
+    "sse_global_get_page": {
+        "hero": {
+            "title": "SSE Global Receive (GET)",
+            "subtitle": "Receiving Server-Sent Events via GET",
+            "description": "Testing EventSource standard API for receiving global SSE events"
+        }
+    },
+    "sse_global_post_page": {
+        "hero": {
+            "title": "SSE Global Receive (POST)",
+            "subtitle": "Receiving Server-Sent Events via POST",
+            "description": "Testing custom POST EventSource for receiving global SSE events"
+        }
+    },
+    "sse_room_get_page": {
+        "hero": {
+            "title": "SSE Room Receive (GET)",
+            "subtitle": "Receiving Room-based SSE via GET",
+            "description": "SSE receive test grouped by Route Param"
+        }
+    },
+    "sse_room_post_page": {
+        "hero": {
+            "title": "SSE Room Receive (POST)",
+            "subtitle": "Receiving Room-based SSE via POST",
+            "description": "SSE POST receive test grouped by Route Param"
+        }
+    },
     "web_rtc_page": {
         "hero": {
             "title": "WebRTC Tests",

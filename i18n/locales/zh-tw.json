@@ -236,6 +236,34 @@
         },
         "intro": "測試全域及依照 route param 做分組的 Server-Sent Events，包含 GET 與 POST 方法。"
     },
+    "sse_global_get_page": {
+        "hero": {
+            "title": "SSE 全域接收 (GET)",
+            "subtitle": "使用 GET 方法接收 Server-Sent Events",
+            "description": "測試使用 EventSource 標準 API 接收全域 SSE 事件"
+        }
+    },
+    "sse_global_post_page": {
+        "hero": {
+            "title": "SSE 全域接收 (POST)",
+            "subtitle": "使用 POST 方法接收 Server-Sent Events",
+            "description": "測試使用自訂 POST EventSource 接收全域 SSE 事件"
+        }
+    },
+    "sse_room_get_page": {
+        "hero": {
+            "title": "SSE 房間接收 (GET)",
+            "subtitle": "使用 GET 方法接收房間內 SSE",
+            "description": "依據 Route Param 分組的 SSE 接收測試"
+        }
+    },
+    "sse_room_post_page": {
+        "hero": {
+            "title": "SSE 房間接收 (POST)",
+            "subtitle": "使用 POST 方法接收房間內 SSE",
+            "description": "依據 Route Param 分組的 SSE POST 接收測試"
+        }
+    },
     "web_rtc_page": {
         "hero": {
             "title": "WebRTC 測試",
