@@ -288,6 +288,27 @@
         "intro": "WebRTC implementation tests, primarily divided into three signaling transport methods: Socket.IO, WebSocket, and Server-Sent Events.",
         "note": "The video functionality is currently in its initial completion stage, but the detailed workflow is not yet complete. Manual URL copying is required for testing."
     },
+    "web_rtc_socket_io_page": {
+        "hero": {
+            "title": "WebRTC + Socket.IO",
+            "subtitle": "Using Socket.IO for Signaling",
+            "description": "WebRTC peer-to-peer video communication with Socket.IO signaling exchange"
+        }
+    },
+    "web_rtc_websocket_page": {
+        "hero": {
+            "title": "WebRTC + WebSocket",
+            "subtitle": "Using Native WebSocket for Signaling",
+            "description": "WebRTC signaling exchange using Nuxt 4 built-in WebSocket features"
+        }
+    },
+    "web_rtc_sse_page": {
+        "hero": {
+            "title": "WebRTC + SSE",
+            "subtitle": "Using Server-Sent Events for Signaling",
+            "description": "WebRTC signaling exchange via Server-Sent Events with POST requests"
+        }
+    },
     "firebase_page": {
         "hero": {
             "title": "Firebase Integration",

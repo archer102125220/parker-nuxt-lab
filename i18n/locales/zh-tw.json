@@ -287,6 +287,27 @@
         "intro": "WebRTC 的實作測試，主要分為配合 Socket.IO、WebSocket 和 Server-Sent Events 三種信令傳輸方式。",
         "note": "目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試。"
     },
+    "web_rtc_socket_io_page": {
+        "hero": {
+            "title": "WebRTC + Socket.IO",
+            "subtitle": "使用 Socket.IO 作為信令傳輸",
+            "description": "透過 Socket.IO 實現 WebRTC 點對點視訊通訊的信令交換"
+        }
+    },
+    "web_rtc_websocket_page": {
+        "hero": {
+            "title": "WebRTC + WebSocket",
+            "subtitle": "使用原生 WebSocket 作為信令傳輸",
+            "description": "透過 Nuxt 4 內建的 WebSocket 功能實現 WebRTC 信令交換"
+        }
+    },
+    "web_rtc_sse_page": {
+        "hero": {
+            "title": "WebRTC + SSE",
+            "subtitle": "使用 Server-Sent Events 作為信令傳輸",
+            "description": "透過 Server-Sent Events 配合 POST 請求實現 WebRTC 信令交換"
+        }
+    },
     "firebase_page": {
         "hero": {
             "title": "Firebase 整合",
