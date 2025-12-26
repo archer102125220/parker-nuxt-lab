@@ -26,8 +26,9 @@ export const detectBrowserLanguage = {
   useCookie: true,
   cookieKey: 'i18n_redirected',
   cookieSecure: process.env.NODE_ENV === 'production',
+  cookieCrossOrigin: true,
   alwaysRedirect: false, // 只在第一次訪問時根據瀏覽器語言重定向，之後尊重 cookie
-  redirectOn: 'root'
+  redirectOn: 'no prefix' // 只在沒有語言前綴的路徑才做重定向，避免覆蓋用戶選擇
 };
 export const messages = {
   en,
