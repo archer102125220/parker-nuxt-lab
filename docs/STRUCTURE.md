@@ -8,8 +8,10 @@ docs/
 │
 ├── agent-rules/                        # 🤖 AI Agent 規則文檔
 │   ├── README.md                      # Agent 規則索引
-│   ├── css-conventions.md             # CSS 命名規範（英文）
-│   └── css-conventions.en.md          # CSS 命名規範（英文備份）
+│   ├── README.en.md                   # Agent 規則索引（英文）
+│   ├── css-conventions.md             # CSS 命名規範
+│   ├── css-conventions.en.md          # CSS 命名規範（英文）
+│   └── css-naming-quick-reference.md  # CSS 命名快速參考
 │
 ├── completed/                          # ✅ 已完成的計劃與任務
 │   ├── README.md                      # 已完成項目索引
@@ -27,17 +29,13 @@ docs/
 │   └── sub-pages-redesign.md          # 子頁面重新設計完成報告
 │
 ├── deployment/                         # 🚀 部署相關文檔
-│   └── [部署指南]
+│   └── vercel-deployment-guide.md     # Vercel 部署指南
 │
 └── in-progress/                        # 🔄 進行中的計劃與任務
     ├── README.md                      # 進行中項目索引
     ├── TESTING.md                     # 測試說明文檔
     ├── TEST_IMPLEMENTATION_PLAN.md    # 測試實施計劃
     ├── TEST_TASK_CHECKLIST.md         # 測試任務清單
-    ├── css-naming-audit-plan.md       # CSS 命名審核計劃
-    ├── css-naming-progress.md         # CSS 命名修復進度
-    ├── css-naming-quick-reference.md  # CSS 命名快速參考
-    ├── css-naming-violations.md       # CSS 命名違規清單
     ├── face-swap-implementation-plan.md  # Face Swap 實施計劃
     ├── face-swap-task-checklist.md    # Face Swap 任務清單
     ├── indexeddb-orm-implementation-plan.md  # IndexedDB ORM 計劃（英文）
