@@ -8,7 +8,7 @@
           alt="CSS Drawing" 
           class="css_drawing_page-hero-background-image"
         />
-        <div class="css_drawing_page-hero-background-overlay"></div>
+        <div class="css_drawing_page-hero-background-overlay" />
       </div>
       
       <div class="css_drawing_page-hero-content">

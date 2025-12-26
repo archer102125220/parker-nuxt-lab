@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="offline_page-hero">
       <div class="offline_page-hero-background">
-        <div class="offline_page-hero-background-overlay"></div>
+        <div class="offline_page-hero-background-overlay" />
       </div>
       
       <div class="offline_page-hero-content">

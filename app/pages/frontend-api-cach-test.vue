@@ -8,7 +8,7 @@
           alt="Frontend API Cache Test" 
           class="frontend_api_cache_page-hero-background-image"
         />
-        <div class="frontend_api_cache_page-hero-background-overlay"></div>
+        <div class="frontend_api_cache_page-hero-background-overlay" />
       </div>
       
       <div class="frontend_api_cache_page-hero-content">

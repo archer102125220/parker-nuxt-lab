@@ -1,41 +1,66 @@
 <template>
-  <section class="hexagon_page">
-    <Hexagon class="hexagon_page-component" />
-    <HexagonContainer class="hexagon_page-hexagon_container">
-      <p>987654321</p>
-      <p>87654321</p>
-      <p>7654321</p>
-      <p>654321</p>
-      <p>54321</p>
-      <p>4321</p>
-      <p>321</p>
-      <p>21</p>
-      <p>1</p>
-    </HexagonContainer>
-    <HexagonContainer
-      width="50px"
-      height="60px"
-      class="hexagon_page-hexagon_container"
-      mask-color="#fff"
-    >
-      <p>987654321</p>
-      <p>87654321</p>
-      <p>7654321</p>
-      <p>654321</p>
-      <p>54321</p>
-      <p>4321</p>
-      <p>321</p>
-      <p>21</p>
-      <p>1</p>
-    </HexagonContainer>
-    <div class="hexagon_page-drawing_container">
-      <div class="hexagon_page-drawing_container-drawing" />
-    </div>
-  </section>
+  <div class="hexagon_page">
+    <!-- Hero Section -->
+    <section class="hexagon_page-hero">
+      <div class="hexagon_page-hero-background">
+        <div class="hexagon_page-hero-background-overlay" />
+      </div>
+
+      <div class="hexagon_page-hero-content">
+        <h1 class="hexagon_page-hero-content-title">
+          {{ $t('hexagon_test_page.hero.title') }}
+        </h1>
+        <p class="hexagon_page-hero-content-subtitle">
+          {{ $t('hexagon_test_page.hero.subtitle') }}
+        </p>
+        <p class="hexagon_page-hero-content-description">
+          {{ $t('hexagon_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="hexagon_page-section">
+      <Hexagon class="hexagon_page-demo-component" />
+      <HexagonContainer class="hexagon_page-demo-hexagon_container">
+        <p>987654321</p>
+        <p>87654321</p>
+        <p>7654321</p>
+        <p>654321</p>
+        <p>54321</p>
+        <p>4321</p>
+        <p>321</p>
+        <p>21</p>
+        <p>1</p>
+      </HexagonContainer>
+      <HexagonContainer
+        width="50px"
+        height="60px"
+        class="hexagon_page-demo-hexagon_container"
+        mask-color="#fff"
+      >
+        <p>987654321</p>
+        <p>87654321</p>
+        <p>7654321</p>
+        <p>654321</p>
+        <p>54321</p>
+        <p>4321</p>
+        <p>321</p>
+        <p>21</p>
+        <p>1</p>
+      </HexagonContainer>
+      <div class="hexagon_page-demo-drawing_container">
+        <div class="hexagon_page-demo-drawing_container-drawing" />
+      </div>
+    </section>
+  </div>
 </template>
+
 <script setup>
+const { t } = useI18n();
+
 useHeadMataData({
-  title: 'css六邊形測試'
+  title: t('hexagon_test_page.hero.title')
 });
 </script>
 
@@ -53,22 +78,89 @@ useHeadMataData({
   content: ''; /* 偽元素必須有 content 屬性 */
 }
 .hexagon_page {
-  &-component {
-    /* Display & Box Model */
-    margin-bottom: 100px;
-  }
+  min-height: 100vh;
 
-  &-hexagon_container {
-    /* Display & Box Model */
-    margin-bottom: 100px;
+  &-hero {
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
     overflow: hidden;
 
-    /* Visual */
-    // background-color: #6a0dad;
-    background-color: #f8f9fa;
+    &-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
+
+      &-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
+      }
+    }
+
+    &-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      text-align: center;
+
+      &-title {
+        margin: 0 0 8px 0;
+        font-size: 36px;
+        font-weight: 800;
+        color: #ffffff;
+
+        @media (max-width: 768px) {
+          font-size: 28px;
+        }
+      }
+
+      &-subtitle {
+        margin: 0 0 12px 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+      }
+
+      &-description {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
   }
 
-  &-drawing_container {
+  &-section {
+    padding: 40px 20px;
+  }
+
+  &-demo {
+    &-component {
+      margin-bottom: 100px;
+    }
+
+    &-hexagon_container {
+      margin-bottom: 100px;
+      overflow: hidden;
+      background-color: #f8f9fa;
+    }
+
+    &-drawing_container {
     /* Display & Box Model */
     --hexagon_width: 100px;
     // height: 200px;
@@ -116,5 +208,6 @@ useHeadMataData({
       }
     }
   }
+}
 }
 </style>

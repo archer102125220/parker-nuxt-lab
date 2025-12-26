@@ -1,5 +1,26 @@
 <template>
   <div class="components_test_page">
+    <!-- Hero Section -->
+    <section class="components_test_page-hero">
+      <div class="components_test_page-hero-background">
+        <div class="components_test_page-hero-background-overlay" />
+      </div>
+      
+      <div class="components_test_page-hero-content">
+        <h1 class="components_test_page-hero-content-title">
+          {{ $t('components_test_page.hero.title') }}
+        </h1>
+        <p class="components_test_page-hero-content-subtitle">
+          {{ $t('components_test_page.hero.subtitle') }}
+        </p>
+        <p class="components_test_page-hero-content-description">
+          {{ $t('components_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="components_test_page-section">
     <TabsBar
       class="components_test_page-bar"
       v-model="tab"
@@ -50,6 +71,7 @@
         </div>
       </div>
     </ScrollFetch>
+    </section>
   </div>
 </template>
 
@@ -101,45 +123,104 @@ function handleInfinityFetch(done) {
 
 <style lang="scss" scoped>
 .components_test_page {
-  /* Display & Box Model */
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  height: 100dvh;
+  min-height: 100vh;
+
+  &-hero {
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow: hidden;
+    
+    &-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      
+      &-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      }
+    }
+    
+    &-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      text-align: center;
+      
+      &-title {
+        margin: 0 0 8px 0;
+        font-size: 36px;
+        font-weight: 800;
+        color: #ffffff;
+        
+        @media (max-width: 768px) {
+          font-size: 28px;
+        }
+      }
+      
+      &-subtitle {
+        margin: 0 0 12px 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+      }
+      
+      &-description {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+
+  &-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: calc(100vh - 200px);
+  }
 
   &-bar {
-    /* Display & Box Model */
     flex: 1;
     flex-basis: 100%;
   }
+
   &-menu {
-    /* Display & Box Model */
     flex-shrink: 0;
     flex-basis: 40px;
     max-height: 93%;
     overflow: hidden;
   }
+
   &-content {
-    /* Display & Box Model */
     flex: 1;
     flex-basis: calc(100% - 40px);
     max-height: 93%;
-
-    /* Visual */
     background-color: #fff;
+
     &-scroll_fetch {
-      // min-height: 100dvh;
       &-text {
-        /* Display & Box Model */
         height: 200px;
       }
+
       &-wang_editor {
-        /* Display & Box Model */
-        // height: 350px;
         margin-bottom: 8px;
       }
+
       &-youtube {
-        /* Display & Box Model */
         height: 80dvh;
       }
     }

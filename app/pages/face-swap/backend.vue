@@ -1,97 +1,111 @@
 <template>
-  <section class="face_swap_backend_page">
-    <v-img
-      class="face_swap_backend_page-banner"
-      max-height="200"
-      cover
-      src="/img/face-swap/face-swap-v.02.png"
-    />
-
-    <h1 class="face_swap_backend_page-title">後端 AI 人臉替換</h1>
-    <p class="face_swap_backend_page-subtitle">
-      使用 Node.js + TensorFlow.js 伺服器端處理
-    </p>
+  <div class="face_swap_backend_page">
+    <!-- Hero Section -->
+    <section class="face_swap_backend_page-hero">
+      <div class="face_swap_backend_page-hero-background">
+        <img 
+          src="/img/face-swap/face-swap-v.02.png" 
+          alt="Face Swap Backend" 
+          class="face_swap_backend_page-hero-background-image"
+        />
+        <div class="face_swap_backend_page-hero-background-overlay" />
+      </div>
+      
+      <div class="face_swap_backend_page-hero-content">
+        <h1 class="face_swap_backend_page-hero-content-title">
+          {{ $t('face_swap_backend.hero.title') }}
+        </h1>
+        <p class="face_swap_backend_page-hero-content-subtitle">
+          {{ $t('face_swap_backend.hero.subtitle') }}
+        </p>
+        <p class="face_swap_backend_page-hero-content-description">
+          {{ $t('face_swap_backend.hero.description') }}
+        </p>
+      </div>
+    </section>
 
     <!-- Upload Section -->
-    <div class="face_swap_backend_page-upload_section">
-      <div class="face_swap_backend_page-upload_section-source">
-        <h3>來源臉部</h3>
-        <ImageUpload
-          ref="sourceFaceEl"
-          v-model="sourceFaceImage"
-          btn-label="選取來源照片"
-          label="點擊或拖拉來源照片到此區塊"
-          mask-label="拖拉來源照片到此區塊"
-          class="face_swap_backend_page-upload_section-upload"
-        />
-      </div>
-
-      <div class="face_swap_backend_page-upload_section-target">
-        <h3>目標圖片</h3>
-        <ImageUpload
-          ref="targetFaceEl"
-          v-model="targetFaceImage"
-          btn-label="選取目標照片"
-          label="點擊或拖拉目標照片到此區塊"
-          mask-label="拖拉目標照片到此區塊"
-          class="face_swap_backend_page-upload_section-upload"
-        />
-      </div>
-
-      <div class="face_swap_backend_page-upload_section-result">
-        <h3>替換結果</h3>
-        <div class="face_swap_backend_page-upload_section-result-container">
-          <img
-            v-if="resultImage !== ''"
-            :src="resultImage"
-            class="face_swap_backend_page-upload_section-result-img"
-            alt="Face swap result"
+    <section class="face_swap_backend_page-section">
+      <div class="face_swap_backend_page-upload_section">
+        <div class="face_swap_backend_page-upload_section-source">
+          <h3>{{ $t('face_swap_backend.sections.source') }}</h3>
+          <ImageUpload
+            ref="sourceFaceEl"
+            v-model="sourceFaceImage"
+            :btn-label="$t('face_swap_backend.upload.source_button')"
+            :label="$t('face_swap_backend.upload.source_label')"
+            :mask-label="$t('face_swap_backend.upload.source_label')"
+            class="face_swap_backend_page-upload_section-upload"
           />
-          <div
-            v-else
-            class="face_swap_backend_page-upload_section-result-placeholder"
-          >
-            <v-icon size="48" color="grey">mdi-image-outline</v-icon>
-            <p>結果將顯示在此</p>
+        </div>
+
+        <div class="face_swap_backend_page-upload_section-target">
+          <h3>{{ $t('face_swap_backend.sections.target') }}</h3>
+          <ImageUpload
+            ref="targetFaceEl"
+            v-model="targetFaceImage"
+            :btn-label="$t('face_swap_backend.upload.target_button')"
+            :label="$t('face_swap_backend.upload.target_label')"
+            :mask-label="$t('face_swap_backend.upload.target_label')"
+            class="face_swap_backend_page-upload_section-upload"
+          />
+        </div>
+
+        <div class="face_swap_backend_page-upload_section-result">
+          <h3>{{ $t('face_swap_backend.sections.result') }}</h3>
+          <div class="face_swap_backend_page-upload_section-result-container">
+            <img
+              v-if="resultImage !== ''"
+              :src="resultImage"
+              class="face_swap_backend_page-upload_section-result-img"
+              alt="Face swap result"
+            />
+            <div
+              v-else
+              class="face_swap_backend_page-upload_section-result-placeholder"
+            >
+              <v-icon size="48" color="grey">mdi-image-outline</v-icon>
+              <p>{{ $t('face_swap_backend.sections.result') }}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Control Buttons -->
-    <div class="face_swap_backend_page-controls">
-      <v-btn
-        color="primary"
-        size="large"
-        :loading="isProcessing"
-        :disabled="!canProcess"
-        @click="handleFaceSwap"
-      >
-        <v-icon start>mdi-face-recognition</v-icon>
-        執行替換
-      </v-btn>
+      <!-- Control Buttons -->
+      <div class="face_swap_backend_page-controls">
+        <v-btn
+          color="primary"
+          size="large"
+          :loading="isProcessing"
+          :disabled="!canProcess"
+          @click="handleFaceSwap"
+        >
+          <v-icon start>mdi-face-recognition</v-icon>
+          {{ $t('face_swap_backend.buttons.swap') }}
+        </v-btn>
 
-      <v-btn
-        color="secondary"
-        size="large"
-        variant="outlined"
-        @click="resetSwap"
-      >
-        <v-icon start>mdi-refresh</v-icon>
-        重置
-      </v-btn>
+        <v-btn
+          color="secondary"
+          size="large"
+          variant="outlined"
+          @click="resetSwap"
+        >
+          <v-icon start>mdi-refresh</v-icon>
+          {{ $t('face_swap_backend.buttons.reset') }}
+        </v-btn>
 
-      <v-btn
-        color="success"
-        size="large"
-        variant="outlined"
-        :disabled="resultImage === ''"
-        @click="downloadResult"
-      >
-        <v-icon start>mdi-download</v-icon>
-        下載結果
-      </v-btn>
-    </div>
+        <v-btn
+          color="success"
+          size="large"
+          variant="outlined"
+          :disabled="resultImage === ''"
+          @click="downloadResult"
+        >
+          <v-icon start>mdi-download</v-icon>
+          {{ $t('face_swap_backend.buttons.download') }}
+        </v-btn>
+      </div>
+    </section>
 
     <!-- Status Message -->
     <v-alert
@@ -131,12 +145,20 @@
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
-  </section>
+  </div>
 </template>
 
 <script setup>
+const { t } = useI18n();
+
 useHeadMataData({
-  title: '後端 AI 人臉替換'
+  title: t('face_swap_backend.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('face_swap_backend.hero.description')
+    }
+  ]
 });
 
 const localePath = useLocalePath();
@@ -257,43 +279,127 @@ function showStatus(message, type = 'info') {
 <style lang="scss" scoped>
 .face_swap_backend_page {
   /* Display & Box Model */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-height: 100vh;
-  padding: 16px 16px 32px;
 
   /* Typography */
   font-family: sans-serif;
 
-  &-banner {
-    /* Display & Box Model */
-    width: 100%;
-    max-width: 600px;
-    margin-bottom: 16px;
-
-    /* Visual */
-    border-radius: 8px;
+  // ========================================
+  // Hero Section
+  // ========================================
+  &-hero {
+    // Positioning
+    position: relative;
+    
+    // Display & Box Model
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    
+    // Visual
+    overflow: hidden;
+    
+    &-background {
+      // Positioning
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      
+      // Display & Box Model
+      width: 100%;
+      height: 100%;
+      
+      &-image {
+        // Display & Box Model
+        width: 100%;
+        height: 100%;
+        
+        // Visual
+        object-fit: cover;
+      }
+      
+      &-overlay {
+        // Positioning
+        position: absolute;
+        top: 0;
+        left: 0;
+        
+        // Display & Box Model
+        width: 100%;
+        height: 100%;
+        
+        // Visual
+        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      }
+    }
+    
+    &-content {
+      // Positioning
+      position: relative;
+      z-index: 1;
+      
+      // Display & Box Model
+      max-width: 800px;
+      text-align: center;
+      
+      &-title {
+        // Display & Box Model
+        margin: 0 0 12px 0;
+        
+        // Typography
+        font-size: 42px;
+        font-weight: 800;
+        color: #ffffff;
+        
+        // Animation
+        animation: fade-in-up 0.6s ease-out;
+        
+        @media (max-width: 768px) {
+          font-size: 32px;
+        }
+      }
+      
+      &-subtitle {
+        // Display & Box Model
+        margin: 0 0 16px 0;
+        
+        // Typography
+        font-size: 20px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+        
+        // Animation
+        animation: fade-in-up 0.6s ease-out 0.1s both;
+        
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
+      }
+      
+      &-description {
+        // Display & Box Model
+        margin: 0;
+        
+        // Typography
+        font-size: 16px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+        
+        // Animation
+        animation: fade-in-up 0.6s ease-out 0.2s both;
+      }
+    }
   }
 
-  &-title {
-    /* Display & Box Model */
-    margin-bottom: 8px;
-
-    /* Typography */
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  &-subtitle {
-    /* Display & Box Model */
-    margin-bottom: 24px;
-
-    /* Typography */
-    font-size: 1rem;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.6);
+  &-section {
+    // Display & Box Model
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   &-upload_section {
@@ -385,12 +491,14 @@ function showStatus(message, type = 'info') {
     /* Display & Box Model */
     width: 100%;
     max-width: 600px;
+    margin: auto;
     margin-bottom: 24px;
   }
 
   &-info {
     /* Display & Box Model */
     width: 100%;
+    margin: auto;
     max-width: 600px;
   }
 }

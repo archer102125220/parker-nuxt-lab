@@ -254,7 +254,7 @@ useHead({
   padding: 40px 20px;
 
   /* Visual */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
 
   &-header {
     /* Display & Box Model */
@@ -310,7 +310,7 @@ useHead({
       /* Display & Box Model */
       margin: 0 0 20px;
       padding-bottom: 15px;
-      border-bottom: 2px solid #667eea;
+      border-bottom: 2px solid #44A08D;
 
       /* Typography */
       font-size: 24px;
@@ -328,10 +328,10 @@ useHead({
     /* Typography */
     font-size: 14px;
     font-weight: 500;
-    color: #667eea;
+    color: #44A08D;
 
     /* Visual */
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(68, 160, 141, 0.1);
   }
 
   &-grid {
@@ -346,7 +346,7 @@ useHead({
       border-radius: 8px;
 
       /* Visual */
-      background: rgba(102, 126, 234, 0.05);
+      background: rgba(68, 160, 141, 0.05);
     }
 
     &-title {
@@ -375,7 +375,7 @@ useHead({
   padding: 40px;
 
   /* Visual */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
 
   /* Animation */
   transition: all 0.3s ease;
@@ -439,7 +439,7 @@ useHead({
   color: #fff;
 
   /* Visual */
-  background: rgba(102, 126, 234, 0.8);
+  background: rgba(68, 160, 141, 0.8);
 
   /* Animation */
   transition: all 0.3s ease;
@@ -449,7 +449,7 @@ useHead({
 
   &:hover {
     /* Visual */
-    background: rgba(102, 126, 234, 1);
+    background: rgba(68, 160, 141, 1);
 
     /* Animation */
     transform: scale(1.1);
@@ -528,21 +528,21 @@ useHead({
       border-radius: 8px;
 
       /* Visual */
-      background: rgba(102, 126, 234, 0.1);
+      background: rgba(68, 160, 141, 0.1);
 
       kbd {
         /* Display & Box Model */
         display: inline-block;
         min-width: 40px;
         padding: 5px 10px;
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        border: 2px solid rgba(68, 160, 141, 0.3);
         border-radius: 4px;
 
         /* Typography */
         font-family: monospace;
         font-size: 14px;
         font-weight: 600;
-        color: #667eea;
+        color: #44A08D;
         text-align: center;
 
         /* Visual */

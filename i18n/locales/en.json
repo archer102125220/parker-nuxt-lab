@@ -185,6 +185,41 @@
         },
         "intro": "Primarily focused on CSS drawing and Anime.js integration tests, including geometric shapes like triangles and hexagons with animation effects."
     },
+    "triangle_test_page": {
+        "hero": {
+            "title": "CSS Triangle Test",
+            "subtitle": "CSS Border Triangle Drawing Demo",
+            "description": "Drawing triangles in various directions using CSS border property"
+        }
+    },
+    "triangle_full_test_page": {
+        "hero": {
+            "title": "CSS Triangle Fullscreen Test",
+            "subtitle": "CSS Fullscreen Triangle Demo",
+            "description": "Testing CSS triangle application in fullscreen layout"
+        }
+    },
+    "triangle_anime_test_page": {
+        "hero": {
+            "title": "CSS Triangle Animation Test",
+            "subtitle": "CSS Triangle Animation Effect Demo",
+            "description": "Testing CSS triangle with animation effects"
+        }
+    },
+    "hexagon_test_page": {
+        "hero": {
+            "title": "CSS Hexagon Test",
+            "subtitle": "CSS Hexagon Drawing Demo",
+            "description": "Drawing hexagon shapes using CSS"
+        }
+    },
+    "svg_color_change_page": {
+        "hero": {
+            "title": "SVG Color Change Test",
+            "subtitle": "SVG Dynamic Color Change Demo",
+            "description": "Testing dynamic color change effects on SVG images"
+        }
+    },
     "socket_test_page": {
         "hero": {
             "title": "Socket Tests",
@@ -194,6 +229,20 @@
         "intro": "Recording results of native WebSocket with Nuxt 4 built-in features, and Socket.IO implementation on both frontend and backend.",
         "warning": "The current deployment environment may not support WebSocket (e.g., Vercel and other deployment platforms), which may cause it to be ineffective."
     },
+    "socket_io_page": {
+        "hero": {
+            "title": "Socket.IO Test",
+            "subtitle": "Socket.IO Bidirectional Communication Test",
+            "description": "Using Socket.IO for real-time bidirectional communication between frontend and backend"
+        }
+    },
+    "websocket_page": {
+        "hero": {
+            "title": "Native WebSocket Test",
+            "subtitle": "Nuxt 4 Built-in WebSocket Test",
+            "description": "Testing native WebSocket communication using Nuxt 4 built-in features"
+        }
+    },
     "sse_page": {
         "hero": {
             "title": "Server-Sent Events Tests",
@@ -201,6 +250,34 @@
             "description": "Testing global and route param-based grouped Server-Sent Events functionality"
         },
         "intro": "Testing global and route param-based grouped Server-Sent Events, including GET and POST methods."
+    },
+    "sse_global_get_page": {
+        "hero": {
+            "title": "SSE Global Receive (GET)",
+            "subtitle": "Receiving Server-Sent Events via GET",
+            "description": "Testing EventSource standard API for receiving global SSE events"
+        }
+    },
+    "sse_global_post_page": {
+        "hero": {
+            "title": "SSE Global Receive (POST)",
+            "subtitle": "Receiving Server-Sent Events via POST",
+            "description": "Testing custom POST EventSource for receiving global SSE events"
+        }
+    },
+    "sse_room_get_page": {
+        "hero": {
+            "title": "SSE Room Receive (GET)",
+            "subtitle": "Receiving Room-based SSE via GET",
+            "description": "SSE receive test grouped by Route Param"
+        }
+    },
+    "sse_room_post_page": {
+        "hero": {
+            "title": "SSE Room Receive (POST)",
+            "subtitle": "Receiving Room-based SSE via POST",
+            "description": "SSE POST receive test grouped by Route Param"
+        }
     },
     "web_rtc_page": {
         "hero": {
@@ -328,6 +405,344 @@
             "submit_button": "Verify",
             "webapi_output": "Web Authn Response:",
             "server_output": "Server Response:"
+        }
+    },
+    "face_api_page": {
+        "hero": {
+            "title": "Face API Recognition Test",
+            "subtitle": "face-api.js Face Recognition Demo",
+            "description": "Using face-api.js for face detection, landmark recognition, expression analysis and face comparison"
+        },
+        "intro": "This page demonstrates various face recognition features of face-api.js, including real-time face detection, landmark recognition, expression analysis and face comparison.",
+        "form": {
+            "upload_label": "Click or drag photo here for recognition",
+            "upload_button": "Select Recognition Photo",
+            "upload_mask": "Drag recognition photo here",
+            "submit_button": "Recognize",
+            "similarity_label": "Similarity:",
+            "same_person": "Same Person",
+            "different_person": "Different Person"
+        },
+        "sections": {
+            "video_preview": "Real-time Video Preview",
+            "bounding_boxes": "Face Bounding Box Detection",
+            "landmarks": "Face Landmark Recognition",
+            "expressions": "Face Expression Analysis"
+        },
+        "data": {
+            "bounding_boxes": "Bounding Box Data",
+            "landmarks": "Landmark Data",
+            "expressions": "Expression Analysis Data"
+        }
+    },
+    "face_swap_frontend": {
+        "hero": {
+            "title": "Frontend Face Swap",
+            "subtitle": "Real-time face swap using browser-side face-api.js",
+            "description": "This feature runs entirely in the frontend without backend server support"
+        },
+        "tip": {
+            "title": "Usage Tip:",
+            "content": "For best results, the source photo dimensions should be similar to the target frame. For different sized images, please use 'Backend AI Face Swap' feature."
+        },
+        "sections": {
+            "source": "Source Face",
+            "target": "Target Frame",
+            "result": "Swap Result"
+        },
+        "upload": {
+            "button": "Select Source Photo",
+            "label": "Click or drag source photo here",
+            "mask": "Drag source photo here"
+        },
+        "buttons": {
+            "swap": "Perform Swap",
+            "reset": "Reset",
+            "download": "Download Result"
+        },
+        "size_warning": {
+            "title": "Image size may not be suitable",
+            "content": "Recommend using dimensions similar to webcam (approx. 640x480) for best results."
+        },
+        "panels": {
+            "detection": "Face Detection Details",
+            "landmarks": "Face Landmarks",
+            "expressions": "Expression Recognition Results"
+        },
+        "status": {
+            "detecting": "Detecting faces...",
+            "swapping": "Performing face swap...",
+            "success": "Face swap completed!",
+            "downloaded": "Image downloaded",
+            "no_source": "Please upload source photo and confirm camera is active",
+            "no_source_face": "Cannot detect face in source photo",
+            "no_target_face": "Cannot detect face in camera frame"
+        }
+    },
+    "face_swap_backend": {
+        "hero": {
+            "title": "Backend AI Face Swap",
+            "subtitle": "High quality face swap using backend AI service",
+            "description": "Supports different image sizes and provides more accurate face swap results"
+        },
+        "sections": {
+            "source": "Source Photo",
+            "target": "Target Photo",
+            "result": "Swap Result"
+        },
+        "upload": {
+            "source_button": "Select Source Photo",
+            "source_label": "Click or drag source photo here",
+            "target_button": "Select Target Photo",
+            "target_label": "Click or drag target photo here"
+        },
+        "buttons": {
+            "swap": "Perform Swap",
+            "reset": "Reset",
+            "download": "Download Result"
+        },
+        "status": {
+            "uploading": "Uploading images...",
+            "processing": "Processing...",
+            "success": "Face swap completed!",
+            "error": "Processing failed"
+        }
+    },
+    "cloud_messaging_page": {
+        "hero": {
+            "title": "Firebase Cloud Messaging",
+            "subtitle": "Push Notification Admin Panel",
+            "description": "Manage push tokens and send notifications to registered devices"
+        },
+        "intro": "Wait for PWA installation to complete before triggering notification permission request. Notifications will work after permission is granted.",
+        "form": {
+            "title_label": "Notification Title",
+            "message_label": "Notification Message",
+            "image_label": "Notification Image URL",
+            "reset": "Reset",
+            "submit": "Submit",
+            "title_error": "Please check notification title",
+            "message_error": "Please check notification message"
+        },
+        "table": {
+            "os": "Operating System",
+            "token": "Token",
+            "action": "Action",
+            "delete": "Delete",
+            "refresh": "Refresh",
+            "no_data": "No Data",
+            "no_data_hint": "Please try again later"
+        },
+        "status": {
+            "success": "Completed, successfully sent to {success} devices, {failure} devices failed",
+            "delete_success": "Deleted successfully",
+            "delete_error": "Delete failed"
+        }
+    },
+    "dialog_page": {
+        "hero": {
+            "title": "Dialog Component Test",
+            "subtitle": "Custom Dialog Component Demo",
+            "description": "Testing custom dialog component vs Vuetify Dialog"
+        },
+        "buttons": {
+            "open": "Open",
+            "vuetify_dialog": "Vuetify Dialog Comparison"
+        }
+    },
+    "drawer_page": {
+        "hero": {
+            "title": "Drawer Component Test",
+            "subtitle": "Custom Drawer Component Demo",
+            "description": "Testing custom side drawer component functionality"
+        },
+        "buttons": {
+            "left": "Left",
+            "right": "Right",
+            "top": "Top",
+            "bottom": "Bottom"
+        }
+    },
+    "slide_in_panel_page": {
+        "hero": {
+            "title": "Slide-in Panel Component Test",
+            "subtitle": "Custom Slide-in Panel Component Demo",
+            "description": "Testing custom slide-in side panel component functionality"
+        },
+        "describe": {
+            "text": "Handcrafted message queue component to avoid package conflicts in company projects",
+            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        },
+        "buttons": {
+            "left": "Left",
+            "right": "Right"
+        }
+    },
+    "image_upload_page": {
+        "hero": {
+            "title": "Image Upload Component Test",
+            "subtitle": "Custom ImageUpload Component Demo",
+            "description": "Test image upload component with drag-and-drop and preview support"
+        }
+    },
+    "phone_input_page": {
+        "hero": {
+            "title": "Phone Number Input Component",
+            "subtitle": "Phone input with country code selector",
+            "description": "Using flag-icons to display country flags with multi-country code support"
+        }
+    },
+    "selector_page": {
+        "hero": {
+            "title": "Dropdown Selector Test",
+            "subtitle": "Custom Selector Component Demo",
+            "description": "Test custom dropdown selector component functionality"
+        }
+    },
+    "lazyload_test_page": {
+        "hero": {
+            "title": "Custom Lazyload Directive Test",
+            "subtitle": "Custom Image Lazy Loading Directive Demo",
+            "description": "Testing custom v-customize-lazyload directive functionality"
+        }
+    },
+    "ripple_test_page": {
+        "hero": {
+            "title": "Custom Ripple Directive Test",
+            "subtitle": "Custom Click Ripple Effect Directive Demo",
+            "description": "Testing custom v-customize-ripple directive functionality"
+        },
+        "click_me": "Click me to test custom ripple effect"
+    },
+    "go_top_page": {
+        "hero": {
+            "title": "Go Top Component Test",
+            "subtitle": "Custom GoTop Component Demo",
+            "description": "Testing custom scroll-to-top button component functionality"
+        },
+        "scroll_hint": "Scroll down to see the go-to-top button"
+    },
+    "switch_button_page": {
+        "hero": {
+            "title": "Switch Component Test",
+            "subtitle": "Custom Switch Button Component Demo",
+            "description": "Testing custom toggle switch button component functionality"
+        },
+        "current_value": "Current State",
+        "label": "Live Only"
+    },
+    "enter_label_page": {
+        "hero": {
+            "title": "Text Animation Test",
+            "subtitle": "Custom Animated Text Component Demo",
+            "description": "Testing custom character-by-character text animation effect"
+        },
+        "demo_title": "Demo",
+        "test_title": "Test Text",
+        "update": "Update"
+    },
+    "qr_code_page": {
+        "hero": {
+            "title": "QR Code Component Test",
+            "subtitle": "Custom QR Code Component Demo",
+            "description": "Testing custom QR code generator component functionality"
+        },
+        "input_label": "Enter QR Code content"
+    },
+    "skeleton_loader_page": {
+        "hero": {
+            "title": "Skeleton Component Test",
+            "subtitle": "Custom Skeleton Loader Demo",
+            "description": "Testing custom skeleton screen loader component functionality"
+        },
+        "toggle_loading": "Enable loading state",
+        "loaded_content": "Content loaded"
+    },
+    "countdown_page": {
+        "hero": {
+            "title": "Countdown Component Test",
+            "subtitle": "Custom Flip Countdown Timer Demo",
+            "description": "Testing custom flip-style countdown timer component functionality"
+        }
+    },
+    "virtual_scroller_page": {
+        "hero": {
+            "title": "Virtual Scroller Component Test",
+            "subtitle": "Vuetify Virtual Scroll Component Demo",
+            "description": "Testing Vuetify v-virtual-scroll for efficient rendering of large datasets"
+        },
+        "describe": {
+            "text": "Testing whether items of different sizes display correctly"
+        }
+    },
+    "youtube_test_page": {
+        "hero": {
+            "title": "YouTube Integration Test",
+            "subtitle": "Custom YouTube Player Component Demo",
+            "description": "Testing custom embedded YouTube player component"
+        },
+        "describe": {
+            "text": "Wrapped YouTube iframe into a component for unified management and styling"
+        }
+    },
+    "swiper_test_page": {
+        "hero": {
+            "title": "Custom Swiper Test",
+            "subtitle": "Custom Carousel Component Demo",
+            "description": "Testing custom touch-enabled carousel component"
+        },
+        "describe": {
+            "text": "Handcrafted carousel component to avoid package conflicts in company projects",
+            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        }
+    },
+    "swiper_js_test_page": {
+        "hero": {
+            "title": "Swiper.js Integration Test",
+            "subtitle": "Swiper.js Library Integration Demo",
+            "description": "Testing Swiper.js integration with loop and autoplay features"
+        }
+    },
+    "wang_editor_page": {
+        "hero": {
+            "title": "Wang Editor Integration Test",
+            "subtitle": "Wang Editor Rich Text Editor Demo",
+            "description": "Testing Wang Editor rich text editor integration"
+        },
+        "describe": {
+            "text": "Integrated Wang Editor as rich text editor for company project requirements"
+        }
+    },
+    "countdown_test_page": {
+        "hero": {
+            "title": "Countdown Timer Test",
+            "subtitle": "Custom Countdown Component Demo",
+            "description": "Testing custom flip-style countdown timer component functionality"
+        },
+        "describe": {
+            "text": "Handcrafted flip-style countdown timer to avoid package conflicts in company projects",
+            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        }
+    },
+    "components_test_page": {
+        "hero": {
+            "title": "Components Integration Test",
+            "subtitle": "Multi-Component Integration Demo",
+            "description": "Testing multiple custom components integration and interaction on a single page"
+        }
+    },
+    "tab_test_page": {
+        "hero": {
+            "title": "Custom Tab Test",
+            "subtitle": "Custom TabsBar/TabsContent Component Demo",
+            "description": "Testing custom tab switching component configurations and effects"
+        }
+    },
+    "scroll_fetch_page": {
+        "hero": {
+            "title": "Pull-to-Refresh Component Test",
+            "subtitle": "Custom ScrollFetch Component Demo",
+            "description": "Testing custom pull-to-refresh and infinite scroll component with GitHub API integration"
         }
     },
     "components": {

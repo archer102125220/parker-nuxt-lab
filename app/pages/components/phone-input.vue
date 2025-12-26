@@ -100,9 +100,9 @@
               class="phone_input_demo-input"
             />
           </div>
-          <button type="submit" class="phone_input_demo-form-submit">
+          <v-btn type="submit" color="primary" size="large" block>
             提交表單
-          </button>
+          </v-btn>
         </form>
         <div v-if="submittedData" class="phone_input_demo-result">
           <strong>提交的資料：</strong>
@@ -234,7 +234,7 @@ function handleSubmit() {
   padding: 40px 20px;
 
   /* Visual */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
 
   &-container {
     /* Display & Box Model */
@@ -274,7 +274,7 @@ function handleSubmit() {
     margin-bottom: 40px;
     padding: 12px 20px;
     border-radius: 8px;
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(68, 160, 141, 0.2);
 
     /* Typography */
     text-align: center;
@@ -282,8 +282,8 @@ function handleSubmit() {
     /* Visual */
     background: linear-gradient(
       135deg,
-      rgba(102, 126, 234, 0.1) 0%,
-      rgba(118, 75, 162, 0.1) 100%
+      rgba(68, 160, 141, 0.1) 0%,
+      rgba(78, 205, 196, 0.1) 100%
     );
 
     p {
@@ -296,7 +296,7 @@ function handleSubmit() {
 
       /* Typography */
       font-size: 14px;
-      color: #5a67d8;
+      color: #44A08D;
     }
 
     &-icon {
@@ -310,7 +310,7 @@ function handleSubmit() {
     strong {
       /* Typography */
       font-weight: 600;
-      color: #667eea;
+      color: #44A08D;
     }
   }
 
@@ -468,41 +468,6 @@ function handleSubmit() {
       &::placeholder {
         /* Typography */
         color: #999;
-      }
-    }
-
-    &-submit {
-      /* Display & Box Model */
-      width: 100%;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-
-      /* Typography */
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-
-      /* Visual */
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
-      /* Animation */
-      transition: all 0.3s ease;
-
-      /* Misc */
-      cursor: pointer;
-
-      &:hover {
-        /* Visual */
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-
-        /* Animation */
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        /* Animation */
-        transform: translateY(0);
       }
     }
   }

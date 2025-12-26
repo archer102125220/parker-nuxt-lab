@@ -8,7 +8,7 @@
           alt="Directives" 
           class="directives_page-hero-background-image"
         />
-        <div class="directives_page-hero-background-overlay"></div>
+        <div class="directives_page-hero-background-overlay" />
       </div>
       
       <div class="directives_page-hero-content">

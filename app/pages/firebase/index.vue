@@ -8,7 +8,7 @@
           alt="Firebase Integration" 
           class="firebase_page-hero-background-image"
         />
-        <div class="firebase_page-hero-background-overlay"></div>
+        <div class="firebase_page-hero-background-overlay" />
       </div>
       
       <div class="firebase_page-hero-content">

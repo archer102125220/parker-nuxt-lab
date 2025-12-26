@@ -184,6 +184,41 @@
         },
         "intro": "主要以 CSS 繪圖及 Anime.js 整合測試為主，包含三角形、六邊形等幾何圖形繪製與動畫效果。"
     },
+    "triangle_test_page": {
+        "hero": {
+            "title": "CSS 三角形測試",
+            "subtitle": "CSS Border 繪製三角形展示",
+            "description": "使用 CSS border 屬性繪製各種方向的三角形"
+        }
+    },
+    "triangle_full_test_page": {
+        "hero": {
+            "title": "CSS 三角形滿版測試",
+            "subtitle": "CSS 全螢幕三角形展示",
+            "description": "測試 CSS 三角形在滿版布局中的應用"
+        }
+    },
+    "triangle_anime_test_page": {
+        "hero": {
+            "title": "CSS 三角形動畫測試",
+            "subtitle": "CSS 三角形動畫效果展示",
+            "description": "測試 CSS 三角形搭配動畫的效果"
+        }
+    },
+    "hexagon_test_page": {
+        "hero": {
+            "title": "CSS 六邊形測試",
+            "subtitle": "CSS 六邊形繪製展示",
+            "description": "使用 CSS 繪製六邊形圖形"
+        }
+    },
+    "svg_color_change_page": {
+        "hero": {
+            "title": "SVG 變色測試",
+            "subtitle": "SVG 動態變色展示",
+            "description": "測試 SVG 圖片的動態變色效果"
+        }
+    },
     "socket_test_page": {
         "hero": {
             "title": "Socket 測試",
@@ -193,6 +228,20 @@
         "intro": "紀錄原生配合 Nuxt 4 內建的 WebSocket 以及前後端皆由 Socket.IO 實作的結果。",
         "warning": "當前部署環境可能不支援 WebSocket（如：Vercel 等部署平台），可能會無效。"
     },
+    "socket_io_page": {
+        "hero": {
+            "title": "Socket.IO 測試",
+            "subtitle": "Socket.IO 雙向通訊測試",
+            "description": "使用 Socket.IO 實現前後端即時雙向通訊"
+        }
+    },
+    "websocket_page": {
+        "hero": {
+            "title": "原生 WebSocket 測試",
+            "subtitle": "Nuxt 4 內建 WebSocket 測試",
+            "description": "使用 Nuxt 4 內建的 WebSocket 功能進行原生通訊測試"
+        }
+    },
     "sse_page": {
         "hero": {
             "title": "Server-Sent Events 測試",
@@ -200,6 +249,34 @@
             "description": "測試全域及依照 route param 做分組的 Server-Sent Events 功能"
         },
         "intro": "測試全域及依照 route param 做分組的 Server-Sent Events，包含 GET 與 POST 方法。"
+    },
+    "sse_global_get_page": {
+        "hero": {
+            "title": "SSE 全域接收 (GET)",
+            "subtitle": "使用 GET 方法接收 Server-Sent Events",
+            "description": "測試使用 EventSource 標準 API 接收全域 SSE 事件"
+        }
+    },
+    "sse_global_post_page": {
+        "hero": {
+            "title": "SSE 全域接收 (POST)",
+            "subtitle": "使用 POST 方法接收 Server-Sent Events",
+            "description": "測試使用自訂 POST EventSource 接收全域 SSE 事件"
+        }
+    },
+    "sse_room_get_page": {
+        "hero": {
+            "title": "SSE 房間接收 (GET)",
+            "subtitle": "使用 GET 方法接收房間內 SSE",
+            "description": "依據 Route Param 分組的 SSE 接收測試"
+        }
+    },
+    "sse_room_post_page": {
+        "hero": {
+            "title": "SSE 房間接收 (POST)",
+            "subtitle": "使用 POST 方法接收房間內 SSE",
+            "description": "依據 Route Param 分組的 SSE POST 接收測試"
+        }
     },
     "web_rtc_page": {
         "hero": {
@@ -327,6 +404,344 @@
             "submit_button": "驗證",
             "webapi_output": "Web Authn 回傳：",
             "server_output": "伺服端回傳："
+        }
+    },
+    "face_api_page": {
+        "hero": {
+            "title": "Face API 人臉辨識測試",
+            "subtitle": "face-api.js 人臉辨識功能展示",
+            "description": "使用 face-api.js 進行人臉偵測、特徵點識別、表情分析及人臉比對"
+        },
+        "intro": "此頁面展示 face-api.js 的各種人臉辨識功能，包含即時人臉偵測、特徵點識別、表情分析及人臉比對。",
+        "form": {
+            "upload_label": "點擊或拖拉識別照片到此區塊",
+            "upload_button": "選取辨識照片",
+            "upload_mask": "拖拉識別照片到此區塊",
+            "submit_button": "辨識",
+            "similarity_label": "近似值：",
+            "same_person": "相同人",
+            "different_person": "不同人"
+        },
+        "sections": {
+            "video_preview": "即時視訊預覽",
+            "bounding_boxes": "人臉邊界框偵測",
+            "landmarks": "人臉特徵點識別",
+            "expressions": "人臉表情分析"
+        },
+        "data": {
+            "bounding_boxes": "邊界框資料",
+            "landmarks": "特徵點資料",
+            "expressions": "表情分析資料"
+        }
+    },
+    "face_swap_frontend": {
+        "hero": {
+            "title": "純前端人臉替換",
+            "subtitle": "使用瀏覽器端 face-api.js 進行即時人臉替換",
+            "description": "此功能完全在前端運行，不需要後端伺服器支援"
+        },
+        "tip": {
+            "title": "使用提示：",
+            "content": "為獲得最佳效果，建議來源照片的尺寸與目標畫面相近。如需處理不同尺寸的圖片，請使用「後端 AI 人臉替換」功能。"
+        },
+        "sections": {
+            "source": "來源臉部",
+            "target": "目標畫面",
+            "result": "替換結果"
+        },
+        "upload": {
+            "button": "選取來源照片",
+            "label": "點擊或拖拉來源照片到此區塊",
+            "mask": "拖拉來源照片到此區塊"
+        },
+        "buttons": {
+            "swap": "執行替換",
+            "reset": "重置",
+            "download": "下載結果"
+        },
+        "size_warning": {
+            "title": "圖片尺寸可能不適合",
+            "content": "建議使用與攝影機相近的尺寸（約 640x480）以獲得最佳效果。"
+        },
+        "panels": {
+            "detection": "人臉偵測詳細資訊",
+            "landmarks": "臉部特徵點 (Landmarks)",
+            "expressions": "表情辨識結果"
+        },
+        "status": {
+            "detecting": "正在偵測人臉...",
+            "swapping": "正在執行人臉替換...",
+            "success": "人臉替換完成！",
+            "downloaded": "圖片已下載",
+            "no_source": "請先上傳來源照片並確認攝影機已啟動",
+            "no_source_face": "無法在來源照片中偵測到人臉",
+            "no_target_face": "無法在攝影機畫面中偵測到人臉"
+        }
+    },
+    "face_swap_backend": {
+        "hero": {
+            "title": "後端 AI 人臉替換",
+            "subtitle": "使用後端 AI 服務進行高品質人臉替換",
+            "description": "支援不同尺寸的圖片，提供更精確的人臉替換效果"
+        },
+        "sections": {
+            "source": "來源照片",
+            "target": "目標照片",
+            "result": "替換結果"
+        },
+        "upload": {
+            "source_button": "選取來源照片",
+            "source_label": "點擊或拖拉來源照片到此區塊",
+            "target_button": "選取目標照片",
+            "target_label": "點擊或拖拉目標照片到此區塊"
+        },
+        "buttons": {
+            "swap": "執行替換",
+            "reset": "重置",
+            "download": "下載結果"
+        },
+        "status": {
+            "uploading": "正在上傳圖片...",
+            "processing": "正在處理中...",
+            "success": "人臉替換完成！",
+            "error": "處理失敗"
+        }
+    },
+    "cloud_messaging_page": {
+        "hero": {
+            "title": "Firebase Cloud Messaging",
+            "subtitle": "推播通知後台管理",
+            "description": "管理推播 tokens 並發送通知訊息到已註冊的裝置"
+        },
+        "intro": "需等待 PWA 安裝完成才會觸發通知權限請求流程，同意後才能正常觸發通知功能。",
+        "form": {
+            "title_label": "推播標題",
+            "message_label": "推播訊息",
+            "image_label": "推播圖片網址",
+            "reset": "重置",
+            "submit": "送出",
+            "title_error": "請檢查推播標題",
+            "message_error": "請檢查推播訊息"
+        },
+        "table": {
+            "os": "作業系統",
+            "token": "Token",
+            "action": "操作",
+            "delete": "刪除",
+            "refresh": "重新整理",
+            "no_data": "暫無資料",
+            "no_data_hint": "請稍後再試"
+        },
+        "status": {
+            "success": "執行完畢，成功向 {success} 份裝置發送推播訊息，{failure} 份裝置發送失敗",
+            "delete_success": "刪除成功",
+            "delete_error": "刪除失敗"
+        }
+    },
+    "dialog_page": {
+        "hero": {
+            "title": "彈窗組件測試",
+            "subtitle": "自製 Dialog 組件展示",
+            "description": "測試自製彈窗組件與 Vuetify Dialog 的比較"
+        },
+        "buttons": {
+            "open": "開啟",
+            "vuetify_dialog": "Vuetify Dialog 對照"
+        }
+    },
+    "drawer_page": {
+        "hero": {
+            "title": "抽屜組件測試",
+            "subtitle": "自製 Drawer 組件展示",
+            "description": "測試自製側邊抽屜組件功能"
+        },
+        "buttons": {
+            "left": "左側",
+            "right": "右側",
+            "top": "頂部",
+            "bottom": "底部"
+        }
+    },
+    "slide_in_panel_page": {
+        "hero": {
+            "title": "滑入面板組件測試",
+            "subtitle": "自製 Slide-in Panel 組件展示",
+            "description": "測試自製滑入側邊面板組件功能"
+        },
+        "describe": {
+            "text": "為了避免公司專案上的套件衝突，因此手刻一版訊息佇列",
+            "strikethrough": "我也想既優雅又輕鬆愜意的使用套件，但現實不允許"
+        },
+        "buttons": {
+            "left": "左側",
+            "right": "右側"
+        }
+    },
+    "image_upload_page": {
+        "hero": {
+            "title": "圖片上傳組件測試",
+            "subtitle": "自製 ImageUpload 組件展示",
+            "description": "測試圖片上傳組件功能，支援拖拉上傳與預覽"
+        }
+    },
+    "phone_input_page": {
+        "hero": {
+            "title": "電話號碼輸入組件",
+            "subtitle": "帶國碼選擇器的電話輸入組件",
+            "description": "使用 flag-icons 顯示國旗，支援多國國碼選擇"
+        }
+    },
+    "selector_page": {
+        "hero": {
+            "title": "下拉選擇器測試",
+            "subtitle": "自製 Selector 組件展示",
+            "description": "測試自製下拉選擇器組件功能"
+        }
+    },
+    "lazyload_test_page": {
+        "hero": {
+            "title": "自製 Lazyload 指令測試",
+            "subtitle": "自製圖片懶加載指令展示",
+            "description": "測試自製 v-customize-lazyload 指令功能"
+        }
+    },
+    "ripple_test_page": {
+        "hero": {
+            "title": "自製 Ripple 指令測試",
+            "subtitle": "自製點擊波紋效果指令展示",
+            "description": "測試自製 v-customize-ripple 指令功能"
+        },
+        "click_me": "點擊我測試自製的 ripple 效果"
+    },
+    "go_top_page": {
+        "hero": {
+            "title": "返回置頂組件測試",
+            "subtitle": "自製 GoTop 組件展示",
+            "description": "測試自製返回頂部按鈕組件功能"
+        },
+        "scroll_hint": "請向下滾動以查看返回頂部按鈕"
+    },
+    "switch_button_page": {
+        "hero": {
+            "title": "Switch 組件測試",
+            "subtitle": "自製開關按鈕組件展示",
+            "description": "測試自製開關切換按鈕組件功能"
+        },
+        "current_value": "目前狀態",
+        "label": "僅直播"
+    },
+    "enter_label_page": {
+        "hero": {
+            "title": "文字特效測試",
+            "subtitle": "自製動畫文字組件展示",
+            "description": "測試自製文字逐字進入動畫特效"
+        },
+        "demo_title": "展示",
+        "test_title": "測試文字",
+        "update": "更新"
+    },
+    "qr_code_page": {
+        "hero": {
+            "title": "QR Code 組件測試",
+            "subtitle": "自製 QR Code 組件展示",
+            "description": "測試自製 QR Code 生成器組件功能"
+        },
+        "input_label": "輸入 QR Code 內容"
+    },
+    "skeleton_loader_page": {
+        "hero": {
+            "title": "Skeleton 組件測試",
+            "subtitle": "自製骨架屏載入器展示",
+            "description": "測試自製骨架屏載入器組件功能"
+        },
+        "toggle_loading": "開啟載入中狀態",
+        "loaded_content": "載入完成區塊"
+    },
+    "countdown_page": {
+        "hero": {
+            "title": "倒數計時組件測試",
+            "subtitle": "自製翻頁式倒數計時器展示",
+            "description": "測試自製翻頁式倒數計時器組件功能"
+        }
+    },
+    "virtual_scroller_page": {
+        "hero": {
+            "title": "Virtual Scroller 組件測試",
+            "subtitle": "Vuetify 虛擬滾動組件展示",
+            "description": "測試 Vuetify v-virtual-scroll 組件高效渲染大量數據"
+        },
+        "describe": {
+            "text": "測試不同大小的 item 是否能正常顯示"
+        }
+    },
+    "youtube_test_page": {
+        "hero": {
+            "title": "YouTube 整合測試",
+            "subtitle": "自製 YouTube 播放器組件展示",
+            "description": "測試自製 YouTube 嵌入式播放器組件"
+        },
+        "describe": {
+            "text": "將 YouTube iframe 嵌入封裝成組件，便於統一管理與調整樣式"
+        }
+    },
+    "swiper_test_page": {
+        "hero": {
+            "title": "自製 Swiper 測試",
+            "subtitle": "自製輪播圖組件展示",
+            "description": "測試自製觸控滑動輪播圖組件"
+        },
+        "describe": {
+            "text": "為了避免公司專案上的套件衝突，因此手刻一版輪播圖",
+            "strikethrough": "我也想既優雅又輕鬆愜意的使用套件，但現實不允許"
+        }
+    },
+    "swiper_js_test_page": {
+        "hero": {
+            "title": "Swiper.js 整合測試",
+            "subtitle": "Swiper.js 套件整合展示",
+            "description": "測試 Swiper.js 套件整合，支援循環播放、自動播放等功能"
+        }
+    },
+    "wang_editor_page": {
+        "hero": {
+            "title": "Wang Editor 整合測試",
+            "subtitle": "Wang Editor 富文字編輯器展示",
+            "description": "測試 Wang Editor 富文字編輯器套件整合"
+        },
+        "describe": {
+            "text": "因公司專案需求整合 Wang Editor 作為富文字編輯器"
+        }
+    },
+    "countdown_test_page": {
+        "hero": {
+            "title": "倒數計時器測試",
+            "subtitle": "自製 Countdown 組件展示",
+            "description": "測試自製翻頁式倒數計時器組件功能"
+        },
+        "describe": {
+            "text": "為了避免公司專案上的套件衝突，因此手刻一版翻頁式倒數計時器",
+            "strikethrough": "我也想既優雅又輕鬆憄意的使用套件，但現實不允許"
+        }
+    },
+    "components_test_page": {
+        "hero": {
+            "title": "組件綜合測試",
+            "subtitle": "多組件整合展示",
+            "description": "測試多個自製組件在同一頁面中的整合與互動"
+        }
+    },
+    "tab_test_page": {
+        "hero": {
+            "title": "自製 Tab 測試",
+            "subtitle": "自製 TabsBar/TabsContent 組件展示",
+            "description": "測試自製標籤切換組件各種配置與效果"
+        }
+    },
+    "scroll_fetch_page": {
+        "hero": {
+            "title": "下拉更新組件測試",
+            "subtitle": "自製 ScrollFetch 組件展示",
+            "description": "測試自製下拉更新與無限滾動組件，整合 GitHub API 實例"
         }
     },
     "components": {

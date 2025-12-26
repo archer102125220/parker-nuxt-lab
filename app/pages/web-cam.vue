@@ -8,7 +8,7 @@
           alt="WebCam Test" 
           class="web_cam_page-hero-background-image"
         />
-        <div class="web_cam_page-hero-background-overlay"></div>
+        <div class="web_cam_page-hero-background-overlay" />
       </div>
       
       <div class="web_cam_page-hero-content">

@@ -21,10 +21,28 @@ export default defineWebSocketHandler({
     console.log('[ws] Default WebSocket messageJson', messageJson);
 
     if (messageJson.event === 'ping') {
-      peer.send({ ...messageJson, event: 'pong' });
+      peer.send({
+        ...messageJson,
+        event: 'pong'
+      });
     }
 
-    if (typeof messageJson.event === 'string' && messageJson.event !== '') {
+    // 廣播事件：發送給所有連線（包含發送者自己透過 peer.send）
+    if (messageJson.event === 'broadcast-message') {
+      // peer.publish 需要發送字串格式，peer.send 會自動 stringify
+      const broadcastData = JSON.stringify(messageJson);
+      // 發送給頻道內所有其他 peers（不含發送者）
+      peer.publish('default', broadcastData);
+      // 也發送給發送者自己
+      peer.send(messageJson);
+    }
+
+    // 原本的事件：只回傳給發送者
+    if (
+      typeof messageJson.event === 'string' &&
+      messageJson.event !== '' &&
+      messageJson.event !== 'broadcast-message'
+    ) {
       peer.send(messageJson);
     }
   },
@@ -42,5 +60,5 @@ export default defineWebSocketHandler({
   error(peer, error) {
     // console.log('[ws] Default WebSocket error', peer, error);
     console.log('[ws] Default WebSocket error', error);
-  },
+  }
 });

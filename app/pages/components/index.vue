@@ -8,7 +8,7 @@
           alt="Components" 
           class="components_page-hero-background-image"
         />
-        <div class="components_page-hero-background-overlay"></div>
+        <div class="components_page-hero-background-overlay" />
       </div>
       
       <div class="components_page-hero-content">

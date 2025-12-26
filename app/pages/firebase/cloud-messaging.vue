@@ -1,79 +1,100 @@
 <template>
-  <section class="cloud_messaging_page">
-    <p class="cloud_messaging_page-description">
-      需等帶PWA安裝完成才會觸發通知權限請求流程，同意後才能正常觸發通知功能
-    </p>
+  <div class="cloud_messaging_page">
+    <!-- Hero Section -->
+    <section class="cloud_messaging_page-hero">
+      <div class="cloud_messaging_page-hero-background">
+        <div class="cloud_messaging_page-hero-background-overlay" />
+      </div>
+      
+      <div class="cloud_messaging_page-hero-content">
+        <h1 class="cloud_messaging_page-hero-content-title">
+          {{ $t('cloud_messaging_page.hero.title') }}
+        </h1>
+        <p class="cloud_messaging_page-hero-content-subtitle">
+          {{ $t('cloud_messaging_page.hero.subtitle') }}
+        </p>
+        <p class="cloud_messaging_page-hero-content-description">
+          {{ $t('cloud_messaging_page.hero.description') }}
+        </p>
+      </div>
+    </section>
 
-    <v-container
-      class="cloud_messaging_page-form"
-      :tag="VForm"
-      v-model="isValidSubmit"
-      @submit.prevent="handlePushNotification"
-    >
-      <v-row>
-        <v-col
-          cols="12"
-          sm="12"
-          :tag="VTextField"
-          label="推播標題"
-          v-model="appMessageTitle"
-          :rules="handleCheckMessageTitle"
-        />
-        <v-col
-          cols="12"
-          sm="12"
-          :tag="VTextField"
-          label="推播訊息"
-          v-model="appMessageData"
-          :rules="handleCheckMessageData"
-        />
-        <v-col
-          cols="12"
-          sm="12"
-          :tag="VTextField"
-          label="推播圖片網址"
-          v-model="appMessageImg"
-        />
-      </v-row>
-      <v-row justify="end" align="center">
-        <v-col
-          :tag="VBtn"
-          color="primary"
-          variant="outlined"
-          width="100%"
-          min-height="100%"
-          @click="handleResetForm"
-        >
-          <span> 重置 </span>
-        </v-col>
-        <v-col
-          :tag="VBtn"
-          color="primary"
-          type="submit"
-          width="100%"
-          min-height="100%"
-          :disabled="isValidSubmit === false"
-        >
-          送出
-        </v-col>
-      </v-row>
-    </v-container>
+    <!-- Main Content Section -->
+    <section class="cloud_messaging_page-section">
+      <p class="cloud_messaging_page-intro">
+        {{ $t('cloud_messaging_page.intro') }}
+      </p>
 
-    <v-container class="cloud_messaging_page-refresh_btn">
-      <v-row justify="end" align="center">
-        <v-col
-          cols="12"
-          :tag="VBtn"
-          prepend-icon="mdi-reload"
-          color="primary"
-          width="100%"
-          min-height="100%"
-          @click="handleRefresh"
-        >
-          <span> 重新整理 </span>
-        </v-col>
-      </v-row>
-    </v-container>
+      <v-container
+        class="cloud_messaging_page-form"
+        :tag="VForm"
+        v-model="isValidSubmit"
+        @submit.prevent="handlePushNotification"
+      >
+        <v-row>
+          <v-col
+            cols="12"
+            sm="12"
+            :tag="VTextField"
+            :label="$t('cloud_messaging_page.form.title_label')"
+            v-model="appMessageTitle"
+            :rules="handleCheckMessageTitle"
+          />
+          <v-col
+            cols="12"
+            sm="12"
+            :tag="VTextField"
+            :label="$t('cloud_messaging_page.form.message_label')"
+            v-model="appMessageData"
+            :rules="handleCheckMessageData"
+          />
+          <v-col
+            cols="12"
+            sm="12"
+            :tag="VTextField"
+            :label="$t('cloud_messaging_page.form.image_label')"
+            v-model="appMessageImg"
+          />
+        </v-row>
+        <v-row justify="end" align="center">
+          <v-col
+            :tag="VBtn"
+            color="primary"
+            variant="outlined"
+            width="100%"
+            min-height="100%"
+            @click="handleResetForm"
+          >
+            <span>{{ $t('cloud_messaging_page.form.reset') }}</span>
+          </v-col>
+          <v-col
+            :tag="VBtn"
+            color="primary"
+            type="submit"
+            width="100%"
+            min-height="100%"
+            :disabled="isValidSubmit === false"
+          >
+            {{ $t('cloud_messaging_page.form.submit') }}
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-container class="cloud_messaging_page-refresh_btn">
+        <v-row justify="end" align="center">
+          <v-col
+            cols="12"
+            :tag="VBtn"
+            prepend-icon="mdi-reload"
+            color="primary"
+            width="100%"
+            min-height="100%"
+            @click="handleRefresh"
+          >
+            <span>{{ $t('cloud_messaging_page.table.refresh') }}</span>
+          </v-col>
+        </v-row>
+      </v-container>
 
     <v-skeleton-loader
       type="table"
@@ -136,9 +157,9 @@
               class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
               :data-title="`${ACRION_TITLE}：`"
             >
-              <v-btn color="error" @click="handleDeleteToken(webToken.token)">
-                <span> 刪除 </span>
-              </v-btn>
+                  <v-btn color="error" @click="handleDeleteToken(webToken.token)">
+                    <span>{{ $t('cloud_messaging_page.table.delete') }}</span>
+                  </v-btn>
             </td>
           </tr>
 
@@ -166,12 +187,12 @@
               class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
               :data-title="`${ACRION_TITLE}：`"
             >
-              <v-btn
-                color="error"
-                @click="handleDeleteToken(androidToken.token)"
-              >
-                <span> 刪除 </span>
-              </v-btn>
+                  <v-btn
+                    color="error"
+                    @click="handleDeleteToken(androidToken.token)"
+                  >
+                    <span>{{ $t('cloud_messaging_page.table.delete') }}</span>
+                  </v-btn>
             </td>
           </tr>
 
@@ -199,35 +220,44 @@
               class="cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td"
               :data-title="`${ACRION_TITLE}：`"
             >
-              <v-btn color="error" @click="handleDeleteToken(iosToken.token)">
-                <span> 刪除 </span>
-              </v-btn>
+                  <v-btn color="error" @click="handleDeleteToken(iosToken.token)">
+                    <span>{{ $t('cloud_messaging_page.table.delete') }}</span>
+                  </v-btn>
             </td>
           </tr>
         </tbody>
       </v-table>
 
-      <!-- https://vuetifyjs.com/en/components/empty-states -->
-      <v-empty-state
-        v-else
-        width="100%"
-        color="primary"
-        justify="center"
-        icon="mdi-alert"
-        title="暫無資料"
-        text="請稍後再試"
-        action-text="重新整理"
-        @click:action="handleRefresh"
-      />
-    </v-skeleton-loader>
-  </section>
+        <!-- https://vuetifyjs.com/en/components/empty-states -->
+        <v-empty-state
+          v-else
+          width="100%"
+          color="primary"
+          justify="center"
+          icon="mdi-alert"
+          :title="$t('cloud_messaging_page.table.no_data')"
+          :text="$t('cloud_messaging_page.table.no_data_hint')"
+          :action-text="$t('cloud_messaging_page.table.refresh')"
+          @click:action="handleRefresh"
+        />
+      </v-skeleton-loader>
+    </section>
+  </div>
 </template>
 
 <script setup>
 import { VTextField, VForm, VBtn } from 'vuetify/components';
 
+const { t } = useI18n();
+
 useHeadMataData({
-  title: 'Firebase Cloud Messaging 後台'
+  title: t('cloud_messaging_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('cloud_messaging_page.hero.description')
+    }
+  ]
 });
 
 const nuxtApp = useNuxtApp();
@@ -492,7 +522,129 @@ async function handleDeleteToken(token) {
 .cloud_messaging_page {
   /* Display & Box Model */
   width: 100%;
-  min-height: 500px;
+  min-height: 100vh;
+
+  // ========================================
+  // Hero Section
+  // ========================================
+  &-hero {
+    // Positioning
+    position: relative;
+    
+    // Display & Box Model
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    
+    // Visual
+    overflow: hidden;
+    
+    &-background {
+      // Positioning
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      
+      // Display & Box Model
+      width: 100%;
+      height: 100%;
+      
+      // Visual
+      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      
+      &-overlay {
+        // Positioning
+        position: absolute;
+        top: 0;
+        left: 0;
+        
+        // Display & Box Model
+        width: 100%;
+        height: 100%;
+        
+        // Visual
+        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      }
+    }
+    
+    &-content {
+      // Positioning
+      position: relative;
+      z-index: 1;
+      
+      // Display & Box Model
+      max-width: 800px;
+      text-align: center;
+      
+      &-title {
+        // Display & Box Model
+        margin: 0 0 12px 0;
+        
+        // Typography
+        font-size: 42px;
+        font-weight: 800;
+        color: #ffffff;
+        
+        // Animation
+        animation: fade-in-up 0.6s ease-out;
+        
+        @media (max-width: 768px) {
+          font-size: 32px;
+        }
+      }
+      
+      &-subtitle {
+        // Display & Box Model
+        margin: 0 0 16px 0;
+        
+        // Typography
+        font-size: 20px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+        
+        // Animation
+        animation: fade-in-up 0.6s ease-out 0.1s both;
+        
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
+      }
+      
+      &-description {
+        // Display & Box Model
+        margin: 0;
+        
+        // Typography
+        font-size: 16px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+        
+        // Animation
+        animation: fade-in-up 0.6s ease-out 0.2s both;
+      }
+    }
+  }
+
+  &-section {
+    // Display & Box Model
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &-intro {
+    // Display & Box Model
+    margin-bottom: 24px;
+    
+    // Typography
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text-secondary, #4a5568);
+    text-align: center;
+  }
 
   &-form {
     :deep(.v-btn) {
