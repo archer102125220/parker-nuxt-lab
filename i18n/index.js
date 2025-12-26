@@ -24,9 +24,15 @@ export const langDir = './locales';
 export const detectBrowserLanguage = {
   fallbackLocale,
   useCookie: true,
+  cookieKey: 'i18n_redirected',
+  cookieSecure: process.env.NODE_ENV === 'production',
+  alwaysRedirect: false, // 只在第一次訪問時根據瀏覽器語言重定向，之後尊重 cookie
   redirectOn: 'root'
 };
-export const messages = { en, zh: zhTw };
+export const messages = {
+  en,
+  zh: zhTw
+};
 export const bundle = {
   compositionOnly: true,
   runtimeOnly: true,
