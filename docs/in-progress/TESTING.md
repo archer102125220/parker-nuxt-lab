@@ -2,6 +2,10 @@
 
 本文件說明專案的測試套件使用方式。
 
+> [!TIP]
+> 新增測試前，請先閱讀 [前端測試設計指南](../agent-rules/frontend-testing-guide.md)，
+> 了解什麼值得測試、如何寫有意義的測試。
+
 ## 測試統計
 
 **當前狀態：**
@@ -18,9 +22,10 @@
 
 ### 單元測試
 測試獨立的函數和組件：
-- 工具函數測試（helpers, utilities）
-- Vue 組件測試（components）
-- Composables 測試
+- **純函數測試** - 最適合單元測試（工具函數、驗證邏輯）
+- **行為測試** - 測試可觀察的行為，不測試 props 存在
+- 參考範本：`LoadingBar.spec.js`, `SkeletonLoader.spec.js`
+
 
 ### 整合測試
 測試組件間的互動：

@@ -6,12 +6,14 @@
 > 此文件為測試覆蓋率提升的實作計劃。
 > 
 > - **建立時間：** 2025-11-25
+> - **最後更新：** 2025-12-27
 > - **當前狀態：** 核心測試已完成，擴展測試待實作
-> - **已完成項目：** 工具函數、核心組件、整合測試
+> - **已完成項目：** 工具函數、核心組件、整合測試、行為測試範本
 > - **待完成項目：** 更多組件測試、Composables 測試
-> - **用途：** 指導未來測試擴展的參考計劃
 > 
-> 當前測試狀態請參考 [TESTING.md](./TESTING.md)
+> **重要參考文件：**
+> - [測試哲學指南](../agent-rules/frontend-testing-guide.md) - 什麼值得測試？
+> - [TESTING.md](./TESTING.md) - 當前測試狀態
 
 ---
 
@@ -25,7 +27,7 @@
   - check-phone.js ✅
   - request/index.js ❌
   - firebase.js ❌
-- ✅ Vue 組件：7/34 (20.6%)
+- ✅ Vue 組件：9/34 (26.5%)
   - SwitchButton.vue ✅
   - Selector.vue ✅
   - PhoneInput.vue ✅
@@ -33,6 +35,8 @@
   - Drawer.vue ✅
   - Message.vue ✅
   - ImageUpload.vue ✅
+  - LoadingBar.vue ✅ (行為測試範本)
+  - SkeletonLoader.vue ✅ (行為測試範本)
 - ✅ Composables：1/17 (5.9%)
   - useRequest ✅
 
