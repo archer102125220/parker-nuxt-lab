@@ -398,11 +398,11 @@ function handleSliderMove(e) {
 
   const {
     isHorizontal,
-    isVertical,
-    originalAngleDeg,
-    angleDeg,
-    angleRad,
-    distance
+    // isVertical,
+    // originalAngleDeg,
+    // angleDeg,
+    // angleRad,
+    // distance
   } = $classifySwipeDirection(
     { clientX: startX.value, clientY: startY.value },
     { clientX: eventX, clientY: eventY }

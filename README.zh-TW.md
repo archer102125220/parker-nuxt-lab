@@ -771,11 +771,47 @@ components/
 - Swagger JSON：`/api/nuxt-server/swagger-docs`（已在 `routeRules` 中設定 prerender）
 - 亦有 `pages/swagger-doc.vue` 可視化查看 API 文件
 
-## 測試（Playwright）
+## 測試（Vitest + Playwright）
 
-- 測試指令：`yarn test:e2e`、`yarn test:e2e-ui`
-- `yarn pretest` 會先以 `.env.e2e` 建置並啟動於 3001 埠，之後再執行測試
-- 測試配置：`playwright.config.ts`，測試案例位於 `tests/`
+專案採用 **Vitest** 進行單元/整合測試，**Playwright** 進行 E2E 測試。
+
+### 測試統計
+
+- 總測試數：310+ 個
+- 通過率：97%+
+- 工具函數覆蓋：7/9 (77.8%)
+- Vue 組件覆蓋：9/34 (26.5%)
+
+### 測試哲學
+
+> 💡 **測試的目的是捕獲 bug，而非達到覆蓋率指標。**
+
+專案遵循「行為導向測試」原則：
+
+**✅ 值得測試**：
+- 純函數（工具函數、驗證邏輯）
+- 組件的可觀察行為
+
+**❌ 不值得單元測試**：
+- Props 是否存在
+- CSS 樣式
+- 需要瀏覽器 API 的功能（改用 E2E）
+
+詳細指南請參閱 [前端測試設計指南](./docs/agent-rules/frontend-testing-guide.md)。
+
+### 測試指令
+
+```bash
+# 單元測試
+yarn test:unit
+yarn test:unit:watch
+yarn test:unit:coverage
+
+# E2E 測試
+yarn test:e2e
+yarn test:e2e-ui
+yarn test:codegen
+```
 
 ## 平台相容性備註
 

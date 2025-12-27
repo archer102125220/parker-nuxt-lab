@@ -769,11 +769,47 @@ All style files in this project follow these organizational principles to ensure
 - Swagger JSON: `/api/nuxt-server/swagger-docs` (prerendered via `routeRules`)
 - Also see `pages/swagger-doc.vue` for UI rendering
 
-## Testing (Playwright)
+## Testing (Vitest + Playwright)
 
-- Run: `yarn test:e2e`, `yarn test:e2e-ui`
-- `yarn pretest` builds with `.env.e2e` and starts on port 3001 before tests
-- Config: `playwright.config.ts`; specs in `tests/`
+The project uses **Vitest** for unit/integration tests and **Playwright** for E2E tests.
+
+### Test Statistics
+
+- Total tests: 310+
+- Pass rate: 97%+
+- Utility function coverage: 7/9 (77.8%)
+- Vue component coverage: 9/34 (26.5%)
+
+### Testing Philosophy
+
+> 💡 **The goal of testing is to catch bugs, not to achieve coverage metrics.**
+
+The project follows "behavior-driven testing" principles:
+
+**✅ Worth Testing**:
+- Pure functions (utilities, validation logic)
+- Observable component behavior
+
+**❌ Not Worth Unit Testing**:
+- Props existence checks
+- CSS styles
+- Features requiring browser APIs (use E2E instead)
+
+See [Frontend Testing Guide](./docs/agent-rules/frontend-testing-guide.md) for details.
+
+### Test Commands
+
+```bash
+# Unit tests
+yarn test:unit
+yarn test:unit:watch
+yarn test:unit:coverage
+
+# E2E tests
+yarn test:e2e
+yarn test:e2e-ui
+yarn test:codegen
+```
 
 ## Platform Notes
 
