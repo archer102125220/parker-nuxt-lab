@@ -20,11 +20,14 @@
 ## 📊 當前測試狀態
 
 **已測試項目：**
-- ✅ 工具函數：4/6 (66.7%)
+- ✅ 工具函數：7/9 (77.8%)
   - amount-format.js ✅
   - number-unit.js ✅
   - safeToJSON.js ✅
   - check-phone.js ✅
+  - classify-swipe-direction.js ✅ (行為測試範本)
+  - distance-between-points.js ✅ (行為測試範本)
+  - get-cookie.js ✅ (行為測試範本)
   - request/index.js ❌
   - firebase.js ❌
 - ✅ Vue 組件：9/34 (26.5%)
@@ -41,9 +44,9 @@
   - useRequest ✅
 
 **測試統計：**
-- 總測試數：270+ tests
-- 通過率：94.4% (255/270)
-- 覆蓋率：67.73%
+- 總測試數：310+ tests
+- 通過率：97%+
+- 新增行為測試：41 tests
 
 ---
 

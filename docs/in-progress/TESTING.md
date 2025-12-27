@@ -9,12 +9,12 @@
 ## 測試統計
 
 **當前狀態：**
-- 總測試數：270+ 個
-- 通過率：94.4% (255/270)
+- 總測試數：310+ 個
+- 通過率：97%+
 - 測試框架：Vitest (單元測試/整合測試) + Playwright (E2E 測試)
 
 **測試分布：**
-- 單元測試：191 tests
+- 單元測試：230+ tests
 - 整合測試：12 tests
 - E2E 測試：9 test files
 
@@ -24,7 +24,8 @@
 測試獨立的函數和組件：
 - **純函數測試** - 最適合單元測試（工具函數、驗證邏輯）
 - **行為測試** - 測試可觀察的行為，不測試 props 存在
-- 參考範本：`LoadingBar.spec.js`, `SkeletonLoader.spec.js`
+- 組件範本：`LoadingBar.spec.js`, `SkeletonLoader.spec.js`
+- 純函數範本：`classify-swipe-direction.spec.js`, `get-cookie.spec.js`
 
 
 ### 整合測試
