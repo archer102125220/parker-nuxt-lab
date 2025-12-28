@@ -1,7 +1,16 @@
 <template>
   <div class="home_page">
     <!-- Hero Section -->
-    <section class="home_page-hero">
+    <section
+      class="home_page-hero"
+      v-ripples-animation="{
+        resolution: 512,
+        dropRadius: 20,
+        perturbance: 0.04,
+        interactive: true,
+        imageUrl: '/img/home/hero-gradient.svg'
+      }"
+    >
       <div class="home_page-hero-background">
         <div class="home_page-hero-background-gradient" />
       </div>
