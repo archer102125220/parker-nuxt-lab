@@ -62,7 +62,7 @@
     </section>
 
     <!-- Navigation Grid Section -->
-    <section id="navigation" class="home_page-navigation">
+    <section ref="navigationRef" class="home_page-navigation">
       <div class="home_page-navigation-container">
         <h2 class="home_page-navigation-title">
           {{ t('home.navigation.title') }}
@@ -111,11 +111,17 @@ definePageMeta({
 const localePath = useLocalePath();
 const { t } = useI18n();
 
+// Template refs
+const navigationRef = ref(null);
+
 // Smooth scroll to navigation section
 function scrollToNavigation() {
-  const navigationSection = document.getElementById('navigation');
-  if (navigationSection) {
-    navigationSection.scrollIntoView({
+  const element = navigationRef.value;
+  if (
+    element instanceof HTMLElement &&
+    typeof element.scrollIntoView === 'function'
+  ) {
+    element.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
