@@ -91,7 +91,8 @@
             "title": "Project Overview",
             "intro": "Parker's Nuxt Lab is an experimental project built on Nuxt 4, aimed at exploring and practicing modern frontend and backend technologies.",
             "purpose": "The main purpose of this project is to test and integrate various cutting-edge technologies, including PWA, real-time communication, AI/ML, and establish a complete set of development practice examples.",
-            "features": "Through custom components and third-party integrations, we have built a feature-rich, well-structured technology showcase platform."
+            "features": "Through custom components and third-party integrations, we have built a feature-rich, well-structured technology showcase platform.",
+            "view_source": "View Source on GitHub"
         },
         "tech_stack": {
             "title": "Tech Stack",
@@ -1155,6 +1156,61 @@
         },
         "log": {
             "title": "Activity Log"
+        }
+    },
+    "ripples_component_page": {
+        "hero": {
+            "title": "Ripples Background Component",
+            "subtitle": "WebGL-based Interactive Water Ripple Background",
+            "description": "Encapsulated Vue component with mouse/touch interaction, auto drops, and customizable parameters"
+        },
+        "view_directive": "View Directive Version",
+        "demo": {
+            "title": "Interactive Demo",
+            "interactive_hint": "Water Ripple Effect Demo",
+            "touch_hint": "Move or click to create ripples",
+            "controls": "Parameter Controls",
+            "code_example": "Code Example"
+        },
+        "props": {
+            "title": "Props Reference",
+            "description": "Description",
+            "image_url": "Background image URL (required)",
+            "resolution": "Ripple resolution (recommended: 256, 512, 1024)",
+            "drop_radius": "Drop radius",
+            "perturbance": "Perturbance strength (recommended: 0.01 ~ 0.1)",
+            "interactive": "Enable mouse/touch interaction",
+            "auto_drops": "Enable auto drops effect",
+            "auto_drops_interval": "Auto drops interval (ms)"
+        }
+    },
+    "ripples_directive_page": {
+        "hero": {
+            "title": "Ripples Directive",
+            "subtitle": "Vue Custom Directive for Water Ripple Effect",
+            "description": "Add water ripple effects to elements directly via directives without wrapper components"
+        },
+        "view_component": "View Component Version",
+        "code_example": "Code Example",
+        "view_source": "View Source on GitHub",
+        "animation": {
+            "description": "Basic water ripple animation directive with mouse/touch interaction",
+            "hint": "Move or click to create ripples"
+        },
+        "auto_drops": {
+            "description": "Directive that automatically generates random water drops",
+            "hint": "Auto-generating random water drops"
+        },
+        "options": {
+            "title": "Directive Options Reference",
+            "description": "Description",
+            "image_url": "Background image URL",
+            "resolution": "Ripple resolution",
+            "interactive": "Enable interaction",
+            "interval": "Drop interval (ms)",
+            "drop_radius": "Drop radius",
+            "strength": "Base drop strength",
+            "strength_variance": "Drop strength random variance"
         }
     }
 }

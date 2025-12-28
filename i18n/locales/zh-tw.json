@@ -90,7 +90,8 @@
             "title": "專案概述",
             "intro": "Parker 的 Nuxt 實驗室是一個以 Nuxt 4 為核心的實驗型專案，旨在探索和實踐現代化的前後端技術。",
             "purpose": "本專案的主要目的是測試和整合各種前沿技術，包括 PWA、即時通訊、AI/ML 等，並建立一套完整的開發實踐範例。",
-            "features": "透過自製組件和第三方整合，我們打造了一個功能豐富、架構清晰的技術展示平台。"
+            "features": "透過自製組件和第三方整合，我們打造了一個功能豐富、架構清晰的技術展示平台。",
+            "view_source": "查看 GitHub 原始碼"
         },
         "tech_stack": {
             "title": "技術棧",
@@ -1154,6 +1155,61 @@
         },
         "log": {
             "title": "操作記錄"
+        }
+    },
+    "ripples_component_page": {
+        "hero": {
+            "title": "Ripples 水波紋元件",
+            "subtitle": "基於 WebGL 的互動式水波紋背景",
+            "description": "封裝好的 Vue 元件，支援滑鼠/觸控互動、自動水滴效果、可自訂參數"
+        },
+        "view_directive": "查看指令版本",
+        "demo": {
+            "title": "互動展示",
+            "interactive_hint": "水波紋效果展示",
+            "touch_hint": "滑鼠移動或點擊產生水波紋",
+            "controls": "參數調整",
+            "code_example": "程式碼範例"
+        },
+        "props": {
+            "title": "Props 說明",
+            "description": "說明",
+            "image_url": "背景圖片 URL（必填）",
+            "resolution": "水波紋解析度（建議: 256, 512, 1024）",
+            "drop_radius": "水滴半徑",
+            "perturbance": "擾動強度（建議: 0.01 ~ 0.1）",
+            "interactive": "是否啟用滑鼠/觸控互動",
+            "auto_drops": "是否啟用自動水滴效果",
+            "auto_drops_interval": "自動水滴間隔（毫秒）"
+        }
+    },
+    "ripples_directive_page": {
+        "hero": {
+            "title": "Ripples 水波紋指令",
+            "subtitle": "Vue 自訂指令版本的水波紋效果",
+            "description": "直接透過指令為元素添加水波紋效果，無需包裝元件"
+        },
+        "view_component": "查看元件版本",
+        "code_example": "程式碼範例",
+        "view_source": "查看 GitHub 原始碼",
+        "animation": {
+            "description": "基本的水波紋動畫指令，支援滑鼠/觸控互動",
+            "hint": "滑鼠移動或點擊產生水波紋"
+        },
+        "auto_drops": {
+            "description": "自動產生隨機水滴效果的指令",
+            "hint": "自動產生隨機位置的水滴"
+        },
+        "options": {
+            "title": "指令參數說明",
+            "description": "說明",
+            "image_url": "背景圖片 URL",
+            "resolution": "水波紋解析度",
+            "interactive": "是否啟用互動",
+            "interval": "水滴間隔時間（毫秒）",
+            "drop_radius": "水滴半徑",
+            "strength": "水滴基礎強度",
+            "strength_variance": "水滴強度隨機變化範圍"
         }
     }
 }
