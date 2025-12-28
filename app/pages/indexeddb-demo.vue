@@ -23,11 +23,20 @@
     <section class="indexeddb_demo_page-section">
       <!-- Status Card -->
       <div class="indexeddb_demo_page-section-status">
-        <div class="indexeddb_demo_page-section-status-indicator" :data-connected="isInitialized">
-          {{ isInitialized ? $t('indexeddb_demo_page.status.connected') : $t('indexeddb_demo_page.status.disconnected') }}
+        <div
+          class="indexeddb_demo_page-section-status-indicator"
+          :data-connected="isInitialized"
+        >
+          {{
+            isInitialized
+              ? $t('indexeddb_demo_page.status.connected')
+              : $t('indexeddb_demo_page.status.disconnected')
+          }}
         </div>
         <span class="indexeddb_demo_page-section-status-text">
-          {{ $t('indexeddb_demo_page.status.label') }}: {{ dbName }} v{{ dbVersion }}
+          {{ $t('indexeddb_demo_page.status.label') }}: {{ dbName }} v{{
+            dbVersion
+          }}
         </span>
       </div>
 
@@ -56,11 +65,7 @@
             variant="outlined"
             density="compact"
           />
-          <v-btn
-            color="primary"
-            :loading="isLoading"
-            @click="handleCreate"
-          >
+          <v-btn color="primary" :loading="isLoading" @click="handleCreate">
             {{ $t('indexeddb_demo_page.form.add') }}
           </v-btn>
         </div>
@@ -86,17 +91,10 @@
             variant="outlined"
             density="compact"
           />
-          <v-btn
-            color="secondary"
-            :loading="isLoading"
-            @click="handleQuery"
-          >
+          <v-btn color="secondary" :loading="isLoading" @click="handleQuery">
             {{ $t('indexeddb_demo_page.query.search') }}
           </v-btn>
-          <v-btn
-            variant="outlined"
-            @click="handleLoadAll"
-          >
+          <v-btn variant="outlined" @click="handleLoadAll">
             {{ $t('indexeddb_demo_page.query.load_all') }}
           </v-btn>
         </div>
@@ -108,7 +106,10 @@
           {{ $t('indexeddb_demo_page.list.title') }} ({{ users.length }})
         </h2>
 
-        <div v-if="users.length === 0" class="indexeddb_demo_page-section-list-empty">
+        <div
+          v-if="users.length === 0"
+          class="indexeddb_demo_page-section-list-empty"
+        >
           {{ $t('indexeddb_demo_page.list.empty') }}
         </div>
 
@@ -119,10 +120,20 @@
             class="indexeddb_demo_page-section-list-items-item"
           >
             <div class="indexeddb_demo_page-section-list-items-item-info">
-              <span class="indexeddb_demo_page-section-list-items-item-info-id">#{{ user.id }}</span>
-              <span class="indexeddb_demo_page-section-list-items-item-info-name">{{ user.name }}</span>
-              <span class="indexeddb_demo_page-section-list-items-item-info-email">{{ user.email }}</span>
-              <span class="indexeddb_demo_page-section-list-items-item-info-age">{{ user.age }} {{ $t('indexeddb_demo_page.list.years') }}</span>
+              <span class="indexeddb_demo_page-section-list-items-item-info-id"
+                >#{{ user.id }}</span
+              >
+              <span
+                class="indexeddb_demo_page-section-list-items-item-info-name"
+                >{{ user.name }}</span
+              >
+              <span
+                class="indexeddb_demo_page-section-list-items-item-info-email"
+                >{{ user.email }}</span
+              >
+              <span class="indexeddb_demo_page-section-list-items-item-info-age"
+                >{{ user.age }} {{ $t('indexeddb_demo_page.list.years') }}</span
+              >
             </div>
             <div class="indexeddb_demo_page-section-list-items-item-actions">
               <v-btn
@@ -176,8 +187,13 @@
             class="indexeddb_demo_page-section-log-content-item"
             :data-type="log.type"
           >
-            <span class="indexeddb_demo_page-section-log-content-item-time">{{ log.time }}</span>
-            <span class="indexeddb_demo_page-section-log-content-item-message">{{ log.message }}</span>
+            <span class="indexeddb_demo_page-section-log-content-item-time">{{
+              log.time
+            }}</span>
+            <span
+              class="indexeddb_demo_page-section-log-content-item-message"
+              >{{ log.message }}</span
+            >
           </div>
         </div>
       </div>
@@ -186,7 +202,7 @@
 </template>
 
 <script setup>
-import IndexedDBORM from '@app/utils/database/indexeddb-orm';
+import IndexedDBORM from '@app/utils/indexeddb/indexeddb-orm';
 
 const { t } = useI18n();
 
@@ -234,15 +250,13 @@ async function initDatabase() {
         age: { type: 'number', defaultValue: 0 }
       },
       {
-        indexes: [
-          { fields: ['age'] }
-        ]
+        indexes: [{ fields: ['age'] }]
       }
     );
 
     // Explicitly initialize the database connection
     await db._initDatabase();
-    
+
     isInitialized.value = true;
     addLog('Database initialized successfully', 'success');
     await handleLoadAll();
@@ -300,7 +314,10 @@ async function handleQuery() {
       order: [['age', 'ASC']]
     });
     users.value = result;
-    addLog(`Found ${result.length} users with age between ${minAge.value} and ${maxAge.value}`, 'info');
+    addLog(
+      `Found ${result.length} users with age between ${minAge.value} and ${maxAge.value}`,
+      'info'
+    );
   } catch (error) {
     addLog(`Error querying users: ${error.message}`, 'error');
   } finally {
@@ -378,7 +395,7 @@ onMounted(() => {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -450,12 +467,12 @@ onMounted(() => {
         font-size: 12px;
         font-weight: 600;
 
-        &[data-connected="true"] {
+        &[data-connected='true'] {
           background: #c6f6d5;
           color: #22543d;
         }
 
-        &[data-connected="false"] {
+        &[data-connected='false'] {
           background: #fed7d7;
           color: #742a2a;
         }
@@ -467,7 +484,11 @@ onMounted(() => {
       }
     }
 
-    &-form, &-query, &-list, &-bulk, &-log {
+    &-form,
+    &-query,
+    &-list,
+    &-bulk,
+    &-log {
       margin-bottom: 24px;
       padding: 20px;
       border-radius: 12px;
@@ -482,7 +503,9 @@ onMounted(() => {
       }
     }
 
-    &-form-fields, &-query-fields, &-bulk-actions {
+    &-form-fields,
+    &-query-fields,
+    &-bulk-actions {
       display: flex;
       flex-wrap: wrap;
       align-items: flex-end;
@@ -518,7 +541,7 @@ onMounted(() => {
             &-id {
               font-size: 12px;
               font-weight: 600;
-              color: #44A08D;
+              color: #44a08d;
             }
 
             &-name {
@@ -563,11 +586,11 @@ onMounted(() => {
             color: #e2e8f0;
           }
 
-          &[data-type="success"] &-message {
+          &[data-type='success'] &-message {
             color: #68d391;
           }
 
-          &[data-type="error"] &-message {
+          &[data-type='error'] &-message {
             color: #fc8181;
           }
         }

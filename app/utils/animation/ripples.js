@@ -1,6 +1,59 @@
-// RIPPLES CLASS DEFINITION
-// =========================
+/**
+ * @typedef {Object} RipplesOptions
+ * @property {string|null} [imageUrl] - 背景圖片 URL
+ * @property {number} [resolution=256] - 水波紋解析度 (建議: 256, 512, 1024)
+ * @property {number} [dropRadius=20] - 水滴半徑 (像素)
+ * @property {number} [perturbance=0.03] - 擾動強度 (建議: 0.01 ~ 0.1)
+ * @property {boolean} [interactive=true] - 是否啟用滑鼠/觸控互動
+ * @property {string} [crossOrigin=''] - 圖片 CORS 設定
+ */
+
+/**
+ * @typedef {Object} RipplesConfig
+ * @property {number} type - WebGL 紋理類型
+ * @property {Function|null} arrayType - 陣列類型建構函數
+ * @property {boolean} linearSupport - 是否支援線性過濾
+ * @property {string[]} extensions - 需要的 WebGL 擴展列表
+ */
+
+/**
+ * WebGL 水波紋動畫效果類別
+ *
+ * 基於 WebGL 實現的互動式水波紋效果，可應用於任何 HTML 元素的背景。
+ * 支援滑鼠/觸控互動、自動水滴、暫停/播放等功能。
+ *
+ * @example
+ * // 基本用法 - 使用靜態方法初始化
+ * Ripples.ripples('#myElement', {
+ *   resolution: 512,
+ *   dropRadius: 20,
+ *   perturbance: 0.04,
+ *   interactive: true,
+ *   imageUrl: '/path/to/background.png'
+ * });
+ *
+ * @example
+ * // 程式化觸發水滴
+ * const ripples = Ripples.ripples('#myElement', options);
+ * ripples.drop(100, 200, 20, 0.04);
+ *
+ * @example
+ * // 控制動畫狀態
+ * Ripples.ripples('#myElement', 'pause');
+ * Ripples.ripples('#myElement', 'play');
+ * Ripples.ripples('#myElement', 'destroy');
+ *
+ * @class Ripples
+ * @author Parker
+ * @see https://github.com/archer102125220/javascript-ripples
+ */
 export class Ripples {
+  /**
+   * 建立 Ripples 實例
+   *
+   * @param {HTMLElement} el - 要套用水波紋效果的 HTML 元素
+   * @param {RipplesOptions} options - 配置選項
+   */
   constructor(el, options) {
     this.transparentPixels = this.createImageData(32, 32);
 
@@ -154,8 +207,19 @@ export class Ripples {
     document.querySelector('head').prepend(this.style);
   }
 
+  /**
+   * WebGL 渲染上下文 (共用)
+   * @type {WebGLRenderingContext|null}
+   * @static
+   */
   static gl;
 
+  /**
+   * 檢查字串是否為百分比值
+   * @param {string} str - 要檢查的字串
+   * @returns {boolean} 是否為百分比
+   * @private
+   */
   isPercentage(str) {
     return str[str.length - 1] === '%';
   }
@@ -409,6 +473,17 @@ export class Ripples {
     return url.match(/^data:/);
   }
 
+  /**
+   * 預設配置選項
+   * @type {RipplesOptions}
+   * @static
+   * @property {string|null} imageUrl - 背景圖片 URL
+   * @property {number} resolution - 水波紋解析度 (預設: 256)
+   * @property {number} dropRadius - 水滴半徑 (預設: 20)
+   * @property {number} perturbance - 擾動強度 (預設: 0.03)
+   * @property {boolean} interactive - 是否啟用滑鼠/觸控互動 (預設: true)
+   * @property {string} crossOrigin - 圖片跨域設定
+   */
   static DEFAULTS = {
     imageUrl: null,
     resolution: 256,
@@ -933,6 +1008,18 @@ export class Ripples {
   /**
    *  Public methods
    */
+  /**
+   * 在指定位置觸發水滴效果
+   *
+   * @param {number} x - 水滴 X 座標 (相對於元素左上角)
+   * @param {number} y - 水滴 Y 座標 (相對於元素左上角)
+   * @param {number} radius - 水滴半徑
+   * @param {number} strength - 水滴強度 (建議值: 0.01 ~ 0.5)
+   * @returns {void}
+   *
+   * @example
+   * ripples.drop(100, 200, 20, 0.04);
+   */
   static drop(x, y, radius, strength) {
     Ripples.gl = this.context;
 
@@ -965,6 +1052,10 @@ export class Ripples {
     this.swapBufferIndices();
   }
 
+  /**
+   * 更新 canvas 尺寸以匹配元素大小
+   * @returns {void}
+   */
   static updateSize() {
     const newWidth = this.$el.getBoundingClientRect().width,
       newHeight = this.$el.getBoundingClientRect().height;
@@ -975,6 +1066,10 @@ export class Ripples {
     }
   }
 
+  /**
+   * 銷毀 Ripples 實例並清理資源
+   * @returns {void}
+   */
   static destroy() {
     this.$el.removeEventListener('mousemove', this.ripplesMousemove);
     this.$el.removeEventListener('touchmove', this.ripplesTouchmove);
@@ -996,6 +1091,10 @@ export class Ripples {
     this.destroyed = true;
   }
 
+  /**
+   * 顯示水波紋效果
+   * @returns {void}
+   */
   static show() {
     this.visible = true;
 
@@ -1003,6 +1102,10 @@ export class Ripples {
     this.hideCssBackground();
   }
 
+  /**
+   * 隱藏水波紋效果
+   * @returns {void}
+   */
   static hide() {
     this.visible = false;
 
@@ -1010,14 +1113,29 @@ export class Ripples {
     this.restoreCssBackground();
   }
 
+  /**
+   * 暫停水波紋動畫
+   * @returns {void}
+   */
   static pause() {
     this.running = false;
   }
 
+  /**
+   * 繼續播放水波紋動畫
+   * @returns {void}
+   */
   static play() {
     this.running = true;
   }
 
+  /**
+   * 動態設定屬性值
+   *
+   * @param {string} property - 屬性名稱 ('dropRadius' | 'perturbance' | 'interactive' | 'crossOrigin' | 'imageUrl')
+   * @param {*} value - 屬性值
+   * @returns {void}
+   */
   static set(property, value) {
     switch (property) {
       case 'dropRadius':
@@ -1033,8 +1151,41 @@ export class Ripples {
     }
   }
 
+  /**
+   * WebGL 配置 (瀏覽器支援檢測結果)
+   * @type {Object|null}
+   * @static
+   */
   static config = Ripples.loadConfig();
 
+  /**
+   * 靜態入口方法 - 初始化或控制 Ripples 實例
+   *
+   * 此方法實現類似多載的功能：
+   * - 傳入 options 物件：初始化新的 Ripples 實例
+   * - 傳入字串命令：執行對應的實例方法 (如 'drop', 'pause', 'play', 'destroy')
+   *
+   * @param {HTMLElement|string} target - 目標元素或 CSS 選擇器
+   * @param {RipplesOptions|string} option - 配置選項物件或命令字串
+   * @param {...*} args - 額外參數 (用於 'drop' 等命令)
+   * @returns {Ripples|undefined} 初始化時返回 Ripples 實例
+   * @throws {Error} 瀏覽器不支援 WebGL 時拋出錯誤
+   * @throws {Error} target 不是有效的 HTMLElement 時拋出錯誤
+   * @static
+   *
+   * @example
+   * // 初始化
+   * const ripples = Ripples.ripples('#hero', { resolution: 512 });
+   *
+   * @example
+   * // 觸發水滴
+   * Ripples.ripples('#hero', 'drop', 100, 200, 20, 0.04);
+   *
+   * @example
+   * // 暫停/播放
+   * Ripples.ripples('#hero', 'pause');
+   * Ripples.ripples('#hero', 'play');
+   */
   static ripples(target, option) {
     const args = Array.prototype.slice.call(arguments, Ripples.ripples.length);
     if (!Ripples.config) {

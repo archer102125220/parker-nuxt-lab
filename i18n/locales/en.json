@@ -23,7 +23,8 @@
         "firebase": "Firebase Integration Test",
         "socket": "Socket Test",
         "server_sent_event": "Server Sent Event Test",
-        "web_rtc": "WebRTC Test"
+        "web_rtc": "WebRTC Test",
+        "indexeddb_demo": "IndexedDB ORM Demo"
     },
     "home": {
         "hero": {
@@ -70,7 +71,8 @@
             "server_sent_event_desc": "Server-Sent Events unidirectional real-time communication",
             "web_rtc_desc": "WebRTC peer-to-peer video call functionality testing",
             "face_swap_desc": "AI face swapping technology implementation showcase",
-            "swagger_doc_desc": "Using Swagger UI to display complete documentation for Nuxt Server APIs"
+            "swagger_doc_desc": "Using Swagger UI to display complete documentation for Nuxt Server APIs",
+            "indexeddb_demo_desc": "Custom IndexedDB ORM tool demonstration and testing"
         },
         "stats": {
             "components": "Components",

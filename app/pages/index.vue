@@ -284,6 +284,11 @@ const linkList = computed(() => [
     to: localePath('/swagger-doc'),
     label: t('index.swagger_doc'),
     description: t('home.nav.swagger_doc_desc')
+  },
+  {
+    to: localePath('/indexeddb-demo'),
+    label: t('index.indexeddb_demo'),
+    description: t('home.nav.indexeddb_demo_desc')
   }
 ]);
 </script>

@@ -22,7 +22,8 @@
         "socket": "socket測試",
         "server_sent_event": "Server Sent Event測試",
         "web_rtc": "WebRTC測試",
-        "swagger_doc": "Swagger API 文檔"
+        "swagger_doc": "Swagger API 文檔",
+        "indexeddb_demo": "IndexedDB ORM 展示"
     },
     "home": {
         "hero": {
@@ -69,7 +70,8 @@
             "server_sent_event_desc": "Server-Sent Events 單向即時通訊實作",
             "web_rtc_desc": "WebRTC 點對點視訊通話功能測試",
             "face_swap_desc": "AI 人臉交換技術的實作展示",
-            "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔"
+            "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔",
+            "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試"
         },
         "stats": {
             "components": "組件數量",
