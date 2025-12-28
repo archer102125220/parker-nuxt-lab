@@ -3,12 +3,12 @@
     <!-- Hero Section -->
     <section
       class="home_page-hero"
-      v-ripples-animation="{
-        resolution: 512,
+      v-ripples-auto-drops="{
+        interval: 300,
         dropRadius: 20,
-        perturbance: 0.04,
-        interactive: true,
-        imageUrl: '/img/home/hero-gradient.svg'
+        strength: 0.04,
+        strengthVariance: 0.04,
+        interactive: true
       }"
     >
       <div class="home_page-hero-background">
@@ -24,15 +24,16 @@
           {{ t('home.hero.description') }}
         </p>
         <div class="home_page-hero-content-actions">
-          <button
+          <v-btn
             @click="scrollToNavigation"
             class="home_page-hero-content-actions-btn"
             css-variant="primary"
           >
             {{ t('home.hero.cta_explore') }}
-          </button>
+          </v-btn>
           <NuxtLink
             :to="localePath('/about')"
+            v-ripple
             class="home_page-hero-content-actions-btn"
             css-variant="secondary"
           >
@@ -311,6 +312,7 @@ const linkList = computed(() => [
     overflow: hidden;
 
     /* Visual - for Ripples animation */
+    background-image: url('/img/home/hero-gradient.svg');
     background-size: cover;
     background-position: center;
 
@@ -436,6 +438,8 @@ const linkList = computed(() => [
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
           &[css-variant='primary'] {
+            height: 100%;
+
             /* Visual */
             background: #ffffff;
             color: #44a08d;

@@ -424,12 +424,6 @@ export class Ripples {
     };
 
     const dropAtPointer = (pointer, big) => {
-      console.log({
-        pointerEventsEnabled: pointerEventsEnabled(),
-        visible: this.visible,
-        running: this.running,
-        interactive: this.interactive
-      });
       if (pointerEventsEnabled()) {
         this.dropAtPointer(
           pointer,
@@ -441,7 +435,6 @@ export class Ripples {
 
     // Start listening to pointer events
     this.$el.addEventListener('mousemove', (e) => {
-      // console.log(e);
       dropAtPointer(e);
     });
 
@@ -921,7 +914,6 @@ export class Ripples {
   }
 
   dropAtPointer(pointer, radius, strength) {
-    console.log({ pointer, radius, strength });
     let $elStyle;
     try {
       $elStyle = window.getComputedStyle(this.$el);
@@ -942,7 +934,6 @@ export class Ripples {
    *  Public methods
    */
   static drop(x, y, radius, strength) {
-    console.log({ x, y, radius, strength });
     Ripples.gl = this.context;
 
     const elWidth = this.$el.getBoundingClientRect().width;
