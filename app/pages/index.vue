@@ -310,6 +310,10 @@ const linkList = computed(() => [
     padding: 80px 24px;
     overflow: hidden;
 
+    /* Visual - for Ripples animation */
+    background-size: cover;
+    background-position: center;
+
     &-background {
       /* Positioning */
       position: absolute;
