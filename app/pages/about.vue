@@ -42,15 +42,23 @@
 
           <!-- GitHub Link -->
           <div class="about_page-overview-github">
-            <a
+            <v-btn
               href="https://github.com/archer102125220/parker-nuxt-lab"
               target="_blank"
               rel="noopener noreferrer"
-              class="about_page-overview-github-link"
+              color="grey-darken-4"
+              rounded="xl"
+              size="large"
+              class="about_page-overview-github-btn"
             >
-              <span class="about_page-overview-github-link-icon">📦</span>
-              {{ $t('about.overview.view_source') }}
-            </a>
+              <div class="about_page-overview-github-btn-wrapper">
+                <span class="about_page-overview-github-btn-wrapper-emoji"
+                  >📦</span
+                >
+                <p>{{ $t('about.overview.view_source') }}</p>
+                <v-icon icon="mdi-open-in-new" size="small" />
+              </div>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -231,7 +239,7 @@ useHeadMataData({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .about_page {
   // Display & Box Model
   min-height: 100vh;
@@ -422,35 +430,24 @@ useHeadMataData({
     margin-top: 32px;
     text-align: center;
 
-    &-link {
-      // Display & Box Model
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 28px;
-      border-radius: 12px;
-
-      // Typography
-      font-size: 16px;
-      font-weight: 600;
-      text-decoration: none;
-      color: #ffffff;
-
-      // Visual
-      background: linear-gradient(135deg, #24292e 0%, #40484f 100%);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-
-      // Animation
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    &-btn {
+      :deep(.v-btn__content) {
+        height: 100%;
       }
 
-      &-icon {
+      &-wrapper {
+        // Display & Box Model
+        display: inline-flex;
+        align-items: center;
+
         // Typography
-        font-size: 20px;
+        text-transform: none;
+        letter-spacing: normal;
+
+        &-emoji {
+          // Typography
+          font-size: 20px;
+        }
       }
     }
   }
