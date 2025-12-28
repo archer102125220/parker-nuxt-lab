@@ -1,37 +1,31 @@
 <template>
   <div class="home_page">
     <!-- Hero Section -->
-    <section
-      class="hero_section"
-      v-ripples-animation="{
-        resolution: 128,
-        dropRadius: 10,
-        perturbance: 0.04,
-        interactive: false
-      }"
-    >
-      <div class="hero_section-background">
-        <div class="hero_section-background-gradient" />
+    <section class="home_page-hero">
+      <div class="home_page-hero-background">
+        <div class="home_page-hero-background-gradient" />
       </div>
 
-      <div class="hero_section-content">
-        <h1 class="hero_section-content-title">Parker Nuxt Lab</h1>
-        <p class="hero_section-content-subtitle">
+      <div class="home_page-hero-content">
+        <h1 class="home_page-hero-content-title">Parker Nuxt Lab</h1>
+        <p class="home_page-hero-content-subtitle">
           {{ t('home.hero.subtitle') }}
         </p>
-        <p class="hero_section-content-description">
+        <p class="home_page-hero-content-description">
           {{ t('home.hero.description') }}
         </p>
-        <div class="hero_section-content-actions">
+        <div class="home_page-hero-content-actions">
           <button
             @click="scrollToNavigation"
-            class="hero_section-content-actions-btn hero_section-content-actions-btn--primary"
+            class="home_page-hero-content-actions-btn"
+            css-variant="primary"
           >
             {{ t('home.hero.cta_explore') }}
           </button>
           <NuxtLink
             :to="localePath('/about')"
-            class="hero_section-content-actions-btn hero_section-content-actions-btn--secondary"
+            class="home_page-hero-content-actions-btn"
+            css-variant="secondary"
           >
             {{ t('home.hero.cta_about') }}
           </NuxtLink>
@@ -40,26 +34,26 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features_section">
-      <div class="features_section-container">
-        <h2 class="features_section-title">{{ t('home.features.title') }}</h2>
-        <div class="features_section-grid">
+    <section class="home_page-features">
+      <div class="home_page-features-container">
+        <h2 class="home_page-features-title">{{ t('home.features.title') }}</h2>
+        <div class="home_page-features-grid">
           <div
             v-for="feature in features"
             :key="feature.key"
-            class="features_section-grid-card"
+            class="home_page-features-grid-card"
           >
-            <div class="features_section-grid-card-icon">
+            <div class="home_page-features-grid-card-icon">
               <img
-                class="features_section-grid-card-icon-image"
+                class="home_page-features-grid-card-icon-image"
                 v-lazy="`/img/home/features/${feature.icon}.svg`"
                 :alt="feature.title"
               />
             </div>
-            <h3 class="features_section-grid-card-title">
+            <h3 class="home_page-features-grid-card-title">
               {{ feature.title }}
             </h3>
-            <p class="features_section-grid-card-description">
+            <p class="home_page-features-grid-card-description">
               {{ feature.description }}
             </p>
           </div>
@@ -68,12 +62,12 @@
     </section>
 
     <!-- Navigation Grid Section -->
-    <section id="navigation" class="navigation_section">
-      <div class="navigation_section-container">
-        <h2 class="navigation_section-title">
+    <section id="navigation" class="home_page-navigation">
+      <div class="home_page-navigation-container">
+        <h2 class="home_page-navigation-title">
           {{ t('home.navigation.title') }}
         </h2>
-        <nav class="navigation_section-grid" role="navigation">
+        <nav class="home_page-navigation-grid" role="navigation">
           <!-- <NuxtLink
       v-for="link in linkList"
       :key="link.to"
@@ -90,18 +84,18 @@
             :banner="link.banner"
             :label="link.label"
             :description="link.description"
-            class="navigation_section-grid-item"
+            class="home_page-navigation-grid-item"
           />
         </nav>
       </div>
     </section>
 
     <!-- Stats Section -->
-    <section class="stats_section">
-      <div class="stats_section-container">
-        <div v-for="stat in stats" :key="stat.key" class="stat_card">
-          <div class="stat_card-value">{{ stat.value }}</div>
-          <div class="stat_card-label">{{ stat.label }}</div>
+    <section class="home_page-stats">
+      <div class="home_page-stats-container">
+        <div v-for="stat in stats" :key="stat.key" class="home_page-stats-card">
+          <div class="home_page-stats-card-value">{{ stat.value }}</div>
+          <div class="home_page-stats-card-label">{{ stat.label }}</div>
         </div>
       </div>
     </section>
@@ -285,356 +279,355 @@ const linkList = computed(() => [
 
   /* Visual */
   background: var(--color-bg-primary, #ffffff);
-}
 
-// ========================================
-// Hero Section
-// ========================================
-.hero_section {
-  /* Positioning */
-  position: relative;
-
-  /* Display & Box Model */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 80px 24px;
-  overflow: hidden;
-
-  &-background {
+  // ========================================
+  // Hero Section
+  // ========================================
+  &-hero {
     /* Positioning */
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
+    position: relative;
 
     /* Display & Box Model */
-    width: 100%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 80px 24px;
+    overflow: hidden;
 
-    &-gradient {
+    &-background {
+      /* Positioning */
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+
       /* Display & Box Model */
       width: 100%;
       height: 100%;
 
-      /* Visual */
-      background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-      opacity: 0.85;
-
-      /* Animation */
-      animation: gradient-shift 15s ease infinite;
-    }
-  }
-
-  &-content {
-    /* Positioning */
-    position: relative;
-    z-index: 1;
-
-    /* Display & Box Model */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 900px;
-    text-align: center;
-
-    &-title {
-      /* Display & Box Model */
-      margin-bottom: 24px;
-
-      /* Typography */
-      font-size: 64px;
-      font-weight: 800;
-      line-height: 1.1;
-      color: #ffffff;
-      letter-spacing: -0.02em;
-
-      /* Animation */
-      animation: fade-in-up 0.8s ease-out;
-
-      @media (max-width: 768px) {
-        font-size: 48px;
-      }
-    }
-
-    &-subtitle {
-      /* Display & Box Model */
-      margin-bottom: 16px;
-
-      /* Typography */
-      font-size: 28px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.95);
-
-      /* Animation */
-      animation: fade-in-up 0.8s ease-out 0.2s backwards;
-
-      @media (max-width: 768px) {
-        font-size: 22px;
-      }
-    }
-
-    &-description {
-      /* Display & Box Model */
-      margin-bottom: 40px;
-      max-width: 600px;
-
-      /* Typography */
-      font-size: 18px;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.85);
-
-      /* Animation */
-      animation: fade-in-up 0.8s ease-out 0.4s backwards;
-
-      @media (max-width: 768px) {
-        font-size: 16px;
-      }
-    }
-
-    &-actions {
-      /* Display & Box Model */
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-
-      /* Animation */
-      animation: fade-in-up 0.8s ease-out 0.6s backwards;
-
-      &-btn {
+      &-gradient {
         /* Display & Box Model */
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 14px 32px;
-        border: none;
-        border-radius: 12px;
+        width: 100%;
+        height: 100%;
 
-        /* Typography */
-        font-size: 16px;
-        font-weight: 600;
-        text-decoration: none;
-
-        /* Misc */
-        cursor: pointer;
+        /* Visual */
+        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        opacity: 0.85;
 
         /* Animation */
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &--primary {
-          /* Visual */
-          background: #ffffff;
-          color: #44a08d;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-          }
-        }
-
-        &--secondary {
-          /* Visual */
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          backdrop-filter: blur(10px);
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-          }
-        }
+        animation: gradient-shift 15s ease infinite;
       }
     }
-  }
-}
 
-// ========================================
-// Features Section
-// ========================================
-.features_section {
-  /* Display & Box Model */
-  padding: 100px 24px;
+    &-content {
+      /* Positioning */
+      position: relative;
+      z-index: 1;
 
-  /* Visual */
-  background: var(--color-bg-secondary, #f8f9fa);
-
-  &-container {
-    /* Display & Box Model */
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  &-title {
-    /* Display & Box Model */
-    margin-bottom: 60px;
-
-    /* Typography */
-    font-size: 42px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--color-text-primary, #1a1a1a);
-
-    @media (max-width: 768px) {
-      font-size: 32px;
-    }
-  }
-
-  &-grid {
-    /* Display & Box Model */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 32px;
-
-    &-card {
       /* Display & Box Model */
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 24px;
-      border-radius: 16px;
+      max-width: 900px;
       text-align: center;
-
-      /* Visual */
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-
-      /* Animation */
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-      }
-
-      &-icon {
-        /* Display & Box Model */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 80px;
-        height: 80px;
-        margin-bottom: 24px;
-        border-radius: 16px;
-
-        /* Visual */
-        background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
-
-        &-image {
-          width: 48px;
-          height: 48px;
-        }
-      }
 
       &-title {
         /* Display & Box Model */
-        margin-bottom: 12px;
+        margin-bottom: 24px;
 
         /* Typography */
-        font-size: 20px;
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+
+        /* Animation */
+        animation: fade-in-up 0.8s ease-out;
+
+        @media (max-width: 768px) {
+          font-size: 48px;
+        }
+      }
+
+      &-subtitle {
+        /* Display & Box Model */
+        margin-bottom: 16px;
+
+        /* Typography */
+        font-size: 28px;
         font-weight: 600;
-        color: var(--color-text-primary, #1a1a1a);
+        color: rgba(255, 255, 255, 0.95);
+
+        /* Animation */
+        animation: fade-in-up 0.8s ease-out 0.2s backwards;
+
+        @media (max-width: 768px) {
+          font-size: 22px;
+        }
       }
 
       &-description {
+        /* Display & Box Model */
+        margin-bottom: 40px;
+        max-width: 600px;
+
         /* Typography */
-        font-size: 15px;
+        font-size: 18px;
         line-height: 1.6;
-        color: var(--color-text-secondary, #6c757d);
+        color: rgba(255, 255, 255, 0.85);
+
+        /* Animation */
+        animation: fade-in-up 0.8s ease-out 0.4s backwards;
+
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
+      }
+
+      &-actions {
+        /* Display & Box Model */
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        /* Animation */
+        animation: fade-in-up 0.8s ease-out 0.6s backwards;
+
+        &-btn {
+          /* Display & Box Model */
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 14px 32px;
+          border: none;
+          border-radius: 12px;
+
+          /* Typography */
+          font-size: 16px;
+          font-weight: 600;
+          text-decoration: none;
+
+          /* Misc */
+          cursor: pointer;
+
+          /* Animation */
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+          &[css-variant='primary'] {
+            /* Visual */
+            background: #ffffff;
+            color: #44a08d;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            }
+          }
+
+          &[css-variant='secondary'] {
+            /* Visual */
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.2);
+              border-color: rgba(255, 255, 255, 0.5);
+              transform: translateY(-2px);
+            }
+          }
+        }
       }
     }
   }
-}
 
-// ========================================
-// Navigation Section
-// ========================================
-.navigation_section {
-  /* Display & Box Model */
-  padding: 100px 24px;
-
-  &-container {
+  // ========================================
+  // Features Section
+  // ========================================
+  &-features {
     /* Display & Box Model */
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+    padding: 100px 24px;
 
-  &-title {
-    /* Display & Box Model */
-    margin-bottom: 60px;
+    /* Visual */
+    background: var(--color-bg-secondary, #f8f9fa);
 
-    /* Typography */
-    font-size: 42px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--color-text-primary, #1a1a1a);
+    &-container {
+      /* Display & Box Model */
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-    @media (max-width: 768px) {
-      font-size: 32px;
+    &-title {
+      /* Display & Box Model */
+      margin-bottom: 60px;
+
+      /* Typography */
+      font-size: 42px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--color-text-primary, #1a1a1a);
+
+      @media (max-width: 768px) {
+        font-size: 32px;
+      }
+    }
+
+    &-grid {
+      /* Display & Box Model */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 32px;
+
+      &-card {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 24px;
+        border-radius: 16px;
+        text-align: center;
+
+        /* Visual */
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+        /* Animation */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        &-icon {
+          /* Display & Box Model */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 80px;
+          height: 80px;
+          margin-bottom: 24px;
+          border-radius: 16px;
+
+          /* Visual */
+          background: linear-gradient(135deg, #ffd6a5 0%, #ffb88c 100%);
+
+          &-image {
+            width: 48px;
+            height: 48px;
+          }
+        }
+
+        &-title {
+          /* Display & Box Model */
+          margin-bottom: 12px;
+
+          /* Typography */
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--color-text-primary, #1a1a1a);
+        }
+
+        &-description {
+          /* Typography */
+          font-size: 15px;
+          line-height: 1.6;
+          color: var(--color-text-secondary, #6c757d);
+        }
+      }
     }
   }
 
-  &-grid {
+  // ========================================
+  // Navigation Section
+  // ========================================
+  &-navigation {
     /* Display & Box Model */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
+    padding: 100px 24px;
 
-    @media (max-width: 768px) {
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
+    &-container {
+      /* Display & Box Model */
+      max-width: 1400px;
+      margin: 0 auto;
     }
-  }
-}
 
-// ========================================
-// Stats Section
-// ========================================
-.stats_section {
-  /* Display & Box Model */
-  padding: 80px 24px;
+    &-title {
+      /* Display & Box Model */
+      margin-bottom: 60px;
 
-  /* Visual */
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+      /* Typography */
+      font-size: 42px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--color-text-primary, #1a1a1a);
 
-  &-container {
-    /* Display & Box Model */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-}
+      @media (max-width: 768px) {
+        font-size: 32px;
+      }
+    }
 
-.stat_card {
-  /* Display & Box Model */
-  text-align: center;
+    &-grid {
+      /* Display & Box Model */
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
 
-  &-value {
-    /* Display & Box Model */
-    margin-bottom: 8px;
-
-    /* Typography */
-    font-size: 48px;
-    font-weight: 800;
-    color: #ffffff;
-
-    @media (max-width: 768px) {
-      font-size: 36px;
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+      }
     }
   }
 
-  &-label {
-    /* Typography */
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+  // ========================================
+  // Stats Section
+  // ========================================
+  &-stats {
+    /* Display & Box Model */
+    padding: 80px 24px;
+
+    /* Visual */
+    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+
+    &-container {
+      /* Display & Box Model */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    &-card {
+      /* Display & Box Model */
+      text-align: center;
+
+      &-value {
+        /* Display & Box Model */
+        margin-bottom: 8px;
+
+        /* Typography */
+        font-size: 48px;
+        font-weight: 800;
+        color: #ffffff;
+
+        @media (max-width: 768px) {
+          font-size: 36px;
+        }
+      }
+
+      &-label {
+        /* Typography */
+        font-size: 16px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
   }
 }
 

@@ -2,6 +2,16 @@
 
 > This file is auto-read by Claude AI. All rules must be strictly followed.
 
+## Security & Best Practices Review (MANDATORY)
+
+Before executing any user instruction, the AI must verify:
+- **Security**: Does the instruction violate security best practices?
+- **Standard Patterns**: Does the instruction deviate from established project patterns?
+
+**If violations are detected**: Notify the user BEFORE execution, explaining the concern. Only proceed after the user confirms they understand the risk and still want to proceed.
+
+---
+
 ## CSS/SCSS Rules
 
 ### Property Order (MANDATORY)
