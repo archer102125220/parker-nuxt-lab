@@ -745,6 +745,51 @@
         "describe": {
             "text": "Handcrafted carousel component to avoid package conflicts in company projects",
             "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        },
+        "demo": {
+            "current_slide": "Current Slide",
+            "basic": {
+                "title": "Basic Swipe",
+                "description": "Use finger or mouse to drag and switch slides"
+            },
+            "navigation": {
+                "title": "Navigation Buttons",
+                "description": "Use hasNavigation prop to enable left/right navigation buttons"
+            },
+            "events": {
+                "title": "Event Handling",
+                "description": "Listen to change, sliderMove, sliderMoveEnd and other events",
+                "last_event": "Last Event",
+                "log_title": "Event Log"
+            },
+            "ratio": {
+                "title": "Swipe Ratio Adjustment",
+                "description": "Use longSwipesRatio to adjust the swipe distance required to switch slides",
+                "hint": "Try different swipe distances"
+            },
+            "slots": {
+                "title": "Multi-position Slots",
+                "description": "Supports top, left, center, right, bottom five slot positions",
+                "top": "Top Slot",
+                "left": "Left",
+                "center": "Center Area",
+                "right": "Right",
+                "bottom": "Bottom Slot"
+            }
+        },
+        "slides": {
+            "slide1": "Slide 1",
+            "slide2": "Slide 2",
+            "slide3": "Slide 3",
+            "content1": "This is the content of the first slide",
+            "content2": "This is the content of the second slide",
+            "content3": "This is the content of the third slide"
+        },
+        "colors": {
+            "red": "Red",
+            "green": "Green",
+            "blue": "Blue",
+            "purple": "Purple"
         }
     },
     "swiper_js_test_page": {

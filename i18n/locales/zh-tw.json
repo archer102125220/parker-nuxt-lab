@@ -744,6 +744,51 @@
         "describe": {
             "text": "為了避免公司專案上的套件衝突，因此手刻一版輪播圖",
             "strikethrough": "我也想既優雅又輕鬆愜意的使用套件，但現實不允許"
+        },
+        "demo": {
+            "current_slide": "當前幻燈片",
+            "basic": {
+                "title": "基本滑動",
+                "description": "使用手指或滑鼠拖動切換幻燈片"
+            },
+            "navigation": {
+                "title": "導航按鈕",
+                "description": "使用 hasNavigation 屬性啟用左右導航按鈕"
+            },
+            "events": {
+                "title": "事件處理",
+                "description": "監聽 change、sliderMove、sliderMoveEnd 等事件",
+                "last_event": "最後事件",
+                "log_title": "事件日誌"
+            },
+            "ratio": {
+                "title": "滑動比例調整",
+                "description": "使用 longSwipesRatio 調整切換所需的滑動距離比例",
+                "hint": "嘗試不同的滑動距離"
+            },
+            "slots": {
+                "title": "多位置插槽",
+                "description": "支援 top、left、center、right、bottom 五個位置的插槽",
+                "top": "頂部插槽",
+                "left": "左側",
+                "center": "中心區域",
+                "right": "右側",
+                "bottom": "底部插槽"
+            }
+        },
+        "slides": {
+            "slide1": "幻燈片 1",
+            "slide2": "幻燈片 2",
+            "slide3": "幻燈片 3",
+            "content1": "這是第一個幻燈片的內容",
+            "content2": "這是第二個幻燈片的內容",
+            "content3": "這是第三個幻燈片的內容"
+        },
+        "colors": {
+            "red": "紅色",
+            "green": "綠色",
+            "blue": "藍色",
+            "purple": "紫色"
         }
     },
     "swiper_js_test_page": {
