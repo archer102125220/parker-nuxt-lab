@@ -92,7 +92,8 @@
             "intro": "Parker's Nuxt Lab is an experimental project built on Nuxt 4, aimed at exploring and practicing modern frontend and backend technologies.",
             "purpose": "The main purpose of this project is to test and integrate various cutting-edge technologies, including PWA, real-time communication, AI/ML, and establish a complete set of development practice examples.",
             "features": "Through custom components and third-party integrations, we have built a feature-rich, well-structured technology showcase platform.",
-            "view_source": "View Source on GitHub"
+            "view_source": "View Source on GitHub",
+            "view_nextjs": "View Next.js Version"
         },
         "tech_stack": {
             "title": "Tech Stack",

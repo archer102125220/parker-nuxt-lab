@@ -91,7 +91,8 @@
             "intro": "Parker 的 Nuxt 實驗室是一個以 Nuxt 4 為核心的實驗型專案，旨在探索和實踐現代化的前後端技術。",
             "purpose": "本專案的主要目的是測試和整合各種前沿技術，包括 PWA、即時通訊、AI/ML 等，並建立一套完整的開發實踐範例。",
             "features": "透過自製組件和第三方整合，我們打造了一個功能豐富、架構清晰的技術展示平台。",
-            "view_source": "查看 GitHub 原始碼"
+            "view_source": "查看 GitHub 原始碼",
+            "view_nextjs": "查看 Next.js 版本"
         },
         "tech_stack": {
             "title": "技術棧",

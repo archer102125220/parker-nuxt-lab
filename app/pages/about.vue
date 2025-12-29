@@ -60,6 +60,27 @@
               </div>
             </v-btn>
           </div>
+
+          <!-- Next.js Version Link -->
+          <div class="about_page-overview-nextjs">
+            <v-btn
+              href="https://parker-nextjs-lab.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              color="blue-grey-darken-1"
+              rounded="xl"
+              size="large"
+              class="about_page-overview-nextjs-btn"
+            >
+              <div class="about_page-overview-nextjs-btn-wrapper">
+                <span class="about_page-overview-nextjs-btn-wrapper-emoji">
+                  ⚛️
+                </span>
+                <p>{{ $t('about.overview.view_nextjs') }}</p>
+                <v-icon icon="mdi-open-in-new" size="small" />
+              </div>
+            </v-btn>
+          </div>
         </div>
       </div>
     </section>
@@ -428,6 +449,33 @@ useHeadMataData({
   &-github {
     // Display & Box Model
     margin-top: 32px;
+    text-align: center;
+
+    &-btn {
+      :deep(.v-btn__content) {
+        height: 100%;
+      }
+
+      &-wrapper {
+        // Display & Box Model
+        display: inline-flex;
+        align-items: center;
+
+        // Typography
+        text-transform: none;
+        letter-spacing: normal;
+
+        &-emoji {
+          // Typography
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  &-nextjs {
+    // Display & Box Model
+    margin-top: 16px;
     text-align: center;
 
     &-btn {
