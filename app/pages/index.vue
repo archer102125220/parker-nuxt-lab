@@ -11,10 +11,6 @@
         interactive: true
       }"
     >
-      <div class="home_page-hero-background">
-        <div class="home_page-hero-background-gradient" />
-      </div>
-
       <div class="home_page-hero-content">
         <h1 class="home_page-hero-content-title">Parker Nuxt Lab</h1>
         <p class="home_page-hero-content-subtitle">
@@ -320,31 +316,6 @@ const linkList = computed(() => [
     background-image: url('/img/home/hero-gradient.svg');
     background-size: cover;
     background-position: center;
-
-    &-background {
-      /* Positioning */
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-
-      /* Display & Box Model */
-      width: 100%;
-      height: 100%;
-
-      &-gradient {
-        /* Display & Box Model */
-        width: 100%;
-        height: 100%;
-
-        /* Visual */
-        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-        opacity: 0.85;
-
-        /* Animation */
-        animation: gradient-shift 15s ease infinite;
-      }
-    }
 
     &-content {
       /* Positioning */
