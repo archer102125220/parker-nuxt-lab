@@ -751,6 +751,31 @@ All style files in this project follow these organizational principles to ensure
 - [CSS Naming Convention Quick Reference](./docs/in-progress/css-naming-quick-reference.md)
 - [CSS Naming Convention Progress](./docs/in-progress/css-naming-progress.md)
 
+## 🛠️ Vue/Nuxt Development Standards
+
+### Dynamic Components with Auto-Imported Components (MANDATORY)
+
+When using auto-imported components (like `NuxtLink`, `NuxtImg`) inside a dynamic `<component :is="...">`, you **MUST** use `resolveComponent()` to properly reference them:
+
+```vue
+<script setup>
+import { resolveComponent } from 'vue';
+
+// ✅ Correct: Use resolveComponent to get auto-imported component
+const NuxtLink = resolveComponent('NuxtLink');
+</script>
+
+<template>
+  <!-- ✅ Works correctly -->
+  <component :is="disabled ? 'div' : NuxtLink" :to="to">
+    Content
+  </component>
+</template>
+```
+
+**Why?** Auto-imported components are not available as runtime variables in `<script setup>`. Without `resolveComponent()`, you'll get:
+> `[Vue warn]: Property "NuxtLink" was accessed during render but is not defined on instance.`
+
 ## Realtime / Media Pages
 
 - `pages/socket-test/` (Socket.IO)

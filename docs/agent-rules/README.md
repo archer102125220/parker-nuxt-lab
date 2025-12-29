@@ -71,6 +71,13 @@
    - 單一頁面組件：以雙駝峰頁面名稱資料夾儲存（如 `components/HooksTest/`）
    - 多頁面共用組件：以分歧路由作為雙駝峰資料夾名稱（如 `components/WebRtc/`）
 
+### Vue/Nuxt 規範
+
+1. **動態組件與自動導入組件**（必須遵守）：
+   - 在動態 `<component :is="...">` 中使用自動導入的組件（如 `NuxtLink`、`NuxtImg`）時，必須使用 `resolveComponent()`
+   - ❌ 錯誤：直接使用 `NuxtLink`（會導致 `Property "NuxtLink" was accessed during render...` 錯誤）
+   - ✅ 正確：`const NuxtLink = resolveComponent('NuxtLink')`
+
 ---
 
 ## 📖 詳細規範

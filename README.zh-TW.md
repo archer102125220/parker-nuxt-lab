@@ -753,6 +753,31 @@ components/
 - [CSS 命名規範快速參考](./docs/in-progress/css-naming-quick-reference.md)
 - [CSS 命名規範修正進度](./docs/in-progress/css-naming-progress.md)
 
+## 🛠️ Vue/Nuxt 開發規範
+
+### 動態組件與自動導入組件（必須遵守）
+
+在動態 `<component :is="...">` 中使用自動導入的組件（如 `NuxtLink`、`NuxtImg`）時，**必須**使用 `resolveComponent()` 來正確引用：
+
+```vue
+<script setup>
+import { resolveComponent } from 'vue';
+
+// ✅ 正確：使用 resolveComponent 獲取自動導入的組件
+const NuxtLink = resolveComponent('NuxtLink');
+</script>
+
+<template>
+  <!-- ✅ 正確使用 -->
+  <component :is="disabled ? 'div' : NuxtLink" :to="to">
+    內容
+  </component>
+</template>
+```
+
+**為什麼？** 自動導入的組件在 `<script setup>` 中無法作為 runtime 變數使用。若不使用 `resolveComponent()`，會出現以下錯誤：
+> `[Vue warn]: Property "NuxtLink" was accessed during render but is not defined on instance.`
+
 ## 即時通訊 / 影音相關頁面
 
 - `pages/socket-test/`（Socket.IO）
