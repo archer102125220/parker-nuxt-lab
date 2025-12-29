@@ -356,7 +356,20 @@
             "subtitle": "AI 人臉識別與替換技術",
             "description": "使用 AI 技術實現人臉識別與替換功能，提供前端與後端兩種實作版本"
         },
-        "intro": "使用 face-api.js 和 AI 模型實現人臉識別與替換功能，提供純前端與後端 AI 兩種實作方式。"
+        "intro": "使用 face-api.js 和 AI 模型實現人臉識別與替換功能，提供純前端與後端 AI 兩種實作方式。",
+        "section_title": "選擇實作版本",
+        "serverless_notice": {
+            "title": "Serverless 環境限制",
+            "text": "目前網站部署於 Vercel Serverless 環境，後端 AI 版本需要長時間執行的運算資源，無法在 Serverless 環境中正常運作。如需體驗完整功能，請在本地環境執行此專案。"
+        },
+        "versions": {
+            "frontend": "純前端版本 - 使用 face-api.js + Canvas 實現",
+            "backend": "後端 AI 版本 - 使用 Node.js 後端 + AI 模型"
+        },
+        "badges": {
+            "unavailable": "無法使用",
+            "developing": "開發中"
+        }
     },
     "swagger_doc_page": {
         "hero": {

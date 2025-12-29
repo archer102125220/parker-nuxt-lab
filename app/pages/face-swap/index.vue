@@ -36,19 +36,19 @@
     <!-- Face Swap Versions -->
     <section class="face_swap_page-section">
       <div class="face_swap_page-section-container">
-        <h2 class="face_swap_page-section-title">選擇實作版本</h2>
+        <h2 class="face_swap_page-section-title">
+          {{ $t('face_swap_page.section_title') }}
+        </h2>
 
         <!-- Serverless Environment Notice -->
         <div v-if="isVercel" class="face_swap_page-serverless-notice">
           <div class="face_swap_page-serverless-notice-icon">⚠️</div>
           <div class="face_swap_page-serverless-notice-content">
             <h3 class="face_swap_page-serverless-notice-content-title">
-              Serverless 環境限制
+              {{ $t('face_swap_page.serverless_notice.title') }}
             </h3>
             <p class="face_swap_page-serverless-notice-content-text">
-              目前網站部署於 Vercel Serverless 環境，後端 AI
-              版本需要長時間執行的運算資源， 無法在 Serverless
-              環境中正常運作。如需體驗完整功能，請在本地環境執行此專案。
+              {{ $t('face_swap_page.serverless_notice.text') }}
             </p>
           </div>
         </div>
@@ -92,12 +92,14 @@ useHeadMataData({
 const faceSwapVersions = computed(() => [
   {
     to: localePath('/face-swap/frontend'),
-    label: '純前端版本 - 使用 face-api.js + Canvas 實現'
+    label: t('face_swap_page.versions.frontend')
   },
   {
     to: isVercel.value ? null : localePath('/face-swap/backend'),
-    label: '後端 AI 版本 - 使用 Node.js 後端 + AI 模型',
-    badge: isVercel.value ? '無法使用' : '開發中',
+    label: t('face_swap_page.versions.backend'),
+    badge: isVercel.value
+      ? t('face_swap_page.badges.unavailable')
+      : t('face_swap_page.badges.developing'),
     disabled: isVercel.value
   }
 ]);

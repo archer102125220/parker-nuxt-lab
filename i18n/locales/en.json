@@ -357,7 +357,20 @@
             "subtitle": "AI Face Recognition & Swap Technology",
             "description": "Using AI technology to implement face recognition and swap functionality, providing both frontend and backend implementation versions"
         },
-        "intro": "Using face-api.js and AI models to implement face recognition and swap functionality, providing both pure frontend and backend AI implementation methods."
+        "intro": "Using face-api.js and AI models to implement face recognition and swap functionality, providing both pure frontend and backend AI implementation methods.",
+        "section_title": "Select Implementation Version",
+        "serverless_notice": {
+            "title": "Serverless Environment Limitation",
+            "text": "This website is deployed on Vercel Serverless environment. The backend AI version requires long-running computational resources and cannot function properly in a Serverless environment. To experience full functionality, please run this project locally."
+        },
+        "versions": {
+            "frontend": "Frontend Only - Using face-api.js + Canvas",
+            "backend": "Backend AI Version - Using Node.js Backend + AI Model"
+        },
+        "badges": {
+            "unavailable": "Unavailable",
+            "developing": "In Development"
+        }
     },
     "swagger_doc_page": {
         "hero": {
