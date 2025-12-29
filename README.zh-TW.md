@@ -823,9 +823,33 @@ yarn test:codegen
 - `public/ai_models`：`face-api.js` 權重檔案（weights）
   - 來源參考：<https://github.com/justadudewhohacks/face-api.js/tree/master>
 
+## 🤖 AI Agent 規則
+
+本專案包含 AI Agent（Claude、Cursor 等）的程式碼規則，以確保一致的程式碼生成：
+
+### 規則檔案
+
+| 檔案 | 用途 |
+|------|------|
+| `CLAUDE.md` | Claude AI 快速參考 |
+| `.cursor/rules/css-conventions.mdc` | CSS/SCSS 命名與屬性順序 |
+| `.cursor/rules/security-policy.mdc` | 資安警告政策 |
+| `.cursor/rules/lint-policy.mdc` | Lint 禁用註解政策 |
+
+### 相關文件
+
+| 文件 | 說明 |
+|------|------|
+| [Agent 規則總覽](./docs/agent-rules/README.md) | 完整 Agent 規則概述 |
+| [CSS 開發規範](./docs/agent-rules/css-conventions.md) | 詳細 CSS/SCSS 標準 |
+| [前端測試設計指南](./docs/agent-rules/frontend-testing-guide.md) | 測試設計原則 |
+
+> 💡 人類開發者也可以參考這些規則以維持一致的程式碼風格。
+
 ## 參考連結
 
 - Nuxt 4 文件：<https://nuxt.com/docs/getting-started/introduction>
 - 部署文件：<https://nuxt.com/docs/getting-started/deployment>
 - face-api.js models（weights）：<https://github.com/justadudewhohacks/face-api.js/tree/master>
 - mac 安裝 node-canvas：<https://github.com/Automattic/node-canvas>
+

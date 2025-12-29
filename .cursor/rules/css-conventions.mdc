@@ -20,6 +20,11 @@ globs: ["**/*.scss", "**/*.css", "**/*.vue"]
 - State: `[css-is-active='true']` (HTML attributes)
 - Color/Size variants: `[css-color='red']`, `[css-size='small']` (HTML attributes)
 
+## Forbidden Practices
+- ❌ **NEVER use `__` (double underscore)**
+- ❌ **NEVER use `--` (double hyphen)** - use HTML attributes instead
+- ❌ **NEVER use multiple classNames on a single element**
+
 ### HTML Attribute Usage:
 **When to use**:
 1. States: `[css-is-active='true']`, `[css-is-disabled='true']`

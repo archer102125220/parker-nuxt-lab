@@ -17,6 +17,15 @@
 | 文件 | 說明 |
 |------|------|
 | [css-conventions.md](./css-conventions.md) | CSS/SCSS 開發規範（屬性順序、BEM 命名、檔案組織） |
+| [frontend-testing-guide.md](./frontend-testing-guide.md) | 前端測試設計指南 |
+
+### Cursor IDE 規則 (`.cursor/rules/`)
+
+| 文件 | 說明 |
+|------|------|
+| `css-conventions.mdc` | CSS/SCSS 命名與屬性順序規則 |
+| `security-policy.mdc` | 資安與最佳實踐審查政策 |
+| `lint-policy.mdc` | Lint 禁用註解政策 |
 
 ---
 

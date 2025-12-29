@@ -821,9 +821,33 @@ yarn test:codegen
 - `public/ai_models`: `face-api.js` weight files
   - Reference: <https://github.com/justadudewhohacks/face-api.js/tree/master>
 
+## 🤖 AI Agent Rules
+
+This project includes coding rules for AI agents (Claude, Cursor, etc.) to ensure consistent code generation:
+
+### Rule Files
+
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Quick reference for Claude AI |
+| `.cursor/rules/css-conventions.mdc` | CSS/SCSS naming & property order |
+| `.cursor/rules/security-policy.mdc` | Security warning policy |
+| `.cursor/rules/lint-policy.mdc` | Lint disable comment policy |
+
+### Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Agent Rules README](./docs/agent-rules/README.md) | Complete agent rules overview |
+| [CSS Conventions](./docs/agent-rules/css-conventions.md) | Detailed CSS/SCSS standards |
+| [Frontend Testing Guide](./docs/agent-rules/frontend-testing-guide.md) | Testing design principles |
+
+> 💡 Human developers can also reference these rules for consistent coding practices.
+
 ## References
 
 - Nuxt 4 Docs: <https://nuxt.com/docs/getting-started/introduction>
 - Deployment: <https://nuxt.com/docs/getting-started/deployment>
 - face-api.js models (weights): <https://github.com/justadudewhohacks/face-api.js/tree/master>
 - node-canvas (macOS): <https://github.com/Automattic/node-canvas>
+
