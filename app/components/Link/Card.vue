@@ -35,6 +35,9 @@
 </template>
 
 <script setup>
+import { resolveComponent } from 'vue';
+
+const NuxtLink = resolveComponent('NuxtLink');
 const DEFAULT_IMG = '/img/icon/NuxtRock.v.10.4.webp';
 
 const props = defineProps({
