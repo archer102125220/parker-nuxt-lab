@@ -77,7 +77,7 @@ const directivesList = computed(() => [
     label: '自製 Lazyload 指令測試'
   },
   {
-    to: localePath('/components/ripples-directive'),
+    to: localePath('/directives/ripples'),
     label: t('ripples_directive_page.hero.title')
   }
 ]);

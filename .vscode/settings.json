@@ -5,7 +5,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "prettier.prettier-vscode",
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
     "editor.tabSize": 2,
     "editor.formatOnSave": true
   },

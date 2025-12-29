@@ -64,7 +64,7 @@ const exampleCode = computed(
         </p>
         <div class="ripples_component_page-hero-content-actions">
           <NuxtLink
-            :to="localePath('/components/ripples-directive')"
+            :to="localePath('/directives/ripples')"
             v-ripple
             class="ripples_component_page-hero-content-actions-btn"
           >
