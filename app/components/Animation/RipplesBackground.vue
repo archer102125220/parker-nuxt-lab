@@ -19,7 +19,7 @@
  * </RipplesBackground>
  */
 
-import { Ripples } from '@app/utils/animation/ripples';
+import { Ripples as RipplesAnimation } from '@app/utils/animation/ripples';
 
 // ========================================
 // Props
@@ -103,19 +103,54 @@ const ripplesOptions = computed(() => ({
 // ========================================
 // Lifecycle
 // ========================================
+let visibilityObserver = null;
+let isVisible = true;
+
 onMounted(() => {
   if (containerRef.value) {
     // 初始化 Ripples
-    ripplesInstance = Ripples.ripples(containerRef.value, ripplesOptions.value);
+    ripplesInstance = RipplesAnimation.ripples(
+      containerRef.value,
+      ripplesOptions.value
+    );
 
     // 設定自動水滴
     if (props.autoDrops) {
       startAutoDrops();
     }
+
+    // 建立可視範圍觀察器
+    visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 回復可視範圍，繼續動畫
+            isVisible = true;
+            play();
+          } else {
+            // 超出可視範圍，暫停動畫
+            isVisible = false;
+            pause();
+          }
+        });
+      },
+      {
+        // 當元素有任何部分進入視窗時觸發
+        threshold: 0
+      }
+    );
+
+    visibilityObserver.observe(containerRef.value);
   }
 });
 
 onBeforeUnmount(() => {
+  // 清理可視範圍觀察器
+  if (visibilityObserver) {
+    visibilityObserver.disconnect();
+    visibilityObserver = null;
+  }
+
   stopAutoDrops();
   if (ripplesInstance) {
     ripplesInstance.destroy();
@@ -158,6 +193,8 @@ function startAutoDrops() {
   if (autoDropsIntervalId) return;
 
   autoDropsIntervalId = setInterval(() => {
+    // 如果不可見，則跳過水滴產生
+    if (!isVisible) return;
     if (!ripplesInstance || !containerRef.value) return;
 
     const rect = containerRef.value.getBoundingClientRect();
