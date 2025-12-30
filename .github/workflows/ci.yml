@@ -58,6 +58,31 @@ jobs:
       fail-fast: false
       matrix:
         project: [chromium, firefox, webkit]
+    env:
+      DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+      POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
+      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+      VITE_APP_ID: ${{ secrets.VITE_APP_ID }}
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_ANDROID_FIREBASE_CREDENTIAL: ${{ secrets.VITE_ANDROID_FIREBASE_CREDENTIAL }}
+      VITE_FIREBASE_CREDENTIAL: ${{ secrets.VITE_FIREBASE_CREDENTIAL }}
+      VITE_IOS_FIREBASE_CREDENTIAL: ${{ secrets.VITE_IOS_FIREBASE_CREDENTIAL }}
+      VITE_FIREBASE_VAPID_KEY: ${{ secrets.VITE_FIREBASE_VAPID_KEY }}
+      VITE_MESSAGING_SENDER_ID: ${{ secrets.VITE_MESSAGING_SENDER_ID }}
+      VITE_MEASUREMENT_ID: ${{ secrets.VITE_MEASUREMENT_ID }}
+      # VITE_ Vars for build process
+      VITE_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+      VITE_POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
+      VITE_POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      VITE_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      VITE_POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -69,7 +94,7 @@ jobs:
     - name: Install Playwright Browsers
       run: yarn playwright install --with-deps
     - name: Build Application
-      run: yarn build
+      run: yarn build --dotenv .env.e2e
     - name: Run Playwright tests
       run: yarn playwright test --project=${{ matrix.project }}
     - uses: actions/upload-artifact@v4

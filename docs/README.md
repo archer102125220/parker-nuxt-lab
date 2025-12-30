@@ -114,6 +114,26 @@ docs/
 - [功能頁面完成報告](./completed/functional-pages-redesign.md)
 - [子頁面完成報告](./completed/sub-pages-redesign.md)
 
+- [子頁面完成報告](./completed/sub-pages-redesign.md)
+
+---
+
+### 5. CI/CD 流水線設置專案 🚀
+
+**完成時間：** 2025-12-30
+**完成度：** 100%
+
+**成果：**
+
+- ✅ 建立 GitHub Actions 自動化流水線
+- ✅ 整合 ESLint, Vitest, Playwright
+- ✅ 實現安全的 Secrets 管理機制
+- ✅ 修復 E2E 連線與 CI 建置問題
+
+**相關文檔：**
+
+- [完整設定指南](./completed/ci-cd-setup.md)
+
 ---
 
 ## 🔄 進行中的專案
@@ -145,9 +165,9 @@ docs/
 
 | 類別       | 數量 | 狀態 |
 | ---------- | ---- | ---- |
-| 已完成專案 | 4    | ✅   |
+| 已完成專案 | 5    | ✅   |
 | 進行中專案 | 1    | 🔄   |
-| 總文檔數   | 15   | -    |
+| 總文檔數   | 16   | -    |
 
 ### 已完成專案詳情
 
@@ -157,6 +177,7 @@ docs/
 | Banner 輪播組件    | 100%   | 2025-12-03 |
 | Face Swap 對齊優化 | 100%   | 2025-12-13 |
 | 頁面重新設計       | 100%   | 2025-12-26 |
+| CI/CD 流水線設置   | 100%   | 2025-12-30 |
 
 ---
 
@@ -169,6 +190,8 @@ docs/
 
 ### 按類型瀏覽
 
+- **CI/CD 相關**
+  - [CI/CD 設定指南](./completed/ci-cd-setup.md)
 - **CSS 相關**
   - [CSS 屬性順序計劃](./completed/css-property-order-plan.md)
 - **組件相關**
@@ -184,6 +207,12 @@ docs/
 ---
 
 ## 📅 更新記錄
+
+### 2025-12-30
+
+- ✅ 完成 CI/CD 流水線設置專案
+- 📝 新增 CI/CD 設定指南
+- 🔄 更新 .env.e2e 安全性與 GitHub Secrets 整合
 
 ### 2025-12-26
 
