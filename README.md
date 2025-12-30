@@ -19,6 +19,15 @@ An experimental Nuxt 4 project that integrates PWA, i18n, Pinia, Vuetify, Socket
 - **Additional Libraries**: WangEditor 5.1 (rich text editor), FIDO2, QR Code, Swiper 11.1, Day.js, Axios 1.7
 - **Analytics**: Vercel Analytics & Speed Insights
 
+## 🤖 AI Agent Rules
+
+This project includes configuration files for AI code assistants to ensure consistent code style:
+
+- **[GEMINI.md](./GEMINI.md)** - Rules for [Gemini Code Assist / Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/configuration.md#example-context-file-content-eg-geminimd) ([中文文件 - 非官方](https://gemini-cli.gh.miniasp.com/cli/configuration.html#context-%E6%AA%94%E6%A1%88%E5%85%A7%E5%AE%B9%E7%AF%84%E4%BE%8B-%E4%BE%8B%E5%A6%82-gemini-md)) (Google)
+- **[.agent/rules/](./.agent/rules/)** - Rules for [Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity?hl=en#8) (Google)
+- **[CLAUDE.md](./CLAUDE.md)** - Rules for [Claude Code](http://platform.claude.com/docs/en/agent-sdk/modifying-system-prompts#methods-of-modification) (Anthropic)
+- **[.cursor/rules/](./.cursor/rules/)** - Rules for [Cursor IDE](https://docs.cursor.com/context/rules)
+
 ## Key Directories
 
 - `pages/`: Example pages such as `web-rtc/`, `socket-test/`, `server-sent-event-test/`
@@ -855,14 +864,17 @@ This project includes coding rules for AI agents (Claude, Cursor, etc.) to ensur
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Quick reference for Claude AI |
+| `GEMINI.md` | Quick reference for Gemini AI |
 | `.cursor/rules/css-conventions.mdc` | CSS/SCSS naming & property order |
 | `.cursor/rules/security-policy.mdc` | Security warning policy |
 | `.cursor/rules/lint-policy.mdc` | Lint disable comment policy |
 
 ### Official Documentation
 
-- **CLAUDE.md**: [Claude Code - Memory & CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) - Learn how Claude Code uses CLAUDE.md as project-specific instructions
-- **.cursor/rules/**: [Cursor Rules Documentation](https://docs.cursor.com/context/rules) - Official guide for configuring Cursor IDE rules
+- **[GEMINI.md](./GEMINI.md)** - [Gemini Code Assist / Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/configuration.md#example-context-file-content-eg-geminimd) rules
+- **[.agent/rules/](./.agent/rules/)** - [Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity?hl=en#8) (Google) rules
+- **[CLAUDE.md](./CLAUDE.md)** - [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/modifying-system-prompts#methods-of-modification) - Learn how Claude uses CLAUDE.md as project-level instructions
+- **[.cursor/rules/](./.cursor/rules/)** - [Cursor Rules Documentation](https://docs.cursor.com/context/rules) - Official guide for configuring Cursor IDE rules
 
 ### Documentation
 

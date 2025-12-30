@@ -857,14 +857,17 @@ yarn test:codegen
 | 檔案 | 用途 |
 |------|------|
 | `CLAUDE.md` | Claude AI 快速參考 |
+| `GEMINI.md` | Gemini AI 快速參考 |
 | `.cursor/rules/css-conventions.mdc` | CSS/SCSS 命名與屬性順序 |
 | `.cursor/rules/security-policy.mdc` | 資安警告政策 |
 | `.cursor/rules/lint-policy.mdc` | Lint 禁用註解政策 |
 
 ### 官方文件
 
-- **CLAUDE.md**：[Claude Code - Memory & CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) - 了解 Claude Code 如何使用 CLAUDE.md 作為專案專屬指令
-- **.cursor/rules/**：[Cursor Rules 官方文件](https://docs.cursor.com/context/rules) - Cursor IDE 規則設定官方指南
+- **[GEMINI.md](./GEMINI.md)** - [Gemini Code Assist / Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/configuration.md#example-context-file-content-eg-geminimd)（[中文文件 - 非官方](https://gemini-cli.gh.miniasp.com/cli/configuration.html#context-%E6%AA%94%E6%A1%88%E5%85%A7%E5%AE%B9%E7%AF%84%E4%BE%8B-%E4%BE%8B%E5%A6%82-gemini-md)） - Gemini Code Assist / Gemini CLI 規則
+- **[.agent/rules/](./.agent/rules/)** - [Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity?hl=zh-tw#8)（Google）規則
+- **[CLAUDE.md](./CLAUDE.md)** - [Claude Code](http://platform.claude.com/docs/en/agent-sdk/modifying-system-prompts#methods-of-modification) - 了解 Claude Code 如何使用 CLAUDE.md 作為專案專屬指令
+- **[.cursor/rules/](./.cursor/rules/)** - [Cursor IDE](https://docs.cursor.com/context/rules) - Cursor IDE 規則設定官方指南
 
 ### 相關文件
 
