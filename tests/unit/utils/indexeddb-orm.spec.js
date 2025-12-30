@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import 'fake-indexeddb/auto';
-import IndexedDBORM from '../../../app/utils/database/indexeddb-orm';
+import IndexedDBORM from '@app/utils/indexeddb/indexeddb-orm';
 
 describe('IndexedDBORM', () => {
   let db;

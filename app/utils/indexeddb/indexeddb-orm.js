@@ -122,7 +122,11 @@ class IndexedDBORM {
 
             // Create indexes for unique fields
             for (const [fieldName, config] of Object.entries(attributes)) {
-              if (config.unique && !config.primaryKey) {
+              if (
+                config.unique &&
+                !config.primaryKey &&
+                !objectStore.indexNames.contains(fieldName)
+              ) {
                 objectStore.createIndex(fieldName, fieldName, {
                   unique: true
                 });

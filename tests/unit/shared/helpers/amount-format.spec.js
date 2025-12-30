@@ -82,7 +82,7 @@ describe('amountFormat', () => {
   describe('Safari 降級處理', () => {
     it('應該在正則表達式錯誤時觸發降級處理', () => {
       // 使用無效的正則表達式觸發錯誤
-      const invalidRegex = ['(?<!invalid)', 'g'];
+      const invalidRegex = ['(', 'g'];
       const result = amountFormat(1000, invalidRegex, ',');
 
       // 降級處理應該返回包含數字的結果
@@ -93,7 +93,7 @@ describe('amountFormat', () => {
     });
 
     it('降級處理應該正確處理整數', () => {
-      const invalidRegex = ['(?<!x)', 'g'];
+      const invalidRegex = ['(', 'g'];
       const result = amountFormat(1234, invalidRegex, ',');
       // 降級處理會產生分離的數字
       expect(result).toContain('1');
@@ -101,7 +101,7 @@ describe('amountFormat', () => {
     });
 
     it('降級處理應該正確處理小數', () => {
-      const invalidRegex = ['(?<!x)', 'g'];
+      const invalidRegex = ['(', 'g'];
       const result = amountFormat(1234.56, invalidRegex, ',');
       expect(result).toContain('1');
       expect(result).toContain('2');
@@ -109,7 +109,7 @@ describe('amountFormat', () => {
     });
 
     it('降級處理應該使用自訂分隔符號', () => {
-      const invalidRegex = ['(?<!x)', 'g'];
+      const invalidRegex = ['(', 'g'];
       const result = amountFormat(1000, invalidRegex, '_');
       expect(result).toContain('_');
     });
@@ -144,8 +144,8 @@ describe('amountFormat', () => {
     });
 
     it('應該處理非函數的錯誤處理器', () => {
-      const invalidRegex = ['(?<!x)', 'g'];
-      const result = amountFormat(1000, invalidRegex, ',', null);
+      const invalidRegex = ['(', 'g'];
+      const result = amountFormat(1000, invalidRegex, ',', undefined);
 
       // 沒有錯誤處理函數時會使用預設的 handleSafari
       expect(result).toBeDefined();

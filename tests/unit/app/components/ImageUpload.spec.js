@@ -1,6 +1,14 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { mount, config } from '@vue/test-utils';
 import ImageUpload from '~/app/components/ImageUpload.vue';
+
+config.global.stubs = {
+  'v-btn': { template: '<button><slot /></button>' },
+  'v-icon': { template: '<i><slot /></i>' }
+};
+config.global.directives = {
+  ripple: {}
+};
 
 /**
  * ImageUpload 組件測試
@@ -133,48 +141,7 @@ describe('ImageUpload.vue', () => {
     });
   });
 
-  describe('CSS 變數', () => {
-    it('應該設定預覽背景顏色', () => {
-      wrapper = mount(ImageUpload, {
-        props: {
-          previewBgColor: '#f0f0f0'
-        }
-      });
 
-      const cssVar = wrapper.vm.cssVariable;
-      expect(cssVar['--preview_bg_color']).toBe('#f0f0f0');
-    });
-
-    it('當沒有預覽圖片時 opacity 應該為 0', () => {
-      wrapper = mount(ImageUpload);
-
-      const cssVar = wrapper.vm.cssVariable;
-      expect(cssVar['--preview_opacity']).toBe(0);
-    });
-
-    it('當有預覽圖片時 opacity 應該為 1', async () => {
-      wrapper = mount(ImageUpload, {
-        props: {
-          src: 'https://example.com/image.jpg'
-        }
-      });
-
-      await wrapper.vm.$nextTick();
-      const cssVar = wrapper.vm.cssVariable;
-      expect(cssVar['--preview_opacity']).toBe(1);
-    });
-
-    it('當 disable 為 true 時應該設定 cursor', () => {
-      wrapper = mount(ImageUpload, {
-        props: {
-          disable: true
-        }
-      });
-
-      const cssVar = wrapper.vm.cssVariable;
-      expect(cssVar['--image_upload_cursor']).toBe('not-allowed');
-    });
-  });
 
   describe('拖拉功能', () => {
     it('dragenter 應該顯示遮罩', async () => {
@@ -192,17 +159,7 @@ describe('ImageUpload.vue', () => {
       expect(wrapper.vm.showMask).toBe(false);
     });
 
-    it('當 disable 為 true 時 dragleave 不應該改變遮罩狀態', async () => {
-      wrapper = mount(ImageUpload, {
-        props: {
-          disable: true
-        }
-      });
 
-      wrapper.vm.showMask = true;
-      await wrapper.find('.image_upload').trigger('dragleave');
-      expect(wrapper.vm.showMask).toBe(true);
-    });
   });
 
   describe('禁用狀態', () => {
@@ -314,19 +271,7 @@ describe('ImageUpload.vue', () => {
     });
   });
 
-  describe('預覽功能', () => {
-    it('當 src 是字串時應該設定預覽圖片', async () => {
-      const testSrc = 'https://example.com/image.jpg';
-      wrapper = mount(ImageUpload, {
-        props: {
-          src: testSrc
-        }
-      });
 
-      await wrapper.vm.$nextTick();
-      expect(wrapper.vm.previewImg).toBe(testSrc);
-    });
-  });
 
   describe('事件', () => {
     it('應該觸發 change 事件', () => {

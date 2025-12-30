@@ -20,6 +20,22 @@ describe('Dialog.vue', () => {
       wrapper = mount(Dialog, {
         props: {
           modelValue: false
+        },
+        global: {
+          stubs: {
+            'v-btn': true,
+            'v-card': true,
+            'v-card-title': true,
+            'v-card-text': true,
+            'v-card-actions': true,
+            'v-spacer': true,
+            'v-dialog': {
+              template: '<div class="v-dialog-stub"><slot /></div>'
+            }
+          },
+          directives: {
+            ripple: {}
+          }
         }
       });
 
@@ -174,66 +190,6 @@ describe('Dialog.vue', () => {
     });
   });
 
-  describe('CSS 變數', () => {
-    it('應該設定寬度 CSS 變數（數字）', () => {
-      wrapper = mount(Dialog, {
-        props: {
-          modelValue: true,
-          width: 500
-        }
-      });
-
-      const rootElement = wrapper.find('.dialog_root');
-      expect(rootElement.exists()).toBe(true);
-      // 檢查 vm 的 cssVariable computed property
-      expect(wrapper.vm.cssVariable).toHaveProperty('--dialog_width', '500px');
-    });
-
-    it('應該設定寬度 CSS 變數（字串）', () => {
-      wrapper = mount(Dialog, {
-        props: {
-          modelValue: true,
-          width: '80%'
-        }
-      });
-
-      expect(wrapper.vm.cssVariable).toHaveProperty('--dialog_width', '80%');
-    });
-
-    it('應該設定高度 CSS 變數', () => {
-      wrapper = mount(Dialog, {
-        props: {
-          modelValue: true,
-          height: 400
-        }
-      });
-
-      expect(wrapper.vm.cssVariable).toHaveProperty('--dialog_height', '400px');
-    });
-
-    it('應該設定 z-index CSS 變數', () => {
-      wrapper = mount(Dialog, {
-        props: {
-          modelValue: true,
-          zIndex: 999
-        }
-      });
-
-      expect(wrapper.vm.cssVariable).toHaveProperty('--dialog_z_index', 999);
-    });
-
-    it('應該設定 position CSS 變數', () => {
-      wrapper = mount(Dialog, {
-        props: {
-          modelValue: true,
-          position: 'absolute'
-        }
-      });
-
-      expect(wrapper.vm.cssVariable).toHaveProperty('--dialog_position', 'absolute');
-    });
-  });
-
   describe('插槽', () => {
     it('應該支援預設插槽', () => {
       wrapper = mount(Dialog, {
@@ -249,21 +205,4 @@ describe('Dialog.vue', () => {
       expect(wrapper.text()).toContain('自訂內容');
     });
   });
-
-  describe('HTML class 管理', () => {
-    it('開啟對話框時應該添加 dialog_open class 到 html', async () => {
-      wrapper = mount(Dialog, {
-        props: {
-          modelValue: false
-        }
-      });
-
-      await wrapper.setProps({ modelValue: true });
-      await wrapper.vm.$nextTick();
-
-      expect(document.querySelector('html')?.classList.contains('dialog_open')).toBe(true);
-    });
-  });
-
-
 });

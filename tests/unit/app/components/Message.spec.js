@@ -1,7 +1,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { mount, config } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import Message from '~/app/components/Message.vue';
+
+// Global stubs for this test file
+config.global.stubs = {
+  'v-snackbar': true,
+  'v-alert': true,
+  'v-btn': true
+};
 
 /**
  * Message 組件測試 - 專注於封裝邏輯
@@ -30,7 +37,14 @@ describe('Message.vue - 封裝邏輯', () => {
 
     it('應該接受自訂 timeout', () => {
       wrapper = mount(Message, {
-        props: { timeout: 3000 }
+        props: { timeout: 3000 },
+        global: {
+          stubs: {
+            'v-snackbar': true,
+            'v-alert': true,
+            'v-btn': true
+          }
+        }
       });
       expect(wrapper.props('timeout')).toBe(3000);
     });
