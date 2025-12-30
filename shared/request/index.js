@@ -121,7 +121,7 @@ export function axiosInit(baseURL, errorAdapter, defaultExtendOption) {
       if (token) {
         requestPath += '__token:' + token;
       }
-      console.log('\x1b[33m%s\x1b[0m ', requestPath);
+      console.log('\x1B[33m%s\x1B[0m ', requestPath);
       return config;
     });
   }

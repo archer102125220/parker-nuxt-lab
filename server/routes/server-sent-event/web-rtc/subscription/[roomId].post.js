@@ -44,7 +44,7 @@ export default defineEventHandler(async function(event) {
                 memberDescriptionList,
                 isOffer: memberType?.isOffer,
                 isAnswer: memberType?.isAnswer
-            }
+            };
 
             await eventStream.push({
                 event: 'webrtc',

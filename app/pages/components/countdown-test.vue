@@ -5,7 +5,7 @@
       <div class="countdown_test_page-hero-background">
         <div class="countdown_test_page-hero-background-overlay" />
       </div>
-      
+
       <div class="countdown_test_page-hero-content">
         <h1 class="countdown_test_page-hero-content-title">
           {{ $t('countdown_test_page.hero.title') }}
@@ -31,6 +31,7 @@
     <form class="countdown_test_page-form" @submit.prevent="handleSecondDemo">
       <p class="countdown_test_page-form-title">測試秒數：</p>
       <v-number-input
+        v-model="demoInput"
         clearable
         label="測試秒數："
         control-variant="stacked"
@@ -38,7 +39,6 @@
         :reverse="false"
         :hide-input="false"
         :inset="false"
-        v-model="demoInput"
       />
 
       <v-radio-group v-model="demoRadio">
@@ -231,7 +231,7 @@ function handleDateDemo() {
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -240,7 +240,7 @@ function handleDateDemo() {
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -250,31 +250,31 @@ function handleDateDemo() {
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;
@@ -293,7 +293,7 @@ function handleDateDemo() {
   &-describe {
     margin-bottom: 24px;
     text-align: center;
-    
+
     &-text,
     &-note,
     &-strikethrough {

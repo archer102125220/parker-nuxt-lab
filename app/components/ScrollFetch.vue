@@ -1,12 +1,12 @@
 <template>
   <div
     ref="scrollFetchRef"
-    class="scroll_fetch"
-    :style="cssVariable"
     v-scroll-end="{
       handler: handleScrollEnd,
       wait: scrollEndWait
     }"
+    class="scroll_fetch"
+    :style="cssVariable"
     @mousedown="handlePullStart"
     @mousemove="handlePulling"
     @touchstart="handlePullStart"
@@ -20,9 +20,9 @@
         <slot
           v-if="refreshing === false"
           name="refresh"
-          :isPulling="isPulling"
-          :isPullStart="isPullStart"
-          :isShowRefreshIcon="isShowRefreshIcon"
+          :is-pulling="isPulling"
+          :is-pull-start="isPullStart"
+          :is-show-refresh-icon="isShowRefreshIcon"
         >
           <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-pull_label">
             {{ isPulling === true ? pullingLabel : pullLabel }}

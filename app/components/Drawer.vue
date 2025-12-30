@@ -53,9 +53,9 @@
           :is-vertical="isVertical"
           :is-horizontal="isHorizontal"
           :click="handleDragBarClick"
-          :dragStart="handleDragStart"
+          :drag-start="handleDragStart"
           :draging="handleDraging"
-          :dragEnd="handleDragEnd"
+          :drag-end="handleDragEnd"
         >
           <div
             class="drawer_root-wrapping-drawer-drag_bar"

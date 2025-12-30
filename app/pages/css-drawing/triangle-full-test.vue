@@ -21,8 +21,8 @@
       icon
       size="small"
       color="primary"
-      @click="isCollapsed = !isCollapsed"
       :aria-expanded="!isCollapsed"
+      @click="isCollapsed = !isCollapsed"
     >
       <span class="triangle_full_test_page-toggle-icon">
         {{ isCollapsed ? '▶' : '◀' }}

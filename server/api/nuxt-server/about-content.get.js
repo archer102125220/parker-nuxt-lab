@@ -36,7 +36,7 @@
  */
 /**
  * 關於頁面內容資料
- * 
+ *
  * 包含專案介紹、技術棧、測試項目等相關資訊
  * 用於動態生成關於頁面的內容結構
  */
@@ -152,7 +152,7 @@ const ABOUT_CONTENT_DATA_ZH = [
 
 /**
  * About page content data (English)
- * 
+ *
  * Contains project introduction, tech stack, test items and related information
  * Used to dynamically generate about page content structure
  */
@@ -268,25 +268,25 @@ const ABOUT_CONTENT_DATA_EN = [
 
 /**
  * 取得關於頁面內容 API
- * 
+ *
  * 回傳關於頁面的靜態內容資料，包含專案介紹、技術棧、
  * 測試項目等資訊。模擬延遲回應以測試前端載入狀態。
- * 
+ *
  * @api {GET} /api/nuxt-server/about-content 取得關於頁面內容
  * @apiGroup Content
  * @apiName GetAboutContent
- * 
+ *
  * @apiSuccess {Array} data 關於頁面內容陣列
  * @apiSuccess {String} data[].title 區塊標題
  * @apiSuccess {Array} [data[].description] 區塊描述文字陣列
  * @apiSuccess {Boolean} data[].description[].isDel 是否為刪除線文字
  * @apiSuccess {String} data[].description[].text 描述文字內容
  * @apiSuccess {Array} [data[].listItemList] 列表項目陣列
- * 
+ *
  * @example
  * // 請求範例
  * GET /api/nuxt-server/about-content
- * 
+ *
  * @example
  * // 成功回應範例
  * [
@@ -301,7 +301,7 @@ const ABOUT_CONTENT_DATA_EN = [
  *     ]
  *   }
  * ]
- * 
+ *
  * @description
  * 此 API 模擬 1 秒的延遲回應，用於測試前端的載入狀態處理
  */

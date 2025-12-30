@@ -72,7 +72,7 @@ export function useRequest(
         hasErrorAdapter
       );
 
-      response.value = newResponse
+      response.value = newResponse;
 
       return newResponse;
     } catch (_error) {

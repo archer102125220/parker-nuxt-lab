@@ -36,13 +36,13 @@
 </template>
 
 <script setup>
+import _cloneDeep from 'lodash/cloneDeep';
+
 const { t } = useI18n();
 
 useHeadMataData({
   title: t('sse_global_post_page.hero.title')
 });
-
-import _cloneDeep from 'lodash/cloneDeep';
 
 const SSEMessageList = ref([]);
 const postEventSource = usePostEventSource({

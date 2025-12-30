@@ -5,7 +5,7 @@
       <div class="selector_page-hero-background">
         <div class="selector_page-hero-background-overlay" />
       </div>
-      
+
       <div class="selector_page-hero-content">
         <h1 class="selector_page-hero-content-title">
           {{ $t('selector_page.hero.title') }}
@@ -24,13 +24,13 @@
       <div class="selector_page-demo">
         <h3 class="selector_page-demo-label">選擇運動類型：</h3>
         <Selector
+          v-model="classId"
           display-key="display"
           value-key="id"
-          v-model="classId"
           :option-list="matchTypeList"
           class="selector_page-demo-selector"
         />
-        
+
         <div class="selector_page-demo-result">
           <p class="selector_page-demo-result-label">目前選擇：</p>
           <code class="selector_page-demo-result-value">{{ currentSelection }}</code>
@@ -86,7 +86,7 @@ onMounted(() => {
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -95,7 +95,7 @@ onMounted(() => {
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -105,31 +105,31 @@ onMounted(() => {
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;
@@ -161,13 +161,13 @@ onMounted(() => {
       padding: 16px;
       border-radius: 8px;
       background: #f8f9fa;
-      
+
       &-label {
         margin-bottom: 8px;
         font-weight: 600;
         color: #333;
       }
-      
+
       &-value {
         display: block;
         padding: 12px;

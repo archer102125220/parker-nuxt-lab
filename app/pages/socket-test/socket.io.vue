@@ -71,12 +71,12 @@
 </template>
 
 <script setup>
+import _cloneDeep from 'lodash/cloneDeep';
 const { t } = useI18n();
 
 useHeadMataData({
   title: t('socket_io_page.hero.title')
 });
-import _cloneDeep from 'lodash/cloneDeep';
 
 const socketIoClientConnected = ref(false);
 const socketIoClient = useSocketIoClient(
@@ -108,7 +108,7 @@ function onMessage(payload) {
 
 function sendMessage() {
   if (!messageToSend.value || !socketIoClientConnected.value) return;
-  
+
   // 使用 broadcast-message 事件，讓所有連線都能收到
   socketIoClient.io.emit('broadcast-message', {
     content: messageToSend.value,

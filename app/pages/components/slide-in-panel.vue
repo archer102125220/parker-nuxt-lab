@@ -5,7 +5,7 @@
       <div class="slide_in_panel_page-hero-background">
         <div class="slide_in_panel_page-hero-background-overlay" />
       </div>
-      
+
       <div class="slide_in_panel_page-hero-content">
         <h1 class="slide_in_panel_page-hero-content-title">
           {{ $t('slide_in_panel_page.hero.title') }}
@@ -33,19 +33,19 @@
         @submit.prevent="handleUpdateShowMessage"
       >
         <v-text-field
+          v-model="message"
           clearable
           label="新增彈跳訊息"
           class="slide_in_panel_page-form-input"
-          v-model="message"
         />
 
         <v-checkbox
+          v-model="leftEnter"
           class="slide_in_panel_page-form-checkbox"
           label="從左側進入通知訊息"
           color="primary"
           hide-details
           :value="true"
-          v-model="leftEnter"
         />
 
         <div class="slide_in_panel_page-form-submit">
@@ -53,8 +53,8 @@
         </div>
 
         <TabsBar
-          class="slide_in_panel_page-form-tabs"
           v-model="tab"
+          class="slide_in_panel_page-form-tabs"
           gap="16px"
           border-side-height="2px"
           border-side-width="30px"
@@ -62,10 +62,10 @@
           :tab-list="tabList"
         />
         <TabsContent
+          v-model="tab"
           class="slide_in_panel_page-form-tabs_content"
           height="100%"
           tabs-content-height="70%"
-          v-model="tab"
           :tab-list="tabList"
           :slot-name-is-default="true"
         >
@@ -80,11 +80,11 @@
               <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
               <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
               <SlideInPanel
+                v-model="showMessage"
                 bottom="0px"
-                zIndex="3"
+                z-index="3"
                 :timeout="3000000"
                 container-position="absolute"
-                v-model="showMessage"
                 :left-enter="leftEnter"
               />
             </div>
@@ -144,7 +144,7 @@ onMounted(() => {
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -153,7 +153,7 @@ onMounted(() => {
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -163,25 +163,25 @@ onMounted(() => {
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
         animation: fade-in-up 0.6s ease-out;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
@@ -189,7 +189,7 @@ onMounted(() => {
         color: rgba(255, 255, 255, 0.95);
         animation: fade-in-up 0.6s ease-out 0.1s both;
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;
@@ -209,7 +209,7 @@ onMounted(() => {
   &-describe {
     margin-bottom: 24px;
     text-align: center;
-    
+
     &-text,
     &-note,
     &-strikethrough {
@@ -241,7 +241,7 @@ onMounted(() => {
     &-tabs_content {
       flex: 1;
       overflow: hidden;
-      
+
       &-item {
         position: relative;
         overflow: hidden;

@@ -18,7 +18,7 @@ export default defineEventHandler(async function(event) {
 
     console.log('WebRTC SSE');
     // const { roomId } = event.context.params;
-    const roomId = getRouterParam(event, 'roomId')
+    const roomId = getRouterParam(event, 'roomId');
     const query = getQuery(event);
 
     const userId = query?.userId || '';
@@ -43,7 +43,7 @@ export default defineEventHandler(async function(event) {
                 memberDescriptionList,
                 isOffer: memberType?.isOffer,
                 isAnswer: memberType?.isAnswer
-            }
+            };
 
             await eventStream.push({
                 event: 'webrtc',
@@ -61,4 +61,4 @@ export default defineEventHandler(async function(event) {
 
 
     return eventStream.send();
-})
+});

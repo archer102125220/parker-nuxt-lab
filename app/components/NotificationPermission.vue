@@ -1,6 +1,7 @@
 <template>
   <client-only>
     <v-snackbar
+      v-model="isShow"
       class="notification_permission"
       location="top"
       :timeout="-1"
@@ -9,13 +10,12 @@
       position="sticky"
       :multi-line="true"
       variant="flat"
-      v-model="isShow"
     >
       <div class="notification_permission-content">
         <p>本專案有整合firebase 的 FCM 功能，若想測試該功能需要啟用推播權限</p>
       </div>
 
-      <template v-slot:actions>
+      <template #actions>
         <div class="notification_permission-actions">
           <v-btn
             color="error"

@@ -66,8 +66,8 @@ const autoDropsExampleCode = `<!-- 自動水滴效果 -->
         </p>
         <div class="ripples_directive_page-hero-content-actions">
           <NuxtLink
-            :to="localePath('/components/ripples-component')"
             v-ripple
+            :to="localePath('/components/ripples-component')"
             class="ripples_directive_page-hero-content-actions-btn"
           >
             {{ t('ripples_directive_page.view_component') }}

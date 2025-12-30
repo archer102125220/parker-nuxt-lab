@@ -22,8 +22,8 @@
     <!-- Main Content -->
     <section class="tab_test_page-section">
       <TabsBar
-        class="tab_test_page-bar"
         v-model="tab"
+        class="tab_test_page-bar"
         gap="16px"
         border-side-height="2px"
         border-side-width="30px"
@@ -31,8 +31,8 @@
         :tab-list="tabList"
       />
       <TabsBar
-        class="tab_test_page-bar"
         v-model="tab"
+        class="tab_test_page-bar"
         gap="16px"
         limit-shadow
         border-side-height="2px"
@@ -41,8 +41,8 @@
         :tab-list="tabList"
       />
       <TabsBar
-        class="tab_test_page-bar"
         v-model="tab"
+        class="tab_test_page-bar"
         gap="16px"
         is-navigation-absolute
         border-side-height="2px"
@@ -51,8 +51,8 @@
         :tab-list="tabList"
       />
       <TabsBar
-        class="tab_test_page-bar"
         v-model="tab"
+        class="tab_test_page-bar"
         gap="16px"
         border-side-height="2px"
         border-side-width="30px"
@@ -60,7 +60,7 @@
         :tab-list="tabList"
       >
         <template #prev="{ ...arg }">
-          <div v-bind="arg" v-ripple class="tab_test_page-bar-prev">
+          <div v-ripple v-bind="arg" class="tab_test_page-bar-prev">
             <img
               class="tab_test_page-bar-prev-img"
               src="/img/icon/arrow/arrow-right-line-black.svg"
@@ -69,9 +69,9 @@
         </template>
       </TabsBar>
       <TabsContent
+        v-model="tab"
         class="tab_test_page-tab_content"
         height="100%"
-        v-model="tab"
         :tab-list="tabList"
       />
 
@@ -94,9 +94,9 @@
           height="100dvh"
           refresh-icon="/img/icon/refresh/refresh-icon.svg"
           refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-          :infinityEnd="infinityEnd"
+          :infinity-end="infinityEnd"
           @refresh="handleRefresh"
-          @infinityFetch="handleInfinityFetch"
+          @infinity-fetch="handleInfinityFetch"
         >
           <div>
             <TabsBar

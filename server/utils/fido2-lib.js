@@ -34,7 +34,7 @@ export function setFido2Lib(newF2l) {
   if (newF2l instanceof Fido2Lib === false) {
     throw new Error('Not Fido2Lib Object');
   }
-  f2l = newF2l
+  f2l = newF2l;
 }
 
-export default { getFido2Lib, fido2LibInitialize, fido2LibIsInitialized, newFido2Lib, setFido2Lib }
+export default { getFido2Lib, fido2LibInitialize, fido2LibIsInitialized, newFido2Lib, setFido2Lib };

@@ -14,7 +14,7 @@ export function decodeSocketIOPayload(payload) {
     });
 
     decoder.add(engineIoDecodePayload?.[0]?.data || payload);
-  })
+  });
 }
 
 export default decodeSocketIOPayload;

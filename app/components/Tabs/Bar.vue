@@ -25,14 +25,14 @@
 
     <div
       ref="tabBarRef"
-      :class="[
-        'tabs_bar-option_list',
-        validSelectedType !== false ? 'tabs_bar-option_list_emphasize' : ''
-      ]"
       v-scroll-end="{
         handler: handleTabBarScrollEnd,
         wait: scrollEndWait
       }"
+      :class="[
+        'tabs_bar-option_list',
+        validSelectedType !== false ? 'tabs_bar-option_list_emphasize' : ''
+      ]"
       @scroll="handleScroll"
       @mousedown="handleStartTabBarScroll"
       @mousemove="handleTabBarScroll"

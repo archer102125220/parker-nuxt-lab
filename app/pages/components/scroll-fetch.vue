@@ -33,9 +33,9 @@
         :is-mobile="$store.system.isMobile"
         :loading="pending"
         :infinity-disable="displayDataList.length <= 0"
-        @refresh="handleRefresh"
-        @infinityFetch="handleInfinityFetch"
         class="scroll_fetch_test_page-scroller"
+        @refresh="handleRefresh"
+        @infinity-fetch="handleInfinityFetch"
       >
         <div class="scroll_fetch_test_page-scroller-description">
           <a
@@ -58,9 +58,9 @@
           @submit.prevent="handleRefresh"
         >
           <v-radio-group
+            v-model="userTokenType"
             inline
             class="scroll_fetch_test_page-form-token_type"
-            v-model="userTokenType"
           >
             <v-radio
               color="primary"
@@ -74,18 +74,18 @@
               value="input"
             />
             <v-text-field
+              v-model="userInputToken"
               clearable
               label="GitHub Token"
               class="scroll_fetch_test_page-form-token_type-token_input"
-              v-model="userInputToken"
               :disabled="userTokenType !== 'input'"
             />
           </v-radio-group>
 
           <v-radio-group
+            v-model="userAccountType"
             class="scroll_fetch_test_page-form-account_type"
             inline
-            v-model="userAccountType"
           >
             <v-radio
               color="primary"
@@ -95,9 +95,9 @@
 
             <v-radio color="primary" label="自行輸入GitHub帳號" value="input" />
             <v-text-field
+              v-model="userInputAccount"
               clearable
               label="GitHub帳號"
-              v-model="userInputAccount"
               class="scroll_fetch_test_page-form-account_type-account_input"
               :disabled="userAccountType !== 'input'"
             />
@@ -107,19 +107,19 @@
         </form>
 
         <v-checkbox
+          v-model="userSelect"
           label="停用user-select"
           color="primary"
           :value="true"
           class="scroll_fetch_test_page-user_select_disabled"
-          v-model="userSelect"
         />
 
         <v-checkbox
+          v-model="pullRefeshDisabled"
           label="停用下拉重整"
           color="primary"
           :value="true"
           class="scroll_fetch_test_page-pull_Refresh_disabled"
-          v-model="pullRefeshDisabled"
         />
 
         <div class="scroll_fetch_test_page-list">

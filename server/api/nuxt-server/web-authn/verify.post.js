@@ -127,14 +127,14 @@ import { parseAuthenticatorData } from '@server/utils/fido2-lib';
  */
 /**
  * WebAuthn 憑證驗證 API
- * 
+ *
  * 驗證 WebAuthn 登入請求
  * 使用已儲存的憑證資料驗證使用者的身份
- * 
+ *
  * @api {POST} /api/nuxt-server/web-authn/verify WebAuthn 憑證驗證
  * @apiGroup WebAuthn
  * @apiName WebAuthnVerify
- * 
+ *
  * @apiBody {String} challengeString 挑戰字串
  * @apiBody {Object} credential WebAuthn 憑證物件
  * @apiBody {String} credential.id 憑證 ID
@@ -147,18 +147,18 @@ import { parseAuthenticatorData } from '@server/utils/fido2-lib';
  * @apiBody {String} base64URLServerSaveData.credentialPublicKeyPem PEM 格式的公鑰
  * @apiBody {String} [base64URLServerSaveData.credentialPublicKeyJwk] JWK 格式的公鑰
  * @apiBody {String} userId 使用者 ID
- * 
+ *
  * @apiSuccess {Object} data 驗證結果物件
  * @apiSuccess {String} data.credential.id 憑證 ID
  * @apiSuccess {String} data.base64URLServerSaveDataCredentialPublicKeyPem PEM 格式的公鑰
  * @apiSuccess {Object} data.decodeClientDataObj 解析後的客戶端資料物件
  * @apiSuccess {Boolean} data.success 驗證是否成功
  * @apiSuccess {String} data.userHandle 使用者控制代碼
- * 
+ *
  * @apiError {Object} error 驗證失敗時的錯誤資訊
  * @apiError {Number} error.statusCode=401 HTTP 狀態碼
  * @apiError {String} error.statusMessage 錯誤訊息
- * 
+ *
  * @example
  * // 請求範例
  * POST /api/nuxt-server/web-authn/verify
@@ -178,7 +178,7 @@ import { parseAuthenticatorData } from '@server/utils/fido2-lib';
  *   },
  *   "userId": "user123"
  * }
- * 
+ *
  * @example
  * // 成功回應範例
  * {
@@ -192,27 +192,27 @@ import { parseAuthenticatorData } from '@server/utils/fido2-lib';
  *   "success": true,
  *   "userHandle": "user123"
  * }
- * 
+ *
  * @description
  * 此 API 處理 WebAuthn 登入驗證流程：
- * 
+ *
  * 1. 驗證憑證資料的完整性和有效性
  * 2. 解析並驗證認證器資料 (authenticatorData)
  * 3. 驗證客戶端資料 (clientDataJSON) 的類型和挑戰值
  * 4. 驗證使用者控制代碼 (userHandle)
  * 5. 使用伺服器儲存的公鑰進行後續驗證
- * 
+ *
  * 驗證項目：
  * - clientData.type 必須為 "webauthn.get"
  * - 挑戰值必須與預期值相符
  * - userId 必須與 userHandle 相符
  * - 認證器資料格式必須正確
- * 
+ *
  * 重要注意事項：
  * - 簽章驗證部分目前依賴 fido2-lib 套件實作
  * - 需要從資料庫取得對應的憑證資料
  * - 支援平台和跨平台認證器
- * 
+ *
  * @see {@link https://blog.techbridge.cc/2019/08/17/webauthn-intro WebAuthn 介紹}
  * @see {@link https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/ Passkey 和 WebAuthn}
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API#browser_compatibility WebAuthn API 瀏覽器相容性}
@@ -245,7 +245,7 @@ export default defineEventHandler(async (event) => {
   };
   // console.log(credential.rawId);
 
-  const decodedClientData = utf8Decoder.decode(credential.clientDataJSON)
+  const decodedClientData = utf8Decoder.decode(credential.clientDataJSON);
   const clientDataObj = JSON.parse(decodedClientData);
 
   console.log(clientDataObj);
@@ -260,7 +260,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 401,
       statusMessage: 'clientData.type error',
-    })
+    });
   }
 
   if (challengeString !== clientDataObj.challenge) {

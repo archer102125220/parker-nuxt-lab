@@ -5,7 +5,7 @@
       <div class="components_test_page-hero-background">
         <div class="components_test_page-hero-background-overlay" />
       </div>
-      
+
       <div class="components_test_page-hero-content">
         <h1 class="components_test_page-hero-content-title">
           {{ $t('components_test_page.hero.title') }}
@@ -22,8 +22,8 @@
     <!-- Main Content -->
     <section class="components_test_page-section">
     <TabsBar
-      class="components_test_page-bar"
       v-model="tab"
+      class="components_test_page-bar"
       gap="16px"
       border-side-height="2px"
       border-side-width="30px"
@@ -48,9 +48,9 @@
       height="100dvh"
       refresh-icon="/img/icon/refresh/refresh-icon.svg"
       refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-      :infinityEnd="infinityEnd"
+      :infinity-end="infinityEnd"
       @refresh="handleRefresh"
-      @infinityFetch="handleInfinityFetch"
+      @infinity-fetch="handleInfinityFetch"
     >
       <div class="components_test_page-content-scroll_fetch">
         <TabsBar
@@ -64,7 +64,7 @@
         <p class="components_test_page-content-scroll_fetch-text">12343</p>
         <WangEditor
           class="components_test_page-content-scroll_fetch-wang_editor"
-          editorHeight="350px"
+          editor-height="350px"
         />
         <div class="components_test_page-content-scroll_fetch-youtube">
           <Youtube video-id="RTtmcqPXwuw" autoplay />
@@ -133,7 +133,7 @@ function handleInfinityFetch(done) {
     justify-content: center;
     padding: 40px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -142,7 +142,7 @@ function handleInfinityFetch(done) {
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -152,31 +152,31 @@ function handleInfinityFetch(done) {
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 8px 0;
         font-size: 36px;
         font-weight: 800;
         color: #ffffff;
-        
+
         @media (max-width: 768px) {
           font-size: 28px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 12px 0;
         font-size: 18px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
       }
-      
+
       &-description {
         margin: 0;
         font-size: 14px;

@@ -81,28 +81,28 @@ import firebaseAdmin from 'firebase-admin';
  */
 /**
  * iOS 推播通知 API
- * 
+ *
  * 發送推播通知到 iOS 裝置
  * 使用 Firebase Cloud Messaging (FCM) 向指定的 iOS 裝置推送訊息
- * 
+ *
  * @api {POST} /api/nuxt-server/firebase-admin/ios-push-notification iOS 推播通知
  * @apiGroup Firebase
  * @apiName IosPushNotification
- * 
+ *
  * @apiBody {String} data 推播訊息內容
  * @apiBody {String} [title] 推播訊息標題
  * @apiBody {String} [img] 推播訊息圖片 URL
  * @apiBody {Array<String>} token iOS 裝置的 FCM 權杖陣列
- * 
+ *
  * @apiSuccess {Object} data FCM 回應物件
  * @apiSuccess {Number} data.successCount 成功發送的數量
  * @apiSuccess {Number} data.failureCount 發送失敗的數量
  * @apiSuccess {Array} data.responses 個別發送結果陣列
- * 
+ *
  * @apiError {Object} error 發送失敗時的錯誤資訊
  * @apiError {Number} error.statusCode=500 HTTP 狀態碼
  * @apiError {String} error.statusMessage 錯誤訊息
- * 
+ *
  * @example
  * // 請求範例
  * POST /api/nuxt-server/firebase-admin/ios-push-notification
@@ -113,7 +113,7 @@ import firebaseAdmin from 'firebase-admin';
  *   "img": "https://example.com/image.jpg",
  *   "token": ["ios_token_1", "ios_token_2"]
  * }
- * 
+ *
  * @example
  * // 成功回應範例
  * {
@@ -130,25 +130,25 @@ import firebaseAdmin from 'firebase-admin';
  *     }
  *   ]
  * }
- * 
+ *
  * @description
  * 此 API 專門用於向 iOS 裝置發送推播通知：
- * 
+ *
  * 1. 驗證必要的參數 (data 和 token)
  * 2. 使用 Firebase Admin iOS 應用實例
  * 3. 透過 FCM 發送多播訊息到指定的裝置
  * 4. 回傳發送結果統計
- * 
+ *
  * 支援的資料欄位：
  * - msg: 訊息內容
  * - title: 訊息標題
  * - img: 圖片 URL
- * 
+ *
  * 注意事項：
  * - token 必須是有效的 iOS FCM 權杖陣列
  * - 使用 sendEachForMulticast 方法支援批次發送
  * - iOS 推播通知需要適當的證書配置
- * 
+ *
  * @see {@link https://firebase.google.com/docs/cloud-messaging Firebase Cloud Messaging 文檔}
  */
 export default defineEventHandler(async function iosPushMessage(event) {

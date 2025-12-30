@@ -60,12 +60,12 @@
 </template>
 
 <script setup>
+import _cloneDeep from 'lodash/cloneDeep';
 const { t } = useI18n();
 
 useHeadMataData({
   title: t('websocket_page.hero.title')
 });
-import _cloneDeep from 'lodash/cloneDeep';
 
 const webSocket = useWebSocket(
   {
@@ -111,7 +111,7 @@ function onMessage(event) {
 
 function sendMessage() {
   if (!messageToSend.value || !webSocket.value) return;
-  
+
   // 使用 broadcast-message 事件，讓所有連線都能收到
   webSocket.value.send('broadcast-message', {
     content: messageToSend.value,

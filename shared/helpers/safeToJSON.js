@@ -4,7 +4,7 @@ export function safeToJSON(data) {
       // 檢查值的型別是否為 bigint
       if (typeof value === 'bigint') {
         // 轉換為字串，並在字串前加上一個標記，以便稍後識別
-        return value.toString() + "n";
+        return value.toString() + 'n';
       }
       return value;
     });
@@ -17,7 +17,7 @@ export function safeParseJSON(data) {
   try {
     return JSON.parse(data, (key, value) => {
       // 檢查值的型別是否為字串，且以 "n" 結尾
-      if (typeof value === 'string' && value.endsWith("n")) {
+      if (typeof value === 'string' && value.endsWith('n')) {
         const numPart = value.slice(0, -1);
         // 檢查去掉 'n' 後是否為純數字（包括負數）
         // 使用正則表達式確保是有效的數字格式
@@ -40,4 +40,4 @@ export function safeParseJSON(data) {
 export default {
   safeToJSON,
   safeParseJSON
-}
+};

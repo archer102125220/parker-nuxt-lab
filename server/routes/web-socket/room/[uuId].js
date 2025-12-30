@@ -35,6 +35,6 @@ export default defineWebSocketHandler({
 
   error(peer, error) {
     // console.log("[ws] Room WebSocket error", peer, error);
-    console.log("[ws] Room WebSocket error", error);
+    console.log('[ws] Room WebSocket error', error);
   },
 });

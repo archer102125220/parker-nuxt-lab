@@ -31,8 +31,8 @@
             size="x-small"
             variant="text"
             class="sse_room_post_page-section-room_info-row-copy"
-            @click="copyRoomId"
             title="複製 Room ID"
+            @click="copyRoomId"
           >
             <v-icon size="16">{{ copiedId ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
           </v-btn>
@@ -102,6 +102,7 @@
 </template>
 
 <script setup>
+import _cloneDeep from 'lodash/cloneDeep';
 const { t } = useI18n();
 
 useHeadMataData({
@@ -110,7 +111,6 @@ useHeadMataData({
 definePageMeta({
   middleware: 'check-params-uuid'
 });
-import _cloneDeep from 'lodash/cloneDeep';
 const route = useRoute();
 
 // Copy states
@@ -148,7 +148,7 @@ async function copyUrl() {
 // TODO: 發送訊息功能需要調整伺服器端結構，詳見 template 中的 TODO 說明
 // async function sendMessage() {
 //   if (!messageToSend.value) return;
-//   
+//
 //   sending.value = true;
 //   try {
 //     await $fetch(`/api/server-sent-event/room/${route.params.uuId}`, {

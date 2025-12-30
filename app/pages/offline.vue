@@ -5,7 +5,7 @@
       <div class="offline_page-hero-background">
         <div class="offline_page-hero-background-overlay" />
       </div>
-      
+
       <div class="offline_page-hero-content">
         <h1 class="offline_page-hero-content-title">
           {{ $t('offline_page.hero.title') }}
@@ -34,7 +34,7 @@
         <div class="offline_page-status_card">
           <!-- Network Icon -->
           <div class="offline_page-status_card-icon_container">
-            <div 
+            <div
               class="offline_page-status_card-icon"
               :css-status="isOnline ? 'online' : 'offline'"
             >
@@ -58,7 +58,7 @@
           </p>
 
           <!-- Status Badge -->
-          <div 
+          <div
             class="offline_page-status_card-badge"
             :css-status="isOnline ? 'online' : 'offline'"
           >
@@ -98,8 +98,8 @@
           </div>
 
           <!-- Tip Alert -->
-          <div 
-            v-if="!isOnline" 
+          <div
+            v-if="!isOnline"
             class="offline_page-status_card-tip"
           >
             <div class="offline_page-status_card-tip-icon">
@@ -198,98 +198,98 @@ onUnmounted(() => {
 .offline_page-hero {
   // Positioning
   position: relative;
-  
+
   // Display & Box Model
   min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  
+
   // Visual
   overflow: hidden;
-  
+
   &-background {
     // Positioning
     position: absolute;
     top: 0;
     left: 0;
     z-index: 0;
-    
+
     // Display & Box Model
     width: 100%;
     height: 100%;
-    
+
     &-overlay {
       // Positioning
       position: absolute;
       top: 0;
       left: 0;
-      
+
       // Display & Box Model
       width: 100%;
       height: 100%;
-      
+
       // Visual
       background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
     }
   }
-  
+
   &-content {
     // Positioning
     position: relative;
     z-index: 1;
-    
+
     // Display & Box Model
     max-width: 800px;
     text-align: center;
-    
+
     &-title {
       // Display & Box Model
       margin: 0 0 16px 0;
-      
+
       // Typography
       font-size: 48px;
       font-weight: 800;
       color: #ffffff;
-      
+
       // Animation
       animation: fade-in-up 0.6s ease-out;
-      
+
       @media (max-width: 768px) {
         font-size: 36px;
       }
     }
-    
+
     &-subtitle {
       // Display & Box Model
       margin: 0 0 24px 0;
-      
+
       // Typography
       font-size: 24px;
       font-weight: 500;
       color: rgba(255, 255, 255, 0.95);
-      
+
       // Animation
       animation: fade-in-up 0.6s ease-out 0.1s both;
-      
+
       @media (max-width: 768px) {
         font-size: 20px;
       }
     }
-    
+
     &-description {
       // Display & Box Model
       margin: 0;
-      
+
       // Typography
       font-size: 18px;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.9);
-      
+
       // Animation
       animation: fade-in-up 0.6s ease-out 0.2s both;
-      
+
       @media (max-width: 768px) {
         font-size: 16px;
       }
@@ -303,23 +303,23 @@ onUnmounted(() => {
 .offline_page-intro {
   // Display & Box Model
   padding: 60px 20px;
-  
+
   // Visual
   background: var(--color-bg-secondary, #f7fafc);
-  
+
   &-container {
     // Display & Box Model
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   &-text {
     // Typography
     font-size: 18px;
     line-height: 1.8;
     color: var(--color-text-secondary, #4a5568);
     text-align: center;
-    
+
     // Display & Box Model
     max-width: 800px;
     margin: 0 auto;
@@ -332,7 +332,7 @@ onUnmounted(() => {
 .offline_page-section {
   // Display & Box Model
   padding: 60px 20px;
-  
+
   &-container {
     // Display & Box Model
     max-width: 600px;
@@ -344,25 +344,25 @@ onUnmounted(() => {
   // Display & Box Model
   padding: 48px 32px;
   border-radius: 16px;
-  
+
   // Visual
   background: #ffffff;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  
+
   // Animation
   animation: fade-in-up 0.6s ease-out 0.3s both;
-  
+
   @media (max-width: 768px) {
     padding: 32px 24px;
   }
-  
+
   &-icon_container {
     // Display & Box Model
     display: flex;
     justify-content: center;
     margin-bottom: 24px;
   }
-  
+
   &-icon {
     // Display & Box Model
     width: 120px;
@@ -371,67 +371,67 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    
+
     // Visual
     background: var(--color-bg-secondary, #f7fafc);
-    
+
     // Animation
     animation: pulse 2s ease-in-out infinite;
-    
+
     svg {
       // Display & Box Model
       width: 64px;
       height: 64px;
-      
+
       // Visual
       color: #718096;
     }
-    
+
     &[css-status='online'] {
       // Visual
       background: rgba(72, 187, 120, 0.1);
-      
+
       svg {
         color: #48bb78;
       }
     }
-    
+
     &[css-status='offline'] {
       // Visual
       background: rgba(160, 174, 192, 0.1);
-      
+
       svg {
         color: #a0aec0;
       }
     }
   }
-  
+
   &-title {
     // Display & Box Model
     margin: 0 0 16px 0;
-    
+
     // Typography
     font-size: 32px;
     font-weight: 700;
     color: var(--color-text-primary, #2d3748);
     text-align: center;
-    
+
     @media (max-width: 768px) {
       font-size: 28px;
     }
   }
-  
+
   &-description {
     // Display & Box Model
     margin: 0 0 24px 0;
-    
+
     // Typography
     font-size: 16px;
     line-height: 1.6;
     color: var(--color-text-secondary, #4a5568);
     text-align: center;
   }
-  
+
   &-badge {
     // Display & Box Model
     display: inline-flex;
@@ -440,43 +440,43 @@ onUnmounted(() => {
     padding: 12px 24px;
     margin-bottom: 32px;
     border-radius: 24px;
-    
+
     // Typography
     font-size: 16px;
     font-weight: 600;
-    
+
     svg {
       // Display & Box Model
       width: 20px;
       height: 20px;
     }
-    
+
     &[css-status='online'] {
       // Visual
       background: rgba(72, 187, 120, 0.1);
       color: #48bb78;
     }
-    
+
     &[css-status='offline'] {
       // Visual
       background: rgba(245, 101, 101, 0.1);
       color: #f56565;
     }
-    
+
     &-text {
       // Typography
       font-size: 16px;
       font-weight: 600;
     }
   }
-  
+
   &-actions {
     // Display & Box Model
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 24px;
-    
+
     &-button {
       // Display & Box Model
       display: flex;
@@ -486,39 +486,39 @@ onUnmounted(() => {
       padding: 14px 24px;
       border: none;
       border-radius: 8px;
-      
+
       // Typography
       font-size: 16px;
       font-weight: 600;
-      
+
       // Misc
       cursor: pointer;
       transition: all 0.3s;
-      
+
       svg {
         // Display & Box Model
         width: 20px;
         height: 20px;
       }
-      
+
       &[css-variant='primary'] {
         // Visual
         background: var(--color-primary, #44A08D);
         color: #ffffff;
-        
+
         &:hover {
           background: var(--color-primary-dark, #2d6a5a);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(68, 160, 141, 0.3);
         }
       }
-      
+
       &[css-variant='secondary'] {
         // Visual
         background: transparent;
         color: var(--color-primary, #44A08D);
         border: 2px solid var(--color-primary, #44A08D);
-        
+
         &:hover {
           background: var(--color-primary, #44A08D);
           color: #ffffff;
@@ -527,7 +527,7 @@ onUnmounted(() => {
       }
     }
   }
-  
+
   &-tip {
     // Display & Box Model
     display: flex;
@@ -535,40 +535,40 @@ onUnmounted(() => {
     padding: 16px;
     margin-bottom: 24px;
     border-radius: 8px;
-    
+
     // Visual
     background: rgba(66, 153, 225, 0.1);
     border-left: 4px solid #4299e1;
-    
+
     &-icon {
       // Display & Box Model
       flex-shrink: 0;
-      
+
       svg {
         // Display & Box Model
         width: 24px;
         height: 24px;
-        
+
         // Visual
         color: #4299e1;
       }
     }
-    
+
     &-content {
       &-title {
         // Display & Box Model
         margin: 0 0 8px 0;
-        
+
         // Typography
         font-size: 16px;
         font-weight: 600;
         color: var(--color-text-primary, #2d3748);
       }
-      
+
       &-text {
         // Display & Box Model
         margin: 0;
-        
+
         // Typography
         font-size: 14px;
         line-height: 1.6;
@@ -576,11 +576,11 @@ onUnmounted(() => {
       }
     }
   }
-  
+
   &-info {
     // Display & Box Model
     margin: 0;
-    
+
     // Typography
     font-size: 14px;
     color: var(--color-text-tertiary, #718096);

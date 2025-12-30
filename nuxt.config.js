@@ -25,7 +25,7 @@ const CONTENT_SECURITY_POLICY =
     IS_DEV !== true ?
     {
         'default-src': [
-            "'self'",
+            '\'self\'',
             'https://fonts.googleapis.com',
             'https://fonts.gstatic.com',
             'https://www.googletagmanager.com',
@@ -35,17 +35,17 @@ const CONTENT_SECURITY_POLICY =
             'https://*.facebook.com',
             'https://*.fbcdn.net'
         ],
-        'base-uri': ["'self'"],
+        'base-uri': ['\'self\''],
         'font-src': [
-            "'self'",
+            '\'self\'',
             'data:',
             'blob:',
             'https://fonts.gstatic.com',
             'https://*.fbcdn.net'
         ],
-        'form-action': ["'self'", 'https://*.facebook.com'],
+        'form-action': ['\'self\'', 'https://*.facebook.com'],
         'img-src': [
-            "'self'",
+            '\'self\'',
             'data:',
             'blob:',
             'https://*.ytimg.com',
@@ -55,20 +55,20 @@ const CONTENT_SECURITY_POLICY =
             'https://*.googletagmanager.com',
             'https://validator.swagger.io'
         ],
-        'object-src': ["'none'"],
-        'script-src-attr': ["'none'"],
+        'object-src': ['\'none\''],
+        'script-src-attr': ['\'none\''],
         // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", "'strict-dynamic'", "'self'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com'],
         // 'script-src': ["'unsafe-inline'", "'unsafe-eval'", 'https://www.googletagmanager.com', 'https://*.youtube.com', 'https://*.ytimg.com', 'https://connect.facebook.net', 'https://*.facebook.com', 'https://*.fbcdn.net', 'https://*.googleapis.com', 'https://vercel.live'],
         'style-src': [
-            "'self'",
-            "'unsafe-inline'",
+            '\'self\'',
+            '\'unsafe-inline\'',
             'https://fonts.googleapis.com',
             'https://*.youtube.com',
             'https://*.facebook.com',
             'https://*.fbcdn.net'
         ],
         'connect-src': [
-            "'self'",
+            '\'self\'',
             'https://assets.vercel.com',
             'https://fonts.googleapis.com',
             'https://fonts.gstatic.com',
@@ -82,20 +82,20 @@ const CONTENT_SECURITY_POLICY =
             'https://api.github.com'
         ],
         'frame-ancestors': [
-            "'self'",
+            '\'self\'',
             'https://*.youtube.com',
             'https://*.ytimg.com',
             'https://*.facebook.com'
         ],
         'frame-src': [
-            "'self'",
+            '\'self\'',
             'https://*.youtube.com',
             'https://*.ytimg.com',
             'https://www.googletagmanager.com',
             'https://*.facebook.com'
         ],
         'media-src': [
-            "'self'",
+            '\'self\'',
             'https://*.youtube.com',
             'https://*.ytimg.com',
             'https://*.facebook.com',
@@ -105,7 +105,7 @@ const CONTENT_SECURITY_POLICY =
     } :
     {
         'img-src': [
-            "'self'",
+            '\'self\'',
             'data:',
             'blob:',
             'https://*.ytimg.com',
@@ -447,7 +447,7 @@ export default defineNuxtConfig({
         // https://realfavicongenerator.net/
         manifest: {
             name: 'Parker Chen 的Nuxt實驗室',
-            short_name: "Parker Chen's Nuxt Lab",
+            short_name: 'Parker Chen\'s Nuxt Lab',
             // lang: 'zh-tw',
             lang: defaultLang,
             icons: [{

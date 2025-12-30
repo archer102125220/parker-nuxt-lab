@@ -2,7 +2,7 @@ import '@babel/register';
 
 import { dirname, resolve, join } from 'path';
 import { fileURLToPath } from 'url';
-import { unflatten } from 'flat'
+import { unflatten } from 'flat';
 import fsExtra from 'fs-extra';
 import { extractSheets } from 'spreadsheet-to-json';
 import vuetifyZhHant from 'vuetify/lib/locale/zh-Hant.mjs';

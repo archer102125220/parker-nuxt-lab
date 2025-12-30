@@ -15,7 +15,7 @@ export function doubleTap(doubleTapMs) {
       timeout = setTimeout(() => clearTimeout(timeout), doubleTapMs);
     }
     lastTap = currentTime;
-  }
+  };
 }
 
 export function customDoubleTap(func, doubleTapMs = 200, defaultFunc) {
@@ -32,7 +32,7 @@ export function customDoubleTap(func, doubleTapMs = 200, defaultFunc) {
     if(typeof defaultFunc === 'function'){
       defaultFunc.apply(this, args);
     }
-  }
+  };
 }
 
 export function initializeDoubleTap(doubleTapMs = 200) {

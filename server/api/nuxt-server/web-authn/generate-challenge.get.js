@@ -18,36 +18,36 @@ import { Base64 as base64Js } from 'js-base64';
  */
 /**
  * WebAuthn 挑戰生成 API
- * 
+ *
  * 生成 WebAuthn 認證所需的隨機挑戰值
  * 使用加密安全的隨機數生成器產生 32 位元組的挑戰值
- * 
+ *
  * @api {GET} /api/nuxt-server/web-authn/generate-challenge 生成 WebAuthn 挑戰
  * @apiGroup WebAuthn
  * @apiName GenerateWebAuthnChallenge
- * 
+ *
  * @apiSuccess {String} data Base64URL 編碼的挑戰值
- * 
+ *
  * @example
  * // 請求範例
  * GET /api/nuxt-server/web-authn/generate-challenge
- * 
+ *
  * @example
  * // 成功回應範例
  * "base64url_encoded_challenge_string"
- * 
+ *
  * @description
  * 此 API 生成用於 WebAuthn 認證流程的挑戰值：
- * 
+ *
  * 1. 使用 crypto.getRandomValues() 生成 32 位元組的加密安全隨機數
  * 2. 將隨機數轉換為 Base64URL 編碼格式
  * 3. 回傳編碼後的挑戰字串
- * 
+ *
  * 使用場景：
  * - WebAuthn 註冊流程中的挑戰生成
  * - WebAuthn 登入流程中的挑戰生成
  * - 防止重放攻擊的安全機制
- * 
+ *
  * 注意事項：
  * - 挑戰值應在每次認證請求中唯一
  * - 挑戰值應在合理的時間內過期

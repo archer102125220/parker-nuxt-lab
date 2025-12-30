@@ -22,7 +22,7 @@
       :slot-name-is-default="slotNameIsDefault"
       :should-fill-height="scrollFetch === true"
       @update:model-value="change"
-      @sliderMove="sliderMove"
+      @slider-move="sliderMove"
     >
       <template v-for="_slot in slots" #[_slot]="{ ...arg }">
         <slot :name="_slot" v-bind="arg" :is-tab-moveing="isTabMoveing" />
@@ -41,15 +41,15 @@
 
         <ScrollFetch
           v-else
-          class="tabs_content-swiper-scroll_fetch"
           :key="slotName"
+          class="tabs_content-swiper-scroll_fetch"
           :height="height"
           :refresh="refresh"
           :loading="loading"
           :ios-style="iosStyle"
           :refresh-icon="refreshIcon"
-          :pullingLabel="pullingLabel"
-          :loadingLabel="loadingLabel"
+          :pulling-label="pullingLabel"
+          :loading-label="loadingLabel"
           :infinity-fetch="infinityFetch"
           :infinity-label="infinityLabel"
           :refreshing-icon="refreshingIcon"

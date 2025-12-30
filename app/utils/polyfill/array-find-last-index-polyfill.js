@@ -7,7 +7,7 @@ export function findLastIndex(array, callback, thisArg) {
     if (callback.call(thisArg, array[index], index, array)) return index;
   }
   return -1;
-};
+}
 
 export function handleFindLastIndexPolyfill() {
   if (typeof Array.prototype.findLastIndex !== 'function') {

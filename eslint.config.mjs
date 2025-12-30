@@ -1,7 +1,7 @@
-import withNuxt from './.nuxt/eslint.config.mjs'
-import prettier from 'eslint-config-prettier'
-import globals from 'globals'
-import unicorn from 'eslint-plugin-unicorn'
+import withNuxt from './.nuxt/eslint.config.mjs';
+import prettier from 'eslint-config-prettier';
+import globals from 'globals';
+import unicorn from 'eslint-plugin-unicorn';
 
 export default withNuxt(
   prettier,
@@ -36,24 +36,29 @@ export default withNuxt(
       'no-console': 0,
       'no-const-assign': 2,
       'no-useless-escape': 1,
-      'no-unused-vars': [
-        2,
-        {
-          vars: 'all',
-          args: 'after-used'
-        }
-      ],
-      'no-irregular-whitespace': 0,
-      'no-trailing-spaces': 1,
-      'no-undef': 2,
-      curly: 0,
-      'space-before-function-paren': 0,
-      'import/no-mutable-exports': 1,
-      'new-cap': 1,
       'unicorn/escape-case': 1,
       camelcase: 0,
       'vue/no-dupe-keys': 1,
-      '@typescript-eslint/consistent-type-imports': 'off'
+      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-declaration-merging': 'off',
+      'no-async-promise-executor': 'off',
+      'no-empty': 'off',
+      'import/no-mutable-exports': 'off',
+      'vue/no-unused-vars': 'off',
+      'no-unsafe-optional-chaining': 'off',
+      'vue/valid-define-props': 'off',
+      'no-unused-vars': 'off', // Turn off base rule as it conflicts with TS one
+      '@typescript-eslint/no-unused-vars': [
+        1,
+        {
+          vars: 'all',
+          args: 'after-used',
+          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_'
+        }
+      ]
     },
     // https://github.com/nuxt/nuxt/discussions/16871
 

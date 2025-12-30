@@ -1,7 +1,7 @@
 <template>
   <div
-    class="image_upload"
     v-ripple.value="disable === false"
+    class="image_upload"
     :style="cssVariable"
     @click="handeChange"
     @dragenter.stop.prevent="dragenter"
@@ -11,7 +11,7 @@
   >
     <slot
       :src="previewImg"
-      :showMask="showMask"
+      :show-mask="showMask"
       :disable="disable"
       :change="handeChange"
     >
@@ -31,8 +31,8 @@
       <slot name="preview" :src="previewImg">
         <img
           ref="previewEl"
-          class="image_upload-preview-img"
           v-ripple
+          class="image_upload-preview-img"
           :src="previewImg"
         />
       </slot>
@@ -45,7 +45,7 @@
         (disable === true ? 'cursor: not-allowed;' : '')
       "
     >
-      <slot name="mask" :showMask="showMask" :disable="disable">
+      <slot name="mask" :show-mask="showMask" :disable="disable">
         <p>{{ maskLabel }}</p>
       </slot>
     </div>

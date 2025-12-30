@@ -5,7 +5,7 @@
       <div class="lazyload_test_page-hero-background">
         <div class="lazyload_test_page-hero-background-overlay" />
       </div>
-      
+
       <div class="lazyload_test_page-hero-content">
         <h1 class="lazyload_test_page-hero-content-title">
           {{ $t('lazyload_test_page.hero.title') }}
@@ -27,7 +27,7 @@
           class="lazyload_test_page-demo-normal"
           src="/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg"
         />
-        
+
         <div class="lazyload_test_page-demo-spacer">
           <p class="lazyload_test_page-demo-spacer-text">⬇️ 請繼續往下滾動 ⬇️</p>
           <p class="lazyload_test_page-demo-spacer-hint">
@@ -35,11 +35,11 @@
             當您滾動到下方圖片可見區域時，圖片才會開始加載。
           </p>
         </div>
-        
+
         <h3 class="lazyload_test_page-demo-label">懶加載圖片 (滾動到可見區域時加載)：</h3>
         <img
-          class="lazyload_test_page-demo-lazyload"
           v-customize-lazyload="'/img/test-img/1499231493_936.gif'"
+          class="lazyload_test_page-demo-lazyload"
         />
       </div>
     </section>
@@ -72,7 +72,7 @@ useHeadMataData({
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -81,7 +81,7 @@ useHeadMataData({
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -91,31 +91,31 @@ useHeadMataData({
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;

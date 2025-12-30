@@ -2,7 +2,6 @@
   <div class="home_page">
     <!-- Hero Section -->
     <section
-      class="home_page-hero"
       v-ripples-auto-drops="{
         interval: 300,
         dropRadius: 20,
@@ -10,6 +9,7 @@
         strengthVariance: 0.04,
         interactive: true
       }"
+      class="home_page-hero"
     >
       <div class="home_page-hero-content">
         <h1 class="home_page-hero-content-title">Parker Nuxt Lab</h1>
@@ -21,15 +21,15 @@
         </p>
         <div class="home_page-hero-content-actions">
           <v-btn
-            @click="scrollToNavigation"
             class="home_page-hero-content-actions-btn"
             css-variant="primary"
+            @click="scrollToNavigation"
           >
             {{ t('home.hero.cta_explore') }}
           </v-btn>
           <NuxtLink
-            :to="localePath('/about')"
             v-ripple
+            :to="localePath('/about')"
             class="home_page-hero-content-actions-btn"
             css-variant="secondary"
           >
@@ -51,8 +51,8 @@
           >
             <div class="home_page-features-grid-card-icon">
               <img
-                class="home_page-features-grid-card-icon-image"
                 v-lazy="`/img/home/features/${feature.icon}.svg`"
+                class="home_page-features-grid-card-icon-image"
                 :alt="feature.title"
               />
             </div>

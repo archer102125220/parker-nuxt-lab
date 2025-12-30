@@ -146,14 +146,14 @@ import { Fido2Lib } from 'fido2-lib';
  */
 /**
  * FIDO2 憑證註冊 API
- * 
+ *
  * 驗證並處理 FIDO2/WebAuthn 憑證註冊請求
  * 驗證前端傳來的憑證資料並回傳註冊結果
- * 
+ *
  * @api {POST} /api/nuxt-server/fido2-lib/registration FIDO2 憑證註冊
  * @apiGroup FIDO2
  * @apiName Fido2Registration
- * 
+ *
  * @apiBody {String} challengeString 挑戰字串
  * @apiBody {Object} credential WebAuthn 憑證物件
  * @apiBody {String} credential.id 憑證 ID
@@ -164,7 +164,7 @@ import { Fido2Lib } from 'fido2-lib';
  * @apiBody {String} credential.response.clientDataJSON Base64URL 編碼的客戶端資料
  * @apiBody {Object} user 使用者資訊
  * @apiBody {String} user.id 使用者 ID
- * 
+ *
  * @apiSuccess {Object} data 註冊結果物件
  * @apiSuccess {String} data.credential.id 憑證 ID
  * @apiSuccess {Object} data.attestationResult 證明結果物件
@@ -173,11 +173,11 @@ import { Fido2Lib } from 'fido2-lib';
  * @apiSuccess {String} data.base64URLServerSaveData.credentialPublicKeyPem PEM 格式的公鑰
  * @apiSuccess {String} data.base64URLServerSaveData.userId 使用者 ID
  * @apiSuccess {Number} data.base64URLServerSaveData.counter 計數器值
- * 
+ *
  * @apiError {Object} error 註冊失敗時的錯誤資訊
  * @apiError {Number} error.statusCode=401 HTTP 狀態碼
  * @apiError {String} error.statusMessage 錯誤訊息
- * 
+ *
  * @example
  * // 請求範例
  * POST /api/nuxt-server/fido2-lib/registration
@@ -197,7 +197,7 @@ import { Fido2Lib } from 'fido2-lib';
  *     "id": "user123"
  *   }
  * }
- * 
+ *
  * @example
  * // 成功回應範例
  * {
@@ -210,21 +210,21 @@ import { Fido2Lib } from 'fido2-lib';
  *     "counter": 0
  *   }
  * }
- * 
+ *
  * @description
  * 此 API 處理 FIDO2/WebAuthn 憑證註冊流程：
- * 
+ *
  * 1. 驗證憑證資料的完整性和有效性
  * 2. 解析並驗證證明物件 (attestationObject)
  * 3. 驗證客戶端資料 (clientDataJSON)
  * 4. 提取並處理認證器資料 (authenticatorData)
  * 5. 回傳處理後的資料供伺服器儲存
- * 
+ *
  * 重要注意事項：
  * - 驗證成功後應將 base64URLServerSaveData 儲存至資料庫
  * - credentialPublicKeyPem 為 PEM 格式，用於後續登入驗證
  * - counter 值用於防止重放攻擊
- * 
+ *
  * @see {@link https://webauthn-open-source.github.io/fido2-lib/index.html FIDO2-Lib 文檔}
  */
 export default defineEventHandler(async (event) => {
@@ -234,10 +234,10 @@ export default defineEventHandler(async (event) => {
   const f2l = new Fido2Lib({
     timeout: 60000,
     rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'parker-nuxt-lab.vercel.app',
-    rpName: "Nuxt Lab",
+    rpName: 'Nuxt Lab',
     // rpIcon: "https://example.com/logo.png",
     challengeSize: 128,
-    attestation: "direct",
+    attestation: 'direct',
     cryptoParams: [-7, -257],
     authenticatorRequireResidentKey: true,
     // authenticatorAttachment: "platform",

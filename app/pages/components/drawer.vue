@@ -5,7 +5,7 @@
       <div class="drawer_page-hero-background">
         <div class="drawer_page-hero-background-overlay" />
       </div>
-      
+
       <div class="drawer_page-hero-content">
         <h1 class="drawer_page-hero-content-title">
           {{ $t('drawer_page.hero.title') }}
@@ -25,8 +25,8 @@
 
       <div class="drawer_page-controls">
         <v-radio-group
-          class="drawer_page-controls-radio"
           v-model="anchor"
+          class="drawer_page-controls-radio"
         >
           <v-radio color="primary" :label="$t('drawer_page.buttons.top')" value="top" />
           <v-radio color="primary" :label="$t('drawer_page.buttons.right')" value="right" />
@@ -76,7 +76,7 @@ function handleOpen() {
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -85,7 +85,7 @@ function handleOpen() {
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -95,25 +95,25 @@ function handleOpen() {
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
         animation: fade-in-up 0.6s ease-out;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
@@ -121,7 +121,7 @@ function handleOpen() {
         color: rgba(255, 255, 255, 0.95);
         animation: fade-in-up 0.6s ease-out 0.1s both;
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;

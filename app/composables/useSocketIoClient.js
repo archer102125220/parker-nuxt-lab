@@ -61,7 +61,7 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
         listener.connect(...arg);
       }
     });
-    newSocketIo.on('disconnect', () => {
+    newSocketIo.on('disconnect', (...arg) => {
       SocketIo.connected = newSocketIo.connected;
 
       if (typeof listener.disconnect === 'function') {
@@ -141,7 +141,7 @@ export function useSocketIoClient(config = { channel: '/', listener: {} }, sende
             return senderSetting[senderSettingKey]?.value();
           }
           return senderSetting[senderSettingKey]?.value;
-        }
+        };
 
         const sendValue = getSendValue();
 

@@ -11,7 +11,7 @@ export function googleGtagInit(log = false, callback) {
       console.log('gtm 參數：', trackData);
     }
     window.dataLayer.push(trackData);
-  }
+  };
 
   if (typeof callback === 'function') {
     callback(window.gtag, window.gtm);

@@ -36,17 +36,17 @@ onMounted(() => {
   // Display & Box Model
   padding: 32px 24px;
   margin-top: 60px;
-  
+
   // Visual
   background: linear-gradient(to top, rgba(248, 249, 250, 0.8), transparent);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  
+
   &[css-animation='true'] {
     // Animation
     animation-name: footerEnterAnimation;
     animation-duration: 0.3s;
   }
-  
+
   &-copyright {
     // Display & Box Model
     margin: 0;

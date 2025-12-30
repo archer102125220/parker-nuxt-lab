@@ -1,8 +1,8 @@
 <!-- TODO: loop fix -->
 <template>
   <div
-    class="swiper_js"
     ref="swiperJsRootRef"
+    class="swiper_js"
     :style="cssVariable"
     @mouseup="resetMoveingStatus"
     @touchend="resetMoveingStatus"

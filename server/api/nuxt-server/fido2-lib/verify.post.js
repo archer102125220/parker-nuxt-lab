@@ -140,14 +140,14 @@ import { Fido2Lib } from 'fido2-lib';
  */
 /**
  * FIDO2 憑證驗證 API
- * 
+ *
  * 驗證 FIDO2/WebAuthn 登入請求
  * 使用已儲存的憑證資料驗證使用者的身份
- * 
+ *
  * @api {POST} /api/nuxt-server/fido2-lib/verify FIDO2 憑證驗證
  * @apiGroup FIDO2
  * @apiName Fido2Verify
- * 
+ *
  * @apiBody {String} challengeString 挑戰字串
  * @apiBody {Object} credential WebAuthn 憑證物件
  * @apiBody {String} credential.id 憑證 ID
@@ -162,15 +162,15 @@ import { Fido2Lib } from 'fido2-lib';
  * @apiBody {String} base64URLServerSaveData.credentialPublicKeyPem PEM 格式的公鑰
  * @apiBody {String} base64URLServerSaveData.userId 使用者 ID
  * @apiBody {Number} base64URLServerSaveData.counter 計數器值
- * 
+ *
  * @apiSuccess {Object} data 驗證結果物件
  * @apiSuccess {String} data.credential.id 憑證 ID
  * @apiBody {Object} data.assertionResult 斷言結果物件
- * 
+ *
  * @apiError {Object} error 驗證失敗時的錯誤資訊
  * @apiError {Number} error.statusCode=401 HTTP 狀態碼
  * @apiError {String} error.statusMessage 錯誤訊息
- * 
+ *
  * @example
  * // 請求範例
  * POST /api/nuxt-server/fido2-lib/verify
@@ -194,28 +194,28 @@ import { Fido2Lib } from 'fido2-lib';
  *     "counter": 1
  *   }
  * }
- * 
+ *
  * @example
  * // 成功回應範例
  * {
  *   "credential": { ... },
  *   "assertionResult": { ... }
  * }
- * 
+ *
  * @description
  * 此 API 處理 FIDO2/WebAuthn 登入驗證流程：
- * 
+ *
  * 1. 驗證憑證資料的完整性和有效性
  * 2. 使用伺服器儲存的公鑰驗證簽章
  * 3. 驗證挑戰值是否正確
  * 4. 檢查計數器值防止重放攻擊
  * 5. 驗證使用者控制代碼
- * 
+ *
  * 重要注意事項：
  * - 需要從資料庫取得對應的憑證資料 (base64URLServerSaveData)
  * - 驗證成功後應更新計數器值
  * - 支援跨平台和平台認證器
- * 
+ *
  * @see {@link https://webauthn-open-source.github.io/fido2-lib/index.html FIDO2-Lib 文檔}
  */
 export default defineEventHandler(async (event) => {
@@ -226,10 +226,10 @@ export default defineEventHandler(async (event) => {
     timeout: 60000,
     // rpId: "example.com",
     rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'parker-nuxt-lab.vercel.app',
-    rpName: "Nuxt Lab",
+    rpName: 'Nuxt Lab',
     // rpIcon: "https://example.com/logo.png",
     challengeSize: 128,
-    attestation: "direct",
+    attestation: 'direct',
     cryptoParams: [-7, -257],
     // authenticatorAttachment: "platform",
     // authenticatorRequireResidentKey: false,
@@ -256,7 +256,7 @@ export default defineEventHandler(async (event) => {
 
   let output = {
     ...payload,
-  }
+  };
   try {
     const assertionResult = await f2l.assertionResult({
       ...payload.credential,
@@ -281,7 +281,7 @@ export default defineEventHandler(async (event) => {
       // decodeClientDataObj: clientDataObj,
       // success: true,
       // userHandle: credential.userHandle
-    }
+    };
   } catch (error) {
     console.error(error);
     throw createError({

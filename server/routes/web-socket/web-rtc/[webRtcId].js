@@ -86,6 +86,6 @@ export default defineWebSocketHandler({
 
   error(peer, error) {
     // console.log("[ws] WebRTC WebSocket error", peer, error);
-    console.log("[ws] WebRTC WebSocket error", error);
+    console.log('[ws] WebRTC WebSocket error', error);
   },
 });

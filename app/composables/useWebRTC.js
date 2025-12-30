@@ -190,7 +190,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
 
     if (newIceCandidateError !== oldIceCandidateError) {
       if (typeof oldIceCandidateError === 'function') {
-        webRTC.RTC.removeEventListener('icecandidateerror', oldIceCandidateError)
+        webRTC.RTC.removeEventListener('icecandidateerror', oldIceCandidateError);
       }
       if (typeof newIceCandidateError === 'function') {
         webRTC.RTC.addEventListener('icecandidateerror', newIceCandidateError);
@@ -421,7 +421,7 @@ export function useWebRTC(config = DEFAULT_CONFIG, streamData = null) {
     if (typeof webRTC.RTC?.removeTrack === 'function') {
       webRTC.trackSenderList.forEach(sender => {
         webRTC.RTC.removeTrack(sender);
-      })
+      });
     }
     if (typeof webRTC.RTC.close === 'function') {
       webRTC.RTC?.close();

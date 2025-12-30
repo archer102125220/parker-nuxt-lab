@@ -31,7 +31,7 @@ export function handleBindScrollEnd(el, handler, wait = 100) {
   el.addEventListener('scroll', bindScrollEnd);
 
   return () => el.removeEventListener('scroll', bindScrollEnd);
-};
+}
 
 export function createScrollEndEvent(wait = 100) {
   let setTimeoutTimer = 0;

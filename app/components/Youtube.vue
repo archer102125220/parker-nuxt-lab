@@ -1,6 +1,6 @@
 <template>
   <div class="youtube">
-    <div class="youtube-player" ref="youtubePlayerEl" />
+    <div ref="youtubePlayerEl" class="youtube-player" />
   </div>
 </template>
 

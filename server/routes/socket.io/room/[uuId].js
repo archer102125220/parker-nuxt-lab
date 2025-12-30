@@ -1,4 +1,5 @@
 import { useNitroApp } from '#imports';
+import qs from 'qs';
 
 import { decodeSocketIOPayload } from '@server/utils/socket.io-decode';
 
@@ -57,12 +58,12 @@ export default defineEventHandler({
       console.log('[ws-socket.io] Room WebSocket decoded message', decodedMessage);
     },
 
-    close(peer) {
+    close(_peer) {
       console.log('[ws-socket.io] Room WebSocket close');
     },
 
-    error(peer, error) {
+    error(_peer, error) {
       console.log('[ws-socket.io] Room WebSocket error', error);
     },
   },
-})
+});

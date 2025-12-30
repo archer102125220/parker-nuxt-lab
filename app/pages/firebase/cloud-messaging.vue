@@ -5,7 +5,7 @@
       <div class="cloud_messaging_page-hero-background">
         <div class="cloud_messaging_page-hero-background-overlay" />
       </div>
-      
+
       <div class="cloud_messaging_page-hero-content">
         <h1 class="cloud_messaging_page-hero-content-title">
           {{ $t('cloud_messaging_page.hero.title') }}
@@ -26,34 +26,34 @@
       </p>
 
       <v-container
+        v-model="isValidSubmit"
         class="cloud_messaging_page-form"
         :tag="VForm"
-        v-model="isValidSubmit"
         @submit.prevent="handlePushNotification"
       >
         <v-row>
           <v-col
+            v-model="appMessageTitle"
             cols="12"
             sm="12"
             :tag="VTextField"
             :label="$t('cloud_messaging_page.form.title_label')"
-            v-model="appMessageTitle"
             :rules="handleCheckMessageTitle"
           />
           <v-col
+            v-model="appMessageData"
             cols="12"
             sm="12"
             :tag="VTextField"
             :label="$t('cloud_messaging_page.form.message_label')"
-            v-model="appMessageData"
             :rules="handleCheckMessageData"
           />
           <v-col
+            v-model="appMessageImg"
             cols="12"
             sm="12"
             :tag="VTextField"
             :label="$t('cloud_messaging_page.form.image_label')"
-            v-model="appMessageImg"
           />
         </v-row>
         <v-row justify="end" align="center">
@@ -530,98 +530,98 @@ async function handleDeleteToken(token) {
   &-hero {
     // Positioning
     position: relative;
-    
+
     // Display & Box Model
     min-height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 60px 20px;
-    
+
     // Visual
     overflow: hidden;
-    
+
     &-background {
       // Positioning
       position: absolute;
       top: 0;
       left: 0;
       z-index: 0;
-      
+
       // Display & Box Model
       width: 100%;
       height: 100%;
-      
+
       // Visual
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         // Positioning
         position: absolute;
         top: 0;
         left: 0;
-        
+
         // Display & Box Model
         width: 100%;
         height: 100%;
-        
+
         // Visual
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       // Positioning
       position: relative;
       z-index: 1;
-      
+
       // Display & Box Model
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         // Display & Box Model
         margin: 0 0 12px 0;
-        
+
         // Typography
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
-        
+
         // Animation
         animation: fade-in-up 0.6s ease-out;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         // Display & Box Model
         margin: 0 0 16px 0;
-        
+
         // Typography
         font-size: 20px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
-        
+
         // Animation
         animation: fade-in-up 0.6s ease-out 0.1s both;
-        
+
         @media (max-width: 768px) {
           font-size: 18px;
         }
       }
-      
+
       &-description {
         // Display & Box Model
         margin: 0;
-        
+
         // Typography
         font-size: 16px;
         line-height: 1.5;
         color: rgba(255, 255, 255, 0.9);
-        
+
         // Animation
         animation: fade-in-up 0.6s ease-out 0.2s both;
       }
@@ -638,7 +638,7 @@ async function handleDeleteToken(token) {
   &-intro {
     // Display & Box Model
     margin-bottom: 24px;
-    
+
     // Typography
     font-size: 16px;
     line-height: 1.6;

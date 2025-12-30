@@ -5,7 +5,7 @@
       <div class="ripple_test_page-hero-background">
         <div class="ripple_test_page-hero-background-overlay" />
       </div>
-      
+
       <div class="ripple_test_page-hero-content">
         <h1 class="ripple_test_page-hero-content-title">
           {{ $t('ripple_test_page.hero.title') }}
@@ -22,8 +22,8 @@
     <!-- Main Content -->
     <section class="ripple_test_page-section">
       <div class="ripple_test_page-demo">
-        <p 
-          v-customize-ripple 
+        <p
+          v-customize-ripple
           class="ripple_test_page-demo-button"
         >
           {{ $t('ripple_test_page.click_me') }}
@@ -59,7 +59,7 @@ useHeadMataData({
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -68,7 +68,7 @@ useHeadMataData({
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -78,31 +78,31 @@ useHeadMataData({
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;

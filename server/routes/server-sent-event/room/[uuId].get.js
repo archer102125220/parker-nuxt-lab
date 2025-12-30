@@ -21,4 +21,4 @@ export default defineEventHandler(async (event) => {
   });
 
   return eventStream.send();
-})
+});

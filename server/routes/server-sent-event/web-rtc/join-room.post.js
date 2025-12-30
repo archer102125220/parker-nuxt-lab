@@ -60,5 +60,5 @@ export default defineEventHandler(async function(event) {
         }
     );
 
-    return memberType
+    return memberType;
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-// eslint-disable-next-line import/no-anonymous-default-export
+
 module.exports = {
   up: queryInterface => {
     const { database, dialectOptions, dialect } =

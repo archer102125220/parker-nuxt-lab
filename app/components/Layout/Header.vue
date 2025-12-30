@@ -114,7 +114,7 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 100;
-  
+
   // Display & Box Model
   display: flex;
   flex-direction: row;
@@ -126,7 +126,7 @@ onMounted(() => {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  
+
   // Animation
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 

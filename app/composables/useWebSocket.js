@@ -33,7 +33,7 @@ export function useWebSocket(config = { channel: '/' }, senderSetting = {}, afte
           console.log('WebSocket client open', event);
 
           if (this.inited === undefined && typeof afterInit === 'function') {
-            handleWaitConnect(afterInit, this)
+            handleWaitConnect(afterInit, this);
             this.inited = true;
           }
           if (typeof webSocketConfig.open === 'function') {
@@ -76,7 +76,7 @@ export function useWebSocket(config = { channel: '/' }, senderSetting = {}, afte
             return senderSetting[senderSettingKey]?.value();
           }
           return senderSetting[senderSettingKey]?.value;
-        }
+        };
 
         const sendValue = getSendValue();
 

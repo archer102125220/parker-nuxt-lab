@@ -109,4 +109,4 @@ export default defineEventHandler({
       console.log('[ws-socket.io] WebRTC WebSocket error', error);
     },
   },
-})
+});

@@ -95,19 +95,19 @@ import { Fido2Lib } from 'fido2-lib';
  */
 /**
  * FIDO2 選項生成 API
- * 
+ *
  * 生成 FIDO2/WebAuthn 註冊或登入所需的選項參數
  * 根據 isLogin 參數決定生成註冊選項或認證選項
- * 
+ *
  * @api {GET} /api/nuxt-server/fido2-lib/generate-option 生成 FIDO2 選項
  * @apiGroup FIDO2
  * @apiName GenerateFido2Option
- * 
+ *
  * @apiQuery {Boolean} [isLogin=false] 是否為登入模式
  * @apiQuery {String} [userId] 使用者 ID (註冊時需要)
  * @apiQuery {String} [userName] 使用者名稱 (註冊時需要)
  * @apiQuery {String} [userDisplayName] 使用者顯示名稱 (註冊時需要)
- * 
+ *
  * @apiSuccess {Object} data FIDO2 選項物件
  * @apiSuccess {String} data.challenge Base64URL 編碼的挑戰值
  * @apiSuccess {Number} data.timeout 超時時間（毫秒）
@@ -118,15 +118,15 @@ import { Fido2Lib } from 'fido2-lib';
  * @apiSuccess {String} data.user.id 使用者 ID
  * @apiSuccess {String} data.user.name 使用者名稱
  * @apiSuccess {String} data.user.displayName 使用者顯示名稱
- * 
+ *
  * @example
  * // 註冊模式請求範例
  * GET /api/nuxt-server/fido2-lib/generate-option?userId=user123&userName=john&userDisplayName=John Doe
- * 
+ *
  * @example
  * // 登入模式請求範例
  * GET /api/nuxt-server/fido2-lib/generate-option?isLogin=true
- * 
+ *
  * @example
  * // 註冊模式成功回應範例
  * {
@@ -140,7 +140,7 @@ import { Fido2Lib } from 'fido2-lib';
  *     "displayName": "John Doe"
  *   }
  * }
- * 
+ *
  * @example
  * // 登入模式成功回應範例
  * {
@@ -149,36 +149,36 @@ import { Fido2Lib } from 'fido2-lib';
  *   "rpId": "parker-nuxt-lab.vercel.app",
  *   "allowCredentials": []
  * }
- * 
+ *
  * @description
  * 此 API 根據查詢參數生成 FIDO2/WebAuthn 所需的選項：
- * 
+ *
  * 註冊模式 (isLogin=false 或未提供)：
  * - 生成 attestationOptions 用於新憑證註冊
  * - 需要提供 userId, userName, userDisplayName
- * 
+ *
  * 登入模式 (isLogin=true)：
  * - 生成 assertionOptions 用於現有憑證認證
  * - 通常需要從資料庫查詢 allowCredentials
- * 
+ *
  * 環境配置：
  * - 開發環境：rpId 設為 "localhost"
  * - 生產環境：rpId 設為 "parker-nuxt-lab.vercel.app"
- * 
+ *
  * @see {@link https://webauthn-open-source.github.io/fido2-lib/index.html FIDO2-Lib 文檔}
  */
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
-  console.log({ query })
+  console.log({ query });
 
   const f2l = new Fido2Lib({
     timeout: 60000,
     rpId: process.env.NODE_ENV === 'development' ? 'localhost' : 'parker-nuxt-lab.vercel.app',
-    rpName: "Nuxt Lab",
+    rpName: 'Nuxt Lab',
     // rpIcon: "https://example.com/logo.png",
     challengeSize: 128,
-    attestation: "direct",
+    attestation: 'direct',
     cryptoParams: [-7, -257],
     authenticatorRequireResidentKey: true,
     // authenticatorAttachment: "platform",

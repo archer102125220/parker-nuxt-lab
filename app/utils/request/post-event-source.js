@@ -127,6 +127,6 @@ export class PostEventSource extends EventTarget {
     }
   }
 
-};
+}
 
 export default PostEventSource;

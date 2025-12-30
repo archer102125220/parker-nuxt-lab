@@ -5,7 +5,7 @@
       <div class="qr_code_page-hero-background">
         <div class="qr_code_page-hero-background-overlay" />
       </div>
-      
+
       <div class="qr_code_page-hero-content">
         <h1 class="qr_code_page-hero-content-title">
           {{ $t('qr_code_page.hero.title') }}
@@ -23,10 +23,10 @@
     <section class="qr_code_page-section">
       <div class="qr_code_page-demo">
         <v-text-field
+          v-model="qrCodeValue"
           clearable
           :label="$t('qr_code_page.input_label')"
           class="qr_code_page-demo-input"
-          v-model="qrCodeValue"
         />
         <div class="qr_code_page-demo-qrcode">
           <QRcode :qr-code-value="qrCodeValue" />
@@ -64,7 +64,7 @@ const qrCodeValue = ref('QRcodeTest');
     justify-content: center;
     padding: 60px 20px;
     overflow: hidden;
-    
+
     &-background {
       position: absolute;
       top: 0;
@@ -73,7 +73,7 @@ const qrCodeValue = ref('QRcodeTest');
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
-      
+
       &-overlay {
         position: absolute;
         top: 0;
@@ -83,31 +83,31 @@ const qrCodeValue = ref('QRcodeTest');
         background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
       }
     }
-    
+
     &-content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       text-align: center;
-      
+
       &-title {
         margin: 0 0 12px 0;
         font-size: 42px;
         font-weight: 800;
         color: #ffffff;
-        
+
         @media (max-width: 768px) {
           font-size: 32px;
         }
       }
-      
+
       &-subtitle {
         margin: 0 0 16px 0;
         font-size: 20px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.95);
       }
-      
+
       &-description {
         margin: 0;
         font-size: 16px;

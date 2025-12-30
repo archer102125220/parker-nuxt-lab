@@ -69,14 +69,14 @@ import swaggerJSDoc from 'swagger-jsdoc';
  */
 /**
  * Swagger API 文檔生成 API
- * 
+ *
  * 動態生成專案的 Swagger/OpenAPI 3.0 文檔
  * 掃描所有 API 檔案並根據 JSDoc 註解生成完整的 API 文檔
- * 
+ *
  * @api {GET} /api/nuxt-server/swagger-docs 取得 Swagger API 文檔
  * @apiGroup Documentation
  * @apiName GetSwaggerDocs
- * 
+ *
  * @apiSuccess {Object} data Swagger/OpenAPI 3.0 文檔物件
  * @apiSuccess {String} data.openapi OpenAPI 版本號
  * @apiSuccess {Object} data.info API 基本資訊
@@ -87,11 +87,11 @@ import swaggerJSDoc from 'swagger-jsdoc';
  * @apiSuccess {Object} data.components 組件定義
  * @apiSuccess {Object} data.paths API 路徑定義
  * @apiSuccess {Object} data.security 安全性定義
- * 
+ *
  * @example
  * // 請求範例
  * GET /api/nuxt-server/swagger-docs
- * 
+ *
  * @example
  * // 成功回應範例
  * {
@@ -108,18 +108,18 @@ import swaggerJSDoc from 'swagger-jsdoc';
  *     }
  *   }
  * }
- * 
+ *
  * @description
  * 此 API 會掃描 server/api/**\/*.js 路徑下的所有檔案
  * 並根據 JSDoc 註解生成完整的 OpenAPI 3.0 規格文檔
- * 
+ *
  * 支援的環境變數：
  * - SWAGGER_SCHEMA_HTTPS: 設定為 'true' 時僅支援 HTTPS
- * 
+ *
  * 安全性配置：
  * - BearerAuth: 支援 Bearer Token 認證
  * - OAuth2: 支援 OAuth2 認證
- * 
+ *
  * @see {@link https://swagger.io/specification/ OpenAPI 3.0 規格}
  * @see {@link https://github.com/Surnet/swagger-jsdoc swagger-jsdoc 文檔}
  */

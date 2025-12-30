@@ -123,7 +123,7 @@ function handleWaitConnect(socket) {
 
     await new Promise((_resolve) => setTimeout(_resolve, 500));
     resolve(handleWaitConnect(socket));
-  })
+  });
 }
 
 function handleHeatbeat(socket) {

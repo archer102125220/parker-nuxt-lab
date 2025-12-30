@@ -59,7 +59,7 @@ export class firebase {
   #_serviceWorker = null;
   #_croe = null;
   #_croeInited = false;
-  #_store = null
+  #_store = null;
   #_storeInited = false;
   #_token = null;
   #_messaging = null;
@@ -124,14 +124,14 @@ export class firebase {
     if (typeof analyticsApp !== 'object' || analyticsApp === null) {
       console.warn('firebase analytics missing');
     }
-    return logEvent(analyticsApp, ...arg)
+    return logEvent(analyticsApp, ...arg);
   }
   analyticsLog(...arg) {
     if (this.analyticsInited !== true && (typeof this.#_analytics !== 'object' || this.#_analytics === null)) {
       console.warn('firebase analytics missing');
       return;
     }
-    return this.logEvent(this.analytics?.app, ...arg)
+    return this.logEvent(this.analytics?.app, ...arg);
   }
   async configUpdate(newConfig = null, reInit = true) {
     if (typeof newConfig !== 'object' || newConfig === null) {
@@ -182,7 +182,7 @@ export class firebase {
     if (import.meta.server) {
       return this.croeServerInit(firebaseConfig);
     } else {
-      return this.croeClientInit(firebaseConfig)
+      return this.croeClientInit(firebaseConfig);
     }
   }
 
@@ -320,7 +320,7 @@ export class firebase {
     return null;
   }
   async getOrRegisterServiceWorker(scope = this.serviceWorkerScope) {
-    const serviceWorker = await this.getServiceWorker(scope)
+    const serviceWorker = await this.getServiceWorker(scope);
     if (serviceWorker) return serviceWorker;
 
     return await this.registerServiceWorker(scope);
@@ -344,11 +344,11 @@ export class firebase {
         const serviceWorkerRegistration = await this.getServiceWorker();
 
         if (typeof serviceWorkerRegistration === 'undefined' || serviceWorkerRegistration === null) {
-          throw new Error('The browser doesn\'t support service worker.')
+          throw new Error('The browser doesn\'t support service worker.');
         }
 
         const newFirebaseMessaging = this.getMessaging(currentFirebaseCroe);
-        this.#_messaging = newFirebaseMessaging
+        this.#_messaging = newFirebaseMessaging;
 
         const token = await this.getToken(newFirebaseMessaging, {
           vapidKey: this.#_vapidKey,
@@ -364,14 +364,14 @@ export class firebase {
             readonly from: string;       // 訊息的發送者
             readonly messageId: string;  // 訊息的唯一 ID
             readonly messageType: string; // "push" 或 "data"
-  
+
             readonly data?: { [key: string]: string }; // 如果有資料訊息，則包含此屬性
-  
+
             readonly notification?: NotificationPayload; // 如果有通知訊息，則包含此屬性
-  
+
             readonly rawData: object; // 原始訊息數據，可能包含更多低級別屬性
           }
-  
+
           interface NotificationPayload {
             readonly title: string | undefined;
             readonly body: string | undefined;
