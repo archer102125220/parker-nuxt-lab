@@ -366,7 +366,7 @@ const exampleCode = computed(
       height: 100%;
 
       /* Visual */
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
     }
   }
 
@@ -437,7 +437,7 @@ const exampleCode = computed(
         font-size: 16px;
         font-weight: 600;
         text-decoration: none;
-        color: #764ba2;
+        color: #44a08d;
 
         /* Visual */
         background: #ffffff;
@@ -572,7 +572,7 @@ const exampleCode = computed(
           border-radius: 50%;
 
           /* Visual */
-          background: #667eea;
+          background: #44a08d;
           appearance: none;
 
           /* Misc */

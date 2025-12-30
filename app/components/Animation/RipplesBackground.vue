@@ -83,9 +83,8 @@ const props = defineProps({
 const containerRef = ref(null);
 
 // ========================================
-// Ripples Instance
+// Auto Drops
 // ========================================
-let ripplesInstance = null;
 let autoDropsIntervalId = null;
 
 // ========================================
@@ -108,11 +107,8 @@ let isVisible = true;
 
 onMounted(() => {
   if (containerRef.value) {
-    // 初始化 Ripples
-    ripplesInstance = RipplesAnimation.ripples(
-      containerRef.value,
-      ripplesOptions.value
-    );
+    // 初始化 Ripples (實例會存儲在 el.ripples 屬性上)
+    RipplesAnimation.ripples(containerRef.value, ripplesOptions.value);
 
     // 設定自動水滴
     if (props.autoDrops) {
@@ -152,9 +148,10 @@ onBeforeUnmount(() => {
   }
 
   stopAutoDrops();
-  if (ripplesInstance) {
-    ripplesInstance.destroy();
-    ripplesInstance = null;
+
+  // 銷毀 Ripples 實例
+  if (containerRef.value?.ripples) {
+    RipplesAnimation.ripples(containerRef.value, 'destroy');
   }
 });
 
@@ -195,7 +192,7 @@ function startAutoDrops() {
   autoDropsIntervalId = setInterval(() => {
     // 如果不可見，則跳過水滴產生
     if (!isVisible) return;
-    if (!ripplesInstance || !containerRef.value) return;
+    if (!containerRef.value?.ripples) return;
 
     const rect = containerRef.value.getBoundingClientRect();
     const x = Math.random() * rect.width;
@@ -203,7 +200,15 @@ function startAutoDrops() {
     const strength =
       props.autoDropsStrength + Math.random() * props.autoDropsStrengthVariance;
 
-    ripplesInstance.drop(x, y, props.dropRadius, strength);
+    // 使用靜態方法調用 drop 命令
+    RipplesAnimation.ripples(
+      containerRef.value,
+      'drop',
+      x,
+      y,
+      props.dropRadius,
+      strength
+    );
   }, props.autoDropsInterval);
 }
 
@@ -230,8 +235,16 @@ function drop(
   radius = props.dropRadius,
   strength = props.autoDropsStrength
 ) {
-  if (ripplesInstance) {
-    ripplesInstance.drop(x, y, radius, strength);
+  if (containerRef.value) {
+    // 使用靜態方法調用 drop 命令
+    RipplesAnimation.ripples(
+      containerRef.value,
+      'drop',
+      x,
+      y,
+      radius,
+      strength
+    );
   }
 }
 
@@ -239,8 +252,8 @@ function drop(
  * 暫停動畫
  */
 function pause() {
-  if (ripplesInstance) {
-    ripplesInstance.pause();
+  if (containerRef.value?.ripples) {
+    RipplesAnimation.ripples(containerRef.value, 'pause');
   }
 }
 
@@ -248,8 +261,8 @@ function pause() {
  * 繼續播放動畫
  */
 function play() {
-  if (ripplesInstance) {
-    ripplesInstance.play();
+  if (containerRef.value?.ripples) {
+    RipplesAnimation.ripples(containerRef.value, 'play');
   }
 }
 

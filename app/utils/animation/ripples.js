@@ -1208,11 +1208,13 @@ export class Ripples {
         ...(typeof option == 'object' ? option : {})
       };
 
-    if (!data) {
+    if (data instanceof Ripples === false) {
       targetElement.ripples = new Ripples(targetElement, options);
     } else if (typeof option == 'string') {
       Ripples[option].apply(data, args);
     }
+
+    return targetElement.ripples;
   }
 }
 
