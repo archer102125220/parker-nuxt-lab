@@ -859,6 +859,11 @@ This project includes coding rules for AI agents (Claude, Cursor, etc.) to ensur
 | `.cursor/rules/security-policy.mdc` | Security warning policy |
 | `.cursor/rules/lint-policy.mdc` | Lint disable comment policy |
 
+### Official Documentation
+
+- **CLAUDE.md**: [Claude Code - Memory & CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) - Learn how Claude Code uses CLAUDE.md as project-specific instructions
+- **.cursor/rules/**: [Cursor Rules Documentation](https://docs.cursor.com/context/rules) - Official guide for configuring Cursor IDE rules
+
 ### Documentation
 
 | Document | Description |

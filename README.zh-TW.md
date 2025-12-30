@@ -861,6 +861,11 @@ yarn test:codegen
 | `.cursor/rules/security-policy.mdc` | 資安警告政策 |
 | `.cursor/rules/lint-policy.mdc` | Lint 禁用註解政策 |
 
+### 官方文件
+
+- **CLAUDE.md**：[Claude Code - Memory & CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) - 了解 Claude Code 如何使用 CLAUDE.md 作為專案專屬指令
+- **.cursor/rules/**：[Cursor Rules 官方文件](https://docs.cursor.com/context/rules) - Cursor IDE 規則設定官方指南
+
 ### 相關文件
 
 | 文件 | 說明 |
