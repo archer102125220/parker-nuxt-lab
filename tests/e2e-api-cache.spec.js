@@ -23,7 +23,7 @@ test.describe('API 快取測試', () => {
 
   test('首次載入應該發送 API 請求', async ({ page }) => {
     // 監聽網路請求
-    const requests: string[] = [];
+    const requests = [];
 
     page.on('request', (request) => {
       if (request.url().includes('/api/')) {
@@ -47,7 +47,7 @@ test.describe('API 快取測試', () => {
     await page.waitForTimeout(1000);
 
     // 記錄請求
-    const requests: string[] = [];
+    const requests = [];
     let requestCount = 0;
 
     page.on('request', (request) => {
@@ -131,7 +131,7 @@ test.describe('API 快取測試', () => {
 
   test('應該能夠處理多個 API 請求', async ({ page }) => {
     // 監聽所有 API 請求
-    const apiRequests: string[] = [];
+    const apiRequests = [];
 
     page.on('request', (request) => {
       if (request.url().includes('/api/')) {
