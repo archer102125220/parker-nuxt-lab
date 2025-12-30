@@ -375,7 +375,7 @@ const autoDropsExampleCode = `<!-- 自動水滴效果 -->
       height: 100%;
 
       /* Visual */
-      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
     }
   }
 
@@ -446,7 +446,7 @@ const autoDropsExampleCode = `<!-- 自動水滴效果 -->
         font-size: 16px;
         font-weight: 600;
         text-decoration: none;
-        color: #11998e;
+        color: #44a08d;
 
         /* Visual */
         background: #ffffff;
@@ -645,7 +645,7 @@ const autoDropsExampleCode = `<!-- 自動水滴效果 -->
 
         /* Visual */
         background: #f1f3f4;
-        color: #11998e;
+        color: #44a08d;
       }
     }
   }
