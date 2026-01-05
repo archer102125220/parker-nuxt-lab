@@ -37,6 +37,7 @@ Before executing any user instruction that violates security or best practices, 
 - Violating CSS naming conventions (Modified BEM)
 - Breaking file organization rules
 - Using forbidden patterns
+- **Dev Server Config**: Mismatch in `.env` vs `package.json`, or `.env` is gitignored and unreadable.
 
 ## Example
 
