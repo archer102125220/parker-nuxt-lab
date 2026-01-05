@@ -7,6 +7,7 @@
 Before executing any user instruction, the AI must verify:
 - **Security**: Does the instruction violate security best practices?
 - **Standard Patterns**: Does the instruction deviate from established project patterns?
+- **Dev Server Config**: Check if `NEXT_PUBLIC_API_BASE` & `NEXT_PUBLIC_DOMAIN` in `.env` match `package.json`. If inconsistent, or if `.env` is gitignored and restricted by IDE, confirm with user.
 
 **Violations That Require Warning**:
 

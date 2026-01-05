@@ -129,6 +129,8 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 - `VITE_FIREBASE_*` (API KEY, VAPID KEY, CREDENTIAL, etc.)
 - `HTTPS` (control HTTPS behavior if needed)
 
+> **Dev Server Config Check**: When starting the development server, check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the `package.json` development server settings. If inconsistent, or if `.env` is gitignored and restricted by IDE settings, confirm with the user whether to use the current `.env` configuration.
+
 ### Upstash Redis Configuration
 
 The project uses Upstash Redis for real-time data storage in WebRTC features. Configure in `.env`:
