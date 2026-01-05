@@ -37,3 +37,6 @@ coverage/
 # firebase
 *-firebase-adminsdk-*.json
 .vercel
+
+# Antigravity Export
+docs/gemini-3-pro-migration/antigravity_export.zip
