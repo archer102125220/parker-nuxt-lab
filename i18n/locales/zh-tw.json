@@ -23,7 +23,8 @@
         "server_sent_event": "Server Sent Event測試",
         "web_rtc": "WebRTC測試",
         "swagger_doc": "Swagger API 文檔",
-        "indexeddb_demo": "IndexedDB ORM 展示"
+        "indexeddb_demo": "IndexedDB ORM 展示",
+        "krpano_demo": "Krpano 全景圖展示"
     },
     "home": {
         "hero": {
@@ -71,7 +72,8 @@
             "web_rtc_desc": "WebRTC 點對點視訊通話功能測試",
             "face_swap_desc": "AI 人臉交換技術的實作展示",
             "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔",
-            "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試"
+            "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試",
+            "krpano_demo_desc": "使用 Krpano 實現互動式 360° 全景圖瀏覽"
         },
         "stats": {
             "components": "組件數量",
@@ -1224,6 +1226,35 @@
             "drop_radius": "水滴半徑",
             "strength": "水滴基礎強度",
             "strength_variance": "水滴強度隨機變化範圍"
+        }
+    },
+    "krpano_demo_page": {
+        "hero": {
+            "title": "Krpano 全景圖展示",
+            "subtitle": "360° 全景圖查看器組件",
+            "description": "使用 Krpano 實現互動式 360° 全景圖瀏覽，支援場景切換、熱點管理等功能"
+        },
+        "scenes": {
+            "scene1": "場景 1 - 極光",
+            "scene2": "場景 2 - 星空"
+        },
+        "controls": {
+            "title": "控制面板",
+            "show": "顯示控制",
+            "hide": "隱藏控制",
+            "scene": "場景切換",
+            "hotspots": "熱點管理",
+            "add_hotspot": "新增熱點",
+            "remove_hotspot": "移除最後一個",
+            "clear_hotspots": "清除全部",
+            "debug": "Debug 模式",
+            "debug_on": "開啟",
+            "debug_off": "關閉",
+            "text_layer": "文字圖層",
+            "text_content": "輸入文字內容"
+        },
+        "log": {
+            "title": "事件日誌"
         }
     }
 }
