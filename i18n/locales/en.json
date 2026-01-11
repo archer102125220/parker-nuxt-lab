@@ -1256,6 +1256,16 @@
         },
         "log": {
             "title": "Event Log"
+        },
+        "hotspot_form": {
+            "name_placeholder": "Hotspot Name",
+            "ath_placeholder": "Horizontal Angle (ATH)",
+            "atv_placeholder": "Vertical Angle (ATV)",
+            "preset_icon": "Preset Icon",
+            "custom_url": "Custom URL",
+            "url_placeholder": "Enter image URL",
+            "confirm": "Add",
+            "cancel": "Cancel"
         }
     }
 }

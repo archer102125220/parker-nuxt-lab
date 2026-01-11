@@ -1255,6 +1255,16 @@
         },
         "log": {
             "title": "事件日誌"
+        },
+        "hotspot_form": {
+            "name_placeholder": "熱點名稱",
+            "ath_placeholder": "水平角度 (ATH)",
+            "atv_placeholder": "垂直角度 (ATV)",
+            "preset_icon": "預設圖示",
+            "custom_url": "自訂 URL",
+            "url_placeholder": "輸入圖片網址",
+            "confirm": "確認",
+            "cancel": "取消"
         }
     }
 }

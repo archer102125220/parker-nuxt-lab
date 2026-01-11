@@ -54,22 +54,129 @@
           <span class="krpano_demo-controls-panel-group-label">
             {{ $t('krpano_demo_page.controls.hotspots') }}
           </span>
-          <div class="krpano_demo-controls-panel-group-buttons">
+          
+          <!-- 新增熱點表單 -->
+          <div v-if="!isAddFormOpen" class="krpano_demo-controls-panel-group-buttons">
             <button
               class="krpano_demo-controls-panel-group-buttons-btn"
               css-color="success"
-              @click="addSampleHotspot"
+              @click="isAddFormOpen = true"
             >
-              {{ $t('krpano_demo_page.controls.add_hotspot') }}
+              + {{ $t('krpano_demo_page.controls.add_hotspot') }}
             </button>
-            <button
-              class="krpano_demo-controls-panel-group-buttons-btn"
-              css-color="warning"
-              :disabled="hotspots.length === 0"
-              @click="clearHotspots"
+          </div>
+          
+          <div v-else class="krpano_demo-controls-panel-group-form">
+            <input
+              v-model="newHotspot.name"
+              type="text"
+              class="krpano_demo-controls-panel-group-form-input"
+              :placeholder="$t('krpano_demo_page.hotspot_form.name_placeholder')"
+            />
+            <div class="krpano_demo-controls-panel-group-form-row">
+              <input
+                v-model.number="newHotspot.ath"
+                type="number"
+                class="krpano_demo-controls-panel-group-form-input"
+                :placeholder="$t('krpano_demo_page.hotspot_form.ath_placeholder')"
+              />
+              <input
+                v-model.number="newHotspot.atv"
+                type="number"
+                class="krpano_demo-controls-panel-group-form-input"
+                :placeholder="$t('krpano_demo_page.hotspot_form.atv_placeholder')"
+              />
+            </div>
+            
+            <!-- 圖示類型切換 -->
+            <div class="krpano_demo-controls-panel-group-form-tabs">
+              <button
+                class="krpano_demo-controls-panel-group-form-tabs-btn"
+                :css-is-active="iconTabIndex === 0"
+                @click="iconTabIndex = 0"
+              >
+                {{ $t('krpano_demo_page.hotspot_form.preset_icon') }}
+              </button>
+              <button
+                class="krpano_demo-controls-panel-group-form-tabs-btn"
+                :css-is-active="iconTabIndex === 1"
+                @click="iconTabIndex = 1"
+              >
+                {{ $t('krpano_demo_page.hotspot_form.custom_url') }}
+              </button>
+            </div>
+            
+            <!-- 預設圖示選擇 -->
+            <div v-if="iconTabIndex === 0" class="krpano_demo-controls-panel-group-form-icons">
+              <button
+                v-for="(icon, index) in hotspotIcons"
+                :key="icon.url"
+                class="krpano_demo-controls-panel-group-form-icons-btn"
+                :css-is-active="selectedIconIndex === index"
+                @click="selectedIconIndex = index"
+              >
+                {{ icon.label }}
+              </button>
+            </div>
+            
+            <!-- 自訂 URL 輸入 -->
+            <div v-else class="krpano_demo-controls-panel-group-form-url">
+              <input
+                v-model="customIconUrl"
+                type="text"
+                class="krpano_demo-controls-panel-group-form-input"
+                :placeholder="$t('krpano_demo_page.hotspot_form.url_placeholder')"
+              />
+            </div>
+            
+            <div class="krpano_demo-controls-panel-group-form-actions">
+              <button
+                class="krpano_demo-controls-panel-group-buttons-btn"
+                @click="cancelAddHotspot"
+              >
+                {{ $t('krpano_demo_page.hotspot_form.cancel') }}
+              </button>
+              <button
+                class="krpano_demo-controls-panel-group-buttons-btn"
+                css-color="success"
+                :disabled="!isFormValid"
+                @click="confirmAddHotspot"
+              >
+                {{ $t('krpano_demo_page.hotspot_form.confirm') }}
+              </button>
+            </div>
+          </div>
+          
+          <!-- 熱點列表 -->
+          <div v-if="hotspots.length > 0" class="krpano_demo-controls-panel-group-list">
+            <div
+              v-for="hotspot in hotspots"
+              :key="hotspot.name"
+              class="krpano_demo-controls-panel-group-list-item"
             >
-              {{ $t('krpano_demo_page.controls.clear_hotspots') }}
-            </button>
+              <span class="krpano_demo-controls-panel-group-list-item-name">
+                {{ hotspot.displayName || hotspot.name }}
+              </span>
+              <span class="krpano_demo-controls-panel-group-list-item-coords">
+                ({{ hotspot.ath.toFixed(0) }}, {{ hotspot.atv.toFixed(0) }})
+              </span>
+              <div class="krpano_demo-controls-panel-group-list-item-actions">
+                <button
+                  class="krpano_demo-controls-panel-group-list-item-actions-btn"
+                  :css-is-visible="hotspot.visible"
+                  @click="toggleHotspotVisibility(hotspot.name)"
+                >
+                  {{ hotspot.visible ? '●' : '○' }}
+                </button>
+                <button
+                  class="krpano_demo-controls-panel-group-list-item-actions-btn"
+                  css-color="danger"
+                  @click="removeHotspot(hotspot.name)"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -173,6 +280,38 @@ const currentSceneLabel = computed(() => {
 const hotspots = ref([]);
 let hotspotCounter = 0;
 
+// Hotspot Form State
+const isAddFormOpen = ref(false);
+const selectedIconIndex = ref(0);
+const iconTabIndex = ref(0); // 0: preset, 1: custom URL
+const customIconUrl = ref('');
+const newHotspot = ref({
+  name: '',
+  ath: 0,
+  atv: 0
+});
+
+// Hotspot Icons
+const hotspotIcons = [
+  { label: 'Hotspot', url: '/krpano/skin/vtourskin_hotspot.png' },
+  { label: 'Map', url: '/krpano/skin/vtourskin_mapspot.png' }
+];
+
+// Form validation
+const isFormValid = computed(() => {
+  if (!newHotspot.value.name.trim()) return false;
+  if (iconTabIndex.value === 1 && !customIconUrl.value.trim()) return false;
+  return true;
+});
+
+// Get hotspot URL based on tab selection
+function getHotspotUrl() {
+  if (iconTabIndex.value === 1 && customIconUrl.value.trim()) {
+    return customIconUrl.value.trim();
+  }
+  return hotspotIcons[selectedIconIndex.value].url;
+}
+
 // Logs
 const logs = ref([]);
 
@@ -192,31 +331,56 @@ function switchScene(sceneName) {
 }
 
 // Hotspot management
-function addSampleHotspot() {
+function confirmAddHotspot() {
+  if (!isFormValid.value) return;
+  
   hotspotCounter++;
-  const randomAth = Math.floor(Math.random() * 360) - 180;
-  const randomAtv = Math.floor(Math.random() * 90) - 45;
-
-  const newHotspot = {
+  const hotspot = {
     name: `hotspot_${hotspotCounter}`,
-    url: '/krpano/skin/vtourskin_hotspot.png',
-    ath: randomAth,
-    atv: randomAtv,
+    displayName: newHotspot.value.name.trim(),
+    url: getHotspotUrl(),
+    ath: newHotspot.value.ath || 0,
+    atv: newHotspot.value.atv || 0,
     scale: 0.5,
     visible: true,
     onClick: (config) => {
-      addLog(`Click: ${config.name}`, 'success');
+      addLog(`Click: ${config.displayName || config.name}`, 'success');
     }
   };
 
-  hotspots.value = [...hotspots.value, newHotspot];
-  addLog(`Added: ${newHotspot.name}`, 'success');
+  hotspots.value = [...hotspots.value, hotspot];
+  addLog(`Added: ${hotspot.displayName}`, 'success');
+  
+  // Reset form
+  newHotspot.value = { name: '', ath: 0, atv: 0 };
+  selectedIconIndex.value = 0;
+  iconTabIndex.value = 0;
+  customIconUrl.value = '';
+  isAddFormOpen.value = false;
 }
 
-function clearHotspots() {
-  const count = hotspots.value.length;
-  hotspots.value = [];
-  addLog(`Cleared ${count} hotspots`, 'warning');
+function cancelAddHotspot() {
+  newHotspot.value = { name: '', ath: 0, atv: 0 };
+  selectedIconIndex.value = 0;
+  iconTabIndex.value = 0;
+  customIconUrl.value = '';
+  isAddFormOpen.value = false;
+}
+
+function toggleHotspotVisibility(name) {
+  const hotspot = hotspots.value.find((h) => h.name === name);
+  if (hotspot) {
+    hotspot.visible = !hotspot.visible;
+    hotspots.value = [...hotspots.value]; // Trigger reactivity
+    addLog(`${hotspot.displayName || name}: ${hotspot.visible ? 'Visible' : 'Hidden'}`, 'info');
+  }
+}
+
+function removeHotspot(name) {
+  const hotspot = hotspots.value.find((h) => h.name === name);
+  const displayName = hotspot?.displayName || name;
+  hotspots.value = hotspots.value.filter((h) => h.name !== name);
+  addLog(`Removed: ${displayName}`, 'warning');
 }
 
 // Krpano events
@@ -397,6 +561,225 @@ onMounted(() => {
             }
           }
         }
+
+        &-form {
+          // Display & Box Model
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          padding: 12px;
+          border-radius: 10px;
+
+          // Visual
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+
+          &-input {
+            // Display & Box Model
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+
+            // Typography
+            font-size: 13px;
+            color: #fff;
+
+            // Visual
+            background: rgba(255, 255, 255, 0.05);
+
+            // Animation
+            transition: border-color 0.2s ease;
+
+            &::placeholder {
+              color: rgba(255, 255, 255, 0.4);
+            }
+
+            &:focus {
+              outline: none;
+              border-color: rgba(104, 211, 145, 0.6);
+            }
+          }
+
+          &-row {
+            // Display & Box Model
+            display: flex;
+            gap: 8px;
+          }
+
+          &-icons {
+            // Display & Box Model
+            display: flex;
+            gap: 6px;
+
+            &-btn {
+              // Display & Box Model
+              padding: 6px 12px;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 6px;
+
+              // Typography
+              font-size: 12px;
+              color: rgba(255, 255, 255, 0.7);
+
+              // Visual
+              background: rgba(255, 255, 255, 0.05);
+
+              // Misc
+              cursor: pointer;
+
+              // Animation
+              transition: all 0.2s ease;
+
+              &:hover {
+                background: rgba(255, 255, 255, 0.1);
+              }
+
+              &[css-is-active='true'] {
+                background: rgba(104, 211, 145, 0.3);
+                border-color: rgba(104, 211, 145, 0.6);
+                color: #68d391;
+              }
+            }
+          }
+
+          &-tabs {
+            // Display & Box Model
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 8px;
+
+            // Visual
+            background: rgba(0, 0, 0, 0.3);
+
+            &-btn {
+              // Display & Box Model
+              flex: 1;
+              padding: 6px 10px;
+              border: none;
+              border-radius: 6px;
+
+              // Typography
+              font-size: 11px;
+              font-weight: 500;
+              color: rgba(255, 255, 255, 0.6);
+
+              // Visual
+              background: transparent;
+
+              // Misc
+              cursor: pointer;
+
+              // Animation
+              transition: all 0.2s ease;
+
+              &:hover {
+                color: rgba(255, 255, 255, 0.8);
+              }
+
+              &[css-is-active='true'] {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+              }
+            }
+          }
+
+          &-url {
+            // Display & Box Model
+            display: flex;
+          }
+
+          &-actions {
+            // Display & Box Model
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 4px;
+          }
+        }
+
+        &-list {
+          // Display & Box Model
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          margin-top: 8px;
+
+          &-item {
+            // Display & Box Model
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 6px;
+
+            // Visual
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            &-name {
+              // Typography
+              font-size: 12px;
+              font-weight: 500;
+              color: rgba(255, 255, 255, 0.9);
+            }
+
+            &-coords {
+              // Typography
+              font-size: 11px;
+              color: rgba(255, 255, 255, 0.5);
+            }
+
+            &-actions {
+              // Display & Box Model
+              display: flex;
+              gap: 4px;
+              margin-left: auto;
+
+              &-btn {
+                // Display & Box Model
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+                border: none;
+                border-radius: 4px;
+
+                // Typography
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.6);
+
+                // Visual
+                background: transparent;
+
+                // Misc
+                cursor: pointer;
+
+                // Animation
+                transition: all 0.2s ease;
+
+                &:hover {
+                  background: rgba(255, 255, 255, 0.1);
+                  color: #fff;
+                }
+
+                &[css-is-visible='true'] {
+                  color: #68d391;
+                }
+
+                &[css-color='danger'] {
+                  color: rgba(252, 129, 129, 0.8);
+
+                  &:hover {
+                    background: rgba(252, 129, 129, 0.2);
+                    color: #fc8181;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
 
@@ -404,6 +787,7 @@ onMounted(() => {
       max-height: 300px;
       opacity: 1;
       padding: 16px 20px;
+      overflow-y: auto;
     }
 
     &[css-is-expanded='false'] &-panel,
