@@ -121,6 +121,8 @@ yarn test:codegen
 - `VITE_FIREBASE_*`（API KEY、VAPID KEY、CREDENTIAL 等）
 - `HTTPS`（若需以環境變數控制 HTTPS 行為）
 
+> **開發伺服器配置檢查**：在開啟開發伺服器時，檢查 `.env` 中的 `NEXT_PUBLIC_API_BASE` 及 `NEXT_PUBLIC_DOMAIN` 的設置是否與 `package.json` 中開啟開發伺服器的設置一致。如果不一致，或是當 `.env` 被 gitignore 且 IDE 設置為不可讀取時，請務必與人類開發者確認是否以當前 `.env` 配置進行設定。
+
 ### Upstash Redis 設定
 
 專案使用 Upstash Redis 作為 WebRTC 功能的即時資料儲存。請在 `.env` 中設定：

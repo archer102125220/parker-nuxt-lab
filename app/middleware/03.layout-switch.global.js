@@ -3,7 +3,7 @@ const LAYOUT_SETTING = [
     { name: 'home', layout: 'home' },
     // { name: 'swagger-doc', layout: false },
     { path: '/css-drawing/triangle-full-test', layout: 'full-screen' },
-    { path: '/css-drawing/triangle-full-test', layout: 'full-screen' }
+    { name: 'krpano-demo', layout: 'immersive' }
   ];
 
   export default defineNuxtRouteMiddleware((to) => {
@@ -14,7 +14,7 @@ const LAYOUT_SETTING = [
       const toHrefLocalePath =
         typeof path === 'string' && path !== '' ? getLocalePath(path) : undefined;
       // const toHrefLocalePath = typeof path === 'string' && path !== '' ? path : undefined;
-      // console.log({ toHrefLocalePath });
+      // console.log({ toHrefLocalePath, to, ['getRouteBaseName(to)']: getRouteBaseName(to) });
 
       return (
         (exact === true
