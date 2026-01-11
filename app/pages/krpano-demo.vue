@@ -15,16 +15,19 @@
     />
 
     <!-- 控制面板 (可收合) -->
-    <div
-      class="krpano_demo-controls"
-      :css-is-expanded="controlsExpanded"
-    >
+    <div class="krpano_demo-controls" :css-is-expanded="controlsExpanded">
       <button
         class="krpano_demo-controls-toggle"
         @click="controlsExpanded = !controlsExpanded"
       >
-        <v-icon :icon="controlsExpanded ? 'mdi-chevron-down' : 'mdi-chevron-up'" />
-        {{ controlsExpanded ? $t('krpano_demo_page.controls.hide') : $t('krpano_demo_page.controls.show') }}
+        <v-icon
+          :icon="controlsExpanded ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+        />
+        {{
+          controlsExpanded
+            ? $t('krpano_demo_page.controls.hide')
+            : $t('krpano_demo_page.controls.show')
+        }}
       </button>
 
       <div class="krpano_demo-controls-panel">
@@ -80,7 +83,11 @@
             :css-is-active="debug"
             @click="debug = !debug"
           >
-            {{ debug ? $t('krpano_demo_page.controls.debug_on') : $t('krpano_demo_page.controls.debug_off') }}
+            {{
+              debug
+                ? $t('krpano_demo_page.controls.debug_on')
+                : $t('krpano_demo_page.controls.debug_off')
+            }}
           </button>
         </div>
       </div>
@@ -94,10 +101,7 @@
     </div>
 
     <!-- 日誌面板 (可收合) -->
-    <div
-      class="krpano_demo-log"
-      :css-is-expanded="logExpanded"
-    >
+    <div class="krpano_demo-log" :css-is-expanded="logExpanded">
       <button
         class="krpano_demo-log-toggle"
         @click="logExpanded = !logExpanded"
@@ -114,7 +118,9 @@
           :data-type="log.type"
         >
           <span class="krpano_demo-log-panel-item-time">{{ log.time }}</span>
-          <span class="krpano_demo-log-panel-item-message">{{ log.message }}</span>
+          <span class="krpano_demo-log-panel-item-message">{{
+            log.message
+          }}</span>
         </div>
       </div>
     </div>
@@ -159,7 +165,7 @@ const scenes = computed(() => [
 ]);
 
 const currentSceneLabel = computed(() => {
-  const scene = scenes.value.find(s => s.name === currentScene.value);
+  const scene = scenes.value.find((s) => s.name === currentScene.value);
   return scene ? scene.label : '';
 });
 
@@ -251,7 +257,7 @@ onMounted(() => {
   &-controls {
     // Positioning
     position: fixed;
-    bottom: 24px;
+    bottom: 80px; // 調高避開 Krpano 自帶 UI
     left: 50%;
     z-index: 50;
     transform: translateX(-50%);
@@ -293,17 +299,27 @@ onMounted(() => {
 
     &-panel {
       // Display & Box Model
-      display: none;
+      display: flex;
       flex-wrap: wrap;
       gap: 16px;
       margin-top: 12px;
       padding: 16px 20px;
       border-radius: 16px;
+      max-height: 0;
+      overflow: hidden;
 
       // Visual
       background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+
+      // Animation
+      transition:
+        max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease,
+        padding 0.3s ease,
+        margin 0.3s ease;
 
       &-group {
         // Display & Box Model
@@ -385,7 +401,18 @@ onMounted(() => {
     }
 
     &[css-is-expanded='true'] &-panel {
-      display: flex;
+      max-height: 300px;
+      opacity: 1;
+      padding: 16px 20px;
+    }
+
+    &[css-is-expanded='false'] &-panel,
+    &:not([css-is-expanded='true']) &-panel {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 20px;
+      margin-top: 0;
+      border-color: transparent;
     }
   }
 
@@ -488,21 +515,30 @@ onMounted(() => {
 
     &-panel {
       // Display & Box Model
-      display: none;
+      display: flex;
       flex-direction: column;
       max-width: 300px;
-      max-height: 200px;
+      max-height: 0;
       margin-top: 8px;
-      padding: 12px;
+      padding: 0 12px;
       border-radius: 12px;
-      overflow-y: auto;
+      overflow: hidden;
 
       // Visual
       background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(20px);
+      opacity: 0;
 
       // Typography
       font-family: monospace;
+
+      // Animation
+      transition:
+        max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease,
+        padding 0.3s ease,
+        transform 0.3s ease;
+      transform: translateY(-10px);
 
       &-item {
         // Display & Box Model
@@ -536,7 +572,19 @@ onMounted(() => {
     }
 
     &[css-is-expanded='true'] &-panel {
-      display: flex;
+      max-height: 200px;
+      opacity: 1;
+      padding: 12px;
+      overflow-y: auto;
+      transform: translateY(0);
+    }
+
+    &[css-is-expanded='false'] &-panel,
+    &:not([css-is-expanded='true']) &-panel {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 12px;
+      transform: translateY(-10px);
     }
   }
 }
