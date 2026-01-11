@@ -285,6 +285,11 @@ const linkList = computed(() => [
     to: localePath('/indexeddb-demo'),
     label: t('index.indexeddb_demo'),
     description: t('home.nav.indexeddb_demo_desc')
+  },
+  {
+    to: localePath('/krpano-demo'),
+    label: t('index.krpano_demo'),
+    description: t('home.nav.krpano_demo_desc')
   }
 ]);
 </script>

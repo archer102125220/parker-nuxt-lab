@@ -37,3 +37,6 @@ coverage/
 # firebase
 *-firebase-adminsdk-*.json
 .vercel
+
+# Antigravity Export
+docs/antigravity-migration/antigravity_export.zip
