@@ -210,9 +210,11 @@ export default defineNuxtConfig({
     '/api/nuxt-server/swagger-docs': {
       prerender: true
     },
-    '/': {
-      isr: true
-    },
+    // 注意：首頁不能使用 ISR，因為 i18n 語言偵測需要動態執行
+    // 若使用 ISR，第一個訪客的語言偵測結果會被快取，導致後續訪客都被重定向到錯誤的語系
+    // '/': {
+    //   isr: true
+    // },
     '/zh': {
       isr: true
     },
