@@ -368,7 +368,8 @@ export default defineNuxtConfig({
           autoprefixer,
           postcssPxtorem({
             rootValue: 16, // 1rem 對應的 px
-            propWhiteList: ['*']
+            propWhiteList: ['*'],
+            minPixelValue: 2
           }),
           // https://github.com/cuth/postcss-pxtorem/blob/master/index.js#L119C37-L119C37
           // https://juejin.cn/post/7033773414363955230#heading-3
