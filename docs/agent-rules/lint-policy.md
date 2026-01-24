@@ -1,7 +1,3 @@
----
-description: Lint Disable and Error Suppression Policy
-globs: **/*.ts, **/*.js, **/*.vue
----
 # Lint Disable Comments & Error Suppression Policy (CRITICAL)
 
 ### Lint Disable Comments
