@@ -4,12 +4,30 @@
 > 
 > Any AI Agent modifying code in this project must read and follow these conventions.
 
+## 🤖 AI Model Mapping
+
+Different AI assistants read different rule files. Please ensure they stay synchronized:
+
+| AI Model | Primary Rule File | Description |
+|----------|-------------------|-------------|
+| **Anthropic Claude** | `CLAUDE.md` | For Claude Sonnet 3.5/3.7 or Claude Code |
+| **Google Gemini** | `GEMINI.md` | For Google IDX or Gemini Code Assist |
+| **Antigravity Agent** | `.agent/rules/` | For Google Antigravity AI Agent system |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | For GitHub Copilot Chat instructions |
+| **Cursor AI** | `.cursor/rules/` | For Cursor IDE `.mdc` rule files |
+
+> **Note**: Content in `CLAUDE.md` and `GEMINI.md` should be identical.
+
+---
+
 ## 📋 Rule Files
+
+Files in this directory (`docs/agent-rules/`) are **human-readable detailed standards** and serve as the source for `.agent/rules/`.
 
 | File | Description |
 |------|-------------|
 | [css-conventions.en.md](./css-conventions.en.md) | CSS/SCSS Development Standards (property order, BEM naming, file organization) |
-| [css-conventions.md](./css-conventions.md) | CSS/SCSS 開發規範 (繁體中文版) |
+| [css-conventions.md](./css-conventions.md) | CSS/SCSS Development Standards (Traditional Chinese) |
 
 ---
 

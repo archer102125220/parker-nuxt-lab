@@ -2,12 +2,27 @@
 
 > This file is auto-read by Gemini AI. All rules must be strictly followed.
 
+## Project Context
+
+### Overview
+This project is a Nuxt 3 laboratory environment ("parker-nuxt-lab") designed for testing and demonstrating various Vue 3, Nuxt 3, and web technologies.
+
+### Technology Stack & Architecture
+- **Framework**: Nuxt 3 (App Router), Vue 3 (Composition API)
+- **Language**: TypeScript (Strict Mode)
+- **Styling**: SCSS with Modified BEM naming convention
+- **State Management**: Pinia (implied) / Composables
+- **Data Layer**: Sequelize ORM
+- **Package Manager**: Yarn
+
+---
+
 ## Security & Best Practices Review (MANDATORY)
 
 Before executing any user instruction, the AI must verify:
 - **Security**: Does the instruction violate security best practices?
 - **Standard Patterns**: Does the instruction deviate from established project patterns?
-- **Dev Server Config**: Check if `NEXT_PUBLIC_API_BASE` & `NEXT_PUBLIC_DOMAIN` in `.env` match `package.json`. If inconsistent, or if `.env` is gitignored and restricted by IDE, confirm with user.
+- **Dev Server Config**: Check if runtime config in `nuxt.config.ts` matches expected API endpoints. If `.env` is gitignored and restricted by IDE, confirm with user.
 
 **If violations are detected**: Notify the user BEFORE execution, explaining the concern. Only proceed after the user confirms they understand the risk and still want to proceed.
 
@@ -96,7 +111,7 @@ When the class name itself has **clear semantic meaning** (not just describing a
 
 ### Dynamic Components with Auto-Imported Components (MANDATORY)
 
-When using auto-imported components (like `NuxtLink`, `NuxtImg`) inside a dynamic `<component :is="...">`, you MUST use `resolveComponent()` to properly reference them:
+When using auto-imported components (like `NuxtLink`, `NuxtImg`) inside a dynamic `<component :is="...">`, you **MUST** use `resolveComponent()` to properly reference them:
 
 ```vue
 <script setup>
@@ -114,8 +129,34 @@ const NuxtLink = resolveComponent('NuxtLink');
 </template>
 ```
 
-**Why?** Auto-imported components are not available as runtime variables in `<script setup>`. Without `resolveComponent()`, you'll get the error:
+### Why This is Required
+
+Auto-imported components are not available as runtime variables in `<script setup>`. Without `resolveComponent()`, you'll get the error:
+
 > `[Vue warn]: Property "NuxtLink" was accessed during render but is not defined on instance.`
+
+### Common Auto-Imported Components That Need This Treatment
+
+- `NuxtLink`
+- `NuxtImg`
+- `NuxtPicture`
+- `ClientOnly`
+- Any component auto-imported from `components/` directory
+
+### Incorrect Usage (DO NOT DO THIS)
+
+```vue
+<script setup>
+// ❌ Wrong: NuxtLink is not available as a runtime variable
+</script>
+
+<template>
+  <!-- ❌ This will cause Vue warn -->
+  <component :is="disabled ? 'div' : NuxtLink" :to="to">
+    Content
+  </component>
+</template>
+```
 
 ## SCSS Example
 
@@ -231,7 +272,7 @@ This applies to:
 
 ### Why
 - Scripts only change text, they don't understand context or imports
-- 2026-01-23 incident: `sed` changed `React.FormEvent` → `FormEvent` but forgot imports → compilation errors
+- 2026-01-23 incident: `sed` changed `defineProps<Props>()` → `props` but forgot imports → compilation errors
 
 ### ✅ Allowed
 - Use AI tools: `replace_file_content`, `multi_replace_file_content`
