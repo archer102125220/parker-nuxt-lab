@@ -436,7 +436,8 @@ export default defineNuxtConfig({
     },
     '@nuxtjs/i18n',
     '@vite-pwa/nuxt',
-    'nuxt-security'
+    'nuxt-security',
+    '@nuxtjs/sitemap'
   ],
   i18n: {
     strategy,
@@ -570,6 +571,10 @@ export default defineNuxtConfig({
         // xrspatialtracking: [],   // XR 空間追蹤
       }
     }
+  },
+
+  site: {
+    url: process.env.VITE_DOMAIN,
   },
 
   build: {
