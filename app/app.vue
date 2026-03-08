@@ -47,7 +47,7 @@ useHead({
   meta: [
     {
       name: 'google-site-verification',
-      content: '95cyZ_y_761JE0X06C0sEC9Q0p0KVXkKd8FuQO2ZdVM'
+      content: import.meta.env.VITE_GOOGLE_SITE_VERIFICATION
     }
   ]
 });
