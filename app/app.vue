@@ -43,6 +43,15 @@ import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 import { Analytics } from '@vercel/analytics/nuxt';
 import _debounce from 'lodash/debounce';
 
+useHead({
+  meta: [
+    {
+      name: 'google-site-verification',
+      content: '95cyZ_y_761JE0X06C0sEC9Q0p0KVXkKd8FuQO2ZdVM'
+    }
+  ]
+});
+
 useSecurityNonce();
 
 const NO_GO_TOP = [];
