@@ -438,7 +438,9 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@vite-pwa/nuxt',
     'nuxt-security',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots',
+    '@nuxtjs/seo'
   ],
   i18n: {
     strategy,
@@ -575,7 +577,38 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: process.env.VITE_DOMAIN,
+    url: process.env.VITE_DOMAIN
+  },
+
+  robots:{// 定義規則
+    groups: [
+      {
+        userAgent: ['*'], // 針對所有爬蟲
+        allow: ['/'],     // 允許所有路徑
+          // 禁止爬取 WebRTC 相關路徑
+        disallow: [
+          '/web-rtc/server-sent-event/room',
+          '/zh/web-rtc/server-sent-event/room',
+          '/en/web-rtc/server-sent-event/room',
+          '/web-rtc/socket.io/room',
+          '/zh/web-rtc/socket.io/room',
+          '/en/web-rtc/socket.io/room',
+          '/web-rtc/websocket/room',
+          '/zh/web-rtc/websocket/room',
+          '/en/web-rtc/websocket/room',
+          '/server-sent-event-test/room-get',
+          '/zh/server-sent-event-test/room-get',
+          '/en/server-sent-event-test/room-get',
+          '/server-sent-event-test/room-post',
+          '/zh/server-sent-event-test/room-post',
+          '/en/server-sent-event-test/room-post',
+          '/offline',
+          '/zh/offline',
+          '/en/offline'
+        ],
+      }
+    ],
+    sitemap: process.env.VITE_DOMAIN + '/sitemap.xml'
   },
 
   build: {
