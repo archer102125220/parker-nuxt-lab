@@ -10,10 +10,6 @@ export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === '
     console.error('document API遺失');
     return;
   }
-  const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
-
-  const script = document.createElement('script');
-  script.setAttribute('nonce', nonceValue.value);
 
   function init(gtag, gtm, ...arg) {
     if (typeof gtag === 'function') {
@@ -26,7 +22,13 @@ export function googleGAInit(googleGAID = '', debug = process.env.NODE_ENV === '
       callback(gtag, gtm, ...arg);
     }
   }
-  script.onload = () => googleGtagInit(log, init);
+  googleGtagInit(log, init);
+
+  const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
+
+  const script = document.createElement('script');
+  script.setAttribute('nonce', nonceValue.value);
+  // script.onload = () => googleGtagInit(log, init);
   // script.addEventListener('load', () =>  googleGtagInit(googleGAID, log, init));
 
 
