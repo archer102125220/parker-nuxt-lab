@@ -13,7 +13,25 @@
 
 **若偵測到違規**：在執行前先通知使用者並說明疑慮。只有在使用者確認理解風險並仍想繼續的情況下才可執行。
 
+## 🤖 AI 模型對應表 (AI Model Mapping)
+
+不同的 AI 助手會讀取不同的規則文件，請確保相關文件保持同步：
+
+| AI 模型 | 主要規則文件 | 說明 |
+|---------|--------------|------|
+| **Anthropic Claude** | `CLAUDE.md` | 使用 Sonnet 3.5/3.7 或 Claude Code 時以此為準 |
+| **Google Gemini** | `GEMINI.md` | 使用 Google IDX 或 Gemini Code Assist 時以此為準 |
+| **Antigravity Agent** | `.agent/rules/` | Google Antigravity AI Agent 系統專用 |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | GitHub Copilot Chat 專用指令 |
+| **Cursor AI** | `.cursor/rules/` | Cursor IDE 專用的 `.mdc` 規則檔 |
+
+> **注意**：`CLAUDE.md` 與 `GEMINI.md` 的內容應保持完全一致。
+
+---
+
 ## 📋 規範文件清單
+
+此目錄 (`docs/agent-rules/`) 下的文件是 **人類可讀的詳細規範**，也是 `.agent/rules/` 的來源參考。
 
 | 文件 | 說明 |
 |------|------|
@@ -27,6 +45,7 @@
 | `css-conventions.mdc` | CSS/SCSS 命名與屬性順序規則 |
 | `security-policy.mdc` | 資安與最佳實踐審查政策 |
 | `lint-policy.mdc` | Lint 禁用註解政策 |
+| `vue-conventions.mdc` | Vue/Nuxt 開發規範（含自動導入組件規則） |
 
 ---
 
