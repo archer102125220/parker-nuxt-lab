@@ -401,7 +401,8 @@ export default defineNuxtConfig({
       noscript: [
         // Google Tag Manager (noscript)
         {
-          textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${process.env.VITE_GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`
+          textContent: `<iframe src="https://www.googletagmanager.com/ns.html?id=${process.env.VITE_GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+          tagPosition: 'body'
         }
       ]
     }
