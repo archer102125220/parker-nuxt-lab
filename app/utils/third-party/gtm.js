@@ -14,8 +14,6 @@ export function googleGTMInit(googleGTMID = '', log = false, callback) {
 
   // window.dataLayer = window.dataLayer || [];
   // window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-  const gtmScript = document.createElement('script');
-  gtmScript.setAttribute('nonce', nonceValue.value);
   function init(gtag, gtm, ...arg) {
     if (typeof gtm === 'function') {
       gtm({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
@@ -24,7 +22,11 @@ export function googleGTMInit(googleGTMID = '', log = false, callback) {
       callback(gtag, gtm, ...arg);
     }
   }
-  gtmScript.onload = () => googleGtagInit(log, init);
+  googleGtagInit(log, init);
+
+  const gtmScript = document.createElement('script');
+  gtmScript.setAttribute('nonce', nonceValue.value);
+  // gtmScript.onload = () => googleGtagInit(log, init);
   // gtmScript.addEventListener('load', () =>  googleGtagInit(googleGAID, log, init));
 
   gtmScript.id = 'gtmScript';
