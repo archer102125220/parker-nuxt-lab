@@ -25,7 +25,8 @@
         "server_sent_event": "Server Sent Event Test",
         "web_rtc": "WebRTC Test",
         "indexeddb_demo": "IndexedDB ORM Demo",
-        "krpano_demo": "Krpano Panorama Demo"
+        "krpano_demo": "Krpano Panorama Demo",
+        "notes": "Notion Notes"
     },
     "home": {
         "hero": {
@@ -74,7 +75,8 @@
             "face_swap_desc": "AI face swapping technology implementation showcase",
             "swagger_doc_desc": "Using Swagger UI to display complete documentation for Nuxt Server APIs",
             "indexeddb_demo_desc": "Custom IndexedDB ORM tool demonstration and testing",
-            "krpano_demo_desc": "Interactive 360° panorama viewing with Krpano"
+            "krpano_demo_desc": "Interactive 360° panorama viewing with Krpano",
+            "notes_desc": "Practical records of daily work and private research on SEO and technology"
         },
         "stats": {
             "components": "Components",
@@ -82,6 +84,17 @@
             "features": "Feature Modules",
             "tests": "Test Cases"
         }
+    },
+    "notes_page": {
+        "hero": {
+            "title": "Notion Notes",
+            "description": "Practical records of daily work and private research"
+        },
+        "seo": {
+            "title": "Notion Notes - Parker Nuxt Lab",
+            "description": "Practical records of daily work and private research, including SEO and other technical notes."
+        },
+        "read_on_notion": "Read on Notion"
     },
     "about": {
         "hero": {

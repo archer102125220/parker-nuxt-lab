@@ -239,6 +239,11 @@ const stats = computed(() => [
 
 const linkList = computed(() => [
   {
+    to: localePath('/notes'),
+    label: t('index.notes'),
+    description: t('home.nav.notes_desc')
+  },
+  {
     to: localePath('/about'),
     banner: '/img/about/about-v.10.webp',
     label: t('index.about'),

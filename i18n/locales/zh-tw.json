@@ -24,7 +24,8 @@
         "web_rtc": "WebRTC測試",
         "swagger_doc": "Swagger API 文檔",
         "indexeddb_demo": "IndexedDB ORM 展示",
-        "krpano_demo": "Krpano 全景圖展示"
+        "krpano_demo": "Krpano 全景圖展示",
+        "notes": "Notion 筆記"
     },
     "home": {
         "hero": {
@@ -73,7 +74,8 @@
             "face_swap_desc": "AI 人臉交換技術的實作展示",
             "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔",
             "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試",
-            "krpano_demo_desc": "使用 Krpano 實現互動式 360° 全景圖瀏覽"
+            "krpano_demo_desc": "使用 Krpano 實現互動式 360° 全景圖瀏覽",
+            "notes_desc": "日常工作與私下研究的 SEO 及技術實戰紀錄"
         },
         "stats": {
             "components": "組件數量",
@@ -81,6 +83,17 @@
             "features": "功能模組",
             "tests": "測試案例"
         }
+    },
+    "notes_page": {
+        "hero": {
+            "title": "Notion 筆記",
+            "description": "日常工作與私下研究的實戰紀錄"
+        },
+        "seo": {
+            "title": "Notion 筆記 - Parker Nuxt Lab",
+            "description": "日常工作與私下研究的實戰紀錄，包含 SEO 與其他技術筆記。"
+        },
+        "read_on_notion": "在 Notion 閱讀"
     },
     "about": {
         "hero": {
