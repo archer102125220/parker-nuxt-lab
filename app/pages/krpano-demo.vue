@@ -245,7 +245,20 @@ useHeadMataData({
   title: t('krpano_demo_page.hero.title')
 });
 
-// Refs
+const localePath = useLocalePath();
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('krpano_demo_page.hero.title'),
+    url: `${DOMAIN}${localePath('/krpano-demo')}`,
+    inLanguage: ['zh-TW', 'en']
+  })
+]);
+
+
 const krpanoRef = ref(null);
 
 // UI State

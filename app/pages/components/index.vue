@@ -128,6 +128,66 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': ['WebPage', 'CollectionPage'],
+    name: t('components_page.hero.title'),
+    description: t('components_page.hero.description'),
+    url: `${DOMAIN}${localePath('/components')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/components-page/components-page-v.05.webp`,
+    author: {
+      '@type': 'Person',
+      name: 'Parker Chen',
+      url: `${DOMAIN}${localePath('/about')}`
+    },
+    about: {
+      '@type': 'SoftwareApplication',
+      name: 'Parker Nuxt Lab',
+      applicationCategory: 'DeveloperApplication',
+      description: t('components_page.hero.description'),
+      operatingSystem: 'Web Browser',
+      url: DOMAIN
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: t('components_page.hero.title'),
+      description: t('components_page.hero.subtitle'),
+      itemListElement: [
+        // UI Components
+        { '@type': 'ListItem', position: 1, name: t('components.tab'), url: `${DOMAIN}${localePath('/components/tab-test')}` },
+        { '@type': 'ListItem', position: 2, name: '彈窗組件', url: `${DOMAIN}${localePath('/components/dialog')}` },
+        { '@type': 'ListItem', position: 3, name: '抽屜收展組件', url: `${DOMAIN}${localePath('/components/drawer')}` },
+        { '@type': 'ListItem', position: 4, name: '下拉選單組件', url: `${DOMAIN}${localePath('/components/selector')}` },
+        { '@type': 'ListItem', position: 5, name: 'Switch 組件測試', url: `${DOMAIN}${localePath('/components/switch-button')}` },
+        { '@type': 'ListItem', position: 6, name: 'Skeleton 組件', url: `${DOMAIN}${localePath('/components/skeleton-loader')}` },
+        { '@type': 'ListItem', position: 7, name: '文字特效測試', url: `${DOMAIN}${localePath('/components/enter-label')}` },
+        { '@type': 'ListItem', position: 8, name: '倒數計時組件', url: `${DOMAIN}${localePath('/components/countdown-test')}` },
+        // Functional Components
+        { '@type': 'ListItem', position: 9, name: t('components.scroll_fetch'), url: `${DOMAIN}${localePath('/components/scroll-fetch')}` },
+        { '@type': 'ListItem', position: 10, name: '選擇圖片組件測試', url: `${DOMAIN}${localePath('/components/image-upload-test')}` },
+        { '@type': 'ListItem', position: 11, name: '電話號碼輸入組件', url: `${DOMAIN}${localePath('/components/phone-input')}` },
+        { '@type': 'ListItem', position: 12, name: '返回置頂組件測試', url: `${DOMAIN}${localePath('/components/go-top')}` },
+        { '@type': 'ListItem', position: 13, name: 'Virtual Scroller 組件測試', url: `${DOMAIN}${localePath('/components/virtual-scroller')}` },
+        { '@type': 'ListItem', position: 14, name: '訊息佇列測試', url: `${DOMAIN}${localePath('/components/slide-in-panel')}` },
+        { '@type': 'ListItem', position: 15, name: 'QR Code 測試', url: `${DOMAIN}${localePath('/components/qr-code-test')}` },
+        // Third-party Integrations
+        { '@type': 'ListItem', position: 16, name: t('components.wang_editor'), url: `${DOMAIN}${localePath('/components/wang-editor-test')}` },
+        { '@type': 'ListItem', position: 17, name: t('components.youtube'), url: `${DOMAIN}${localePath('/components/youtube-test')}` },
+        { '@type': 'ListItem', position: 18, name: '自製 Swiper 測試', url: `${DOMAIN}${localePath('/components/swiper-test')}` },
+        { '@type': 'ListItem', position: 19, name: 'SwiperJS 測試', url: `${DOMAIN}${localePath('/components/swiper-js-test')}` },
+        { '@type': 'ListItem', position: 20, name: 'Banner 輪播組件測試', url: `${DOMAIN}${localePath('/components/banner-demo')}` },
+        { '@type': 'ListItem', position: 21, name: t('ripples_component_page.hero.title'), url: `${DOMAIN}${localePath('/components/ripples-component')}` },
+        // Combined Tests
+        { '@type': 'ListItem', position: 22, name: '組件綜合測試（Tabs、下拉重載、WangEditor、Youtube）', url: `${DOMAIN}${localePath('/components/components-test')}` }
+      ]
+    }
+  })
+]);
+
 // UI Components
 const uiComponents = computed(() => [
   { to: localePath('/components/tab-test'), label: t('components.tab') },

@@ -74,6 +74,20 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('socket_test_page.hero.title'),
+    description: t('socket_test_page.hero.description'),
+    url: `${DOMAIN}${localePath('/socket-test')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/socket/socket-v.05.webp`
+  })
+]);
+
 // Socket Tests List
 const socketTests = computed(() => [
   {

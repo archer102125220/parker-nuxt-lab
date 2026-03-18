@@ -210,6 +210,20 @@ useHeadMataData({
   title: t('indexeddb_demo_page.hero.title')
 });
 
+const localePath = useLocalePath();
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('indexeddb_demo_page.hero.title'),
+    description: t('indexeddb_demo_page.hero.description'),
+    url: `${DOMAIN}${localePath('/indexeddb-demo')}`,
+    inLanguage: ['zh-TW', 'en']
+  })
+]);
+
 // Database setup
 const dbName = 'indexeddb_demo';
 const dbVersion = 1;

@@ -80,6 +80,20 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('firebase_page.hero.title'),
+    description: t('firebase_page.hero.description'),
+    url: `${DOMAIN}${localePath('/firebase')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/firebase/firebase-v.07.webp`
+  })
+]);
+
 // Firebase Tests List
 const firebaseTests = computed(() => [
   {

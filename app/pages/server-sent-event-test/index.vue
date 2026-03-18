@@ -68,6 +68,20 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('sse_page.hero.title'),
+    description: t('sse_page.hero.description'),
+    url: `${DOMAIN}${localePath('/server-sent-event-test')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/server-sent-event/server-sent-event-v.04.webp`
+  })
+]);
+
 // SSE Tests List
 const sseTests = computed(() => [
   {

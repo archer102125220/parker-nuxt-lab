@@ -176,7 +176,22 @@ useHeadMataData({
   ]
 });
 
-const nuxtApp = useNuxtApp();
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+const localePath = useLocalePath();
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('web_authn_page.hero.title'),
+    description: t('web_authn_page.hero.description'),
+    url: `${DOMAIN}${localePath('/web-authn')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/web-authn/web-authn-v.06.webp`
+  })
+]);
+
+
 
 const credentialId = ref(null);
 const credentialPublicKeyPem = ref(null);

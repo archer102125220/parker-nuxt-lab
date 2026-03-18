@@ -171,6 +171,21 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+const localePath = useLocalePath();
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('frontend_api_cache_page.hero.title'),
+    description: t('frontend_api_cache_page.hero.description'),
+    url: `${DOMAIN}${localePath('/frontend-api-cach-test')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/frontend-api-cach/frontend-api-cach-v.06.webp`
+  })
+]);
+
 const nuxtApp = useNuxtApp();
 const { $store } = nuxtApp;
 

@@ -109,13 +109,64 @@
 </template>
 
 <script setup>
-useHeadMataData();
 definePageMeta({
   title: 'system.defaultTitle'
 });
 
 const localePath = useLocalePath();
 const { t } = useI18n();
+
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+useHeadMataData({
+  title: t('system.defaultTitle'),
+  description: t('home.hero.description')
+});
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebSite({
+    name: t('system.systemName'),
+    url: DOMAIN,
+    description: t('home.hero.description'),
+    inLanguage: ['zh-TW', 'en'],
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${DOMAIN}/search?q={search_term_string}`
+      },
+      'query-input': 'required name=search_term_string'
+    }
+  }),
+  defineWebPage({
+    '@type': ['WebPage', 'CollectionPage'],
+    name: t('system.defaultTitle'),
+    description: t('home.hero.description'),
+    url: DOMAIN,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/ico/web-app-manifest-512x512.png`,
+    author: {
+      '@type': 'Person',
+      name: 'Parker Chen',
+      url: DOMAIN + localePath('/about')
+    },
+    about: {
+      '@type': 'SoftwareApplication',
+      name: 'Parker Nuxt Lab',
+      applicationCategory: 'DeveloperApplication',
+      description: t('home.hero.description'),
+      operatingSystem: 'Web Browser',
+      url: DOMAIN,
+      featureList: [
+        t('home.features.pwa.title'),
+        t('home.features.realtime.title'),
+        t('home.features.ai.title'),
+        t('home.features.testing.title')
+      ]
+    }
+  })
+]);
 
 // Template refs
 const navigationRef = ref(null);

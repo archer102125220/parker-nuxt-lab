@@ -68,6 +68,45 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': ['WebPage', 'CollectionPage'],
+    name: t('css_drawing_page.hero.title'),
+    description: t('css_drawing_page.hero.description'),
+    url: `${DOMAIN}${localePath('/css-drawing')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/css-drawing/css-drawing-v.05.webp`,
+    author: {
+      '@type': 'Person',
+      name: 'Parker Chen',
+      url: `${DOMAIN}${localePath('/about')}`
+    },
+    about: {
+      '@type': 'SoftwareApplication',
+      name: 'Parker Nuxt Lab',
+      applicationCategory: 'DeveloperApplication',
+      description: t('css_drawing_page.hero.description'),
+      operatingSystem: 'Web Browser',
+      url: DOMAIN
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: t('css_drawing_page.hero.title'),
+      description: t('css_drawing_page.hero.subtitle'),
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS 三角形測試', url: `${DOMAIN}${localePath('/css-drawing/triangle-test')}` },
+        { '@type': 'ListItem', position: 2, name: 'CSS 三角形滿版測試', url: `${DOMAIN}${localePath('/css-drawing/triangle-full-test')}` },
+        { '@type': 'ListItem', position: 3, name: 'CSS 三角形滿版動畫測試', url: `${DOMAIN}${localePath('/css-drawing/triangle-anime-test')}` },
+        { '@type': 'ListItem', position: 4, name: 'CSS 六邊形測試', url: `${DOMAIN}${localePath('/css-drawing/hexagon-test')}` },
+        { '@type': 'ListItem', position: 5, name: 'SVG 替換顏色測試', url: `${DOMAIN}${localePath('/css-drawing/svg-color-change')}` }
+      ]
+    }
+  })
+]);
+
 // CSS Drawing Tests List
 const drawingTests = computed(() => [
   {

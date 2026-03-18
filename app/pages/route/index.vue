@@ -68,6 +68,20 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('route_page.hero.title'),
+    description: t('route_page.hero.description'),
+    url: `${DOMAIN}${localePath('/route')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/route/route-v.05.webp`
+  })
+]);
+
 // Route Tests List
 const routeTests = computed(() => [
   {

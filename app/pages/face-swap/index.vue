@@ -88,6 +88,20 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('face_swap_page.hero.title'),
+    description: t('face_swap_page.hero.description'),
+    url: `${DOMAIN}${localePath('/face-swap')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/face-swap/face-swap-v.02.png`
+  })
+]);
+
 // Face Swap Versions
 const faceSwapVersions = computed(() => [
   {

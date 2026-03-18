@@ -183,6 +183,21 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+const localePath = useLocalePath();
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('fido2_lib_page.hero.title'),
+    description: t('fido2_lib_page.hero.description'),
+    url: `${DOMAIN}${localePath('/fido2-lib')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/fido2-lib/fido2-lib-v.09.webp`
+  })
+]);
+
 const nuxtApp = useNuxtApp();
 const system = nuxtApp.$store?.system;
 

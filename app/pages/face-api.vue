@@ -213,7 +213,22 @@ useHeadMataData({
   ]
 });
 
-// https://github.com/justadudewhohacks/face-api.js/tree/master
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+const localePath = useLocalePath();
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('face_api_page.hero.title'),
+    description: t('face_api_page.hero.description'),
+    url: `${DOMAIN}${localePath('/face-api')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/face-api/face-api-v.04.webp`
+  })
+]);
+
+
 // https://justadudewhohacks.github.io/face-api.js/docs/globals.html
 // https://gitee.com/tongjh/face-api-demo
 
