@@ -4881,6 +4881,14 @@
     hookable "^5.5.3"
     unhead "2.0.19"
 
+"@unhead/vue@^2.1.12":
+  version "2.1.12"
+  resolved "https://registry.yarnpkg.com/@unhead/vue/-/vue-2.1.12.tgz#e5798784b1815299971b7acb19f570ee8dcb5128"
+  integrity sha512-zEWqg0nZM8acpuTZE40wkeUl8AhIe0tU0OkilVi1D4fmVjACrwoh5HP6aNqJ8kUnKsoy6D+R3Vi/O+fmdNGO7g==
+  dependencies:
+    hookable "^6.0.1"
+    unhead "2.1.12"
+
 "@unocss/core@66.6.6", "@unocss/core@^66.5.10", "@unocss/core@^66.6.6":
   version "66.6.6"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-66.6.6.tgz#49f27908fcd639205cb99ce175ee750c61111b66"
@@ -14821,6 +14829,13 @@ unhead@2.1.10:
   version "2.1.10"
   resolved "https://registry.yarnpkg.com/unhead/-/unhead-2.1.10.tgz#084234588b9d604db8b04acb7650606730b37c33"
   integrity sha512-We8l9uNF8zz6U8lfQaVG70+R/QBfQx1oPIgXin4BtZnK2IQpz6yazQ0qjMNVBDw2ADgF2ea58BtvSK+XX5AS7g==
+  dependencies:
+    hookable "^6.0.1"
+
+unhead@2.1.12, unhead@^2.1.12:
+  version "2.1.12"
+  resolved "https://registry.yarnpkg.com/unhead/-/unhead-2.1.12.tgz#21b524a43aefde352a1ada13e4802b5df48163a6"
+  integrity sha512-iTHdWD9ztTunOErtfUFk6Wr11BxvzumcYJ0CzaSCBUOEtg+DUZ9+gnE99i8QkLFT2q1rZD48BYYGXpOZVDLYkA==
   dependencies:
     hookable "^6.0.1"
 
