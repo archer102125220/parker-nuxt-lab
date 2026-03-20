@@ -527,6 +527,8 @@ export default defineNuxtConfig({
 
       // 排除大型文件和不必要的資源
       globIgnores: [
+        '**/google*.html', // 排除所有以 google 開頭的驗證檔
+        '**/test.html', // 或是其他不需要快取的測試檔
         '**/ai_models/**', // 排除 face-api 模型文件（15MB），改用運行時快取
         '**/node_modules/**',
         '**/*.map'
