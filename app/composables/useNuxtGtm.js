@@ -1,8 +1,8 @@
 export function useNuxtGtm() {
-  if (import.meta.server === true) return null;
   const nuxtApp = useNuxtApp();
 
   const gtm = useState('gtm_nuxt', () => {
+    if (import.meta.server === true) return null;
     return nuxtApp.$gtm || null;
   });
 
