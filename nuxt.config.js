@@ -3,6 +3,7 @@ import os from 'os';
 import fs from 'fs-extra';
 import path from 'path';
 
+import glsl from 'vite-plugin-glsl';
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
@@ -346,6 +347,7 @@ export default defineNuxtConfig({
           }
         }
       : {}),
+    plugins: [glsl()],
 
     server: {
       hmr: process.env.HMR !== 'false' ? undefined : false

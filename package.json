@@ -128,6 +128,7 @@
         "sass-loader": "^14.2.1",
         "sequelize-cli": "^6.6.3",
         "spreadsheet-to-json": "^2.0.0",
+        "vite-plugin-glsl": "^1.6.0",
         "vite-plugin-vuetify": "^2.0.3",
         "vitest": "^4.0.13"
     }
