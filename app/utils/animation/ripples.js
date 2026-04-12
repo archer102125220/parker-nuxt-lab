@@ -372,6 +372,9 @@ export class Ripples {
     try {
       return new ImageData(width, height);
     } catch (e) {
+      if (import.meta.dev) {
+        console.error(e);
+      }
       // Fallback for IE
       const canvas = document.createElement('canvas');
       return canvas.getContext('2d').createImageData(width, height);
@@ -545,6 +548,9 @@ export class Ripples {
     try {
       $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
+      if (import.meta.dev) {
+        console.error(error);
+      }
       $elStyle = this.$el.style;
     }
     const newImageSource =
@@ -705,6 +711,9 @@ export class Ripples {
     try {
       $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
+      if (import.meta.dev) {
+        console.error(error);
+      }
       $elStyle = this.$el.style;
     }
     let backgroundSize = $elStyle.backgroundSize;
@@ -889,6 +898,9 @@ export class Ripples {
     try {
       $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
+      if (import.meta.dev) {
+        console.error(error);
+      }
       $elStyle = this.$el.style;
     }
     const inlineCss = $elStyle.backgroundImage;
@@ -914,6 +926,9 @@ export class Ripples {
     try {
       $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
+      if (import.meta.dev) {
+        console.error(error);
+      }
       $elStyle = this.$el.style;
     }
     const borderLeft = parseInt($elStyle.borderLeftWidth) || 0,
