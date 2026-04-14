@@ -346,6 +346,11 @@ const linkList = computed(() => [
     to: localePath('/krpano-demo'),
     label: t('index.krpano_demo'),
     description: t('home.nav.krpano_demo_desc')
+  },
+  {
+    to: localePath('/animation'),
+    label: t('index.animation'),
+    description: t('home.nav.animation_desc')
   }
 ]);
 </script>

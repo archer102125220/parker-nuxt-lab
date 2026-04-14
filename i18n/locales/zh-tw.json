@@ -76,7 +76,8 @@
             "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔",
             "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試",
             "krpano_demo_desc": "使用 Krpano 實現互動式 360° 全景圖瀏覽",
-            "notes_desc": "日常工作與私下研究的 SEO 及技術實戰紀錄"
+            "notes_desc": "日常工作與私下研究的 SEO 及技術實戰紀錄",
+            "animation_desc": "各種動畫效果與功能展示"
         },
         "stats": {
             "components": "組件數量",
