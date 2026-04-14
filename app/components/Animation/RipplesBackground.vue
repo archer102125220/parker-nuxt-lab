@@ -280,7 +280,9 @@ defineExpose({
 
 <template>
   <div ref="containerRef" class="ripples_background">
-    <slot />
+    <div class="ripples_background-content">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -296,5 +298,19 @@ defineExpose({
   /* Visual - for Ripples animation */
   background-size: cover;
   background-position: center;
+
+  [css-ripples-canvas] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  &-content {
+    position: relative;
+    z-index: 1;
+  }
 }
 </style>

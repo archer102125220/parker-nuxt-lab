@@ -54,6 +54,11 @@ import renderFrag from '@/app/shaders/ripples/render.frag';
  * @see https://github.com/archer102125220/javascript-ripples
  */
 export class Ripples {
+  #ripplesMousemove = null;
+  #ripplesTouchmove = null;
+  #ripplesTouchstart = null;
+  #ripplesMousedown = null;
+
   /**
    * 建立 Ripples 實例
    *
@@ -81,6 +86,7 @@ export class Ripples {
 
     // Init WebGL canvas
     const canvas = document.createElement('canvas');
+    canvas.setAttribute('css-ripples-canvas', 'true');
     canvas.width = this.$el.clientWidth;
     canvas.height = this.$el.clientHeight;
     this.canvas = canvas;
@@ -207,10 +213,16 @@ export class Ripples {
     requestAnimationFrame(step);
 
     // Extend the css
-    this.style = document.createElement('style');
-    this.style.innerText =
-      '.javascript-ripples { position: relative; z-index: 0; }';
-    document.querySelector('head').prepend(this.style);
+    const style = document.getElementById('ripples-style');
+    if (style instanceof HTMLStyleElement) {
+      this.style = style;
+    } else {
+      this.style = document.createElement('style');
+      this.style.id = 'ripples-style';
+      this.style.innerText =
+        '.javascript-ripples { position: relative; z-index: 0; }';
+      document.querySelector('head')?.prepend(this.style);
+    }
   }
 
   /**
@@ -503,42 +515,30 @@ export class Ripples {
   };
 
   setupPointerEvents() {
-    const pointerEventsEnabled = () => {
-      return this.visible && this.running && this.interactive;
+    this.#ripplesMousemove = (e) => {
+      this.handleUserDrop(e);
     };
-
-    const dropAtPointer = (pointer, big) => {
-      if (pointerEventsEnabled()) {
-        this.dropAtPointer(
-          pointer,
-          this.dropRadius * (big ? 1.5 : 1),
-          big ? 0.14 : 0.01
-        );
+    this.#ripplesTouchmove = (e) => {
+      const touches = e.originalEvent.changedTouches;
+      for (let i = 0; i < touches.length; i++) {
+        this.handleUserDrop(touches[i]);
       }
+    };
+    this.#ripplesTouchstart = (e) => {
+      const touches = e.originalEvent.changedTouches;
+      for (let i = 0; i < touches.length; i++) {
+        this.handleUserDrop(touches[i], true);
+      }
+    };
+    this.#ripplesMousedown = (e) => {
+      this.handleUserDrop(e, true);
     };
 
     // Start listening to pointer events
-    this.$el.addEventListener('mousemove', (e) => {
-      dropAtPointer(e);
-    });
-
-    this.$el.addEventListener('touchmove', (e) => {
-      const touches = e.originalEvent.changedTouches;
-      for (let i = 0; i < touches.length; i++) {
-        dropAtPointer(touches[i]);
-      }
-    });
-
-    this.$el.addEventListener('touchstart', (e) => {
-      const touches = e.originalEvent.changedTouches;
-      for (let i = 0; i < touches.length; i++) {
-        dropAtPointer(touches[i]);
-      }
-    });
-
-    this.$el.addEventListener('mousedown', (e) => {
-      dropAtPointer(e, true);
-    });
+    this.$el.addEventListener('mousemove', this.#ripplesMousemove);
+    this.$el.addEventListener('touchmove', this.#ripplesTouchmove);
+    this.$el.addEventListener('touchstart', this.#ripplesTouchstart);
+    this.$el.addEventListener('mousedown', this.#ripplesMousedown);
   }
 
   // Load the image either from the options or the element's CSS rules.
@@ -840,24 +840,15 @@ export class Ripples {
   }
 
   initShaders() {
-    this.dropProgram = this.createProgram(
-      basicVert,
-      dropFrag
-    );
+    this.dropProgram = this.createProgram(basicVert, dropFrag);
 
-    this.updateProgram = this.createProgram(
-      basicVert,
-      updateFrag
-    );
+    this.updateProgram = this.createProgram(basicVert, updateFrag);
     Ripples.gl.uniform2fv(
       this.updateProgram.locations.delta,
       this.textureDelta
     );
 
-    this.renderProgram = this.createProgram(
-      renderVert,
-      renderFrag
-    );
+    this.renderProgram = this.createProgram(renderVert, renderFrag);
     Ripples.gl.uniform2fv(
       this.renderProgram.locations.delta,
       this.textureDelta
@@ -933,12 +924,28 @@ export class Ripples {
     }
     const borderLeft = parseInt($elStyle.borderLeftWidth) || 0,
       borderTop = parseInt($elStyle.borderTopWidth) || 0;
-    this.constructor.drop.apply(this, [
-      pointer.pageX - this.$el.offsetLeft - borderLeft,
-      pointer.pageY - this.$el.offsetTop - borderTop,
+
+    const clientX =
+      'clientX' in pointer ? pointer.clientX : pointer.touches[0].clientX;
+    const clientY =
+      'clientY' in pointer ? pointer.clientY : pointer.touches[0].clientY;
+    const rect = this.$el.getBoundingClientRect();
+
+    this.drop(
+      clientX - rect.left - borderLeft,
+      clientY - rect.top - borderTop,
       radius,
       strength
-    ]);
+    );
+  }
+  handleUserDrop(pointer, big) {
+    if (this.visible && this.running && this.interactive) {
+      this.dropAtPointer(
+        pointer,
+        this.dropRadius * (big ? 1.5 : 1),
+        big ? 0.14 : 0.01
+      );
+    }
   }
 
   /**
@@ -956,7 +963,7 @@ export class Ripples {
    * @example
    * ripples.drop(100, 200, 20, 0.04);
    */
-  static drop(x, y, radius, strength) {
+  drop(x, y, radius, strength) {
     Ripples.gl = this.context;
 
     const elWidth = this.$el.getBoundingClientRect().width;
@@ -992,7 +999,7 @@ export class Ripples {
    * 更新 canvas 尺寸以匹配元素大小
    * @returns {void}
    */
-  static updateSize() {
+  updateSize() {
     const newWidth = this.$el.getBoundingClientRect().width,
       newHeight = this.$el.getBoundingClientRect().height;
 
@@ -1006,11 +1013,11 @@ export class Ripples {
    * 銷毀 Ripples 實例並清理資源
    * @returns {void}
    */
-  static destroy() {
-    this.$el.removeEventListener('mousemove', this.ripplesMousemove);
-    this.$el.removeEventListener('touchmove', this.ripplesTouchmove);
-    this.$el.removeEventListener('touchstart', this.ripplesTouchstart);
-    this.$el.removeEventListener('mousedown', this.ripplesMousedown);
+  destroy() {
+    this.$el.removeEventListener('mousemove', this.#ripplesMousemove);
+    this.$el.removeEventListener('touchmove', this.#ripplesTouchmove);
+    this.$el.removeEventListener('touchstart', this.#ripplesTouchstart);
+    this.$el.removeEventListener('mousedown', this.#ripplesMousedown);
     this.$el.classList.remove('javascript-ripples');
     this.$el.ripples = undefined;
 
@@ -1031,7 +1038,7 @@ export class Ripples {
    * 顯示水波紋效果
    * @returns {void}
    */
-  static show() {
+  show() {
     this.visible = true;
 
     this.canvas.style.dispaly = '';
@@ -1042,7 +1049,7 @@ export class Ripples {
    * 隱藏水波紋效果
    * @returns {void}
    */
-  static hide() {
+  hide() {
     this.visible = false;
 
     this.canvas.style.dispaly = 'none';
@@ -1053,7 +1060,7 @@ export class Ripples {
    * 暫停水波紋動畫
    * @returns {void}
    */
-  static pause() {
+  pause() {
     this.running = false;
   }
 
@@ -1061,7 +1068,7 @@ export class Ripples {
    * 繼續播放水波紋動畫
    * @returns {void}
    */
-  static play() {
+  play() {
     this.running = true;
   }
 
@@ -1072,7 +1079,7 @@ export class Ripples {
    * @param {*} value - 屬性值
    * @returns {void}
    */
-  static set(property, value) {
+  set(property, value) {
     switch (property) {
       case 'dropRadius':
       case 'perturbance':
@@ -1147,7 +1154,10 @@ export class Ripples {
     if (data instanceof Ripples === false) {
       targetElement.ripples = new Ripples(targetElement, options);
     } else if (typeof option == 'string') {
-      Ripples[option].apply(data, args);
+      const method = data[option];
+      if (typeof method === 'function') {
+        method.apply(data, args);
+      }
     }
 
     return targetElement.ripples;
