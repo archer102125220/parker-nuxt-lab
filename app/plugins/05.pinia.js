@@ -1,4 +1,5 @@
 import { useSystemStore } from '@app/store/system';
+import { useWindowSize } from '@app/composables/useWindowSize';
 
 export default defineNuxtPlugin(({ $pinia }) => {
   const system = useSystemStore($pinia);
@@ -20,11 +21,14 @@ export default defineNuxtPlugin(({ $pinia }) => {
       store: {
         system,
         clientInit() {
-          if (typeof window._pluginwareHandleResize_ !== 'function') {
-            function _pluginwareHandleResize_() {
+          const { windowSize } = useWindowSize();
+
+          const stopWatch = watch(
+            () => windowSize,
+            (newWindowSize) => {
               system.setWindowInnerSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
+                width: newWindowSize.width,
+                height: newWindowSize.height,
                 // 最好與 style\mixin.scss 的 @mixin mobile 設定一樣
                 isMobile: window.matchMedia('(max-width: 707px)').matches,
                 // 最好與 style\mixin.scss 的 @mixin tabletOnly 設定一樣
@@ -35,19 +39,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
                 isTablet: window.matchMedia('(max-width: 1140px)').matches
               });
             }
-            window._pluginwareHandleResize_ = _pluginwareHandleResize_;
-            _pluginwareHandleResize_();
-            window.addEventListener('resize', window._pluginwareHandleResize_);
-          }
+          );
 
-          if (typeof window._pluginwareHandleResize_ !== 'function') {
-            return () =>
-              window.removeEventListener(
-                'resize',
-                window._pluginwareHandleResize_
-              );
-          }
-          return () => {};
+          return stopWatch;
         }
       }
     }

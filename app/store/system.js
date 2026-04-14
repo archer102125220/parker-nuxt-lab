@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 import { getLocalLanguage } from '@app/utils/third-party/get-local-language';
+import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from '@app/composables/useWindowSize';
 
 const DIALOG_PROPS = {
   hideTitle: true,
@@ -28,8 +29,8 @@ export const useSystemStore = defineStore('system', {
     loading: false,
     messageState: { text: '', type: 'success' },
     cantResendOTPTime: Date.now(),
-    windowInnerWidth: 1920,
-    windowInnerHeight: 1080,
+    windowInnerWidth: DEFAULT_WIDTH,
+    windowInnerHeight: DEFAULT_HEIGHT,
     isMobile: false,
     isTabletOnly: false,
     isTablet: false,

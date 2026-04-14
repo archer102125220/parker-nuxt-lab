@@ -64,6 +64,7 @@
         "jwt-decode": "^4.0.0",
         "lodash": "^4.17.21",
         "lru-cache": "^11.0.0",
+        "mdn-polyfills": "^5.20.0",
         "nanoid": "^5.1.6",
         "node-gyp": "^11.2.0",
         "nuxt": "^4.1.3",

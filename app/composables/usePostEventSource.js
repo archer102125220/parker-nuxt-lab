@@ -1,4 +1,4 @@
-import { dayjs } from '@app/plugins/01.day';
+import { dayjs } from '@app/plugins/02.day';
 import { PostEventSource } from '@app/utils/request/post-event-source';
 
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';

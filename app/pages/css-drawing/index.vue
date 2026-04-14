@@ -36,9 +36,7 @@
     <!-- CSS Drawing Tests List -->
     <section class="css_drawing_page-section">
       <div class="css_drawing_page-section-container">
-        <h2 class="css_drawing_page-section-title">
-          CSS 繪圖測試列表
-        </h2>
+        <h2 class="css_drawing_page-section-title">CSS 繪圖測試列表</h2>
         <div class="css_drawing_page-grid">
           <LinkCard
             v-for="test in drawingTests"
@@ -97,11 +95,30 @@ useSchemaOrg([
       name: t('css_drawing_page.hero.title'),
       description: t('css_drawing_page.hero.subtitle'),
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'CSS 三角形測試', url: `${DOMAIN}${localePath('/css-drawing/triangle-test')}` },
-        { '@type': 'ListItem', position: 2, name: 'CSS 三角形滿版測試', url: `${DOMAIN}${localePath('/css-drawing/triangle-full-test')}` },
-        { '@type': 'ListItem', position: 3, name: 'CSS 三角形滿版動畫測試', url: `${DOMAIN}${localePath('/css-drawing/triangle-anime-test')}` },
-        { '@type': 'ListItem', position: 4, name: 'CSS 六邊形測試', url: `${DOMAIN}${localePath('/css-drawing/hexagon-test')}` },
-        { '@type': 'ListItem', position: 5, name: 'SVG 替換顏色測試', url: `${DOMAIN}${localePath('/css-drawing/svg-color-change')}` }
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'CSS 三角形測試',
+          url: `${DOMAIN}${localePath('/css-drawing/triangle-test')}`
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'CSS 三角形滿版測試',
+          url: `${DOMAIN}${localePath('/css-drawing/triangle-full-test')}`
+        },
+        {
+          '@type': 'ListItem',
+          position: 4,
+          name: 'CSS 六邊形測試',
+          url: `${DOMAIN}${localePath('/css-drawing/hexagon-test')}`
+        },
+        {
+          '@type': 'ListItem',
+          position: 5,
+          name: 'SVG 替換顏色測試',
+          url: `${DOMAIN}${localePath('/css-drawing/svg-color-change')}`
+        }
       ]
     }
   })
@@ -116,10 +133,6 @@ const drawingTests = computed(() => [
   {
     to: localePath('/css-drawing/triangle-full-test'),
     label: 'CSS 三角形滿版測試'
-  },
-  {
-    to: localePath('/css-drawing/triangle-anime-test'),
-    label: 'CSS 三角形滿版動畫測試'
   },
   {
     to: localePath('/css-drawing/hexagon-test'),
@@ -181,7 +194,11 @@ const drawingTests = computed(() => [
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -324,11 +341,21 @@ const drawingTests = computed(() => [
     // Animation
     animation: fade-in-up 0.5s ease-out both;
 
-    &:nth-child(1) { animation-delay: 0.05s; }
-    &:nth-child(2) { animation-delay: 0.1s; }
-    &:nth-child(3) { animation-delay: 0.15s; }
-    &:nth-child(4) { animation-delay: 0.2s; }
-    &:nth-child(5) { animation-delay: 0.25s; }
+    &:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+    &:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+    &:nth-child(5) {
+      animation-delay: 0.25s;
+    }
   }
 }
 

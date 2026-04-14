@@ -25,7 +25,8 @@
         "swagger_doc": "Swagger API 文檔",
         "indexeddb_demo": "IndexedDB ORM 展示",
         "krpano_demo": "Krpano 全景圖展示",
-        "notes": "Notion 筆記"
+        "notes": "Notion 筆記",
+        "animation": "動畫效果展示"
     },
     "home": {
         "hero": {
@@ -1278,6 +1279,32 @@
             "url_placeholder": "輸入圖片網址",
             "confirm": "確認",
             "cancel": "取消"
+        }
+    },
+    "animation_page": {
+        "badge": "Animation Lab",
+        "hero": {
+            "title": "動畫效果展示",
+            "subtitle": "CSS、WebGL 與動畫庫整合",
+            "description": "集中展示各種動畫效果組件，包含文字特效、水波紋背景、CSS 動畫等視覺互動技術"
+        },
+        "intro": {
+            "text": "本區塊匯集各類動畫相關組件與效果展示，涵蓋純 CSS 動畫、WebGL 水波紋特效，以及自製文字動畫組件等，作為動畫技術的整合實驗室。"
+        },
+        "demos": {
+            "title": "動畫效果選單",
+            "enter_label": {
+                "label": "文字逐字進入特效",
+                "description": "自製文字逐字動態顯示組件，支援自訂進入動畫效果"
+            },
+            "ripples": {
+                "label": "水波紋背景元件",
+                "description": "基於 WebGL 的互動式水波紋背景，支援滑鼠觸控互動與自動水滴效果"
+            },
+            "triangle_anime": {
+                "label": "CSS 三角形動畫",
+                "description": "使用 CSS 搭配 anime.js 的三角形進場動畫效果展示"
+            }
         }
     }
 }

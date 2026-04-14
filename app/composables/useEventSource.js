@@ -1,4 +1,4 @@
-import { dayjs } from '@app/plugins/01.day';
+import { dayjs } from '@app/plugins/02.day';
 
 const DOMAIN = (import.meta.dev === true ? window?.location?.origin : import.meta.env.VITE_DOMAIN || window?.location?.origin) || '';
 const SERVER_SENT_EVENT_BASE_PATH = import.meta.env.VITE_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';

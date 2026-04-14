@@ -26,7 +26,8 @@
         "web_rtc": "WebRTC Test",
         "indexeddb_demo": "IndexedDB ORM Demo",
         "krpano_demo": "Krpano Panorama Demo",
-        "notes": "Notion Notes"
+        "notes": "Notion Notes",
+        "animation": "Animation Showcase"
     },
     "home": {
         "hero": {
@@ -1279,6 +1280,32 @@
             "url_placeholder": "Enter image URL",
             "confirm": "Add",
             "cancel": "Cancel"
+        }
+    },
+    "animation_page": {
+        "badge": "Animation Lab",
+        "hero": {
+            "title": "Animation Showcase",
+            "subtitle": "CSS, WebGL & Animation Library Integrations",
+            "description": "A centralized showcase of animation components including text effects, water ripple backgrounds, CSS animations and other visual interaction techniques"
+        },
+        "intro": {
+            "text": "This section brings together various animation-related components and effect demos, covering pure CSS animations, WebGL water ripple effects, and custom text animation components — serving as an integrated animation technology laboratory."
+        },
+        "demos": {
+            "title": "Animation Collection",
+            "enter_label": {
+                "label": "Character-by-Character Text Effect",
+                "description": "Custom component for animated character-by-character text reveal with customizable entrance effects"
+            },
+            "ripples": {
+                "label": "Ripples Background Component",
+                "description": "WebGL-based interactive water ripple background with mouse/touch interaction and auto drops"
+            },
+            "triangle_anime": {
+                "label": "CSS Triangle Animation",
+                "description": "CSS triangle entrance animation effect with anime.js integration"
+            }
         }
     }
 }
