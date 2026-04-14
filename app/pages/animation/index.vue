@@ -14,9 +14,6 @@
       </div>
 
       <div class="animation_page-hero-content">
-        <div class="animation_page-hero-content-badge">
-          {{ $t('animation_page.badge') }}
-        </div>
         <h1 class="animation_page-hero-content-title">
           {{ $t('animation_page.hero.title') }}
         </h1>
@@ -29,7 +26,7 @@
       </div>
     </section>
 
-    <!-- Intro Section -->
+    <!-- Introduction -->
     <section class="animation_page-intro">
       <div class="animation_page-section-container">
         <p class="animation_page-intro-text">
@@ -39,33 +36,20 @@
     </section>
 
     <!-- Animation Demos Grid -->
-    <section class="animation_page-demos">
+    <section class="animation_page-section">
       <div class="animation_page-section-container">
         <h2 class="animation_page-section-title">
           {{ $t('animation_page.demos.title') }}
         </h2>
         <div class="animation_page-grid">
-          <NuxtLink
+          <LinkCard
             v-for="item in demoItems"
             :key="item.to"
             :to="item.to"
-            class="animation_page-grid-card"
-          >
-            <div class="animation_page-grid-card-icon-wrap">
-              <span class="animation_page-grid-card-icon-wrap-emoji">{{
-                item.emoji
-              }}</span>
-            </div>
-            <div class="animation_page-grid-card-body">
-              <h3 class="animation_page-grid-card-body-title">
-                {{ item.label }}
-              </h3>
-              <p class="animation_page-grid-card-body-description">
-                {{ item.description }}
-              </p>
-            </div>
-            <div class="animation_page-grid-card-arrow">›</div>
-          </NuxtLink>
+            :label="item.label"
+            :description="item.description"
+            class="animation_page-grid-item"
+          />
         </div>
       </div>
     </section>
@@ -86,22 +70,70 @@ useHeadMataData({
   ]
 });
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': ['WebPage', 'CollectionPage'],
+    name: t('animation_page.hero.title'),
+    description: t('animation_page.hero.description'),
+    url: `${DOMAIN}${localePath('/animation')}`,
+    inLanguage: ['zh-TW', 'en'],
+    author: {
+      '@type': 'Person',
+      name: 'Parker Chen',
+      url: `${DOMAIN}${localePath('/about')}`
+    },
+    about: {
+      '@type': 'SoftwareApplication',
+      name: 'Parker Nuxt Lab',
+      applicationCategory: 'DeveloperApplication',
+      description: t('animation_page.hero.description'),
+      operatingSystem: 'Web Browser',
+      url: DOMAIN
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: t('animation_page.demos.title'),
+      description: t('animation_page.intro.text'),
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: t('animation_page.demos.enter_label.label'),
+          url: `${DOMAIN}${localePath('/animation/enter-label')}`
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: t('animation_page.demos.ripples.label'),
+          url: `${DOMAIN}${localePath('/animation/ripples-component')}`
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: t('animation_page.demos.triangle_anime.label'),
+          url: `${DOMAIN}${localePath('/animation/triangle-anime-test')}`
+        }
+      ]
+    }
+  })
+]);
+
 const demoItems = computed(() => [
   {
     to: localePath('/animation/enter-label'),
-    emoji: '✍️',
     label: t('animation_page.demos.enter_label.label'),
     description: t('animation_page.demos.enter_label.description')
   },
   {
     to: localePath('/animation/ripples-component'),
-    emoji: '🌊',
     label: t('animation_page.demos.ripples.label'),
     description: t('animation_page.demos.ripples.description')
   },
   {
     to: localePath('/animation/triangle-anime-test'),
-    emoji: '🔺',
     label: t('animation_page.demos.triangle_anime.label'),
     description: t('animation_page.demos.triangle_anime.description')
   }
@@ -110,18 +142,21 @@ const demoItems = computed(() => [
 
 <style lang="scss" scoped>
 .animation_page {
-  min-height: 100vh;
-
   // ========================================
   // Hero Section
   // ========================================
   &-hero {
+    /* Positioning */
     position: relative;
+
+    /* Display & Box Model */
+    min-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 420px;
-    padding: 100px 24px 80px;
+    padding: 80px 20px;
+
+    /* Visual */
     overflow: hidden;
 
     &-background {
@@ -273,224 +308,152 @@ const demoItems = computed(() => [
     }
 
     &-content {
+      /* Positioning */
       position: relative;
       z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 860px;
+
+      /* Display & Box Model */
+      max-width: 800px;
       text-align: center;
 
-      &-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 16px;
-        margin-bottom: 24px;
-        border: 1px solid rgba(78, 205, 196, 0.4);
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #4ecdc4;
-        background: rgba(78, 205, 196, 0.1);
-        animation: fade-in-up 0.6s ease-out;
-      }
-
       &-title {
-        margin: 0 0 20px;
-        font-size: 56px;
+        /* Display & Box Model */
+        margin: 0 0 16px 0;
+
+        /* Typography */
+        font-size: 48px;
         font-weight: 800;
-        line-height: 1.1;
         color: #ffffff;
-        letter-spacing: -0.02em;
-        animation: fade-in-up 0.6s ease-out 0.1s both;
+
+        /* Animation */
+        animation: fade-in-up 0.6s ease-out;
 
         @media (max-width: 768px) {
-          font-size: 40px;
+          font-size: 36px;
         }
       }
 
       &-subtitle {
-        margin: 0 0 16px;
-        font-size: 22px;
+        /* Display & Box Model */
+        margin: 0 0 24px 0;
+
+        /* Typography */
+        font-size: 24px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.9);
-        animation: fade-in-up 0.6s ease-out 0.2s both;
+        color: rgba(255, 255, 255, 0.95);
+
+        /* Animation */
+        animation: fade-in-up 0.6s ease-out 0.1s both;
 
         @media (max-width: 768px) {
-          font-size: 18px;
+          font-size: 20px;
         }
       }
 
       &-description {
+        /* Display & Box Model */
         margin: 0;
-        max-width: 640px;
-        font-size: 17px;
-        line-height: 1.7;
-        color: rgba(255, 255, 255, 0.75);
-        animation: fade-in-up 0.6s ease-out 0.3s both;
+
+        /* Typography */
+        font-size: 18px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+
+        /* Animation */
+        animation: fade-in-up 0.6s ease-out 0.2s both;
+
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
       }
     }
   }
 
   // ========================================
-  // Section Container
+  // Common Section Styles
   // ========================================
-  &-section-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
+  &-section {
+    /* Display & Box Model */
+    padding: 60px 20px;
 
-  &-section-title {
-    margin: 0 0 48px 0;
-    font-size: 34px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--color-text-primary, #1a1a1a);
+    &-container {
+      /* Display & Box Model */
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-    @media (max-width: 768px) {
-      font-size: 28px;
-      margin-bottom: 32px;
+    &-title {
+      /* Display & Box Model */
+      margin: 0 0 40px 0;
+
+      /* Typography */
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-text-primary, #2d3748);
+      text-align: center;
+
+      @media (max-width: 768px) {
+        font-size: 28px;
+        margin-bottom: 32px;
+      }
     }
   }
 
   // ========================================
-  // Intro Section
+  // Introduction
   // ========================================
   &-intro {
-    padding: 60px 24px;
-    background: var(--color-bg-secondary, #f8f9fa);
+    /* Display & Box Model */
+    padding: 60px 20px;
+
+    /* Visual */
+    background: var(--color-bg-secondary, #f7fafc);
+
+    &-container {
+      /* Display & Box Model */
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
     &-text {
+      /* Typography */
       font-size: 18px;
       line-height: 1.8;
       color: var(--color-text-secondary, #4a5568);
       text-align: center;
-      max-width: 760px;
+
+      /* Display & Box Model */
+      max-width: 800px;
       margin: 0 auto;
     }
   }
 
   // ========================================
-  // Demos Section
-  // ========================================
-  &-demos {
-    padding: 80px 24px;
-    background: var(--color-bg-primary, #ffffff);
-  }
-
-  // ========================================
-  // Grid Cards
+  // Animation Demos Grid
   // ========================================
   &-grid {
+    /* Display & Box Model */
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 16px;
     }
 
-    &-card {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 28px 24px;
-      border: 1px solid rgba(0, 0, 0, 0.07);
-      border-radius: 20px;
-      text-decoration: none;
-      background: #ffffff;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    &-item {
+      /* Animation */
       animation: fade-in-up 0.5s ease-out both;
-      overflow: hidden;
-
-      &::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: linear-gradient(180deg, #44a08d, #4ecdc4);
-        content: '';
-        transform: scaleY(0);
-        transform-origin: top;
-        transition: transform 0.3s ease;
-      }
 
       &:nth-child(1) {
-        animation-delay: 0.1s;
+        animation-delay: 0.05s;
       }
       &:nth-child(2) {
-        animation-delay: 0.2s;
+        animation-delay: 0.1s;
       }
       &:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-
-      &:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 16px 40px rgba(68, 160, 141, 0.15);
-        border-color: rgba(68, 160, 141, 0.3);
-
-        &::before {
-          transform: scaleY(1);
-        }
-
-        .animation_page-grid-card-arrow {
-          transform: translateX(4px);
-          color: #44a08d;
-        }
-      }
-
-      &-icon-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        width: 64px;
-        height: 64px;
-        border-radius: 16px;
-        background: linear-gradient(
-          135deg,
-          rgba(68, 160, 141, 0.12) 0%,
-          rgba(78, 205, 196, 0.12) 100%
-        );
-
-        &-emoji {
-          font-size: 28px;
-          line-height: 1;
-        }
-      }
-
-      &-body {
-        flex: 1;
-        min-width: 0;
-
-        &-title {
-          margin: 0 0 6px;
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--color-text-primary, #1a1a1a);
-        }
-
-        &-description {
-          margin: 0;
-          font-size: 14px;
-          line-height: 1.5;
-          color: var(--color-text-secondary, #6c757d);
-        }
-      }
-
-      &-arrow {
-        flex-shrink: 0;
-        font-size: 22px;
-        color: #ccc;
-        transition: all 0.3s ease;
+        animation-delay: 0.15s;
       }
     }
   }
@@ -502,23 +465,11 @@ const demoItems = computed(() => [
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes float-particle {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(-20px) scale(1.2);
-    opacity: 1;
   }
 }
 </style>
