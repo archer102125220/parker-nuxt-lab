@@ -46,7 +46,7 @@
             max="100"
             step="1"
             thumb-label
-            class="waving_image_page-form-input"
+            class="waving_image_page-form-row-input"
           />
         </div>
 
@@ -58,7 +58,7 @@
             max="10"
             step="0.1"
             thumb-label
-            class="waving_image_page-form-input"
+            class="waving_image_page-form-row-input"
           />
         </div>
 
@@ -70,7 +70,7 @@
             max="5"
             step="0.1"
             thumb-label
-            class="waving_image_page-form-input"
+            class="waving_image_page-form-row-input"
           />
         </div>
 
@@ -82,16 +82,18 @@
             max="120"
             step="1"
             thumb-label
-            class="waving_image_page-form-input"
+            class="waving_image_page-form-row-input"
           />
         </div>
 
         <div class="waving_image_page-form-row">
-          <v-select
+          <VSelector
             v-model="form.direction"
-            :items="directionOptions"
+            display-key="title"
+            :menu-full-width="true"
+            :option-list="directionOptions"
             :label="$t('waving_image_page.direction')"
-            class="waving_image_page-form-input"
+            class="waving_image_page-form-row-selector"
           />
         </div>
       </form>
@@ -247,6 +249,12 @@ const form = reactive({
 
     &-row {
       margin-bottom: 16px;
+
+      &-selector {
+        border-radius: 6px;
+
+        background-color: rgb(237 237 237);
+      }
     }
   }
 }
