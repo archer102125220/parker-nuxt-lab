@@ -135,8 +135,8 @@ Keep secrets and endpoints in `.env` (or platform env). `nuxt.config.js` exposes
 
 The project uses Upstash Redis for real-time data storage in WebRTC features. Configure in `.env`:
 
-- `UPSTASH_REDIS_REST_URL`: Upstash Redis REST API URL
-- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis REST API Token
+- `UPSTASH_REDIS_V2_REST_URL`: Upstash Redis REST API URL
+- `UPSTASH_REDIS_V2_REST_TOKEN`: Upstash Redis REST API Token
 
 > **Redis Key Prefix**: All Redis keys use the `nuxt-lab:` prefix (e.g., `nuxt-lab:web-rtc-member-list-{roomId}`) to prevent key collisions when sharing the same Redis instance with other projects.
 

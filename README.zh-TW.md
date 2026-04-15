@@ -127,8 +127,8 @@ yarn test:codegen
 
 專案使用 Upstash Redis 作為 WebRTC 功能的即時資料儲存。請在 `.env` 中設定：
 
-- `UPSTASH_REDIS_REST_URL`：Upstash Redis REST API URL
-- `UPSTASH_REDIS_REST_TOKEN`：Upstash Redis REST API Token
+- `UPSTASH_REDIS_V2_REST_URL`：Upstash Redis REST API URL
+- `UPSTASH_REDIS_V2_REST_TOKEN`：Upstash Redis REST API Token
 
 > **Redis Key 前綴**：所有 Redis keys 都使用 `nuxt-lab:` 前綴（例如 `nuxt-lab:web-rtc-member-list-{roomId}`），以避免與其他共用同一 Redis 實例的專案產生 key 衝突。
 
