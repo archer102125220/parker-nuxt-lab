@@ -1,3 +1,5 @@
+import _debounce from 'lodash/debounce';
+
 export const DEFAULT_WIDTH = 1920;
 export const DEFAULT_HEIGHT = 1080;
 
@@ -5,17 +7,15 @@ export function useWindowSize() {
   const width = ref(typeof window !== 'undefined' ? window.innerWidth : DEFAULT_WIDTH);
   const height = ref(typeof window !== 'undefined' ? window.innerHeight : DEFAULT_HEIGHT);
 
-  const windowSize = reactive({
+  const windowSize = computed(() => ({
     width: width.value,
     height: height.value
-  });
+  }));
 
-  function handleResize() {
+  const handleResize = _debounce(() => {
     width.value = window.innerWidth;
     height.value = window.innerHeight;
-    windowSize.width = width.value;
-    windowSize.height = height.value;
-  }
+  }, 200);
 
   if (typeof window !== 'undefined') {
     handleResize();

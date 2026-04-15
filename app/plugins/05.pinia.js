@@ -24,8 +24,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
           const { windowSize } = useWindowSize();
 
           const stopWatch = watch(
-            () => windowSize,
+            () => windowSize.value,
             (newWindowSize) => {
+              console.log({ newWindowSize });
               system.setWindowInnerSize({
                 width: newWindowSize.width,
                 height: newWindowSize.height,
@@ -41,7 +42,9 @@ export default defineNuxtPlugin(({ $pinia }) => {
             }
           );
 
-          return stopWatch;
+          return () => {
+            stopWatch();
+          };
         }
       }
     }

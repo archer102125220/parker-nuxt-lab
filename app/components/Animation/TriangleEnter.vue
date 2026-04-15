@@ -48,10 +48,12 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import animejs from 'animejs';
 import _debounce from 'lodash/debounce';
+</script>
 
+<script setup>
 const triangleLeft = useTemplateRef('triangleLeft');
 const triangleRight = useTemplateRef('triangleRight');
 const triangleBgLeft = useTemplateRef('triangleBgLeft');

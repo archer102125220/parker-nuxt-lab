@@ -27,7 +27,11 @@
           icon
           size="small"
           variant="text"
-          :title="copiedId ? $t('web_rtc_socket_io_page.room.copied') : $t('web_rtc_socket_io_page.room.copy_id')"
+          :title="
+            copiedId
+              ? $t('web_rtc_socket_io_page.room.copied')
+              : $t('web_rtc_socket_io_page.room.copy_id')
+          "
           @click="handleCopyId"
         >
           <v-icon>{{ copiedId ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
@@ -36,7 +40,11 @@
           icon
           size="small"
           variant="text"
-          :title="copiedUrl ? $t('web_rtc_socket_io_page.room.copied') : $t('web_rtc_socket_io_page.room.copy_url')"
+          :title="
+            copiedUrl
+              ? $t('web_rtc_socket_io_page.room.copied')
+              : $t('web_rtc_socket_io_page.room.copy_url')
+          "
           @click="handleCopyUrl"
         >
           <v-icon>{{ copiedUrl ? 'mdi-check' : 'mdi-link' }}</v-icon>
@@ -63,7 +71,9 @@
               :key="streamItem?.id"
               class="web_rtc_sse_room_page-section-videos-others-item"
             >
-              <span class="web_rtc_sse_room_page-section-videos-others-item-label">
+              <span
+                class="web_rtc_sse_room_page-section-videos-others-item-label"
+              >
                 {{ $t('web_rtc_socket_io_page.room.remote_video') }}
               </span>
               <video
@@ -73,7 +83,10 @@
               />
             </div>
           </template>
-          <div v-else class="web_rtc_sse_room_page-section-videos-others-waiting">
+          <div
+            v-else
+            class="web_rtc_sse_room_page-section-videos-others-waiting"
+          >
             {{ $t('web_rtc_socket_io_page.room.waiting') }}
           </div>
         </div>
@@ -82,10 +95,12 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { nanoid } from 'nanoid';
 import _debounce from 'lodash/debounce';
+</script>
 
+<script setup>
 const { t } = useI18n();
 
 useHeadMataData({
@@ -386,13 +401,14 @@ onBeforeMount(async function () {
       display: grid;
       grid-template-columns: 1fr 2fr;
       gap: 16px;
-    align-items: end;
+      align-items: end;
 
       @media (max-width: 768px) {
         grid-template-columns: 1fr;
       }
 
-      &-self, &-others-item {
+      &-self,
+      &-others-item {
         position: relative;
         border-radius: 12px;
         overflow: hidden;

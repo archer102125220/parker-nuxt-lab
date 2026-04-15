@@ -1,4 +1,6 @@
 <script>
+import _debounce from 'lodash/debounce';
+
 export const DIRECTION_HORIZONTAL = 'horizontal';
 export const DIRECTION_VERTICAL = 'vertical';
 </script>
@@ -69,7 +71,7 @@ const amplitudeRatio = ref(null);
 const timeNow = ref(null);
 const timeLast = ref(null);
 const delta = ref(null);
-let distance = null;
+const distance = ref(null);
 const imgLoading = ref(true);
 const showImg = ref(true);
 const canvasWidth = ref(null);
@@ -79,17 +81,30 @@ const windowSize = computed(() => ({
   width: systemStore.windowInnerWidth,
   height: systemStore.windowInnerHeight
 }));
-const safeWavePadding = computed(() => {
-  return props.wavePadding ?? props.amplitude * 2;
+const amplitude = computed(() => props.amplitude ?? 30);
+const period = computed(() => props.period ?? 2);
+const frequency = computed(() => props.frequency ?? 1);
+const fps = computed(() => props.fps ?? 70);
+const wavePadding = computed(() => {
+  return props.wavePadding ?? amplitude.value * 2;
 });
+const stop = computed(() =>
+  typeof props.stop === 'boolean' ? props.stop : false
+);
+const direction = computed(() =>
+  [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL].includes(props.direction)
+    ? props.direction
+    : DIRECTION_VERTICAL
+);
+
 const interval = computed(() => {
-  return 1000 / props.fps;
+  return 1000 / fps.value;
 });
 const cssVariables = computed(() => ({
   '--waving_image_wave_padding':
-    props.direction === DIRECTION_HORIZONTAL
-      ? `${safeWavePadding.value / 2}px 0 ${safeWavePadding.value / 2}px 0`
-      : `0 ${safeWavePadding.value / 2}px 0 ${safeWavePadding.value / 2}px`,
+    direction.value === DIRECTION_HORIZONTAL
+      ? `${wavePadding.value / 2}px 0 ${wavePadding.value / 2}px 0`
+      : `0 ${wavePadding.value / 2}px 0 ${wavePadding.value / 2}px`,
   '--waving_image_img_display': showImg.value ? 'block' : 'none',
   '--waving_image_canvas_display': showImg.value ? 'none' : 'block',
   '--waving_image_wrapper_width': canvasWidth.value
@@ -105,7 +120,7 @@ function handleImgLoading() {
 }
 
 function animateFrame() {
-  if (props.stop) {
+  if (stop.value) {
     animationFrameId.value = requestAnimationFrame(animateFrame);
     return;
   }
@@ -147,35 +162,35 @@ function animateFrame() {
   delta.value = timeNow.value - timeLast.value;
   if (delta.value > interval.value) {
     timeLast.value = timeNow.value;
-    distance += (delta.value / 1000) * waveSpeed.value;
+    distance.value += (delta.value / 1000) * waveSpeed.value;
     ctx.clearRect(0, 0, canvasWidth.value, canvasHeight.value);
 
-    if (direction === DIRECTION_HORIZONTAL) {
+    if (direction.value === DIRECTION_HORIZONTAL) {
       for (let x = 0; x < imgWidth.value; x++) {
         const y =
           amplitudeRatio.value *
             x *
-            Math.sin(spatialFrequency.value * (x - distance)) +
-          safeWavePadding.value / 2;
+            Math.sin(spatialFrequency.value * (x - distance.value)) +
+          wavePadding.value / 2;
         ctx.drawImage(
           scaledImageCanvas.value,
           x,
           0,
           1,
-          imgHeight,
+          imgHeight.value,
           x,
           y,
           1,
-          imgHeight
+          imgHeight.value
         );
       }
-    } else if (direction === DIRECTION_VERTICAL) {
+    } else if (direction.value === DIRECTION_VERTICAL) {
       for (let y = 0; y < imgHeight.value; y++) {
         const x =
           amplitudeRatio.value *
             y *
-            Math.sin(spatialFrequency.value * (y - distance)) +
-          safeWavePadding.value / 2;
+            Math.sin(spatialFrequency.value * (y - distance.value)) +
+          wavePadding.value / 2;
         ctx.drawImage(
           scaledImageCanvas.value,
           0,
@@ -210,6 +225,21 @@ function initWavingImageDOM() {
 
   if (typeof onLoad === 'function') onLoad(img, canvas, ctx);
 
+  handleWavingImageSize(img);
+  handleWavingImageCalculate();
+
+  timeNow.value = Date.now(); // 當前時間
+  timeLast.value = timeNow.value; // 上一幀時間
+  delta.value = 0; // 連續幀之間間隔（實際）
+  distance.value = 0;
+
+  animationFrameId.value = requestAnimationFrame(animateFrame);
+  requestAnimationFrame(function () {
+    showImg.value = false;
+  });
+}
+const initWavingImageDOMDebounce = _debounce(initWavingImageDOM, 150);
+function handleWavingImageSize(img) {
   imgWidth.value = Math.floor(img.width);
   imgHeight.value = Math.floor(img.height);
 
@@ -221,33 +251,35 @@ function initWavingImageDOM() {
     scaledImageCtx.value.drawImage(img, 0, 0, imgWidth.value, imgHeight.value);
   }
 
-  const canvasWidth =
-    direction === DIRECTION_HORIZONTAL
+  const newCanvasWidth =
+    direction.value === DIRECTION_HORIZONTAL
       ? imgWidth.value
-      : imgWidth.value + safeWavePadding.value;
-  const canvasHeight =
-    direction === DIRECTION_HORIZONTAL
-      ? imgHeight.value + safeWavePadding.value
+      : imgWidth.value + wavePadding.value;
+  const newCanvasHeight =
+    direction.value === DIRECTION_HORIZONTAL
+      ? imgHeight.value + wavePadding.value
       : imgHeight.value;
 
-  setCanvasWidth(canvasWidth);
-  setCanvasHeight(canvasHeight);
-
-  wavelength.value = imgWidth.value / period; // 波長
-  waveSpeed.value = wavelength.value * frequency; // 波速
-  spatialFrequency.value = (2 * Math.PI) / wavelength.value; // x係數
-  amplitudeRatio.value = amplitude / imgWidth.value; // 振幅係數
-
-  timeNow.value = Date.now(); // 當前時間
-  timeLast.value = timeNow.value; // 上一幀時間
-  delta.value = 0; // 連續幀之間間隔（實際）
-  distance = 0;
-
-  animationFrameId.value = requestAnimationFrame(animateFrame);
-  requestAnimationFrame(function () {
-    setShowImg(false);
-  });
+  canvasWidth.value = newCanvasWidth;
+  canvasHeight.value = newCanvasHeight;
 }
+function handleWavingImageCalculate() {
+  wavelength.value = imgWidth.value / period.value; // 波長
+  waveSpeed.value = wavelength.value * frequency.value; // 波速
+  spatialFrequency.value = (2 * Math.PI) / wavelength.value; // x係數
+  amplitudeRatio.value = amplitude.value / imgWidth.value; // 振幅係數
+}
+
+onMounted(() => {
+  if (imgRef.value?.complete === true) {
+    imgLoading.value = false;
+  }
+});
+onUnmounted(() => {
+  if (animationFrameId.value !== null) {
+    cancelAnimationFrame(animationFrameId.value);
+  }
+});
 
 watch(
   () => props.src,
@@ -257,19 +289,31 @@ watch(
   }
 );
 watch(
-  () => windowSize.value,
+  () => [windowSize.value, direction.value, amplitude.value],
   () => {
-    showImg.value = false;
+    showImg.value = true;
   }
 );
 watch(
-  () => [imgLoading.value, windowSize.value],
+  () => [imgLoading.value, windowSize.value, direction.value, amplitude.value],
   ([newImgLoading]) => {
-    if (newImgLoading === false && imgRef.value instanceof HTMLImageElement) {
-      initWavingImageDOM();
+    console.log('????');
+    if (newImgLoading === false && imgRef.value?.complete === true) {
+      nextTick(() => requestAnimationFrame(initWavingImageDOMDebounce));
     }
-  },
-  { immediate: true }
+  }
+);
+watch(
+  () => [
+    period.value,
+    frequency.value,
+    fps.value,
+    wavePadding.value,
+    stop.value
+  ],
+  () => {
+    handleWavingImageCalculate();
+  }
 );
 </script>
 

@@ -115,6 +115,12 @@ useSchemaOrg([
           position: 3,
           name: t('animation_page.demos.triangle_anime.label'),
           url: `${DOMAIN}${localePath('/animation/triangle-anime-test')}`
+        },
+        {
+          '@type': 'ListItem',
+          position: 4,
+          name: t('animation_page.demos.waving_image.label'),
+          url: `${DOMAIN}${localePath('/animation/waving-image')}`
         }
       ]
     }
@@ -136,6 +142,11 @@ const demoItems = computed(() => [
     to: localePath('/animation/triangle-anime-test'),
     label: t('animation_page.demos.triangle_anime.label'),
     description: t('animation_page.demos.triangle_anime.description')
+  },
+  {
+    to: localePath('/animation/waving-image'),
+    label: t('animation_page.demos.waving_image.label'),
+    description: t('animation_page.demos.waving_image.description')
   }
 ]);
 </script>

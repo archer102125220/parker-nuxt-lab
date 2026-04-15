@@ -117,9 +117,11 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import _debounce from 'lodash/debounce';
+</script>
 
+<script setup>
 const MOVE_DISTANCE_LIMIT = 50;
 
 const { $bindScrollEnd } = useNuxtApp();

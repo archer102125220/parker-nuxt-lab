@@ -725,6 +725,21 @@
         "test_title": "測試文字",
         "update": "更新"
     },
+    "waving_image_page": {
+        "hero": {
+            "title": "圖片波浪特效測試",
+            "subtitle": "自製 Waving Image 組件展示",
+            "description": "測試圖片加上波浪變形動畫效果"
+        },
+        "controls": "參數調整",
+        "amplitude": "震幅 (Amplitude)",
+        "period": "週期數 (Period)",
+        "frequency": "頻率 (Frequency)",
+        "fps": "每秒幀數 (FPS)",
+        "direction": "方向 (Direction)",
+        "direction_horizontal": "水平",
+        "direction_vertical": "垂直"
+    },
     "qr_code_page": {
         "hero": {
             "title": "QR Code 組件測試",
@@ -1239,6 +1254,10 @@
             "triangle_anime": {
                 "label": "CSS 三角形動畫",
                 "description": "使用 CSS 搭配 anime.js 的三角形進場動畫效果展示"
+            },
+            "waving_image": {
+                "label": "圖片波浪動畫",
+                "description": "使用 Canvas 實作圖片隨時間呈現波浪效果的動畫"
             }
         }
     }

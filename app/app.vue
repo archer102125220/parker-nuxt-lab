@@ -38,10 +38,13 @@
   </div>
 </template>
 
+<script>
+import _debounce from 'lodash/debounce';
+</script>
+
 <script setup>
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 import { Analytics } from '@vercel/analytics/nuxt';
-import _debounce from 'lodash/debounce';
 
 useHead({
   meta: [
@@ -138,7 +141,7 @@ watch(() => [route.path, gtm.value, firebase.value], handleTrackData);
 watch(
   () => $i18n.locale.value,
   (newLocale) => {
-    console.log('watch $i18n.locale.value', newLocale);
+    // console.log('watch $i18n.locale.value', newLocale);
     $setLocalLanguage(newLocale);
 
     $dayjs.locale(newLocale.includes('en') ? 'en' : 'zh-tw');
@@ -156,7 +159,7 @@ watch(
       }
     }
 
-    console.log('watch $i18n.locale.value end');
+    // console.log('watch $i18n.locale.value end');
   },
   { immediate: true }
 );

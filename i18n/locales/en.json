@@ -726,6 +726,21 @@
         "test_title": "Test Text",
         "update": "Update"
     },
+    "waving_image_page": {
+        "hero": {
+            "title": "Waving Image Animation",
+            "subtitle": "Custom Waving Image Component Demo",
+            "description": "Testing custom image waving animation effect"
+        },
+        "controls": "Options",
+        "amplitude": "Amplitude",
+        "period": "Period",
+        "frequency": "Frequency",
+        "fps": "FPS",
+        "direction": "Direction",
+        "direction_horizontal": "Horizontal",
+        "direction_vertical": "Vertical"
+    },
     "qr_code_page": {
         "hero": {
             "title": "QR Code Component Test",
@@ -1240,6 +1255,10 @@
             "triangle_anime": {
                 "label": "CSS Triangle Animation",
                 "description": "CSS triangle entrance animation effect with anime.js integration"
+            },
+            "waving_image": {
+                "label": "Waving Image Animation",
+                "description": "Custom image waving animation component"
             }
         }
     }
