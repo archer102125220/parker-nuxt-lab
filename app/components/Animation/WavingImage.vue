@@ -1,4 +1,5 @@
 <script>
+// WebGL 版還未開發，shader 檔已先移動至 @app/shaders/waving-image 中
 import _debounce from 'lodash/debounce';
 
 export const DIRECTION_HORIZONTAL = 'horizontal';
