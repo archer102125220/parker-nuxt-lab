@@ -24,7 +24,7 @@
         "web_rtc": "WebRTC測試",
         "swagger_doc": "Swagger API 文檔",
         "indexeddb_demo": "IndexedDB ORM 展示",
-        "krpano_demo": "Krpano 全景圖展示",
+        "virtual_reality": "虛擬實境實驗室",
         "notes": "Notion 筆記",
         "animation": "動畫效果展示"
     },
@@ -75,7 +75,7 @@
             "face_swap_desc": "AI 人臉交換技術的實作展示",
             "swagger_doc_desc": "使用 Swagger UI 展示 Nuxt Server API 的完整文檔",
             "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試",
-            "krpano_demo_desc": "使用 Krpano 實現互動式 360° 全景圖瀏覽",
+            "virtual_reality_desc": "探索 WebVR 和 WebXR，包含全景圖與 3D 虛擬視覺展示",
             "notes_desc": "日常工作與私下研究的 SEO 及技術實戰紀錄",
             "animation_desc": "各種動畫效果與功能展示"
         },
@@ -85,6 +85,14 @@
             "features": "功能模組",
             "tests": "測試案例"
         }
+    },
+    "virtual_reality": {
+        "title": "虛擬實境",
+        "subtitle": "WebVR 與 WebXR 實驗項目",
+        "aframe_demo": "A-Frame 展示",
+        "aframe_desc": "使用 A-Frame 框架構建的 3D 與 WebVR 體驗。",
+        "krpano_demo": "Krpano 展示",
+        "krpano_desc": "使用 Krpano 實現互動式 360° 全景圖導覽的展示。"
     },
     "notes_page": {
         "hero": {

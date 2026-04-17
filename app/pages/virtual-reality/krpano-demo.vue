@@ -54,9 +54,12 @@
           <span class="krpano_demo-controls-panel-group-label">
             {{ $t('krpano_demo_page.controls.hotspots') }}
           </span>
-          
+
           <!-- 新增熱點表單 -->
-          <div v-if="!isAddFormOpen" class="krpano_demo-controls-panel-group-buttons">
+          <div
+            v-if="!isAddFormOpen"
+            class="krpano_demo-controls-panel-group-buttons"
+          >
             <button
               class="krpano_demo-controls-panel-group-buttons-btn"
               css-color="success"
@@ -65,29 +68,35 @@
               + {{ $t('krpano_demo_page.controls.add_hotspot') }}
             </button>
           </div>
-          
+
           <div v-else class="krpano_demo-controls-panel-group-form">
             <input
               v-model="newHotspot.name"
               type="text"
               class="krpano_demo-controls-panel-group-form-input"
-              :placeholder="$t('krpano_demo_page.hotspot_form.name_placeholder')"
+              :placeholder="
+                $t('krpano_demo_page.hotspot_form.name_placeholder')
+              "
             />
             <div class="krpano_demo-controls-panel-group-form-row">
               <input
                 v-model.number="newHotspot.ath"
                 type="number"
                 class="krpano_demo-controls-panel-group-form-input"
-                :placeholder="$t('krpano_demo_page.hotspot_form.ath_placeholder')"
+                :placeholder="
+                  $t('krpano_demo_page.hotspot_form.ath_placeholder')
+                "
               />
               <input
                 v-model.number="newHotspot.atv"
                 type="number"
                 class="krpano_demo-controls-panel-group-form-input"
-                :placeholder="$t('krpano_demo_page.hotspot_form.atv_placeholder')"
+                :placeholder="
+                  $t('krpano_demo_page.hotspot_form.atv_placeholder')
+                "
               />
             </div>
-            
+
             <!-- 圖示類型切換 -->
             <div class="krpano_demo-controls-panel-group-form-tabs">
               <button
@@ -105,9 +114,12 @@
                 {{ $t('krpano_demo_page.hotspot_form.custom_url') }}
               </button>
             </div>
-            
+
             <!-- 預設圖示選擇 -->
-            <div v-if="iconTabIndex === 0" class="krpano_demo-controls-panel-group-form-icons">
+            <div
+              v-if="iconTabIndex === 0"
+              class="krpano_demo-controls-panel-group-form-icons"
+            >
               <button
                 v-for="(icon, index) in hotspotIcons"
                 :key="icon.url"
@@ -118,17 +130,19 @@
                 {{ icon.label }}
               </button>
             </div>
-            
+
             <!-- 自訂 URL 輸入 -->
             <div v-else class="krpano_demo-controls-panel-group-form-url">
               <input
                 v-model="customIconUrl"
                 type="text"
                 class="krpano_demo-controls-panel-group-form-input"
-                :placeholder="$t('krpano_demo_page.hotspot_form.url_placeholder')"
+                :placeholder="
+                  $t('krpano_demo_page.hotspot_form.url_placeholder')
+                "
               />
             </div>
-            
+
             <div class="krpano_demo-controls-panel-group-form-actions">
               <button
                 class="krpano_demo-controls-panel-group-buttons-btn"
@@ -146,9 +160,12 @@
               </button>
             </div>
           </div>
-          
+
           <!-- 熱點列表 -->
-          <div v-if="hotspots.length > 0" class="krpano_demo-controls-panel-group-list">
+          <div
+            v-if="hotspots.length > 0"
+            class="krpano_demo-controls-panel-group-list"
+          >
             <div
               v-for="hotspot in hotspots"
               :key="hotspot.name"
@@ -253,11 +270,10 @@ useSchemaOrg([
   defineWebPage({
     '@type': 'WebPage',
     name: t('krpano_demo_page.hero.title'),
-    url: `${DOMAIN}${localePath('/krpano-demo')}`,
+    url: `${DOMAIN}${localePath('/virtual-reality/krpano-demo')}`,
     inLanguage: ['zh-TW', 'en']
   })
 ]);
-
 
 const krpanoRef = ref(null);
 
@@ -346,7 +362,7 @@ function switchScene(sceneName) {
 // Hotspot management
 function confirmAddHotspot() {
   if (!isFormValid.value) return;
-  
+
   hotspotCounter++;
   const hotspot = {
     name: `hotspot_${hotspotCounter}`,
@@ -363,7 +379,7 @@ function confirmAddHotspot() {
 
   hotspots.value = [...hotspots.value, hotspot];
   addLog(`Added: ${hotspot.displayName}`, 'success');
-  
+
   // Reset form
   newHotspot.value = { name: '', ath: 0, atv: 0 };
   selectedIconIndex.value = 0;
@@ -385,7 +401,10 @@ function toggleHotspotVisibility(name) {
   if (hotspot) {
     hotspot.visible = !hotspot.visible;
     hotspots.value = [...hotspots.value]; // Trigger reactivity
-    addLog(`${hotspot.displayName || name}: ${hotspot.visible ? 'Visible' : 'Hidden'}`, 'info');
+    addLog(
+      `${hotspot.displayName || name}: ${hotspot.visible ? 'Visible' : 'Hidden'}`,
+      'info'
+    );
   }
 }
 

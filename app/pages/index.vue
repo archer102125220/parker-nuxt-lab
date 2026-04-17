@@ -343,9 +343,9 @@ const linkList = computed(() => [
     description: t('home.nav.indexeddb_demo_desc')
   },
   {
-    to: localePath('/krpano-demo'),
-    label: t('index.krpano_demo'),
-    description: t('home.nav.krpano_demo_desc')
+    to: localePath('/virtual-reality'),
+    label: t('index.virtual_reality'),
+    description: t('home.nav.virtual_reality_desc')
   },
   {
     to: localePath('/animation'),

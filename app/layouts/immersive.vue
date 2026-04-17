@@ -1,13 +1,20 @@
 <template>
   <div class="immersive_layout">
     <!-- 返回按鈕 -->
-    <NuxtLink
-      :to="localePath('/')"
-      class="immersive_layout-back"
-    >
-      <v-icon icon="mdi-arrow-left" size="24" />
-      <span class="immersive_layout-back-text">{{ $t('system.defaultTitle') }}</span>
-    </NuxtLink>
+    <span class="immersive_layout-back">
+      <v-icon icon="mdi-arrow-left" size="24" @click="handleGoBack" />
+      <NuxtLink :to="localePath('/')" class="immersive_layout-back-link">
+        <img
+          src="/img/icon/NuxtRock.v.10.4.webp"
+          :alt="$t('system.systemName')"
+          class="immersive_layout-back-link-logo"
+        />
+        <AnimationEnterLabel
+          class="immersive_layout-back-link-label"
+          :label="$t('system.defaultTitle')"
+        />
+      </NuxtLink>
+    </span>
 
     <!-- 全屏內容區 -->
     <main class="immersive_layout-content">
@@ -17,7 +24,12 @@
 </template>
 
 <script setup>
+const router = useRouter();
 const localePath = useLocalePath();
+
+function handleGoBack() {
+  router.back();
+}
 </script>
 
 <style lang="scss">
@@ -65,13 +77,30 @@ const localePath = useLocalePath();
       transform: translateY(-2px);
     }
 
-    &-text {
-      // Typography
-      font-size: 14px;
-      font-weight: 500;
+    &-link {
+      // Display & Box Model
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.9);
 
-      @media (max-width: 600px) {
-        display: none;
+      &-logo {
+        // Display & Box Model
+        width: 32px;
+        height: 32px;
+      }
+
+      &-label {
+        // Typography
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.9);
+
+        @include mobile {
+          display: none;
+        }
       }
     }
   }
