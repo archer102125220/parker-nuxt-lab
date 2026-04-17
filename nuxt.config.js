@@ -353,6 +353,9 @@ export default defineNuxtConfig({
       hmr: process.env.HMR !== 'false' ? undefined : false
     },
     vue: {
+      compilerOptions: {
+        isCustomElement: (tag) => tag.startsWith('a-')
+      },
       template: {
         transformAssetUrls
       }
