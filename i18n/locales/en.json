@@ -569,7 +569,8 @@
             "downloaded": "Image downloaded",
             "no_source": "Please upload source photo and confirm camera is active",
             "no_source_face": "Cannot detect face in source photo",
-            "no_target_face": "Cannot detect face in camera frame"
+            "no_target_face": "Cannot detect face in camera frame",
+            "error": "Face swap failed"
         }
     },
     "face_swap_backend": {
@@ -596,9 +597,17 @@
         },
         "status": {
             "uploading": "Uploading images...",
-            "processing": "Processing...",
+            "processing": "Processing, please wait...",
             "success": "Face swap completed!",
-            "error": "Processing failed"
+            "error": "Processing failed",
+            "error_fallback": "Face swap processing failed",
+            "no_source": "Please upload source and target photos first",
+            "downloaded": "Image downloaded"
+        },
+        "tech_info": {
+            "title": "Technical Details",
+            "detection": "Server-side face detection",
+            "processing": "Server-side image processing"
         }
     },
     "cloud_messaging_page": {

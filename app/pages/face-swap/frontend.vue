@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO:人工測試換臉功能是否正常運作 -->
   <div class="face_swap_frontend_page">
     <!-- Hero Section -->
     <section class="face_swap_frontend_page-hero">
@@ -54,41 +53,48 @@
 
         <div class="face_swap_frontend_page-swap_section-target">
           <h3>{{ $t('face_swap_frontend.sections.target') }}</h3>
-        <div
-          class="face_swap_frontend_page-swap_section-target-video_container"
-        >
-          <video
-            ref="videoEl"
-            class="face_swap_frontend_page-swap_section-target-video"
-            width="480"
-            height="360"
-            autoplay
-            :srcObject="streamObj"
-          />
-          <canvas
-            ref="targetOverlayCanvas"
-            class="face_swap_frontend_page-swap_section-target-overlay"
-            width="480"
-            height="360"
-          />
-        </div>
+          <div
+            class="face_swap_frontend_page-swap_section-target-video_container"
+          >
+            <video
+              ref="videoEl"
+              class="face_swap_frontend_page-swap_section-target-video"
+              width="480"
+              height="360"
+              autoplay
+              :srcObject="streamObj"
+            />
+            <canvas
+              ref="targetOverlayCanvas"
+              class="face_swap_frontend_page-swap_section-target-overlay"
+              width="480"
+              height="360"
+            />
+          </div>
         </div>
 
         <div class="face_swap_frontend_page-swap_section-result">
           <h3>{{ $t('face_swap_frontend.sections.result') }}</h3>
-        <canvas
-          ref="resultCanvas"
-          class="face_swap_frontend_page-swap_section-result-canvas"
-          width="480"
-          height="360"
-        />
+          <canvas
+            ref="resultCanvas"
+            class="face_swap_frontend_page-swap_section-result-canvas"
+            width="480"
+            height="360"
+          />
+        </div>
       </div>
-    </div>
     </section>
 
     <!-- Image Size Warning -->
-    <v-alert v-if="imageSizeWarning" type="warning" variant="tonal" class="face_swap_frontend_page-warning">
-      <p>⚠️ <strong>{{ $t('face_swap_frontend.size_warning.title') }}</strong></p>
+    <v-alert
+      v-if="imageSizeWarning"
+      type="warning"
+      variant="tonal"
+      class="face_swap_frontend_page-warning"
+    >
+      <p>
+        ⚠️ <strong>{{ $t('face_swap_frontend.size_warning.title') }}</strong>
+      </p>
       <p>{{ $t('face_swap_frontend.size_warning.content') }}</p>
     </v-alert>
 
@@ -251,7 +257,7 @@ useHeadMataData({
 
 const MODELS_PATH = '/ai_models';
 
-const system = useSystemStore();
+// const system = useSystemStore();
 
 // Template refs
 const sourceFaceEl = useTemplateRef('sourceFaceEl');
@@ -301,12 +307,12 @@ const canSwap = computed(() => {
 // Face swap core functions
 async function performFaceSwap() {
   if (!canSwap.value) {
-    showStatus('請先上傳來源照片並確認攝影機已啟動', 'warning');
+    showStatus(t('face_swap_frontend.status.no_source'), 'warning');
     return;
   }
 
   isSwapping.value = true;
-  showStatus('正在偵測人臉...', 'info');
+  showStatus(t('face_swap_frontend.status.detecting'), 'info');
 
   try {
     // Use ssdMobilenetv1 to match the detection box display
@@ -323,7 +329,7 @@ async function performFaceSwap() {
       .withFaceLandmarks();
 
     if (sourceDetection === undefined) {
-      throw new Error('無法在來源照片中偵測到人臉');
+      throw new Error(t('face_swap_frontend.status.no_source_face'));
     }
 
     // Detect target face from video
@@ -332,33 +338,33 @@ async function performFaceSwap() {
       .withFaceLandmarks();
 
     if (targetDetection === undefined) {
-      throw new Error('無法在攝影機畫面中偵測到人臉');
+      throw new Error(t('face_swap_frontend.status.no_target_face'));
     }
 
-    showStatus('正在執行人臉替換...', 'info');
+    showStatus(t('face_swap_frontend.status.swapping'), 'info');
 
     // Perform face swap
     await blendFaces(sourceDetection, targetDetection);
 
     hasResult.value = true;
-    showStatus('人臉替換完成！', 'success');
+    showStatus(t('face_swap_frontend.status.success'), 'success');
   } catch (error) {
     console.error(error);
-    showStatus(error.message || '人臉替換失敗', 'error');
+    showStatus(error.message || t('face_swap_frontend.status.error'), 'error');
   } finally {
     isSwapping.value = false;
   }
 }
 
 // Helper function to load image from base64 (same as backend)
-function loadImageFromBase64(base64) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = base64;
-  });
-}
+// function loadImageFromBase64(base64) {
+//   return new Promise((resolve, reject) => {
+//     const img = new Image();
+//     img.onload = () => resolve(img);
+//     img.onerror = reject;
+//     img.src = base64;
+//   });
+// }
 
 async function blendFaces(sourceDetection, targetDetection) {
   const canvas = resultCanvas.value;
@@ -481,7 +487,7 @@ function downloadResult() {
   link.href = canvas.toDataURL('image/png');
   link.click();
 
-  showStatus('圖片已下載', 'success');
+  showStatus(t('face_swap_frontend.status.downloaded'), 'success');
 }
 
 function showStatus(message, type = 'info') {
@@ -764,7 +770,11 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
         height: 100%;
 
         // Visual
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

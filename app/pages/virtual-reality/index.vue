@@ -68,10 +68,7 @@ const linkList = computed(() => [
     padding: 100px 24px;
     
     /* Visual */
-    background: 
-      radial-gradient(circle at 20% 0%, rgba(167, 139, 250, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 80% 100%, rgba(56, 189, 248, 0.2) 0%, transparent 50%),
-      linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    background: linear-gradient(135deg, #cbd5e1 0%, #f1f5f9 100%);
     color: #0f172a;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     
@@ -91,7 +88,7 @@ const linkList = computed(() => [
         font-size: 48px;
         font-weight: 800;
         letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+        background: linear-gradient(135deg, #020617 0%, #1e293b 100%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -108,7 +105,7 @@ const linkList = computed(() => [
         /* Typography */
         font-size: 20px;
         font-weight: 500;
-        color: #475569;
+        color: #334155;
 
         /* Animation */
         animation: fade-in-up 0.8s ease-out 0.2s backwards;

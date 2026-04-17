@@ -17,6 +17,7 @@
         "fido2_lib": "生物辨識測試（fido2-lib）",
         "web_cam": "WebCam測試",
         "face_api": "face-api測試",
+        "face_swap": "AI 換臉 測試",
         "frontend_cach_api": "前端api快取測試",
         "firebase": "firebase整合測試",
         "socket": "socket測試",
@@ -568,7 +569,8 @@
             "downloaded": "圖片已下載",
             "no_source": "請先上傳來源照片並確認攝影機已啟動",
             "no_source_face": "無法在來源照片中偵測到人臉",
-            "no_target_face": "無法在攝影機畫面中偵測到人臉"
+            "no_target_face": "無法在攝影機畫面中偵測到人臉",
+            "error": "人臉替換失敗"
         }
     },
     "face_swap_backend": {
@@ -595,9 +597,17 @@
         },
         "status": {
             "uploading": "正在上傳圖片...",
-            "processing": "正在處理中...",
+            "processing": "正在處理中，請稍候...",
             "success": "人臉替換完成！",
-            "error": "處理失敗"
+            "error": "處理失敗",
+            "error_fallback": "人臉替換處理失敗",
+            "no_source": "請先上傳來源照片和目標照片",
+            "downloaded": "圖片已下載"
+        },
+        "tech_info": {
+            "title": "技術說明",
+            "detection": "伺服器端人臉偵測",
+            "processing": "伺服器端圖片處理"
         }
     },
     "cloud_messaging_page": {

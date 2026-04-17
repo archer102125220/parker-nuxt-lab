@@ -329,7 +329,8 @@ const linkList = computed(() => [
   },
   {
     to: localePath('/face-swap'),
-    label: 'AI 換臉 測試',
+    label: t('index.face_swap'),
+    banner: '/img/face-swap/face-swap-v.02.png',
     description: t('home.nav.face_swap_desc')
   },
   {

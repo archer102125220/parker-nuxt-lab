@@ -120,7 +120,7 @@
 
     <!-- Tech Info -->
     <v-expansion-panels class="face_swap_backend_page-info">
-      <v-expansion-panel title="技術說明">
+      <v-expansion-panel :title="$t('face_swap_backend.tech_info.title')">
         <v-expansion-panel-text>
           <v-list density="compact">
             <v-list-item prepend-icon="mdi-nodejs">
@@ -132,13 +132,13 @@
             <v-list-item prepend-icon="mdi-face-recognition">
               <v-list-item-title>face-api.js + TensorFlow.js</v-list-item-title>
               <v-list-item-subtitle
-                >Server-side face detection</v-list-item-subtitle
+                >{{ $t('face_swap_backend.tech_info.detection') }}</v-list-item-subtitle
               >
             </v-list-item>
             <v-list-item prepend-icon="mdi-palette">
               <v-list-item-title>node-canvas</v-list-item-title>
               <v-list-item-subtitle
-                >Server-side image processing</v-list-item-subtitle
+                >{{ $t('face_swap_backend.tech_info.processing') }}</v-list-item-subtitle
               >
             </v-list-item>
           </v-list>
@@ -188,12 +188,12 @@ const canProcess = computed(() => {
 // Methods
 async function handleFaceSwap() {
   if (!canProcess.value) {
-    showStatus('請先上傳來源照片和目標照片', 'warning');
+    showStatus(t('face_swap_backend.status.no_source'), 'warning');
     return;
   }
 
   isProcessing.value = true;
-  showStatus('正在處理中，請稍候...', 'info');
+  showStatus(t('face_swap_backend.status.processing'), 'info');
 
   try {
     // Get blobs from preview elements
@@ -211,14 +211,14 @@ async function handleFaceSwap() {
 
     if (response.success === true) {
       resultImage.value = response.resultImage;
-      showStatus('人臉替換完成！', 'success');
+      showStatus(t('face_swap_backend.status.success'), 'success');
     } else {
-      throw new Error(response.error || '處理失敗');
+      throw new Error(response.error || t('face_swap_backend.status.error'));
     }
   } catch (error) {
     console.error('Face swap error:', error);
     showStatus(
-      error.message || error?.response?.data?.message || '人臉替換處理失敗',
+      error.message || error?.response?.data?.message || t('face_swap_backend.status.error_fallback'),
       'error'
     );
   } finally {
@@ -267,7 +267,7 @@ function downloadResult() {
   link.href = resultImage.value;
   link.click();
 
-  showStatus('圖片已下載', 'success');
+  showStatus(t('face_swap_backend.status.downloaded'), 'success');
 }
 
 function showStatus(message, type = 'info') {
