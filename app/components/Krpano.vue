@@ -1,7 +1,5 @@
 <template>
-  <ClientOnly>
-    <div :id="containerId" ref="containerRef" class="krpano" />
-  </ClientOnly>
+  <div :id="containerId" ref="containerRef" class="krpano" />
 </template>
 
 <script setup>
