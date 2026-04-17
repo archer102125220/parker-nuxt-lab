@@ -14799,7 +14799,7 @@ text-decoder@^1.1.0:
   dependencies:
     b4a "^1.6.4"
 
-"three-bmfont-text@github:dmarcos/three-bmfont-text#eed4878795be9b3e38cf6aec6b903f56acd1f695":
+three-bmfont-text@dmarcos/three-bmfont-text#eed4878795be9b3e38cf6aec6b903f56acd1f695:
   version "3.0.0"
   resolved "https://codeload.github.com/dmarcos/three-bmfont-text/tar.gz/eed4878795be9b3e38cf6aec6b903f56acd1f695"
   dependencies:
