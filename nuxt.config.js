@@ -433,6 +433,12 @@ export default defineNuxtConfig({
       'store/**'
     ]
   },
+  components: {
+    dirs: [
+      { path: '@app/aframe/components', extensions: ['.vue'], prefix: false },
+      { path: '@/app/aframe/components', extensions: ['.vue'], prefix: false }
+    ]
+  },
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',
