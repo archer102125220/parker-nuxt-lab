@@ -74,22 +74,15 @@
           {{ t('home.navigation.title') }}
         </h2>
         <nav class="home_page-navigation-grid" role="navigation">
-          <!-- <NuxtLink
-      v-for="link in linkList"
-      :key="link.to"
-      class="index_page-content-link"
-      :to="link.to"
-    >
-      {{ link.label }}
-    </NuxtLink> -->
-
           <LinkCard
             v-for="link in linkList"
             :key="link.to"
             :to="link.to"
             :banner="link.banner"
+            :icon="link.icon"
             :label="link.label"
             :description="link.description"
+            :footer-text="link.footerText || t('home.hero.cta_explore')"
             class="home_page-navigation-grid-item"
           />
         </nav>
@@ -239,9 +232,11 @@ const stats = computed(() => [
 
 const linkList = computed(() => [
   {
-    to: localePath('/notes'),
+    to: 'https://valley-hortensia-084.notion.site/Parker-Chen-3446dcd96fa280c7b1ecdd139384ee12',
+    icon: '📄',
     label: t('index.notes'),
-    description: t('home.nav.notes_desc')
+    description: t('home.nav.notes_desc'),
+    footerText: t('home.nav.read_on_notion')
   },
   {
     to: localePath('/about'),

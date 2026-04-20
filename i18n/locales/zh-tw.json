@@ -78,7 +78,8 @@
             "indexeddb_demo_desc": "自製 IndexedDB ORM 工具的功能展示與測試",
             "virtual_reality_desc": "探索 WebVR 和 WebXR，包含全景圖與 3D 虛擬視覺展示",
             "notes_desc": "日常工作與私下研究的 SEO 及技術實戰紀錄",
-            "animation_desc": "各種動畫效果與功能展示"
+            "animation_desc": "各種動畫效果與功能展示",
+            "read_on_notion": "在 Notion 閱讀"
         },
         "stats": {
             "components": "組件數量",
