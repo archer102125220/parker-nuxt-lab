@@ -78,7 +78,8 @@
             "indexeddb_demo_desc": "Custom IndexedDB ORM tool demonstration and testing",
             "virtual_reality_desc": "Explore WebVR and WebXR experiments, including panoramas and 3D scenes",
             "notes_desc": "Practical records of daily work and private research on SEO and technology",
-            "animation_desc": "Showcase of various animation effects and utilities"
+            "animation_desc": "Showcase of various animation effects and utilities",
+            "read_on_notion": "Read on Notion"
         },
         "stats": {
             "components": "Components",
