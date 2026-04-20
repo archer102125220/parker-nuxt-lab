@@ -47,7 +47,7 @@ html {
 }
 
 a {
-  &[target='_blank']::after {
+  &[target='_blank']:not([css-not-link-icon='true'])::after {
     // Display & Box Model
     display: inline-block;
     width: var(--link_blank_width, 16px);

@@ -74,40 +74,15 @@
           {{ t('home.navigation.title') }}
         </h2>
         <nav class="home_page-navigation-grid" role="navigation">
-          <a
-            href="https://valley-hortensia-084.notion.site/Parker-Chen-3446dcd96fa280c7b1ecdd139384ee12"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="home_page-notion_card"
-          >
-            <div class="home_page-notion_card-icon">📄</div>
-            <h2 class="home_page-notion_card-title">{{ t('index.notes') }}</h2>
-            <p class="home_page-notion_card-desc">
-              {{ t('home.nav.notes_desc') }}
-            </p>
-            <div class="home_page-notion_card-footer">
-              <span class="home_page-notion_card-footer-text">{{
-                t('home.nav.read_on_notion')
-              }}</span>
-              <span class="home_page-notion_card-footer-arrow">→</span>
-            </div>
-          </a>
-          <!-- <NuxtLink
-      v-for="link in linkList"
-      :key="link.to"
-      class="index_page-content-link"
-      :to="link.to"
-    >
-      {{ link.label }}
-    </NuxtLink> -->
-
           <LinkCard
             v-for="link in linkList"
             :key="link.to"
             :to="link.to"
             :banner="link.banner"
+            :icon="link.icon"
             :label="link.label"
             :description="link.description"
+            :footer-text="link.footerText || t('home.hero.cta_explore')"
             class="home_page-navigation-grid-item"
           />
         </nav>
@@ -256,6 +231,13 @@ const stats = computed(() => [
 ]);
 
 const linkList = computed(() => [
+  {
+    to: 'https://valley-hortensia-084.notion.site/Parker-Chen-3446dcd96fa280c7b1ecdd139384ee12',
+    icon: '📄',
+    label: t('index.notes'),
+    description: t('home.nav.notes_desc'),
+    footerText: t('home.nav.read_on_notion')
+  },
   {
     to: localePath('/about'),
     banner: '/img/about/about-v.10.webp',
@@ -659,107 +641,6 @@ const linkList = computed(() => [
       @media (max-width: 768px) {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 16px;
-      }
-    }
-  }
-
-  // ========================================
-  // Notion Card
-  // ========================================
-  &-notion_card {
-    /* Display & Box Model */
-    display: flex;
-    flex-direction: column;
-    padding: 32px 24px;
-    border-radius: 20px;
-    text-decoration: none;
-
-    /* Visual */
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    backdrop-filter: blur(10px);
-
-    /* Animation */
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:hover {
-      /* Visual */
-      background: #ffffff;
-      border-color: rgba(68, 160, 141, 0.2);
-      box-shadow: 0 12px 32px rgba(68, 160, 141, 0.1);
-
-      /* Positioning */
-      transform: translateY(-6px);
-
-      .home_page-notion_card-footer-arrow {
-        transform: translateX(6px);
-        color: #44a08d;
-      }
-    }
-
-    &-icon {
-      /* Display & Box Model */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      margin-bottom: 20px;
-      border-radius: 14px;
-
-      /* Typography */
-      font-size: 28px;
-
-      /* Visual */
-      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-      border: 1px solid rgba(0, 0, 0, 0.03);
-    }
-
-    &-title {
-      /* Display & Box Model */
-      margin-bottom: 12px;
-
-      /* Typography */
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 1.5;
-      color: var(--color-text-primary, #1a1a1a);
-    }
-
-    &-desc {
-      /* Display & Box Model */
-      flex: 1;
-      margin-bottom: 24px;
-
-      /* Typography */
-      font-size: 14px;
-      color: var(--color-text-secondary, #6c757d);
-      line-height: 1.5;
-    }
-
-    &-footer {
-      /* Display & Box Model */
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 20px;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-
-      &-text {
-        /* Typography */
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--color-text-secondary, #6c757d);
-      }
-
-      &-arrow {
-        /* Typography */
-        font-size: 18px;
-        color: #adb5bd;
-
-        /* Animation */
-        transition: all 0.3s ease;
       }
     }
   }
