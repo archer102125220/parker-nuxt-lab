@@ -83,6 +83,7 @@
             :label="link.label"
             :description="link.description"
             :footer-text="link.footerText || t('home.hero.cta_explore')"
+            :has-banner="link.hasBanner"
             class="home_page-navigation-grid-item"
           />
         </nav>
@@ -233,10 +234,12 @@ const stats = computed(() => [
 const linkList = computed(() => [
   {
     to: 'https://valley-hortensia-084.notion.site/Parker-Chen-3446dcd96fa280c7b1ecdd139384ee12',
-    icon: '📄',
+    // icon: '📄',
+    banner: '/img/home/notion-icon.webp',
     label: t('index.notes'),
     description: t('home.nav.notes_desc'),
     footerText: t('home.nav.read_on_notion')
+    // hasBanner: false
   },
   {
     to: localePath('/about'),

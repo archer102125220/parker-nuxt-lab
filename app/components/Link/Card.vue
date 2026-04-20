@@ -10,7 +10,7 @@
     :css-state="disabled ? 'disabled' : undefined"
   >
     <div class="link_card-wrapper">
-      <div v-if="banner" class="link_card-image_container">
+      <div v-if="hasBanner" class="link_card-image_container">
         <img
           class="link_card-image_container-img"
           :src="safeBanner"
@@ -56,6 +56,8 @@
 <script setup>
 import { resolveComponent } from 'vue';
 
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
 const NuxtLink = resolveComponent('NuxtLink');
 const DEFAULT_IMG = '/img/icon/NuxtRock.v.10.4.webp';
 
@@ -67,13 +69,18 @@ const props = defineProps({
   description: { type: String, default: '' },
   footerText: { type: String, default: '' },
   badge: { type: String, default: '' },
-  disabled: { type: Boolean, default: false }
+  disabled: { type: Boolean, default: false },
+  hasBanner: { type: Boolean, default: true }
 });
 
 const isBannerError = ref(false);
 
 const isExternal = computed(() => {
-  return typeof props.to === 'string' && props.to.startsWith('http');
+  return (
+    typeof props.to === 'string' &&
+    props.to.startsWith('http') &&
+    props.to !== DOMAIN
+  );
 });
 
 const safeBanner = computed(() => {
