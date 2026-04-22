@@ -519,13 +519,13 @@ export class Ripples {
       this.handleUserDrop(e);
     };
     this.#ripplesTouchmove = (e) => {
-      const touches = e.originalEvent.changedTouches;
+      const touches = e.originalEvent?.changedTouches || e.changedTouches || e.touches;
       for (let i = 0; i < touches.length; i++) {
         this.handleUserDrop(touches[i]);
       }
     };
     this.#ripplesTouchstart = (e) => {
-      const touches = e.originalEvent.changedTouches;
+      const touches = e.originalEvent?.changedTouches || e.changedTouches || e.touches;
       for (let i = 0; i < touches.length; i++) {
         this.handleUserDrop(touches[i], true);
       }
@@ -651,18 +651,25 @@ export class Ripples {
   }
 
   render() {
+    // 將渲染目標設定為 null，代表直接渲染到畫布 (Canvas) 上，而不是紋理 (Framebuffer)
     Ripples.gl.bindFramebuffer(Ripples.gl.FRAMEBUFFER, null);
 
+    // 設定 viewport 為 Canvas 的實際尺寸
     Ripples.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
+    // 啟用混合模式 (Blend)，並清除顏色和深度緩衝區
     Ripples.gl.enable(Ripples.gl.BLEND);
     Ripples.gl.clear(Ripples.gl.COLOR_BUFFER_BIT | Ripples.gl.DEPTH_BUFFER_BIT);
 
+    // 啟用渲染用的著色器程式 (render.frag)
     Ripples.gl.useProgram(this.renderProgram.id);
 
+    // 綁定背景圖片紋理到紋理單元 0
     this.bindTexture(this.backgroundTexture, 0);
+    // 綁定包含水波高度狀態的紋理到紋理單元 1
     this.bindTexture(this.textures[0], 1);
 
+    // 將各種參數 (擾動強度、背景座標、容器比例) 傳遞給片段著色器
     Ripples.gl.uniform1f(
       this.renderProgram.locations.perturbance,
       this.perturbance
@@ -682,22 +689,30 @@ export class Ripples {
     Ripples.gl.uniform1i(this.renderProgram.locations.samplerBackground, 0);
     Ripples.gl.uniform1i(this.renderProgram.locations.samplerRipples, 1);
 
+    // 執行繪製，將經過水波扭曲的背景渲染到畫布上
     this.drawQuad();
     Ripples.gl.disable(Ripples.gl.BLEND);
   }
 
   update() {
+    // 設定 viewport 尺寸為水波紋解析度 (通常較小以提升效能，例如 256x256)
     Ripples.gl.viewport(0, 0, this.resolution, this.resolution);
 
+    // 綁定 FBO，將運算結果輸出到備用紋理 (而不是畫布)
     Ripples.gl.bindFramebuffer(
       Ripples.gl.FRAMEBUFFER,
       this.framebuffers[this.bufferWriteIndex]
     );
+    // 讀取當前的波浪狀態紋理
     this.bindTexture(this.textures[this.bufferReadIndex]);
+    
+    // 啟用物理狀態更新的著色器程式 (update.frag)
     Ripples.gl.useProgram(this.updateProgram.id);
 
+    // 繪製一個覆蓋全區的矩形來觸發片段著色器，計算並更新所有像素的波浪狀態
     this.drawQuad();
 
+    // 交換讀寫紋理的索引 (Ping-Pong 緩衝區設計，將寫入結果作為下一幀的讀取輸入)
     this.swapBufferIndices();
   }
 
@@ -840,15 +855,20 @@ export class Ripples {
   }
 
   initShaders() {
+    // 建立「產生水滴」用的著色器程式，使用 basic.vert (計算座標) 與 drop.frag (計算水滴影響的高度)
     this.dropProgram = this.createProgram(basicVert, dropFrag);
 
+    // 建立「更新波浪物理狀態」用的著色器程式，使用 basic.vert 與 update.frag (透過周圍像素更新當前波浪高度與速度)
     this.updateProgram = this.createProgram(basicVert, updateFrag);
+    // 傳遞像素偏移量給 update.frag，以便取得相鄰像素
     Ripples.gl.uniform2fv(
       this.updateProgram.locations.delta,
       this.textureDelta
     );
 
+    // 建立「渲染最終畫面」用的著色器程式，使用 render.vert (計算折射座標) 與 render.frag (計算光影與背景扭曲)
     this.renderProgram = this.createProgram(renderVert, renderFrag);
+    // 傳遞像素偏移量給 render.frag，以便計算表面法線與光影折射
     Ripples.gl.uniform2fv(
       this.renderProgram.locations.delta,
       this.textureDelta
@@ -979,19 +999,25 @@ export class Ripples {
 
     Ripples.gl.viewport(0, 0, this.resolution, this.resolution); // 設置畫布的起始座標與寬高
 
+    // 綁定 FBO，將產生的水滴結果寫入備用紋理
     Ripples.gl.bindFramebuffer(
       Ripples.gl.FRAMEBUFFER,
       this.framebuffers[this.bufferWriteIndex]
     );
+    // 讀取當前的波浪狀態紋理
     this.bindTexture(this.textures[this.bufferReadIndex]);
 
+    // 啟用繪製水滴的著色器程式 (drop.frag)
     Ripples.gl.useProgram(this.dropProgram.id);
+    // 傳遞水滴中心座標、半徑、強度等參數
     Ripples.gl.uniform2fv(this.dropProgram.locations.center, dropPosition);
     Ripples.gl.uniform1f(this.dropProgram.locations.radius, radius);
     Ripples.gl.uniform1f(this.dropProgram.locations.strength, strength);
 
+    // 繪製全畫面矩形，片段著色器會只對半徑內的水波進行改變
     this.drawQuad();
 
+    // 交換讀寫索引
     this.swapBufferIndices();
   }
 
