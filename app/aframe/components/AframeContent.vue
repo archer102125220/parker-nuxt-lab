@@ -11,14 +11,14 @@
   </div>
 </template>
 <script setup>
-import { useAframe } from '@app/aframe/hooks/useAframe';
-import { useCustomLookControls } from '@app/aframe/hooks/useCustomLookControls';
-import { useAframeLink } from '@app/aframe/hooks/useAframeLink';
-import { useAframeDialogTrigger } from '@app/aframe/hooks/useAframeDialogTrigger';
-import { useAframeSlideTrigger } from '@app/aframe/hooks/useAframeSlideTrigger';
-import { useAframeSkyAnimation } from '@app/aframe/hooks/useAframeSkyAnimation';
-import { useVideoControl } from '@app/aframe/hooks/useVideoControl';
-import { useAframeDialogVideo } from '@app/aframe/hooks/useAframeDialogVideo';
+import { useAframe } from '@app/aframe/composables/useAframe';
+import { useCustomLookControls } from '@app/aframe/composables/useCustomLookControls';
+import { useAframeLink } from '@app/aframe/composables/useAframeLink';
+import { useAframeDialogTrigger } from '@app/aframe/composables/useAframeDialogTrigger';
+import { useAframeSlideTrigger } from '@app/aframe/composables/useAframeSlideTrigger';
+import { useAframeSkyAnimation } from '@app/aframe/composables/useAframeSkyAnimation';
+import { useVideoControl } from '@app/aframe/composables/useVideoControl';
+import { useAframeDialogVideo } from '@app/aframe/composables/useAframeDialogVideo';
 
 const props = defineProps({
   class: {
