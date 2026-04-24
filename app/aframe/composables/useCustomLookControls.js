@@ -1,6 +1,6 @@
 // https://stackoverflow.com/questions/48710938/creating-vertical-camera-rotation-touch-control-for-mobile-using-a-frame
 // https://github.com/aframevr/aframe/blob/master/src/components/look-controls.js
-import { useAframe } from '@app/aframe/hooks/useAframe';
+import { useAframe } from '@app/aframe/composables/useAframe';
 
 export function useCustomLookControls(aframeConfig) {
   const aframe = useAframe(aframeConfig);

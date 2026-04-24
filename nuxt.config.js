@@ -339,13 +339,13 @@ export default defineNuxtConfig({
   vite: {
     ...(IS_DEBUG === true
       ? {
-          esbuild: {
-            // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
-            // 明确设置为不移除 'console.log' 等
-            drop: ['debugger'], // 仍然移除 debugger
-            pure: []
-          }
+        esbuild: {
+          // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
+          // 明确设置为不移除 'console.log' 等
+          drop: ['debugger'], // 仍然移除 debugger
+          pure: []
         }
+      }
       : {}),
     plugins: [glsl()],
 
@@ -430,15 +430,22 @@ export default defineNuxtConfig({
 
       'store',
       'store/*/index.{ts,js,mjs,mts}',
-      'store/**'
+      'store/**',
+
+      'aframe/composables',
+      'aframe/composables/**'
     ]
   },
-  // components: {
-  //   dirs: [
-  //     { path: '@app/aframe/components', extensions: ['.vue'], prefix: false },
-  //     { path: '@app/aframe/components', extensions: ['.vue'], prefix: false }
-  //   ]
-  // },
+  components: {
+    dirs: [
+      { path: '@app/aframe/components', extensions: ['.vue'], prefix: false },
+      { path: '@/app/aframe/components', extensions: ['.vue'], prefix: false },
+      '~app/components',
+      '~/app/components/**',
+      '@app/components',
+      '@/app/components/**'
+    ]
+  },
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',

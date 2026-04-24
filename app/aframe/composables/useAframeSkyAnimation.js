@@ -1,4 +1,4 @@
-import { useAframe } from '@app/aframe/hooks/useAframe';
+import { useAframe } from '@app/aframe/composables/useAframe';
 import { useVrStore } from '@app/store/360vrStore';
 
 export function useAframeSkyAnimation(aframeConfig) {

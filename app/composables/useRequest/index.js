@@ -1,6 +1,6 @@
 import _cloneDeep from 'lodash/cloneDeep';
 
-import { useRequestInit } from '@app/hooks/useRequest/useRequestInit';
+import { useRequestInit } from '@app/composables/useRequest/useRequestInit';
 
 // import { axiosInit, request as axiosRequest } from '@shared/request';
 
