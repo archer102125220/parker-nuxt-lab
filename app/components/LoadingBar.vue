@@ -7,18 +7,49 @@
     class="loading_bar"
     :style="`--loading_width:${width};--loading_position:${position}`"
   /> -->
-  <div
-    v-if="loading"
-    class="loading_bar"
-    :style="`--loading_width:${width};--loading_height:${height}px;--loading_position:${position}`"
-  />
+  <div v-if="loading" class="loading_bar" :style="cssVariable" />
 </template>
 <script setup>
 const props = defineProps({
-  position: { type: String, default: 'absolute' },
   loading: { type: Boolean, default: false },
-  height: { type: String, default: '6' },
-  width: { type: String, default: '100%' }
+  position: { type: String, default: 'absolute' },
+  color: { type: String, default: 'var(--primary)' },
+  zIndex: { type: [String, Number], default: '10' },
+  height: { type: [String, Number], default: '6' },
+  width: { type: [String, Number], default: '100%' }
+});
+const cssVariable = computed(() => {
+  const newCssVariable = {
+    '--loading_position': props.position,
+    '--loading_color': props.color
+  };
+
+  let height = '6px';
+  if (typeof props.height === 'number' || /^\d+$/.test(props.height)) {
+    height = `${props.height}px`;
+  } else if (typeof props.height === 'string') {
+    height = props.height;
+  }
+  newCssVariable['--loading_height'] = height;
+
+  let width = '100%';
+  if (typeof props.width === 'number' || /^\d+$/.test(props.width)) {
+    width = `${props.width}px`;
+  } else if (typeof props.width === 'string') {
+    width = props.width;
+  }
+  newCssVariable['--loading_width'] = width;
+
+  let zIndex = 10;
+  if (
+    typeof props.zIndex === 'number' ||
+    (typeof props.zIndex === 'string' && /^\d+$/.test(props.zIndex))
+  ) {
+    zIndex = props.zIndex;
+  }
+  newCssVariable['--loading_zIndex'] = zIndex;
+
+  return newCssVariable;
 });
 </script>
 
@@ -28,7 +59,7 @@ const props = defineProps({
   position: var(--loading_position);
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: var(--loading_zIndex);
 
   // Display & Box Model
   width: var(--loading_width);
