@@ -2,7 +2,7 @@
 
 <template>
   <div class="sheet_editor_page">
-    <!-- <NuxtLink to="/sheet-editor/univer">univer</NuxtLink> -->
+    <NuxtLink to="/sheet-editor/univer">univer</NuxtLink>
     <NuxtLink to="/sheet-editor/collabora">collabora</NuxtLink>
   </div>
 </template>

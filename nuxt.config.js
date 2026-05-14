@@ -618,7 +618,8 @@ export default defineNuxtConfig({
     reportOnly: IS_DEBUG,
 
     headers: {
-      contentSecurityPolicy: CONTENT_SECURITY_POLICY,
+      // contentSecurityPolicy: CONTENT_SECURITY_POLICY,
+      contentSecurityPolicy: [],
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
       crossOriginEmbedderPolicy: false,
       // crossOriginEmbedderPolicy: 'credentialless',
