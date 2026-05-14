@@ -1,15 +1,15 @@
+<script setup>
+const props = defineProps({
+  loading: { type: Boolean, default: false }
+});
+</script>
+
 <template>
   <div v-bind="$attrs" class="skeleton_loader" :css-fadein="loading === false">
     <div v-if="loading" class="skeleton_loader-loading" />
     <slot v-else />
   </div>
 </template>
-
-<script setup>
-const props = defineProps({
-  loading: { type: Boolean, default: false }
-});
-</script>
 
 <style lang="scss">
 @keyframes loaded_fadein {

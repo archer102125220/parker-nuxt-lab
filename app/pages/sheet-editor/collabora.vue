@@ -1,28 +1,26 @@
-<script setup>
-const testToken = 'testToken';
-const collaboraHost = 'http://localhost:9980';
-const wopiHost = 'http://192.168.139.3:3000/collabora';
-const fileId = 'test.xlsx';
-const iframeUrl = computed(() => {
-  const encodedWopiSrc = encodeURIComponent(
-    `${wopiHost}/wopi/files/${fileId}?token=${testToken}`
-  );
-  return `${collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}`;
-});
-</script>
+<script setup></script>
 
 <template>
-  <div>
+  <div class="collabora_page">
     <p>Collabora</p>
-    <ClientOnly>
-      <iframe :src="iframeUrl" frameborder="0" />
-    </ClientOnly>
+    <CollaboraIframe
+      class="collabora_page-collabora"
+      token="testToken"
+      collabora-host="http://localhost:9980"
+      file-id="test.xlsx"
+      wopi-host="http://192.168.139.3:3000/collabora"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
-iframe {
+.collabora_page {
   width: 100%;
   height: 100vh;
+
+  &-collabora {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
