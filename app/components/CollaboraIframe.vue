@@ -1,3 +1,23 @@
+<script>
+export const COLLABORA_LOCALES = [
+  // 亞洲語系
+  { code: 'zh-TW', locale: 'tw', label: '繁體中文 (台灣)' },
+  { code: 'zh-CN', locale: 'cn', label: '简体中文' },
+  { code: 'zh-HK', locale: 'hk', label: '繁體中文 (香港)' },
+  { code: 'ja-JP', locale: 'jp', label: '日本語' },
+  { code: 'ko-KR', locale: 'kr', label: '한국어' },
+
+  // 歐美語系
+  { code: 'en-US', locale: 'us', label: 'English (US)' },
+  { code: 'en-GB', locale: 'gb', label: 'English (UK)' },
+  { code: 'fr-FR', locale: 'fr', label: 'Français' }, // 法文
+  { code: 'de-DE', locale: 'de', label: 'Deutsch' }, // 德文
+  { code: 'es-ES', locale: 'es', label: 'Español' }, // 西班牙文
+  { code: 'it-IT', locale: 'it', label: 'Italiano' }, // 義大利文
+  { code: 'pt-BR', locale: 'br', label: 'Português (BR)' }, // 葡萄牙文 (巴西)
+  { code: 'ru-RU', locale: 'ru', label: 'Русский' } // 俄文
+];
+</script>
 <script setup>
 const props = defineProps({
   token: {
@@ -15,15 +35,23 @@ const props = defineProps({
   wopiHost: {
     type: String,
     default: import.meta.env.VITE_DOMAIN
+  },
+  language: {
+    type: String,
+    default: 'zh-TW'
   }
 });
 
 const loading = ref(true);
+
 const iframeUrl = computed(() => {
   const encodedWopiSrc = encodeURIComponent(
     `${props.wopiHost}/wopi/files/${props.fileId}?token=${props.token}`
   );
-  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}`;
+  console.log({
+    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&lang=${props.language}`
+  });
+  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&lang=${props.language}`;
 });
 </script>
 
