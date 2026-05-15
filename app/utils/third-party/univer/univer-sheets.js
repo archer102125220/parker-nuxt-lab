@@ -1,10 +1,4 @@
-
-export type UniverSheetsInstance = {
-  univer: any;
-  univerAPI: any;
-}
-
-export async function importUniver(): Promise<void> {
+export async function importUniver(){
   if (typeof document === 'undefined') return;
 
 
@@ -16,11 +10,11 @@ export async function importUniver(): Promise<void> {
   }
 
   return new Promise(async (resolve) => {
-    function handleRemoveScriptId(e: Event) {
+    function handleRemoveScriptId(e) {
       console.log(e);
       if (!e.currentTarget) return;
 
-      const targetId = (e.currentTarget as HTMLScriptElement).id;
+      const targetId = e.currentTarget.id;
       const targetIdIndex= scriptIdList.findIndex((scriptId) => scriptId === targetId);
 
       if (targetIdIndex > -1) {
@@ -28,7 +22,7 @@ export async function importUniver(): Promise<void> {
       }
       console.log({ scriptIdList });
       if (scriptIdList.length <= 0) {
-        setTimeout(resolve, 1000);
+        setTimeout(resolve, 1500);
       }
     }
 
@@ -63,7 +57,7 @@ export async function importUniver(): Promise<void> {
     document.head.appendChild(univerRxjs);
     document.head.appendChild(univerEcharts);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     const univerPresets = document.createElement('script');
     univerPresets.setAttribute('id', 'univer-presets');
@@ -83,35 +77,14 @@ export async function importUniver(): Promise<void> {
 
     document.head.appendChild(univerSheetsCore);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     const univerSheetsAdvanced = document.createElement('script');
     univerSheetsAdvanced.setAttribute('id', 'univer-sheets-advanced');
     univerSheetsAdvanced.setAttribute('async', 'true');
-    // univerSheetsAdvanced.setAttribute('module', 'true');
     univerSheetsAdvanced.setAttribute('crossorigin', 'true');
     univerSheetsAdvanced.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/umd/index.js');
     univerSheetsAdvanced.addEventListener('load', handleRemoveScriptId);
-    univerSheetsAdvanced.addEventListener('load', function (e) {
-      console.log('univerSheetsAdvanced load');
-      console.log((window as any).UniverSheetsAdvancedPreset);
-      console.dir(e);
-      console.log((e as any).currentTarget);
-      console.log(
-      (window as any).UniverProEngineFormula,
-          (window as any).UniverProExchangeClient,
-          (window as any).UniverProLicense,
-          (window as any).UniverProSheetsChart,
-          (window as any).UniverProSheetsChartUi,
-          (window as any).UniverProSheetsExchangeClient,
-          (window as any).UniverProSheetsPivot,
-          (window as any).UniverProSheetsPivotUi,
-          (window as any).UniverProSheetsPrint,
-          (window as any).UniverProSheetsShape,
-          (window as any).UniverProSheetsShapeUi,
-          (window as any).UniverProSheetsSparkline,
-          (window as any).UniverProSheetsSparklineUi);
-    });
     
     document.head.appendChild(univerSheetsAdvanced);
 
@@ -176,10 +149,10 @@ export async function importUniver(): Promise<void> {
   });
 }
 
-export async function createUniverInstance(container: HTMLElement): Promise<UniverSheetsInstance> {
+export async function createUniverInstance(container) {
   await importUniver();
 
-  if (typeof (window as any).UniverPresets?.createUniver !== 'function') {
+  if (typeof window.UniverPresets?.createUniver !== 'function') {
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve(createUniverInstance(container));
@@ -187,36 +160,47 @@ export async function createUniverInstance(container: HTMLElement): Promise<Univ
     });
   }
 
+  if (container instanceof HTMLElement === false) {
+    throw new Error('container must be an HTMLElement');
+  }
+
   const {
     UniverPresets,
     UniverPresetSheetsCore,
     UniverCore,
+    UniverProLicense,
     // UniverSheetsAdvancedPreset,
     // UniverSheetsDrawingPreset,
     UniverPresetSheetsCoreZhTW,
     UniverPresetSheetsAdvancedZhTW,
     UniverPresetSheetsDrawingZhTW
-  } = (window as any);
+  } = window;
   const { createUniver } = UniverPresets;
   const { LocaleType, mergeLocales } = UniverCore;
   const { UniverSheetsCorePreset } = UniverPresetSheetsCore;
+  const { UniverLicensePlugin } = UniverProLicense;
 
-  return createUniver({
+  const univerInstance = createUniver({
     locale: LocaleType.ZH_TW,
     locales: {
       [LocaleType.ZH_TW]: mergeLocales(
         UniverPresetSheetsCoreZhTW,
-        // UniverPresetSheetsDrawingZhTW,
-        // UniverPresetSheetsAdvancedZhTW
+        UniverPresetSheetsDrawingZhTW,
+        UniverPresetSheetsAdvancedZhTW
       )
     },
     presets: [
       UniverSheetsCorePreset({ container }),
-      // UniverSheetsAdvancedPreset({ license:'[ENCRYPTION_KEY]', useWorker:true }),
+      // UniverSheetsAdvancedPreset({ license: 'fake.txt', useWorker:true }),
       // UniverSheetsDrawingPreset()
     ]
   });
 
+  univerInstance.univer.registerPlugin(UniverLicensePlugin, {
+    license: 'fake.txt'
+  });
+
+  return univerInstance;
 }
 
 export default createUniverInstance;

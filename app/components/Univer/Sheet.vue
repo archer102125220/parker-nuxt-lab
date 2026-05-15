@@ -1,8 +1,7 @@
-<script lang="ts" setup>
-import type { UniverSheetsInstance } from '@app/utils/third-party/univer/univer-sheets';
-const container = ref<HTMLDivElement | null>(null);
+<script setup>
+const container = ref(null);
 
-const univerInstance = shallowReactive<UniverSheetsInstance>({
+const univerInstance = shallowReactive({
   univer: null,
   univerAPI: null
 });
@@ -12,9 +11,7 @@ async function handleUniverSheet() {
     const { createUniverInstance } = await import(
       '@app/utils/third-party/univer/univer-sheets'
     );
-    const { univer, univerAPI } = await createUniverInstance(
-      container.value as HTMLDivElement
-    );
+    const { univer, univerAPI } = await createUniverInstance(container.value);
 
     univerAPI.createWorkbook({});
 
@@ -30,8 +27,12 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  univerInstance.univer?.dispose();
-  univerInstance.univerAPI?.dispose();
+  if (typeof univerInstance.univer?.dispose === 'function') {
+    univerInstance.univer?.dispose();
+  }
+  if (typeof univerInstance.univerAPI?.dispose === 'function') {
+    univerInstance.univerAPI?.dispose();
+  }
   univerInstance.univer = null;
   univerInstance.univerAPI = null;
 });
