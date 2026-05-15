@@ -17,12 +17,21 @@ export const COLLABORA_LOCALES = [
   { code: 'pt-BR', locale: 'br', label: 'Português (BR)' }, // 葡萄牙文 (巴西)
   { code: 'ru-RU', locale: 'ru', label: 'Русский' } // 俄文
 ];
+export const COLLABORA_FILE_TYPE = [
+  { code: 'xlsx', label: 'Excel' },
+  { code: 'docx', label: 'Word' },
+  { code: 'pptx', label: 'PowerPoint' }
+];
 </script>
 <script setup>
 const props = defineProps({
   token: {
     type: String,
     default: ''
+  },
+  fileType: {
+    type: String,
+    default: COLLABORA_FILE_TYPE[0].code
   },
   collaboraHost: {
     type: String,
@@ -45,8 +54,11 @@ const props = defineProps({
 const loading = ref(true);
 
 const iframeUrl = computed(() => {
+  const fileType =
+    COLLABORA_FILE_TYPE.find((item) => item.code === props.fileType)?.code ||
+    'xlsx';
   const encodedWopiSrc = encodeURIComponent(
-    `${props.wopiHost}/wopi/files/${props.fileId}?token=${props.token}`
+    `${props.wopiHost}/wopi/files/${props.fileId}?token=${props.token}&filetype=${fileType}`
   );
   console.log({
     iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&lang=${props.language}`
@@ -57,7 +69,11 @@ const iframeUrl = computed(() => {
 
 <template>
   <div class="collabora_iframe">
-    <SkeletonLoader :loading="loading" class="collabora_iframe-skeleton" />
+    <SkeletonLoader
+      v-if="loading"
+      :loading="true"
+      class="collabora_iframe-skeleton"
+    />
     <ClientOnly>
       <iframe
         class="collabora_iframe-iframe"

@@ -2,17 +2,19 @@ import path from 'path';
 import fs from 'fs-extra';
 
 const __dirname = path.resolve();
-const FILE_DIR = path.join(__dirname, 'public/xlsx');
+const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler(async (event) => {
   const { filesId } = event.context.params;
+  const { filetype } = getQuery(event);
 
+  const dirPath = path.join(FILE_DIR, filetype);
   // const filePath = path.join(FILE_DIR, 'test.xlsx');
-  const filePath = path.join(FILE_DIR, filesId);
+  const filePath = path.join(dirPath, filesId);
 
   console.log('save');
-  console.log({ filesId });
+  console.log({ filesId, filetype });
   console.log('[PutFile] 實際寫入路徑:', filePath); // ← 確認寫入位置
   console.log('[PutFile] FILE_DIR:', FILE_DIR);
 
@@ -27,7 +29,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // 確保目錄存在
-    fs.ensureDirSync(FILE_DIR);
+    fs.ensureDirSync(dirPath);
     // 將 Buffer 寫入硬碟覆寫舊檔案
     fs.writeFileSync(filePath, rawBinary);
 

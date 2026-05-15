@@ -29,8 +29,8 @@ const currentLocale = computed(() => {
       class="collabora_page-collabora"
       token="testToken"
       collabora-host="http://localhost:9980"
-      file-id="test.xlsx"
-      file-type="xlsx"
+      file-type="docx"
+      file-id="test.docx"
       wopi-host="http://192.168.139.3:3000/collabora"
       :language="currentLocale"
     />

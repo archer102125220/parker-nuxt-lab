@@ -2,19 +2,21 @@ import path from 'path';
 import fs from 'fs-extra';
 
 const __dirname = path.resolve();
-const FILE_DIR = path.join(__dirname, 'public/xlsx');
+const FILE_DIR = path.join(__dirname, 'public');
 
 console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler((event) => {
   const { filesId } = event.context.params;
+  const { filetype } = getQuery(event);
 
   console.log('read');
-  console.log({ filesId });
+  console.log({ filesId, filetype });
 
+  const dirPath = path.join(FILE_DIR, filetype);
   // 正式時應替換為 filesId
   // const filePath = path.join(FILE_DIR, 'test.xlsx');
-  const filePath = path.join(FILE_DIR, filesId);
+  const filePath = path.join(dirPath, filesId);
   const stats = fs.statSync(filePath);
 
   return {
