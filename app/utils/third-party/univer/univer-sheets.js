@@ -1,153 +1,149 @@
-export async function importUniver(){
+import { loadScript } from '@app/utils/helpers/load-script';
+import { loadCSS } from '@app/utils/helpers/load-css';
+
+export async function importUniver() {
   if (typeof document === 'undefined') return;
 
+  const dependecyScriptList = [
+    {
+      id: 'univer-react',
+      src: 'https://unpkg.com/react@18.3.1/umd/react.production.min.js'
+    },
+    {
+      id: 'univer-react-dom',
+      src: 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js'
+    },
+    {
+      id: 'univer-rxjs',
+      src: 'https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js'
+    },
+    {
+      id: 'univer-echarts',
+      src: 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js'
+    }
+  ];
+  const univerCoreScriptList = [
+    {
+      id: 'univer-presets',
+      src: 'https://unpkg.com/@univerjs/presets/lib/umd/index.js'
+    },
+    // {
+    //   id: 'univer-core-facade',
+    //   src: 'https://unpkg.com/@univerjs/core/lib/umd/facade.js'
+    // }
+  ];
+  const univerScriptList = [
+    {
+      id: 'univer-thread-comment',
+      src: 'https://unpkg.com/@univerjs/thread-comment/lib/umd/index.js'
+    },
+    {
+      id: 'univer-sheets-print-facade',
+      src: 'https://unpkg.com/@univerjs-pro/sheets-print/lib/umd/facade.js'
+    }
+  ];
+  const univerSheetCoreScriptList = [
+    {
+      id: 'univer-sheets-core',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-core/lib/umd/index.js'
+    },
+    {
+      id: 'univer-sheets-thread-comment',
+      src: 'https://unpkg.com/@univerjs/sheets-thread-comment/lib/umd/index.js'
+    }
+  ];
+  const univerSheetScriptList = [
+    {
+      id: 'univer-sheets-drawing',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/umd/index.js'
+    },
+    {
+      id: 'univer-sheets-advanced',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/umd/index.js'
+    }
+  ];
+  const univerLocaleList = [
+    {
+      id: 'univer-sheets-core-zh-tw',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-core/lib/umd/locales/zh-TW.js'
+    },
+    {
+      id: 'univer-sheets-drawing-zh-tw',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/umd/locales/zh-TW.js'
+    },
+    {
+      id: 'univer-sheets-advanced-zh-tw',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/umd/locales/zh-TW.js'
+    }
+  ];
+  const univerCSSList = [
+    {
+      id: 'univer-sheets-core-css',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-core/lib/index.css'
+    },
+    {
+      id: 'univer-sheets-drawing-css',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/index.css'
+    },
+    {
+      id: 'univer-sheets-advanced-css',
+      src: 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/index.css'
+    }
+  ];
 
-  const scriptIdList = ['univer-react', 'univer-react-dom', 'univer-rxjs', 'univer-echarts', 'univer-presets', 'univer-sheets-core', 'univer-sheets-core-zh-tw', 'univer-sheets-advanced', 'univer-sheets-advanced-zh-tw', 'univer-sheets-drawing', 'univer-sheets-drawing-zh-tw', 'univer-sheets-advanced-css', 'univer-sheets-core-css', 'univer-sheets-drawing-css'];
-  const querySelectorAllString = scriptIdList.map((scriptId) => `#${scriptId}`).join(',');
+  const querySelectorAllString = [
+    ...dependecyScriptList.map((dependecyScript) => `#${dependecyScript.id}`),
+    ...univerSheetCoreScriptList.map((sheetCoreScript) => `#${sheetCoreScript.id}`),
+    ...univerCoreScriptList.map((coreScript) => `#${coreScript.id}`),
+    ...univerScriptList.map((univerScript) => `#${univerScript.id}`),
+    ...univerSheetScriptList.map(
+      (univerSheetScript) => `#${univerSheetScript.id}`
+    ),
+    ...univerLocaleList.map(
+      (univerLocaleScript) => `#${univerLocaleScript.id}`
+    ),
+    ...univerCSSList.map((univerCSSScript) => `#${univerCSSScript.id}`)
+  ].join(',');
 
   if (document.querySelectorAll(querySelectorAllString).length > 0) {
     return;
   }
 
-  return new Promise(async (resolve) => {
-    function handleRemoveScriptId(e) {
-      console.log(e);
-      if (!e.currentTarget) return;
+  // 嚴格依序載入，每個都等前一個完成
+  const dependecyScriptPromiseList = dependecyScriptList.map(
+    (dependecyScript) => loadScript(dependecyScript.id, dependecyScript.src)
+  );
+  await Promise.all(dependecyScriptPromiseList);
 
-      const targetId = e.currentTarget.id;
-      const targetIdIndex= scriptIdList.findIndex((scriptId) => scriptId === targetId);
+  const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
+    loadScript(coreScript.id, coreScript.src)
+  );
+  await Promise.all(univerCoreScriptPromiseList);
 
-      if (targetIdIndex > -1) {
-        scriptIdList.splice(targetIdIndex, 1);
-      }
-      console.log({ scriptIdList });
-      if (scriptIdList.length <= 0) {
-        setTimeout(resolve, 1500);
-      }
-    }
+  const univerScriptPromiseList = univerScriptList.map((univerScript) =>
+    loadScript(univerScript.id, univerScript.src)
+  );
+  await Promise.all(univerScriptPromiseList);
 
-    const univerReact = document.createElement('script');
-    univerReact.setAttribute('id', 'univer-react');
-    univerReact.setAttribute('async', 'true');
-    univerReact.setAttribute('crossorigin', 'true');
-    univerReact.setAttribute('src', 'https://unpkg.com/react@18.3.1/umd/react.production.min.js');
-    univerReact.addEventListener('load',handleRemoveScriptId);
+  const univerSheetCoreScriptPromiseList = univerSheetCoreScriptList.map((sheetCoreScript) =>
+    loadScript(sheetCoreScript.id, sheetCoreScript.src)
+  );
+  await Promise.all(univerSheetCoreScriptPromiseList);
 
-    const univerReactDom = document.createElement('script');
-    univerReactDom.setAttribute('id', 'univer-react-dom');
-    univerReactDom.setAttribute('async', 'true');
-    univerReactDom.setAttribute('crossorigin', 'true');
-    univerReactDom.setAttribute('src', 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js');
-    univerReactDom.addEventListener('load',handleRemoveScriptId);
+  const univerSheetScriptPromiseList = univerSheetScriptList.map(
+    (univerSheetScript) =>
+      loadScript(univerSheetScript.id, univerSheetScript.src)
+  );
+  await Promise.all(univerSheetScriptPromiseList);
 
-    const univerRxjs = document.createElement('script');
-    univerRxjs.setAttribute('id', 'univer-rxjs');
-    univerRxjs.setAttribute('async', 'true');
-    univerRxjs.setAttribute('crossorigin', 'true');
-    univerRxjs.setAttribute('src', 'https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js');
-    univerRxjs.addEventListener('load',handleRemoveScriptId);
-    
-    const univerEcharts = document.createElement('script');
-    univerEcharts.setAttribute('id', 'univer-echarts');
-    univerEcharts.setAttribute('async', 'true');
-    univerEcharts.setAttribute('crossorigin', 'true');
-    univerEcharts.setAttribute('src', 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js');
-    univerEcharts.addEventListener('load',handleRemoveScriptId);
-
-    document.head.appendChild(univerReact);
-    document.head.appendChild(univerReactDom);
-    document.head.appendChild(univerRxjs);
-    document.head.appendChild(univerEcharts);
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    const univerPresets = document.createElement('script');
-    univerPresets.setAttribute('id', 'univer-presets');
-    univerPresets.setAttribute('async', 'true');
-    univerPresets.setAttribute('crossorigin', 'true');
-    univerPresets.setAttribute('src', 'https://unpkg.com/@univerjs/presets/lib/umd/index.js');
-    univerPresets.addEventListener('load', handleRemoveScriptId);
-
-    document.head.appendChild(univerPresets);
-
-    const univerSheetsCore = document.createElement('script');
-    univerSheetsCore.setAttribute('id', 'univer-sheets-core');
-    univerSheetsCore.setAttribute('async', 'true');
-    univerSheetsCore.setAttribute('crossorigin', 'true');
-    univerSheetsCore.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-core/lib/umd/index.js');
-    univerSheetsCore.addEventListener('load', handleRemoveScriptId);
-
-    document.head.appendChild(univerSheetsCore);
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    const univerSheetsAdvanced = document.createElement('script');
-    univerSheetsAdvanced.setAttribute('id', 'univer-sheets-advanced');
-    univerSheetsAdvanced.setAttribute('async', 'true');
-    univerSheetsAdvanced.setAttribute('crossorigin', 'true');
-    univerSheetsAdvanced.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/umd/index.js');
-    univerSheetsAdvanced.addEventListener('load', handleRemoveScriptId);
-    
-    document.head.appendChild(univerSheetsAdvanced);
-
-    const univerSheetsDrawing = document.createElement('script');
-    univerSheetsDrawing.setAttribute('id', 'univer-sheets-drawing');
-    univerSheetsDrawing.setAttribute('async', 'true');
-    univerSheetsDrawing.setAttribute('crossorigin', 'true');
-    univerSheetsDrawing.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/umd/index.js');
-    univerSheetsDrawing.addEventListener('load', handleRemoveScriptId);
-    
-    document.head.appendChild(univerSheetsDrawing);
-
-    const univerSheetsCoreZhTW = document.createElement('script');
-    univerSheetsCoreZhTW.setAttribute('id', 'univer-sheets-core-zh-tw');
-    univerSheetsCoreZhTW.setAttribute('crossorigin', 'true');
-    univerSheetsCoreZhTW.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-core/lib/umd/locales/zh-TW.js');
-    univerSheetsCoreZhTW.addEventListener('load',handleRemoveScriptId);
-
-    const univerSheetsAdvancedZhTW = document.createElement('script');
-    univerSheetsAdvancedZhTW.setAttribute('id', 'univer-sheets-advanced-zh-tw');
-    univerSheetsAdvancedZhTW.setAttribute('crossorigin', 'true');
-    univerSheetsAdvancedZhTW.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/umd/locales/zh-TW.js');
-    univerSheetsAdvancedZhTW.addEventListener('load',handleRemoveScriptId);
-
-    const univerSheetsDrawingZhTW = document.createElement('script');
-    univerSheetsDrawingZhTW.setAttribute('id', 'univer-sheets-drawing-zh-tw');
-    univerSheetsDrawingZhTW.setAttribute('crossorigin', 'true');
-    univerSheetsDrawingZhTW.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/umd/locales/zh-TW.js');
-    univerSheetsDrawingZhTW.addEventListener('load',handleRemoveScriptId);
-
-    const univerSheetsAdvancedCss = document.createElement('link');
-    univerSheetsAdvancedCss.setAttribute('id', 'univer-sheets-advanced-css');
-    univerSheetsAdvancedCss.setAttribute('crossorigin', 'true');
-    univerSheetsAdvancedCss.setAttribute('rel', 'stylesheet');
-    univerSheetsAdvancedCss.setAttribute('href', 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/index.css');
-    univerSheetsAdvancedCss.addEventListener('load', handleRemoveScriptId);
-    
-    document.head.appendChild(univerSheetsAdvancedCss);
-
-    const univerSheetsCoreCss = document.createElement('link');
-    univerSheetsCoreCss.setAttribute('id', 'univer-sheets-core-css');
-    univerSheetsCoreCss.setAttribute('crossorigin', 'true');
-    univerSheetsCoreCss.setAttribute('rel', 'stylesheet');
-    univerSheetsCoreCss.setAttribute('href', 'https://unpkg.com/@univerjs/preset-sheets-core/lib/index.css');
-    univerSheetsCoreCss.addEventListener('load', handleRemoveScriptId);
-    
-    document.head.appendChild(univerSheetsCoreCss);
-
-    const univerSheetsDrawingCss = document.createElement('link');
-    univerSheetsDrawingCss.setAttribute('id', 'univer-sheets-drawing-css');
-    univerSheetsDrawingCss.setAttribute('rel', 'stylesheet');
-    univerSheetsDrawingCss.setAttribute('crossorigin', 'true');
-    univerSheetsDrawingCss.setAttribute('href', 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/index.css');
-    univerSheetsDrawingCss.addEventListener('load', handleRemoveScriptId);
-
-    document.head.appendChild(univerSheetsDrawingCss);
-
-    document.head.appendChild(univerSheetsCoreZhTW);
-    document.head.appendChild(univerSheetsAdvancedZhTW);
-    document.head.appendChild(univerSheetsDrawingZhTW);
-  });
+  await Promise.all([
+    ...univerLocaleList.map((univerLocaleScript) =>
+      loadScript(univerLocaleScript.id, univerLocaleScript.src)
+    ),
+    ...univerCSSList.map((univerCSSScript) =>
+      loadCSS(univerCSSScript.id, univerCSSScript.src)
+    )
+  ]);
 }
 
 export async function createUniverInstance(container) {
@@ -169,7 +165,7 @@ export async function createUniverInstance(container) {
     UniverPresets,
     UniverPresetSheetsCore,
     UniverCore,
-    // UniverProLicense,
+    UniverProLicense,
     // UniverSheetsAdvancedPreset,
     // UniverSheetsDrawingPreset,
     UniverPresetSheetsCoreZhTW,
@@ -179,7 +175,7 @@ export async function createUniverInstance(container) {
   const { createUniver } = UniverPresets;
   const { LocaleType, mergeLocales } = UniverCore;
   const { UniverSheetsCorePreset } = UniverPresetSheetsCore;
-  // const { UniverLicensePlugin } = UniverProLicense;
+  const { UniverLicensePlugin } = UniverProLicense;
 
   const univerInstance = createUniver({
     locale: LocaleType.ZH_TW,
@@ -197,9 +193,10 @@ export async function createUniverInstance(container) {
     ]
   });
 
-  // univerInstance.univer.registerPlugin(UniverLicensePlugin, {
-  //   license: 'fake.txt'
-  // });
+  univerInstance.univer.registerPlugin(UniverLicensePlugin, {
+    license: 'fake.txt'
+  });
+  window.univerInstance=univerInstance;
 
   return univerInstance;
 }
