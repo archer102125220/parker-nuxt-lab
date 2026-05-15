@@ -10,7 +10,7 @@ const univerInstance = shallowReactive({
 async function handleUniverSheet() {
   try {
     const { createUniverInstance } = await import(
-      '@app/utils/third-party/univer/univer-sheets'
+      '@/app/utils/third-party/univer/create-sheet'
     );
     const { univer, univerAPI } = await createUniverInstance(container.value);
 
