@@ -26,21 +26,13 @@ export async function importUniver() {
     {
       id: 'univer-presets',
       src: 'https://unpkg.com/@univerjs/presets/lib/umd/index.js'
-    },
-    // {
-    //   id: 'univer-core-facade',
-    //   src: 'https://unpkg.com/@univerjs/core/lib/umd/facade.js'
-    // }
+    }
   ];
   const univerScriptList = [
     {
       id: 'univer-thread-comment',
       src: 'https://unpkg.com/@univerjs/thread-comment/lib/umd/index.js'
     },
-    {
-      id: 'univer-sheets-print-facade',
-      src: 'https://unpkg.com/@univerjs-pro/sheets-print/lib/umd/facade.js'
-    }
   ];
   const univerSheetCoreScriptList = [
     {
@@ -60,7 +52,11 @@ export async function importUniver() {
     {
       id: 'univer-sheets-advanced',
       src: 'https://unpkg.com/@univerjs/preset-sheets-advanced/lib/umd/index.js'
-    }
+    },
+    {
+      id: 'univer-sheets-print-facade',
+      src: 'https://unpkg.com/@univerjs-pro/sheets-print/lib/umd/facade.js'
+    },
   ];
   const univerLocaleList = [
     {
