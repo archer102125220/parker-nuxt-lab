@@ -1,5 +1,6 @@
 export default defineEventHandler((event) => {
-  if (import.meta.dev === false) {
+  const url = event.node.req?.url ?? '';
+  if (url.includes('/collabora/wopi/files') && import.meta.dev === false) {
     setResponseStatus(event, 403);
     return '';
   }
