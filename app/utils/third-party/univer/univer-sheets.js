@@ -42,12 +42,14 @@ export async function importUniver(){
 
     const univerRxjs = document.createElement('script');
     univerRxjs.setAttribute('id', 'univer-rxjs');
+    univerRxjs.setAttribute('async', 'true');
     univerRxjs.setAttribute('crossorigin', 'true');
     univerRxjs.setAttribute('src', 'https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js');
     univerRxjs.addEventListener('load',handleRemoveScriptId);
     
     const univerEcharts = document.createElement('script');
     univerEcharts.setAttribute('id', 'univer-echarts');
+    univerEcharts.setAttribute('async', 'true');
     univerEcharts.setAttribute('crossorigin', 'true');
     univerEcharts.setAttribute('src', 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js');
     univerEcharts.addEventListener('load',handleRemoveScriptId);
@@ -90,7 +92,6 @@ export async function importUniver(){
 
     const univerSheetsDrawing = document.createElement('script');
     univerSheetsDrawing.setAttribute('id', 'univer-sheets-drawing');
-    univerSheetsDrawing.setAttribute('crossorigin', 'true');
     univerSheetsDrawing.setAttribute('async', 'true');
     univerSheetsDrawing.setAttribute('crossorigin', 'true');
     univerSheetsDrawing.setAttribute('src', 'https://unpkg.com/@univerjs/preset-sheets-drawing/lib/umd/index.js');
@@ -168,7 +169,7 @@ export async function createUniverInstance(container) {
     UniverPresets,
     UniverPresetSheetsCore,
     UniverCore,
-    UniverProLicense,
+    // UniverProLicense,
     // UniverSheetsAdvancedPreset,
     // UniverSheetsDrawingPreset,
     UniverPresetSheetsCoreZhTW,
@@ -178,7 +179,7 @@ export async function createUniverInstance(container) {
   const { createUniver } = UniverPresets;
   const { LocaleType, mergeLocales } = UniverCore;
   const { UniverSheetsCorePreset } = UniverPresetSheetsCore;
-  const { UniverLicensePlugin } = UniverProLicense;
+  // const { UniverLicensePlugin } = UniverProLicense;
 
   const univerInstance = createUniver({
     locale: LocaleType.ZH_TW,
@@ -196,9 +197,9 @@ export async function createUniverInstance(container) {
     ]
   });
 
-  univerInstance.univer.registerPlugin(UniverLicensePlugin, {
-    license: 'fake.txt'
-  });
+  // univerInstance.univer.registerPlugin(UniverLicensePlugin, {
+  //   license: 'fake.txt'
+  // });
 
   return univerInstance;
 }
