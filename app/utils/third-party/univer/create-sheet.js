@@ -467,26 +467,29 @@ export async function importAdvancedSheet() {
     return;
   }
 
-  // 確保 script 按順序載入
-  for (const univerProCroScript of univerProCroScriptList) {
-    await loadScript(
-      univerProCroScript.id,
-      univerProCroScript.src,
-      univerProCroScript.module
-    );
-  }
-  for (const univerSheetAdvancedScript of univerSheetsAdvancedScriptList) {
-    await loadScript(
-      univerSheetAdvancedScript.id,
-      univerSheetAdvancedScript.src,
-      univerSheetAdvancedScript.module
-    );
-  }
+  const univerProCroScriptPromiseList = univerProCroScriptList.map(
+    (univerProCroScript) => {
+      return loadScript(
+        univerProCroScript.id,
+        univerProCroScript.src,
+        univerProCroScript.module
+      );
+    }
+  );
+  await Promise.all(univerProCroScriptPromiseList);
+
+  const univerSheetsAdvancedScriptPromiseList = univerSheetsAdvancedScriptList.map(
+    (univerSheetAdvancedScript) => {
+      return loadScript(
+        univerSheetAdvancedScript.id,
+        univerSheetAdvancedScript.src,
+        univerSheetAdvancedScript.module
+      );
+    }
+  );
+  await Promise.all(univerSheetsAdvancedScriptPromiseList);
 
   const univerSheetsAdvancedPromiseList = [
-    // ...univerSheetsAdvancedScriptList.map((univerSheetScript) =>
-    //   loadScript(univerSheetScript.id, univerSheetScript.src, univerSheetScript.module)
-    // ),
     ...univerSheetsAdvancedLocaleList.map((univerLocaleScript) =>
       loadScript(univerLocaleScript.id, univerLocaleScript.src)
     ),
@@ -507,13 +510,6 @@ export async function createUniverInstance(container) {
       }, 100);
     });
   }
-
-  // await new Promise((resolve) => {
-  //   setTimeout(async () => {
-  //     await importAdvancedSheet();
-  //     resolve();
-  //   }, 10000);
-  // });
 
   if (container instanceof HTMLElement === false) {
     throw new Error('container must be an HTMLElement');
@@ -586,7 +582,7 @@ export async function createUniverInstance(container) {
     );
   }
 
-  window.univerInstance = univerInstance;
+  // window.univerInstance = univerInstance;
 
   return univerInstance;
 }
