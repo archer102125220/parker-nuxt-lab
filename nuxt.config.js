@@ -30,7 +30,9 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.ytimg.com',
     'https://connect.facebook.net',
     'https://*.facebook.com',
-    'https://*.fbcdn.net'
+    'https://*.fbcdn.net',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'base-uri': ['\'self\''],
   'font-src': [
@@ -38,9 +40,11 @@ const CONTENT_SECURITY_POLICY = {
     'data:',
     'blob:',
     'https://fonts.gstatic.com',
-    'https://*.fbcdn.net'
+    'https://*.fbcdn.net',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
-  'form-action': ['\'self\'', 'https://*.facebook.com'],
+  'form-action': ['\'self\'', 'https://*.facebook.com', 'https://unpkg.com/@univerjs', 'http://localhost:9980'],
   'img-src': [
     '\'self\'',
     'data:',
@@ -50,7 +54,9 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.facebook.com',
     'https://*.fbcdn.net',
     'https://*.googletagmanager.com',
-    'https://validator.swagger.io'
+    'https://validator.swagger.io',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'object-src': ['\'none\''],
   'script-src-attr': ['\'none\''],
@@ -67,6 +73,8 @@ const CONTENT_SECURITY_POLICY = {
   //   'https://*.fbcdn.net',
   //   'https://*.googleapis.com',
   //   'https://va.vercel-scripts.com'
+  //   'https://unpkg.com/@univerjs',
+  //   'http://localhost:9980'
   // ],
   'script-src': [
     '\'self\'',
@@ -82,7 +90,9 @@ const CONTENT_SECURITY_POLICY = {
     'https://vercel.live',
     'https://gc.kis.v2.scr.kaspersky',
     'wss://gc.kis.v2.scr.kaspersky',
-    'https://va.vercel-scripts.com'
+    'https://va.vercel-scripts.com',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'style-src': [
     '\'self\'',
@@ -90,7 +100,9 @@ const CONTENT_SECURITY_POLICY = {
     'https://fonts.googleapis.com',
     'https://*.youtube.com',
     'https://*.facebook.com',
-    'https://*.fbcdn.net'
+    'https://*.fbcdn.net',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'connect-src': [
     '\'self\'',
@@ -104,27 +116,35 @@ const CONTENT_SECURITY_POLICY = {
     'https://graph.facebook.com',
     'https://*.google-analytics.com',
     'https://*.googleapis.com',
-    'https://api.github.com'
+    'https://api.github.com',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'frame-ancestors': [
     '\'self\'',
     'https://*.youtube.com',
     'https://*.ytimg.com',
-    'https://*.facebook.com'
+    'https://*.facebook.com',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'frame-src': [
     '\'self\'',
     'https://*.youtube.com',
     'https://*.ytimg.com',
     'https://www.googletagmanager.com',
-    'https://*.facebook.com'
+    'https://*.facebook.com',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'media-src': [
     '\'self\'',
     'https://*.youtube.com',
     'https://*.ytimg.com',
     'https://*.facebook.com',
-    'https://*.fbcdn.net'
+    'https://*.fbcdn.net',
+    'https://unpkg.com/@univerjs',
+    'http://localhost:9980'
   ],
   'upgrade-insecure-requests': true
 };
@@ -196,6 +216,34 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
+    // Collabora WOPI endpoints：關閉 nuxt-security 的 CSRF 保護與速率限制
+    // 因為 Collabora Docker 從容器內部發出請求，不帶 CSRF token / Origin header
+    '/collabora/**': {
+      security: {
+        xssValidator: false,
+        corsHandler: {
+          origin: '*',
+          methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+          allowHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-WOPI-Override',
+            'X-WOPI-Lock',
+            'X-Requested-With'
+          ],
+          exposeHeaders: ['X-WOPI-Lock'],
+          credentials: false,
+          maxAge: '86400',
+          preflight: { statusCode: 204 }
+        },
+        rateLimiter: false,
+        requestSizeLimiter: {
+          maxRequestSizeInBytes: 50 * 1024 * 1024, // 50MB（xlsx 可能很大）
+          maxUploadFileRequestInBytes: 50 * 1024 * 1024
+        },
+        csrf: false
+      }
+    },
     // '/': { isr: true },
     // '/en': { isr: true },
     // '/': { prerender: true },
@@ -570,7 +618,8 @@ export default defineNuxtConfig({
     reportOnly: IS_DEBUG,
 
     headers: {
-      contentSecurityPolicy: CONTENT_SECURITY_POLICY,
+      // contentSecurityPolicy: CONTENT_SECURITY_POLICY,
+      contentSecurityPolicy: [],
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
       crossOriginEmbedderPolicy: false,
       // crossOriginEmbedderPolicy: 'credentialless',
