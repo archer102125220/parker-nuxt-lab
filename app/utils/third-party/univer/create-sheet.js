@@ -4,6 +4,23 @@ import { loadCSS } from '@app/utils/helpers/load-css';
 const UNIVERSAL_VERSION = '0.22.1';
 const UNIVER_SERVER_ENDPOINT = 'https://localhost:3000/api/univer-test';
 
+export const LOCALE_TYPE = {
+  get list() {
+    return localeType.list;
+  }
+};
+const localeType = {
+  list: null
+};
+export const EVENT_TYPE = {
+  get list() {
+    return eventType.list;
+  }
+};
+const eventType = {
+  list: null
+};
+
 export async function importUniver() {
   if (typeof document === 'undefined') return;
 
@@ -40,6 +57,10 @@ export async function importUniver() {
     //   id: 'univer-thread-comment',
     //   src: `https://unpkg.com/@univerjs/thread-comment@${UNIVERSAL_VERSION}/lib/umd/index.js`
     // }
+    {
+      id: 'univer-pro-license',
+      src: `https://unpkg.com/@univerjs-pro/license@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    }
   ];
   const univerSheetCoreScriptList = [
     {
@@ -123,48 +144,96 @@ export async function importUniver() {
       src: `https://unpkg.com/@univerjs/preset-sheets-core@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-sheets-core-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-core@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-sheets-filter-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-filter@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
+    },
+    {
+      id: 'univer-sheets-filter-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-filter@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
     },
     {
       id: 'univer-sheets-sort-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-sort@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-sheets-sort-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-sort@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-sheets-data-validation-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-data-validation@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
+    },
+    {
+      id: 'univer-sheets-data-validation-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-data-validation@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
     },
     {
       id: 'univer-sheets-conditional-formatting-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-conditional-formatting@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-sheets-conditional-formatting-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-conditional-formatting@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-sheets-hyper-link-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-hyper-link@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
+    },
+    {
+      id: 'univer-sheets-hyper-link-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-hyper-link@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
     },
     {
       id: 'univer-sheets-find-replace-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-find-replace@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-sheets-find-replace-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-find-replace@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-sheets-drawing-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-drawing@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
+    },
+    {
+      id: 'univer-sheets-drawing-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-drawing@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
     },
     {
       id: 'univer-sheets-thread-comment-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-thread-comment@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-sheets-thread-comment-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-thread-comment@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-sheets-note-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-note@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
+    },
+    {
+      id: 'univer-sheets-note-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-note@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
     },
     {
       id: 'univer-sheets-table-zh-tw',
       src: `https://unpkg.com/@univerjs/preset-sheets-table@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-sheets-table-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-table@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-sheets-zen-editor-zh-tw',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/umd/locale/zh-TW.js`
+    },
+    {
+      id: 'univer-sheets-zen-editor-en-us',
+      src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/umd/locale/en-US.js`
     }
   ];
   const univerCSSList = [
@@ -299,10 +368,6 @@ export async function importUniver() {
 export async function importAdvancedSheet() {
   const univerProCroScriptList = [
     {
-      id: 'univer-pro-license',
-      src: `https://unpkg.com/@univerjs-pro/license@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
-    {
       id: 'univer-pro-engine-formula',
       src: `https://unpkg.com/@univerjs-pro/engine-formula@${UNIVERSAL_VERSION}/lib/umd/index.js`
     }
@@ -381,12 +446,24 @@ export async function importAdvancedSheet() {
       src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
     },
     {
+      id: 'univer-preset-sheets-advanced-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    },
+    {
       id: 'univer-pro-sheets-print-zh-tw',
       src: `https://unpkg.com/@univerjs-pro/sheets-print@${UNIVERSAL_VERSION}/lib/umd/locale/zh-TW.js`
     },
     {
+      id: 'univer-pro-sheets-print-en-us',
+      src: `https://unpkg.com/@univerjs-pro/sheets-print@${UNIVERSAL_VERSION}/lib/umd/locale/en-US.js`
+    },
+    {
       id: 'univer-pro-exchange-client-zh-tw',
       src: `https://unpkg.com/@univerjs-pro/exchange-client@${UNIVERSAL_VERSION}/lib/umd/locale/zh-TW.js`
+    },
+    {
+      id: 'univer-pro-exchange-client-en-us',
+      src: `https://unpkg.com/@univerjs-pro/exchange-client@${UNIVERSAL_VERSION}/lib/umd/locale/en-US.js`
     }
 
     // {
@@ -500,13 +577,14 @@ export async function importAdvancedSheet() {
   await Promise.all(univerSheetsAdvancedPromiseList);
 }
 
-export async function createUniverInstance(container) {
+export async function createUniverInstance(container, locale = '') {
+  console.log('createUniverInstance start');
   await importUniver();
 
   if (typeof window.UniverPresets?.createUniver !== 'function') {
     await new Promise((resolve) => {
       setTimeout(() => {
-        resolve(createUniverInstance(container));
+        resolve(createUniverInstance(container, locale));
       }, 100);
     });
   }
@@ -521,7 +599,9 @@ export async function createUniverInstance(container) {
     UniverPresetSheetsCore,
     UniverPresetSheetsDrawing,
     UniverPresetSheetsCoreZhTW,
-    UniverPresetSheetsDrawingZhTW
+    UniverPresetSheetsCoreEnUS,
+    UniverPresetSheetsDrawingZhTW,
+    UniverPresetSheetsDrawingEnUS
   } = window;
   const { createUniver } = UniverPresets;
   const { LocaleType, mergeLocales } = UniverCore;
@@ -529,11 +609,15 @@ export async function createUniverInstance(container) {
   const { UniverSheetsDrawingPreset } = UniverPresetSheetsDrawing;
 
   const univerInstance = createUniver({
-    locale: LocaleType.ZH_TW,
+    locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
     locales: {
       [LocaleType.ZH_TW]: mergeLocales(
         UniverPresetSheetsCoreZhTW,
         UniverPresetSheetsDrawingZhTW
+      ),
+      [LocaleType.EN_US]: mergeLocales(
+        UniverPresetSheetsCoreEnUS,
+        UniverPresetSheetsDrawingEnUS
       )
     },
     presets: [
@@ -546,12 +630,15 @@ export async function createUniverInstance(container) {
   const {
     UniverProLicense = {},
     UniverProSheetsPrint = {},
-    UniverProExchangeClient={},
+    UniverProExchangeClient = {},
     UniverProSheetsExchangeClient = {},
 
     UniverProSheetsPrintZhTW,
+    UniverProSheetsPrintEnUS,
     UniverProExchangeClientZhTW,
-    UniverPresetSheetsAdvancedZhTW
+    UniverProExchangeClientEnUS,
+    UniverPresetSheetsAdvancedZhTW,
+    UniverPresetSheetsAdvancedEnUS
   } = window;
   const { UniverLicensePlugin } = UniverProLicense;
   const { UniverSheetsPrintPlugin } = UniverProSheetsPrint;
@@ -580,8 +667,18 @@ export async function createUniverInstance(container) {
         UniverPresetSheetsAdvancedZhTW
       )
     );
+    univerInstance.univerAPI.loadLocales(
+      LocaleType.EN_US,
+      mergeLocales(
+        UniverProSheetsPrintEnUS,
+        UniverProExchangeClientEnUS,
+        UniverPresetSheetsAdvancedEnUS
+      )
+    );
   }
 
+  localeType.list = UniverCore.LocaleType;
+  eventType.list = univerInstance.univerAPI.Event;
   // window.univerInstance = univerInstance;
 
   return univerInstance;
