@@ -1,4 +1,4 @@
-export function loadScript(id, src) {
+export function loadScript(id, src, module = false) {
   if (typeof document === 'undefined') {
     return Promise.resolve();
   }
@@ -11,6 +11,9 @@ export function loadScript(id, src) {
     const script = document.createElement('script');
     script.id = id;
     script.src = src;
+    if (module === true) {
+      script.type = 'module';
+    }
     // 完全不設定 async，讓瀏覽器依照插入順序執行
     script.onload = () => resolve();
     script.onerror = reject;
