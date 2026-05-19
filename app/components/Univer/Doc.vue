@@ -22,7 +22,7 @@ const props = defineProps({
       return LOCALE_TYPE?.list?.ZH_TW || 'zhTW';
     }
   },
-  doc: {
+  value: {
     type: Object,
     default: () => ({
       id: 'YBLWUR',
@@ -111,59 +111,13 @@ const props = defineProps({
   }
 });
 const emits = defineEmits([
+  'update:value',
+  'update:document',
+  'change',
   'univerStarting',
   'univerReady',
   'univerRendered',
-  'univerSteady',
-  'univerChangeStart',
-  'univerChange',
-  'univerChangeEnd',
-
-  'BeforeClipboardChange',
-  'BeforeClipboardPaste',
-  'ClipboardChanged',
-  'ClipboardPasted',
-  'SelectionChanged',
-  'SelectionMoveStart',
-  'SelectionMoveEnd',
-  'SelectionMoving',
-  'DragOver',
-  'Drop',
-  'CellClicked',
-  'CellHover',
-  'CellPointerDown',
-  'CellPointerUp',
-  'CellPointerMove',
-  'SheetValueChanged',
-  'SheetZoomChanged',
-  'SheetSkeletonChanged',
-  'BeforeSheetEditStart',
-  'SheetEditStarted',
-  'BeforeSheetEditEnd',
-  'SheetEditEnded',
-  'SheetEditChanging',
-  'Scroll',
-  'CrosshairHighlightColorChanged',
-  'CrosshairHighlightEnabledChanged',
-  'RowHeaderClick',
-  'RowHeaderHover',
-  'ColumnHeaderClick',
-  'ColumnHeaderHover',
-  'BeforeSheetDataValidationAdd',
-  'SheetDataValidationChanged',
-  'SheetDataValidatorStatusChanged',
-  'BeforeCommentAdd',
-  'CommentAdded',
-  'BeforeCommentUpdate',
-  'CommentUpdated',
-  'BeforeCommentDeleted',
-  'CommentDeleted',
-  'SheetBeforeRangeSort',
-  'SheetRangeSorted',
-  'SheetBeforeRangeFilter',
-  'SheetRangeFiltered',
-  'BeforePivotTableAdd',
-  'PivotTableAdded'
+  'univerSteady'
 ]);
 
 const container = ref(null);
@@ -206,23 +160,7 @@ async function handleUniverDoc() {
       })
     );
 
-    // disposableList.push(
-    //   univerAPI.addEvent(univerAPI.Event.SheetEditStarted, (event) => {
-    //     emits('univerChangeStart', event);
-    //   })
-    // );
-    // disposableList.push(
-    //   univerAPI.addEvent(univerAPI.Event.SheetEditChanging, (event) => {
-    //     emits('univerChange', event);
-    //   })
-    // );
-    // disposableList.push(
-    //   univerAPI.addEvent(univerAPI.Event.SheetEditEnded, (event) => {
-    //     console.log({ event });
-    //     emits('univerChangeEnd', event);
-    //   })
-    // );
-    currentDoc.value = univerAPI.createUniverDoc(props.doc);
+    currentDoc.value = univerAPI.createUniverDoc(props.value);
 
     univerInstance.univer = univer;
     univerInstance.univerAPI = univerAPI;
@@ -231,6 +169,22 @@ async function handleUniverDoc() {
   }
 
   loading.value = false;
+}
+
+function handleKeyDown() {
+  if (univerInstance.univerAPI === null) return;
+
+  const doc = univerInstance.univerAPI.getActiveDocument();
+
+  emits('update:document', doc);
+  if (doc === null) {
+    console.error('doc is null');
+    return;
+  }
+  const saveData = doc.getSnapshot();
+
+  emits('update:value', saveData);
+  emits('change', saveData);
 }
 
 onMounted(() => {
@@ -277,7 +231,7 @@ onUnmounted(() => {
       :loading="true"
       class="univer_doc-skeleton"
     />
-    <div ref="container" class="univer_doc-editor" />
+    <div ref="container" class="univer_doc-editor" @keydown="handleKeyDown" />
   </div>
 </template>
 
