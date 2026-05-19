@@ -2,8 +2,8 @@
 
 <template>
   <div class="docxs_editor_page">
-    <NuxtLink to="/docxs-editor/univer">univer</NuxtLink>
-    <NuxtLink to="/docxs-editor/collabora">collabora</NuxtLink>
+    <NuxtLink to="/doc-editor/univer">univer</NuxtLink>
+    <NuxtLink to="/doc-editor/collabora">collabora</NuxtLink>
   </div>
 </template>
 
