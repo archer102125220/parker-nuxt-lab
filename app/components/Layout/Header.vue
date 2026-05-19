@@ -1,3 +1,33 @@
+<script setup>
+const router = useRouter();
+
+const props = defineProps({
+  hasBack: { type: Boolean, default: true }
+});
+
+const animation = computed(() => {
+  if (import.meta.client) {
+    return window.___IS_NUXT_INITED__ !== true;
+  }
+  return true;
+});
+
+const imgTransition = computed(() => {
+  if (animation.value === true) {
+    return 'fade-transition';
+  }
+  return false;
+});
+
+function handleGoBack() {
+  router.back();
+}
+
+onMounted(() => {
+  window.___IS_NUXT_INITED__ = true;
+});
+</script>
+
 <template>
   <header class="layout_header" :css-animation="animation">
     <v-btn
@@ -31,35 +61,6 @@
     <LanguageSwitcher />
   </header>
 </template>
-<script setup>
-const router = useRouter();
-
-const props = defineProps({
-  hasBack: { type: Boolean, default: true }
-});
-
-const animation = computed(() => {
-  if (import.meta.client) {
-    return window.___IS_NUXT_INITED__ !== true;
-  }
-  return true;
-});
-
-const imgTransition = computed(() => {
-  if (animation.value === true) {
-    return 'fade-transition';
-  }
-  return false;
-});
-
-function handleGoBack() {
-  router.back();
-}
-
-onMounted(() => {
-  window.___IS_NUXT_INITED__ = true;
-});
-</script>
 
 <style lang="scss" scoped>
 @keyframes headerEnterAnimation {

@@ -1,8 +1,3 @@
-<template>
-  <footer class="layout_footer" :css-animation="animation">
-    <p class="layout_footer-copyright">&copy; {{ copyright }}</p>
-  </footer>
-</template>
 <script setup>
 const animation = computed(() => {
   if (import.meta.client) {
@@ -18,6 +13,12 @@ onMounted(() => {
   window.___IS_NUXT_INITED__ = true;
 });
 </script>
+
+<template>
+  <footer class="layout_footer" :css-animation="animation">
+    <p class="layout_footer-copyright">&copy; {{ copyright }}</p>
+  </footer>
+</template>
 
 <style lang="scss" scoped>
 @keyframes footerEnterAnimation {
