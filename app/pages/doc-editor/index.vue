@@ -1,14 +1,15 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div class="docxs_editor_page">
+  <div class="doc_editor_page">
     <NuxtLink to="/doc-editor/univer">univer</NuxtLink>
     <NuxtLink to="/doc-editor/collabora">collabora</NuxtLink>
+    <NuxtLink to="/doc-editor/syncfusion">syncfusion</NuxtLink>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.docxs_editor_page {
+.doc_editor_page {
   display: flex;
   justify-content: center;
   align-items: center;

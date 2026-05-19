@@ -19,14 +19,14 @@ const currentLocale = computed(() => {
 </script>
 
 <template>
-  <div class="collabora_page">
+  <div class="collabora_doc_page">
     <p>Collabora</p>
     <p>
       礙於本專案目前部署環境為 Vercel（Serverless Functions），而 Collabora 需要
       Docker 啟動主要編輯檔案的服務，因此本示範僅能在本機 Docker 環境下展示。
     </p>
     <CollaboraIframe
-      class="collabora_page-collabora"
+      class="collabora_doc_page-collabora"
       token="testToken"
       collabora-host="http://localhost:9980"
       file-type="docx"
@@ -38,7 +38,7 @@ const currentLocale = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.collabora_page {
+.collabora_doc_page {
   width: 100%;
   height: 100vh;
 

@@ -3,15 +3,15 @@ const { locale } = useI18n();
 </script>
 
 <template>
-  <div class="univer_page">
+  <div class="univer_sheet_page">
     <ClientOnly>
-      <UniverSheet :locale="locale" />
+      <UniverSheetEditor :locale="locale" />
     </ClientOnly>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.univer_page {
+.univer_sheet_page {
   height: 90vh;
 }
 </style>

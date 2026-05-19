@@ -1,15 +1,13 @@
 <script setup></script>
 
 <template>
-  <div class="univer_doc_page">
-    <ClientOnly>
-      <UniverDocEditor />
-    </ClientOnly>
+  <div class="syncfusion_doc_page">
+    <p>syncfusion doc editor</p>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.univer_doc_page {
+.syncfusion_doc_page {
   height: 90vh;
 }
 </style>
