@@ -113,6 +113,7 @@ const props = defineProps({
 const emits = defineEmits([
   'update:workbook',
   'update:worksheet',
+  'univerStarting',
   'univerReady',
   'univerRendered',
   'univerSteady',
@@ -142,13 +143,16 @@ async function handleUniverSheet() {
     disposable.push(
       univerAPI.addEvent(univerAPI.Event.LifeCycleChanged, (event) => {
         switch (event.stage) {
-          case univerAPI.Enum.LifecycleStages.univerReady:
+          case univerAPI.Enum.LifecycleStages.Starting:
+            emits('univerStarting', event);
+            break;
+          case univerAPI.Enum.LifecycleStages.Ready:
             emits('univerReady', event);
             break;
-          case univerAPI.Enum.LifecycleStages.univerRendered:
+          case univerAPI.Enum.LifecycleStages.Rendered:
             emits('univerRendered', event);
             break;
-          case univerAPI.Enum.LifecycleStages.univerSteady:
+          case univerAPI.Enum.LifecycleStages.Steady:
             emits('univerSteady', event);
             break;
         }

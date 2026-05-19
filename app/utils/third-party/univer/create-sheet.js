@@ -680,7 +680,7 @@ export async function createSheetInstance(container, locale = '') {
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;
-  window.univerInstance = univerInstance;
+  // window.univerInstance = univerInstance;
 
   return univerInstance;
 }
