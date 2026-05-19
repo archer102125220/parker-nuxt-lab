@@ -13,7 +13,7 @@ defineOptions({
   inheritAttrs: false
 });
 
-const disposable = [];
+const disposableList = [];
 
 const props = defineProps({
   locale: {
@@ -140,7 +140,7 @@ async function handleUniverSheet() {
       props.locale
     );
 
-    disposable.push(
+    disposableList.push(
       univerAPI.addEvent(univerAPI.Event.LifeCycleChanged, (event) => {
         switch (event.stage) {
           case univerAPI.Enum.LifecycleStages.Starting:
@@ -158,17 +158,17 @@ async function handleUniverSheet() {
         }
       })
     );
-    disposable.push(
+    disposableList.push(
       univerAPI.addEvent(univerAPI.Event.SheetEditStarted, (event) => {
         emits('univerChangeStart', event);
       })
     );
-    disposable.push(
+    disposableList.push(
       univerAPI.addEvent(univerAPI.Event.SheetEditChanging, (event) => {
         emits('univerChange', event);
       })
     );
-    disposable.push(
+    disposableList.push(
       univerAPI.addEvent(univerAPI.Event.SheetEditEnded, (event) => {
         console.log({ event });
         emits('univerChangeEnd', event);
@@ -192,7 +192,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  disposable.forEach((item) => {
+  disposableList.forEach((item) => {
     try {
       item.dispose?.();
     } catch (error) {

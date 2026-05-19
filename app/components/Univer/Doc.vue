@@ -13,7 +13,7 @@ defineOptions({
   inheritAttrs: false
 });
 
-const disposable = [];
+const disposableList = [];
 
 const props = defineProps({
   locale: {
@@ -117,7 +117,53 @@ const emits = defineEmits([
   'univerSteady',
   'univerChangeStart',
   'univerChange',
-  'univerChangeEnd'
+  'univerChangeEnd',
+
+  'BeforeClipboardChange',
+  'BeforeClipboardPaste',
+  'ClipboardChanged',
+  'ClipboardPasted',
+  'SelectionChanged',
+  'SelectionMoveStart',
+  'SelectionMoveEnd',
+  'SelectionMoving',
+  'DragOver',
+  'Drop',
+  'CellClicked',
+  'CellHover',
+  'CellPointerDown',
+  'CellPointerUp',
+  'CellPointerMove',
+  'SheetValueChanged',
+  'SheetZoomChanged',
+  'SheetSkeletonChanged',
+  'BeforeSheetEditStart',
+  'SheetEditStarted',
+  'BeforeSheetEditEnd',
+  'SheetEditEnded',
+  'SheetEditChanging',
+  'Scroll',
+  'CrosshairHighlightColorChanged',
+  'CrosshairHighlightEnabledChanged',
+  'RowHeaderClick',
+  'RowHeaderHover',
+  'ColumnHeaderClick',
+  'ColumnHeaderHover',
+  'BeforeSheetDataValidationAdd',
+  'SheetDataValidationChanged',
+  'SheetDataValidatorStatusChanged',
+  'BeforeCommentAdd',
+  'CommentAdded',
+  'BeforeCommentUpdate',
+  'CommentUpdated',
+  'BeforeCommentDeleted',
+  'CommentDeleted',
+  'SheetBeforeRangeSort',
+  'SheetRangeSorted',
+  'SheetBeforeRangeFilter',
+  'SheetRangeFiltered',
+  'BeforePivotTableAdd',
+  'PivotTableAdded'
 ]);
 
 const container = ref(null);
@@ -138,7 +184,10 @@ async function handleUniverDoc() {
       props.locale
     );
 
-    disposable.push(
+    // 只有出現在 univerAPI.Event 中的事件能被觸發
+    // 官網上（https://docs.univer.ai/guides/docs/features/core/general-api#%E4%BA%8B%E4%BB%B6%E9%A1%9E%E5%88%A5）
+    // 雖然有列出很多事件，但是沒有在 univerAPI.Event 中的無法被有效觸發，可能是還需要導入或註冊某些 univer 的套件
+    disposableList.push(
       univerAPI.addEvent(univerAPI.Event.LifeCycleChanged, (event) => {
         switch (event.stage) {
           case univerAPI.Enum.LifecycleStages.Starting:
@@ -156,17 +205,18 @@ async function handleUniverDoc() {
         }
       })
     );
-    // disposable.push(
+
+    // disposableList.push(
     //   univerAPI.addEvent(univerAPI.Event.SheetEditStarted, (event) => {
     //     emits('univerChangeStart', event);
     //   })
     // );
-    // disposable.push(
+    // disposableList.push(
     //   univerAPI.addEvent(univerAPI.Event.SheetEditChanging, (event) => {
     //     emits('univerChange', event);
     //   })
     // );
-    // disposable.push(
+    // disposableList.push(
     //   univerAPI.addEvent(univerAPI.Event.SheetEditEnded, (event) => {
     //     console.log({ event });
     //     emits('univerChangeEnd', event);
@@ -188,7 +238,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  disposable.forEach((item) => {
+  disposableList.forEach((item) => {
     try {
       item.dispose?.();
     } catch (error) {
