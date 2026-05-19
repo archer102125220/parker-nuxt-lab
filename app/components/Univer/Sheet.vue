@@ -122,10 +122,10 @@ const emits = defineEmits([
   'univerChangeEnd'
 ]);
 
-const currentWorkbook = ref({});
-// const currentWorksheet = ref({})
-
 const container = ref(null);
+
+const currentWorkbook = ref({});
+// const currentWorksheet = ref({});
 const loading = ref(true);
 
 const univerInstance = reactive({

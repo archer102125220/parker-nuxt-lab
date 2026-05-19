@@ -111,6 +111,7 @@ const props = defineProps({
   }
 });
 const emits = defineEmits([
+  'univerStarting',
   'univerReady',
   'univerRendered',
   'univerSteady',
@@ -119,10 +120,10 @@ const emits = defineEmits([
   'univerChangeEnd'
 ]);
 
-const currentDoc = ref({});
-// const currentWorksheet = ref({})
-
 const container = ref(null);
+
+const currentDoc = ref({});
+// const currentWorksheet = ref({});
 const loading = ref(true);
 
 const univerInstance = reactive({
@@ -140,13 +141,16 @@ async function handleUniverDoc() {
     disposable.push(
       univerAPI.addEvent(univerAPI.Event.LifeCycleChanged, (event) => {
         switch (event.stage) {
-          case univerAPI.Enum.LifecycleStages.univerReady:
+          case univerAPI.Enum.LifecycleStages.Starting:
+            emits('univerStarting', event);
+            break;
+          case univerAPI.Enum.LifecycleStages.Ready:
             emits('univerReady', event);
             break;
-          case univerAPI.Enum.LifecycleStages.univerRendered:
+          case univerAPI.Enum.LifecycleStages.Rendered:
             emits('univerRendered', event);
             break;
-          case univerAPI.Enum.LifecycleStages.univerSteady:
+          case univerAPI.Enum.LifecycleStages.Steady:
             emits('univerSteady', event);
             break;
         }
