@@ -3,7 +3,7 @@
 <template>
   <div class="univer_page">
     <ClientOnly>
-      <UniverSheet />
+      <UniverDoc />
     </ClientOnly>
   </div>
 </template>

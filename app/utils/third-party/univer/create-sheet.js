@@ -376,7 +376,7 @@ export async function importAdvancedSheet() {
     {
       id: 'univer-preset-sheets-advanced',
       src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
+    },
 
     // {
     //   id: 'univer-pro-sheets-print',
@@ -577,14 +577,13 @@ export async function importAdvancedSheet() {
   await Promise.all(univerSheetsAdvancedPromiseList);
 }
 
-export async function createUniverInstance(container, locale = '') {
-  console.log('createUniverInstance start');
+export async function createSheetInstance(container, locale = '') {
   await importUniver();
 
   if (typeof window.UniverPresets?.createUniver !== 'function') {
     await new Promise((resolve) => {
       setTimeout(() => {
-        resolve(createUniverInstance(container, locale));
+        resolve(createSheetInstance(container, locale));
       }, 100);
     });
   }
@@ -632,6 +631,7 @@ export async function createUniverInstance(container, locale = '') {
     UniverProSheetsPrint = {},
     UniverProExchangeClient = {},
     UniverProSheetsExchangeClient = {},
+    // UniverProEngineFormula = {},
 
     UniverProSheetsPrintZhTW,
     UniverProSheetsPrintEnUS,
@@ -644,6 +644,7 @@ export async function createUniverInstance(container, locale = '') {
   const { UniverSheetsPrintPlugin } = UniverProSheetsPrint;
   const { UniverExchangeClientPlugin } = UniverProExchangeClient;
   const { UniverSheetsExchangeClientPlugin } = UniverProSheetsExchangeClient;
+  // const { UniverProFormulaEnginePlugin } = UniverProEngineFormula;
 
   if (typeof UniverLicensePlugin !== 'undefined') {
     univerInstance.univer.registerPlugin(UniverLicensePlugin, {
@@ -679,9 +680,9 @@ export async function createUniverInstance(container, locale = '') {
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;
-  // window.univerInstance = univerInstance;
+  window.univerInstance = univerInstance;
 
   return univerInstance;
 }
 
-export default createUniverInstance;
+export default createSheetInstance;

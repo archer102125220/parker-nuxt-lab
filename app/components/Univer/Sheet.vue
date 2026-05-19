@@ -2,7 +2,7 @@
 import {
   LOCALE_TYPE,
   EVENT_TYPE,
-  createUniverInstance
+  createSheetInstance
 } from '@app/utils/third-party/univer/create-sheet';
 
 export { LOCALE_TYPE, EVENT_TYPE };
@@ -134,12 +134,11 @@ const univerInstance = reactive({
 
 async function handleUniverSheet() {
   try {
-    const { univer, univerAPI } = await createUniverInstance(
+    const { univer, univerAPI } = await createSheetInstance(
       container.value,
       props.locale
     );
 
-    currentWorkbook.value = univerAPI.createWorkbook(props.workbook);
     disposable.push(
       univerAPI.addEvent(univerAPI.Event.LifeCycleChanged, (event) => {
         switch (event.stage) {
@@ -173,6 +172,7 @@ async function handleUniverSheet() {
         emits('update:worksheet', event?.worksheet);
       })
     );
+    currentWorkbook.value = univerAPI.createWorkbook(props.workbook);
 
     univerInstance.univer = univer;
     univerInstance.univerAPI = univerAPI;
