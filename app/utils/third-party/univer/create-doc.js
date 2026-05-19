@@ -500,7 +500,7 @@ export async function createDocInstance(container, locale = '') {
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;
-  window.univerInstance = univerInstance;
+  // window.univerInstance = univerInstance;
 
   return univerInstance;
 }
