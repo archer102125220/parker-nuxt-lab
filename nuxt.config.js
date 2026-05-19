@@ -684,8 +684,8 @@ export default defineNuxtConfig({
   build: {
     transpile:
       IS_DEV === true
-        ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker', 'unhead', '@unhead/vue']
-        : ['vuetify', 'date-fns', 'lodash', '@vuepic/vue-datepicker', 'unhead', '@unhead/vue']
+        ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker', 'unhead', '@unhead/vue', /@syncfusion/]
+        : ['vuetify', 'date-fns', '@vuepic/vue-datepicker', 'unhead', '@unhead/vue', /@syncfusion/, 'lodash']
   },
 
   runtimeConfig: {
