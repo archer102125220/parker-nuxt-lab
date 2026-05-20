@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 // https://help.syncfusion.com/document-processing/excel/spreadsheet/vue/vue-3-getting-started
 defineOptions({
   inheritAttrs: false
@@ -7,7 +7,7 @@ defineOptions({
 const props = defineProps({});
 const emits = defineEmits([]);
 
-const container = ref<HTMLDivElement | null>(null);
+const container = ref(null);
 const currentDoc = ref({});
 const loading = ref(true);
 </script>
