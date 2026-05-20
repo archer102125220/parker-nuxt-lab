@@ -5,6 +5,7 @@
     <NuxtLink to="/doc-editor/univer">univer</NuxtLink>
     <NuxtLink to="/doc-editor/collabora">collabora</NuxtLink>
     <NuxtLink to="/doc-editor/syncfusion">syncfusion</NuxtLink>
+    <NuxtLink to="/doc-editor/tiptap">tiptap</NuxtLink>
   </div>
 </template>
 
