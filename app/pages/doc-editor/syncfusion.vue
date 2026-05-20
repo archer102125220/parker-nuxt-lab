@@ -3,7 +3,7 @@
 <template>
   <div class="syncfusion_doc_page">
     <p>syncfusion doc editor</p>
-    <!-- TODO -->
+    <SyncfusionDocEditor />
     <!-- @syncfusion/ej2-vue-documenteditor -->
   </div>
 </template>

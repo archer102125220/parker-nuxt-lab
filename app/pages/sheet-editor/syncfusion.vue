@@ -3,7 +3,7 @@
 <template>
   <div class="syncfusion_sheet_page">
     <p>syncfusion sheet editor</p>
-    <!-- TODO -->
+    <SyncfusionSheetEditor />
     <!-- @syncfusion/ej2-vue-spreadsheet -->
   </div>
 </template>
