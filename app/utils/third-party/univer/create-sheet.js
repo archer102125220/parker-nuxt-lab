@@ -1,5 +1,7 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 import { loadCSS } from '@app/utils/helpers/load-css';
+import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
+import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 
 const UNIVERSAL_VERSION = '0.22.1';
 const UNIVER_SERVER_ENDPOINT = 'https://localhost:3000/api/univer-test';
@@ -376,7 +378,7 @@ export async function importAdvancedSheet() {
     {
       id: 'univer-preset-sheets-advanced',
       src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
+    }
 
     // {
     //   id: 'univer-pro-sheets-print',
@@ -555,15 +557,14 @@ export async function importAdvancedSheet() {
   );
   await Promise.all(univerProCroScriptPromiseList);
 
-  const univerSheetsAdvancedScriptPromiseList = univerSheetsAdvancedScriptList.map(
-    (univerSheetAdvancedScript) => {
+  const univerSheetsAdvancedScriptPromiseList =
+    univerSheetsAdvancedScriptList.map((univerSheetAdvancedScript) => {
       return loadScript(
         univerSheetAdvancedScript.id,
         univerSheetAdvancedScript.src,
         univerSheetAdvancedScript.module
       );
-    }
-  );
+    });
   await Promise.all(univerSheetsAdvancedScriptPromiseList);
 
   const univerSheetsAdvancedPromiseList = [
@@ -607,6 +608,11 @@ export async function createSheetInstance(container, locale = '') {
   const { UniverSheetsCorePreset } = UniverPresetSheetsCore;
   const { UniverSheetsDrawingPreset } = UniverPresetSheetsDrawing;
 
+  const [ImportCSVPlugin, ExportCSVPlugin] = await Promise.all([
+    createdImportCSVButtonPlugin(),
+    createdExportCSVButtonPlugin()
+  ]);
+
   const univerInstance = createUniver({
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
     locales: {
@@ -622,6 +628,10 @@ export async function createSheetInstance(container, locale = '') {
     presets: [
       UniverSheetsCorePreset({ container }),
       UniverSheetsDrawingPreset()
+    ],
+    plugins: [
+      ImportCSVPlugin,
+      ExportCSVPlugin
     ]
   });
 
@@ -657,7 +667,7 @@ export async function createSheetInstance(container, locale = '') {
       exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/{type}/export`,
       getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/task/{taskID}`,
       signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/file/{fileID}/sign-url`,
-      downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`,
+      downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
     });
     univerInstance.univer.registerPlugin(UniverSheetsExchangeClientPlugin);
     univerInstance.univerAPI.loadLocales(

@@ -34,7 +34,7 @@ export function loadScript(id, src, attributes = {}, successDelay = 1000) {
       if (typeof errorEvent === 'function') {
         errorEvent(...args);
       }
-      reject();
+      reject(...args);
     };
     document.head.appendChild(script);
   });
