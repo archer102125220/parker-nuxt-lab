@@ -71,8 +71,8 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
     }
 
     /**
-     * Import CSV Button Plugin
-     * A simple Plugin example, show how to write a plugin.
+     * 匯入 CSV 按鈕插件
+     * 一個簡單的插件範例，展示如何撰寫插件。
      */
     class ImportCSVButtonPlugin extends Plugin {
       static pluginName = 'import-csv-plugin';
@@ -93,13 +93,13 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       }
 
       /**
-       * The first lifecycle of the plugin mounted on the Univer instance,
-       * the Univer business instance has not been created at this time.
-       * The plugin should add its own module to the dependency injection system at this lifecycle.
-       * It is not recommended to initialize the internal module of the plugin outside this lifecycle.
+       * 插件掛載到 Univer 實例的第一個生命週期，
+       * 此時 Univer 業務實例尚未建立。
+       * 插件應在此生命週期將自身的模組加入到依賴注入系統中。
+       * 不建議在此生命週期之外初始化插件的內部模組。
        */
       onStarting() {
-        // register icon component
+        // 註冊圖標元件
         // this.componentManager.register('FolderIcon', FolderIcon);
 
         const buttonId = 'import-csv-button';
@@ -108,24 +108,24 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           type: CommandType.OPERATION,
           id: buttonId,
           handler: (accessor) => {
-            // inject univer instance service
+            // 注入 univer 實例服務
             const univerInstanceService = accessor.get(IUniverInstanceService);
             const commandService = accessor.get(ICommandService);
             const undoRedoService = accessor.get(IUndoRedoService);
 
-            // get current sheet
+            // 取得當前工作表
             const worksheet = univerInstanceService
               .getCurrentUnitOfType(UniverInstanceType.UNIVER_SHEET)
               .getActiveSheet();
             const unitId = worksheet.getUnitId();
             const subUnitId = worksheet.getSheetId();
 
-            // wait user select csv file, then assemble multiple mutations operation to enable correct undo/redo
+            // 等待用戶選擇 CSV 檔案，然後組裝多個變更操作以啟用正確的復原/重做功能
             return handleSelectCSVFile(({ data, rowsCount, colsCount }) => {
               const redoMutations = [];
               const undoMutations = [];
 
-              // set sheet row count
+              // 設定工作表列數
               const setRowCountMutationRedoParams = {
                 unitId,
                 subUnitId,
@@ -145,7 +145,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
                 params: setRowCountMutationUndoParams
               });
 
-              // set sheet column count
+              // 設定工作表欄數
               const setColumnCountMutationRedoParams = {
                 unitId,
                 subUnitId,
@@ -165,15 +165,15 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
                 params: setColumnCountMutationUndoParams
               });
 
-              // parse csv to univer data
+              // 將 CSV 解析為 Univer 資料
               const cellValue = covertCellValues(data, {
-                startColumn: 0, // start column index
-                startRow: 0, // start row index
-                endColumn: colsCount - 1, // end column index
-                endRow: rowsCount - 1 // end row index
+                startColumn: 0, // 起始欄索引
+                startRow: 0, // 起始列索引
+                endColumn: colsCount - 1, // 結束欄索引
+                endRow: rowsCount - 1 // 結束列索引
               });
 
-              // set sheet data
+              // 設定工作表資料
               const setRangeValuesMutationRedoParams = {
                 unitId,
                 subUnitId,
@@ -214,7 +214,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           title: 'Import CSV',
           tooltip: 'Import CSV',
-          icon: 'FolderIcon', // icon name
+          icon: 'FolderIcon', // 圖標名稱
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {
             const univerInstanceService = this._injector.get(
@@ -246,8 +246,8 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       }
     }
 
-    // Ensure Univer DI container resolves these dependencies in JS
-    // The first element is empty (,) because index 0 is the _config parameter which is not injected
+    // 確保 Univer 依賴注入容器在 JS 中正確解析這些依賴
+    // 第一個元素是空的 (,)，因為索引 0 是 _config 參數，該參數不被注入
     setDependencies(ImportCSVButtonPlugin, [
       , // eslint-disable-line no-sparse-arrays
       [Injector],
