@@ -1,4 +1,4 @@
-export function loadCSS(id, href) {
+export function loadCSS(id, href, attributes = {}, successDelay = 0) {
   if (typeof document === 'undefined') {
     return Promise.resolve();
   }
@@ -12,8 +12,30 @@ export function loadCSS(id, href) {
     link.id = id;
     link.rel = 'stylesheet';
     link.href = href;
-    link.onload = () => resolve();
-    link.onerror = reject;
+    
+    Object.keys(attributes).forEach((key) => {
+      link.setAttribute(key, attributes[key]);
+    });
+
+    const loadEvent = attributes.load;
+    const errorEvent = attributes.error;
+
+    link.onload = (...args) => {
+      if (typeof loadEvent === 'function') {
+        loadEvent(...args);
+      }
+      if (successDelay > 0) {
+        setTimeout(resolve, successDelay);
+      } else {
+        resolve();
+      }
+    };
+    link.onerror = (...args) => {
+      if (typeof errorEvent === 'function') {
+        errorEvent(...args);
+      }
+      reject();
+    };
     document.head.appendChild(link);
   });
 }

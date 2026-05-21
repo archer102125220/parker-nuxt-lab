@@ -1,4 +1,4 @@
-export function loadScript(id, src, module = false) {
+export function loadScript(id, src, attributes = {}, successDelay = 500) {
   if (typeof document === 'undefined') {
     return Promise.resolve();
   }
@@ -11,12 +11,31 @@ export function loadScript(id, src, module = false) {
     const script = document.createElement('script');
     script.id = id;
     script.src = src;
-    if (module === true) {
-      script.type = 'module';
-    }
-    // 完全不設定 async，讓瀏覽器依照插入順序執行
-    script.onload = () => resolve();
-    script.onerror = reject;
+
+    Object.keys(attributes).forEach((key) => {
+      script.setAttribute(key, attributes[key]);
+    });
+
+    const loadEvent = attributes.load;
+    const errorEvent = attributes.error;
+
+    script.onload = (...args) => {
+      if (typeof loadEvent === 'function') {
+        loadEvent(...args);
+      }
+
+      if (successDelay > 0) {
+        setTimeout(resolve, successDelay);
+      } else {
+        resolve();
+      }
+    };
+    script.onerror = (...args) => {
+      if (typeof errorEvent === 'function') {
+        errorEvent(...args);
+      }
+      reject();
+    };
     document.head.appendChild(script);
   });
 }

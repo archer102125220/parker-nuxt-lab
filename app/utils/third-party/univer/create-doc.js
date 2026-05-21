@@ -200,18 +200,18 @@ export async function importUniver() {
       loadScript(
         dependecyScript.id,
         dependecyScript.src,
-        dependecyScript.module
+        dependecyScript.attributes
       )
   );
   await Promise.all(dependecyScriptPromiseList);
 
   const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
-    loadScript(coreScript.id, coreScript.src, coreScript.module)
+    loadScript(coreScript.id, coreScript.src, coreScript.attributes)
   );
   await Promise.all(univerCoreScriptPromiseList);
 
   const univerScriptPromiseList = univerScriptList.map((univerScript) =>
-    loadScript(univerScript.id, univerScript.src, univerScript.module)
+    loadScript(univerScript.id, univerScript.src, univerScript.attributes)
   );
   await Promise.all(univerScriptPromiseList);
 
@@ -220,7 +220,7 @@ export async function importUniver() {
       loadScript(
         sheetCoreScript.id,
         sheetCoreScript.src,
-        sheetCoreScript.module
+        sheetCoreScript.attributes
       )
   );
   await Promise.all(univerDocCoreScriptPromiseList);
@@ -230,7 +230,7 @@ export async function importUniver() {
       loadScript(
         univerDocScript.id,
         univerDocScript.src,
-        univerDocScript.module
+        univerDocScript.attributes
       )
   );
   await Promise.all(univerDocScriptPromiseList);
@@ -339,7 +339,7 @@ export async function importAdvancedDoc() {
       return loadScript(
         univerProCroScript.id,
         univerProCroScript.src,
-        univerProCroScript.module
+        univerProCroScript.attributes
       );
     }
   );
@@ -350,7 +350,7 @@ export async function importAdvancedDoc() {
       return loadScript(
         univerDocAdvancedScript.id,
         univerDocAdvancedScript.src,
-        univerDocAdvancedScript.module
+        univerDocAdvancedScript.attributes
       );
     }
   );
