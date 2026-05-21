@@ -42,7 +42,11 @@ export async function importUniver() {
     {
       id: 'univer-echarts',
       src: 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js'
-    }
+    },
+    // {
+    //   id: 'univer-monaco',
+    //   src:'https://unpkg.com/monaco-editor@0.55.1/min/vs/editor/editor.main.js'
+    // }
   ];
   const univerCoreScriptList = [
     {
@@ -135,10 +139,11 @@ export async function importUniver() {
       id: 'univer-sheets-zen-editor-facade',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/umd/facade.js`
     },
-    {
-      id: 'univer-uniscript',
-      src: `https://unpkg.com/@univerjs/uniscript@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
+    // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+    // {
+    //   id: 'univer-uniscript',
+    //   src: `https://unpkg.com/@univerjs/uniscript@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // }
   ];
   const univerLocaleList = [
     {
@@ -236,7 +241,17 @@ export async function importUniver() {
     {
       id: 'univer-sheets-zen-editor-en-us',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/umd/locale/en-US.js`
-    }
+    },
+
+    // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+    // {
+    //   id: 'univer-uniscript-zh-tw',
+    //   src: `https://unpkg.com/@univerjs/uniscript@${UNIVERSAL_VERSION}/lib/umd/locale/zh-TW.js`
+    // },
+    // {
+    //   id: 'univer-uniscript-en-us',
+    //   src: `https://unpkg.com/@univerjs/uniscript@${UNIVERSAL_VERSION}/lib/umd/locale/en-US.js`
+    // }
   ];
   const univerCSSList = [
     {
@@ -291,10 +306,12 @@ export async function importUniver() {
       id: 'univer-sheets-zen-editor-css',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/index.css`
     },
-    {
-      id: 'univer-uniscript-css',
-      src: `https://unpkg.com/@univerjs/uniscript@${UNIVERSAL_VERSION}/lib/index.css`
-    }
+
+    // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+    // {
+    //   id: 'univer-uniscript-css',
+    //   src: `https://unpkg.com/@univerjs/uniscript@${UNIVERSAL_VERSION}/lib/index.css`
+    // }
   ];
 
   const querySelectorAllString = [
@@ -322,18 +339,18 @@ export async function importUniver() {
       loadScript(
         dependecyScript.id,
         dependecyScript.src,
-        dependecyScript.module
+        dependecyScript.attributes
       )
   );
   await Promise.all(dependecyScriptPromiseList);
 
   const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
-    loadScript(coreScript.id, coreScript.src, coreScript.module)
+    loadScript(coreScript.id, coreScript.src, coreScript.attributes)
   );
   await Promise.all(univerCoreScriptPromiseList);
 
   const univerScriptPromiseList = univerScriptList.map((univerScript) =>
-    loadScript(univerScript.id, univerScript.src, univerScript.module)
+    loadScript(univerScript.id, univerScript.src, univerScript.attributes)
   );
   await Promise.all(univerScriptPromiseList);
 
@@ -342,7 +359,7 @@ export async function importUniver() {
       loadScript(
         sheetCoreScript.id,
         sheetCoreScript.src,
-        sheetCoreScript.module
+        sheetCoreScript.attributes
       )
   );
   await Promise.all(univerSheetCoreScriptPromiseList);
@@ -352,7 +369,7 @@ export async function importUniver() {
       loadScript(
         univerSheetScript.id,
         univerSheetScript.src,
-        univerSheetScript.module
+        univerSheetScript.attributes
       )
   );
   await Promise.all(univerSheetsScriptPromiseList);
@@ -367,7 +384,7 @@ export async function importUniver() {
   ]);
 }
 
-export async function importAdvancedSheet() {
+export async function importSheetAdvanced() {
   const univerProCroScriptList = [
     {
       id: 'univer-pro-engine-formula',
@@ -378,7 +395,7 @@ export async function importAdvancedSheet() {
     {
       id: 'univer-preset-sheets-advanced',
       src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
+    },
 
     // {
     //   id: 'univer-pro-sheets-print',
@@ -451,6 +468,7 @@ export async function importAdvancedSheet() {
       id: 'univer-preset-sheets-advanced-en-us',
       src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
     },
+
     {
       id: 'univer-pro-sheets-print-zh-tw',
       src: `https://unpkg.com/@univerjs-pro/sheets-print@${UNIVERSAL_VERSION}/lib/umd/locale/zh-TW.js`
@@ -551,7 +569,7 @@ export async function importAdvancedSheet() {
       return loadScript(
         univerProCroScript.id,
         univerProCroScript.src,
-        univerProCroScript.module
+        univerProCroScript.attributes
       );
     }
   );
@@ -562,7 +580,7 @@ export async function importAdvancedSheet() {
       return loadScript(
         univerSheetAdvancedScript.id,
         univerSheetAdvancedScript.src,
-        univerSheetAdvancedScript.module
+        univerSheetAdvancedScript.attributes
       );
     });
   await Promise.all(univerSheetsAdvancedScriptPromiseList);
@@ -578,7 +596,71 @@ export async function importAdvancedSheet() {
   await Promise.all(univerSheetsAdvancedPromiseList);
 }
 
-export async function createSheetInstance(container, locale = '') {
+export async function importCollaboration() {
+  const univerSheetCollaborationScriptList = [
+    {
+      id: 'univer-preset-sheets-collaboration',
+      src: `https://unpkg.com/@univerjs/preset-sheets-collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    }
+  ];
+
+  const univerSheetsCollaborationLocaleList = [
+    {
+      id: 'univer-preset-sheets-collaboration-zh-tw',
+      src: `https://unpkg.com/@univerjs/preset-sheets-collaboration@${UNIVERSAL_VERSION}/lib/umd/locales/zh-TW.js`
+    },
+    {
+      id: 'univer-preset-sheets-collaboration-en-us',
+      src: `https://unpkg.com/@univerjs/preset-sheets-collaboration@${UNIVERSAL_VERSION}/lib/umd/locales/en-US.js`
+    }
+  ];
+
+  const univerSheetsCollaborationCSSList = [
+    {
+      id: 'univer-preset-sheets-collaboration-css',
+      src: `https://unpkg.com/@univerjs/preset-sheets-collaboration@${UNIVERSAL_VERSION}/lib/index.css`
+    }
+  ];
+
+  const querySelectorAllString = [
+    ...univerSheetCollaborationScriptList.map(
+      (univerSheetAdvancedScript) => `#${univerSheetAdvancedScript.id}`
+    ),
+    ...univerSheetsCollaborationLocaleList.map(
+      (univerSheetAdvancedLocale) => `#${univerSheetAdvancedLocale.id}`
+    )
+  ].join(',');
+
+  if (document.querySelectorAll(querySelectorAllString).length > 0) {
+    return;
+  }
+
+  const univerSheetCollaborationScriptPromiseList =
+    univerSheetCollaborationScriptList.map((univerSheetCollaborationScript) => {
+      return loadScript(
+        univerSheetCollaborationScript.id,
+        univerSheetCollaborationScript.src,
+        univerSheetCollaborationScript.attributes
+      );
+    });
+  await Promise.all(univerSheetCollaborationScriptPromiseList);
+
+  const univerSheetsCollaborationPromiseList = [
+    ...univerSheetsCollaborationLocaleList.map((univerLocaleScript) =>
+      loadScript(univerLocaleScript.id, univerLocaleScript.src)
+    ),
+    ...univerSheetsCollaborationCSSList.map((univerCSSScript) =>
+      loadCSS(univerCSSScript.id, univerCSSScript.src)
+    )
+  ];
+  await Promise.all(univerSheetsCollaborationPromiseList);
+}
+
+export async function createSheetInstance(
+  container,
+  locale = '',
+  collaboration = false
+) {
   await importUniver();
 
   if (typeof window.UniverPresets?.createUniver !== 'function') {
@@ -593,100 +675,245 @@ export async function createSheetInstance(container, locale = '') {
     throw new Error('container must be an HTMLElement');
   }
 
+  await importSheetAdvanced();
+
   const {
     UniverPresets,
     UniverCore,
     UniverPresetSheetsCore,
+    UniverPresetSheetsFilter,
+    UniverPresetSheetsSort,
+    UniverPresetSheetsDataValidation,
+    UniverPresetSheetsConditionalFormatting,
+    UniverPresetSheetsHyperLink,
+    UniverPresetSheetsFindReplace,
     UniverPresetSheetsDrawing,
+    UniverPresetSheetsThreadComment,
+    UniverPresetSheetsNote,
+    UniverPresetSheetsTable,
+
+    // UniverWatermark,
+    UniverSheetsCrosshairHighlight,
+    UniverSheetsZenEditor,
+
+    // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+    // UniverUniscript,
+
     UniverPresetSheetsCoreZhTW,
     UniverPresetSheetsCoreEnUS,
+    UniverPresetSheetsFilterZhTW,
+    UniverPresetSheetsFilterEnUS,
+    UniverPresetSheetsSortZhTW,
+    UniverPresetSheetsSortEnUS,
+    UniverPresetSheetsDataValidationZhTW,
+    UniverPresetSheetsDataValidationEnUS,
+    UniverPresetSheetsConditionalFormattingZhTW,
+    UniverPresetSheetsConditionalFormattingEnUS,
+    UniverPresetSheetsHyperLinkZhTW,
+    UniverPresetSheetsHyperLinkEnUS,
+    UniverPresetSheetsFindReplaceZhTW,
+    UniverPresetSheetsFindReplaceEnUS,
+
+    // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+    // UniverUniscriptZhTW,
+    // UniverUniscriptEnUS,
+
     UniverPresetSheetsDrawingZhTW,
-    UniverPresetSheetsDrawingEnUS
+    UniverPresetSheetsDrawingEnUS,
+    UniverPresetSheetsThreadCommentZhTW,
+    UniverPresetSheetsThreadCommentEnUS,
+    UniverPresetSheetsNoteZhTW,
+    UniverPresetSheetsNoteEnUS,
+    UniverPresetSheetsTableZhTW,
+    UniverPresetSheetsTableEnUS,
+    UniverSheetsZenEditorZhTW,
+    UniverSheetsZenEditorEnUS,
+
+    UniverPresetSheetsAdvanced,
+    UniverPresetSheetsAdvancedZhTW,
+    UniverPresetSheetsAdvancedEnUS
   } = window;
   const { createUniver } = UniverPresets;
   const { LocaleType, mergeLocales } = UniverCore;
   const { UniverSheetsCorePreset } = UniverPresetSheetsCore;
+  const { UniverSheetsFilterPreset } = UniverPresetSheetsFilter;
+  const { UniverSheetsSortPreset } = UniverPresetSheetsSort;
+  const { UniverSheetsDataValidationPreset } = UniverPresetSheetsDataValidation;
+  const { UniverSheetsConditionalFormattingPreset } =
+    UniverPresetSheetsConditionalFormatting;
+  const { UniverSheetsHyperLinkPreset } = UniverPresetSheetsHyperLink;
+  const { UniverSheetsFindReplacePreset } = UniverPresetSheetsFindReplace;
   const { UniverSheetsDrawingPreset } = UniverPresetSheetsDrawing;
+  const { UniverSheetsThreadCommentPreset } = UniverPresetSheetsThreadComment;
+  const { UniverSheetsNotePreset } = UniverPresetSheetsNote;
+  const { UniverSheetsTablePreset } = UniverPresetSheetsTable;
+  const { UniverSheetsAdvancedPreset } = UniverPresetSheetsAdvanced;
+
+  // const { UniverWatermarkPlugin: _UniverWatermarkPlugin } = UniverWatermark;
+  const { UniverSheetsCrosshairHighlightPlugin } =
+    UniverSheetsCrosshairHighlight;
+  const { UniverSheetsZenEditorPlugin } = UniverSheetsZenEditor;
+
+  // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+  // const { UniverUniscriptPlugin } = UniverUniscript;
 
   const [ImportCSVPlugin, ExportCSVPlugin] = await Promise.all([
     createdImportCSVButtonPlugin(),
     createdExportCSVButtonPlugin()
   ]);
 
-  const univerInstance = createUniver({
+  const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
-    locales: {
-      [LocaleType.ZH_TW]: mergeLocales(
-        UniverPresetSheetsCoreZhTW,
-        UniverPresetSheetsDrawingZhTW
-      ),
-      [LocaleType.EN_US]: mergeLocales(
-        UniverPresetSheetsCoreEnUS,
-        UniverPresetSheetsDrawingEnUS
-      )
-    },
+    locales: {},
+    collaboration: collaboration || undefined,
     presets: [
       UniverSheetsCorePreset({ container }),
-      UniverSheetsDrawingPreset()
+      UniverSheetsFilterPreset(),
+      UniverSheetsSortPreset(),
+      UniverSheetsDataValidationPreset(),
+      UniverSheetsConditionalFormattingPreset(),
+      UniverSheetsHyperLinkPreset(),
+      UniverSheetsFindReplacePreset(),
+      UniverSheetsThreadCommentPreset(),
+      UniverSheetsNotePreset(),
+      UniverSheetsTablePreset(),
+      UniverSheetsAdvancedPreset({
+        license: import.meta.env.VITE_UNIVER_LICENSE,
+        useWorker: true,
+        universerEndpoint: UNIVER_SERVER_ENDPOINT
+      })
     ],
     plugins: [
       ImportCSVPlugin,
-      ExportCSVPlugin
+      ExportCSVPlugin,
+      // [_UniverWatermarkPlugin, {
+      //   textWatermarkSettings: {
+      //     content: '測試浮水印',
+      //     fontSize: 20,
+      //   },
+      // }],
+      UniverSheetsCrosshairHighlightPlugin,
+      UniverSheetsZenEditorPlugin,
+
+      // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+      // UniverUniscriptPlugin
     ]
-  });
+  };
 
-  await importAdvancedSheet();
-  const {
-    UniverProLicense = {},
-    UniverProSheetsPrint = {},
-    UniverProExchangeClient = {},
-    UniverProSheetsExchangeClient = {},
-    // UniverProEngineFormula = {},
+  if (collaboration === true) {
+    await importCollaboration();
 
-    UniverProSheetsPrintZhTW,
-    UniverProSheetsPrintEnUS,
-    UniverProExchangeClientZhTW,
-    UniverProExchangeClientEnUS,
-    UniverPresetSheetsAdvancedZhTW,
-    UniverPresetSheetsAdvancedEnUS
-  } = window;
-  const { UniverLicensePlugin } = UniverProLicense;
-  const { UniverSheetsPrintPlugin } = UniverProSheetsPrint;
-  const { UniverExchangeClientPlugin } = UniverProExchangeClient;
-  const { UniverSheetsExchangeClientPlugin } = UniverProSheetsExchangeClient;
-  // const { UniverProFormulaEnginePlugin } = UniverProEngineFormula;
+    const {
+      UniverPresetSheetsCollaboration,
+      UniverSheetsCollaborationPresetZhTW,
+      UniverSheetsCollaborationPresetEnUS
+    } = window;
 
-  if (typeof UniverLicensePlugin !== 'undefined') {
-    univerInstance.univer.registerPlugin(UniverLicensePlugin, {
-      license: import.meta.env.VITE_UNIVER_LICENSE || ''
-    });
-    univerInstance.univer.registerPlugin(UniverSheetsPrintPlugin);
-    univerInstance.univer.registerPlugin(UniverExchangeClientPlugin, {
-      uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/stream/file/upload`,
-      importServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/{type}/import`,
-      exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/{type}/export`,
-      getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/task/{taskID}`,
-      signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/file/{fileID}/sign-url`,
-      downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
-    });
-    univerInstance.univer.registerPlugin(UniverSheetsExchangeClientPlugin);
-    univerInstance.univerAPI.loadLocales(
-      LocaleType.ZH_TW,
-      mergeLocales(
-        UniverProSheetsPrintZhTW,
-        UniverProExchangeClientZhTW,
-        UniverPresetSheetsAdvancedZhTW
+    const { UniverSheetsCollaborationPreset } = UniverPresetSheetsCollaboration;
+
+    univerConfig.locales = {
+      [LocaleType.ZH_TW]: mergeLocales(
+        UniverPresetSheetsCoreZhTW,
+        UniverPresetSheetsFilterZhTW,
+        UniverPresetSheetsSortZhTW,
+        UniverPresetSheetsDataValidationZhTW,
+        UniverPresetSheetsConditionalFormattingZhTW,
+        UniverPresetSheetsHyperLinkZhTW,
+        UniverPresetSheetsFindReplaceZhTW,
+
+        // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+        // UniverUniscriptZhTW,
+
+        UniverPresetSheetsDrawingZhTW,
+        UniverPresetSheetsThreadCommentZhTW,
+        UniverPresetSheetsNoteZhTW,
+        UniverPresetSheetsTableZhTW,
+        UniverSheetsZenEditorZhTW,
+
+        UniverPresetSheetsAdvancedZhTW,
+        UniverSheetsCollaborationPresetZhTW
+      ),
+      [LocaleType.EN_US]: mergeLocales(
+        UniverPresetSheetsCoreEnUS,
+        UniverPresetSheetsFilterEnUS,
+        UniverPresetSheetsSortEnUS,
+        UniverPresetSheetsDataValidationEnUS,
+        UniverPresetSheetsConditionalFormattingEnUS,
+        UniverPresetSheetsHyperLinkEnUS,
+        UniverPresetSheetsFindReplaceEnUS,
+
+        // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+        // UniverUniscriptEnUS,
+
+        UniverPresetSheetsDrawingEnUS,
+        UniverPresetSheetsThreadCommentEnUS,
+        UniverPresetSheetsNoteEnUS,
+        UniverPresetSheetsTableEnUS,
+        UniverSheetsZenEditorEnUS,
+
+        UniverPresetSheetsAdvancedEnUS,
+        UniverSheetsCollaborationPresetEnUS
       )
+    };
+
+    univerConfig.collaboration = true;
+
+    univerConfig.presets.push(
+      UniverSheetsDrawingPreset({ collaboration: true }),
+      UniverSheetsCollaborationPreset({
+        universerEndpoint: UNIVER_SERVER_ENDPOINT
+      })
     );
-    univerInstance.univerAPI.loadLocales(
-      LocaleType.EN_US,
-      mergeLocales(
-        UniverProSheetsPrintEnUS,
-        UniverProExchangeClientEnUS,
+  } else {
+    univerConfig.locales = {
+      [LocaleType.ZH_TW]: mergeLocales(
+        UniverPresetSheetsCoreZhTW,
+        UniverPresetSheetsFilterZhTW,
+        UniverPresetSheetsSortZhTW,
+        UniverPresetSheetsDataValidationZhTW,
+        UniverPresetSheetsConditionalFormattingZhTW,
+        UniverPresetSheetsHyperLinkZhTW,
+        UniverPresetSheetsFindReplaceZhTW,
+
+        // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+        // UniverUniscriptZhTW,
+
+        UniverPresetSheetsDrawingZhTW,
+        UniverPresetSheetsThreadCommentZhTW,
+        UniverPresetSheetsNoteZhTW,
+        UniverPresetSheetsTableZhTW,
+        UniverSheetsZenEditorZhTW,
+
+        UniverPresetSheetsAdvancedZhTW
+      ),
+      [LocaleType.EN_US]: mergeLocales(
+        UniverPresetSheetsCoreEnUS,
+        UniverPresetSheetsFilterEnUS,
+        UniverPresetSheetsSortEnUS,
+        UniverPresetSheetsDataValidationEnUS,
+        UniverPresetSheetsConditionalFormattingEnUS,
+        UniverPresetSheetsHyperLinkEnUS,
+        UniverPresetSheetsFindReplaceEnUS,
+
+        // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
+        // UniverUniscriptEnUS,
+
+        UniverPresetSheetsDrawingEnUS,
+        UniverPresetSheetsThreadCommentEnUS,
+        UniverPresetSheetsNoteEnUS,
+        UniverPresetSheetsTableEnUS,
+        UniverSheetsZenEditorEnUS,
+
         UniverPresetSheetsAdvancedEnUS
       )
-    );
+    };
+
+    univerConfig.presets.push(UniverSheetsDrawingPreset());
+
+    univerConfig.collaboration = undefined;
   }
+
+  const univerInstance = createUniver(univerConfig);
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;

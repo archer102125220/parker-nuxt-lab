@@ -142,7 +142,8 @@ async function handleUniverSheet() {
   try {
     const { univer, univerAPI } = await createSheetInstance(
       container.value,
-      props.locale
+      props.locale,
+      false
     );
 
     disposableList.push(
