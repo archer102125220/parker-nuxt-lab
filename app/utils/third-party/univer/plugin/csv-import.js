@@ -78,6 +78,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       static pluginName = 'import-csv-plugin';
 
       constructor(
+        _config,
         _injector,
         menuManagerService,
         commandService,
@@ -246,7 +247,9 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
     }
 
     // Ensure Univer DI container resolves these dependencies in JS
+    // The first element is empty (,) because index 0 is the _config parameter which is not injected
     setDependencies(ImportCSVButtonPlugin, [
+      , // eslint-disable-line no-sparse-arrays
       [Injector],
       [IMenuManagerService],
       [ICommandService],

@@ -60,6 +60,7 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       static pluginName = 'export-csv-plugin';
 
       constructor(
+        _config,
         _injector,
         menuManagerService,
         commandService,
@@ -198,7 +199,9 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
     }
 
     // Ensure Univer DI container resolves these dependencies in JS
+    // The first element is empty (,) because index 0 is the _config parameter which is not injected
     setDependencies(ExportCSVButtonPlugin, [
+      , // eslint-disable-line no-sparse-arrays
       [Injector],
       [IMenuManagerService],
       [ICommandService],
