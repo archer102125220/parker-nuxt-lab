@@ -3,7 +3,7 @@ import { loadCSS } from '@app/utils/helpers/load-css';
 import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 
 const UNIVERSAL_VERSION = '0.23.0';
-const UNIVER_SERVER_ENDPOINT = 'https://localhost:3000/api/univer-test';
+const UNIVER_SERVER_ENDPOINT = import.meta.env.VITE_UNIVER_SERVER_ENDPOINT || 'http://localhost:3000/api/univer';
 
 // 因為 univer 會重複引用導致報錯，所以忽略 univer 的重複引用錯誤
 function ignoreErrorLog() {

@@ -4,7 +4,7 @@ import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plug
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 
 const UNIVERSAL_VERSION = '0.22.1';
-const UNIVER_SERVER_ENDPOINT = 'https://localhost:3000/api/univer-test';
+const UNIVER_SERVER_ENDPOINT = import.meta.env.VITE_UNIVER_SERVER_ENDPOINT || 'http://localhost:3000/api/univer';
 
 export const LOCALE_TYPE = {
   get list() {
