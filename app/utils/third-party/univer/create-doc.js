@@ -5,6 +5,46 @@ import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 const UNIVERSAL_VERSION = '0.23.0';
 const UNIVER_SERVER_ENDPOINT = 'https://localhost:3000/api/univer-test';
 
+// 因為 univer 會重複引用導致報錯，所以忽略 univer 的重複引用錯誤
+function ignoreErrorLog() {
+  if (typeof window.originalConsoleError === 'function') {
+    return;
+  }
+
+  // 1. 先把原生的 console.error 存起來
+  window.originalConsoleError =
+    window.originalConsoleError || window.console.error;
+
+  // 2. 覆寫 console.error
+  window.console.error = function (...args) {
+    // 3. 產生一個錯誤物件來獲取當下的 Call Stack
+    const stackTrace = new Error().stack || '';
+
+    // 4. 定義你要過濾的目標（例如該 CDN 的網址特徵、檔案名稱，或特定套件內的函式名稱）
+    const targetScript = 'https://unpkg.com/@univerjs'; // 替換成你想攔截的 CDN 檔名或路徑
+
+    // 你也可以結合之前的訊息字串過濾，做雙重條件判斷
+    const targetMessage =
+      ' already exists. Returning the cached identifier decorator.';
+    const isTargetMessage = args.some(
+      (arg) => typeof arg === 'string' && arg.includes(targetMessage)
+    );
+
+    // 5. 判斷堆疊中是否包含目標檔案的呼叫紀錄
+    if (stackTrace.includes(targetScript) && isTargetMessage) {
+      // 如果這個 error 是從目標 CDN 腳本發出來的，我們就直接 return 把它吃掉
+      if (import.meta.dev) {
+        console.warn('@univerjs ignoreErrorLog', args);
+      }
+
+      return;
+    }
+
+    // 如果不是目標腳本觸發的，就照常印出錯誤
+    window.originalConsoleError.apply(console, args);
+  };
+}
+
 export const LOCALE_TYPE = {
   get list() {
     return localeType.list;
@@ -257,8 +297,6 @@ export async function importDoc() {
 }
 
 export async function importAdvancedDoc() {
-  // await importSheet();
-
   const univerProCroScriptList = [
     {
       id: 'univer-pro-engine-formula',
@@ -286,7 +324,7 @@ export async function importAdvancedDoc() {
     {
       id: 'univer-pro-docs-print',
       src: `https://unpkg.com/@univerjs-pro/docs-print@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
+    }
     // {
     //   id: 'univer-preset-docs-advanced',
     //   src: `https://unpkg.com/@univerjs/preset-docs-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
@@ -364,20 +402,7 @@ export async function importAdvancedDoc() {
 }
 
 export async function importDocCollaboration() {
-  const univerDocCollaborationDependecyList = [
-    // {
-    //   id: 'univer-sheets-core',
-    //   src: `https://unpkg.com/@univerjs/preset-sheets-core@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // },
-    // {
-    //   id: 'univer-sheets',
-    //   src: `https://unpkg.com/@univerjs/sheets@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // },
-    // {
-    //   id: 'univer-sheets-conditional-formatting',
-    //   src: `https://unpkg.com/@univerjs/sheets-conditional-formatting@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // }
-  ];
+  await importSheet();
 
   const univerDocCollaborationScriptList = [
     // {
@@ -417,10 +442,6 @@ export async function importDocCollaboration() {
   ];
 
   const querySelectorAllString = [
-    ...univerDocCollaborationDependecyList.map(
-      (univerDocCollaborationDependecy) =>
-        `#${univerDocCollaborationDependecy.id}`
-    ),
     ...univerDocCollaborationScriptList.map(
       (univerDocCollaborationScript) => `#${univerDocCollaborationScript.id}`
     ),
@@ -438,18 +459,6 @@ export async function importDocCollaboration() {
   ) {
     return;
   }
-
-  const univerDocCollaborationDependecyPromiseList =
-    univerDocCollaborationDependecyList.map(
-      (univerDocCollaborationDependecy) => {
-        return loadScript(
-          univerDocCollaborationDependecy.id,
-          univerDocCollaborationDependecy.src,
-          univerDocCollaborationDependecy.attributes
-        );
-      }
-    );
-  await Promise.all(univerDocCollaborationDependecyPromiseList);
 
   // const univerDocCollaborationScriptPromiseList = univerDocCollaborationScriptList.map(
   //   (univerDocCollaborationScript) => {
@@ -493,8 +502,9 @@ export async function importDocCollaboration() {
 export async function createDocInstance(
   container,
   locale = '',
-  collaboration = true
+  collaboration = false
 ) {
+  ignoreErrorLog();
   console.log('createDocInstance start');
   await importUniver();
   await importDoc();
@@ -560,37 +570,17 @@ export async function createDocInstance(
 
   const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
-    locales: {
-      [LocaleType.ZH_TW]: mergeLocales(
-        UniverPresetDocsCoreZhTW,
-        UniverPresetDocsHyperLinkZhTW,
-        UniverPresetDocsDrawingZhTW,
-        UniverPresetDocsQuickInsertUiZhTW,
-        UniverPresetDocsThreadCommentZhTW,
-
-        UniverPresetDocsAdvancedZhTW
-      ),
-      [LocaleType.EN_US]: mergeLocales(
-        UniverPresetDocsCoreEnUS,
-        UniverPresetDocsHyperLinkEnUS,
-        UniverPresetDocsDrawingEnUS,
-        UniverPresetDocsQuickInsertUiEnUS,
-        UniverPresetDocsThreadCommentEnUS,
-
-        UniverPresetDocsAdvancedEnUS
-      )
-    },
+    locales: {},
     presets: [
       UniverDocsCorePreset({ container }),
       UniverDocsHyperLinkPreset(),
-      UniverDocsDrawingPreset(),
       UniverDocsThreadCommentPreset()
     ],
     plugins: [
       UniverDocsQuickInsertUIPlugin
       // [UniverWatermarkPlugin, {
       //   textWatermarkSettings: {
-      //     content: 'Hello, Univer!',
+      //     content: '測試浮水印',
       //     fontSize: 36,
       //   },
       // }]
@@ -609,11 +599,11 @@ export async function createDocInstance(
       [
         UniverExchangeClientPlugin,
         {
-          uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/stream/file/upload`,
-          importServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/{type}/import`,
-          exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/{type}/export`,
-          getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/exchange/task/{taskID}`,
-          signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/universer-api/file/{fileID}/sign-url`,
+          uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/stream/file/upload`,
+          importServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/import`,
+          exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/export`,
+          getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/task/{taskID}`,
+          signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/file/{fileID}/sign-url`,
           downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
         }
       ],
@@ -621,8 +611,106 @@ export async function createDocInstance(
     );
 
     if (collaboration === true) {
-      // await importDocCollaboration();
-      // univerConfig.collaboration = true;
+      await importDocCollaboration();
+      const {
+        UniverProCollaboration,
+        UniverProCollaborationClient,
+        UniverProCollaborationClientUi,
+
+        UniverProCollaborationClientZhTW,
+        UniverProCollaborationClientEnUS,
+        UniverProCollaborationClientUiZhTW,
+        UniverProCollaborationClientUiEnUS
+      } = window;
+
+      const { IAuthzIoService, IUndoRedoService, IMentionIOService } =
+        UniverCore;
+
+      const { UniverCollaborationPlugin } = UniverProCollaboration;
+      const { UniverCollaborationClientPlugin } = UniverProCollaborationClient;
+      const {
+        BrowserCollaborationSocketService,
+        UniverCollaborationClientUIPlugin
+      } = UniverProCollaborationClientUi;
+
+      univerConfig.collaboration = true;
+
+      univerConfig.locales = {
+        [LocaleType.ZH_TW]: mergeLocales(
+          UniverPresetDocsCoreZhTW,
+          UniverPresetDocsHyperLinkZhTW,
+          UniverPresetDocsDrawingZhTW,
+          UniverPresetDocsQuickInsertUiZhTW,
+          UniverPresetDocsThreadCommentZhTW,
+
+          UniverPresetDocsAdvancedZhTW,
+          UniverProCollaborationClientZhTW,
+          UniverProCollaborationClientUiZhTW
+        ),
+        [LocaleType.EN_US]: mergeLocales(
+          UniverPresetDocsCoreEnUS,
+          UniverPresetDocsHyperLinkEnUS,
+          UniverPresetDocsDrawingEnUS,
+          UniverPresetDocsQuickInsertUiEnUS,
+          UniverPresetDocsThreadCommentEnUS,
+
+          UniverPresetDocsAdvancedEnUS,
+          UniverProCollaborationClientEnUS,
+          UniverProCollaborationClientUiEnUS
+        )
+      };
+
+      univerConfig.override = [
+        [IAuthzIoService, null],
+        [IUndoRedoService, null],
+        [IMentionIOService, null]
+      ];
+
+      univerConfig.presets.push(
+        UniverDocsDrawingPreset({
+          collaboration: true
+        })
+      );
+
+      univerConfig.plugins.push(
+        UniverCollaborationPlugin,
+        [
+          UniverCollaborationClientPlugin,
+          {
+            socketService: BrowserCollaborationSocketService,
+            authzUrl: `${UNIVER_SERVER_ENDPOINT}/authz`,
+            snapshotServerUrl: `${UNIVER_SERVER_ENDPOINT}/snapshot`,
+            collabSubmitChangesetUrl: `${UNIVER_SERVER_ENDPOINT}/comb`,
+            collabWebSocketUrl: `${UNIVER_SERVER_ENDPOINT}/comb/connect`
+          }
+        ],
+        UniverCollaborationClientUIPlugin
+      );
+    } else {
+      univerConfig.locales = {
+        [LocaleType.ZH_TW]: mergeLocales(
+          UniverPresetDocsCoreZhTW,
+          UniverPresetDocsHyperLinkZhTW,
+          UniverPresetDocsDrawingZhTW,
+          UniverPresetDocsQuickInsertUiZhTW,
+          UniverPresetDocsThreadCommentZhTW,
+
+          UniverPresetDocsAdvancedZhTW
+        ),
+        [LocaleType.EN_US]: mergeLocales(
+          UniverPresetDocsCoreEnUS,
+          UniverPresetDocsHyperLinkEnUS,
+          UniverPresetDocsDrawingEnUS,
+          UniverPresetDocsQuickInsertUiEnUS,
+          UniverPresetDocsThreadCommentEnUS,
+
+          UniverPresetDocsAdvancedEnUS
+        )
+      };
+
+      univerConfig.presets.push(
+        UniverDocsDrawingPreset()
+      );
     }
   }
 
