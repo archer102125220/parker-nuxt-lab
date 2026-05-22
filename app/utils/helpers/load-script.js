@@ -1,4 +1,4 @@
-export function loadScript(id, src, attributes = {}, successDelay = 1000) {
+export function loadScript(id, src, attributes = {}, successDelay = 1500) {
   if (typeof document === 'undefined') {
     return Promise.resolve();
   }
