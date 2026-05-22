@@ -7,7 +7,7 @@ const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler((event) => {
-  const { filesId } = event.context.params;
+  const filesId = getRouterParam(event, 'filesId');
   const { filetype } = getQuery(event);
 
   console.log('read');

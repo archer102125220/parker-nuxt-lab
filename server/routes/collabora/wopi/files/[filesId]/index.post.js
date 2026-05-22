@@ -6,7 +6,7 @@
 const lockStore = new Map();
 
 export default defineEventHandler(async (event) => {
-  const { filesId } = event.context.params;
+  const filesId = getRouterParam(event, 'filesId');
   const operation = getHeader(event, 'X-WOPI-Override');
 
   console.log(`[WOPI Lock] operation=${operation}, filesId=${filesId}`);
