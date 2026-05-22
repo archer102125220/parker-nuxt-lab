@@ -42,7 +42,7 @@ export async function importUniver() {
     {
       id: 'univer-echarts',
       src: 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js'
-    },
+    }
     // {
     //   id: 'univer-monaco',
     //   src:'https://unpkg.com/monaco-editor@0.55.1/min/vs/editor/editor.main.js'
@@ -68,6 +68,42 @@ export async function importUniver() {
       src: `https://unpkg.com/@univerjs-pro/license@${UNIVERSAL_VERSION}/lib/umd/index.js`
     }
   ];
+
+  const querySelectorAllString = [
+    ...dependecyScriptList.map((dependecyScript) => `#${dependecyScript.id}`),
+    ...univerCoreScriptList.map((coreScript) => `#${coreScript.id}`),
+    ...univerScriptList.map((univerScript) => `#${univerScript.id}`)
+  ].join(',');
+
+  if (
+    document.querySelectorAll(querySelectorAllString).length ===
+    querySelectorAllString.length
+  ) {
+    return;
+  }
+
+  const dependecyScriptPromiseList = dependecyScriptList.map(
+    (dependecyScript) =>
+      loadScript(
+        dependecyScript.id,
+        dependecyScript.src,
+        dependecyScript.attributes
+      )
+  );
+  await Promise.all(dependecyScriptPromiseList);
+
+  const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
+    loadScript(coreScript.id, coreScript.src, coreScript.attributes)
+  );
+  await Promise.all(univerCoreScriptPromiseList);
+
+  const univerScriptPromiseList = univerScriptList.map((univerScript) =>
+    loadScript(univerScript.id, univerScript.src, univerScript.attributes)
+  );
+  await Promise.all(univerScriptPromiseList);
+}
+
+export async function importSheet() {
   const univerSheetCoreScriptList = [
     {
       id: 'univer-sheets-core',
@@ -138,7 +174,7 @@ export async function importUniver() {
     {
       id: 'univer-sheets-zen-editor-facade',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/umd/facade.js`
-    },
+    }
     // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
     // {
     //   id: 'univer-uniscript',
@@ -241,7 +277,7 @@ export async function importUniver() {
     {
       id: 'univer-sheets-zen-editor-en-us',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/umd/locale/en-US.js`
-    },
+    }
 
     // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
     // {
@@ -305,7 +341,7 @@ export async function importUniver() {
     {
       id: 'univer-sheets-zen-editor-css',
       src: `https://unpkg.com/@univerjs/sheets-zen-editor@${UNIVERSAL_VERSION}/lib/index.css`
-    },
+    }
 
     // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
     // {
@@ -315,12 +351,9 @@ export async function importUniver() {
   ];
 
   const querySelectorAllString = [
-    ...dependecyScriptList.map((dependecyScript) => `#${dependecyScript.id}`),
     ...univerSheetCoreScriptList.map(
       (sheetCoreScript) => `#${sheetCoreScript.id}`
     ),
-    ...univerCoreScriptList.map((coreScript) => `#${coreScript.id}`),
-    ...univerScriptList.map((univerScript) => `#${univerScript.id}`),
     ...univerSheetsScriptList.map(
       (univerSheetScript) => `#${univerSheetScript.id}`
     ),
@@ -330,29 +363,12 @@ export async function importUniver() {
     ...univerCSSList.map((univerCSSScript) => `#${univerCSSScript.id}`)
   ].join(',');
 
-  if (document.querySelectorAll(querySelectorAllString).length > 0) {
+  if (
+    document.querySelectorAll(querySelectorAllString).length ===
+    querySelectorAllString.length
+  ) {
     return;
   }
-
-  const dependecyScriptPromiseList = dependecyScriptList.map(
-    (dependecyScript) =>
-      loadScript(
-        dependecyScript.id,
-        dependecyScript.src,
-        dependecyScript.attributes
-      )
-  );
-  await Promise.all(dependecyScriptPromiseList);
-
-  const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
-    loadScript(coreScript.id, coreScript.src, coreScript.attributes)
-  );
-  await Promise.all(univerCoreScriptPromiseList);
-
-  const univerScriptPromiseList = univerScriptList.map((univerScript) =>
-    loadScript(univerScript.id, univerScript.src, univerScript.attributes)
-  );
-  await Promise.all(univerScriptPromiseList);
 
   const univerSheetCoreScriptPromiseList = univerSheetCoreScriptList.map(
     (sheetCoreScript) =>
@@ -395,7 +411,7 @@ export async function importSheetAdvanced() {
     {
       id: 'univer-preset-sheets-advanced',
       src: `https://unpkg.com/@univerjs/preset-sheets-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
+    }
 
     // {
     //   id: 'univer-pro-sheets-print',
@@ -560,7 +576,10 @@ export async function importSheetAdvanced() {
     )
   ].join(',');
 
-  if (document.querySelectorAll(querySelectorAllString).length > 0) {
+  if (
+    document.querySelectorAll(querySelectorAllString).length ===
+    querySelectorAllString.length
+  ) {
     return;
   }
 
@@ -631,7 +650,10 @@ export async function importCollaboration() {
     )
   ].join(',');
 
-  if (document.querySelectorAll(querySelectorAllString).length > 0) {
+  if (
+    document.querySelectorAll(querySelectorAllString).length ===
+    querySelectorAllString.length
+  ) {
     return;
   }
 
@@ -662,6 +684,7 @@ export async function createSheetInstance(
   collaboration = false
 ) {
   await importUniver();
+  await importSheet();
 
   if (typeof window.UniverPresets?.createUniver !== 'function') {
     await new Promise((resolve) => {
@@ -765,7 +788,6 @@ export async function createSheetInstance(
   const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
     locales: {},
-    collaboration: collaboration || undefined,
     presets: [
       UniverSheetsCorePreset({ container }),
       UniverSheetsFilterPreset(),
@@ -793,7 +815,7 @@ export async function createSheetInstance(
       //   },
       // }],
       UniverSheetsCrosshairHighlightPlugin,
-      UniverSheetsZenEditorPlugin,
+      UniverSheetsZenEditorPlugin
 
       // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
       // UniverUniscriptPlugin
