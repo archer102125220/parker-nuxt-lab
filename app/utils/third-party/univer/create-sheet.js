@@ -4,7 +4,11 @@ import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plug
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 
 const UNIVERSAL_VERSION = '0.22.1';
-const UNIVER_SERVER_ENDPOINT = import.meta.env.VITE_UNIVER_SERVER_ENDPOINT || 'http://localhost:3000/api/univer';
+// const UNIVER_SERVER_ENDPOINT =
+//   import.meta.env.VITE_UNIVER_SERVER_ENDPOINT ||
+//   'http://localhost:3000/api/univer';
+const UNIVERSER_DOCKER_HOST =
+  import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
 
 export const LOCALE_TYPE = {
   get list() {
@@ -802,7 +806,8 @@ export async function createSheetInstance(
       UniverSheetsAdvancedPreset({
         license: import.meta.env.VITE_UNIVER_LICENSE,
         useWorker: true,
-        universerEndpoint: UNIVER_SERVER_ENDPOINT
+        // universerEndpoint: UNIVER_SERVER_ENDPOINT,
+        universerEndpoint: UNIVERSER_DOCKER_HOST
       })
     ],
     plugins: [
@@ -883,7 +888,8 @@ export async function createSheetInstance(
     univerConfig.presets.push(
       UniverSheetsDrawingPreset({ collaboration: true }),
       UniverSheetsCollaborationPreset({
-        universerEndpoint: UNIVER_SERVER_ENDPOINT
+        // universerEndpoint: UNIVER_SERVER_ENDPOINT
+        universerEndpoint: UNIVERSER_DOCKER_HOST
       })
     );
   } else {

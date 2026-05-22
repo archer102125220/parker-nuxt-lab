@@ -3,8 +3,8 @@
 
 POST
 
-[UNIVERSER_DOCKER_HOST]/universer-api/snapshot/{type}/unit/-/create
-http://localhost:8000
+[UNIVERSER_DOCKER_HOST]/snapshot/{type}/unit/-/create
+http://localhost:8000/universer-api
 type 參數值：1 表示 Docs，2 表示 Sheets。
 
 Headers

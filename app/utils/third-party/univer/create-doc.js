@@ -3,7 +3,11 @@ import { loadCSS } from '@app/utils/helpers/load-css';
 import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 
 const UNIVERSAL_VERSION = '0.23.0';
-const UNIVER_SERVER_ENDPOINT = import.meta.env.VITE_UNIVER_SERVER_ENDPOINT || 'http://localhost:3000/api/univer';
+// const UNIVER_SERVER_ENDPOINT =
+//   import.meta.env.VITE_UNIVER_SERVER_ENDPOINT ||
+//   'http://localhost:3000/api/univer';
+const UNIVERSER_DOCKER_HOST =
+  import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
 
 // 因為 univer 會重複引用導致報錯，所以忽略 univer 的重複引用錯誤
 function ignoreErrorLog() {
@@ -599,12 +603,19 @@ export async function createDocInstance(
       [
         UniverExchangeClientPlugin,
         {
-          uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/stream/file/upload`,
-          importServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/import`,
-          exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/export`,
-          getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/task/{taskID}`,
-          signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/file/{fileID}/sign-url`,
-          downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
+          // uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/stream/file/upload`,
+          // importServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/import`,
+          // exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/export`,
+          // getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/task/{taskID}`,
+          // signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/file/{fileID}/sign-url`,
+          // downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
+
+          uploadFileServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/stream/file/upload`,
+          importServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/{type}/import`,
+          exportServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/{type}/export`,
+          getTaskServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/task/{taskID}`,
+          signUrlServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/file/{fileID}/sign-url`,
+          downloadEndpointUrl: `${UNIVERSER_DOCKER_HOST}/`
         }
       ],
       UniverDocsExchangeClientPlugin
@@ -678,10 +689,15 @@ export async function createDocInstance(
           UniverCollaborationClientPlugin,
           {
             socketService: BrowserCollaborationSocketService,
-            authzUrl: `${UNIVER_SERVER_ENDPOINT}/authz`,
-            snapshotServerUrl: `${UNIVER_SERVER_ENDPOINT}/snapshot`,
-            collabSubmitChangesetUrl: `${UNIVER_SERVER_ENDPOINT}/comb`,
-            collabWebSocketUrl: `${UNIVER_SERVER_ENDPOINT}/comb/connect`
+            // authzUrl: `${UNIVER_SERVER_ENDPOINT}/authz`,
+            // snapshotServerUrl: `${UNIVER_SERVER_ENDPOINT}/snapshot`,
+            // collabSubmitChangesetUrl: `${UNIVER_SERVER_ENDPOINT}/comb`,
+            // collabWebSocketUrl: `${UNIVER_SERVER_ENDPOINT}/comb/connect`
+
+            authzUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/authz`,
+            snapshotServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/snapshot`,
+            collabSubmitChangesetUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/comb`,
+            collabWebSocketUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/comb/connect`
           }
         ],
         UniverCollaborationClientUIPlugin
@@ -708,9 +724,7 @@ export async function createDocInstance(
         )
       };
 
-      univerConfig.presets.push(
-        UniverDocsDrawingPreset()
-      );
+      univerConfig.presets.push(UniverDocsDrawingPreset());
     }
   }
 

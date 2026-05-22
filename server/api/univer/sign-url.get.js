@@ -3,8 +3,8 @@
 
 GET
 
-[UNIVERSER_DOCKER_HOST]/universer-api/file/{fileID}/sign-url
-http://localhost:8000
+[UNIVERSER_DOCKER_HOST]/file/{fileID}/sign-url
+http://localhost:8000/universer-api
 
 Headers
 

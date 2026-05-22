@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+const { locale } = useI18n();
+</script>
 
 <template>
   <div class="univer_doc_page">
     <ClientOnly>
-      <UniverDocEditor />
+      <UniverDocEditor :locale="locale" />
     </ClientOnly>
   </div>
 </template>

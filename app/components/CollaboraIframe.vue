@@ -47,7 +47,7 @@ const props = defineProps({
   },
   language: {
     type: String,
-    default: 'zh-TW'
+    default: COLLABORA_LOCALES[0].code
   }
 });
 

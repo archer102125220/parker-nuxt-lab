@@ -3,8 +3,8 @@
 
 POST
 
-[UNIVERSER_DOCKER_HOST]/universer-api/stream/file/upload
-http://localhost:8000
+[UNIVERSER_DOCKER_HOST]/stream/file/upload
+http://localhost:8000/universer-api
 
 Headers
 content-type: multipart/form-data

@@ -3,8 +3,8 @@
 
 GET
 
-[UNIVERSER_DOCKER_HOST]/universer-api/exchange/task/{taskID}
-http://localhost:8000
+[UNIVERSER_DOCKER_HOST]/exchange/task/{taskID}
+http://localhost:8000/universer-api
 
 Headers
 

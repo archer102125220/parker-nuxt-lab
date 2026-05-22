@@ -3,7 +3,7 @@ import { COLLABORA_LOCALES } from '@app/components/CollaboraIframe.vue';
 
 const { locale } = useI18n();
 console.log(locale.value);
-const currentLocale = computed(() => {
+const language = computed(() => {
   const _locale =
     locale.value === 'zh'
       ? 'zh-TW'
@@ -32,7 +32,7 @@ const currentLocale = computed(() => {
       file-id="test.xlsx"
       file-type="xlsx"
       wopi-host="http://192.168.139.3:3000/collabora"
-      :language="currentLocale"
+      :language="language"
     />
   </div>
 </template>

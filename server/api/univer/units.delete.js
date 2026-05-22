@@ -3,8 +3,8 @@
 
 DELETE
 
-[UNIVERSER_DOCKER_HOST]/universer-api/snapshot/-/units
-http://localhost:8000
+[UNIVERSER_DOCKER_HOST]/snapshot/-/units
+http://localhost:8000/universer-api
 
 Headers
 content-type: application/json

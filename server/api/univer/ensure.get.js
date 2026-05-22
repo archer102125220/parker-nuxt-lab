@@ -3,8 +3,8 @@
 
 GET
 
-[UNIVERSER_DOCKER_HOST]/universer-api/snapshot/{type}/unit/{unitID}/rev/0/ensure
-http://localhost:8000
+[UNIVERSER_DOCKER_HOST]/snapshot/{type}/unit/{unitID}/rev/0/ensure
+http://localhost:8000/universer-api
 type 參數值：1 表示 Docs，2 表示 Sheets。
 
 Headers
