@@ -1,6 +1,3 @@
-/* eslint-disable no-var */
-// TODO
-
 // https://mozilla.github.io/pdf.js/
 // https://stackoverflow.com/questions/65750584/how-to-import-mozilla-pdf-js-in-vue-project
 import * as PDFJS from 'pdfjs-dist/lib/pdf';
@@ -78,20 +75,20 @@ class GenericScripting {
 }
 // eslint-disable-next-line no-shadow-restricted-names
 const webL10n = (function (window, document, undefined) {
-  var gL10nData = {};
-  var gTextData = '';
-  var gTextProp = 'textContent';
-  var gLanguage = '';
-  var gMacros = {};
-  var gReadyState = 'loading';
-  var gAsyncResourceLoading = true;
+  let gL10nData = {};
+  let gTextData = '';
+  const gTextProp = 'textContent';
+  let gLanguage = '';
+  const gMacros = {};
+  let gReadyState = 'loading';
+  const gAsyncResourceLoading = true;
 
   function getL10nResourceLinks() {
     return document.querySelectorAll('link[type="application/l10n"]');
   }
 
   function getL10nDictionary() {
-    var script = document.querySelector('script[type="application/l10n"]');
+    const script = document.querySelector('script[type="application/l10n"]');
     return script ? JSON.parse(script.innerHTML) : null;
   }
 
@@ -101,9 +98,9 @@ const webL10n = (function (window, document, undefined) {
 
   function getL10nAttributes(element) {
     if (!element) return {};
-    var l10nId = element.getAttribute('data-l10n-id');
-    var l10nArgs = element.getAttribute('data-l10n-args');
-    var args = {};
+    const l10nId = element.getAttribute('data-l10n-id');
+    const l10nArgs = element.getAttribute('data-l10n-args');
+    let args = {};
 
     if (l10nArgs) {
       try {
@@ -125,7 +122,7 @@ const webL10n = (function (window, document, undefined) {
 
     onFailure = onFailure || function _onFailure() { };
 
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', url, gAsyncResourceLoading);
 
     if (xhr.overrideMimeType) {
@@ -153,7 +150,7 @@ const webL10n = (function (window, document, undefined) {
   }
 
   function parseResource(href, lang, successCallback, failureCallback) {
-    var baseURL = href.replace(/[^\/]*$/, '') || './';
+    const baseURL = href.replace(/[^\/]*$/, '') || './';
 
     function evalString(text) {
       if (text.lastIndexOf('\\') < 0) return text;
@@ -171,19 +168,19 @@ const webL10n = (function (window, document, undefined) {
     }
 
     function parseProperties(text, parsedPropertiesCallback) {
-      var dictionary = {};
-      var reBlank = /^\s*|\s*$/;
-      var reComment = /^\s*#|^\s*$/;
-      var reSection = /^\s*\[(.*)\]\s*$/;
-      var reImport = /^\s*@import\s+url\((.*)\)\s*$/i;
-      var reSplit = /^([^=\s]*)\s*=\s*(.+)$/;
+      const dictionary = {};
+      const reBlank = /^\s*|\s*$/;
+      const reComment = /^\s*#|^\s*$/;
+      const reSection = /^\s*\[(.*)\]\s*$/;
+      const reImport = /^\s*@import\s+url\((.*)\)\s*$/i;
+      const reSplit = /^([^=\s]*)\s*=\s*(.+)$/;
 
       function parseRawLines(rawText, extendedSyntax, parsedRawLinesCallback) {
-        var entries = rawText.replace(reBlank, '').split(/[\r\n]+/);
-        var currentLang = '*';
-        var genericLang = lang.split('-', 1)[0];
-        var skipLang = false;
-        var match = '';
+        const entries = rawText.replace(reBlank, '').split(/[\r\n]+/);
+        let currentLang = '*';
+        const genericLang = lang.split('-', 1)[0];
+        let skipLang = false;
+        let match = '';
 
         function nextEntry() {
            
@@ -193,7 +190,7 @@ const webL10n = (function (window, document, undefined) {
               return;
             }
 
-            var line = entries.shift();
+            const line = entries.shift();
             if (reComment.test(line)) continue;
 
             if (extendedSyntax) {
@@ -218,7 +215,7 @@ const webL10n = (function (window, document, undefined) {
               }
             }
 
-            var tmp = line.match(reSplit);
+            const tmp = line.match(reSplit);
 
             if (tmp && tmp.length == 3) {
               dictionary[tmp[1]] = evalString(tmp[2]);
@@ -252,7 +249,7 @@ const webL10n = (function (window, document, undefined) {
       function (response) {
         gTextData += response;
         parseProperties(response, function (data) {
-          for (var key in data) {
+          for (const key in data) {
             var id,
               prop,
               index = key.lastIndexOf('.');
@@ -290,20 +287,20 @@ const webL10n = (function (window, document, undefined) {
 
     clear();
     gLanguage = lang;
-    var langLinks = getL10nResourceLinks();
-    var langCount = langLinks.length;
+    const langLinks = getL10nResourceLinks();
+    const langCount = langLinks.length;
 
     if (langCount === 0) {
-      var dict = getL10nDictionary();
+      const dict = getL10nDictionary();
 
       if (dict && dict.locales && dict.default_locale) {
         if(process.env.NODE_ENV !== 'production') console.log('using the embedded JSON directory, early way out');
         gL10nData = dict.locales[lang];
 
         if (!gL10nData) {
-          var defaultLocale = dict.default_locale.toLowerCase();
+          const defaultLocale = dict.default_locale.toLowerCase();
 
-          for (var anyCaseLang in dict.locales) {
+          for (let anyCaseLang in dict.locales) {
             anyCaseLang = anyCaseLang.toLowerCase();
 
             if (anyCaseLang === lang) {
@@ -324,8 +321,8 @@ const webL10n = (function (window, document, undefined) {
       return;
     }
 
-    var onResourceLoaded = null;
-    var gResourceCount = 0;
+    let onResourceLoaded = null;
+    let gResourceCount = 0;
 
     onResourceLoaded = function () {
       gResourceCount++;
@@ -337,7 +334,7 @@ const webL10n = (function (window, document, undefined) {
     };
 
     function L10nResourceLink(link) {
-      var href = link.href;
+      const href = link.href;
 
       this.load = function (lang, callback) {
         parseResource(href, lang, callback, function () {
@@ -349,8 +346,8 @@ const webL10n = (function (window, document, undefined) {
       };
     }
 
-    for (var i = 0; i < langCount; i++) {
-      var resource = new L10nResourceLink(langLinks[i]);
+    for (let i = 0; i < langCount; i++) {
+      const resource = new L10nResourceLink(langLinks[i]);
       resource.load(lang, onResourceLoaded);
     }
   }
@@ -362,7 +359,7 @@ const webL10n = (function (window, document, undefined) {
   }
 
   function getPluralRules(lang) {
-    var locales2rules = {
+    const locales2rules = {
       af: 3,
       ak: 4,
       am: 4,
@@ -543,7 +540,7 @@ const webL10n = (function (window, document, undefined) {
       return start <= n && n <= end;
     }
 
-    var pluralRules = {
+    const pluralRules = {
        
       0: function (n) {
         return 'other';
@@ -700,7 +697,7 @@ const webL10n = (function (window, document, undefined) {
         return 'other';
       },
     };
-    var index = locales2rules[lang.replace(/-.*$/, '')];
+    const index = locales2rules[lang.replace(/-.*$/, '')];
 
     if (!(index in pluralRules)) {
       if(process.env.NODE_ENV !== 'production') console.warn('plural form unknown for [' + lang + ']');
@@ -713,7 +710,7 @@ const webL10n = (function (window, document, undefined) {
   }
 
   gMacros.plural = function (str, param, key, prop) {
-    var n = parseFloat(param);
+    const n = parseFloat(param);
     if (isNaN(n)) return str;
     if (prop != gTextProp) return str;
 
@@ -721,7 +718,7 @@ const webL10n = (function (window, document, undefined) {
       gMacros._pluralRules = getPluralRules(gLanguage);
     }
 
-    var index = '[' + gMacros._pluralRules(n) + ']';
+    const index = '[' + gMacros._pluralRules(n) + ']';
 
     if (n === 0 && key + '[zero]' in gL10nData) {
       str = gL10nData[key + '[zero]'][prop];
@@ -739,7 +736,7 @@ const webL10n = (function (window, document, undefined) {
   };
 
   function getL10nData(key, args, fallback) {
-    var data = gL10nData[key];
+    let data = gL10nData[key];
 
     if (!data) {
       if(process.env.NODE_ENV !== 'production') console.warn('#' + key + ' is undefined.');
@@ -751,10 +748,10 @@ const webL10n = (function (window, document, undefined) {
       data = fallback;
     }
 
-    var rv = {};
+    const rv = {};
 
-    for (var prop in data) {
-      var str = data[prop];
+    for (const prop in data) {
+      let str = data[prop];
       str = substIndexes(str, args, key, prop);
       str = substArguments(str, args, key);
       rv[prop] = str;
@@ -764,12 +761,12 @@ const webL10n = (function (window, document, undefined) {
   }
 
   function substIndexes(str, args, key, prop) {
-    var reIndex = /\{\[\s*([a-zA-Z]+)\(([a-zA-Z]+)\)\s*\]\}/;
-    var reMatch = reIndex.exec(str);
+    const reIndex = /\{\[\s*([a-zA-Z]+)\(([a-zA-Z]+)\)\s*\]\}/;
+    const reMatch = reIndex.exec(str);
     if (!reMatch || !reMatch.length) return str;
-    var macroName = reMatch[1];
-    var paramName = reMatch[2];
-    var param;
+    const macroName = reMatch[1];
+    const paramName = reMatch[2];
+    let param;
 
     if (args && paramName in args) {
       param = args[paramName];
@@ -778,7 +775,7 @@ const webL10n = (function (window, document, undefined) {
     }
 
     if (macroName in gMacros) {
-      var macro = gMacros[macroName];
+      const macro = gMacros[macroName];
       str = macro(str, param, key, prop);
     }
 
@@ -786,7 +783,7 @@ const webL10n = (function (window, document, undefined) {
   }
 
   function substArguments(str, args, key) {
-    var reArgs = /\{\{\s*(.+?)\s*\}\}/g;
+    const reArgs = /\{\{\s*(.+?)\s*\}\}/g;
     return str.replace(reArgs, function (matched_text, arg) {
       if (args && arg in args) {
         return args[arg];
@@ -802,9 +799,9 @@ const webL10n = (function (window, document, undefined) {
   }
 
   function translateElement(element) {
-    var l10n = getL10nAttributes(element);
+    const l10n = getL10nAttributes(element);
     if (!l10n.id) return;
-    var data = getL10nData(l10n.id, l10n.args);
+    const data = getL10nData(l10n.id, l10n.args);
 
     if (!data) {
       if(process.env.NODE_ENV !== 'production') console.warn('#' + l10n.id + ' is undefined.');
@@ -815,10 +812,10 @@ const webL10n = (function (window, document, undefined) {
       if (getChildElementCount(element) === 0) {
         element[gTextProp] = data[gTextProp];
       } else {
-        var children = element.childNodes;
-        var found = false;
+        const children = element.childNodes;
+        let found = false;
 
-        for (var i = 0, l = children.length; i < l; i++) {
+        for (let i = 0, l = children.length; i < l; i++) {
           if (children[i].nodeType === 3 && /\S/.test(children[i].nodeValue)) {
             if (found) {
               children[i].nodeValue = '';
@@ -830,7 +827,7 @@ const webL10n = (function (window, document, undefined) {
         }
 
         if (!found) {
-          var textNode = document.createTextNode(data[gTextProp]);
+          const textNode = document.createTextNode(data[gTextProp]);
           element.insertBefore(textNode, element.firstChild);
         }
       }
@@ -838,7 +835,7 @@ const webL10n = (function (window, document, undefined) {
       delete data[gTextProp];
     }
 
-    for (var k in data) {
+    for (const k in data) {
       element[k] = data[k];
     }
   }
@@ -852,9 +849,9 @@ const webL10n = (function (window, document, undefined) {
       return element.childElementCount;
     }
 
-    var count = 0;
+    let count = 0;
 
-    for (var i = 0; i < element.childNodes.length; i++) {
+    for (let i = 0; i < element.childNodes.length; i++) {
       count += element.nodeType === 1 ? 1 : 0;
     }
 
@@ -863,10 +860,10 @@ const webL10n = (function (window, document, undefined) {
 
   function translateFragment(element) {
     element = element || document.documentElement;
-    var children = getTranslatableChildren(element);
-    var elementCount = children.length;
+    const children = getTranslatableChildren(element);
+    const elementCount = children.length;
 
-    for (var i = 0; i < elementCount; i++) {
+    for (let i = 0; i < elementCount; i++) {
       translateElement(children[i]);
     }
 
@@ -875,22 +872,22 @@ const webL10n = (function (window, document, undefined) {
 
   return {
     get: function (key, args, fallbackString) {
-      var index = key.lastIndexOf('.');
-      var prop = gTextProp;
+      const index = key.lastIndexOf('.');
+      let prop = gTextProp;
 
       if (index > 0) {
         prop = key.substring(index + 1);
         key = key.substring(0, index);
       }
 
-      var fallback;
+      let fallback;
 
       if (fallbackString) {
         fallback = {};
         fallback[prop] = fallbackString;
       }
 
-      var data = getL10nData(key, args, fallback);
+      const data = getL10nData(key, args, fallback);
 
       if (data && prop in data) {
         return data[prop];
@@ -913,8 +910,8 @@ const webL10n = (function (window, document, undefined) {
       });
     },
     getDirection: function () {
-      var rtlList = ['ar', 'he', 'fa', 'ps', 'ur'];
-      var shortCode = gLanguage.split('-', 1)[0];
+      const rtlList = ['ar', 'he', 'fa', 'ps', 'ur'];
+      const shortCode = gLanguage.split('-', 1)[0];
       return rtlList.indexOf(shortCode) >= 0 ? 'rtl' : 'ltr';
     },
     translate: translateFragment,
