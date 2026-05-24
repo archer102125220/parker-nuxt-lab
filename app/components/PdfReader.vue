@@ -1,6 +1,10 @@
 <template>
   <div ref="pdfReaderDOM" class="pdf_reader">
-    <div id="outerContainer" ref="outerContainer">
+    <div
+      id="outerContainer"
+      ref="outerContainer"
+      :class="{ sidebarOpen: sidebarOpen }"
+    >
       <div id="sidebarContainer" ref="sidebarContainer">
         <div id="toolbarSidebar" ref="toolbarSidebar">
           <div id="toolbarSidebarLeft" ref="toolbarSidebarLeft">
@@ -8,10 +12,12 @@
               <button
                 id="viewThumbnail"
                 ref="viewThumbnail"
-                class="toolbarButton toggled"
+                class="toolbarButton"
+                :class="{ toggled: activeSidebarTab === 'thumbnails' }"
                 title="Show Thumbnails"
                 tabindex="2"
                 data-l10n-id="thumbs"
+                @click="setSidebarTab('thumbnails')"
               >
                 <span data-l10n-id="thumbs_label">Thumbnails</span>
               </button>
@@ -19,9 +25,11 @@
                 id="viewOutline"
                 ref="viewOutline"
                 class="toolbarButton"
+                :class="{ toggled: activeSidebarTab === 'outline' }"
                 title="Show Document Outline (double-click to expand/collapse all items)"
                 tabindex="3"
                 data-l10n-id="document_outline"
+                @click="setSidebarTab('outline')"
               >
                 <span data-l10n-id="document_outline_label"
                   >Document Outline</span
@@ -31,9 +39,11 @@
                 id="viewAttachments"
                 ref="viewAttachments"
                 class="toolbarButton"
+                :class="{ toggled: activeSidebarTab === 'attachments' }"
                 title="Show Attachments"
                 tabindex="4"
                 data-l10n-id="attachments"
+                @click="setSidebarTab('attachments')"
               >
                 <span data-l10n-id="attachments_label">Attachments</span>
               </button>
@@ -41,9 +51,11 @@
                 id="viewLayers"
                 ref="viewLayers"
                 class="toolbarButton"
+                :class="{ toggled: activeSidebarTab === 'layers' }"
                 title="Show Layers (double-click to reset all layers to the default state)"
                 tabindex="5"
                 data-l10n-id="layers"
+                @click="setSidebarTab('layers')"
               >
                 <span data-l10n-id="layers_label">Layers</span>
               </button>
@@ -54,10 +66,9 @@
             <div
               id="outlineOptionsContainer"
               ref="outlineOptionsContainer"
-              class="hidden"
+              :class="{ hidden: activeSidebarTab !== 'outline' }"
             >
               <div class="verticalToolbarSeparator"></div>
-
               <button
                 id="currentOutlineItem"
                 ref="currentOutlineItem"
@@ -75,17 +86,38 @@
           </div>
         </div>
         <div id="sidebarContent" ref="sidebarContent">
-          <div id="thumbnailView" ref="thumbnailView"></div>
-          <div id="outlineView" ref="outlineView" class="hidden"></div>
-          <div id="attachmentsView" ref="attachmentsView" class="hidden"></div>
-          <div id="layersView" ref="layersView" class="hidden"></div>
+          <div
+            id="thumbnailView"
+            ref="thumbnailView"
+            :class="{ hidden: activeSidebarTab !== 'thumbnails' }"
+          ></div>
+          <div
+            id="outlineView"
+            ref="outlineView"
+            :class="{ hidden: activeSidebarTab !== 'outline' }"
+          ></div>
+          <div
+            id="attachmentsView"
+            ref="attachmentsView"
+            :class="{ hidden: activeSidebarTab !== 'attachments' }"
+          ></div>
+          <div
+            id="layersView"
+            ref="layersView"
+            :class="{ hidden: activeSidebarTab !== 'layers' }"
+          ></div>
         </div>
         <div id="sidebarResizer" ref="sidebarResizer"></div>
       </div>
       <!-- sidebarContainer -->
 
       <div id="mainContainer" ref="mainContainer">
-        <div id="findbar" ref="findbar" class="findbar hidden doorHanger">
+        <div
+          id="findbar"
+          ref="findbar"
+          class="findbar doorHanger"
+          :class="{ hidden: !findbarOpen }"
+        >
           <div id="findbarInputContainer" ref="findbarInputContainer">
             <input
               id="findInput"
@@ -95,6 +127,9 @@
               placeholder="Find in document…"
               tabindex="91"
               data-l10n-id="find_input"
+              :value="findQuery"
+              @input="onFindInput"
+              @keydown.enter.prevent="findNext"
             />
             <div class="splitToolbarButton">
               <button
@@ -104,23 +139,24 @@
                 title="Find the previous occurrence of the phrase"
                 tabindex="92"
                 data-l10n-id="find_previous"
+                @click="findPrev"
               >
                 <span data-l10n-id="find_previous_label">Previous</span>
               </button>
               <div class="splitToolbarButtonSeparator"></div>
               <button
                 id="findNext"
-                ref="findNext"
+                ref="findNextBtn"
                 class="toolbarButton findNext"
                 title="Find the next occurrence of the phrase"
                 tabindex="93"
                 data-l10n-id="find_next"
+                @click="findNext"
               >
                 <span data-l10n-id="find_next_label">Next</span>
               </button>
             </div>
           </div>
-
           <div id="findbarOptionsOneContainer" ref="findbarOptionsOneContainer">
             <input
               id="findHighlightAll"
@@ -128,6 +164,8 @@
               type="checkbox"
               class="toolbarField"
               tabindex="94"
+              :checked="findHighlightAllVal"
+              @change="onFindHighlightAllChange"
             />
             <label
               for="findHighlightAll"
@@ -141,6 +179,8 @@
               type="checkbox"
               class="toolbarField"
               tabindex="95"
+              :checked="findMatchCaseVal"
+              @change="onFindMatchCaseChange"
             />
             <label
               for="findMatchCase"
@@ -156,6 +196,8 @@
               type="checkbox"
               class="toolbarField"
               tabindex="96"
+              :checked="findEntireWordVal"
+              @change="onFindEntireWordChange"
             />
             <label
               for="findEntireWord"
@@ -166,12 +208,15 @@
             <span
               id="findResultsCount"
               ref="findResultsCount"
-              class="toolbarLabel hidden"
-            ></span>
+              class="toolbarLabel"
+              :class="{ hidden: findResultsText === '' }"
+              >{{ findResultsText }}</span
+            >
           </div>
-
-          <div id="findbarMessageContainer" ref="findResultsCount">
-            <span id="findMsg" ref="findMsg" class="toolbarLabel"></span>
+          <div id="findbarMessageContainer" ref="findbarMessageContainer">
+            <span id="findMsg" ref="findMsg" class="toolbarLabel">{{
+              findMsg
+            }}</span>
           </div>
         </div>
         <!-- findbar -->
@@ -179,7 +224,8 @@
         <div
           id="secondaryToolbar"
           ref="secondaryToolbar"
-          class="secondaryToolbar hidden doorHangerRight"
+          class="secondaryToolbar doorHangerRight"
+          :class="{ hidden: !secondaryToolbarOpen }"
         >
           <div
             id="secondaryToolbarButtonContainer"
@@ -192,6 +238,7 @@
               title="Switch to Presentation Mode"
               tabindex="51"
               data-l10n-id="presentation_mode"
+              @click="enterPresentationMode"
             >
               <span data-l10n-id="presentation_mode_label"
                 >Presentation Mode</span
@@ -205,6 +252,7 @@
               title="Open File"
               tabindex="52"
               data-l10n-id="open_file"
+              @click="openFileDialog"
             >
               <span data-l10n-id="open_file_label">Open</span>
             </button>
@@ -216,6 +264,7 @@
               title="Print"
               tabindex="53"
               data-l10n-id="print"
+              @click="printFile"
             >
               <span data-l10n-id="print_label">Print</span>
             </button>
@@ -227,6 +276,7 @@
               title="Download"
               tabindex="54"
               data-l10n-id="download"
+              @click="downloadFile"
             >
               <span data-l10n-id="download_label">Download</span>
             </button>
@@ -234,14 +284,13 @@
             <a
               id="secondaryViewBookmark"
               ref="secondaryViewBookmark"
-              href="#"
+              :href="currentPageHash"
               class="secondaryToolbarButton bookmark visibleSmallView"
               title="Current view (copy or open in new window)"
               tabindex="55"
               data-l10n-id="bookmark"
+              ><span data-l10n-id="bookmark_label">Current View</span></a
             >
-              <span data-l10n-id="bookmark_label">Current View</span>
-            </a>
 
             <div class="horizontalToolbarSeparator visibleLargeView"></div>
 
@@ -252,9 +301,11 @@
               title="Go to First Page"
               tabindex="56"
               data-l10n-id="first_page"
+              @click="goToFirstPage"
             >
               <span data-l10n-id="first_page_label">Go to First Page</span>
             </button>
+
             <button
               id="lastPage"
               ref="lastPage"
@@ -262,6 +313,7 @@
               title="Go to Last Page"
               tabindex="57"
               data-l10n-id="last_page"
+              @click="goToLastPage"
             >
               <span data-l10n-id="last_page_label">Go to Last Page</span>
             </button>
@@ -275,9 +327,11 @@
               title="Rotate Clockwise"
               tabindex="58"
               data-l10n-id="page_rotate_cw"
+              @click="rotateCw"
             >
               <span data-l10n-id="page_rotate_cw_label">Rotate Clockwise</span>
             </button>
+
             <button
               id="pageRotateCcw"
               ref="pageRotateCcw"
@@ -285,6 +339,7 @@
               title="Rotate Counterclockwise"
               tabindex="59"
               data-l10n-id="page_rotate_ccw"
+              @click="rotateCcw"
             >
               <span data-l10n-id="page_rotate_ccw_label"
                 >Rotate Counterclockwise</span
@@ -296,22 +351,27 @@
             <button
               id="cursorSelectTool"
               ref="cursorSelectTool"
-              class="secondaryToolbarButton selectTool toggled"
+              class="secondaryToolbarButton selectTool"
+              :class="{ toggled: cursorTool === 0 }"
               title="Enable Text Selection Tool"
               tabindex="60"
               data-l10n-id="cursor_text_select_tool"
+              @click="setCursorSelectTool"
             >
               <span data-l10n-id="cursor_text_select_tool_label"
                 >Text Selection Tool</span
               >
             </button>
+
             <button
               id="cursorHandTool"
               ref="cursorHandTool"
               class="secondaryToolbarButton handTool"
+              :class="{ toggled: cursorTool === 1 }"
               title="Enable Hand Tool"
               tabindex="61"
               data-l10n-id="cursor_hand_tool"
+              @click="setCursorHandTool"
             >
               <span data-l10n-id="cursor_hand_tool_label">Hand Tool</span>
             </button>
@@ -322,43 +382,54 @@
               id="scrollPage"
               ref="scrollPage"
               class="secondaryToolbarButton scrollPage"
+              :class="{ toggled: isScrollPage }"
               title="Use Page Scrolling"
               tabindex="62"
               data-l10n-id="scroll_page"
+              @click="setScrollPage"
             >
               <span data-l10n-id="scroll_page_label">Page Scrolling</span>
             </button>
+
             <button
               id="scrollVertical"
               ref="scrollVertical"
-              class="secondaryToolbarButton scrollVertical toggled"
+              class="secondaryToolbarButton scrollVertical"
+              :class="{ toggled: isScrollVertical }"
               title="Use Vertical Scrolling"
               tabindex="63"
               data-l10n-id="scroll_vertical"
+              @click="setScrollVertical"
             >
               <span data-l10n-id="scroll_vertical_label"
                 >Vertical Scrolling</span
               >
             </button>
+
             <button
               id="scrollHorizontal"
               ref="scrollHorizontal"
               class="secondaryToolbarButton scrollHorizontal"
+              :class="{ toggled: isScrollHorizontal }"
               title="Use Horizontal Scrolling"
               tabindex="64"
               data-l10n-id="scroll_horizontal"
+              @click="setScrollHorizontal"
             >
               <span data-l10n-id="scroll_horizontal_label"
                 >Horizontal Scrolling</span
               >
             </button>
+
             <button
               id="scrollWrapped"
               ref="scrollWrapped"
               class="secondaryToolbarButton scrollWrapped"
+              :class="{ toggled: isScrollWrapped }"
               title="Use Wrapped Scrolling"
               tabindex="65"
               data-l10n-id="scroll_wrapped"
+              @click="setScrollWrapped"
             >
               <span data-l10n-id="scroll_wrapped_label">Wrapped Scrolling</span>
             </button>
@@ -368,30 +439,38 @@
             <button
               id="spreadNone"
               ref="spreadNone"
-              class="secondaryToolbarButton spreadNone toggled"
+              class="secondaryToolbarButton spreadNone"
+              :class="{ toggled: currentSpreadMode === SPREAD_NONE }"
               title="Do not join page spreads"
               tabindex="66"
               data-l10n-id="spread_none"
+              @click="setSpreadNone"
             >
               <span data-l10n-id="spread_none_label">No Spreads</span>
             </button>
+
             <button
               id="spreadOdd"
               ref="spreadOdd"
               class="secondaryToolbarButton spreadOdd"
+              :class="{ toggled: currentSpreadMode === SPREAD_ODD }"
               title="Join page spreads starting with odd-numbered pages"
               tabindex="67"
               data-l10n-id="spread_odd"
+              @click="setSpreadOdd"
             >
               <span data-l10n-id="spread_odd_label">Odd Spreads</span>
             </button>
+
             <button
               id="spreadEven"
               ref="spreadEven"
               class="secondaryToolbarButton spreadEven"
+              :class="{ toggled: currentSpreadMode === SPREAD_EVEN }"
               title="Join page spreads starting with even-numbered pages"
               tabindex="68"
               data-l10n-id="spread_even"
+              @click="setSpreadEven"
             >
               <span data-l10n-id="spread_even_label">Even Spreads</span>
             </button>
@@ -405,6 +484,7 @@
               title="Document Properties…"
               tabindex="69"
               data-l10n-id="document_properties"
+              @click="openDocumentProperties"
             >
               <span data-l10n-id="document_properties_label"
                 >Document Properties…</span
@@ -425,8 +505,9 @@
                   title="Toggle Sidebar"
                   tabindex="11"
                   data-l10n-id="toggle_sidebar"
-                  aria-expanded="false"
+                  :aria-expanded="String(sidebarOpen)"
                   aria-controls="sidebarContainer"
+                  @click="toggleSidebar"
                 >
                   <span data-l10n-id="toggle_sidebar_label"
                     >Toggle Sidebar</span
@@ -440,8 +521,9 @@
                   title="Find in Document"
                   tabindex="12"
                   data-l10n-id="findbar"
-                  aria-expanded="false"
+                  :aria-expanded="String(findbarOpen)"
                   aria-controls="findbar"
+                  @click="toggleFindbar"
                 >
                   <span data-l10n-id="findbar_label">Find</span>
                 </button>
@@ -453,6 +535,8 @@
                     title="Previous Page"
                     tabindex="13"
                     data-l10n-id="previous"
+                    :disabled="!canGoPrev"
+                    @click="goToPrevPage"
                   >
                     <span data-l10n-id="previous_label">Previous</span>
                   </button>
@@ -464,6 +548,8 @@
                     title="Next Page"
                     tabindex="14"
                     data-l10n-id="next"
+                    :disabled="!canGoNext"
+                    @click="goToNextPage"
                   >
                     <span data-l10n-id="next_label">Next</span>
                   </button>
@@ -474,14 +560,19 @@
                   type="number"
                   class="toolbarField pageNumber"
                   title="Page"
-                  value="1"
+                  :value="currentPage"
                   size="4"
                   min="1"
+                  :max="totalPages"
                   tabindex="15"
                   data-l10n-id="page"
                   autocomplete="off"
+                  @change="onPageNumberChange"
+                  @keydown.enter.prevent="onPageNumberChange"
                 />
-                <span id="numPages" ref="numPages" class="toolbarLabel"></span>
+                <span id="numPages" ref="numPages" class="toolbarLabel">{{
+                  pagesCountText
+                }}</span>
               </div>
               <div id="toolbarViewerRight" ref="toolbarViewerRight">
                 <button
@@ -491,6 +582,7 @@
                   title="Switch to Presentation Mode"
                   tabindex="31"
                   data-l10n-id="presentation_mode"
+                  @click="enterPresentationMode"
                 >
                   <span data-l10n-id="presentation_mode_label"
                     >Presentation Mode</span
@@ -504,6 +596,7 @@
                   title="Open File"
                   tabindex="32"
                   data-l10n-id="open_file"
+                  @click="openFileDialog"
                 >
                   <span data-l10n-id="open_file_label">Open</span>
                 </button>
@@ -515,6 +608,7 @@
                   title="Print"
                   tabindex="33"
                   data-l10n-id="print"
+                  @click="printFile"
                 >
                   <span data-l10n-id="print_label">Print</span>
                 </button>
@@ -526,20 +620,21 @@
                   title="Download"
                   tabindex="34"
                   data-l10n-id="download"
+                  @click="downloadFile"
                 >
                   <span data-l10n-id="download_label">Download</span>
                 </button>
+
                 <a
                   id="viewBookmark"
                   ref="viewBookmark"
-                  href="#"
+                  :href="currentPageHash"
                   class="toolbarButton bookmark hiddenSmallView"
                   title="Current view (copy or open in new window)"
                   tabindex="35"
                   data-l10n-id="bookmark"
+                  ><span data-l10n-id="bookmark_label">Current View</span></a
                 >
-                  <span data-l10n-id="bookmark_label">Current View</span>
-                </a>
 
                 <div class="verticalToolbarSeparator hiddenSmallView"></div>
 
@@ -550,8 +645,9 @@
                   title="Tools"
                   tabindex="36"
                   data-l10n-id="tools"
-                  aria-expanded="false"
+                  :aria-expanded="String(secondaryToolbarOpen)"
                   aria-controls="secondaryToolbar"
+                  @click="toggleSecondaryToolbar"
                 >
                   <span data-l10n-id="tools_label">Tools</span>
                 </button>
@@ -560,22 +656,24 @@
                 <div class="splitToolbarButton">
                   <button
                     id="zoomOut"
-                    ref="zoomOut"
+                    ref="zoomOutBtn"
                     class="toolbarButton zoomOut"
                     title="Zoom Out"
                     tabindex="21"
                     data-l10n-id="zoom_out"
+                    @click="zoomOut"
                   >
                     <span data-l10n-id="zoom_out_label">Zoom Out</span>
                   </button>
                   <div class="splitToolbarButtonSeparator"></div>
                   <button
                     id="zoomIn"
-                    ref="zoomIn"
+                    ref="zoomInBtn"
                     class="toolbarButton zoomIn"
                     title="Zoom In"
                     tabindex="22"
                     data-l10n-id="zoom_in"
+                    @click="zoomIn"
                   >
                     <span data-l10n-id="zoom_in_label">Zoom In</span>
                   </button>
@@ -591,13 +689,13 @@
                     title="Zoom"
                     tabindex="23"
                     data-l10n-id="zoom"
+                    :value="currentScale"
+                    @change="onScaleChange"
                   >
                     <option
                       id="pageAutoOption"
                       ref="pageAutoOption"
-                      title
                       value="auto"
-                      selected="selected"
                       data-l10n-id="page_scale_auto"
                     >
                       Automatic Zoom
@@ -605,7 +703,6 @@
                     <option
                       id="pageActualOption"
                       ref="pageActualOption"
-                      title
                       value="page-actual"
                       data-l10n-id="page_scale_actual"
                     >
@@ -614,7 +711,6 @@
                     <option
                       id="pageFitOption"
                       ref="pageFitOption"
-                      title
                       value="page-fit"
                       data-l10n-id="page_scale_fit"
                     >
@@ -623,7 +719,6 @@
                     <option
                       id="pageWidthOption"
                       ref="pageWidthOption"
-                      title
                       value="page-width"
                       data-l10n-id="page_scale_width"
                     >
@@ -632,10 +727,9 @@
                     <option
                       id="customScaleOption"
                       ref="customScaleOption"
-                      title
                       value="custom"
-                      disabled="disabled"
-                      hidden="true"
+                      disabled
+                      hidden
                     ></option>
                     <option
                       title
@@ -717,13 +811,17 @@
           <div id="viewer" ref="viewer" class="pdfViewer"></div>
         </div>
 
-        <div id="errorWrapper" ref="errorWrapper" hidden="true">
+        <div id="errorWrapper" ref="errorWrapper" :hidden="!errorVisible">
           <div id="errorMessageLeft" ref="errorMessageLeft">
-            <span id="errorMessage" ref="errorMessage"></span>
+            <span id="errorMessage" ref="errorMessage">{{
+              errorMessageText
+            }}</span>
             <button
               id="errorShowMore"
               ref="errorShowMore"
               data-l10n-id="error_more_info"
+              :hidden="errorMoreInfoVisible"
+              @click="showMoreInfo"
             >
               More Information
             </button>
@@ -731,13 +829,19 @@
               id="errorShowLess"
               ref="errorShowLess"
               data-l10n-id="error_less_info"
-              hidden="true"
+              :hidden="!errorMoreInfoVisible"
+              @click="showLessInfo"
             >
               Less Information
             </button>
           </div>
           <div id="errorMessageRight" ref="errorMessageRight">
-            <button id="errorClose" ref="errorClose" data-l10n-id="error_close">
+            <button
+              id="errorClose"
+              ref="errorClose"
+              data-l10n-id="error_close"
+              @click="closeError"
+            >
               Close
             </button>
           </div>
@@ -745,18 +849,25 @@
           <textarea
             id="errorMoreInfo"
             ref="errorMoreInfo"
-            hidden="true"
+            :hidden="!errorMoreInfoVisible"
             readonly="readonly"
+            :value="errorStack"
           ></textarea>
         </div>
       </div>
       <!-- mainContainer -->
 
-      <div id="overlayContainer" ref="overlayContainer" class="hidden">
+      <div
+        id="overlayContainer"
+        ref="overlayContainer"
+        :class="{ hidden: !overlayVisible }"
+      >
+        <!-- Password dialog -->
         <div
           id="passwordOverlay"
           ref="passwordOverlay"
-          class="container hidden"
+          class="container"
+          :class="{ hidden: !passwordOverlayVisible }"
         >
           <div class="dialog">
             <div class="row">
@@ -774,6 +885,9 @@
                 ref="password"
                 type="password"
                 class="toolbarField"
+                :value="passwordValue"
+                @input="passwordValue = $event.target.value"
+                @keydown.enter.prevent="submitPassword"
               />
             </div>
             <div class="buttonRow">
@@ -781,6 +895,7 @@
                 id="passwordCancel"
                 ref="passwordCancel"
                 class="overlayButton"
+                @click="cancelPassword"
               >
                 <span data-l10n-id="password_cancel">Cancel</span>
               </button>
@@ -788,110 +903,136 @@
                 id="passwordSubmit"
                 ref="passwordSubmit"
                 class="overlayButton"
+                @click="submitPassword"
               >
                 <span data-l10n-id="password_ok">OK</span>
               </button>
             </div>
           </div>
         </div>
+
+        <!-- Document Properties dialog -->
         <div
           id="documentPropertiesOverlay"
           ref="documentPropertiesOverlay"
-          class="container hidden"
+          class="container"
+          :class="{ hidden: !documentPropertiesVisible }"
         >
           <div class="dialog">
             <div class="row">
               <span data-l10n-id="document_properties_file_name"
                 >File name:</span
               >
-              <p id="fileNameField" ref="fileNameField">-</p>
+              <p id="fileNameField" ref="fileNameField">
+                {{ docProps.fileName }}
+              </p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_file_size"
                 >File size:</span
               >
-              <p id="fileSizeField" ref="fileSizeField">-</p>
+              <p id="fileSizeField" ref="fileSizeField">
+                {{ docProps.fileSize }}
+              </p>
             </div>
             <div class="separator"></div>
             <div class="row">
               <span data-l10n-id="document_properties_title">Title:</span>
-              <p id="titleField" ref="titleField">-</p>
+              <p id="titleField" ref="titleField">{{ docProps.title }}</p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_author">Author:</span>
-              <p id="authorField" ref="authorField">-</p>
+              <p id="authorField" ref="authorField">{{ docProps.author }}</p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_subject">Subject:</span>
-              <p id="subjectField" ref="subjectField">-</p>
+              <p id="subjectField" ref="subjectField">{{ docProps.subject }}</p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_keywords">Keywords:</span>
-              <p id="keywordsField" ref="keywordsField">-</p>
+              <p id="keywordsField" ref="keywordsField">
+                {{ docProps.keywords }}
+              </p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_creation_date"
                 >Creation Date:</span
               >
-              <p id="creationDateField" ref="creationDateField">-</p>
+              <p id="creationDateField" ref="creationDateField">
+                {{ docProps.creationDate }}
+              </p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_modification_date"
                 >Modification Date:</span
               >
-              <p id="modificationDateField" ref="modificationDateField">-</p>
+              <p id="modificationDateField" ref="modificationDateField">
+                {{ docProps.modificationDate }}
+              </p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_creator">Creator:</span>
-              <p id="creatorField" ref="creatorField">-</p>
+              <p id="creatorField" ref="creatorField">{{ docProps.creator }}</p>
             </div>
             <div class="separator"></div>
             <div class="row">
               <span data-l10n-id="document_properties_producer"
                 >PDF Producer:</span
               >
-              <p id="producerField" ref="producerField">-</p>
+              <p id="producerField" ref="producerField">
+                {{ docProps.producer }}
+              </p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_version"
                 >PDF Version:</span
               >
-              <p id="versionField" ref="versionField">-</p>
+              <p id="versionField" ref="versionField">{{ docProps.version }}</p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_page_count"
                 >Page Count:</span
               >
-              <p id="pageCountField" ref="pageCountField">-</p>
+              <p id="pageCountField" ref="pageCountField">
+                {{ docProps.pageCount }}
+              </p>
             </div>
             <div class="row">
               <span data-l10n-id="document_properties_page_size"
                 >Page Size:</span
               >
-              <p id="pageSizeField" ref="pageSizeField">-</p>
+              <p id="pageSizeField" ref="pageSizeField">
+                {{ docProps.pageSize }}
+              </p>
             </div>
             <div class="separator"></div>
             <div class="row">
               <span data-l10n-id="document_properties_linearized"
                 >Fast Web View:</span
               >
-              <p id="linearizedField" ref="linearizedField">-</p>
+              <p id="linearizedField" ref="linearizedField">
+                {{ docProps.linearized }}
+              </p>
             </div>
             <div class="buttonRow">
               <button
                 id="documentPropertiesClose"
                 ref="documentPropertiesClose"
                 class="overlayButton"
+                @click="closeDocumentProperties"
               >
                 <span data-l10n-id="document_properties_close">Close</span>
               </button>
             </div>
           </div>
         </div>
+
+        <!-- Print progress dialog -->
         <div
           id="printServiceOverlay"
           ref="printServiceOverlay"
-          class="container hidden"
+          class="container"
+          :class="{ hidden: !printServiceVisible }"
         >
           <div class="dialog">
             <div class="row">
@@ -900,16 +1041,20 @@
               >
             </div>
             <div class="row">
-              <progress value="0" max="100"></progress>
+              <progress :value="printProgress" max="100"></progress>
               <span
                 data-l10n-id="print_progress_percent"
-                data-l10n-args="{ 'progress': 0 }"
                 class="relative-progress"
-                >0%</span
+                >{{ printProgress }}%</span
               >
             </div>
             <div class="buttonRow">
-              <button id="printCancel" ref="printCancel" class="overlayButton">
+              <button
+                id="printCancel"
+                ref="printCancel"
+                class="overlayButton"
+                @click="cancelPrint"
+              >
                 <span data-l10n-id="print_progress_close">Cancel</span>
               </button>
             </div>
@@ -922,200 +1067,525 @@
     <div id="printContainer" ref="printContainer"></div>
   </div>
 </template>
-<script>
-// TODO
-export default {
-  props: {
-    src: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      pdfSrc: '',
-      pdfTitle: ''
-    };
-  },
-  computed: {
-    PDFViewer() {
-      // TODO 核心 $pdfViewer
-      return this.$pdfViewer?.PDFViewerApplication;
-    },
-    PDFViewerConfig() {
-      return {
-        appContainer: this.$refs.pdfReaderDOM,
-        mainContainer: this.$refs.viewerContainer,
-        viewerContainer: this.$refs.viewer,
-        eventBus: null,
-        toolbar: {
-          container: this.$refs.toolbarViewer,
-          numPages: this.$refs.numPages,
-          pageNumber: this.$refs.pageNumber,
-          scaleSelect: this.$refs.scaleSelect,
-          customScaleOption: this.$refs.customScaleOption,
-          previous: this.$refs.previous,
-          next: this.$refs.next,
-          zoomIn: this.$refs.zoomIn,
-          zoomOut: this.$refs.zoomOut,
-          viewFind: this.$refs.viewFind,
-          openFile: this.$refs.openFile,
-          print: this.$refs.print,
-          presentationModeButton: this.$refs.presentationMode,
-          download: this.$refs.download,
-          viewBookmark: this.$refs.viewBookmark
-        },
-        secondaryToolbar: {
-          toolbar: this.$refs.secondaryToolbar,
-          toggleButton: this.$refs.secondaryToolbarToggle,
-          toolbarButtonContainer: this.$refs.secondaryToolbarButtonContainer,
-          presentationModeButton: this.$refs.secondaryPresentationMode,
-          openFileButton: this.$refs.secondaryOpenFile,
-          printButton: this.$refs.secondaryPrint,
-          downloadButton: this.$refs.secondaryDownload,
-          viewBookmarkButton: this.$refs.secondaryViewBookmark,
-          firstPageButton: this.$refs.firstPage,
-          lastPageButton: this.$refs.lastPage,
-          pageRotateCwButton: this.$refs.pageRotateCw,
-          pageRotateCcwButton: this.$refs.pageRotateCcw,
-          cursorSelectToolButton: this.$refs.cursorSelectTool,
-          cursorHandToolButton: this.$refs.cursorHandTool,
-          scrollPageButton: this.$refs.scrollPage,
-          scrollVerticalButton: this.$refs.scrollVertical,
-          scrollHorizontalButton: this.$refs.scrollHorizontal,
-          scrollWrappedButton: this.$refs.scrollWrapped,
-          spreadNoneButton: this.$refs.spreadNone,
-          spreadOddButton: this.$refs.spreadOdd,
-          spreadEvenButton: this.$refs.spreadEven,
-          documentPropertiesButton: this.$refs.documentProperties
-        },
-        sidebar: {
-          outerContainer: this.$refs.outerContainer,
-          viewerContainer: this.$refs.viewerContainer,
-          toggleButton: this.$refs.sidebarToggle,
-          thumbnailButton: this.$refs.viewThumbnail,
-          outlineButton: this.$refs.viewOutline,
-          attachmentsButton: this.$refs.viewAttachments,
-          layersButton: this.$refs.viewLayers,
-          thumbnailView: this.$refs.thumbnailView,
-          outlineView: this.$refs.outlineView,
-          attachmentsView: this.$refs.attachmentsView,
-          layersView: this.$refs.layersView,
-          outlineOptionsContainer: this.$refs.outlineOptionsContainer,
-          currentOutlineItemButton: this.$refs.currentOutlineItem
-        },
-        sidebarResizer: {
-          outerContainer: this.$refs.outerContainer,
-          resizer: this.$refs.sidebarResizer
-        },
-        findBar: {
-          bar: this.$refs.findbar,
-          toggleButton: this.$refs.viewFind,
-          findField: this.$refs.findInput,
-          highlightAllCheckbox: this.$refs.findHighlightAll,
-          caseSensitiveCheckbox: this.$refs.findMatchCase,
-          entireWordCheckbox: this.$refs.findEntireWord,
-          findMsg: this.$refs.findMsg,
-          findResultsCount: this.$refs.findResultsCount,
-          findPreviousButton: this.$refs.findPrevious,
-          findNextButton: this.$refs.findNext
-        },
-        passwordOverlay: {
-          overlayName: 'passwordOverlay',
-          container: this.$refs.passwordOverlay,
-          label: this.$refs.passwordText,
-          input: this.$refs.password,
-          submitButton: this.$refs.passwordSubmit,
-          cancelButton: this.$refs.passwordCancel
-        },
-        documentProperties: {
-          overlayName: 'documentPropertiesOverlay',
-          container: this.$refs.documentPropertiesOverlay,
-          closeButton: this.$refs.documentPropertiesClose,
-          fields: {
-            fileName: this.$refs.fileNameField,
-            fileSize: this.$refs.fileSizeField,
-            title: this.$refs.titleField,
-            author: this.$refs.authorField,
-            subject: this.$refs.subjectField,
-            keywords: this.$refs.keywordsField,
-            creationDate: this.$refs.creationDateField,
-            modificationDate: this.$refs.modificationDateField,
-            creator: this.$refs.creatorField,
-            producer: this.$refs.producerField,
-            version: this.$refs.versionField,
-            pageCount: this.$refs.pageCountField,
-            pageSize: this.$refs.pageSizeField,
-            linearized: this.$refs.linearizedField
-          }
-        },
-        errorWrapper: {
-          container: this.$refs.errorWrapper,
-          errorMessage: this.$refs.errorMessage,
-          closeButton: this.$refs.errorClose,
-          errorMoreInfo: this.$refs.errorMoreInfo,
-          moreInfoButton: this.$refs.errorShowMore,
-          lessInfoButton: this.$refs.errorShowLess
-        },
-        printContainer: this.$refs.printContainer,
-        openFileInputName: 'fileInput'
-      };
-    }
-  },
-  watch: {
-    src(src) {
-      if (typeof src === 'string' && src !== '') this.init();
-    }
-  },
-  mounted() {
-    if (process.env.USE_PDF_READER !== true) {
-      console.error('nuxtEnv not setting USE_PDF_READER');
-    }
-    if (document.querySelector('#pdf_reader_resource') === null) {
-      const pdfReaderResource = document.createElement('link');
-      pdfReaderResource.setAttribute('id', 'pdf_reader_resource');
-      pdfReaderResource.setAttribute('rel', 'resource');
-      pdfReaderResource.setAttribute('type', 'application/l10n');
-      pdfReaderResource.setAttribute('href', 'l10n/locale.properties');
-      document.head.append(pdfReaderResource);
-    }
-    if (typeof this.src === 'string' && this.src !== '') this.init();
-  },
-  beforeUpdate() {
-    this.removePdfFileInput();
-  },
-  beforeUnmount() {
-    this.removePdfFileInput();
-  },
-  methods: {
-    init() {
-      this.$nextTick(() => {
-        try {
-          this.loadFile(this.src);
-        } catch (error) {
-          console.log(error);
-        }
+<script setup>
+import { ScrollMode, SpreadMode } from 'pdfjs-dist/web/pdf_viewer.mjs';
+
+defineOptions({
+  inheritAttrs: false
+});
+
+// SpreadMode plain-value aliases for template :class comparisons
+const SPREAD_NONE = SpreadMode.NONE;
+const SPREAD_ODD = SpreadMode.ODD;
+const SPREAD_EVEN = SpreadMode.EVEN;
+
+// ─── Props / Emits ───────────────────────────────────────────────────────────
+const props = defineProps({
+  src: { type: String, required: true }
+});
+const emit = defineEmits(['title-change', 'page-change', 'load-error']);
+
+// ─── Nuxt plugin ─────────────────────────────────────────────────────────────
+const { $pdfReader } = useNuxtApp();
+
+// ─── Critical DOM refs ────────────────────────────────────────────────────────
+const viewerContainer = ref(null);
+const viewer = ref(null);
+const loadingBar = ref(null);
+
+// ─── Navigation state ────────────────────────────────────────────────────────
+const pdfTitle = ref('');
+const currentPage = ref(1);
+const totalPages = ref(0);
+const currentScale = ref('auto');
+
+// ─── Sidebar state ───────────────────────────────────────────────────────────
+const sidebarOpen = ref(false);
+const activeSidebarTab = ref('thumbnails');
+
+// ─── Findbar state ───────────────────────────────────────────────────────────
+const findbarOpen = ref(false);
+const findQuery = ref('');
+const findHighlightAllVal = ref(false);
+const findMatchCaseVal = ref(false);
+const findEntireWordVal = ref(false);
+const findResultsText = ref('');
+const findMsg = ref('');
+
+// ─── Secondary toolbar ───────────────────────────────────────────────────────
+const secondaryToolbarOpen = ref(false);
+
+// ─── Scroll / spread / cursor ────────────────────────────────────────────────
+const isScrollVertical = ref(true);
+const isScrollHorizontal = ref(false);
+const isScrollWrapped = ref(false);
+const isScrollPage = ref(false);
+const currentSpreadMode = ref(SpreadMode.NONE);
+const cursorTool = ref(0); // 0 = select, 1 = hand
+
+// ─── Password dialog ──────────────────────────────────────────────────────────
+const passwordValue = ref('');
+const passwordOverlayVisible = ref(false);
+let passwordCallback = null;
+
+// ─── Document properties dialog ───────────────────────────────────────────────
+const documentPropertiesVisible = ref(false);
+const docProps = reactive({
+  fileName: '-',
+  fileSize: '-',
+  title: '-',
+  author: '-',
+  subject: '-',
+  keywords: '-',
+  creationDate: '-',
+  modificationDate: '-',
+  creator: '-',
+  producer: '-',
+  version: '-',
+  pageCount: '-',
+  pageSize: '-',
+  linearized: '-'
+});
+
+// ─── Error state ──────────────────────────────────────────────────────────────
+const errorVisible = ref(false);
+const errorMessageText = ref('');
+const errorMoreInfoVisible = ref(false);
+const errorStack = ref('');
+
+// ─── Print state ──────────────────────────────────────────────────────────────
+const printProgress = ref(0);
+const printServiceVisible = ref(false);
+
+// ─── PDF.js app instance ──────────────────────────────────────────────────────
+let pdfApp = null;
+
+// ─── Computed ─────────────────────────────────────────────────────────────────
+const canGoPrev = computed(() => currentPage.value > 1 && totalPages.value > 0);
+const canGoNext = computed(() => currentPage.value < totalPages.value);
+const pagesCountText = computed(() =>
+  totalPages.value > 0 ? `of ${totalPages.value}` : ''
+);
+const currentPageHash = computed(() => `#page=${currentPage.value}`);
+const overlayVisible = computed(
+  () =>
+    passwordOverlayVisible.value ||
+    documentPropertiesVisible.value ||
+    printServiceVisible.value
+);
+
+// ─── Lifecycle ────────────────────────────────────────────────────────────────
+onMounted(() => {
+  if (typeof props.src === 'string' && props.src !== '') loadFile(props.src);
+});
+
+onBeforeUnmount(() => {
+  if (typeof pdfApp === 'object' && pdfApp !== null) {
+    pdfApp.close();
+    pdfApp = null;
+  }
+});
+
+watch(
+  () => props.src,
+  (src) => {
+    if (typeof src === 'string' && src !== '') loadFile(src);
+  }
+);
+
+// ─── Core: initialize & load ─────────────────────────────────────────────────
+async function loadFile(url) {
+  try {
+    if (pdfApp === null) {
+      pdfApp = $pdfReader.createApp({
+        container: viewerContainer.value,
+        viewer: viewer.value,
+        locale: navigator.language || 'zh-TW'
       });
-    },
-    async loadFile(url) {
-      this.PDFViewer.setTitle = this.getPdfTitle;
-      await this.PDFViewer.run(this.PDFViewerConfig);
-      await Promise.all([this.PDFViewer.initializedPromise]);
-      // TODO 核心 pdfViewerAppOptions
-      this.$pdfViewerAppOptions.set('defaultUrl', url);
-      await this.PDFViewer.open(url);
-    },
-    removePdfFileInput() {
-      const fileInput = document.querySelectorAll(
-        'body #' + this.PDFViewerConfig.openFileInputName
-      );
-      fileInput.forEach((fileInput) => fileInput.remove());
-    },
-    getPdfTitle(pdfTitle) {
-      this.pdfTitle = pdfTitle;
+      setupEventListeners();
+    }
+    showLoadingBar();
+    await pdfApp.open({ url });
+  } catch (error) {
+    console.error('[PdfReader] loadFile error:', error);
+    showError(error?.message ?? String(error), error?.stack ?? '');
+    emit('load-error', error);
+  }
+}
+
+// ─── EventBus wiring ─────────────────────────────────────────────────────────
+function setupEventListeners() {
+  const { eventBus } = pdfApp;
+
+  eventBus.on('pagesinit', () => {
+    currentPage.value = pdfApp.pdfViewer.currentPageNumber;
+    currentScale.value = pdfApp.pdfViewer.currentScaleValue;
+    isScrollVertical.value = true;
+    currentSpreadMode.value = SpreadMode.NONE;
+  });
+
+  eventBus.on('pagesloaded', ({ pagesCount }) => {
+    totalPages.value = pagesCount;
+    hideLoadingBar();
+  });
+
+  eventBus.on('pagechanging', ({ pageNumber }) => {
+    currentPage.value = pageNumber;
+    emit('page-change', pageNumber);
+  });
+
+  eventBus.on('scalechanging', ({ presetValue, scale }) => {
+    currentScale.value =
+      presetValue !== ''
+        ? presetValue
+        : String(Math.round(scale * 10000) / 100);
+  });
+
+  eventBus.on('documentloaded', async () => {
+    const doc = pdfApp.pdfViewer?.pdfDocument ?? null;
+    if (typeof doc !== 'object' || doc === null) return;
+    totalPages.value = doc.numPages;
+    const { info } = await doc.getMetadata().catch(() => ({ info: {} }));
+    if (typeof info?.Title === 'string' && info.Title !== '') {
+      pdfTitle.value = info.Title;
+      emit('title-change', info.Title);
+    }
+  });
+
+  eventBus.on('updatefindmatchescount', ({ matchesCount }) => {
+    if (
+      typeof matchesCount === 'object' &&
+      matchesCount !== null &&
+      matchesCount.total > 0
+    ) {
+      findResultsText.value = `${matchesCount.current} / ${matchesCount.total}`;
+    }
+  });
+
+  eventBus.on('updatefindcontrolstate', ({ state, matchesCount }) => {
+    if (state === 1) {
+      findMsg.value = 'Phrase not found';
+      findResultsText.value = '';
+    } else if (state === 3) {
+      findMsg.value = 'Searching…';
+    } else {
+      findMsg.value = '';
+      if (
+        typeof matchesCount === 'object' &&
+        matchesCount !== null &&
+        matchesCount.total > 0
+      ) {
+        findResultsText.value = `${matchesCount.current} / ${matchesCount.total}`;
+      }
+    }
+  });
+
+  eventBus.on('scrollmodechanged', ({ mode }) => {
+    isScrollVertical.value = mode === ScrollMode.VERTICAL;
+    isScrollHorizontal.value = mode === ScrollMode.HORIZONTAL;
+    isScrollWrapped.value = mode === ScrollMode.WRAPPED;
+    isScrollPage.value = mode === ScrollMode.PAGE;
+  });
+
+  eventBus.on('spreadmodechanged', ({ mode }) => {
+    currentSpreadMode.value = mode;
+  });
+  eventBus.on('cursortoolchanged', ({ tool }) => {
+    cursorTool.value = tool;
+  });
+
+  eventBus.on('updatepassword', ({ updatePassword }) => {
+    passwordCallback = updatePassword;
+    passwordOverlayVisible.value = true;
+  });
+
+  eventBus.on('printprogress', ({ loaded, total }) => {
+    if (typeof total === 'number' && total > 0) {
+      printProgress.value = Math.round((loaded / total) * 100);
+      printServiceVisible.value = true;
+    }
+  });
+
+  eventBus.on('afterprint', () => {
+    printServiceVisible.value = false;
+    printProgress.value = 0;
+  });
+}
+
+// ─── Loading bar ─────────────────────────────────────────────────────────────
+function showLoadingBar() {
+  const el = loadingBar.value;
+  if (typeof el !== 'object' || el === null) return;
+  el.classList.remove('hidden');
+  el.querySelector('.progress')?.classList.add('indeterminate');
+}
+function hideLoadingBar() {
+  const el = loadingBar.value;
+  if (typeof el !== 'object' || el === null) return;
+  el.classList.add('hidden');
+  el.querySelector('.progress')?.classList.remove('indeterminate');
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function goToPrevPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('previouspage');
+}
+function goToNextPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('nextpage');
+}
+function goToFirstPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('firstpage');
+  closeSecondaryToolbar();
+}
+function goToLastPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('lastpage');
+  closeSecondaryToolbar();
+}
+
+function onPageNumberChange(e) {
+  const value = parseInt(e.target.value, 10);
+  if (Number.isFinite(value) && value > 0 && value <= totalPages.value) {
+    if (pdfApp !== null) pdfApp.pdfViewer.currentPageNumber = value;
+  } else {
+    e.target.value = currentPage.value;
+  }
+}
+
+// ─── Zoom ────────────────────────────────────────────────────────────────────
+function zoomIn() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('zoomin');
+}
+function zoomOut() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('zoomout');
+}
+function onScaleChange(e) {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('scalechanged', { value: e.target.value });
+}
+
+// ─── Sidebar ─────────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value;
+}
+function setSidebarTab(tab) {
+  activeSidebarTab.value = tab;
+  if (!sidebarOpen.value) sidebarOpen.value = true;
+}
+
+// ─── Findbar ─────────────────────────────────────────────────────────────────
+function toggleFindbar() {
+  findbarOpen.value = !findbarOpen.value;
+  if (!findbarOpen.value && pdfApp !== null)
+    pdfApp.eventBus.dispatch('findbarclose');
+}
+function dispatchFind(type = '', findPrevious = false) {
+  if (pdfApp === null) return;
+  pdfApp.eventBus.dispatch('find', {
+    type,
+    query: findQuery.value,
+    phraseSearch: true,
+    caseSensitive: findMatchCaseVal.value,
+    entireWord: findEntireWordVal.value,
+    highlightAll: findHighlightAllVal.value,
+    findPrevious
+  });
+}
+function onFindInput(e) {
+  findQuery.value = e.target.value;
+  dispatchFind('');
+}
+function findNext() {
+  dispatchFind('again', false);
+}
+function findPrev() {
+  dispatchFind('again', true);
+}
+function onFindHighlightAllChange(e) {
+  findHighlightAllVal.value = e.target.checked;
+  dispatchFind('highlightallchange');
+}
+function onFindMatchCaseChange(e) {
+  findMatchCaseVal.value = e.target.checked;
+  dispatchFind('casesensitivitychange');
+}
+function onFindEntireWordChange(e) {
+  findEntireWordVal.value = e.target.checked;
+  dispatchFind('entirewordchange');
+}
+
+// ─── Secondary toolbar ────────────────────────────────────────────────────────
+function toggleSecondaryToolbar() {
+  secondaryToolbarOpen.value = !secondaryToolbarOpen.value;
+}
+function closeSecondaryToolbar() {
+  secondaryToolbarOpen.value = false;
+}
+
+// ─── Rotation ─────────────────────────────────────────────────────────────────
+function rotateCw() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('rotatecw');
+  closeSecondaryToolbar();
+}
+function rotateCcw() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('rotateccw');
+  closeSecondaryToolbar();
+}
+
+// ─── Cursor tool ──────────────────────────────────────────────────────────────
+function setCursorSelectTool() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchcursortool', { tool: 0 });
+  closeSecondaryToolbar();
+}
+function setCursorHandTool() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchcursortool', { tool: 1 });
+  closeSecondaryToolbar();
+}
+
+// ─── Scroll mode ──────────────────────────────────────────────────────────────
+function setScrollPage() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
+  closeSecondaryToolbar();
+}
+function setScrollVertical() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });
+  closeSecondaryToolbar();
+}
+function setScrollHorizontal() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', {
+      mode: ScrollMode.HORIZONTAL
+    });
+  closeSecondaryToolbar();
+}
+function setScrollWrapped() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.WRAPPED });
+  closeSecondaryToolbar();
+}
+
+// ─── Spread mode ──────────────────────────────────────────────────────────────
+function setSpreadNone() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.NONE });
+  closeSecondaryToolbar();
+}
+function setSpreadOdd() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.ODD });
+  closeSecondaryToolbar();
+}
+function setSpreadEven() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.EVEN });
+  closeSecondaryToolbar();
+}
+
+// ─── Presentation mode ────────────────────────────────────────────────────────
+function enterPresentationMode() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('presentationmode');
+  closeSecondaryToolbar();
+}
+
+// ─── Print / Download / Open ──────────────────────────────────────────────────
+function printFile() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('print');
+  closeSecondaryToolbar();
+}
+function downloadFile() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('download');
+  closeSecondaryToolbar();
+}
+function openFileDialog() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.pdf,application/pdf';
+  input.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (file instanceof File) {
+      const data = await file.arrayBuffer();
+      if (pdfApp !== null) await pdfApp.open({ data }).catch(console.error);
+    }
+  });
+  input.click();
+  closeSecondaryToolbar();
+}
+function cancelPrint() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('abortprinting');
+  printServiceVisible.value = false;
+}
+
+// ─── Password dialog ──────────────────────────────────────────────────────────
+function submitPassword() {
+  if (typeof passwordCallback === 'function')
+    passwordCallback(passwordValue.value);
+  passwordValue.value = '';
+  passwordOverlayVisible.value = false;
+  passwordCallback = null;
+}
+function cancelPassword() {
+  if (typeof passwordCallback === 'function') passwordCallback('');
+  passwordValue.value = '';
+  passwordOverlayVisible.value = false;
+  passwordCallback = null;
+}
+
+// ─── Document properties ──────────────────────────────────────────────────────
+async function openDocumentProperties() {
+  const doc = pdfApp?.pdfViewer?.pdfDocument ?? null;
+  if (typeof doc === 'object' && doc !== null) {
+    const { info, contentLength } = await doc
+      .getMetadata()
+      .catch(() => ({ info: {}, contentLength: null }));
+    docProps.title = info?.Title || '-';
+    docProps.author = info?.Author || '-';
+    docProps.subject = info?.Subject || '-';
+    docProps.keywords = info?.Keywords || '-';
+    docProps.creator = info?.Creator || '-';
+    docProps.producer = info?.Producer || '-';
+    docProps.version = info?.PDFFormatVersion || '-';
+    docProps.creationDate = info?.CreationDate || '-';
+    docProps.modificationDate = info?.ModDate || '-';
+    docProps.pageCount = String(doc.numPages);
+    docProps.fileName = props.src.split('/').pop() || '-';
+    if (typeof contentLength === 'number') {
+      docProps.fileSize = `${(contentLength / 1024).toFixed(1)} KB (${contentLength} bytes)`;
+    }
+    const page = await doc.getPage(1).catch(() => null);
+    if (typeof page === 'object' && page !== null) {
+      const vp = page.getViewport({ scale: 1 });
+      docProps.pageSize = `${((vp.width / 72) * 25.4).toFixed(1)} × ${((vp.height / 72) * 25.4).toFixed(1)} mm`;
     }
   }
-};
+  documentPropertiesVisible.value = true;
+  closeSecondaryToolbar();
+}
+function closeDocumentProperties() {
+  documentPropertiesVisible.value = false;
+}
+
+// ─── Error handling ───────────────────────────────────────────────────────────
+function showError(message, stack = '') {
+  errorMessageText.value = message;
+  errorStack.value = stack;
+  errorVisible.value = true;
+  errorMoreInfoVisible.value = false;
+}
+function closeError() {
+  errorVisible.value = false;
+}
+function showMoreInfo() {
+  errorMoreInfoVisible.value = true;
+}
+function showLessInfo() {
+  errorMoreInfoVisible.value = false;
+}
+
+// ─── Expose ───────────────────────────────────────────────────────────────────
+defineExpose({ pdfTitle, getPdfApp: () => pdfApp, loadFile });
 </script>
 
 <style lang="scss">
@@ -1552,7 +2022,7 @@ body[data-pdfjsprinting] #printContainer {
   top: 0;
   right: 0;
   bottom: 0;
-  background: url('@/static/img/pdfjs/loading-icon.gif') center no-repeat;
+  background: url('@/public/img/pdfjs/loading-icon.gif') center no-repeat;
 }
 .pdfViewer .page .loadingIcon.notVisible {
   background: none;
@@ -2215,8 +2685,8 @@ body[data-pdfjsprinting] #printContainer {
   overflow: visible;
   border: var(--page-border);
   background-clip: content-box;
-  -o-border-image: url('@/static/img/pdfjs/shadow.png') 9 9 repeat;
-  border-image: url('@/static/img/pdfjs/shadow.png') 9 9 repeat;
+  -o-border-image: url('@/public/img/pdfjs/shadow.png') 9 9 repeat;
+  border-image: url('@/public/img/pdfjs/shadow.png') 9 9 repeat;
   background-color: rgba(255, 255, 255, 1);
 }
 
@@ -2357,43 +2827,43 @@ body[data-pdfjsprinting] #printContainer {
   --overlay-button-bg-color: rgba(12, 12, 13, 0.1);
   --overlay-button-hover-bg-color: rgba(12, 12, 13, 0.3);
 
-  --loading-icon: url('@/static/img/pdfjs/loading.svg');
-  --treeitem-expanded-icon: url('@/static/img/pdfjs/treeitem-expanded.svg');
-  --treeitem-collapsed-icon: url('@/static/img/pdfjs/treeitem-collapsed.svg');
-  --toolbarButton-menuArrow-icon: url('@/static/img/pdfjs/toolbarButton-menuArrow.svg');
-  --toolbarButton-sidebarToggle-icon: url('@/static/img/pdfjs/toolbarButton-sidebarToggle.svg');
-  --toolbarButton-secondaryToolbarToggle-icon: url('@/static/img/pdfjs/toolbarButton-secondaryToolbarToggle.svg');
-  --toolbarButton-pageUp-icon: url('@/static/img/pdfjs/toolbarButton-pageUp.svg');
-  --toolbarButton-pageDown-icon: url('@/static/img/pdfjs/toolbarButton-pageDown.svg');
-  --toolbarButton-zoomOut-icon: url('@/static/img/pdfjs/toolbarButton-zoomOut.svg');
-  --toolbarButton-zoomIn-icon: url('@/static/img/pdfjs/toolbarButton-zoomIn.svg');
-  --toolbarButton-presentationMode-icon: url('@/static/img/pdfjs/toolbarButton-presentationMode.svg');
-  --toolbarButton-print-icon: url('@/static/img/pdfjs/toolbarButton-print.svg');
-  --toolbarButton-openFile-icon: url('@/static/img/pdfjs/toolbarButton-openFile.svg');
-  --toolbarButton-download-icon: url('@/static/img/pdfjs/toolbarButton-download.svg');
-  --toolbarButton-bookmark-icon: url('@/static/img/pdfjs/toolbarButton-bookmark.svg');
-  --toolbarButton-viewThumbnail-icon: url('@/static/img/pdfjs/toolbarButton-viewThumbnail.svg');
-  --toolbarButton-viewOutline-icon: url('@/static/img/pdfjs/toolbarButton-viewOutline.svg');
-  --toolbarButton-viewAttachments-icon: url('@/static/img/pdfjs/toolbarButton-viewAttachments.svg');
-  --toolbarButton-viewLayers-icon: url('@/static/img/pdfjs/toolbarButton-viewLayers.svg');
-  --toolbarButton-currentOutlineItem-icon: url('@/static/img/pdfjs/toolbarButton-currentOutlineItem.svg');
-  --toolbarButton-search-icon: url('@/static/img/pdfjs/toolbarButton-search.svg');
-  --findbarButton-previous-icon: url('@/static/img/pdfjs/findbarButton-previous.svg');
-  --findbarButton-next-icon: url('@/static/img/pdfjs/findbarButton-next.svg');
-  --secondaryToolbarButton-firstPage-icon: url('@/static/img/pdfjs/secondaryToolbarButton-firstPage.svg');
-  --secondaryToolbarButton-lastPage-icon: url('@/static/img/pdfjs/secondaryToolbarButton-lastPage.svg');
-  --secondaryToolbarButton-rotateCcw-icon: url('@/static/img/pdfjs/secondaryToolbarButton-rotateCcw.svg');
-  --secondaryToolbarButton-rotateCw-icon: url('@/static/img/pdfjs/secondaryToolbarButton-rotateCw.svg');
-  --secondaryToolbarButton-selectTool-icon: url('@/static/img/pdfjs/secondaryToolbarButton-selectTool.svg');
-  --secondaryToolbarButton-handTool-icon: url('@/static/img/pdfjs/secondaryToolbarButton-handTool.svg');
-  --secondaryToolbarButton-scrollPage-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollPage.svg');
-  --secondaryToolbarButton-scrollVertical-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollVertical.svg');
-  --secondaryToolbarButton-scrollHorizontal-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollHorizontal.svg');
-  --secondaryToolbarButton-scrollWrapped-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollWrapped.svg');
-  --secondaryToolbarButton-spreadNone-icon: url('@/static/img/pdfjs/secondaryToolbarButton-spreadNone.svg');
-  --secondaryToolbarButton-spreadOdd-icon: url('@/static/img/pdfjs/secondaryToolbarButton-spreadOdd.svg');
-  --secondaryToolbarButton-spreadEven-icon: url('@/static/img/pdfjs/secondaryToolbarButton-spreadEven.svg');
-  --secondaryToolbarButton-documentProperties-icon: url('@/static/img/pdfjs/secondaryToolbarButton-documentProperties.svg');
+  --loading-icon: url('@/public/img/pdfjs/loading.svg');
+  --treeitem-expanded-icon: url('@/public/img/pdfjs/treeitem-expanded.svg');
+  --treeitem-collapsed-icon: url('@/public/img/pdfjs/treeitem-collapsed.svg');
+  --toolbarButton-menuArrow-icon: url('@/public/img/pdfjs/toolbarButton-menuArrow.svg');
+  --toolbarButton-sidebarToggle-icon: url('@/public/img/pdfjs/toolbarButton-sidebarToggle.svg');
+  --toolbarButton-secondaryToolbarToggle-icon: url('@/public/img/pdfjs/toolbarButton-secondaryToolbarToggle.svg');
+  --toolbarButton-pageUp-icon: url('@/public/img/pdfjs/toolbarButton-pageUp.svg');
+  --toolbarButton-pageDown-icon: url('@/public/img/pdfjs/toolbarButton-pageDown.svg');
+  --toolbarButton-zoomOut-icon: url('@/public/img/pdfjs/toolbarButton-zoomOut.svg');
+  --toolbarButton-zoomIn-icon: url('@/public/img/pdfjs/toolbarButton-zoomIn.svg');
+  --toolbarButton-presentationMode-icon: url('@/public/img/pdfjs/toolbarButton-presentationMode.svg');
+  --toolbarButton-print-icon: url('@/public/img/pdfjs/toolbarButton-print.svg');
+  --toolbarButton-openFile-icon: url('@/public/img/pdfjs/toolbarButton-openFile.svg');
+  --toolbarButton-download-icon: url('@/public/img/pdfjs/toolbarButton-download.svg');
+  --toolbarButton-bookmark-icon: url('@/public/img/pdfjs/toolbarButton-bookmark.svg');
+  --toolbarButton-viewThumbnail-icon: url('@/public/img/pdfjs/toolbarButton-viewThumbnail.svg');
+  --toolbarButton-viewOutline-icon: url('@/public/img/pdfjs/toolbarButton-viewOutline.svg');
+  --toolbarButton-viewAttachments-icon: url('@/public/img/pdfjs/toolbarButton-viewAttachments.svg');
+  --toolbarButton-viewLayers-icon: url('@/public/img/pdfjs/toolbarButton-viewLayers.svg');
+  --toolbarButton-currentOutlineItem-icon: url('@/public/img/pdfjs/toolbarButton-currentOutlineItem.svg');
+  --toolbarButton-search-icon: url('@/public/img/pdfjs/toolbarButton-search.svg');
+  --findbarButton-previous-icon: url('@/public/img/pdfjs/findbarButton-previous.svg');
+  --findbarButton-next-icon: url('@/public/img/pdfjs/findbarButton-next.svg');
+  --secondaryToolbarButton-firstPage-icon: url('@/public/img/pdfjs/secondaryToolbarButton-firstPage.svg');
+  --secondaryToolbarButton-lastPage-icon: url('@/public/img/pdfjs/secondaryToolbarButton-lastPage.svg');
+  --secondaryToolbarButton-rotateCcw-icon: url('@/public/img/pdfjs/secondaryToolbarButton-rotateCcw.svg');
+  --secondaryToolbarButton-rotateCw-icon: url('@/public/img/pdfjs/secondaryToolbarButton-rotateCw.svg');
+  --secondaryToolbarButton-selectTool-icon: url('@/public/img/pdfjs/secondaryToolbarButton-selectTool.svg');
+  --secondaryToolbarButton-handTool-icon: url('@/public/img/pdfjs/secondaryToolbarButton-handTool.svg');
+  --secondaryToolbarButton-scrollPage-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollPage.svg');
+  --secondaryToolbarButton-scrollVertical-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollVertical.svg');
+  --secondaryToolbarButton-scrollHorizontal-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollHorizontal.svg');
+  --secondaryToolbarButton-scrollWrapped-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollWrapped.svg');
+  --secondaryToolbarButton-spreadNone-icon: url('@/public/img/pdfjs/secondaryToolbarButton-spreadNone.svg');
+  --secondaryToolbarButton-spreadOdd-icon: url('@/public/img/pdfjs/secondaryToolbarButton-spreadOdd.svg');
+  --secondaryToolbarButton-spreadEven-icon: url('@/public/img/pdfjs/secondaryToolbarButton-spreadEven.svg');
+  --secondaryToolbarButton-documentProperties-icon: url('@/public/img/pdfjs/secondaryToolbarButton-documentProperties.svg');
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2439,7 +2909,447 @@ body[data-pdfjsprinting] #printContainer {
     /* This image is used in <input> elements, which unfortunately means that
      * the `mask-image` approach used with all of the other images doesn't work
      * here; hence why we still have two versions of this particular image. */
-    --loading-icon: url('@/static/img/pdfjs/loading-dark.svg');
+    --loading-icon: url('@/public/img/pdfjs/loading-dark.svg');
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .pdf_reader {
+    --button-hover-color: Highlight;
+    --doorhanger-hover-bg-color: Highlight;
+    --toolbar-icon-opacity: 1;
+    --toolbar-icon-bg-color: ButtonText;
+    --toolbar-icon-hover-bg-color: ButtonFace;
+    --toggled-btn-color: HighlightText;
+    --toggled-btn-bg-color: LinkText;
+    --doorhanger-hover-color: ButtonFace;
+    --doorhanger-border-color-whcm: 1px solid ButtonText;
+    --doorhanger-triangle-opacity-whcm: 0;
+    --overlay-button-border: 1px solid Highlight;
+    --overlay-button-hover-bg-color: Highlight;
+    --overlay-button-hover-color: ButtonFace;
+    --field-border-color: ButtonText;
+  }
+}
+
+.hidden,
+[hidden] {
+  display: none !important;
+  // display: none;
+}
+
+#viewerContainer.pdfPresentationMode:-webkit-full-screen {
+  top: 0;
+  background-color: rgba(0, 0, 0, 1);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#viewerContainer.pdfPresentationMode:fullscreen {
+  top: 0;
+  background-color: rgba(0, 0, 0, 1);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pdfPresentationMode:-webkit-full-screen a:not(.internalLink) {
+  display: none;
+}
+
+.pdfPresentationMode:fullscreen a:not(.internalLink) {
+  display: none;
+}
+
+.pdfPresentationMode:-webkit-full-screen .textLayer span {
+  cursor: none;
+}
+
+.pdfPresentationMode:fullscreen .textLayer span {
+  cursor: none;
+}
+
+.pdfPresentationMode.pdfPresentationModeControls > *,
+.pdfPresentationMode.pdfPresentationModeControls .textLayer span {
+  cursor: default;
+  border: none;
+  text-align: center;
+}
+
+.xfaLink {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.xfaCheckbox,
+.xfaRadio {
+  width: 100%;
+  height: 100%;
+  flex: 0 0 auto;
+  border: none;
+}
+
+.xfaRich {
+  white-space: pre-wrap;
+  width: 100%;
+  height: 100%;
+}
+
+.xfaImage {
+  -o-object-position: left top;
+  object-position: left top;
+  -o-object-fit: contain;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.xfaLrTb,
+.xfaRlTb,
+.xfaTb {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.xfaLr {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.xfaRl {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: stretch;
+}
+
+.xfaTb > div {
+  justify-content: left;
+}
+
+.xfaPosition {
+  position: relative;
+}
+
+.xfaArea {
+  position: relative;
+}
+
+.xfaValignMiddle {
+  display: flex;
+  align-items: center;
+}
+
+.xfaTable {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.xfaTable .xfaRow {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.xfaTable .xfaRlRow {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: stretch;
+  flex: 1;
+}
+
+.xfaTable .xfaRlRow > div {
+  flex: 1;
+}
+
+.xfaNonInteractive input,
+.xfaNonInteractive textarea,
+.xfaDisabled input,
+.xfaDisabled textarea,
+.xfaReadOnly input,
+.xfaReadOnly textarea {
+  background: initial;
+}
+
+@media print {
+  .xfaTextfield,
+  .xfaSelect {
+    background: transparent;
+  }
+
+  .xfaSelect {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .pdf_reader {
+    --pdfViewer-padding-bottom: 9px;
+    --page-margin: 9px auto 0;
+    --page-border: none;
+    --spreadHorizontalWrapped-margin-LR: 4.5px;
+  }
+}
+
+.pdfViewer {
+  padding-bottom: var(--pdfViewer-padding-bottom);
+}
+
+.pdfViewer .canvasWrapper {
+  overflow: hidden;
+}
+
+.pdfViewer .page {
+  direction: ltr;
+  width: 816px;
+  height: 1056px;
+  margin: var(--page-margin);
+  position: relative;
+  overflow: visible;
+  border: var(--page-border);
+  background-clip: content-box;
+  -o-border-image: url('@/public/img/pdfjs/shadow.png') 9 9 repeat;
+  border-image: url('@/public/img/pdfjs/shadow.png') 9 9 repeat;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.pdfViewer .dummyPage {
+  position: relative;
+  width: 0;
+  /* The height is set via JS, see `BaseViewer.#ensurePageViewVisible`. */
+}
+
+.pdfViewer.removePageBorders .page {
+  margin: 0 auto 10px;
+  border: none;
+}
+
+.pdfViewer.singlePageView {
+  display: inline-block;
+}
+
+.pdfViewer.singlePageView .page {
+  margin: 0;
+  border: none;
+}
+
+.pdfViewer.scrollHorizontal,
+.pdfViewer.scrollWrapped,
+.spread {
+  margin-left: 3.5px;
+  margin-right: 3.5px;
+  text-align: center;
+}
+
+.pdfViewer.scrollHorizontal,
+.spread {
+  white-space: nowrap;
+}
+
+.pdfViewer.removePageBorders,
+.pdfViewer.scrollHorizontal .spread,
+.pdfViewer.scrollWrapped .spread {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.spread .page,
+.spread .dummyPage,
+.pdfViewer.scrollHorizontal .page,
+.pdfViewer.scrollWrapped .page,
+.pdfViewer.scrollHorizontal .spread,
+.pdfViewer.scrollWrapped .spread {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.spread .page,
+.pdfViewer.scrollHorizontal .page,
+.pdfViewer.scrollWrapped .page {
+  margin-left: var(--spreadHorizontalWrapped-margin-LR);
+  margin-right: var(--spreadHorizontalWrapped-margin-LR);
+}
+
+.pdfViewer.removePageBorders .spread .page,
+.pdfViewer.removePageBorders.scrollHorizontal .page,
+.pdfViewer.removePageBorders.scrollWrapped .page {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.pdfViewer.enablePermissions .textLayer span {
+  // -webkit-user-select: none !important;
+  // -moz-user-select: none !important;
+  // user-select: none !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: not-allowed;
+}
+
+.pdfPresentationMode .pdfViewer {
+  padding-bottom: 0;
+}
+
+.pdfPresentationMode .spread {
+  margin: 0;
+}
+
+.pdfPresentationMode .pdfViewer .page {
+  margin: 0 auto;
+  border: 2px solid transparent;
+}
+
+.pdf_reader {
+  --sidebar-width: 200px;
+  --sidebar-transition-duration: 200ms;
+  --sidebar-transition-timing-function: ease;
+  --scale-select-container-width: 140px;
+  --scale-select-overflow: 22px;
+  --loadingBar-end-offset: 0;
+
+  --toolbar-icon-opacity: 0.7;
+  --doorhanger-icon-opacity: 0.9;
+
+  --main-color: rgba(12, 12, 13, 1);
+  --body-bg-color: rgba(237, 237, 240, 1);
+  --errorWrapper-bg-color: rgba(255, 110, 110, 1);
+  --progressBar-color: rgba(10, 132, 255, 1);
+  --progressBar-indeterminate-bg-color: rgba(221, 221, 222, 1);
+  --progressBar-indeterminate-blend-color: rgba(116, 177, 239, 1);
+  --scrollbar-color: auto;
+  --scrollbar-bg-color: auto;
+  --toolbar-icon-bg-color: rgba(0, 0, 0, 1);
+  --toolbar-icon-hover-bg-color: rgba(0, 0, 0, 1);
+
+  --sidebar-narrow-bg-color: rgba(237, 237, 240, 0.9);
+  --sidebar-toolbar-bg-color: rgba(245, 246, 247, 1);
+  --toolbar-bg-color: rgba(249, 249, 250, 1);
+  --toolbar-border-color: rgba(204, 204, 204, 1);
+  --button-hover-color: rgba(221, 222, 223, 1);
+  --toggled-btn-color: rgba(0, 0, 0, 1);
+  --toggled-btn-bg-color: rgba(0, 0, 0, 0.3);
+  --toggled-hover-active-btn-color: rgba(0, 0, 0, 0.4);
+  --dropdown-btn-bg-color: rgba(215, 215, 219, 1);
+  --separator-color: rgba(0, 0, 0, 0.3);
+  --field-color: rgba(6, 6, 6, 1);
+  --field-bg-color: rgba(255, 255, 255, 1);
+  --field-border-color: rgba(187, 187, 188, 1);
+  --findbar-nextprevious-btn-bg-color: rgba(227, 228, 230, 1);
+  --treeitem-color: rgba(0, 0, 0, 0.8);
+  --treeitem-hover-color: rgba(0, 0, 0, 0.9);
+  --treeitem-selected-color: rgba(0, 0, 0, 0.9);
+  --treeitem-selected-bg-color: rgba(0, 0, 0, 0.25);
+  --sidebaritem-bg-color: rgba(0, 0, 0, 0.15);
+  --doorhanger-bg-color: rgba(255, 255, 255, 1);
+  --doorhanger-border-color: rgba(12, 12, 13, 0.2);
+  --doorhanger-hover-color: rgba(12, 12, 13, 1);
+  --doorhanger-hover-bg-color: rgba(237, 237, 237, 1);
+  --doorhanger-separator-color: rgba(222, 222, 222, 1);
+  --overlay-button-border: 0 none;
+  --overlay-button-bg-color: rgba(12, 12, 13, 0.1);
+  --overlay-button-hover-bg-color: rgba(12, 12, 13, 0.3);
+
+  --loading-icon: url('@/public/img/pdfjs/loading.svg');
+  --treeitem-expanded-icon: url('@/public/img/pdfjs/treeitem-expanded.svg');
+  --treeitem-collapsed-icon: url('@/public/img/pdfjs/treeitem-collapsed.svg');
+  --toolbarButton-menuArrow-icon: url('@/public/img/pdfjs/toolbarButton-menuArrow.svg');
+  --toolbarButton-sidebarToggle-icon: url('@/public/img/pdfjs/toolbarButton-sidebarToggle.svg');
+  --toolbarButton-secondaryToolbarToggle-icon: url('@/public/img/pdfjs/toolbarButton-secondaryToolbarToggle.svg');
+  --toolbarButton-pageUp-icon: url('@/public/img/pdfjs/toolbarButton-pageUp.svg');
+  --toolbarButton-pageDown-icon: url('@/public/img/pdfjs/toolbarButton-pageDown.svg');
+  --toolbarButton-zoomOut-icon: url('@/public/img/pdfjs/toolbarButton-zoomOut.svg');
+  --toolbarButton-zoomIn-icon: url('@/public/img/pdfjs/toolbarButton-zoomIn.svg');
+  --toolbarButton-presentationMode-icon: url('@/public/img/pdfjs/toolbarButton-presentationMode.svg');
+  --toolbarButton-print-icon: url('@/public/img/pdfjs/toolbarButton-print.svg');
+  --toolbarButton-openFile-icon: url('@/public/img/pdfjs/toolbarButton-openFile.svg');
+  --toolbarButton-download-icon: url('@/public/img/pdfjs/toolbarButton-download.svg');
+  --toolbarButton-bookmark-icon: url('@/public/img/pdfjs/toolbarButton-bookmark.svg');
+  --toolbarButton-viewThumbnail-icon: url('@/public/img/pdfjs/toolbarButton-viewThumbnail.svg');
+  --toolbarButton-viewOutline-icon: url('@/public/img/pdfjs/toolbarButton-viewOutline.svg');
+  --toolbarButton-viewAttachments-icon: url('@/public/img/pdfjs/toolbarButton-viewAttachments.svg');
+  --toolbarButton-viewLayers-icon: url('@/public/img/pdfjs/toolbarButton-viewLayers.svg');
+  --toolbarButton-currentOutlineItem-icon: url('@/public/img/pdfjs/toolbarButton-currentOutlineItem.svg');
+  --toolbarButton-search-icon: url('@/public/img/pdfjs/toolbarButton-search.svg');
+  --findbarButton-previous-icon: url('@/public/img/pdfjs/findbarButton-previous.svg');
+  --findbarButton-next-icon: url('@/public/img/pdfjs/findbarButton-next.svg');
+  --secondaryToolbarButton-firstPage-icon: url('@/public/img/pdfjs/secondaryToolbarButton-firstPage.svg');
+  --secondaryToolbarButton-lastPage-icon: url('@/public/img/pdfjs/secondaryToolbarButton-lastPage.svg');
+  --secondaryToolbarButton-rotateCcw-icon: url('@/public/img/pdfjs/secondaryToolbarButton-rotateCcw.svg');
+  --secondaryToolbarButton-rotateCw-icon: url('@/public/img/pdfjs/secondaryToolbarButton-rotateCw.svg');
+  --secondaryToolbarButton-selectTool-icon: url('@/public/img/pdfjs/secondaryToolbarButton-selectTool.svg');
+  --secondaryToolbarButton-handTool-icon: url('@/public/img/pdfjs/secondaryToolbarButton-handTool.svg');
+  --secondaryToolbarButton-scrollPage-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollPage.svg');
+  --secondaryToolbarButton-scrollVertical-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollVertical.svg');
+  --secondaryToolbarButton-scrollHorizontal-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollHorizontal.svg');
+  --secondaryToolbarButton-scrollWrapped-icon: url('@/public/img/pdfjs/secondaryToolbarButton-scrollWrapped.svg');
+  --secondaryToolbarButton-spreadNone-icon: url('@/public/img/pdfjs/secondaryToolbarButton-spreadNone.svg');
+  --secondaryToolbarButton-spreadOdd-icon: url('@/public/img/pdfjs/secondaryToolbarButton-spreadOdd.svg');
+  --secondaryToolbarButton-spreadEven-icon: url('@/public/img/pdfjs/secondaryToolbarButton-spreadEven.svg');
+  --secondaryToolbarButton-documentProperties-icon: url('@/public/img/pdfjs/secondaryToolbarButton-documentProperties.svg');
+}
+
+@media (prefers-color-scheme: dark) {
+  .pdf_reader {
+    --main-color: rgba(249, 249, 250, 1);
+    --body-bg-color: rgba(42, 42, 46, 1);
+    --errorWrapper-bg-color: rgba(169, 14, 14, 1);
+    --progressBar-color: rgba(0, 96, 223, 1);
+    --progressBar-indeterminate-bg-color: rgba(40, 40, 43, 1);
+    --progressBar-indeterminate-blend-color: rgba(20, 68, 133, 1);
+    --scrollbar-color: rgba(121, 121, 123, 1);
+    --scrollbar-bg-color: rgba(35, 35, 39, 1);
+    --toolbar-icon-bg-color: rgba(255, 255, 255, 1);
+    --toolbar-icon-hover-bg-color: rgba(255, 255, 255, 1);
+
+    --sidebar-narrow-bg-color: rgba(42, 42, 46, 0.9);
+    --sidebar-toolbar-bg-color: rgba(50, 50, 52, 1);
+    --toolbar-bg-color: rgba(56, 56, 61, 1);
+    --toolbar-border-color: rgba(12, 12, 13, 1);
+    --button-hover-color: rgba(102, 102, 103, 1);
+    --toggled-btn-color: rgba(255, 255, 255, 1);
+    --toggled-btn-bg-color: rgba(0, 0, 0, 0.3);
+    --toggled-hover-active-btn-color: rgba(0, 0, 0, 0.4);
+    --dropdown-btn-bg-color: rgba(74, 74, 79, 1);
+    --separator-color: rgba(0, 0, 0, 0.3);
+    --field-color: rgba(250, 250, 250, 1);
+    --field-bg-color: rgba(64, 64, 68, 1);
+    --field-border-color: rgba(115, 115, 115, 1);
+    --findbar-nextprevious-btn-bg-color: rgba(89, 89, 89, 1);
+    --treeitem-color: rgba(255, 255, 255, 0.8);
+    --treeitem-hover-color: rgba(255, 255, 255, 0.9);
+    --treeitem-selected-color: rgba(255, 255, 255, 0.9);
+    --treeitem-selected-bg-color: rgba(255, 255, 255, 0.25);
+    --sidebaritem-bg-color: rgba(255, 255, 255, 0.15);
+    --doorhanger-bg-color: rgba(74, 74, 79, 1);
+    --doorhanger-border-color: rgba(39, 39, 43, 1);
+    --doorhanger-hover-color: rgba(249, 249, 250, 1);
+    --doorhanger-hover-bg-color: rgba(93, 94, 98, 1);
+    --doorhanger-separator-color: rgba(92, 92, 97, 1);
+    --overlay-button-bg-color: rgba(92, 92, 97, 1);
+    --overlay-button-hover-bg-color: rgba(115, 115, 115, 1);
+
+    /* This image is used in <input> elements, which unfortunately means that
+     * the `mask-image` approach used with all of the other images doesn't work
+     * here; hence why we still have two versions of this particular image. */
+    --loading-icon: url('@/public/img/pdfjs/loading-dark.svg');
   }
 }
 
