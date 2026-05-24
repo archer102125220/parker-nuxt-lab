@@ -1,5 +1,5 @@
 <template>
-  <div class="pdf_reader" ref="pdfReaderDOM">
+  <div ref="pdfReaderDOM" class="pdf_reader">
     <div id="outerContainer" ref="outerContainer">
       <div id="sidebarContainer" ref="sidebarContainer">
         <div id="toolbarSidebar" ref="toolbarSidebar">
@@ -7,21 +7,21 @@
             <div class="splitToolbarButton toggled">
               <button
                 id="viewThumbnail"
+                ref="viewThumbnail"
                 class="toolbarButton toggled"
                 title="Show Thumbnails"
                 tabindex="2"
                 data-l10n-id="thumbs"
-                ref="viewThumbnail"
               >
                 <span data-l10n-id="thumbs_label">Thumbnails</span>
               </button>
               <button
                 id="viewOutline"
+                ref="viewOutline"
                 class="toolbarButton"
                 title="Show Document Outline (double-click to expand/collapse all items)"
                 tabindex="3"
                 data-l10n-id="document_outline"
-                ref="viewOutline"
               >
                 <span data-l10n-id="document_outline_label"
                   >Document Outline</span
@@ -29,21 +29,21 @@
               </button>
               <button
                 id="viewAttachments"
+                ref="viewAttachments"
                 class="toolbarButton"
                 title="Show Attachments"
                 tabindex="4"
                 data-l10n-id="attachments"
-                ref="viewAttachments"
               >
                 <span data-l10n-id="attachments_label">Attachments</span>
               </button>
               <button
                 id="viewLayers"
+                ref="viewLayers"
                 class="toolbarButton"
                 title="Show Layers (double-click to reset all layers to the default state)"
                 tabindex="5"
                 data-l10n-id="layers"
-                ref="viewLayers"
               >
                 <span data-l10n-id="layers_label">Layers</span>
               </button>
@@ -53,19 +53,19 @@
           <div id="toolbarSidebarRight" ref="toolbarSidebarRight">
             <div
               id="outlineOptionsContainer"
-              class="hidden"
               ref="outlineOptionsContainer"
+              class="hidden"
             >
               <div class="verticalToolbarSeparator"></div>
 
               <button
                 id="currentOutlineItem"
+                ref="currentOutlineItem"
                 class="toolbarButton"
                 disabled="disabled"
                 title="Find Current Outline Item"
                 tabindex="6"
                 data-l10n-id="current_outline_item"
-                ref="currentOutlineItem"
               >
                 <span data-l10n-id="current_outline_item_label"
                   >Current Outline Item</span
@@ -76,45 +76,45 @@
         </div>
         <div id="sidebarContent" ref="sidebarContent">
           <div id="thumbnailView" ref="thumbnailView"></div>
-          <div id="outlineView" class="hidden" ref="outlineView"></div>
-          <div id="attachmentsView" class="hidden" ref="attachmentsView"></div>
-          <div id="layersView" class="hidden" ref="layersView"></div>
+          <div id="outlineView" ref="outlineView" class="hidden"></div>
+          <div id="attachmentsView" ref="attachmentsView" class="hidden"></div>
+          <div id="layersView" ref="layersView" class="hidden"></div>
         </div>
         <div id="sidebarResizer" ref="sidebarResizer"></div>
       </div>
       <!-- sidebarContainer -->
 
       <div id="mainContainer" ref="mainContainer">
-        <div class="findbar hidden doorHanger" id="findbar" ref="findbar">
+        <div id="findbar" ref="findbar" class="findbar hidden doorHanger">
           <div id="findbarInputContainer" ref="findbarInputContainer">
             <input
               id="findInput"
+              ref="findInput"
               class="toolbarField"
               title="Find"
               placeholder="Find in document…"
               tabindex="91"
               data-l10n-id="find_input"
-              ref="findInput"
             />
             <div class="splitToolbarButton">
               <button
                 id="findPrevious"
+                ref="findPrevious"
                 class="toolbarButton findPrevious"
                 title="Find the previous occurrence of the phrase"
                 tabindex="92"
                 data-l10n-id="find_previous"
-                ref="findPrevious"
               >
                 <span data-l10n-id="find_previous_label">Previous</span>
               </button>
               <div class="splitToolbarButtonSeparator"></div>
               <button
                 id="findNext"
+                ref="findNext"
                 class="toolbarButton findNext"
                 title="Find the next occurrence of the phrase"
                 tabindex="93"
                 data-l10n-id="find_next"
-                ref="findNext"
               >
                 <span data-l10n-id="find_next_label">Next</span>
               </button>
@@ -123,11 +123,11 @@
 
           <div id="findbarOptionsOneContainer" ref="findbarOptionsOneContainer">
             <input
-              type="checkbox"
               id="findHighlightAll"
+              ref="findHighlightAll"
+              type="checkbox"
               class="toolbarField"
               tabindex="94"
-              ref="findHighlightAll"
             />
             <label
               for="findHighlightAll"
@@ -136,11 +136,11 @@
               >Highlight all</label
             >
             <input
-              type="checkbox"
               id="findMatchCase"
+              ref="findMatchCase"
+              type="checkbox"
               class="toolbarField"
               tabindex="95"
-              ref="findMatchCase"
             />
             <label
               for="findMatchCase"
@@ -151,11 +151,11 @@
           </div>
           <div id="findbarOptionsTwoContainer">
             <input
-              type="checkbox"
               id="findEntireWord"
+              ref="findEntireWord"
+              type="checkbox"
               class="toolbarField"
               tabindex="96"
-              ref="findEntireWord"
             />
             <label
               for="findEntireWord"
@@ -165,21 +165,21 @@
             >
             <span
               id="findResultsCount"
-              class="toolbarLabel hidden"
               ref="findResultsCount"
+              class="toolbarLabel hidden"
             ></span>
           </div>
 
           <div id="findbarMessageContainer" ref="findResultsCount">
-            <span id="findMsg" class="toolbarLabel" ref="findMsg"></span>
+            <span id="findMsg" ref="findMsg" class="toolbarLabel"></span>
           </div>
         </div>
         <!-- findbar -->
 
         <div
           id="secondaryToolbar"
-          class="secondaryToolbar hidden doorHangerRight"
           ref="secondaryToolbar"
+          class="secondaryToolbar hidden doorHangerRight"
         >
           <div
             id="secondaryToolbarButtonContainer"
@@ -187,11 +187,11 @@
           >
             <button
               id="secondaryPresentationMode"
+              ref="secondaryPresentationMode"
               class="secondaryToolbarButton presentationMode visibleLargeView"
               title="Switch to Presentation Mode"
               tabindex="51"
               data-l10n-id="presentation_mode"
-              ref="secondaryPresentationMode"
             >
               <span data-l10n-id="presentation_mode_label"
                 >Presentation Mode</span
@@ -200,45 +200,45 @@
 
             <button
               id="secondaryOpenFile"
+              ref="secondaryOpenFile"
               class="secondaryToolbarButton openFile visibleLargeView"
               title="Open File"
               tabindex="52"
               data-l10n-id="open_file"
-              ref="secondaryOpenFile"
             >
               <span data-l10n-id="open_file_label">Open</span>
             </button>
 
             <button
               id="secondaryPrint"
+              ref="secondaryPrint"
               class="secondaryToolbarButton print visibleMediumView"
               title="Print"
               tabindex="53"
               data-l10n-id="print"
-              ref="secondaryPrint"
             >
               <span data-l10n-id="print_label">Print</span>
             </button>
 
             <button
               id="secondaryDownload"
+              ref="secondaryDownload"
               class="secondaryToolbarButton download visibleMediumView"
               title="Download"
               tabindex="54"
               data-l10n-id="download"
-              ref="secondaryDownload"
             >
               <span data-l10n-id="download_label">Download</span>
             </button>
 
             <a
-              href="#"
               id="secondaryViewBookmark"
+              ref="secondaryViewBookmark"
+              href="#"
               class="secondaryToolbarButton bookmark visibleSmallView"
               title="Current view (copy or open in new window)"
               tabindex="55"
               data-l10n-id="bookmark"
-              ref="secondaryViewBookmark"
             >
               <span data-l10n-id="bookmark_label">Current View</span>
             </a>
@@ -247,21 +247,21 @@
 
             <button
               id="firstPage"
+              ref="firstPage"
               class="secondaryToolbarButton firstPage"
               title="Go to First Page"
               tabindex="56"
               data-l10n-id="first_page"
-              ref="firstPage"
             >
               <span data-l10n-id="first_page_label">Go to First Page</span>
             </button>
             <button
               id="lastPage"
+              ref="lastPage"
               class="secondaryToolbarButton lastPage"
               title="Go to Last Page"
               tabindex="57"
               data-l10n-id="last_page"
-              ref="lastPage"
             >
               <span data-l10n-id="last_page_label">Go to Last Page</span>
             </button>
@@ -270,21 +270,21 @@
 
             <button
               id="pageRotateCw"
+              ref="pageRotateCw"
               class="secondaryToolbarButton rotateCw"
               title="Rotate Clockwise"
               tabindex="58"
               data-l10n-id="page_rotate_cw"
-              ref="pageRotateCw"
             >
               <span data-l10n-id="page_rotate_cw_label">Rotate Clockwise</span>
             </button>
             <button
               id="pageRotateCcw"
+              ref="pageRotateCcw"
               class="secondaryToolbarButton rotateCcw"
               title="Rotate Counterclockwise"
               tabindex="59"
               data-l10n-id="page_rotate_ccw"
-              ref="pageRotateCcw"
             >
               <span data-l10n-id="page_rotate_ccw_label"
                 >Rotate Counterclockwise</span
@@ -295,11 +295,11 @@
 
             <button
               id="cursorSelectTool"
+              ref="cursorSelectTool"
               class="secondaryToolbarButton selectTool toggled"
               title="Enable Text Selection Tool"
               tabindex="60"
               data-l10n-id="cursor_text_select_tool"
-              ref="cursorSelectTool"
             >
               <span data-l10n-id="cursor_text_select_tool_label"
                 >Text Selection Tool</span
@@ -307,11 +307,11 @@
             </button>
             <button
               id="cursorHandTool"
+              ref="cursorHandTool"
               class="secondaryToolbarButton handTool"
               title="Enable Hand Tool"
               tabindex="61"
               data-l10n-id="cursor_hand_tool"
-              ref="cursorHandTool"
             >
               <span data-l10n-id="cursor_hand_tool_label">Hand Tool</span>
             </button>
@@ -320,21 +320,21 @@
 
             <button
               id="scrollPage"
+              ref="scrollPage"
               class="secondaryToolbarButton scrollPage"
               title="Use Page Scrolling"
               tabindex="62"
               data-l10n-id="scroll_page"
-              ref="scrollPage"
             >
               <span data-l10n-id="scroll_page_label">Page Scrolling</span>
             </button>
             <button
               id="scrollVertical"
+              ref="scrollVertical"
               class="secondaryToolbarButton scrollVertical toggled"
               title="Use Vertical Scrolling"
               tabindex="63"
               data-l10n-id="scroll_vertical"
-              ref="scrollVertical"
             >
               <span data-l10n-id="scroll_vertical_label"
                 >Vertical Scrolling</span
@@ -342,11 +342,11 @@
             </button>
             <button
               id="scrollHorizontal"
+              ref="scrollHorizontal"
               class="secondaryToolbarButton scrollHorizontal"
               title="Use Horizontal Scrolling"
               tabindex="64"
               data-l10n-id="scroll_horizontal"
-              ref="scrollHorizontal"
             >
               <span data-l10n-id="scroll_horizontal_label"
                 >Horizontal Scrolling</span
@@ -354,11 +354,11 @@
             </button>
             <button
               id="scrollWrapped"
+              ref="scrollWrapped"
               class="secondaryToolbarButton scrollWrapped"
               title="Use Wrapped Scrolling"
               tabindex="65"
               data-l10n-id="scroll_wrapped"
-              ref="scrollWrapped"
             >
               <span data-l10n-id="scroll_wrapped_label">Wrapped Scrolling</span>
             </button>
@@ -367,31 +367,31 @@
 
             <button
               id="spreadNone"
+              ref="spreadNone"
               class="secondaryToolbarButton spreadNone toggled"
               title="Do not join page spreads"
               tabindex="66"
               data-l10n-id="spread_none"
-              ref="spreadNone"
             >
               <span data-l10n-id="spread_none_label">No Spreads</span>
             </button>
             <button
               id="spreadOdd"
+              ref="spreadOdd"
               class="secondaryToolbarButton spreadOdd"
               title="Join page spreads starting with odd-numbered pages"
               tabindex="67"
               data-l10n-id="spread_odd"
-              ref="spreadOdd"
             >
               <span data-l10n-id="spread_odd_label">Odd Spreads</span>
             </button>
             <button
               id="spreadEven"
+              ref="spreadEven"
               class="secondaryToolbarButton spreadEven"
               title="Join page spreads starting with even-numbered pages"
               tabindex="68"
               data-l10n-id="spread_even"
-              ref="spreadEven"
             >
               <span data-l10n-id="spread_even_label">Even Spreads</span>
             </button>
@@ -400,11 +400,11 @@
 
             <button
               id="documentProperties"
+              ref="documentProperties"
               class="secondaryToolbarButton documentProperties"
               title="Document Properties…"
               tabindex="69"
               data-l10n-id="document_properties"
-              ref="documentProperties"
             >
               <span data-l10n-id="document_properties_label"
                 >Document Properties…</span
@@ -420,13 +420,13 @@
               <div id="toolbarViewerLeft" ref="toolbarViewerLeft">
                 <button
                   id="sidebarToggle"
+                  ref="sidebarToggle"
                   class="toolbarButton"
                   title="Toggle Sidebar"
                   tabindex="11"
                   data-l10n-id="toggle_sidebar"
                   aria-expanded="false"
                   aria-controls="sidebarContainer"
-                  ref="sidebarToggle"
                 >
                   <span data-l10n-id="toggle_sidebar_label"
                     >Toggle Sidebar</span
@@ -435,42 +435,43 @@
                 <div class="toolbarButtonSpacer"></div>
                 <button
                   id="viewFind"
+                  ref="viewFind"
                   class="toolbarButton"
                   title="Find in Document"
                   tabindex="12"
                   data-l10n-id="findbar"
                   aria-expanded="false"
                   aria-controls="findbar"
-                  ref="viewFind"
                 >
                   <span data-l10n-id="findbar_label">Find</span>
                 </button>
                 <div class="splitToolbarButton hiddenSmallView">
                   <button
+                    id="previous"
+                    ref="previous"
                     class="toolbarButton pageUp"
                     title="Previous Page"
-                    id="previous"
                     tabindex="13"
                     data-l10n-id="previous"
-                    ref="previous"
                   >
                     <span data-l10n-id="previous_label">Previous</span>
                   </button>
                   <div class="splitToolbarButtonSeparator"></div>
                   <button
+                    id="next"
+                    ref="next"
                     class="toolbarButton pageDown"
                     title="Next Page"
-                    id="next"
                     tabindex="14"
                     data-l10n-id="next"
-                    ref="next"
                   >
                     <span data-l10n-id="next_label">Next</span>
                   </button>
                 </div>
                 <input
-                  type="number"
                   id="pageNumber"
+                  ref="pageNumber"
+                  type="number"
                   class="toolbarField pageNumber"
                   title="Page"
                   value="1"
@@ -479,18 +480,17 @@
                   tabindex="15"
                   data-l10n-id="page"
                   autocomplete="off"
-                  ref="pageNumber"
                 />
-                <span id="numPages" class="toolbarLabel" ref="numPages"></span>
+                <span id="numPages" ref="numPages" class="toolbarLabel"></span>
               </div>
               <div id="toolbarViewerRight" ref="toolbarViewerRight">
                 <button
                   id="presentationMode"
+                  ref="presentationMode"
                   class="toolbarButton presentationMode hiddenLargeView"
                   title="Switch to Presentation Mode"
                   tabindex="31"
                   data-l10n-id="presentation_mode"
-                  ref="presentationMode"
                 >
                   <span data-l10n-id="presentation_mode_label"
                     >Presentation Mode</span
@@ -499,44 +499,44 @@
 
                 <button
                   id="openFile"
+                  ref="openFile"
                   class="toolbarButton openFile hiddenLargeView"
                   title="Open File"
                   tabindex="32"
                   data-l10n-id="open_file"
-                  ref="openFile"
                 >
                   <span data-l10n-id="open_file_label">Open</span>
                 </button>
 
                 <button
                   id="print"
+                  ref="print"
                   class="toolbarButton print hiddenMediumView"
                   title="Print"
                   tabindex="33"
                   data-l10n-id="print"
-                  ref="print"
                 >
                   <span data-l10n-id="print_label">Print</span>
                 </button>
 
                 <button
                   id="download"
+                  ref="download"
                   class="toolbarButton download hiddenMediumView"
                   title="Download"
                   tabindex="34"
                   data-l10n-id="download"
-                  ref="download"
                 >
                   <span data-l10n-id="download_label">Download</span>
                 </button>
                 <a
-                  href="#"
                   id="viewBookmark"
+                  ref="viewBookmark"
+                  href="#"
                   class="toolbarButton bookmark hiddenSmallView"
                   title="Current view (copy or open in new window)"
                   tabindex="35"
                   data-l10n-id="bookmark"
-                  ref="viewBookmark"
                 >
                   <span data-l10n-id="bookmark_label">Current View</span>
                 </a>
@@ -545,13 +545,13 @@
 
                 <button
                   id="secondaryToolbarToggle"
+                  ref="secondaryToolbarToggle"
                   class="toolbarButton"
                   title="Tools"
                   tabindex="36"
                   data-l10n-id="tools"
                   aria-expanded="false"
                   aria-controls="secondaryToolbar"
-                  ref="secondaryToolbarToggle"
                 >
                   <span data-l10n-id="tools_label">Tools</span>
                 </button>
@@ -560,82 +560,82 @@
                 <div class="splitToolbarButton">
                   <button
                     id="zoomOut"
+                    ref="zoomOut"
                     class="toolbarButton zoomOut"
                     title="Zoom Out"
                     tabindex="21"
                     data-l10n-id="zoom_out"
-                    ref="zoomOut"
                   >
                     <span data-l10n-id="zoom_out_label">Zoom Out</span>
                   </button>
                   <div class="splitToolbarButtonSeparator"></div>
                   <button
                     id="zoomIn"
+                    ref="zoomIn"
                     class="toolbarButton zoomIn"
                     title="Zoom In"
                     tabindex="22"
                     data-l10n-id="zoom_in"
-                    ref="zoomIn"
                   >
                     <span data-l10n-id="zoom_in_label">Zoom In</span>
                   </button>
                 </div>
                 <span
                   id="scaleSelectContainer"
-                  class="dropdownToolbarButton"
                   ref="scaleSelectContainer"
+                  class="dropdownToolbarButton"
                 >
                   <select
                     id="scaleSelect"
+                    ref="scaleSelect"
                     title="Zoom"
                     tabindex="23"
                     data-l10n-id="zoom"
-                    ref="scaleSelect"
                   >
                     <option
                       id="pageAutoOption"
+                      ref="pageAutoOption"
                       title
                       value="auto"
                       selected="selected"
                       data-l10n-id="page_scale_auto"
-                      ref="pageAutoOption"
                     >
                       Automatic Zoom
                     </option>
                     <option
                       id="pageActualOption"
+                      ref="pageActualOption"
                       title
                       value="page-actual"
                       data-l10n-id="page_scale_actual"
-                      ref="pageActualOption"
                     >
                       Actual Size
                     </option>
                     <option
                       id="pageFitOption"
+                      ref="pageFitOption"
                       title
                       value="page-fit"
                       data-l10n-id="page_scale_fit"
-                      ref="pageFitOption"
                     >
                       Page Fit
                     </option>
                     <option
                       id="pageWidthOption"
+                      ref="pageWidthOption"
                       title
                       value="page-width"
                       data-l10n-id="page_scale_width"
-                      ref="pageWidthOption"
                     >
                       Page Width
                     </option>
                     <option
                       id="customScaleOption"
+                      ref="customScaleOption"
                       title
                       value="custom"
                       disabled="disabled"
                       hidden="true"
-                      ref="customScaleOption"
                     ></option>
                     <option
                       title
@@ -713,81 +713,81 @@
           </div>
         </div>
 
-        <div id="viewerContainer" tabindex="0" ref="viewerContainer">
-          <div id="viewer" class="pdfViewer" ref="viewer"></div>
+        <div id="viewerContainer" ref="viewerContainer" tabindex="0">
+          <div id="viewer" ref="viewer" class="pdfViewer"></div>
         </div>
 
-        <div id="errorWrapper" hidden="true" ref="errorWrapper">
+        <div id="errorWrapper" ref="errorWrapper" hidden="true">
           <div id="errorMessageLeft" ref="errorMessageLeft">
             <span id="errorMessage" ref="errorMessage"></span>
             <button
               id="errorShowMore"
-              data-l10n-id="error_more_info"
               ref="errorShowMore"
+              data-l10n-id="error_more_info"
             >
               More Information
             </button>
             <button
               id="errorShowLess"
+              ref="errorShowLess"
               data-l10n-id="error_less_info"
               hidden="true"
-              ref="errorShowLess"
             >
               Less Information
             </button>
           </div>
           <div id="errorMessageRight" ref="errorMessageRight">
-            <button id="errorClose" data-l10n-id="error_close" ref="errorClose">
+            <button id="errorClose" ref="errorClose" data-l10n-id="error_close">
               Close
             </button>
           </div>
           <div class="clearBoth"></div>
           <textarea
             id="errorMoreInfo"
+            ref="errorMoreInfo"
             hidden="true"
             readonly="readonly"
-            ref="errorMoreInfo"
           ></textarea>
         </div>
       </div>
       <!-- mainContainer -->
 
-      <div id="overlayContainer" class="hidden" ref="overlayContainer">
+      <div id="overlayContainer" ref="overlayContainer" class="hidden">
         <div
           id="passwordOverlay"
-          class="container hidden"
           ref="passwordOverlay"
+          class="container hidden"
         >
           <div class="dialog">
             <div class="row">
               <p
                 id="passwordText"
-                data-l10n-id="password_label"
                 ref="passwordText"
+                data-l10n-id="password_label"
               >
                 Enter the password to open this PDF file:
               </p>
             </div>
             <div class="row">
               <input
-                type="password"
                 id="password"
-                class="toolbarField"
                 ref="password"
+                type="password"
+                class="toolbarField"
               />
             </div>
             <div class="buttonRow">
               <button
                 id="passwordCancel"
-                class="overlayButton"
                 ref="passwordCancel"
+                class="overlayButton"
               >
                 <span data-l10n-id="password_cancel">Cancel</span>
               </button>
               <button
                 id="passwordSubmit"
-                class="overlayButton"
                 ref="passwordSubmit"
+                class="overlayButton"
               >
                 <span data-l10n-id="password_ok">OK</span>
               </button>
@@ -796,8 +796,8 @@
         </div>
         <div
           id="documentPropertiesOverlay"
-          class="container hidden"
           ref="documentPropertiesOverlay"
+          class="container hidden"
         >
           <div class="dialog">
             <div class="row">
@@ -880,8 +880,8 @@
             <div class="buttonRow">
               <button
                 id="documentPropertiesClose"
-                class="overlayButton"
                 ref="documentPropertiesClose"
+                class="overlayButton"
               >
                 <span data-l10n-id="document_properties_close">Close</span>
               </button>
@@ -890,8 +890,8 @@
         </div>
         <div
           id="printServiceOverlay"
-          class="container hidden"
           ref="printServiceOverlay"
+          class="container hidden"
         >
           <div class="dialog">
             <div class="row">
@@ -909,7 +909,7 @@
               >
             </div>
             <div class="buttonRow">
-              <button id="printCancel" class="overlayButton" ref="printCancel">
+              <button id="printCancel" ref="printCancel" class="overlayButton">
                 <span data-l10n-id="print_progress_close">Cancel</span>
               </button>
             </div>
@@ -928,13 +928,13 @@ export default {
   props: {
     src: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
-      pdfSrc: "",
-      pdfTitle: "",
+      pdfSrc: '',
+      pdfTitle: ''
     };
   },
   computed: {
@@ -963,7 +963,7 @@ export default {
           print: this.$refs.print,
           presentationModeButton: this.$refs.presentationMode,
           download: this.$refs.download,
-          viewBookmark: this.$refs.viewBookmark,
+          viewBookmark: this.$refs.viewBookmark
         },
         secondaryToolbar: {
           toolbar: this.$refs.secondaryToolbar,
@@ -987,7 +987,7 @@ export default {
           spreadNoneButton: this.$refs.spreadNone,
           spreadOddButton: this.$refs.spreadOdd,
           spreadEvenButton: this.$refs.spreadEven,
-          documentPropertiesButton: this.$refs.documentProperties,
+          documentPropertiesButton: this.$refs.documentProperties
         },
         sidebar: {
           outerContainer: this.$refs.outerContainer,
@@ -1002,11 +1002,11 @@ export default {
           attachmentsView: this.$refs.attachmentsView,
           layersView: this.$refs.layersView,
           outlineOptionsContainer: this.$refs.outlineOptionsContainer,
-          currentOutlineItemButton: this.$refs.currentOutlineItem,
+          currentOutlineItemButton: this.$refs.currentOutlineItem
         },
         sidebarResizer: {
           outerContainer: this.$refs.outerContainer,
-          resizer: this.$refs.sidebarResizer,
+          resizer: this.$refs.sidebarResizer
         },
         findBar: {
           bar: this.$refs.findbar,
@@ -1018,18 +1018,18 @@ export default {
           findMsg: this.$refs.findMsg,
           findResultsCount: this.$refs.findResultsCount,
           findPreviousButton: this.$refs.findPrevious,
-          findNextButton: this.$refs.findNext,
+          findNextButton: this.$refs.findNext
         },
         passwordOverlay: {
-          overlayName: "passwordOverlay",
+          overlayName: 'passwordOverlay',
           container: this.$refs.passwordOverlay,
           label: this.$refs.passwordText,
           input: this.$refs.password,
           submitButton: this.$refs.passwordSubmit,
-          cancelButton: this.$refs.passwordCancel,
+          cancelButton: this.$refs.passwordCancel
         },
         documentProperties: {
-          overlayName: "documentPropertiesOverlay",
+          overlayName: 'documentPropertiesOverlay',
           container: this.$refs.documentPropertiesOverlay,
           closeButton: this.$refs.documentPropertiesClose,
           fields: {
@@ -1046,8 +1046,8 @@ export default {
             version: this.$refs.versionField,
             pageCount: this.$refs.pageCountField,
             pageSize: this.$refs.pageSizeField,
-            linearized: this.$refs.linearizedField,
-          },
+            linearized: this.$refs.linearizedField
+          }
         },
         errorWrapper: {
           container: this.$refs.errorWrapper,
@@ -1055,37 +1055,37 @@ export default {
           closeButton: this.$refs.errorClose,
           errorMoreInfo: this.$refs.errorMoreInfo,
           moreInfoButton: this.$refs.errorShowMore,
-          lessInfoButton: this.$refs.errorShowLess,
+          lessInfoButton: this.$refs.errorShowLess
         },
         printContainer: this.$refs.printContainer,
-        openFileInputName: "fileInput",
+        openFileInputName: 'fileInput'
       };
-    },
+    }
+  },
+  watch: {
+    src(src) {
+      if (typeof src === 'string' && src !== '') this.init();
+    }
   },
   mounted() {
     if (process.env.USE_PDF_READER !== true) {
-      console.error("nuxtEnv not setting USE_PDF_READER");
+      console.error('nuxtEnv not setting USE_PDF_READER');
     }
-    if (document.querySelector("#pdf_reader_resource") === null) {
-      const pdfReaderResource = document.createElement("link");
-      pdfReaderResource.setAttribute("id", "pdf_reader_resource");
-      pdfReaderResource.setAttribute("rel", "resource");
-      pdfReaderResource.setAttribute("type", "application/l10n");
-      pdfReaderResource.setAttribute("href", "l10n/locale.properties");
+    if (document.querySelector('#pdf_reader_resource') === null) {
+      const pdfReaderResource = document.createElement('link');
+      pdfReaderResource.setAttribute('id', 'pdf_reader_resource');
+      pdfReaderResource.setAttribute('rel', 'resource');
+      pdfReaderResource.setAttribute('type', 'application/l10n');
+      pdfReaderResource.setAttribute('href', 'l10n/locale.properties');
       document.head.append(pdfReaderResource);
     }
-    if (typeof this.src === "string" && this.src !== "") this.init();
+    if (typeof this.src === 'string' && this.src !== '') this.init();
   },
   beforeUpdate() {
     this.removePdfFileInput();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.removePdfFileInput();
-  },
-  watch: {
-    src(src) {
-      if (typeof src === "string" && src !== "") this.init();
-    },
   },
   methods: {
     init() {
@@ -1102,24 +1102,24 @@ export default {
       await this.PDFViewer.run(this.PDFViewerConfig);
       await Promise.all([this.PDFViewer.initializedPromise]);
       // TODO 核心 pdfViewerAppOptions
-      this.$pdfViewerAppOptions.set("defaultUrl", url);
+      this.$pdfViewerAppOptions.set('defaultUrl', url);
       await this.PDFViewer.open(url);
     },
     removePdfFileInput() {
       const fileInput = document.querySelectorAll(
-        "body #" + this.PDFViewerConfig.openFileInputName,
+        'body #' + this.PDFViewerConfig.openFileInputName
       );
       fileInput.forEach((fileInput) => fileInput.remove());
     },
     getPdfTitle(pdfTitle) {
       this.pdfTitle = pdfTitle;
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-@import "pdfjs-dist/web/pdf_viewer.css";
+@import 'pdfjs-dist/web/pdf_viewer.css';
 /* Copyright 2014 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1160,364 +1160,364 @@ export default {
     scrollbar-color: var(--scrollbar-color) var(--scrollbar-bg-color);
   }
 }
-html[dir="ltr"] .verticalToolbarSeparator {
+html[dir='ltr'] .verticalToolbarSeparator {
   margin-left: 2px;
 }
-html[dir="rtl"] .verticalToolbarSeparator {
+html[dir='rtl'] .verticalToolbarSeparator {
   margin-right: 2px;
 }
 
-html[dir="ltr"] .secondaryToolbarButton {
+html[dir='ltr'] .secondaryToolbarButton {
   padding-left: 36px;
   text-align: left;
 }
-html[dir="rtl"] .secondaryToolbarButton {
+html[dir='rtl'] .secondaryToolbarButton {
   padding-right: 36px;
   text-align: right;
 }
 
-html[dir="ltr"] .secondaryToolbarButton > span {
+html[dir='ltr'] .secondaryToolbarButton > span {
   padding-right: 4px;
 }
-html[dir="rtl"] .secondaryToolbarButton > span {
+html[dir='rtl'] .secondaryToolbarButton > span {
   padding-left: 4px;
 }
 
-html[dir="ltr"] .toolbarButton.pdfSidebarNotification::after {
+html[dir='ltr'] .toolbarButton.pdfSidebarNotification::after {
   left: 17px;
 }
-html[dir="rtl"] .toolbarButton.pdfSidebarNotification::after {
+html[dir='rtl'] .toolbarButton.pdfSidebarNotification::after {
   right: 17px;
 }
 
-html[dir="rtl"] .toolbarButton#secondaryToolbarToggle::before {
+html[dir='rtl'] .toolbarButton#secondaryToolbarToggle::before {
   transform: scaleX(-1);
 }
 
-html[dir="ltr"] .secondaryToolbarButton::before {
+html[dir='ltr'] .secondaryToolbarButton::before {
   left: 12px;
 }
-html[dir="rtl"] .secondaryToolbarButton::before {
+html[dir='rtl'] .secondaryToolbarButton::before {
   right: 12px;
 }
 
-html[dir="ltr"] .dropdownToolbarButton > select {
+html[dir='ltr'] .dropdownToolbarButton > select {
   padding-left: 4px;
 }
-html[dir="rtl"] .dropdownToolbarButton > select {
+html[dir='rtl'] .dropdownToolbarButton > select {
   padding-right: 4px;
 }
 
-html[dir="ltr"] .dropdownToolbarButton::after {
+html[dir='ltr'] .dropdownToolbarButton::after {
   right: 7px;
 }
-html[dir="rtl"] .dropdownToolbarButton::after {
+html[dir='rtl'] .dropdownToolbarButton::after {
   left: 7px;
 }
 
-html[dir="ltr"] #toolbarViewerLeft > .toolbarButton:first-child,
-html[dir="rtl"] #toolbarViewerRight > .toolbarButton:last-child {
+html[dir='ltr'] #toolbarViewerLeft > .toolbarButton:first-child,
+html[dir='rtl'] #toolbarViewerRight > .toolbarButton:last-child {
   margin-left: 2px;
 }
 
-html[dir="ltr"] #toolbarViewerRight > .toolbarButton:last-child,
-html[dir="rtl"] #toolbarViewerLeft > .toolbarButton:first-child {
+html[dir='ltr'] #toolbarViewerRight > .toolbarButton:last-child,
+html[dir='rtl'] #toolbarViewerLeft > .toolbarButton:first-child {
   margin-right: 2px;
 }
 
-html[dir="ltr"] .splitToolbarButtonSeparator {
+html[dir='ltr'] .splitToolbarButtonSeparator {
   float: left;
 }
-html[dir="rtl"] .splitToolbarButtonSeparator {
+html[dir='rtl'] .splitToolbarButtonSeparator {
   float: right;
 }
 
-html[dir="ltr"] .splitToolbarButton > .toolbarButton:first-child,
-html[dir="rtl"] .splitToolbarButton > .toolbarButton:last-child {
+html[dir='ltr'] .splitToolbarButton > .toolbarButton:first-child,
+html[dir='rtl'] .splitToolbarButton > .toolbarButton:last-child {
   margin: 0;
 }
-html[dir="ltr"] .splitToolbarButton > .toolbarButton:last-child,
-html[dir="rtl"] .splitToolbarButton > .toolbarButton:first-child {
+html[dir='ltr'] .splitToolbarButton > .toolbarButton:last-child,
+html[dir='rtl'] .splitToolbarButton > .toolbarButton:first-child {
   margin: 0;
 }
 
-html[dir="ltr"] .splitToolbarButton > .toolbarButton {
+html[dir='ltr'] .splitToolbarButton > .toolbarButton {
   float: left;
 }
-html[dir="rtl"] .splitToolbarButton > .toolbarButton {
+html[dir='rtl'] .splitToolbarButton > .toolbarButton {
   float: right;
 }
 
-html[dir="ltr"] #toolbarViewerLeft,
-html[dir="rtl"] #toolbarViewerRight,
-html[dir="ltr"] #toolbarSidebarLeft,
-html[dir="rtl"] #toolbarSidebarRight {
+html[dir='ltr'] #toolbarViewerLeft,
+html[dir='rtl'] #toolbarViewerRight,
+html[dir='ltr'] #toolbarSidebarLeft,
+html[dir='rtl'] #toolbarSidebarRight {
   float: left;
 }
-html[dir="ltr"] #toolbarViewerRight,
-html[dir="rtl"] #toolbarViewerLeft,
-html[dir="ltr"] #toolbarSidebarRight,
-html[dir="rtl"] #toolbarSidebarLeft {
+html[dir='ltr'] #toolbarViewerRight,
+html[dir='rtl'] #toolbarViewerLeft,
+html[dir='ltr'] #toolbarSidebarRight,
+html[dir='rtl'] #toolbarSidebarLeft {
   float: right;
 }
-html[dir="ltr"] #toolbarViewerLeft > *,
-html[dir="ltr"] #toolbarViewerMiddle > *,
-html[dir="ltr"] #toolbarViewerRight > *,
-html[dir="ltr"] #toolbarSidebarLeft *,
-html[dir="ltr"] #toolbarSidebarRight *,
-html[dir="ltr"] .findbar * {
+html[dir='ltr'] #toolbarViewerLeft > *,
+html[dir='ltr'] #toolbarViewerMiddle > *,
+html[dir='ltr'] #toolbarViewerRight > *,
+html[dir='ltr'] #toolbarSidebarLeft *,
+html[dir='ltr'] #toolbarSidebarRight *,
+html[dir='ltr'] .findbar * {
   position: relative;
   float: left;
 }
-html[dir="rtl"] #toolbarViewerLeft > *,
-html[dir="rtl"] #toolbarViewerMiddle > *,
-html[dir="rtl"] #toolbarViewerRight > *,
-html[dir="rtl"] #toolbarSidebarLeft *,
-html[dir="rtl"] #toolbarSidebarRight *,
-html[dir="rtl"] .findbar * {
+html[dir='rtl'] #toolbarViewerLeft > *,
+html[dir='rtl'] #toolbarViewerMiddle > *,
+html[dir='rtl'] #toolbarViewerRight > *,
+html[dir='rtl'] #toolbarSidebarLeft *,
+html[dir='rtl'] #toolbarSidebarRight *,
+html[dir='rtl'] .findbar * {
   position: relative;
   float: right;
 }
 
-html[dir="ltr"] .doorHanger:after,
-html[dir="rtl"] .doorHangerRight:after {
+html[dir='ltr'] .doorHanger:after,
+html[dir='rtl'] .doorHangerRight:after {
   left: 10px;
   margin-left: -8px;
 }
 
-html[dir="ltr"] .doorHanger:before,
-html[dir="rtl"] .doorHangerRight:before {
+html[dir='ltr'] .doorHanger:before,
+html[dir='rtl'] .doorHangerRight:before {
   left: 10px;
   margin-left: -9px;
 }
 
-html[dir="rtl"] .doorHanger:after,
-html[dir="ltr"] .doorHangerRight:after {
+html[dir='rtl'] .doorHanger:after,
+html[dir='ltr'] .doorHangerRight:after {
   right: 10px;
   margin-right: -8px;
 }
 
-html[dir="rtl"] .doorHanger:before,
-html[dir="ltr"] .doorHangerRight:before {
+html[dir='rtl'] .doorHanger:before,
+html[dir='ltr'] .doorHangerRight:before {
   right: 10px;
   margin-right: -9px;
 }
 
-html[dir="ltr"] .secondaryToolbar {
+html[dir='ltr'] .secondaryToolbar {
   right: 4px;
 }
-html[dir="rtl"] .secondaryToolbar {
+html[dir='rtl'] .secondaryToolbar {
   left: 4px;
 }
 
-html[dir="ltr"] #findInput {
+html[dir='ltr'] #findInput {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-html[dir="rtl"] #findInput {
+html[dir='rtl'] #findInput {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-html[dir="ltr"] .findbar .splitToolbarButton > .findNext {
+html[dir='ltr'] .findbar .splitToolbarButton > .findNext {
   border-bottom-right-radius: 2px;
   border-top-right-radius: 2px;
   border-right: 1px solid var(--field-border-color);
 }
-html[dir="rtl"] .findbar .splitToolbarButton > .findNext {
+html[dir='rtl'] .findbar .splitToolbarButton > .findNext {
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
   border-left: 1px solid var(--field-border-color);
 }
 
-html[dir="ltr"] .findbar .splitToolbarButton {
+html[dir='ltr'] .findbar .splitToolbarButton {
   margin-left: 0;
   margin-right: 5px;
 }
-html[dir="rtl"] .findbar .splitToolbarButton {
+html[dir='rtl'] .findbar .splitToolbarButton {
   margin-left: 5px;
   margin-right: 0;
 }
 
-html[dir="ltr"] .findbar {
+html[dir='ltr'] .findbar {
   left: 64px;
 }
-html[dir="rtl"] .findbar {
+html[dir='rtl'] .findbar {
   right: 64px;
 }
 
-html[dir="ltr"] #loadingBar {
+html[dir='ltr'] #loadingBar {
   transition-property: left;
   left: 0;
   right: var(--loadingBar-end-offset);
 }
-html[dir="rtl"] #loadingBar {
+html[dir='rtl'] #loadingBar {
   transition-property: right;
   left: var(--loadingBar-end-offset);
   right: 0;
 }
 
-html[dir="ltr"] #outerContainer.sidebarOpen #loadingBar {
+html[dir='ltr'] #outerContainer.sidebarOpen #loadingBar {
   left: var(--sidebar-width);
 }
-html[dir="rtl"] #outerContainer.sidebarOpen #loadingBar {
+html[dir='rtl'] #outerContainer.sidebarOpen #loadingBar {
   right: var(--sidebar-width);
 }
 
-html[dir="ltr"] #sidebarResizer {
+html[dir='ltr'] #sidebarResizer {
   right: -6px;
 }
-html[dir="rtl"] #sidebarResizer {
+html[dir='rtl'] #sidebarResizer {
   left: -6px;
 }
 
-html[dir="ltr"] #toolbarSidebar {
+html[dir='ltr'] #toolbarSidebar {
   box-shadow:
     inset -1px 0 0 rgba(0, 0, 0, 0.25),
     0 1px 0 rgba(0, 0, 0, 0.15),
     0 0 1px rgba(0, 0, 0, 0.1);
 }
-html[dir="rtl"] #toolbarSidebar {
+html[dir='rtl'] #toolbarSidebar {
   box-shadow:
     inset 1px 0 0 rgba(0, 0, 0, 0.25),
     0 1px 0 rgba(0, 0, 0, 0.15),
     0 0 1px rgba(0, 0, 0, 0.1);
 }
 
-html[dir="ltr"] #toolbarSidebar .toolbarButton {
+html[dir='ltr'] #toolbarSidebar .toolbarButton {
   // margin-right: 2px !important;
   margin-right: 2px;
 }
-html[dir="rtl"] #toolbarSidebar .toolbarButton {
+html[dir='rtl'] #toolbarSidebar .toolbarButton {
   // margin-left: 2px !important;
   margin-left: 2px;
 }
 
-html[dir="ltr"] #toolbarSidebarRight .toolbarButton {
+html[dir='ltr'] #toolbarSidebarRight .toolbarButton {
   // margin-right: 3px !important;
   margin-right: 3px;
 }
-html[dir="rtl"] #toolbarSidebarRight .toolbarButton {
+html[dir='rtl'] #toolbarSidebarRight .toolbarButton {
   // margin-left: 3px !important;
   margin-left: 3px;
 }
 
-html[dir="ltr"]
+html[dir='ltr']
   #outerContainer.sidebarOpen
   #viewerContainer:not(.pdfPresentationMode) {
   transition-property: left;
   left: var(--sidebar-width);
 }
-html[dir="rtl"]
+html[dir='rtl']
   #outerContainer.sidebarOpen
   #viewerContainer:not(.pdfPresentationMode) {
   transition-property: right;
   right: var(--sidebar-width);
 }
 
-html[dir="ltr"] #sidebarContent {
+html[dir='ltr'] #sidebarContent {
   left: 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
 }
-html[dir="rtl"] #sidebarContent {
+html[dir='rtl'] #sidebarContent {
   right: 0;
   box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.25);
 }
 
-html[dir="ltr"] #outerContainer.sidebarOpen #sidebarContainer {
+html[dir='ltr'] #outerContainer.sidebarOpen #sidebarContainer {
   left: 0;
 }
-html[dir="rtl"] #outerContainer.sidebarOpen #sidebarContainer {
+html[dir='rtl'] #outerContainer.sidebarOpen #sidebarContainer {
   right: 0;
 }
 
-html[dir="ltr"] #sidebarContainer {
+html[dir='ltr'] #sidebarContainer {
   transition-property: left;
   left: calc(0px - var(--sidebar-width));
   border-right: var(--doorhanger-border-color-whcm);
 }
-html[dir="rtl"] #sidebarContainer {
+html[dir='rtl'] #sidebarContainer {
   transition-property: right;
   right: calc(0px - var(--sidebar-width));
   border-left: var(--doorhanger-border-color-whcm);
 }
 
-html[dir="ltr"] #numPages.toolbarLabel {
+html[dir='ltr'] #numPages.toolbarLabel {
   padding-left: 3px;
 }
-html[dir="rtl"] #numPages.toolbarLabel {
+html[dir='rtl'] #numPages.toolbarLabel {
   padding-right: 3px;
 }
 
-html[dir="ltr"] .thumbnail {
+html[dir='ltr'] .thumbnail {
   float: left;
 }
-html[dir="rtl"] .thumbnail {
+html[dir='rtl'] .thumbnail {
   float: right;
 }
 
-html[dir="ltr"] .treeWithDeepNesting > .treeItem,
-html[dir="ltr"] .treeItem > .treeItems {
+html[dir='ltr'] .treeWithDeepNesting > .treeItem,
+html[dir='ltr'] .treeItem > .treeItems {
   margin-left: 20px;
 }
 
-html[dir="rtl"] .treeWithDeepNesting > .treeItem,
-html[dir="rtl"] .treeItem > .treeItems {
+html[dir='rtl'] .treeWithDeepNesting > .treeItem,
+html[dir='rtl'] .treeItem > .treeItems {
   margin-right: 20px;
 }
-html[dir="ltr"] .treeItem > a {
+html[dir='ltr'] .treeItem > a {
   padding: 2px 0 5px 4px;
 }
-html[dir="rtl"] .treeItem > a {
+html[dir='rtl'] .treeItem > a {
   padding: 2px 4px 5px 0;
 }
 
-html[dir="ltr"] #layersView .treeItem > a > label {
+html[dir='ltr'] #layersView .treeItem > a > label {
   padding-left: 4px;
 }
-html[dir="rtl"] #layersView .treesItem > a > label {
+html[dir='rtl'] #layersView .treesItem > a > label {
   padding-right: 4px;
 }
 
-html[dir="rtl"] .treeItemToggler.treeItemsHidden::before {
+html[dir='rtl'] .treeItemToggler.treeItemsHidden::before {
   transform: scaleX(-1);
 }
 
-html[dir="ltr"] .treeItemToggler {
+html[dir='ltr'] .treeItemToggler {
   float: left;
 }
-html[dir="rtl"] .treeItemToggler {
+html[dir='rtl'] .treeItemToggler {
   float: right;
 }
-html[dir="ltr"] .treeItemToggler::before {
+html[dir='ltr'] .treeItemToggler::before {
   right: 4px;
 }
-html[dir="rtl"] .treeItemToggler::before {
+html[dir='rtl'] .treeItemToggler::before {
   left: 4px;
 }
-html[dir="ltr"] #documentPropertiesOverlay .row > * {
+html[dir='ltr'] #documentPropertiesOverlay .row > * {
   text-align: left;
 }
-html[dir="rtl"] #documentPropertiesOverlay .row > * {
+html[dir='rtl'] #documentPropertiesOverlay .row > * {
   text-align: right;
 }
 
 @media all and (max-width: 840px) {
-  html[dir="ltr"] #outerContainer.sidebarOpen #viewerContainer {
+  html[dir='ltr'] #outerContainer.sidebarOpen #viewerContainer {
     // left: 0 !important;
     left: 0;
   }
-  html[dir="rtl"] #outerContainer.sidebarOpen #viewerContainer {
+  html[dir='rtl'] #outerContainer.sidebarOpen #viewerContainer {
     // right: 0 !important;
     right: 0;
   }
 }
 
 @media all and (max-width: 640px) {
-  html[dir="ltr"] .findbar {
+  html[dir='ltr'] .findbar {
     left: 34px;
   }
-  html[dir="rtl"] .findbar {
+  html[dir='rtl'] .findbar {
     right: 34px;
   }
 }
@@ -1552,7 +1552,7 @@ body[data-pdfjsprinting] #printContainer {
   top: 0;
   right: 0;
   bottom: 0;
-  background: url("@/static/img/pdfjs/loading-icon.gif") center no-repeat;
+  background: url('@/static/img/pdfjs/loading-icon.gif') center no-repeat;
 }
 .pdfViewer .page .loadingIcon.notVisible {
   background: none;
@@ -1750,7 +1750,7 @@ body[data-pdfjsprinting] #printContainer {
 .annotationLayer .buttonWidgetAnnotation.checkBox input:checked:after,
 .annotationLayer .buttonWidgetAnnotation.radioButton input:checked:before {
   background-color: rgba(0, 0, 0, 1);
-  content: "";
+  content: '';
   display: block;
   position: absolute;
 }
@@ -2185,7 +2185,7 @@ body[data-pdfjsprinting] #printContainer {
     -moz-appearance: none;
     appearance: none;
     text-indent: 1px;
-    text-overflow: "";
+    text-overflow: '';
   }
 }
 
@@ -2215,8 +2215,8 @@ body[data-pdfjsprinting] #printContainer {
   overflow: visible;
   border: var(--page-border);
   background-clip: content-box;
-  -o-border-image: url("@/static/img/pdfjs/shadow.png") 9 9 repeat;
-  border-image: url("@/static/img/pdfjs/shadow.png") 9 9 repeat;
+  -o-border-image: url('@/static/img/pdfjs/shadow.png') 9 9 repeat;
+  border-image: url('@/static/img/pdfjs/shadow.png') 9 9 repeat;
   background-color: rgba(255, 255, 255, 1);
 }
 
@@ -2357,43 +2357,43 @@ body[data-pdfjsprinting] #printContainer {
   --overlay-button-bg-color: rgba(12, 12, 13, 0.1);
   --overlay-button-hover-bg-color: rgba(12, 12, 13, 0.3);
 
-  --loading-icon: url("@/static/img/pdfjs/loading.svg");
-  --treeitem-expanded-icon: url("@/static/img/pdfjs/treeitem-expanded.svg");
-  --treeitem-collapsed-icon: url("@/static/img/pdfjs/treeitem-collapsed.svg");
-  --toolbarButton-menuArrow-icon: url("@/static/img/pdfjs/toolbarButton-menuArrow.svg");
-  --toolbarButton-sidebarToggle-icon: url("@/static/img/pdfjs/toolbarButton-sidebarToggle.svg");
-  --toolbarButton-secondaryToolbarToggle-icon: url("@/static/img/pdfjs/toolbarButton-secondaryToolbarToggle.svg");
-  --toolbarButton-pageUp-icon: url("@/static/img/pdfjs/toolbarButton-pageUp.svg");
-  --toolbarButton-pageDown-icon: url("@/static/img/pdfjs/toolbarButton-pageDown.svg");
-  --toolbarButton-zoomOut-icon: url("@/static/img/pdfjs/toolbarButton-zoomOut.svg");
-  --toolbarButton-zoomIn-icon: url("@/static/img/pdfjs/toolbarButton-zoomIn.svg");
-  --toolbarButton-presentationMode-icon: url("@/static/img/pdfjs/toolbarButton-presentationMode.svg");
-  --toolbarButton-print-icon: url("@/static/img/pdfjs/toolbarButton-print.svg");
-  --toolbarButton-openFile-icon: url("@/static/img/pdfjs/toolbarButton-openFile.svg");
-  --toolbarButton-download-icon: url("@/static/img/pdfjs/toolbarButton-download.svg");
-  --toolbarButton-bookmark-icon: url("@/static/img/pdfjs/toolbarButton-bookmark.svg");
-  --toolbarButton-viewThumbnail-icon: url("@/static/img/pdfjs/toolbarButton-viewThumbnail.svg");
-  --toolbarButton-viewOutline-icon: url("@/static/img/pdfjs/toolbarButton-viewOutline.svg");
-  --toolbarButton-viewAttachments-icon: url("@/static/img/pdfjs/toolbarButton-viewAttachments.svg");
-  --toolbarButton-viewLayers-icon: url("@/static/img/pdfjs/toolbarButton-viewLayers.svg");
-  --toolbarButton-currentOutlineItem-icon: url("@/static/img/pdfjs/toolbarButton-currentOutlineItem.svg");
-  --toolbarButton-search-icon: url("@/static/img/pdfjs/toolbarButton-search.svg");
-  --findbarButton-previous-icon: url("@/static/img/pdfjs/findbarButton-previous.svg");
-  --findbarButton-next-icon: url("@/static/img/pdfjs/findbarButton-next.svg");
-  --secondaryToolbarButton-firstPage-icon: url("@/static/img/pdfjs/secondaryToolbarButton-firstPage.svg");
-  --secondaryToolbarButton-lastPage-icon: url("@/static/img/pdfjs/secondaryToolbarButton-lastPage.svg");
-  --secondaryToolbarButton-rotateCcw-icon: url("@/static/img/pdfjs/secondaryToolbarButton-rotateCcw.svg");
-  --secondaryToolbarButton-rotateCw-icon: url("@/static/img/pdfjs/secondaryToolbarButton-rotateCw.svg");
-  --secondaryToolbarButton-selectTool-icon: url("@/static/img/pdfjs/secondaryToolbarButton-selectTool.svg");
-  --secondaryToolbarButton-handTool-icon: url("@/static/img/pdfjs/secondaryToolbarButton-handTool.svg");
-  --secondaryToolbarButton-scrollPage-icon: url("@/static/img/pdfjs/secondaryToolbarButton-scrollPage.svg");
-  --secondaryToolbarButton-scrollVertical-icon: url("@/static/img/pdfjs/secondaryToolbarButton-scrollVertical.svg");
-  --secondaryToolbarButton-scrollHorizontal-icon: url("@/static/img/pdfjs/secondaryToolbarButton-scrollHorizontal.svg");
-  --secondaryToolbarButton-scrollWrapped-icon: url("@/static/img/pdfjs/secondaryToolbarButton-scrollWrapped.svg");
-  --secondaryToolbarButton-spreadNone-icon: url("@/static/img/pdfjs/secondaryToolbarButton-spreadNone.svg");
-  --secondaryToolbarButton-spreadOdd-icon: url("@/static/img/pdfjs/secondaryToolbarButton-spreadOdd.svg");
-  --secondaryToolbarButton-spreadEven-icon: url("@/static/img/pdfjs/secondaryToolbarButton-spreadEven.svg");
-  --secondaryToolbarButton-documentProperties-icon: url("@/static/img/pdfjs/secondaryToolbarButton-documentProperties.svg");
+  --loading-icon: url('@/static/img/pdfjs/loading.svg');
+  --treeitem-expanded-icon: url('@/static/img/pdfjs/treeitem-expanded.svg');
+  --treeitem-collapsed-icon: url('@/static/img/pdfjs/treeitem-collapsed.svg');
+  --toolbarButton-menuArrow-icon: url('@/static/img/pdfjs/toolbarButton-menuArrow.svg');
+  --toolbarButton-sidebarToggle-icon: url('@/static/img/pdfjs/toolbarButton-sidebarToggle.svg');
+  --toolbarButton-secondaryToolbarToggle-icon: url('@/static/img/pdfjs/toolbarButton-secondaryToolbarToggle.svg');
+  --toolbarButton-pageUp-icon: url('@/static/img/pdfjs/toolbarButton-pageUp.svg');
+  --toolbarButton-pageDown-icon: url('@/static/img/pdfjs/toolbarButton-pageDown.svg');
+  --toolbarButton-zoomOut-icon: url('@/static/img/pdfjs/toolbarButton-zoomOut.svg');
+  --toolbarButton-zoomIn-icon: url('@/static/img/pdfjs/toolbarButton-zoomIn.svg');
+  --toolbarButton-presentationMode-icon: url('@/static/img/pdfjs/toolbarButton-presentationMode.svg');
+  --toolbarButton-print-icon: url('@/static/img/pdfjs/toolbarButton-print.svg');
+  --toolbarButton-openFile-icon: url('@/static/img/pdfjs/toolbarButton-openFile.svg');
+  --toolbarButton-download-icon: url('@/static/img/pdfjs/toolbarButton-download.svg');
+  --toolbarButton-bookmark-icon: url('@/static/img/pdfjs/toolbarButton-bookmark.svg');
+  --toolbarButton-viewThumbnail-icon: url('@/static/img/pdfjs/toolbarButton-viewThumbnail.svg');
+  --toolbarButton-viewOutline-icon: url('@/static/img/pdfjs/toolbarButton-viewOutline.svg');
+  --toolbarButton-viewAttachments-icon: url('@/static/img/pdfjs/toolbarButton-viewAttachments.svg');
+  --toolbarButton-viewLayers-icon: url('@/static/img/pdfjs/toolbarButton-viewLayers.svg');
+  --toolbarButton-currentOutlineItem-icon: url('@/static/img/pdfjs/toolbarButton-currentOutlineItem.svg');
+  --toolbarButton-search-icon: url('@/static/img/pdfjs/toolbarButton-search.svg');
+  --findbarButton-previous-icon: url('@/static/img/pdfjs/findbarButton-previous.svg');
+  --findbarButton-next-icon: url('@/static/img/pdfjs/findbarButton-next.svg');
+  --secondaryToolbarButton-firstPage-icon: url('@/static/img/pdfjs/secondaryToolbarButton-firstPage.svg');
+  --secondaryToolbarButton-lastPage-icon: url('@/static/img/pdfjs/secondaryToolbarButton-lastPage.svg');
+  --secondaryToolbarButton-rotateCcw-icon: url('@/static/img/pdfjs/secondaryToolbarButton-rotateCcw.svg');
+  --secondaryToolbarButton-rotateCw-icon: url('@/static/img/pdfjs/secondaryToolbarButton-rotateCw.svg');
+  --secondaryToolbarButton-selectTool-icon: url('@/static/img/pdfjs/secondaryToolbarButton-selectTool.svg');
+  --secondaryToolbarButton-handTool-icon: url('@/static/img/pdfjs/secondaryToolbarButton-handTool.svg');
+  --secondaryToolbarButton-scrollPage-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollPage.svg');
+  --secondaryToolbarButton-scrollVertical-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollVertical.svg');
+  --secondaryToolbarButton-scrollHorizontal-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollHorizontal.svg');
+  --secondaryToolbarButton-scrollWrapped-icon: url('@/static/img/pdfjs/secondaryToolbarButton-scrollWrapped.svg');
+  --secondaryToolbarButton-spreadNone-icon: url('@/static/img/pdfjs/secondaryToolbarButton-spreadNone.svg');
+  --secondaryToolbarButton-spreadOdd-icon: url('@/static/img/pdfjs/secondaryToolbarButton-spreadOdd.svg');
+  --secondaryToolbarButton-spreadEven-icon: url('@/static/img/pdfjs/secondaryToolbarButton-spreadEven.svg');
+  --secondaryToolbarButton-documentProperties-icon: url('@/static/img/pdfjs/secondaryToolbarButton-documentProperties.svg');
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2439,7 +2439,7 @@ body[data-pdfjsprinting] #printContainer {
     /* This image is used in <input> elements, which unfortunately means that
      * the `mask-image` approach used with all of the other images doesn't work
      * here; hence why we still have two versions of this particular image. */
-    --loading-icon: url("@/static/img/pdfjs/loading-dark.svg");
+    --loading-icon: url('@/static/img/pdfjs/loading-dark.svg');
   }
 }
 
@@ -2740,7 +2740,7 @@ body[data-pdfjsprinting] #printContainer {
   width: 29px;
 }
 
-.findbar input[type="checkbox"] {
+.findbar input[type='checkbox'] {
   pointer-events: none;
 }
 
@@ -2756,7 +2756,7 @@ body[data-pdfjsprinting] #printContainer {
   background-color: var(--button-hover-color);
 }
 
-.findbar .toolbarField[type="checkbox"]:checked + .toolbarLabel {
+.findbar .toolbarField[type='checkbox']:checked + .toolbarLabel {
   // background-color: var(--toggled-btn-bg-color) !important;
   background-color: var(--toggled-btn-bg-color);
   color: var(--toggled-btn-color);
@@ -2771,15 +2771,15 @@ body[data-pdfjsprinting] #printContainer {
 #findInput::placeholder {
   font-style: normal;
 }
-#findInput[data-status="pending"] {
+#findInput[data-status='pending'] {
   background-image: var(--loading-icon);
   background-repeat: no-repeat;
   background-position: 98%;
 }
-html[dir="rtl"] #findInput[data-status="pending"] {
+html[dir='rtl'] #findInput[data-status='pending'] {
   background-position: 3px;
 }
-#findInput[data-status="notFound"] {
+#findInput[data-status='notFound'] {
   background-color: rgba(255, 102, 102, 1);
 }
 
@@ -2812,7 +2812,7 @@ html[dir="rtl"] #findInput[data-status="pending"] {
 .doorHangerRight:before {
   bottom: 100%;
   border: solid rgba(0, 0, 0, 0);
-  content: " ";
+  content: ' ';
   height: 0;
   width: 0;
   position: absolute;
@@ -3037,7 +3037,7 @@ html[dir="rtl"] #findInput[data-status="pending"] {
   width: 16px;
   height: 16px;
 
-  content: "";
+  content: '';
   background-color: var(--toolbar-icon-bg-color);
   -webkit-mask-size: cover;
   mask-size: cover;
@@ -3071,7 +3071,7 @@ html[dir="rtl"] #findInput[data-status="pending"] {
   -webkit-mask-image: var(--toolbarButton-sidebarToggle-icon);
   mask-image: var(--toolbarButton-sidebarToggle-icon);
 }
-html[dir="rtl"] .toolbarButton#sidebarToggle::before {
+html[dir='rtl'] .toolbarButton#sidebarToggle::before {
   transform: scaleX(-1);
 }
 
@@ -3139,7 +3139,7 @@ html[dir="rtl"] .toolbarButton#sidebarToggle::before {
   text-decoration: none;
 }
 
-.bookmark[href="#"] {
+.bookmark[href='#'] {
   opacity: 0.5;
   pointer-events: none;
 }
@@ -3159,7 +3159,7 @@ html[dir="rtl"] .toolbarButton#sidebarToggle::before {
   -webkit-mask-image: var(--toolbarButton-viewOutline-icon);
   mask-image: var(--toolbarButton-viewOutline-icon);
 }
-html[dir="rtl"] #viewOutline.toolbarButton::before {
+html[dir='rtl'] #viewOutline.toolbarButton::before {
   transform: scaleX(-1);
 }
 
@@ -3177,7 +3177,7 @@ html[dir="rtl"] #viewOutline.toolbarButton::before {
   -webkit-mask-image: var(--toolbarButton-currentOutlineItem-icon);
   mask-image: var(--toolbarButton-currentOutlineItem-icon);
 }
-html[dir="rtl"] #currentOutlineItem.toolbarButton::before {
+html[dir='rtl'] #currentOutlineItem.toolbarButton::before {
   transform: scaleX(-1);
 }
 
@@ -3191,7 +3191,7 @@ html[dir="rtl"] #currentOutlineItem.toolbarButton::before {
   display: inline-block;
   top: 1px;
   /* Create a filled circle, with a diameter of 9 pixels, using only CSS: */
-  content: "";
+  content: '';
   background-color: rgba(112, 219, 85, 1);
   height: 9px;
   width: 9px;
@@ -3313,18 +3313,18 @@ html[dir="rtl"] #currentOutlineItem.toolbarButton::before {
   outline-style: none;
 }
 
-.toolbarField[type="checkbox"] {
+.toolbarField[type='checkbox'] {
   opacity: 0;
   // position: absolute !important;
   position: absolute;
   left: 0;
 }
 
-html[dir="ltr"] .toolbarField[type="checkbox"] {
+html[dir='ltr'] .toolbarField[type='checkbox'] {
   margin: 10px 0 3px 7px;
 }
 
-html[dir="rtl"] .toolbarField[type="checkbox"] {
+html[dir='rtl'] .toolbarField[type='checkbox'] {
   margin: 10px 7px 3px 0;
 }
 
