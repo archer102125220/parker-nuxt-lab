@@ -1,6 +1,7 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 import { loadCSS } from '@app/utils/helpers/load-css';
 import { importSheet } from '@app/utils/third-party/univer/create-sheet';
+import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 
 const UNIVERSAL_VERSION = '0.23.0';
 // const UNIVER_SERVER_ENDPOINT =
@@ -572,6 +573,11 @@ export async function createDocInstance(
   const { UniverExchangeClientPlugin } = UniverProExchangeClient;
   const { UniverDocsExchangeClientPlugin } = UniverProDocsExchangeClient;
 
+  const [LocalExportButtonPlugin] =
+    await Promise.all([
+      createdLocalExportButtonPlugin()
+    ]);
+
   const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
     locales: {},
@@ -581,6 +587,7 @@ export async function createDocInstance(
       UniverDocsThreadCommentPreset()
     ],
     plugins: [
+      LocalExportButtonPlugin,
       UniverDocsQuickInsertUIPlugin
       // [UniverWatermarkPlugin, {
       //   textWatermarkSettings: {

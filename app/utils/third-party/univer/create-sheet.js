@@ -2,6 +2,7 @@ import { loadScript } from '@app/utils/helpers/load-script';
 import { loadCSS } from '@app/utils/helpers/load-css';
 import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
+import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 
 const UNIVERSAL_VERSION = '0.22.1';
 // const UNIVER_SERVER_ENDPOINT =
@@ -784,10 +785,12 @@ export async function createSheetInstance(
   // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
   // const { UniverUniscriptPlugin } = UniverUniscript;
 
-  const [ImportCSVPlugin, ExportCSVPlugin] = await Promise.all([
-    createdImportCSVButtonPlugin(),
-    createdExportCSVButtonPlugin()
-  ]);
+  const [ImportCSVPlugin, ExportCSVPlugin, LocalExportButtonPlugin] =
+    await Promise.all([
+      createdImportCSVButtonPlugin(),
+      createdExportCSVButtonPlugin(),
+      createdLocalExportButtonPlugin()
+    ]);
 
   const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
@@ -813,6 +816,7 @@ export async function createSheetInstance(
     plugins: [
       ImportCSVPlugin,
       ExportCSVPlugin,
+      LocalExportButtonPlugin,
       // [_UniverWatermarkPlugin, {
       //   textWatermarkSettings: {
       //     content: '測試浮水印',
