@@ -100,7 +100,20 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
               // 1. 取得完整的文件 Snapshot JSON
               const snapshot = doc.getSnapshot();
-              const snapshotStr = JSON.stringify(snapshot);
+              // 為了相容 Universer 的 Protobuf 定義，深拷貝一份，並移除後端不認識的屬性
+              const clonedSnapshot = JSON.parse(JSON.stringify(snapshot));
+              if (clonedSnapshot) {
+                const invalidKeys = [
+                  'id', 'documentStyle', 'locale', 'title', 'settings', 'disabled', 'rev', 
+                  'tableSource', 'footers', 'headers', 'lists', 'drawings', 'drawingsOrder', 
+                  'headerFooterDrawingsOrder', 'resources'
+                ];
+                invalidKeys.forEach(key => {
+                  if (key in clonedSnapshot) delete clonedSnapshot[key];
+                });
+              }
+              
+              const snapshotStr = JSON.stringify(clonedSnapshot);
 
               // 定義後端 API 路徑 (這裡先預設使用預設的 proxy 或直連路徑)
               const UNIVERSER_HOST =
@@ -109,26 +122,24 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const API_PREFIX = `${UNIVERSER_HOST}/universer-api`;
 
               // 2. 上傳快照到 Universer 取得 FileId (jsonID)
-              const blob = new Blob([snapshotStr], { type: 'application/json' });
+              const blob = new Blob([snapshotStr], {
+                type: 'application/json'
+              });
               const formData = new FormData();
               // 必須使用 Blob 封裝以符合 multipart/form-data 格式
-              formData.append(
-                'file',
-                blob,
-                'snapshot.json'
-              );
+              formData.append('file', blob, 'snapshot.json');
 
               const uploadUrl = `${API_PREFIX}/stream/file/upload?size=${blob.size}&source=1&flate=false`;
               const uploadRes = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formData
               });
-              
+
               if (!uploadRes.ok) {
                 const errText = await uploadRes.text();
                 throw new Error(`上傳失敗 (${uploadRes.status}): ${errText}`);
               }
-              
+
               const uploadData = await uploadRes.json();
 
               // 注意: Univer 的成功代碼通常為 0 或 1
@@ -177,8 +188,13 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   taskData.status === 'error' ||
                   taskData.status === 'failed'
                 ) {
+                  console.error(
+                    '[LocalExportPlugin] Task failed details:',
+                    taskData
+                  );
                   throw new Error(
-                    taskData.error?.message || '後端匯出任務執行失敗'
+                    taskData.error?.message ||
+                      '後端匯出任務執行失敗: ' + JSON.stringify(taskData)
                   );
                 }
 
