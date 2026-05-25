@@ -96,8 +96,9 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const doc = univerInstanceService.getFocusedUnit();
             if (typeof doc !== 'object' || doc === null) return false;
             const focusedUnitId = doc.getUnitId();
-            if (typeof focusedUnitId !== 'string' || focusedUnitId === '')
+            if (typeof focusedUnitId !== 'string' || focusedUnitId === '') {
               return false;
+            }
 
             const isDoc = doc.type === UniverInstanceType.UNIVER_DOC;
             const isSheet = doc.type === UniverInstanceType.UNIVER_SHEET;
