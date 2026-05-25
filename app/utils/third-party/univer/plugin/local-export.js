@@ -181,7 +181,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 const taskRes = await fetch(taskUrl);
                 const taskData = await taskRes.json();
 
-                if (taskData.status === 'success') {
+                if (taskData.status === 'success' || taskData.status === 'done') {
                   isSuccess = true;
                   finalTaskData = taskData;
                   break;
@@ -221,6 +221,12 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 finalTaskData.downloadUrl !== ''
               ) {
                 downloadUrl = finalTaskData.downloadUrl;
+              } else if (
+                finalTaskData.export &&
+                typeof finalTaskData.export.fileID === 'string' &&
+                finalTaskData.export.fileID !== ''
+              ) {
+                downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.export.fileID}/download`;
               } else if (
                 typeof finalTaskData.fileID === 'string' &&
                 finalTaskData.fileID !== ''
