@@ -103,10 +103,12 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const isDoc = doc.type === UniverInstanceType.UNIVER_DOC;
             const isSheet = doc.type === UniverInstanceType.UNIVER_SHEET;
 
-            if (!isDoc && !isSheet) return false;
+            if (isDoc === false && isSheet === false) {
+              return false;
+            }
 
-            const fileType = isDoc ? 1 : 2; // 1: Doc, 2: Sheet
-            const fileExtension = isDoc ? 'docx' : 'xlsx';
+            const fileType = isDoc === true ? 1 : 2; // 1: Doc, 2: Sheet
+            const fileExtension = isDoc === true ? 'docx' : 'xlsx';
 
             try {
               messageService.show({
@@ -118,10 +120,10 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const snapshot = doc.getSnapshot();
               let exportJson;
 
-              if (isDoc) {
+              if (isDoc === true) {
                 exportJson =
                   await transformDocumentDataToSnapshotJson(snapshot);
-              } else if (isSheet) {
+              } else if (isSheet === true) {
                 exportJson =
                   await transformWorkbookDataToSnapshotJson(snapshot);
               } else {
