@@ -197,12 +197,11 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
     // 確保 Univer DI 容器在 JS 中解析這些依賴
     // 第一個元素是空的 (,)，因為索引 0 是未被注入的 _config 參數
     setDependencies(ExportCSVButtonPlugin, [
-      , // eslint-disable-line no-sparse-arrays
       [Injector],
       [IMenuManagerService],
       [ICommandService],
       [ComponentManager]
-    ]);
+    ], 1); // <--- 加入 1，讓依賴注入從 constructor 的第 1 個參數開始，完美跳過第 0 個的 _config
 
     resolve(ExportCSVButtonPlugin);
   });

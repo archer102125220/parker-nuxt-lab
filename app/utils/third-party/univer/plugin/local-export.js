@@ -323,12 +323,11 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
     }
 
     setDependencies(LocalExportButtonPlugin, [
-      , // eslint-disable-line no-sparse-arrays
       [Injector],
       [IMenuManagerService],
       [ICommandService],
       [ComponentManager]
-    ]);
+    ], 1);
 
     console.log({ LocalExportButtonPlugin });
 

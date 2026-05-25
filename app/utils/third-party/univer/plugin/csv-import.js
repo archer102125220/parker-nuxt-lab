@@ -249,12 +249,11 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
     // 確保 Univer 依賴注入容器在 JS 中正確解析這些依賴
     // 第一個元素是空的 (,)，因為索引 0 是 _config 參數，該參數不被注入
     setDependencies(ImportCSVButtonPlugin, [
-      , // eslint-disable-line no-sparse-arrays
       [Injector],
       [IMenuManagerService],
       [ICommandService],
       [ComponentManager]
-    ]);
+    ], 1); // <--- 加入 1，讓依賴注入從 constructor 的第 1 個參數開始，完美跳過第 0 個的 _config
 
     resolve(ImportCSVButtonPlugin);
   });
