@@ -226,20 +226,19 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 typeof finalTaskData.export.fileID === 'string' &&
                 finalTaskData.export.fileID !== ''
               ) {
-                downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.export.fileID}/download`;
+                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${finalTaskData.export.fileID}`;
               } else if (
                 typeof finalTaskData.fileID === 'string' &&
                 finalTaskData.fileID !== ''
               ) {
-                downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.fileID}/download`;
+                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${finalTaskData.fileID}`;
               } else if (
                 typeof finalTaskData.fileId === 'string' &&
                 finalTaskData.fileId !== ''
               ) {
-                downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.fileId}/download`;
+                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${finalTaskData.fileId}`;
               } else {
-                // 如果沒有明確的下載網址，預設嘗試用 taskID 當作 fileID 下載看看
-                downloadUrl = `${UNIVERSER_HOST}/file/${taskID}/download`;
+                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${taskID}`;
                 console.warn(
                   '未在任務結果中找到明確的下載欄位，嘗試使用預設組合:',
                   finalTaskData
