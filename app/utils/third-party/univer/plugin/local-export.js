@@ -109,19 +109,26 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const API_PREFIX = `${UNIVERSER_HOST}/universer-api`;
 
               // 2. 上傳快照到 Universer 取得 FileId (jsonID)
+              const blob = new Blob([snapshotStr], { type: 'application/json' });
               const formData = new FormData();
               // 必須使用 Blob 封裝以符合 multipart/form-data 格式
               formData.append(
                 'file',
-                new Blob([snapshotStr], { type: 'application/json' }),
+                blob,
                 'snapshot.json'
               );
 
-              const uploadUrl = `${API_PREFIX}/stream/file/upload?size=${snapshotStr.length}&source=1&flate=false`;
+              const uploadUrl = `${API_PREFIX}/stream/file/upload?size=${blob.size}&source=1&flate=false`;
               const uploadRes = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formData
               });
+              
+              if (!uploadRes.ok) {
+                const errText = await uploadRes.text();
+                throw new Error(`上傳失敗 (${uploadRes.status}): ${errText}`);
+              }
+              
               const uploadData = await uploadRes.json();
 
               // 注意: Univer 的成功代碼通常為 0 或 1
