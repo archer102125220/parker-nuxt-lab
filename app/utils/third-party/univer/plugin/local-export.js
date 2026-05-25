@@ -6,7 +6,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       UniverCore = {},
       UniverDesign = {}
     } = window;
-    const wendellhuRedi = window['@wendellhu/redi'];
+    const wendellhuRedi = window['@wendellhu/redi'] || {};
 
     const { Observable } = rxjs;
     const { Injector, setDependencies } = wendellhuRedi;
