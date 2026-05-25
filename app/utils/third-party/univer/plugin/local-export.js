@@ -72,11 +72,10 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           handler: async (accessor) => {
             const univerInstanceService = accessor.get(IUniverInstanceService);
-            const focusedUnitId = univerInstanceService.getFocusedUnitId();
-            if (!focusedUnitId) return false;
-
-            const doc = univerInstanceService.getUnit(focusedUnitId);
+            const doc = univerInstanceService.getFocusedUnit();
             if (!doc) return false;
+            const focusedUnitId = doc.getUnitId();
+            if (typeof focusedUnitId !== 'string' || focusedUnitId === '') return false;
 
             const isDoc = doc.type === UniverInstanceType.UNIVER_DOC;
             const isSheet = doc.type === UniverInstanceType.UNIVER_SHEET;
@@ -114,7 +113,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const uploadData = await uploadRes.json();
 
               // 注意: Univer 的成功代碼通常為 0 或 1
-              if (!uploadData || !uploadData.FileId) {
+              if (typeof uploadData !== 'object' || uploadData === null || !uploadData.FileId) {
                 throw new Error('上傳 Snapshot 失敗');
               }
               const fileId = uploadData.FileId;
@@ -133,7 +132,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const exportData = await exportRes.json();
               
               const taskID = exportData.taskID;
-              if (!taskID) {
+              if (typeof taskID !== 'string' || taskID === '') {
                 throw new Error('呼叫匯出任務失敗，未取得 taskID');
               }
 
@@ -158,7 +157,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 await new Promise((r) => setTimeout(r, 1000));
               }
 
-              if (!isSuccess) {
+              if (!isSuccess || finalTaskData === null) {
                 throw new Error('匯出任務超時');
               }
 
@@ -166,11 +165,14 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               // 通常 Univer 後端轉換完成後，taskData 裡面會帶有結果的 URL 或新的 FileId
               // 實際的欄位名稱可能因版本略有不同，以下根據經驗涵蓋常見的幾種情形
               let downloadUrl = '';
-              if (finalTaskData.url || finalTaskData.downloadUrl) {
-                downloadUrl = finalTaskData.url || finalTaskData.downloadUrl;
-              } else if (finalTaskData.fileID || finalTaskData.fileId) {
-                const outId = finalTaskData.fileID || finalTaskData.fileId;
-                downloadUrl = `${UNIVERSER_HOST}/file/${outId}/download`;
+              if (typeof finalTaskData.url === 'string' && finalTaskData.url !== '') {
+                downloadUrl = finalTaskData.url;
+              } else if (typeof finalTaskData.downloadUrl === 'string' && finalTaskData.downloadUrl !== '') {
+                downloadUrl = finalTaskData.downloadUrl;
+              } else if (typeof finalTaskData.fileID === 'string' && finalTaskData.fileID !== '') {
+                downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.fileID}/download`;
+              } else if (typeof finalTaskData.fileId === 'string' && finalTaskData.fileId !== '') {
+                downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.fileId}/download`;
               } else {
                 // 如果沒有明確的下載網址，預設嘗試用 taskID 當作 fileID 下載看看
                 downloadUrl = `${UNIVERSER_HOST}/file/${taskID}/download`;
@@ -190,7 +192,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               return true;
             } catch (err) {
               console.error('[LocalExportPlugin] Error:', err);
-              alert('匯出發生錯誤：' + err.message);
+              const errorMessage = err instanceof Error ? err.message : String(err);
+              alert('匯出發生錯誤：' + errorMessage);
               return false;
             }
           }
@@ -208,7 +211,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             );
             const subscription = univerInstanceService.focused$.subscribe(
               (unitId) => {
-                if (!unitId) {
+                if (typeof unitId !== 'string' || unitId === '') {
                   subscriber.next(true);
                   return;
                 }
