@@ -304,6 +304,17 @@ export async function importSheet() {
   );
   await Promise.all(univerSheetCoreScriptPromiseList);
 
+  if (!window.__UNIVER_SHEETS_GLOBALS__) {
+    window.__UNIVER_SHEETS_GLOBALS__ = {
+      UniverCore: window.UniverCore,
+      UniverDesign: window.UniverDesign,
+      UniverUi: window.UniverUi,
+      UniverSheets: window.UniverSheets,
+      UniverSheetsUi: window.UniverSheetsUi,
+      UniverEngineRender: window.UniverEngineRender
+    };
+  }
+
   const univerSheetsScriptPromiseList = univerSheetsScriptList.map(
     (univerSheetScript) =>
       loadScript(
@@ -620,6 +631,10 @@ export async function createSheetInstance(
 
   if (container instanceof HTMLElement === false) {
     throw new Error('container must be an HTMLElement');
+  }
+
+  if (window.__UNIVER_SHEETS_GLOBALS__) {
+    Object.assign(window, window.__UNIVER_SHEETS_GLOBALS__);
   }
 
   await importSheetAdvanced();

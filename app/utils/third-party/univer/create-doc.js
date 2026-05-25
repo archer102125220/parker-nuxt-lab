@@ -222,6 +222,18 @@ export async function importDoc() {
   );
   await Promise.all(univerDocScriptPromiseList);
 
+  // Capture Docs globals immediately after loading Docs scripts
+  if (!window.__UNIVER_DOCS_GLOBALS__) {
+    window.__UNIVER_DOCS_GLOBALS__ = {
+      UniverCore: window.UniverCore,
+      UniverDesign: window.UniverDesign,
+      UniverUi: window.UniverUi,
+      UniverDocs: window.UniverDocs,
+      UniverDocsUi: window.UniverDocsUi,
+      UniverEngineRender: window.UniverEngineRender
+    };
+  }
+
   await Promise.all([
     ...univerLocaleList.map((univerLocaleScript) =>
       loadScript(univerLocaleScript.id, univerLocaleScript.src)
@@ -233,18 +245,13 @@ export async function importDoc() {
 }
 
 export async function importAdvancedDoc() {
-  const backupUniver = {
-    UniverUi: window.UniverUi,
-    UniverCore: window.UniverCore,
-    UniverDesign: window.UniverDesign,
-    UniverDocs: window.UniverDocs,
-    UniverDocsUi: window.UniverDocsUi,
-    UniverEngineRender: window.UniverEngineRender
-  };
-
   await importSheet();
 
-  Object.assign(window, backupUniver);
+  // importSheet may have overwritten globals if it was the first time loading.
+  // We must restore Docs globals here so that Pro plugins bind to Docs UI.
+  if (window.__UNIVER_DOCS_GLOBALS__) {
+    Object.assign(window, window.__UNIVER_DOCS_GLOBALS__);
+  }
 
   const univerProCroScriptList = [
     {
@@ -473,6 +480,11 @@ export async function createDocInstance(
 
   if (container instanceof HTMLElement === false) {
     throw new Error('container must be an HTMLElement');
+  }
+
+  // Restore Docs globals before instantiating the editor
+  if (window.__UNIVER_DOCS_GLOBALS__) {
+    Object.assign(window, window.__UNIVER_DOCS_GLOBALS__);
   }
 
   console.log('before importAdvancedDoc');
