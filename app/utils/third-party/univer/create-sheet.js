@@ -1,15 +1,14 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 import { loadCSS } from '@app/utils/helpers/load-css';
+import {
+  importUniver,
+  UNIVERSAL_VERSION,
+  // UNIVER_SERVER_ENDPOINT,
+  UNIVERSER_DOCKER_HOST
+} from '@app/utils/third-party/univer/import-univer';
 import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
-
-const UNIVERSAL_VERSION = '0.22.1';
-// const UNIVER_SERVER_ENDPOINT =
-//   import.meta.env.VITE_UNIVER_SERVER_ENDPOINT ||
-//   'http://localhost:3000/api/univer';
-const UNIVERSER_DOCKER_HOST =
-  import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
 
 export const LOCALE_TYPE = {
   get list() {
@@ -27,86 +26,6 @@ export const EVENT_TYPE = {
 const eventType = {
   list: null
 };
-
-export async function importUniver() {
-  if (typeof document === 'undefined') return;
-
-  const dependecyScriptList = [
-    {
-      id: 'univer-react',
-      src: 'https://unpkg.com/react@18.3.1/umd/react.production.min.js'
-    },
-    {
-      id: 'univer-react-dom',
-      src: 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js'
-    },
-    {
-      id: 'univer-rxjs',
-      src: 'https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js'
-    },
-    {
-      id: 'univer-echarts',
-      src: 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js'
-    }
-    // {
-    //   id: 'univer-monaco',
-    //   src:'https://unpkg.com/monaco-editor@0.55.1/min/vs/editor/editor.main.js'
-    // }
-  ];
-  const univerCoreScriptList = [
-    {
-      id: 'univer-presets',
-      src: `https://unpkg.com/@univerjs/presets@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
-    // {
-    //   id: 'univer-network',
-    //   src: `https://unpkg.com/@univerjs/network@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // }
-  ];
-  const univerScriptList = [
-    // {
-    //   id: 'univer-thread-comment',
-    //   src: `https://unpkg.com/@univerjs/thread-comment@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // }
-    {
-      id: 'univer-pro-license',
-      src: `https://unpkg.com/@univerjs-pro/license@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
-  ];
-
-  const querySelectorAllString = [
-    ...dependecyScriptList.map((dependecyScript) => `#${dependecyScript.id}`),
-    ...univerCoreScriptList.map((coreScript) => `#${coreScript.id}`),
-    ...univerScriptList.map((univerScript) => `#${univerScript.id}`)
-  ].join(',');
-
-  if (
-    document.querySelectorAll(querySelectorAllString).length ===
-    querySelectorAllString.length
-  ) {
-    return;
-  }
-
-  const dependecyScriptPromiseList = dependecyScriptList.map(
-    (dependecyScript) =>
-      loadScript(
-        dependecyScript.id,
-        dependecyScript.src,
-        dependecyScript.attributes
-      )
-  );
-  await Promise.all(dependecyScriptPromiseList);
-
-  const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
-    loadScript(coreScript.id, coreScript.src, coreScript.attributes)
-  );
-  await Promise.all(univerCoreScriptPromiseList);
-
-  const univerScriptPromiseList = univerScriptList.map((univerScript) =>
-    loadScript(univerScript.id, univerScript.src, univerScript.attributes)
-  );
-  await Promise.all(univerScriptPromiseList);
-}
 
 export async function importSheet() {
   const univerSheetCoreScriptList = [

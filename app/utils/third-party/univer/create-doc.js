@@ -1,14 +1,13 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 import { loadCSS } from '@app/utils/helpers/load-css';
+import {
+  importUniver,
+  UNIVERSAL_VERSION,
+  // UNIVER_SERVER_ENDPOINT,
+  UNIVERSER_DOCKER_HOST
+} from '@app/utils/third-party/univer/import-univer';
 import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
-
-const UNIVERSAL_VERSION = '0.23.0';
-// const UNIVER_SERVER_ENDPOINT =
-//   import.meta.env.VITE_UNIVER_SERVER_ENDPOINT ||
-//   'http://localhost:3000/api/univer';
-const UNIVERSER_DOCKER_HOST =
-  import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
 
 // 因為 univer 會重複引用導致報錯，所以忽略 univer 的重複引用錯誤
 function ignoreErrorLog() {
@@ -66,74 +65,6 @@ export const EVENT_TYPE = {
 const eventType = {
   list: null
 };
-
-export async function importUniver() {
-  if (typeof document === 'undefined') return;
-
-  const dependecyScriptList = [
-    {
-      id: 'univer-react',
-      src: 'https://unpkg.com/react@18.3.1/umd/react.production.min.js'
-    },
-    {
-      id: 'univer-react-dom',
-      src: 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js'
-    },
-    {
-      id: 'univer-rxjs',
-      src: 'https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js'
-    },
-    {
-      id: 'univer-echarts',
-      src: 'https://unpkg.com/echarts@5.6.0/dist/echarts.min.js'
-    }
-  ];
-  const univerCoreScriptList = [
-    {
-      id: 'univer-presets',
-      src: `https://unpkg.com/@univerjs/presets@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
-  ];
-  const univerScriptList = [
-    {
-      id: 'univer-pro-license',
-      src: `https://unpkg.com/@univerjs-pro/license@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
-  ];
-
-  const querySelectorAllString = [
-    ...dependecyScriptList.map((dependecyScript) => `#${dependecyScript.id}`),
-    ...univerCoreScriptList.map((coreScript) => `#${coreScript.id}`),
-    ...univerScriptList.map((univerScript) => `#${univerScript.id}`)
-  ].join(',');
-
-  if (
-    document.querySelectorAll(querySelectorAllString).length ===
-    querySelectorAllString.length
-  ) {
-    return;
-  }
-
-  const dependecyScriptPromiseList = dependecyScriptList.map(
-    (dependecyScript) =>
-      loadScript(
-        dependecyScript.id,
-        dependecyScript.src,
-        dependecyScript.attributes
-      )
-  );
-  await Promise.all(dependecyScriptPromiseList);
-
-  const univerCoreScriptPromiseList = univerCoreScriptList.map((coreScript) =>
-    loadScript(coreScript.id, coreScript.src, coreScript.attributes)
-  );
-  await Promise.all(univerCoreScriptPromiseList);
-
-  const univerScriptPromiseList = univerScriptList.map((univerScript) =>
-    loadScript(univerScript.id, univerScript.src, univerScript.attributes)
-  );
-  await Promise.all(univerScriptPromiseList);
-}
 
 export async function importDoc() {
   const univerDocCoreScriptList = [
@@ -302,6 +233,8 @@ export async function importDoc() {
 }
 
 export async function importAdvancedDoc() {
+  // await importSheet();
+
   const univerProCroScriptList = [
     {
       id: 'univer-pro-engine-formula',
@@ -311,6 +244,18 @@ export async function importAdvancedDoc() {
       id: 'univer-pro-print',
       src: `https://unpkg.com/@univerjs-pro/print@${UNIVERSAL_VERSION}/lib/umd/index.js`
     },
+    // {
+    //   id: 'univer-pro-collaboration',
+    //   src: `https://unpkg.com/@univerjs-pro/collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // },
+    // {
+    //   id: 'univer-pro-collaboration-client',
+    //   src: `https://unpkg.com/@univerjs-pro/collaboration-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // },
+    // {
+    //   id: 'univer-pro-collaboration-client-ui',
+    //   src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // },
     {
       id: 'univer-pro-exchange-client',
       src: `https://unpkg.com/@univerjs-pro/exchange-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
@@ -413,19 +358,19 @@ export async function importDocCollaboration() {
     // {
     //   id: 'univer-preset-docs-collaboration',
     //   src: `https://unpkg.com/@univerjs/preset-docs-collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // }
+    // {
+    //   id: 'univer-pro-collaboration',
+    //   src: `https://unpkg.com/@univerjs-pro/collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
     // },
-    {
-      id: 'univer-pro-collaboration',
-      src: `https://unpkg.com/@univerjs-pro/collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
-    {
-      id: 'univer-pro-collaboration-client',
-      src: `https://unpkg.com/@univerjs-pro/collaboration-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
-    {
-      id: 'univer-pro-collaboration-client-ui',
-      src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
+    // {
+    //   id: 'univer-pro-collaboration-client',
+    //   src: `https://unpkg.com/@univerjs-pro/collaboration-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // },
+    // {
+    //   id: 'univer-pro-collaboration-client-ui',
+    //   src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // }
   ];
 
   const univerDocCollaborationLocaleList = [
