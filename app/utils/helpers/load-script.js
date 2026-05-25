@@ -11,6 +11,7 @@ export function loadScript(id, src, attributes = {}, successDelay = 1500) {
     const script = document.createElement('script');
     script.id = id;
     script.src = src;
+    script.setAttribute('async', 'false'); // Guarantee execution order for interdependent UMD scripts
 
     Object.keys(attributes).forEach((key) => {
       script.setAttribute(key, attributes[key]);
