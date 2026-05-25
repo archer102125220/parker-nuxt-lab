@@ -233,7 +233,18 @@ export async function importDoc() {
 }
 
 export async function importAdvancedDoc() {
-  // await importSheet();
+  const backupUniver = {
+    UniverUi: window.UniverUi,
+    UniverCore: window.UniverCore,
+    UniverDesign: window.UniverDesign,
+    UniverDocs: window.UniverDocs,
+    UniverDocsUi: window.UniverDocsUi,
+    UniverEngineRender: window.UniverEngineRender
+  };
+
+  await importSheet();
+
+  Object.assign(window, backupUniver);
 
   const univerProCroScriptList = [
     {
@@ -244,18 +255,18 @@ export async function importAdvancedDoc() {
       id: 'univer-pro-print',
       src: `https://unpkg.com/@univerjs-pro/print@${UNIVERSAL_VERSION}/lib/umd/index.js`
     },
-    // {
-    //   id: 'univer-pro-collaboration',
-    //   src: `https://unpkg.com/@univerjs-pro/collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // },
-    // {
-    //   id: 'univer-pro-collaboration-client',
-    //   src: `https://unpkg.com/@univerjs-pro/collaboration-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // },
-    // {
-    //   id: 'univer-pro-collaboration-client-ui',
-    //   src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // },
+    {
+      id: 'univer-pro-collaboration',
+      src: `https://unpkg.com/@univerjs-pro/collaboration@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    },
+    {
+      id: 'univer-pro-collaboration-client',
+      src: `https://unpkg.com/@univerjs-pro/collaboration-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    },
+    {
+      id: 'univer-pro-collaboration-client-ui',
+      src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    },
     {
       id: 'univer-pro-exchange-client',
       src: `https://unpkg.com/@univerjs-pro/exchange-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
@@ -352,7 +363,7 @@ export async function importAdvancedDoc() {
 }
 
 export async function importDocCollaboration() {
-  await importSheet();
+  // await importSheet();
 
   const univerDocCollaborationScriptList = [
     // {
@@ -410,23 +421,16 @@ export async function importDocCollaboration() {
     return;
   }
 
-  // const univerDocCollaborationScriptPromiseList = univerDocCollaborationScriptList.map(
-  //   (univerDocCollaborationScript) => {
-  //     return loadScript(
-  //       univerDocCollaborationScript.id,
-  //       univerDocCollaborationScript.src,
-  //       univerDocCollaborationScript.attributes
-  //     );
-  //   }
-  // );
-  // await Promise.all(univerDocCollaborationScriptPromiseList);
-  for (const univerDocCollaborationScript of univerDocCollaborationScriptList) {
-    await loadScript(
-      univerDocCollaborationScript.id,
-      univerDocCollaborationScript.src,
-      univerDocCollaborationScript.attributes
-    );
-  }
+  const univerDocCollaborationScriptPromiseList = univerDocCollaborationScriptList.map(
+    (univerDocCollaborationScript) => {
+      return loadScript(
+        univerDocCollaborationScript.id,
+        univerDocCollaborationScript.src,
+        univerDocCollaborationScript.attributes
+      );
+    }
+  );
+  await Promise.all(univerDocCollaborationScriptPromiseList);
 
   const univerDocCollaborationLocaleListPromiseList =
     univerDocCollaborationLocaleList.map((univerDocCollaborationLocale) => {

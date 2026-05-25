@@ -10,7 +10,10 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
     const wendellhuRedi = window['@wendellhu/redi'] || {};
 
     const { Observable } = rxjs;
-    const { transformDocumentDataToSnapshotJson, transformWorkbookDataToSnapshotJson } = UniverProExchangeClient;
+    const {
+      transformDocumentDataToSnapshotJson,
+      transformWorkbookDataToSnapshotJson
+    } = UniverProExchangeClient;
     const { Injector, setDependencies } = wendellhuRedi;
     const {
       ComponentManager,
@@ -55,6 +58,13 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
     /**
      * 本地文件匯出外掛 (支援 Word / Excel)
      * 專門處理「非協同模式」下，前端建立的本地檔案如何正確匯出為 DOCX / XLSX
+     * 
+     * @example
+     * ```typescript
+     * univer.registerPlugin(LocalExportButtonPlugin, {
+     *   apiPrefix: 'https://api.example.com/universer-api'
+     * });
+     * ```
      */
     class LocalExportButtonPlugin extends Plugin {
       static pluginName = 'local-export-plugin';
@@ -67,6 +77,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
         componentManager
       ) {
         super();
+        this._config = _config;
         this._injector = _injector;
         this.menuManagerService = menuManagerService;
         this.commandService = commandService;
@@ -120,7 +131,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const UNIVERSER_HOST =
                 import.meta.env.VITE_UNIVERSER_DOCKER_HOST ||
                 'http://localhost:8000';
-              const API_PREFIX = `${UNIVERSER_HOST}/universer-api`;
+              const API_PREFIX = this._config?.apiPrefix || `${UNIVERSER_HOST}/universer-api`;
 
               // 2. 上傳快照到 Universer 取得 FileId (jsonID)
               const blob = new Blob([snapshotStr], {
@@ -318,6 +329,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       [ICommandService],
       [ComponentManager]
     ]);
+
+    console.log({ LocalExportButtonPlugin });
 
     resolve(LocalExportButtonPlugin);
   });
