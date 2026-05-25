@@ -58,7 +58,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
     /**
      * 本地文件匯出外掛 (支援 Word / Excel)
      * 專門處理「非協同模式」下，前端建立的本地檔案如何正確匯出為 DOCX / XLSX
-     * 
+     *
      * @example
      * ```typescript
      * univer.registerPlugin(LocalExportButtonPlugin, {
@@ -94,7 +94,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const univerInstanceService = accessor.get(IUniverInstanceService);
             const messageService = accessor.get(IMessageService);
             const doc = univerInstanceService.getFocusedUnit();
-            if (!doc) return false;
+            if (typeof doc !== 'object' || doc === null) return false;
             const focusedUnitId = doc.getUnitId();
             if (typeof focusedUnitId !== 'string' || focusedUnitId === '')
               return false;
@@ -118,20 +118,25 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               let exportJson;
 
               if (isDoc) {
-                exportJson = await transformDocumentDataToSnapshotJson(snapshot);
+                exportJson =
+                  await transformDocumentDataToSnapshotJson(snapshot);
               } else if (isSheet) {
-                exportJson = await transformWorkbookDataToSnapshotJson(snapshot);
+                exportJson =
+                  await transformWorkbookDataToSnapshotJson(snapshot);
               } else {
-                throw new Error('未載入 UniverProExchangeClient，無法進行 Snapshot 轉換');
+                throw new Error(
+                  '未載入 UniverProExchangeClient，無法進行 Snapshot 轉換'
+                );
               }
-              
+
               const snapshotStr = JSON.stringify(exportJson);
 
               // 定義後端 API 路徑 (這裡先預設使用預設的 proxy 或直連路徑)
               const UNIVERSER_HOST =
                 import.meta.env.VITE_UNIVERSER_DOCKER_HOST ||
                 'http://localhost:8000';
-              const API_PREFIX = this._config?.apiPrefix || `${UNIVERSER_HOST}/universer-api`;
+              const API_PREFIX =
+                this._config?.apiPrefix || `${UNIVERSER_HOST}/universer-api`;
 
               // 2. 上傳快照到 Universer 取得 FileId (jsonID)
               const blob = new Blob([snapshotStr], {
@@ -147,7 +152,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 body: formData
               });
 
-              if (!uploadRes.ok) {
+              if (uploadRes.ok === false) {
                 const errText = await uploadRes.text();
                 throw new Error(`上傳失敗 (${uploadRes.status}): ${errText}`);
               }
@@ -158,7 +163,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               if (
                 typeof uploadData !== 'object' ||
                 uploadData === null ||
-                !uploadData.FileId
+                typeof uploadData.FileId !== 'string' ||
+                uploadData.FileId === ''
               ) {
                 throw new Error('上傳 Snapshot 失敗');
               }
@@ -192,7 +198,10 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 const taskRes = await fetch(taskUrl);
                 const taskData = await taskRes.json();
 
-                if (taskData.status === 'success' || taskData.status === 'done') {
+                if (
+                  taskData.status === 'success' ||
+                  taskData.status === 'done'
+                ) {
                   isSuccess = true;
                   finalTaskData = taskData;
                   break;
@@ -214,7 +223,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 await new Promise((r) => setTimeout(r, 1000));
               }
 
-              if (!isSuccess || finalTaskData === null) {
+              if (isSuccess === false || finalTaskData === null) {
                 throw new Error('匯出任務超時');
               }
 
@@ -322,12 +331,16 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       }
     }
 
-    setDependencies(LocalExportButtonPlugin, [
-      [Injector],
-      [IMenuManagerService],
-      [ICommandService],
-      [ComponentManager]
-    ], 1);
+    setDependencies(
+      LocalExportButtonPlugin,
+      [
+        [Injector],
+        [IMenuManagerService],
+        [ICommandService],
+        [ComponentManager]
+      ],
+      1
+    );
 
     console.log({ LocalExportButtonPlugin });
 
