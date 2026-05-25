@@ -3,7 +3,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
     const {
       rxjs = {},
       UniverUi = {},
-      UniverCore = {}
+      UniverCore = {},
+      UniverDesign = {}
     } = window;
     const wendellhuRedi = window['@wendellhu/redi'];
 
@@ -13,7 +14,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       ComponentManager,
       IMenuManagerService,
       MenuItemType,
-      RibbonStartGroup
+      RibbonStartGroup,
+      IMessageService
     } = UniverUi;
     const {
       CommandType,
@@ -22,6 +24,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       Plugin,
       UniverInstanceType
     } = UniverCore;
+    const { MessageType } = UniverDesign;
 
     if (
       typeof Observable === 'undefined' ||
@@ -31,14 +34,16 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       typeof IMenuManagerService === 'undefined' ||
       typeof MenuItemType === 'undefined' ||
       typeof RibbonStartGroup === 'undefined' ||
+      typeof IMessageService === 'undefined' ||
       typeof CommandType === 'undefined' ||
       typeof ICommandService === 'undefined' ||
       typeof IUniverInstanceService === 'undefined' ||
       typeof Plugin === 'undefined' ||
-      typeof UniverInstanceType === 'undefined'
+      typeof UniverInstanceType === 'undefined' ||
+      typeof MessageType === 'undefined'
     ) {
       if (tryCount < tryLimit) {
-          resolve(createdLocalExportButtonPlugin(tryLimit, tryCount + 1));
+        resolve(createdLocalExportButtonPlugin(tryLimit, tryCount + 1));
       }
       return rejects(new Error('Failed to load Univer dependencies'));
     }
@@ -72,10 +77,12 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           handler: async (accessor) => {
             const univerInstanceService = accessor.get(IUniverInstanceService);
+            const messageService = accessor.get(IMessageService);
             const doc = univerInstanceService.getFocusedUnit();
             if (!doc) return false;
             const focusedUnitId = doc.getUnitId();
-            if (typeof focusedUnitId !== 'string' || focusedUnitId === '') return false;
+            if (typeof focusedUnitId !== 'string' || focusedUnitId === '')
+              return false;
 
             const isDoc = doc.type === UniverInstanceType.UNIVER_DOC;
             const isSheet = doc.type === UniverInstanceType.UNIVER_SHEET;
@@ -86,14 +93,19 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const fileExtension = isDoc ? 'docx' : 'xlsx';
 
             try {
-              alert('正在為您匯出文件，這可能需要幾秒鐘的時間，請稍候...');
+              messageService.show({
+                type: MessageType.Info,
+                content: '正在為您匯出文件，這可能需要幾秒鐘的時間，請稍候...'
+              });
 
               // 1. 取得完整的文件 Snapshot JSON
               const snapshot = doc.getSnapshot();
               const snapshotStr = JSON.stringify(snapshot);
 
               // 定義後端 API 路徑 (這裡先預設使用預設的 proxy 或直連路徑)
-              const UNIVERSER_HOST = import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
+              const UNIVERSER_HOST =
+                import.meta.env.VITE_UNIVERSER_DOCKER_HOST ||
+                'http://localhost:8000';
               const API_PREFIX = `${UNIVERSER_HOST}/universer-api`;
 
               // 2. 上傳快照到 Universer 取得 FileId (jsonID)
@@ -113,7 +125,11 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               const uploadData = await uploadRes.json();
 
               // 注意: Univer 的成功代碼通常為 0 或 1
-              if (typeof uploadData !== 'object' || uploadData === null || !uploadData.FileId) {
+              if (
+                typeof uploadData !== 'object' ||
+                uploadData === null ||
+                !uploadData.FileId
+              ) {
                 throw new Error('上傳 Snapshot 失敗');
               }
               const fileId = uploadData.FileId;
@@ -124,13 +140,13 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  unitID: '',      // 留空，因為這是一份尚未存在於後端資料庫的本地檔案
-                  jsonID: fileId,  // 帶入我們剛剛上傳後拿到的 jsonID
+                  unitID: '', // 留空，因為這是一份尚未存在於後端資料庫的本地檔案
+                  jsonID: fileId, // 帶入我們剛剛上傳後拿到的 jsonID
                   type: fileType
                 })
               });
               const exportData = await exportRes.json();
-              
+
               const taskID = exportData.taskID;
               if (typeof taskID !== 'string' || taskID === '') {
                 throw new Error('呼叫匯出任務失敗，未取得 taskID');
@@ -140,7 +156,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               let isSuccess = false;
               let finalTaskData = null;
 
-              for (let i = 0; i < 30; i++) { // 最多等 30 秒
+              for (let i = 0; i < 30; i++) {
+                // 最多等 30 秒
                 const taskUrl = `${API_PREFIX}/exchange/task/${taskID}`;
                 const taskRes = await fetch(taskUrl);
                 const taskData = await taskRes.json();
@@ -149,8 +166,13 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   isSuccess = true;
                   finalTaskData = taskData;
                   break;
-                } else if (taskData.status === 'error' || taskData.status === 'failed') {
-                  throw new Error(taskData.error?.message || '後端匯出任務執行失敗');
+                } else if (
+                  taskData.status === 'error' ||
+                  taskData.status === 'failed'
+                ) {
+                  throw new Error(
+                    taskData.error?.message || '後端匯出任務執行失敗'
+                  );
                 }
 
                 // pending 或 running 狀態，等待 1 秒後再試
@@ -165,18 +187,33 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               // 通常 Univer 後端轉換完成後，taskData 裡面會帶有結果的 URL 或新的 FileId
               // 實際的欄位名稱可能因版本略有不同，以下根據經驗涵蓋常見的幾種情形
               let downloadUrl = '';
-              if (typeof finalTaskData.url === 'string' && finalTaskData.url !== '') {
+              if (
+                typeof finalTaskData.url === 'string' &&
+                finalTaskData.url !== ''
+              ) {
                 downloadUrl = finalTaskData.url;
-              } else if (typeof finalTaskData.downloadUrl === 'string' && finalTaskData.downloadUrl !== '') {
+              } else if (
+                typeof finalTaskData.downloadUrl === 'string' &&
+                finalTaskData.downloadUrl !== ''
+              ) {
                 downloadUrl = finalTaskData.downloadUrl;
-              } else if (typeof finalTaskData.fileID === 'string' && finalTaskData.fileID !== '') {
+              } else if (
+                typeof finalTaskData.fileID === 'string' &&
+                finalTaskData.fileID !== ''
+              ) {
                 downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.fileID}/download`;
-              } else if (typeof finalTaskData.fileId === 'string' && finalTaskData.fileId !== '') {
+              } else if (
+                typeof finalTaskData.fileId === 'string' &&
+                finalTaskData.fileId !== ''
+              ) {
                 downloadUrl = `${UNIVERSER_HOST}/file/${finalTaskData.fileId}/download`;
               } else {
                 // 如果沒有明確的下載網址，預設嘗試用 taskID 當作 fileID 下載看看
                 downloadUrl = `${UNIVERSER_HOST}/file/${taskID}/download`;
-                console.warn('未在任務結果中找到明確的下載欄位，嘗試使用預設組合:', finalTaskData);
+                console.warn(
+                  '未在任務結果中找到明確的下載欄位，嘗試使用預設組合:',
+                  finalTaskData
+                );
               }
 
               // 建立一個不可見的 <a> 標籤來觸發瀏覽器下載
@@ -192,8 +229,12 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               return true;
             } catch (err) {
               console.error('[LocalExportPlugin] Error:', err);
-              const errorMessage = err instanceof Error ? err.message : String(err);
-              alert('匯出發生錯誤：' + errorMessage);
+              const errorMessage =
+                err instanceof Error ? err.message : String(err);
+              messageService.show({
+                type: MessageType.Error,
+                content: '匯出發生錯誤：' + errorMessage
+              });
               return false;
             }
           }
@@ -219,7 +260,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 // 如果目前的檔案不是文件 (DOC) 且不是試算表 (SHEET)，就隱藏這顆按鈕
                 subscriber.next(
                   unit?.type !== UniverInstanceType.UNIVER_DOC &&
-                  unit?.type !== UniverInstanceType.UNIVER_SHEET
+                    unit?.type !== UniverInstanceType.UNIVER_SHEET
                 );
               }
             );
@@ -231,7 +272,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
         this.menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
             [buttonId]: {
-              order: 20, 
+              order: 20,
               menuItemFactory
             }
           }
