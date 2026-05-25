@@ -4,11 +4,13 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       rxjs = {},
       UniverUi = {},
       UniverCore = {},
-      UniverDesign = {}
+      UniverDesign = {},
+      UniverProExchangeClient = {}
     } = window;
     const wendellhuRedi = window['@wendellhu/redi'] || {};
 
     const { Observable } = rxjs;
+    const { transformDocumentDataToSnapshotJson, transformWorkbookDataToSnapshotJson } = UniverProExchangeClient;
     const { Injector, setDependencies } = wendellhuRedi;
     const {
       ComponentManager,
@@ -28,6 +30,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
     if (
       typeof Observable === 'undefined' ||
+      typeof transformDocumentDataToSnapshotJson === 'undefined' ||
+      typeof transformWorkbookDataToSnapshotJson === 'undefined' ||
       typeof Injector === 'undefined' ||
       typeof setDependencies === 'undefined' ||
       typeof ComponentManager === 'undefined' ||
@@ -100,20 +104,17 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
               // 1. 取得完整的文件 Snapshot JSON
               const snapshot = doc.getSnapshot();
-              // 為了相容 Universer 的 Protobuf 定義，深拷貝一份，並移除後端不認識的屬性
-              const clonedSnapshot = JSON.parse(JSON.stringify(snapshot));
-              if (clonedSnapshot) {
-                const invalidKeys = [
-                  'id', 'documentStyle', 'locale', 'title', 'settings', 'disabled', 'rev', 
-                  'tableSource', 'footers', 'headers', 'lists', 'drawings', 'drawingsOrder', 
-                  'headerFooterDrawingsOrder', 'resources'
-                ];
-                invalidKeys.forEach(key => {
-                  if (key in clonedSnapshot) delete clonedSnapshot[key];
-                });
+              let exportJson;
+
+              if (isDoc) {
+                exportJson = await transformDocumentDataToSnapshotJson(snapshot);
+              } else if (isSheet) {
+                exportJson = await transformWorkbookDataToSnapshotJson(snapshot);
+              } else {
+                throw new Error('未載入 UniverProExchangeClient，無法進行 Snapshot 轉換');
               }
               
-              const snapshotStr = JSON.stringify(clonedSnapshot);
+              const snapshotStr = JSON.stringify(exportJson);
 
               // 定義後端 API 路徑 (這裡先預設使用預設的 proxy 或直連路徑)
               const UNIVERSER_HOST =
