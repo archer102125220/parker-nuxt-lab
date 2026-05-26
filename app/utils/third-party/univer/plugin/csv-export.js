@@ -1,12 +1,8 @@
-// import { ExportIcon } from '@univerjs/icons';
+import Vue3IconCSVExport from '@app/components/Icon/CSVExport.jsx';
 
 export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
   return new Promise((resolve, rejects) => {
-    const {
-      rxjs = {},
-      UniverUi = {},
-      UniverCore = {}
-    } = window;
+    const { rxjs = {}, UniverUi = {}, UniverCore = {} } = window;
     const wendellhuRedi = window['@wendellhu/redi'];
 
     const { Observable } = rxjs;
@@ -76,7 +72,9 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
        */
       onStarting() {
         // 1. 註冊我們想在選單中使用的圖示
-        // this.componentManager.register('ExportIcon', ExportIcon);
+        this.componentManager.register('Vue3IconCSVExport', Vue3IconCSVExport, {
+          framework: 'vue3'
+        });
 
         const buttonId = 'export-csv-button';
 
@@ -156,7 +154,7 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           title: 'Export CSV',
           tooltip: 'Export CSV',
-          icon: 'ExportIcon', // 這必須與我們在 componentManager 中註冊的名稱相符
+          icon: 'Vue3IconCSVExport', // 這必須與我們在 componentManager 中註冊的名稱相符
           type: MenuItemType.BUTTON,
           // hidden$ 是一個 Observable，動態決定何時應該隱藏按鈕。
           // 這裡，如果目前聚焦的文件不是試算表（例如切換到文件），我們就隱藏該按鈕。
@@ -196,12 +194,16 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
 
     // 確保 Univer DI 容器在 JS 中解析這些依賴
     // 第一個元素是空的 (,)，因為索引 0 是未被注入的 _config 參數
-    setDependencies(ExportCSVButtonPlugin, [
-      [Injector],
-      [IMenuManagerService],
-      [ICommandService],
-      [ComponentManager]
-    ], 1); // <--- 加入 1，讓依賴注入從 constructor 的第 1 個參數開始，完美跳過第 0 個的 _config
+    setDependencies(
+      ExportCSVButtonPlugin,
+      [
+        [Injector],
+        [IMenuManagerService],
+        [ICommandService],
+        [ComponentManager]
+      ],
+      1
+    ); // <--- 加入 1，讓依賴注入從 constructor 的第 1 個參數開始，完美跳過第 0 個的 _config
 
     resolve(ExportCSVButtonPlugin);
   });

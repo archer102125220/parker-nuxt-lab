@@ -1,4 +1,4 @@
-// import { FolderIcon } from '@univerjs/icons';
+import Vue3IconCSV from '@app/components/Icon/CSV.jsx';
 
 import { handleSelectCSVFile } from '@app/utils/helpers/select-csv-file';
 
@@ -100,7 +100,9 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
        */
       onStarting() {
         // 註冊圖標元件
-        // this.componentManager.register('FolderIcon', FolderIcon);
+        this.componentManager.register('Vue3IconCSV', Vue3IconCSV, {
+          framework: 'vue3'
+        });
 
         const buttonId = 'import-csv-button';
 
@@ -214,7 +216,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           title: 'Import CSV',
           tooltip: 'Import CSV',
-          icon: 'FolderIcon', // 圖標名稱
+          icon: 'Vue3IconCSV', // 圖標名稱
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {
             const univerInstanceService = this._injector.get(
@@ -248,12 +250,16 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
 
     // 確保 Univer 依賴注入容器在 JS 中正確解析這些依賴
     // 第一個元素是空的 (,)，因為索引 0 是 _config 參數，該參數不被注入
-    setDependencies(ImportCSVButtonPlugin, [
-      [Injector],
-      [IMenuManagerService],
-      [ICommandService],
-      [ComponentManager]
-    ], 1); // <--- 加入 1，讓依賴注入從 constructor 的第 1 個參數開始，完美跳過第 0 個的 _config
+    setDependencies(
+      ImportCSVButtonPlugin,
+      [
+        [Injector],
+        [IMenuManagerService],
+        [ICommandService],
+        [ComponentManager]
+      ],
+      1
+    ); // <--- 加入 1，讓依賴注入從 constructor 的第 1 個參數開始，完美跳過第 0 個的 _config
 
     resolve(ImportCSVButtonPlugin);
   });
