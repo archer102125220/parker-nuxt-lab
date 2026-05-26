@@ -5,6 +5,11 @@ import {
   createDocInstance
 } from '@app/utils/third-party/univer/create-doc';
 
+import {
+  fetchUniverSnapshot,
+  UniverInstanceType
+} from '@app/utils/third-party/univer/snapshot';
+
 export { LOCALE_TYPE, EVENT_TYPE };
 </script>
 
@@ -108,6 +113,10 @@ const props = defineProps({
         }
       ]
     })
+  },
+  unitId: {
+    type: String,
+    default: ''
   }
 });
 const emits = defineEmits([
@@ -131,7 +140,7 @@ const univerInstance = reactive({
   univerAPI: null
 });
 
-async function handleUniverDoc() {
+async function handleUniverDoc(overrideSnapshot) {
   try {
     const { univer, univerAPI } = await createDocInstance(
       container.value,
@@ -160,7 +169,34 @@ async function handleUniverDoc() {
       })
     );
 
-    currentDoc.value = univerAPI.createUniverDoc(props.value);
+    if (overrideSnapshot) {
+      currentDoc.value = univerAPI.createUniverDoc(overrideSnapshot);
+    } else {
+      if (props.unitId) {
+        try {
+          const snapshot = await fetchUniverSnapshot(
+            props.unitId,
+            UniverInstanceType.UNIVER_DOC
+          );
+          currentDoc.value = univerAPI.createUniverDoc(snapshot);
+        } catch (error) {
+          console.error('Failed to fetch remote snapshot manually:', error);
+          // Fallback
+          currentDoc.value = univerAPI.createUniverDoc({
+            id: props.unitId,
+            body: {
+              dataStream: '\r\n',
+              textRuns: [],
+              paragraphs: [{ startIndex: 0 }],
+              sectionBreaks: [{ startIndex: 1 }]
+            }
+          });
+        }
+      } else {
+        const snapshot = { ...props.doc };
+        currentDoc.value = univerAPI.createUniverDoc(snapshot);
+      }
+    }
 
     univerInstance.univer = univer;
     univerInstance.univerAPI = univerAPI;
@@ -185,6 +221,27 @@ function handleKeyDown() {
 
   emits('update:value', saveData);
   emits('change', saveData);
+}
+
+function handleLocalImportEvent(customEvent) {
+  const detail = customEvent.detail;
+  if (detail && detail.snapshot && detail.type === 'doc') {
+    const currentUnitId = univerInstance.univerAPI
+      ?.getActiveDocument()
+      ?.getId();
+    if (detail.unitId && currentUnitId && detail.unitId !== currentUnitId) {
+      return; // 忽略不是由當前編輯器觸發的事件
+    }
+    if (univerInstance.univerAPI) {
+      try {
+        // Univer Doc 由於官方設計限制，並不支援像 Sheet 一樣動態建立並切換文件 (會導致 UI 無法正確渲染或拋錯)，
+        // 因此我們在此處收到匯入的 snapshot 後，直接透過重新初始化整個 Univer 實例來載入新檔案。
+        handleUniverDoc(detail.snapshot);
+      } catch (err) {
+        console.error('Failed to replace document:', err);
+      }
+    }
+  }
 }
 
 onMounted(() => {
@@ -231,7 +288,12 @@ onUnmounted(() => {
       :loading="true"
       class="univer_doc-skeleton"
     />
-    <div ref="container" class="univer_doc-editor" @keydown="handleKeyDown" />
+    <div
+      ref="container"
+      class="univer_doc-editor"
+      @keydown="handleKeyDown"
+      @univer-local-import-snapshot="handleLocalImportEvent"
+    />
   </div>
 </template>
 

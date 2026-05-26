@@ -5,6 +5,11 @@ import {
   createSheetInstance
 } from '@app/utils/third-party/univer/create-sheet';
 
+import {
+  fetchUniverSnapshot,
+  UniverInstanceType
+} from '@app/utils/third-party/univer/snapshot';
+
 export { LOCALE_TYPE, EVENT_TYPE };
 </script>
 
@@ -112,6 +117,10 @@ const props = defineProps({
   worksheet: {
     type: Object,
     default: () => ({})
+  },
+  unitId: {
+    type: String,
+    default: ''
   }
 });
 const emits = defineEmits([
@@ -138,7 +147,7 @@ const univerInstance = reactive({
   univerAPI: null
 });
 
-async function handleUniverSheet() {
+async function handleUniverSheet(overrideSnapshot) {
   try {
     const { univer, univerAPI } = await createSheetInstance(
       container.value,
@@ -182,7 +191,28 @@ async function handleUniverSheet() {
         emits('update:worksheet', event?.worksheet);
       })
     );
-    currentWorkbook.value = univerAPI.createWorkbook(props.value);
+    if (overrideSnapshot) {
+      currentWorkbook.value = univerAPI.createWorkbook(overrideSnapshot);
+    } else {
+      if (props.unitId) {
+        try {
+          const snapshot = await fetchUniverSnapshot(
+            props.unitId,
+            UniverInstanceType.UNIVER_SHEET
+          );
+          currentWorkbook.value = univerAPI.createWorkbook(snapshot);
+        } catch (error) {
+          console.error('Failed to fetch remote snapshot manually:', error);
+          // Fallback
+          currentWorkbook.value = univerAPI.createWorkbook({
+            id: props.unitId
+          });
+        }
+      } else {
+        const snapshot = { ...props.value };
+        currentWorkbook.value = univerAPI.createWorkbook(snapshot);
+      }
+    }
 
     univerInstance.univer = univer;
     univerInstance.univerAPI = univerAPI;

@@ -751,10 +751,6 @@ export async function createSheetInstance(
       })
     ],
     plugins: [
-      ImportCSVPlugin,
-      ExportCSVPlugin,
-      // LocalExportButtonPlugin,
-      // LocalImportButtonPlugin,
       // [_UniverWatermarkPlugin, {
       //   textWatermarkSettings: {
       //     content: '測試浮水印',
