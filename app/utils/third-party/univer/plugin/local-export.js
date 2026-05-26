@@ -87,19 +87,9 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       }
 
       onStarting() {
-        try {
-          console.log({
-            ['this.componentManager.register']: this.componentManager.register,
-            ['Vue3DownloadIcon']: Vue3DownloadIcon
-          });
-          this.componentManager.register('Vue3DownloadIcon', Vue3DownloadIcon, {
-            framework: 'vue3'
-          });
-        } catch (error) {
-          if (import.meta.dev) {
-            console.error(error);
-          }
-        }
+        this.componentManager.register('Vue3DownloadIcon', Vue3DownloadIcon, {
+          framework: 'vue3'
+        });
 
         const buttonId = 'local-export-button';
 
