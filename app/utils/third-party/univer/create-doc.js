@@ -287,18 +287,18 @@ export async function importAdvancedDoc() {
   ];
 
   const univerDocAdvancedScriptList = [
-    {
-      id: 'univer-pro-docs-exchange-client',
-      src: `https://unpkg.com/@univerjs-pro/docs-exchange-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
-    {
-      id: 'univer-pro-docs-print',
-      src: `https://unpkg.com/@univerjs-pro/docs-print@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    }
     // {
-    //   id: 'univer-preset-docs-advanced',
-    //   src: `https://unpkg.com/@univerjs/preset-docs-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    // }
+    //   id: 'univer-pro-docs-exchange-client',
+    //   src: `https://unpkg.com/@univerjs-pro/docs-exchange-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // },
+    // {
+    //   id: 'univer-pro-docs-print',
+    //   src: `https://unpkg.com/@univerjs-pro/docs-print@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    // },
+    {
+      id: 'univer-preset-docs-advanced',
+      src: `https://unpkg.com/@univerjs/preset-docs-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    }
   ];
 
   const univerDocAdvancedLocaleList = [
@@ -522,17 +522,19 @@ export async function createDocInstance(
   // const { UniverWatermarkPlugin } = UniverWatermark;
 
   const {
-    UniverProLicense = {},
-    UniverProDocsPrint = {},
-    UniverProExchangeClient = {},
+    // UniverProLicense = {},
+    // UniverProDocsPrint = {},
+    // UniverProExchangeClient = {},
     UniverProDocsExchangeClient = {},
+    UniverPresetDocsAdvanced = {},
 
     UniverPresetDocsAdvancedZhTW,
     UniverPresetDocsAdvancedEnUS
   } = window;
-  const { UniverLicensePlugin } = UniverProLicense;
-  const { UniverDocsPrintPlugin } = UniverProDocsPrint;
-  const { UniverExchangeClientPlugin } = UniverProExchangeClient;
+  // const { UniverLicensePlugin } = UniverProLicense;
+  const { UniverDocsAdvancedPreset } = UniverPresetDocsAdvanced;
+  // const { UniverDocsPrintPlugin } = UniverProDocsPrint;
+  // const { UniverExchangeClientPlugin } = UniverProExchangeClient;
   const { UniverDocsExchangeClientPlugin } = UniverProDocsExchangeClient;
 
   const [LocalExportButtonPlugin, LocalImportButtonPlugin] = await Promise.all([
@@ -560,36 +562,52 @@ export async function createDocInstance(
     ]
   };
 
-  if (typeof UniverLicensePlugin !== 'undefined') {
-    univerConfig.plugins.push(
-      [
-        UniverLicensePlugin,
-        {
-          license: import.meta.env.VITE_UNIVER_LICENSE || ''
-        }
-      ],
-      UniverDocsPrintPlugin,
-      [
-        UniverExchangeClientPlugin,
-        {
-          // uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/stream/file/upload`,
-          // importServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/import`,
-          // exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/export`,
-          // getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/task/{taskID}`,
-          // signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/file/{fileID}/sign-url`,
-          // downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
+  if (typeof UniverDocsAdvancedPreset !== 'undefined') {
+    // univerConfig.plugins.push(
+    //   [
+    //     UniverLicensePlugin,
+    //     {
+    //       license: import.meta.env.VITE_UNIVER_LICENSE || ''
+    //     }
+    //   ],
+    //   UniverDocsPrintPlugin,
+    //   [
+    //     UniverExchangeClientPlugin,
+    //     {
+    //       // uploadFileServerUrl: `${UNIVER_SERVER_ENDPOINT}/stream/file/upload`,
+    //       // importServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/import`,
+    //       // exportServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/{type}/export`,
+    //       // getTaskServerUrl: `${UNIVER_SERVER_ENDPOINT}/exchange/task/{taskID}`,
+    //       // signUrlServerUrl: `${UNIVER_SERVER_ENDPOINT}/file/{fileID}/sign-url`,
+    //       // downloadEndpointUrl: `${UNIVER_SERVER_ENDPOINT}/`
 
-          uploadFileServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/stream/file/upload`,
-          importServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/{type}/import`,
-          exportServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/{type}/export`,
-          getTaskServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/task/{taskID}`,
-          signUrlServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/file/{fileID}/sign-url`,
-          downloadEndpointUrl: `${UNIVERSER_DOCKER_HOST}/`
-        }
-      ]
-    );
+    //       uploadFileServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/stream/file/upload`,
+    //       importServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/{type}/import`,
+    //       exportServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/{type}/export`,
+    //       getTaskServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/exchange/task/{taskID}`,
+    //       signUrlServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/file/{fileID}/sign-url`,
+    //       downloadEndpointUrl: `${UNIVERSER_DOCKER_HOST}/`
+    //     }
+    //   ],
+    //   [
+    //     UniverDocsExchangeClientPlugin,
+    //     {
+    //       hidden: true
+    //     }
+    //   ]
+    // );
 
     if (collaboration === true) {
+      univerConfig.presets.push([
+        UniverDocsAdvancedPreset,
+        {
+          license: import.meta.env.VITE_UNIVER_LICENSE,
+          useWorker: true,
+          // universerEndpoint: UNIVER_SERVER_ENDPOINT
+          universerEndpoint: UNIVERSER_DOCKER_HOST
+        }
+      ]);
+
       await importDocCollaboration();
       const {
         UniverProCollaboration,
@@ -652,7 +670,6 @@ export async function createDocInstance(
       );
 
       univerConfig.plugins.push(
-        UniverDocsExchangeClientPlugin,
         UniverCollaborationPlugin,
         [
           UniverCollaborationClientPlugin,
@@ -693,9 +710,24 @@ export async function createDocInstance(
         )
       };
 
-      univerConfig.presets.push(UniverDocsDrawingPreset());
+      const advancedPreset = UniverDocsAdvancedPreset({
+        license: import.meta.env.VITE_UNIVER_LICENSE,
+        useWorker: true,
+        // universerEndpoint: UNIVER_SERVER_ENDPOINT
+        universerEndpoint: UNIVERSER_DOCKER_HOST
+      });
+
+      // 過濾掉官方的匯出按鈕 UI Plugin，這樣在非共編狀態下就不會顯示官方按鈕
+      advancedPreset.plugins = advancedPreset.plugins.filter((plugin) => {
+        const pluginClass = Array.isArray(plugin) ? plugin[0] : plugin;
+        return pluginClass !== UniverDocsExchangeClientPlugin;
+      });
+
+      univerConfig.presets.push(UniverDocsDrawingPreset(), advancedPreset);
     }
   }
+
+  console.log({ univerConfig });
 
   const univerInstance = await importRegisterVue(createUniver(univerConfig));
   univerInstance.univer.registerPlugins([
