@@ -586,8 +586,7 @@ export async function createDocInstance(
           signUrlServerUrl: `${UNIVERSER_DOCKER_HOST}/universer-api/file/{fileID}/sign-url`,
           downloadEndpointUrl: `${UNIVERSER_DOCKER_HOST}/`
         }
-      ],
-      UniverDocsExchangeClientPlugin
+      ]
     );
 
     if (collaboration === true) {
@@ -653,6 +652,7 @@ export async function createDocInstance(
       );
 
       univerConfig.plugins.push(
+        UniverDocsExchangeClientPlugin,
         UniverCollaborationPlugin,
         [
           UniverCollaborationClientPlugin,

@@ -711,7 +711,8 @@ export async function createSheetInstance(
   const { UniverSheetsThreadCommentPreset } = UniverPresetSheetsThreadComment;
   const { UniverSheetsNotePreset } = UniverPresetSheetsNote;
   const { UniverSheetsTablePreset } = UniverPresetSheetsTable;
-  const { UniverSheetsAdvancedPreset } = UniverPresetSheetsAdvanced;
+  const { UniverSheetsAdvancedPreset, UniverSheetsExchangeClientPlugin } =
+    UniverPresetSheetsAdvanced;
 
   // const { UniverWatermarkPlugin: _UniverWatermarkPlugin } = UniverWatermark;
   const { UniverSheetsCrosshairHighlightPlugin } =
@@ -721,13 +722,32 @@ export async function createSheetInstance(
   // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
   // const { UniverUniscriptPlugin } = UniverUniscript;
 
-  const [ImportCSVPlugin, ExportCSVPlugin, LocalExportButtonPlugin, LocalImportButtonPlugin] =
-    await Promise.all([
-      createdImportCSVButtonPlugin(),
-      createdExportCSVButtonPlugin(),
-      createdLocalExportButtonPlugin(),
-      createdLocalImportButtonPlugin()
-    ]);
+  const [
+    ImportCSVPlugin,
+    ExportCSVPlugin,
+    LocalExportButtonPlugin,
+    LocalImportButtonPlugin
+  ] = await Promise.all([
+    createdImportCSVButtonPlugin(),
+    createdExportCSVButtonPlugin(),
+    createdLocalExportButtonPlugin(),
+    createdLocalImportButtonPlugin()
+  ]);
+
+  const advancedPreset = UniverSheetsAdvancedPreset({
+    license: import.meta.env.VITE_UNIVER_LICENSE,
+    useWorker: true,
+    // universerEndpoint: UNIVER_SERVER_ENDPOINT,
+    universerEndpoint: UNIVERSER_DOCKER_HOST
+  });
+
+  if (collaboration === false) {
+    // 過濾掉官方的匯出按鈕 UI Plugin，這樣在非共編狀態下就不會顯示官方按鈕
+    advancedPreset.plugins = advancedPreset.plugins.filter((plugin) => {
+      const pluginClass = Array.isArray(plugin) ? plugin[0] : plugin;
+      return pluginClass !== UniverSheetsExchangeClientPlugin;
+    });
+  }
 
   const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
@@ -743,12 +763,7 @@ export async function createSheetInstance(
       UniverSheetsThreadCommentPreset(),
       UniverSheetsNotePreset(),
       UniverSheetsTablePreset(),
-      UniverSheetsAdvancedPreset({
-        license: import.meta.env.VITE_UNIVER_LICENSE,
-        useWorker: true,
-        // universerEndpoint: UNIVER_SERVER_ENDPOINT,
-        universerEndpoint: UNIVERSER_DOCKER_HOST
-      })
+      advancedPreset
     ],
     plugins: [
       // [_UniverWatermarkPlugin, {
