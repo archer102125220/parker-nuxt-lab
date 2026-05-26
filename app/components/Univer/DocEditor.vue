@@ -193,7 +193,7 @@ async function handleUniverDoc(overrideSnapshot) {
           });
         }
       } else {
-        const snapshot = { ...props.doc };
+        const snapshot = { ...props.value };
         currentDoc.value = univerAPI.createUniverDoc(snapshot);
       }
     }
