@@ -75,22 +75,18 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
             // We use FUniver to access the import APIs easily
             const univerAPI = FUniver.newAPI(accessor.get(Injector));
             // 根據當前啟用的編輯器類型動態決定支援的副檔名
-            const isDoc =
-              typeof univerAPI.getActiveDocument === 'function' &&
-              !!univerAPI.getActiveDocument();
-            const isSheet =
-              typeof univerAPI.getActiveWorkbook === 'function' &&
-              !!univerAPI.getActiveWorkbook();
+            const isDoc = !!univerAPI.getActiveDocument?.();
+            const isSheet = !!univerAPI.getActiveWorkbook?.();
 
             let acceptExtensions = '.docx,.xlsx';
             let errorMessage = '不支援的檔案格式，請上傳 DOCX 或 XLSX';
 
-            if (isDoc) {
-              acceptExtensions = '.docx';
-              errorMessage = '不支援的檔案格式，請上傳 DOCX 檔案';
-            } else if (isSheet) {
+            if (isSheet) {
               acceptExtensions = '.xlsx';
               errorMessage = '不支援的檔案格式，請上傳 XLSX 檔案';
+            } else if (isDoc) {
+              acceptExtensions = '.docx';
+              errorMessage = '不支援的檔案格式，請上傳 DOCX 檔案';
             }
 
             // 建立一個隱藏的 input 來選擇檔案
@@ -103,10 +99,10 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
               if (!file) return;
 
               const extension = file.name.split('.').pop()?.toLowerCase();
-              const isValidExtension = isDoc
-                ? extension === 'docx'
-                : isSheet
-                  ? extension === 'xlsx'
+              const isValidExtension = isSheet
+                ? extension === 'xlsx'
+                : isDoc
+                  ? extension === 'docx'
                   : extension === 'docx' || extension === 'xlsx';
 
               if (!isValidExtension) {
