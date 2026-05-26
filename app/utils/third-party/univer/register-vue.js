@@ -1,0 +1,77 @@
+import { loadScript } from '@app/utils/helpers/load-script';
+import { UNIVERSAL_VERSION } from '@/app/utils/third-party/univer/import-univer';
+
+export function importRegisterVue(univerInstance, tryLimit = 10, tryCount = 0) {
+  if (typeof univerInstance !== 'object' || univerInstance === null) {
+    console.error('[importRegisterVue] univerInstance is not an object');
+    return;
+  }
+  return new Promise(async (resolve, reject) => {
+    const { UniverUi = {} } = window;
+
+    const { UniverUIPlugin } = UniverUi;
+
+    if (typeof UniverUIPlugin === 'undefined') {
+      if (tryCount < tryLimit) {
+        return setTimeout(() => {
+          resolve(importRegisterVue(univerInstance, tryLimit, tryCount + 1));
+        }, 500);
+      }
+      return reject(new Error('Failed to load Univer dependencies'));
+    }
+
+    const univerUiAdapterVue3DependecyList = [
+      { id: 'vue3', src: 'https://unpkg.com/vue@3/dist/vue.global.js' }
+    ];
+
+    await Promise.all(
+      univerUiAdapterVue3DependecyList.map((item) =>
+        loadScript(item.id, item.src)
+      )
+    );
+
+    const univerUiAdapterVue3ScriptList = [
+      {
+        id: 'univerjs-ui-adapter-vue3',
+        src: `https://unpkg.com/@univerjs/ui-adapter-vue3@${UNIVERSAL_VERSION}/lib/umd/index.js`
+      }
+    ];
+    await Promise.all(
+      univerUiAdapterVue3ScriptList.map((item) => loadScript(item.id, item.src))
+    );
+
+    const { UniverUiAdapterVue3 = {} } = window;
+    const { UniverVue3AdapterPlugin } = UniverUiAdapterVue3;
+
+    if (
+      typeof UniverVue3AdapterPlugin === 'undefined' ||
+      typeof univerInstance?.univer?.registerPlugin === 'undefined'
+    ) {
+      if (tryCount < tryLimit) {
+        return setTimeout(() => {
+          resolve(importRegisterVue(univerInstance, tryLimit, tryCount + 1));
+        }, 500);
+      }
+      return reject(new Error('Failed to load Univer dependencies'));
+    }
+
+    const { univer, univerAPI } = univerInstance;
+    try {
+      console.log('registerPlugin UniverVue3AdapterPlugin');
+      univer.registerPlugin(UniverVue3AdapterPlugin);
+      console.log('registerPlugin UniverVue3AdapterPlugin success');
+
+      // console.log('registerComponent DownloadIcon');
+      // univerAPI.registerComponent('DownloadIcon', DownloadIcon, {
+      //   framework: 'vue3'
+      // });
+      // console.log('registerComponent DownloadIcon success');
+    } catch (error) {
+      // reject(error);
+      if (import.meta.dev) {
+        console.error('registerPlugin UniverVue3AdapterPlugin error', error);
+      }
+    }
+    resolve({ univer, univerAPI });
+  });
+}

@@ -7,7 +7,9 @@ import {
   UNIVERSER_DOCKER_HOST
 } from '@app/utils/third-party/univer/import-univer';
 import { importSheet } from '@app/utils/third-party/univer/create-sheet';
+import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
+import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
 
 // 因為 univer 會重複引用導致報錯，所以忽略 univer 的重複引用錯誤
 function ignoreErrorLog() {
@@ -428,15 +430,14 @@ export async function importDocCollaboration() {
     return;
   }
 
-  const univerDocCollaborationScriptPromiseList = univerDocCollaborationScriptList.map(
-    (univerDocCollaborationScript) => {
+  const univerDocCollaborationScriptPromiseList =
+    univerDocCollaborationScriptList.map((univerDocCollaborationScript) => {
       return loadScript(
         univerDocCollaborationScript.id,
         univerDocCollaborationScript.src,
         univerDocCollaborationScript.attributes
       );
-    }
-  );
+    });
   await Promise.all(univerDocCollaborationScriptPromiseList);
 
   const univerDocCollaborationLocaleListPromiseList =
@@ -465,6 +466,10 @@ export async function createDocInstance(
   locale = '',
   collaboration = false
 ) {
+  if (container instanceof HTMLElement === false) {
+    throw new Error('container must be an HTMLElement');
+  }
+
   ignoreErrorLog();
   console.log('createDocInstance start');
   await importUniver();
@@ -476,10 +481,6 @@ export async function createDocInstance(
         resolve(createDocInstance(container, locale));
       }, 100);
     });
-  }
-
-  if (container instanceof HTMLElement === false) {
-    throw new Error('container must be an HTMLElement');
   }
 
   // Restore Docs globals before instantiating the editor
@@ -534,10 +535,10 @@ export async function createDocInstance(
   const { UniverExchangeClientPlugin } = UniverProExchangeClient;
   const { UniverDocsExchangeClientPlugin } = UniverProDocsExchangeClient;
 
-  const [LocalExportButtonPlugin] =
-    await Promise.all([
-      createdLocalExportButtonPlugin()
-    ]);
+  const [LocalExportButtonPlugin, LocalImportButtonPlugin] = await Promise.all([
+    createdLocalExportButtonPlugin(),
+    createdLocalImportButtonPlugin()
+  ]);
 
   const univerConfig = {
     locale: locale.includes('zh') ? LocaleType.ZH_TW : LocaleType.EN_US,
@@ -548,7 +549,7 @@ export async function createDocInstance(
       UniverDocsThreadCommentPreset()
     ],
     plugins: [
-      LocalExportButtonPlugin,
+      // LocalExportButtonPlugin,
       UniverDocsQuickInsertUIPlugin
       // [UniverWatermarkPlugin, {
       //   textWatermarkSettings: {
@@ -696,7 +697,11 @@ export async function createDocInstance(
     }
   }
 
-  const univerInstance = createUniver(univerConfig);
+  const univerInstance = await importRegisterVue(createUniver(univerConfig));
+  univerInstance.univer.registerPlugins([
+    [LocalExportButtonPlugin],
+    [LocalImportButtonPlugin]
+  ]);
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;

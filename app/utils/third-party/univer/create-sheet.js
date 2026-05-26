@@ -6,9 +6,11 @@ import {
   // UNIVER_SERVER_ENDPOINT,
   UNIVERSER_DOCKER_HOST
 } from '@app/utils/third-party/univer/import-univer';
+import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
 import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
+import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
 
 export const LOCALE_TYPE = {
   get list() {
@@ -719,11 +721,12 @@ export async function createSheetInstance(
   // uniscript 好像是 experimental ，並且 CDN 需要額外想辦法處理 monaco-editor ，暫先註解掉
   // const { UniverUniscriptPlugin } = UniverUniscript;
 
-  const [ImportCSVPlugin, ExportCSVPlugin, LocalExportButtonPlugin] =
+  const [ImportCSVPlugin, ExportCSVPlugin, LocalExportButtonPlugin, LocalImportButtonPlugin] =
     await Promise.all([
       createdImportCSVButtonPlugin(),
       createdExportCSVButtonPlugin(),
-      createdLocalExportButtonPlugin()
+      createdLocalExportButtonPlugin(),
+      createdLocalImportButtonPlugin()
     ]);
 
   const univerConfig = {
@@ -750,7 +753,8 @@ export async function createSheetInstance(
     plugins: [
       ImportCSVPlugin,
       ExportCSVPlugin,
-      LocalExportButtonPlugin,
+      // LocalExportButtonPlugin,
+      // LocalImportButtonPlugin,
       // [_UniverWatermarkPlugin, {
       //   textWatermarkSettings: {
       //     content: '測試浮水印',
@@ -879,7 +883,13 @@ export async function createSheetInstance(
     univerConfig.collaboration = undefined;
   }
 
-  const univerInstance = createUniver(univerConfig);
+  const univerInstance = await importRegisterVue(createUniver(univerConfig));
+  univerInstance.univer.registerPlugins([
+    [ImportCSVPlugin],
+    [ExportCSVPlugin],
+    [LocalExportButtonPlugin],
+    [LocalImportButtonPlugin]
+  ]);
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;

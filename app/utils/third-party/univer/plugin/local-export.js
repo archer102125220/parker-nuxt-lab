@@ -1,3 +1,5 @@
+import Vue3DownloadIcon from '@app/components/Icon/Download';
+
 export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
   return new Promise((resolve, rejects) => {
     const {
@@ -85,6 +87,20 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       }
 
       onStarting() {
+        try {
+          console.log({
+            ['this.componentManager.register']: this.componentManager.register,
+            ['Vue3DownloadIcon']: Vue3DownloadIcon
+          });
+          this.componentManager.register('Vue3DownloadIcon', Vue3DownloadIcon, {
+            framework: 'vue3'
+          });
+        } catch (error) {
+          if (import.meta.dev) {
+            console.error(error);
+          }
+        }
+
         const buttonId = 'local-export-button';
 
         const command = {
@@ -113,7 +129,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             try {
               messageService.show({
                 type: MessageType.Info,
-                content: '正在為您匯出文件，這可能需要幾秒鐘的時間，請稍候...'
+                content: '正在匯出文件，這可能需要幾秒鐘的時間，請稍候...'
               });
 
               // 1. 取得完整的文件 Snapshot JSON
@@ -296,7 +312,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           title: 'Export File',
           tooltip: 'Export as Local File',
-          icon: 'ExportIcon',
+          icon: 'Vue3DownloadIcon',
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {
             const univerInstanceService = this._injector.get(
@@ -344,8 +360,6 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       ],
       1
     );
-
-    console.log({ LocalExportButtonPlugin });
 
     resolve(LocalExportButtonPlugin);
   });
