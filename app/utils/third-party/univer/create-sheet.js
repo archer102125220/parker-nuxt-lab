@@ -11,6 +11,8 @@ import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plug
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
+import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
+import CustomPluginZhTW from '@app/utils/third-party/univer/i18n/zh-TW';
 
 export const LOCALE_TYPE = {
   get list() {
@@ -811,7 +813,9 @@ export async function createSheetInstance(
         UniverSheetsZenEditorZhTW,
 
         UniverPresetSheetsAdvancedZhTW,
-        UniverSheetsCollaborationPresetZhTW
+        UniverSheetsCollaborationPresetZhTW,
+
+        CustomPluginZhTW
       ),
       [LocaleType.EN_US]: mergeLocales(
         UniverPresetSheetsCoreEnUS,
@@ -832,7 +836,9 @@ export async function createSheetInstance(
         UniverSheetsZenEditorEnUS,
 
         UniverPresetSheetsAdvancedEnUS,
-        UniverSheetsCollaborationPresetEnUS
+        UniverSheetsCollaborationPresetEnUS,
+
+        CustomPluginEnUS
       )
     };
 
@@ -865,7 +871,9 @@ export async function createSheetInstance(
         UniverPresetSheetsTableZhTW,
         UniverSheetsZenEditorZhTW,
 
-        UniverPresetSheetsAdvancedZhTW
+        UniverPresetSheetsAdvancedZhTW,
+
+        CustomPluginZhTW
       ),
       [LocaleType.EN_US]: mergeLocales(
         UniverPresetSheetsCoreEnUS,
@@ -885,7 +893,9 @@ export async function createSheetInstance(
         UniverPresetSheetsTableEnUS,
         UniverSheetsZenEditorEnUS,
 
-        UniverPresetSheetsAdvancedEnUS
+        UniverPresetSheetsAdvancedEnUS,
+
+        CustomPluginEnUS
       )
     };
 

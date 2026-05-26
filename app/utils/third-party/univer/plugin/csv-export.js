@@ -152,8 +152,8 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
         // 3. 定義 UI 功能區的選單項目設定
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'Export CSV',
-          tooltip: 'Export CSV',
+          title: 'parker-vue-lab-plugins.csv-export.title',
+          tooltip: 'parker-vue-lab-plugins.csv-export.tooltip',
           icon: 'Vue3IconCSVExport', // 這必須與我們在 componentManager 中註冊的名稱相符
           type: MenuItemType.BUTTON,
           // hidden$ 是一個 Observable，動態決定何時應該隱藏按鈕。

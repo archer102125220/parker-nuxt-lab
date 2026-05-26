@@ -36,7 +36,8 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       IUniverInstanceService,
       Plugin,
       sequenceExecute,
-      UniverInstanceType
+      UniverInstanceType,
+      LocaleService
     } = UniverCore;
 
     if (
@@ -60,7 +61,8 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       typeof IUniverInstanceService === 'undefined' ||
       typeof Plugin === 'undefined' ||
       typeof sequenceExecute === 'undefined' ||
-      typeof UniverInstanceType === 'undefined'
+      typeof UniverInstanceType === 'undefined' ||
+      typeof LocaleService === 'undefined'
     ) {
       if (tryCount < tryLimit) {
         return setTimeout(() => {
@@ -214,8 +216,8 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
 
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'Import CSV',
-          tooltip: 'Import CSV',
+          title: 'parker-vue-lab-plugins.csv-import.title',
+          tooltip: 'parker-vue-lab-plugins.csv-import.tooltip',
           icon: 'Vue3IconCSV', // 圖標名稱
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {

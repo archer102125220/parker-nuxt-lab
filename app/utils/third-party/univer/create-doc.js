@@ -10,6 +10,8 @@ import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
+import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
+import CustomPluginZhTW from '@app/utils/third-party/univer/i18n/zh-TW';
 
 // 因為 univer 會重複引用導致報錯，所以忽略 univer 的重複引用錯誤
 function ignoreErrorLog() {
@@ -642,7 +644,9 @@ export async function createDocInstance(
 
           UniverPresetDocsAdvancedZhTW,
           UniverProCollaborationClientZhTW,
-          UniverProCollaborationClientUiZhTW
+          UniverProCollaborationClientUiZhTW,
+
+          CustomPluginZhTW
         ),
         [LocaleType.EN_US]: mergeLocales(
           UniverPresetDocsCoreEnUS,
@@ -653,7 +657,9 @@ export async function createDocInstance(
 
           UniverPresetDocsAdvancedEnUS,
           UniverProCollaborationClientEnUS,
-          UniverProCollaborationClientUiEnUS
+          UniverProCollaborationClientUiEnUS,
+
+          CustomPluginEnUS
         )
       };
 
@@ -697,7 +703,8 @@ export async function createDocInstance(
           UniverPresetDocsQuickInsertUiZhTW,
           UniverPresetDocsThreadCommentZhTW,
 
-          UniverPresetDocsAdvancedZhTW
+          UniverPresetDocsAdvancedZhTW,
+          CustomPluginZhTW
         ),
         [LocaleType.EN_US]: mergeLocales(
           UniverPresetDocsCoreEnUS,
@@ -706,7 +713,8 @@ export async function createDocInstance(
           UniverPresetDocsQuickInsertUiEnUS,
           UniverPresetDocsThreadCommentEnUS,
 
-          UniverPresetDocsAdvancedEnUS
+          UniverPresetDocsAdvancedEnUS,
+          CustomPluginEnUS
         )
       };
 
@@ -726,8 +734,6 @@ export async function createDocInstance(
       univerConfig.presets.push(UniverDocsDrawingPreset(), advancedPreset);
     }
   }
-
-  console.log({ univerConfig });
 
   const univerInstance = await importRegisterVue(createUniver(univerConfig));
   univerInstance.univer.registerPlugins([

@@ -29,7 +29,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       ICommandService,
       IUniverInstanceService,
       Plugin,
-      UniverInstanceType
+      UniverInstanceType,
+      LocaleService
     } = UniverCore;
     const { MessageType } = UniverDesign;
 
@@ -49,6 +50,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       typeof IUniverInstanceService === 'undefined' ||
       typeof Plugin === 'undefined' ||
       typeof UniverInstanceType === 'undefined' ||
+      typeof LocaleService === 'undefined' ||
       typeof MessageType === 'undefined'
     ) {
       if (tryCount < tryLimit) {
@@ -99,6 +101,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
           handler: async (accessor) => {
             const univerInstanceService = accessor.get(IUniverInstanceService);
             const messageService = accessor.get(IMessageService);
+            const localeService = accessor.get(LocaleService);
             const doc = univerInstanceService.getFocusedUnit();
             if (typeof doc !== 'object' || doc === null) return false;
             const focusedUnitId = doc.getUnitId();
@@ -119,7 +122,9 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             try {
               messageService.show({
                 type: MessageType.Info,
-                content: '正在匯出文件，這可能需要幾秒鐘的時間，請稍候...'
+                content: localeService.t(
+                  'parker-vue-lab-plugins.local-export.info'
+                )
               });
 
               // 1. 取得完整的文件 Snapshot JSON
@@ -134,7 +139,9 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   await transformWorkbookDataToSnapshotJson(snapshot);
               } else {
                 throw new Error(
-                  '未載入 UniverProExchangeClient，無法進行 Snapshot 轉換'
+                  localeService.t(
+                    'parker-vue-lab-plugins.local-export.error.snapshot'
+                  )
                 );
               }
 
@@ -163,7 +170,9 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
               if (uploadRes.ok === false) {
                 const errText = await uploadRes.text();
-                throw new Error(`上傳失敗 (${uploadRes.status}): ${errText}`);
+                throw new Error(
+                  `${localeService.t('parker-vue-lab-plugins.local-export.error.uploadFailed')} (${uploadRes.status}): ${errText}`
+                );
               }
 
               const uploadData = await uploadRes.json();
@@ -175,7 +184,11 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 typeof uploadData.FileId !== 'string' ||
                 uploadData.FileId === ''
               ) {
-                throw new Error('上傳 Snapshot 失敗');
+                throw new Error(
+                  localeService.t(
+                    'parker-vue-lab-plugins.local-export.error.uploadSnapshotFailed'
+                  )
+                );
               }
               const fileId = uploadData.FileId;
 
@@ -194,7 +207,11 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
               const taskID = exportData.taskID;
               if (typeof taskID !== 'string' || taskID === '') {
-                throw new Error('呼叫匯出任務失敗，未取得 taskID');
+                throw new Error(
+                  localeService.t(
+                    'parker-vue-lab-plugins.local-export.error.taskFailed'
+                  )
+                );
               }
 
               // 4. Polling (輪詢) 檢查任務狀態
@@ -224,7 +241,9 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   );
                   throw new Error(
                     taskData.error?.message ||
-                      '後端匯出任務執行失敗: ' + JSON.stringify(taskData)
+                      localeService.t(
+                        'parker-vue-lab-plugins.local-export.error.backendTaskFailed'
+                      ) + JSON.stringify(taskData)
                   );
                 }
 
@@ -233,7 +252,11 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               }
 
               if (isSuccess === false || finalTaskData === null) {
-                throw new Error('匯出任務超時');
+                throw new Error(
+                  localeService.t(
+                    'parker-vue-lab-plugins.local-export.error.timeout'
+                  )
+                );
               }
 
               // 5. 下載檔案
@@ -291,7 +314,10 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 err instanceof Error ? err.message : String(err);
               messageService.show({
                 type: MessageType.Error,
-                content: '匯出發生錯誤：' + errorMessage
+                content:
+                  localeService.t(
+                    'parker-vue-lab-plugins.local-export.error.exportFailed'
+                  ) + errorMessage
               });
               return false;
             }
@@ -300,8 +326,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'Export File',
-          tooltip: 'Export as Local File',
+          title: 'parker-vue-lab-plugins.local-export.title',
+          tooltip: 'parker-vue-lab-plugins.local-export.tooltip',
           icon: 'Vue3DownloadIcon',
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {

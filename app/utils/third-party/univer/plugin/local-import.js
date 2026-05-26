@@ -19,7 +19,7 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
       IMessageService,
       ILayoutService
     } = UniverUi;
-    const { CommandType, ICommandService, Plugin } = UniverCore;
+    const { CommandType, ICommandService, Plugin, LocaleService } = UniverCore;
     const { FUniver } = UniverCoreFacade;
     const { MessageType } = UniverDesign;
 
@@ -33,6 +33,7 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
       typeof RibbonStartGroup === 'undefined' ||
       typeof IMessageService === 'undefined' ||
       typeof ILayoutService === 'undefined' ||
+      typeof LocaleService === 'undefined' ||
       typeof CommandType === 'undefined' ||
       typeof ICommandService === 'undefined' ||
       typeof Plugin === 'undefined' ||
@@ -72,6 +73,7 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
           handler: async (accessor) => {
             const messageService = accessor.get(IMessageService);
             const layoutService = accessor.get(ILayoutService);
+            const localeService = accessor.get(LocaleService);
             // We use FUniver to access the import APIs easily
             const univerAPI = FUniver.newAPI(accessor.get(Injector));
             // 根據當前啟用的編輯器類型動態決定支援的副檔名
@@ -79,14 +81,20 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const isSheet = !!univerAPI.getActiveWorkbook?.();
 
             let acceptExtensions = '.docx,.xlsx';
-            let errorMessage = '不支援的檔案格式，請上傳 DOCX 或 XLSX';
+            let errorMessage = localeService.t(
+              'parker-nuxt-lab-plugins.local-import.error.unsupportedAll'
+            );
 
             if (isSheet) {
               acceptExtensions = '.xlsx';
-              errorMessage = '不支援的檔案格式，請上傳 XLSX 檔案';
+              errorMessage = localeService.t(
+                'parker-nuxt-lab-plugins.local-import.error.unsupportedSheet'
+              );
             } else if (isDoc) {
               acceptExtensions = '.docx';
-              errorMessage = '不支援的檔案格式，請上傳 DOCX 檔案';
+              errorMessage = localeService.t(
+                'parker-vue-lab-plugins.local-import.error.unsupportedDoc'
+              );
             }
 
             // 建立一個隱藏的 input 來選擇檔案
@@ -116,7 +124,9 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
               try {
                 messageService.show({
                   type: MessageType.Info,
-                  content: '正在匯入文件，請稍候...'
+                  content: localeService.t(
+                    'parker-vue-lab-plugins.local-import.info'
+                  )
                 });
 
                 let snapshot = null;
@@ -151,14 +161,21 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
                   messageService.show({
                     type: MessageType.Success,
-                    content: '匯入成功！'
+                    content: localeService.t(
+                      'parker-vue-lab-plugins.local-import.success'
+                    )
                   });
                 }
               } catch (err) {
                 console.error(err);
+                const errorMessage =
+                  err instanceof Error ? err.message : String(err);
                 messageService.show({
                   type: MessageType.Error,
-                  content: '匯入失敗：' + (err.message || '未知錯誤')
+                  content:
+                    localeService.t(
+                      'parker-vue-lab-plugins.local-import.error.importFailed'
+                    ) + errorMessage
                 });
               }
             };
@@ -170,8 +187,8 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'Local Import',
-          tooltip: 'Import DOCX/XLSX (Local)',
+          title: 'parker-vue-lab-plugins.local-import.title',
+          tooltip: 'parker-vue-lab-plugins.local-import.tooltip',
           icon: 'ExportIcon',
           type: MenuItemType.BUTTON
         });
