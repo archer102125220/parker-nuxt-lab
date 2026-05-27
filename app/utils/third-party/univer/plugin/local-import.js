@@ -209,13 +209,26 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
           }
         };
 
-        const menuItemFactory = () => ({
-          id: buttonId,
-          title: 'parker-nuxt-lab-plugins.local-import.title',
-          tooltip: 'parker-nuxt-lab-plugins.local-import.tooltip',
-          icon: 'ExportIcon',
-          type: MenuItemType.BUTTON
-        });
+        const menuItemFactory = (accessor) => {
+          const univerAPI = FUniver.newAPI(accessor.get(Injector));
+          const isDoc = !!univerAPI.getActiveDocument?.();
+          const isSheet = !!univerAPI.getActiveWorkbook?.();
+
+          let tooltipKey = 'parker-nuxt-lab-plugins.local-import.tooltip';
+          if (isSheet) {
+            tooltipKey = 'parker-nuxt-lab-plugins.local-import.tooltipSheet';
+          } else if (isDoc) {
+            tooltipKey = 'parker-nuxt-lab-plugins.local-import.tooltipDoc';
+          }
+
+          return {
+            id: buttonId,
+            title: 'parker-nuxt-lab-plugins.local-import.title',
+            tooltip: tooltipKey,
+            icon: 'ExportIcon',
+            type: MenuItemType.BUTTON
+          };
+        };
 
         // 註冊至工具列
         this.menuManagerService.mergeMenu({
