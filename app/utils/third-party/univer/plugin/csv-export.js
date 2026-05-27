@@ -74,7 +74,7 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
        */
       onStarting() {
         // 1. 註冊我們想在選單中使用的圖示
-        this.componentManager.register('Vue3IconCSVExport', Vue3IconCSVExport, {
+        this.componentManager.register('Vue3CSVExportIcon', Vue3IconCSVExport, {
           framework: 'vue3'
         });
 
@@ -156,7 +156,7 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           title: 'parker-nuxt-lab-plugins.csv-export.title',
           tooltip: 'parker-nuxt-lab-plugins.csv-export.tooltip',
-          icon: 'Vue3IconCSVExport', // 這必須與我們在 componentManager 中註冊的名稱相符
+          icon: 'Vue3CSVExportIcon', // 這必須與我們在 componentManager 中註冊的名稱相符
           type: MenuItemType.BUTTON,
           // hidden$ 是一個 Observable，動態決定何時應該隱藏按鈕。
           // 這裡，如果目前聚焦的文件不是試算表（例如切換到文件），我們就隱藏該按鈕。
@@ -178,13 +178,24 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           })
         });
 
+        const parentMenuId = 'parker-nuxt-lab-plugins.csv-import-export-menu';
+
         // 4. 將選單項目加入功能區選單結構
         // RibbonStartGroup.OTHERS 通常放置在工具列的最右側。
         this.menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
-            [buttonId]: {
-              order: 11, // 顯示順序：放置在順序為 10 的匯入 CSV 之後
-              menuItemFactory
+            [parentMenuId]: {
+              order: 10, // 顯示順序：放在順序為 9 的「開啟快速面板」後面
+              menuItemFactory: () => ({
+                id: parentMenuId,
+                tooltip: 'CSV',
+                icon: 'Vue3CSVIcon',
+                type: MenuItemType.SUBITEMS
+              }),
+              [buttonId]: {
+                order: 2,
+                menuItemFactory
+              }
             }
           }
         });

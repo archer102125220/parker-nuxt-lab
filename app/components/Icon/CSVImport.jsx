@@ -1,3 +1,5 @@
+import { defineComponent } from 'vue';
+
 export const IconCSV = defineComponent({
   setup(props, { attrs }) {
     return () => (

@@ -9,7 +9,7 @@ export default {
       tooltip: '匯入 CSV'
     },
     'server-export': {
-      title: '匯出檔案 (Server)',
+      title: '透過伺服器匯出為標準檔案',
       tooltip: '透過伺服器匯出為標準檔案',
       info: '正在透過伺服器匯出文件，這可能需要幾秒鐘的時間，請稍候...',
       error: {
@@ -61,6 +61,9 @@ export default {
         unlocked: '已解除鎖定範圍：',
         noLockedRange: '選取範圍內沒有鎖定的區塊'
       }
+    },
+    'import-export-menu': {
+      tooltip: '匯入與匯出選項'
     }
   }
 };

@@ -1,6 +1,9 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 import { UNIVERSAL_VERSION } from '@/app/utils/third-party/univer/import-univer';
 
+import IconFolder from '@app/components/Icon/Folder.vue';
+import IconCSV from '@app/components/Icon/CSV.vue';
+
 export function importRegisterVue(univerInstance, tryLimit = 10, tryCount = 0) {
   if (typeof univerInstance !== 'object' || univerInstance === null) {
     console.error('[importRegisterVue] univerInstance is not an object');
@@ -55,23 +58,21 @@ export function importRegisterVue(univerInstance, tryLimit = 10, tryCount = 0) {
       return reject(new Error('Failed to load Univer dependencies'));
     }
 
-    const { univer, univerAPI } = univerInstance;
+    const { univer, univerAPI, ...orthers } = univerInstance;
     try {
-      console.log('registerPlugin UniverVue3AdapterPlugin');
       univer.registerPlugin(UniverVue3AdapterPlugin);
-      console.log('registerPlugin UniverVue3AdapterPlugin success');
-
-      // console.log('registerComponent DownloadIcon');
-      // univerAPI.registerComponent('DownloadIcon', DownloadIcon, {
-      //   framework: 'vue3'
-      // });
-      // console.log('registerComponent DownloadIcon success');
+      univerAPI.registerComponent('Vue3FolderIcon', IconFolder, {
+        framework: 'vue3'
+      });
+      univerAPI.registerComponent('Vue3CSVIcon', IconCSV, {
+        framework: 'vue3'
+      });
     } catch (error) {
       // reject(error);
       if (import.meta.dev) {
         console.error('registerPlugin UniverVue3AdapterPlugin error', error);
       }
     }
-    resolve({ univer, univerAPI });
+    resolve({ univer, univerAPI, ...orthers });
   });
 }

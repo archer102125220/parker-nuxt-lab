@@ -377,12 +377,23 @@ export function createdServerExportButtonPlugin(tryLimit = 10, tryCount = 0) {
           })
         });
 
+        const parentMenuId = 'parker-nuxt-lab-plugins.import-export-menu';
+
         // 加入到工具列的 OTHER 群組
         this.menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
-            [buttonId]: {
-              order: 20,
-              menuItemFactory
+            [parentMenuId]: {
+              order: 19,
+              menuItemFactory: () => ({
+                id: parentMenuId,
+                tooltip: 'parker-nuxt-lab-plugins.import-export-menu.tooltip',
+                icon: 'Vue3FolderIcon',
+                type: MenuItemType.SUBITEMS
+              }),
+              [buttonId]: {
+                order: 3,
+                menuItemFactory
+              }
             }
           }
         });

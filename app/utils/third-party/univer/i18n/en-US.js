@@ -9,7 +9,7 @@ export default {
       tooltip: 'Import CSV'
     },
     'server-export': {
-      title: 'Export File (Server)',
+      title: 'Export as Standard File via Server',
       tooltip: 'Export as Standard File via Server',
       info: 'Exporting document via server, this may take a few seconds, please wait...',
       error: {
@@ -63,6 +63,9 @@ export default {
         unlocked: 'Unlocked range: ',
         noLockedRange: 'No locked blocks in the selection'
       }
+    },
+    'import-export-menu': {
+      tooltip: 'Import and Export options'
     }
   }
 };

@@ -1,4 +1,4 @@
-import Vue3IconCSV from '@app/components/Icon/CSV.jsx';
+import Vue3IconCSVImport from '~/app/components/Icon/CSVImport';
 
 import { handleSelectCSVFile } from '@app/utils/helpers/select-csv-file';
 
@@ -103,7 +103,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
        */
       onStarting() {
         // 註冊圖標元件
-        this.componentManager.register('Vue3IconCSV', Vue3IconCSV, {
+        this.componentManager.register('Vue3CSVImportIcon', Vue3IconCSVImport, {
           framework: 'vue3'
         });
 
@@ -219,7 +219,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
           id: buttonId,
           title: 'parker-nuxt-lab-plugins.csv-import.title',
           tooltip: 'parker-nuxt-lab-plugins.csv-import.tooltip',
-          icon: 'Vue3IconCSV', // 圖標名稱
+          icon: 'Vue3CSVImportIcon', // 圖標名稱
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {
             const univerInstanceService = this._injector.get(
@@ -238,11 +238,23 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
             return () => subscription.unsubscribe();
           })
         });
+
+        const parentMenuId = 'parker-nuxt-lab-plugins.csv-import-export-menu';
+
         this.menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
-            [buttonId]: {
+            [parentMenuId]: {
               order: 10,
-              menuItemFactory
+              menuItemFactory: () => ({
+                id: parentMenuId,
+                tooltip: 'CSV',
+                icon: 'Vue3CSVIcon',
+                type: MenuItemType.SUBITEMS
+              }),
+              [buttonId]: {
+                order: 1,
+                menuItemFactory
+              }
             }
           }
         });

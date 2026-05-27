@@ -6,7 +6,7 @@ import {
   // UNIVER_SERVER_ENDPOINT,
   UNIVERSER_DOCKER_HOST
 } from '@app/utils/third-party/univer/import-univer';
-import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
+import { importRegisterVue } from '@app/utils/third-party/univer/plugin/register-vue';
 import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
 // import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';

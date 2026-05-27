@@ -230,12 +230,23 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
           };
         };
 
+        const parentMenuId = 'parker-nuxt-lab-plugins.import-export-menu';
+
         // 註冊至工具列
         this.menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
-            [buttonId]: {
+            [parentMenuId]: {
               order: 19,
-              menuItemFactory
+              menuItemFactory: () => ({
+                id: parentMenuId,
+                tooltip: 'parker-nuxt-lab-plugins.import-export-menu.tooltip',
+                icon: 'Vue3FolderIcon',
+                type: MenuItemType.SUBITEMS
+              }),
+              [buttonId]: {
+                order: 1,
+                menuItemFactory
+              }
             }
           }
         });

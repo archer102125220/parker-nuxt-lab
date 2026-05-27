@@ -7,7 +7,7 @@ import {
   UNIVERSER_DOCKER_HOST
 } from '@app/utils/third-party/univer/import-univer';
 import { importSheet } from '@app/utils/third-party/univer/create-sheet';
-import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
+import { importRegisterVue } from '@app/utils/third-party/univer/plugin/register-vue';
 // import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 import { createdServerExportButtonPlugin } from '@app/utils/third-party/univer/plugin/server-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
