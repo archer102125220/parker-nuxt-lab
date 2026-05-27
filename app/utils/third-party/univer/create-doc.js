@@ -752,7 +752,7 @@ export async function createDocInstance(
     [ServerExportButtonPlugin],
     [LocalImportButtonPlugin],
     [ExchangeLifecyclePlugin],
-    [DocLockPlugin]
+    [DocLockPlugin, { noStyle: false }]
   ]);
 
   localeType.list = UniverCore.LocaleType;

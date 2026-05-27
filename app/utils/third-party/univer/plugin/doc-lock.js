@@ -110,17 +110,6 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
       return rejects(new Error('Failed to load Univer dependencies'));
     }
 
-    /**
-     * 本地文件匯出外掛 (支援 Word / Excel)
-     * 專門處理「非協同模式」下，前端建立的本地檔案如何正確匯出為 DOCX / XLSX
-     *
-     * @example
-     * ```typescript
-     * univer.registerPlugin(DocLockPlugin, {
-     *   apiPrefix: 'https://api.example.com/universer-api'
-     * });
-     * ```
-     */
     class DocLockPlugin extends Plugin {
       static pluginName = 'doc-lock-plugin';
 
