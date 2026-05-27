@@ -9,7 +9,8 @@ import {
 import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
 import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
-import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
+// import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
+import { createdServerExportButtonPlugin } from '@app/utils/third-party/univer/plugin/server-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
 import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
 import CustomPluginZhTW from '@app/utils/third-party/univer/i18n/zh-TW';
@@ -729,12 +730,14 @@ export async function createSheetInstance(
   const [
     ImportCSVPlugin,
     ExportCSVPlugin,
-    LocalExportButtonPlugin,
+    // LocalExportButtonPlugin,
+    ServerExportButtonPlugin,
     LocalImportButtonPlugin
   ] = await Promise.all([
     createdImportCSVButtonPlugin(),
     createdExportCSVButtonPlugin(),
-    createdLocalExportButtonPlugin(),
+    // createdLocalExportButtonPlugin(),
+    createdServerExportButtonPlugin(),
     createdLocalImportButtonPlugin()
   ]);
 
@@ -910,7 +913,8 @@ export async function createSheetInstance(
   univerInstance.univer.registerPlugins([
     [ImportCSVPlugin],
     [ExportCSVPlugin],
-    [LocalExportButtonPlugin],
+    // [LocalExportButtonPlugin],
+    [ServerExportButtonPlugin],
     [LocalImportButtonPlugin]
   ]);
 

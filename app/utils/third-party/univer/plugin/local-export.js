@@ -62,15 +62,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
     }
 
     /**
-     * 本地文件匯出外掛 (支援 Word / Excel)
-     * 專門處理「非協同模式」下，前端建立的本地檔案如何正確匯出為 DOCX / XLSX
-     *
-     * @example
-     * ```typescript
-     * univer.registerPlugin(LocalExportButtonPlugin, {
-     *   apiPrefix: 'https://api.example.com/universer-api'
-     * });
-     * ```
+     * 純前端本地匯出外掛 (匯出 JSON Snapshot)
+     * 此方法完全不依賴後端，直接在前端將目前的 Snapshot 打包下載
      */
     class LocalExportButtonPlugin extends Plugin {
       static pluginName = 'local-export-plugin';
@@ -83,6 +76,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
         componentManager
       ) {
         super();
+
         this._config = _config;
         this._injector = _injector;
         this.menuManagerService = menuManagerService;
@@ -105,8 +99,10 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const messageService = accessor.get(IMessageService);
             const localeService = accessor.get(LocaleService);
             const layoutService = accessor.get(ILayoutService);
+
             const doc = univerInstanceService.getFocusedUnit();
             if (typeof doc !== 'object' || doc === null) return false;
+
             const focusedUnitId = doc.getUnitId();
             if (typeof focusedUnitId !== 'string' || focusedUnitId === '') {
               return false;
@@ -118,9 +114,6 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             if (isDoc === false && isSheet === false) {
               return false;
             }
-
-            const fileType = isDoc === true ? 1 : 2; // 1: Doc, 2: Sheet
-            const fileExtension = isDoc === true ? 'docx' : 'xlsx';
 
             try {
               messageService.show({
@@ -160,167 +153,23 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 );
               }
 
-              const snapshotStr = JSON.stringify(exportJson);
+              const snapshotStr = JSON.stringify(exportJson, null, 2);
 
-              // 定義後端 API 路徑 (這裡先預設使用預設的 proxy 或直連路徑)
-              const UNIVERSER_HOST =
-                import.meta.env.VITE_UNIVERSER_DOCKER_HOST ||
-                'http://localhost:8000';
-              const API_PREFIX =
-                this._config?.apiPrefix || `${UNIVERSER_HOST}/universer-api`;
-
-              // 2. 上傳快照到 Universer 取得 FileId (jsonID)
+              // 2. 純前端建立 Blob 並觸發下載
               const blob = new Blob([snapshotStr], {
                 type: 'application/json'
               });
-              const formData = new FormData();
-              // 必須使用 Blob 封裝以符合 multipart/form-data 格式
-              formData.append('file', blob, 'snapshot.json');
-
-              const uploadUrl = `${API_PREFIX}/stream/file/upload?size=${blob.size}&source=1&flate=false`;
-              const uploadRes = await fetch(uploadUrl, {
-                method: 'POST',
-                body: formData
-              });
-
-              if (uploadRes.ok === false) {
-                const errText = await uploadRes.text();
-                throw new Error(
-                  `${localeService.t('parker-nuxt-lab-plugins.local-export.error.uploadFailed')} (${uploadRes.status}): ${errText}`
-                );
-              }
-
-              const uploadData = await uploadRes.json();
-
-              // 注意: Univer 的成功代碼通常為 0 或 1
-              if (
-                typeof uploadData !== 'object' ||
-                uploadData === null ||
-                typeof uploadData.FileId !== 'string' ||
-                uploadData.FileId === ''
-              ) {
-                throw new Error(
-                  localeService.t(
-                    'parker-nuxt-lab-plugins.local-export.error.uploadSnapshotFailed'
-                  )
-                );
-              }
-              const fileId = uploadData.FileId;
-
-              // 3. 呼叫匯出 API (type: 1 代表 Doc，type: 2 代表 Sheet)
-              const exportUrl = `${API_PREFIX}/exchange/${fileType}/export`;
-              const exportRes = await fetch(exportUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  unitID: '', // 留空，因為這是一份尚未存在於後端資料庫的本地檔案
-                  jsonID: fileId, // 帶入我們剛剛上傳後拿到的 jsonID
-                  type: fileType
-                })
-              });
-              const exportData = await exportRes.json();
-
-              const taskID = exportData.taskID;
-              if (typeof taskID !== 'string' || taskID === '') {
-                throw new Error(
-                  localeService.t(
-                    'parker-nuxt-lab-plugins.local-export.error.taskFailed'
-                  )
-                );
-              }
-
-              // 4. Polling (輪詢) 檢查任務狀態
-              let isSuccess = false;
-              let finalTaskData = null;
-
-              for (let i = 0; i < 30; i++) {
-                // 最多等 30 秒
-                const taskUrl = `${API_PREFIX}/exchange/task/${taskID}`;
-                const taskRes = await fetch(taskUrl);
-                const taskData = await taskRes.json();
-
-                if (
-                  taskData.status === 'success' ||
-                  taskData.status === 'done'
-                ) {
-                  isSuccess = true;
-                  finalTaskData = taskData;
-                  break;
-                } else if (
-                  taskData.status === 'error' ||
-                  taskData.status === 'failed'
-                ) {
-                  console.error(
-                    '[LocalExportPlugin] Task failed details:',
-                    taskData
-                  );
-                  throw new Error(
-                    taskData.error?.message ||
-                      localeService.t(
-                        'parker-nuxt-lab-plugins.local-export.error.backendTaskFailed'
-                      ) + JSON.stringify(taskData)
-                  );
-                }
-
-                // pending 或 running 狀態，等待 1 秒後再試
-                await new Promise((r) => setTimeout(r, 1000));
-              }
-
-              if (isSuccess === false || finalTaskData === null) {
-                throw new Error(
-                  localeService.t(
-                    'parker-nuxt-lab-plugins.local-export.error.timeout'
-                  )
-                );
-              }
-
-              // 5. 下載檔案
-              // 通常 Univer 後端轉換完成後，taskData 裡面會帶有結果的 URL 或新的 FileId
-              // 實際的欄位名稱可能因版本略有不同，以下根據經驗涵蓋常見的幾種情形
-              let downloadUrl = '';
-              if (
-                typeof finalTaskData.url === 'string' &&
-                finalTaskData.url !== ''
-              ) {
-                downloadUrl = finalTaskData.url;
-              } else if (
-                typeof finalTaskData.downloadUrl === 'string' &&
-                finalTaskData.downloadUrl !== ''
-              ) {
-                downloadUrl = finalTaskData.downloadUrl;
-              } else if (
-                finalTaskData.export &&
-                typeof finalTaskData.export.fileID === 'string' &&
-                finalTaskData.export.fileID !== ''
-              ) {
-                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${finalTaskData.export.fileID}`;
-              } else if (
-                typeof finalTaskData.fileID === 'string' &&
-                finalTaskData.fileID !== ''
-              ) {
-                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${finalTaskData.fileID}`;
-              } else if (
-                typeof finalTaskData.fileId === 'string' &&
-                finalTaskData.fileId !== ''
-              ) {
-                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${finalTaskData.fileId}`;
-              } else {
-                downloadUrl = `${API_PREFIX}/stream/file/download?file_id=${taskID}`;
-                console.warn(
-                  '未在任務結果中找到明確的下載欄位，嘗試使用預設組合:',
-                  finalTaskData
-                );
-              }
-
-              // 建立一個不可見的 <a> 標籤來觸發瀏覽器下載
+              const url = URL.createObjectURL(blob);
               const link = document.createElement('a');
-              link.href = downloadUrl;
-              link.target = '_blank'; // 以防跨域直接開啟新分頁下載
-              link.download = `export.${fileExtension}`;
+              link.href = url;
+              link.target = '_blank';
+              link.download = `snapshot_${isDoc ? 'doc' : 'sheet'}.json`;
               link.style.display = 'none';
+
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
+              URL.revokeObjectURL(url);
 
               return true;
             } catch (err) {
@@ -365,7 +214,6 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   return;
                 }
                 const unit = univerInstanceService.getUnit(unitId);
-                // 如果目前的檔案不是文件 (DOC) 且不是試算表 (SHEET)，就隱藏這顆按鈕
                 subscriber.next(
                   unit?.type !== UniverInstanceType.UNIVER_DOC &&
                     unit?.type !== UniverInstanceType.UNIVER_SHEET
@@ -376,7 +224,6 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
           })
         });
 
-        // 加入到工具列的 OTHER 群組
         this.menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
             [buttonId]: {

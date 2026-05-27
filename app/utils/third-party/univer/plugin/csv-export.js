@@ -59,6 +59,8 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
         componentManager
       ) {
         super();
+
+        this._config = _config;
         this._injector = _injector;
         this.menuManagerService = menuManagerService;
         this.commandService = commandService;

@@ -53,6 +53,7 @@ export function createdUniverExchangeLifecyclePlugin(
 
       constructor(_config, _injector, exchangeService, layoutService) {
         super();
+
         this._config = _config;
         this._injector = _injector;
         this.exchangeService = exchangeService;

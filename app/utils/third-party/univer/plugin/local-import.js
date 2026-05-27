@@ -55,6 +55,7 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
         componentManager
       ) {
         super();
+
         this._injector = _injector;
         this.menuManagerService = menuManagerService;
         this.commandService = commandService;

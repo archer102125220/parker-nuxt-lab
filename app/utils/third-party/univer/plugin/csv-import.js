@@ -88,6 +88,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       ) {
         super();
 
+        this._config = _config;
         this._injector = _injector;
         this.menuManagerService = menuManagerService;
         this.commandService = commandService;
