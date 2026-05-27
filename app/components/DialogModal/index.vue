@@ -24,8 +24,8 @@ const modules = {
 };
 
 // https://cn.vuejs.org/guide/components/v-model#v-model-arguments
-// const modelTrigger = defineModel('trigger', { default: false });
-const modelTrigger = defineModel({ default: false });
+// const modelTrigger = defineModel('trigger', { type: Boolean, default: false });
+const modelTrigger = defineModel({ type: Boolean, default: false });
 
 const props = defineProps({
   width: { type: String, default: null },
@@ -92,13 +92,13 @@ const computedTrigger = computed(
 
 watch(
   () => props.content,
-  async (newValue) => {
+  async (newContent) => {
     const contentName =
-      typeof newValue === 'string' && newValue.includes('.vue') === false
-        ? `${newValue}.vue`
-        : newValue;
+      typeof newContent === 'string' && newContent.includes('.vue') === false
+        ? `${newContent}.vue`
+        : newContent;
 
-    if (typeof newValue === 'string' && newValue !== '') {
+    if (typeof newContent === 'string' && newContent !== '') {
       contentComponent.value = defineAsyncComponent(
         modules[`/components/DialogModal/${contentName}`]
       );
