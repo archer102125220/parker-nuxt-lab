@@ -1,3 +1,4 @@
+import Vue3IconCSV from '@app/components/Icon/CSV.vue';
 import Vue3IconCSVExport from '@app/components/Icon/CSVExport.jsx';
 
 export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
@@ -77,6 +78,19 @@ export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
         this.componentManager.register('Vue3CSVExportIcon', Vue3IconCSVExport, {
           framework: 'vue3'
         });
+
+        try {
+          this.componentManager.register('Vue3CSVIcon', Vue3IconCSV, {
+            framework: 'vue3'
+          });
+        } catch (error) {
+          if (import.meta.dev) {
+            console.error(
+              'registerPlugin ExportCSVButtonPlugin Vue3CSVIcon error',
+              error
+            );
+          }
+        }
 
         const buttonId = 'export-csv-button';
 

@@ -1,3 +1,4 @@
+import Vue3IconFolder from '@app/components/Icon/Folder';
 import Vue3DownloadIcon from '@app/components/Icon/Download';
 
 export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
@@ -88,6 +89,19 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
         this.componentManager.register('Vue3DownloadIcon', Vue3DownloadIcon, {
           framework: 'vue3'
         });
+
+        try {
+          this.componentManager.register('Vue3FolderIcon', Vue3IconFolder, {
+            framework: 'vue3'
+          });
+        } catch (error) {
+          if (import.meta.dev) {
+            console.error(
+              'registerPlugin ServerExportButtonPlugin Vue3FolderIcon error',
+              error
+            );
+          }
+        }
 
         const buttonId = 'local-export-button';
 

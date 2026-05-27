@@ -1,4 +1,5 @@
-import Vue3IconCSVImport from '~/app/components/Icon/CSVImport';
+import Vue3IconCSV from '@app/components/Icon/CSV.vue';
+import Vue3IconCSVImport from '@/app/components/Icon/CSVImport';
 
 import { handleSelectCSVFile } from '@app/utils/helpers/select-csv-file';
 
@@ -106,6 +107,19 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
         this.componentManager.register('Vue3CSVImportIcon', Vue3IconCSVImport, {
           framework: 'vue3'
         });
+
+        try {
+          this.componentManager.register('Vue3CSVIcon', Vue3IconCSV, {
+            framework: 'vue3'
+          });
+        } catch (error) {
+          if (import.meta.dev) {
+            console.error(
+              'registerPlugin ImportCSVButtonPlugin Vue3CSVIcon error',
+              error
+            );
+          }
+        }
 
         const buttonId = 'import-csv-button';
 

@@ -1,3 +1,5 @@
+import Vue3IconFolder from '@app/components/Icon/Folder';
+
 export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
   return new Promise((resolve, rejects) => {
     const {
@@ -63,6 +65,19 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
       }
 
       onStarting() {
+        try {
+          this.componentManager.register('Vue3FolderIcon', Vue3IconFolder, {
+            framework: 'vue3'
+          });
+        } catch (error) {
+          if (import.meta.dev) {
+            console.error(
+              'registerPlugin ServerExportButtonPlugin Vue3FolderIcon error',
+              error
+            );
+          }
+        }
+
         const buttonId = 'local-import-button';
 
         const command = {
