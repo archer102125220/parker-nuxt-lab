@@ -74,6 +74,8 @@ const eventType = {
 };
 
 export async function importDoc() {
+  if (typeof window === 'undefined') return;
+
   const univerDocCoreScriptList = [
     {
       id: 'univer-preset-docs-core',
@@ -252,6 +254,8 @@ export async function importDoc() {
 }
 
 export async function importAdvancedDoc() {
+  if (typeof window === 'undefined') return;
+
   await importSheet();
 
   // importSheet may have overwritten globals if it was the first time loading.
@@ -377,6 +381,8 @@ export async function importAdvancedDoc() {
 }
 
 export async function importDocCollaboration() {
+  if (typeof window === 'undefined') return;
+
   await importAdvancedDoc();
 
   const univerDocCollaborationScriptList = [
@@ -471,6 +477,8 @@ export async function createDocInstance(
   locale = '',
   collaboration = false
 ) {
+  if (typeof window === 'undefined') return;
+
   if (container instanceof HTMLElement === false) {
     throw new Error('container must be an HTMLElement');
   }

@@ -13,6 +13,8 @@ export function fetchUniverSnapshot(
   tryLimit = 10,
   tryCount = 0
 ) {
+  if (typeof window === 'undefined') return;
+
   return new Promise(async (resolve, rejects) => {
     const { UniverProExchangeClient = {} } = window;
 

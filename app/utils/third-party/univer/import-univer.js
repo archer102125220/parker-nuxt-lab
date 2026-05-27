@@ -8,7 +8,7 @@ export const UNIVERSER_DOCKER_HOST =
   import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
 
 export async function importUniver() {
-  if (typeof document === 'undefined') return;
+  if (typeof window === 'undefined') return;
 
   const dependecyScriptList = [
     {

@@ -4,6 +4,8 @@ import Vue3IconCSVImport from '@/app/components/Icon/CSVImport';
 import { handleSelectCSVFile } from '@app/utils/helpers/select-csv-file';
 
 export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
+  if (typeof window === 'undefined') return;
+
   return new Promise((resolve, rejects) => {
     const {
       rxjs = {},

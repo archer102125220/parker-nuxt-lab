@@ -2,6 +2,8 @@ import Vue3IconFolder from '@app/components/Icon/Folder';
 import Vue3DownloadIcon from '@app/components/Icon/Download';
 
 export function createdServerExportButtonPlugin(tryLimit = 10, tryCount = 0) {
+  if (typeof window === 'undefined') return;
+
   return new Promise((resolve, rejects) => {
     const {
       rxjs = {},

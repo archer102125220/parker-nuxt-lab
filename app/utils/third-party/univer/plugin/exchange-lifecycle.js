@@ -11,6 +11,8 @@ export function createdUniverExchangeLifecyclePlugin(
   tryLimit = 10,
   tryCount = 0
 ) {
+  if (typeof window === 'undefined') return;
+
   return new Promise((resolve, rejects) => {
     const {
       UniverCore = {},

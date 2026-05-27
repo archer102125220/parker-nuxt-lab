@@ -33,6 +33,8 @@ const eventType = {
 };
 
 export async function importSheet() {
+  if (typeof window === 'undefined') return;
+
   const univerSheetCoreScriptList = [
     {
       id: 'univer-sheets-core',
@@ -341,6 +343,8 @@ export async function importSheet() {
 }
 
 export async function importSheetAdvanced() {
+  if (typeof window === 'undefined') return;
+
   const univerProCroScriptList = [
     {
       id: 'univer-pro-engine-formula',
@@ -556,6 +560,8 @@ export async function importSheetAdvanced() {
 }
 
 export async function importSheetCollaboration() {
+  if (typeof window === 'undefined') return;
+
   await importSheetAdvanced();
 
   const univerSheetCollaborationScriptList = [
@@ -621,6 +627,8 @@ export async function importSheetCollaboration() {
 }
 
 export async function importSheetLiveShare() {
+  if (typeof window === 'undefined') return;
+
   await importSheetCollaboration();
 
   const univerSheetLiveShareScriptList = [
@@ -680,6 +688,12 @@ export async function createSheetInstance(
   collaboration = false,
   liveShare = false
 ) {
+  if (typeof window === 'undefined') return;
+
+  if (container instanceof HTMLElement === false) {
+    throw new Error('container must be an HTMLElement');
+  }
+
   await importUniver();
   await importSheet();
 
@@ -689,10 +703,6 @@ export async function createSheetInstance(
         resolve(createSheetInstance(container, locale));
       }, 100);
     });
-  }
-
-  if (container instanceof HTMLElement === false) {
-    throw new Error('container must be an HTMLElement');
   }
 
   if (window.__UNIVER_SHEETS_GLOBALS__) {

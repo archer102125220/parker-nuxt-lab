@@ -1,9 +1,9 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 import { UNIVERSAL_VERSION } from '@/app/utils/third-party/univer/import-univer';
 
-import IconFolder from '@app/components/Icon/Folder.vue';
-
 export function importRegisterVue(univerInstance, tryLimit = 10, tryCount = 0) {
+  if (typeof window === 'undefined') return;
+
   if (typeof univerInstance !== 'object' || univerInstance === null) {
     console.error('[importRegisterVue] univerInstance is not an object');
     return;

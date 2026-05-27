@@ -7,9 +7,7 @@ const unitId = computed(() => route.query.unit);
 
 <template>
   <div class="univer_doc_page">
-    <ClientOnly>
-      <UniverDocEditor :locale="locale" :unit-id="unitId" />
-    </ClientOnly>
+    <UniverDocEditor :locale="locale" :unit-id="unitId" />
   </div>
 </template>
 

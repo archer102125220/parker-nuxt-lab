@@ -2,6 +2,8 @@ import Vue3IconCSV from '@app/components/Icon/CSV.vue';
 import Vue3IconCSVExport from '@app/components/Icon/CSVExport.jsx';
 
 export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
+  if (typeof window === 'undefined') return;
+
   return new Promise((resolve, rejects) => {
     const { rxjs = {}, UniverUi = {}, UniverCore = {} } = window;
     const wendellhuRedi = window['@wendellhu/redi'] || {};
