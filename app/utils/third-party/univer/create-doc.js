@@ -10,6 +10,7 @@ import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
+import { createdUniverExchangeLifecyclePlugin } from '@app/utils/third-party/univer/plugin/exchange-lifecycle';
 import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
 import CustomPluginZhTW from '@app/utils/third-party/univer/i18n/zh-TW';
 
@@ -539,9 +540,14 @@ export async function createDocInstance(
   // const { UniverExchangeClientPlugin } = UniverProExchangeClient;
   const { UniverDocsExchangeClientPlugin } = UniverProDocsExchangeClient;
 
-  const [LocalExportButtonPlugin, LocalImportButtonPlugin] = await Promise.all([
+  const [
+    LocalExportButtonPlugin,
+    LocalImportButtonPlugin,
+    ExchangeLifecyclePlugin
+  ] = await Promise.all([
     createdLocalExportButtonPlugin(),
-    createdLocalImportButtonPlugin()
+    createdLocalImportButtonPlugin(),
+    createdUniverExchangeLifecyclePlugin()
   ]);
 
   const univerConfig = {
@@ -738,7 +744,8 @@ export async function createDocInstance(
   const univerInstance = await importRegisterVue(createUniver(univerConfig));
   univerInstance.univer.registerPlugins([
     [LocalExportButtonPlugin],
-    [LocalImportButtonPlugin]
+    [LocalImportButtonPlugin],
+    [ExchangeLifecyclePlugin]
   ]);
 
   localeType.list = UniverCore.LocaleType;

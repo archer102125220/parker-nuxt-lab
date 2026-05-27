@@ -1,7 +1,6 @@
 export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
   return new Promise((resolve, rejects) => {
     const {
-      rxjs = {},
       UniverUi = {},
       UniverCore = {},
       UniverCoreFacade = {},
@@ -9,7 +8,6 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
     } = window;
     const wendellhuRedi = window['@wendellhu/redi'];
 
-    const { Observable } = rxjs;
     const { Injector, setDependencies } = wendellhuRedi;
     const {
       ComponentManager,
@@ -24,7 +22,6 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
     const { MessageType } = UniverDesign;
 
     if (
-      typeof Observable === 'undefined' ||
       typeof Injector === 'undefined' ||
       typeof setDependencies === 'undefined' ||
       typeof ComponentManager === 'undefined' ||
@@ -93,9 +90,21 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
             } else if (isDoc) {
               acceptExtensions = '.docx';
               errorMessage = localeService.t(
-                'parker-vue-lab-plugins.local-import.error.unsupportedDoc'
+                'parker-nuxt-lab-plugins.local-import.error.unsupportedDoc'
               );
             }
+
+            // 放在 input.onchange 會跳 localeService 的相關 error
+            // 初步判斷跟整個編輯器掛載卸載有關，因此提早取出語系包內容
+            const loadingContent = localeService.t(
+              'parker-nuxt-lab-plugins.local-import.info'
+            );
+            const successContent = localeService.t(
+              'parker-nuxt-lab-plugins.local-import.success'
+            );
+            const failedContent = localeService.t(
+              'parker-nuxt-lab-plugins.local-import.importFailed'
+            );
 
             // 建立一個隱藏的 input 來選擇檔案
             const input = document.createElement('input');
@@ -124,10 +133,20 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
               try {
                 messageService.show({
                   type: MessageType.Info,
-                  content: localeService.t(
-                    'parker-vue-lab-plugins.local-import.info'
-                  )
+                  content: loadingContent
                 });
+
+                const startEvent = new CustomEvent(
+                  'univer-local-import-started',
+                  {
+                    bubbles: true
+                  }
+                );
+                if (layoutService.rootContainerElement) {
+                  layoutService.rootContainerElement.dispatchEvent(startEvent);
+                } else {
+                  document.dispatchEvent(startEvent);
+                }
 
                 let snapshot = null;
                 let fileType = '';
@@ -161,9 +180,7 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
                   messageService.show({
                     type: MessageType.Success,
-                    content: localeService.t(
-                      'parker-vue-lab-plugins.local-import.success'
-                    )
+                    content: successContent
                   });
                 }
               } catch (err) {
@@ -172,11 +189,17 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   err instanceof Error ? err.message : String(err);
                 messageService.show({
                   type: MessageType.Error,
-                  content:
-                    localeService.t(
-                      'parker-vue-lab-plugins.local-import.error.importFailed'
-                    ) + errorMessage
+                  content: failedContent + errorMessage
                 });
+              } finally {
+                const endEvent = new CustomEvent('univer-local-import-ended', {
+                  bubbles: true
+                });
+                if (layoutService.rootContainerElement) {
+                  layoutService.rootContainerElement.dispatchEvent(endEvent);
+                } else {
+                  document.dispatchEvent(endEvent);
+                }
               }
             };
             input.click();
@@ -187,8 +210,8 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'parker-vue-lab-plugins.local-import.title',
-          tooltip: 'parker-vue-lab-plugins.local-import.tooltip',
+          title: 'parker-nuxt-lab-plugins.local-import.title',
+          tooltip: 'parker-nuxt-lab-plugins.local-import.tooltip',
           icon: 'ExportIcon',
           type: MenuItemType.BUTTON
         });

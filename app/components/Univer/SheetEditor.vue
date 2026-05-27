@@ -140,6 +140,7 @@ const container = ref(null);
 
 const currentWorkbook = ref({});
 // const currentWorksheet = ref({});
+const isRebuilding = ref(false);
 const loading = ref(true);
 
 const univerInstance = reactive({
@@ -223,6 +224,43 @@ async function handleUniverSheet(overrideSnapshot) {
   loading.value = false;
 }
 
+function handleLocalImportEvent(customEvent) {
+  const detail = customEvent.detail;
+  if (detail && detail.snapshot && detail.type === 'sheet') {
+    const currentUnitId = univerInstance.univerAPI
+      ?.getActiveWorkbook()
+      ?.getId();
+    if (detail.unitId && currentUnitId && detail.unitId !== currentUnitId) {
+      return; // 忽略不是由當前編輯器觸發的事件
+    }
+    if (univerInstance.univerAPI) {
+      isRebuilding.value = true;
+
+      try {
+        // 先建立新的試算表，讓 Univer UI 自動切換過去 (UI 會正常更新)
+        currentWorkbook.value = univerInstance.univerAPI.createWorkbook(
+          detail.snapshot
+        );
+
+        // 註：不呼叫 disposeUnit()，因為 Univer 官方對於動態刪除當前 Unit 的支援有嚴重的 Bug
+        // (會導致 SheetsSelectionsService 的 RxJS 報錯)。
+        // 為了確保 SPA 畫面不崩潰且無報錯，選擇讓舊的資料保留在 Univer 的底層記憶體中，只做畫面的替換。
+      } catch (err) {
+        console.error('Failed to replace workbook:', err);
+      }
+
+      isRebuilding.value = false;
+      loading.value = false;
+    }
+  }
+}
+
+function handleLocalImportEnded() {
+  if (!isRebuilding.value) {
+    loading.value = false;
+  }
+}
+
 onMounted(() => {
   handleUniverSheet();
 });
@@ -270,7 +308,17 @@ onUnmounted(() => {
         />
       </slot>
     </div>
-    <div ref="container" class="univer_sheet-editor" />
+    <div
+      ref="container"
+      class="univer_sheet-editor"
+      @univer-local-import-started="loading = true"
+      @univer-local-import-ended="handleLocalImportEnded"
+      @univer-local-import-snapshot="handleLocalImportEvent"
+      @univer-local-export-started="loading = true"
+      @univer-local-export-ended="loading = false"
+      @univer-exchange-started="loading = true"
+      @univer-exchange-ended="loading = false"
+    />
   </div>
 </template>
 
@@ -285,7 +333,7 @@ onUnmounted(() => {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 2;
+    z-index: 11; // 最小要設為 11 才蓋得掉 univer 的所有 UI
 
     &-skeleton {
       width: 100%;

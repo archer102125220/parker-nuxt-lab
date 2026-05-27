@@ -22,7 +22,8 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       IMenuManagerService,
       MenuItemType,
       RibbonStartGroup,
-      IMessageService
+      IMessageService,
+      ILayoutService
     } = UniverUi;
     const {
       CommandType,
@@ -51,6 +52,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
       typeof Plugin === 'undefined' ||
       typeof UniverInstanceType === 'undefined' ||
       typeof LocaleService === 'undefined' ||
+      typeof ILayoutService === 'undefined' ||
       typeof MessageType === 'undefined'
     ) {
       if (tryCount < tryLimit) {
@@ -102,6 +104,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
             const univerInstanceService = accessor.get(IUniverInstanceService);
             const messageService = accessor.get(IMessageService);
             const localeService = accessor.get(LocaleService);
+            const layoutService = accessor.get(ILayoutService);
             const doc = univerInstanceService.getFocusedUnit();
             if (typeof doc !== 'object' || doc === null) return false;
             const focusedUnitId = doc.getUnitId();
@@ -123,9 +126,21 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               messageService.show({
                 type: MessageType.Info,
                 content: localeService.t(
-                  'parker-vue-lab-plugins.local-export.info'
+                  'parker-nuxt-lab-plugins.local-export.info'
                 )
               });
+
+              const startEvent = new CustomEvent(
+                'univer-local-export-started',
+                {
+                  bubbles: true
+                }
+              );
+              if (layoutService.rootContainerElement) {
+                layoutService.rootContainerElement.dispatchEvent(startEvent);
+              } else {
+                document.dispatchEvent(startEvent);
+              }
 
               // 1. 取得完整的文件 Snapshot JSON
               const snapshot = doc.getSnapshot();
@@ -140,7 +155,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               } else {
                 throw new Error(
                   localeService.t(
-                    'parker-vue-lab-plugins.local-export.error.snapshot'
+                    'parker-nuxt-lab-plugins.local-export.error.snapshot'
                   )
                 );
               }
@@ -171,7 +186,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               if (uploadRes.ok === false) {
                 const errText = await uploadRes.text();
                 throw new Error(
-                  `${localeService.t('parker-vue-lab-plugins.local-export.error.uploadFailed')} (${uploadRes.status}): ${errText}`
+                  `${localeService.t('parker-nuxt-lab-plugins.local-export.error.uploadFailed')} (${uploadRes.status}): ${errText}`
                 );
               }
 
@@ -186,7 +201,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               ) {
                 throw new Error(
                   localeService.t(
-                    'parker-vue-lab-plugins.local-export.error.uploadSnapshotFailed'
+                    'parker-nuxt-lab-plugins.local-export.error.uploadSnapshotFailed'
                   )
                 );
               }
@@ -209,7 +224,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               if (typeof taskID !== 'string' || taskID === '') {
                 throw new Error(
                   localeService.t(
-                    'parker-vue-lab-plugins.local-export.error.taskFailed'
+                    'parker-nuxt-lab-plugins.local-export.error.taskFailed'
                   )
                 );
               }
@@ -242,7 +257,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                   throw new Error(
                     taskData.error?.message ||
                       localeService.t(
-                        'parker-vue-lab-plugins.local-export.error.backendTaskFailed'
+                        'parker-nuxt-lab-plugins.local-export.error.backendTaskFailed'
                       ) + JSON.stringify(taskData)
                   );
                 }
@@ -254,7 +269,7 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
               if (isSuccess === false || finalTaskData === null) {
                 throw new Error(
                   localeService.t(
-                    'parker-vue-lab-plugins.local-export.error.timeout'
+                    'parker-nuxt-lab-plugins.local-export.error.timeout'
                   )
                 );
               }
@@ -316,18 +331,27 @@ export function createdLocalExportButtonPlugin(tryLimit = 10, tryCount = 0) {
                 type: MessageType.Error,
                 content:
                   localeService.t(
-                    'parker-vue-lab-plugins.local-export.error.exportFailed'
+                    'parker-nuxt-lab-plugins.local-export.error.exportFailed'
                   ) + errorMessage
               });
               return false;
+            } finally {
+              const endEvent = new CustomEvent('univer-local-export-ended', {
+                bubbles: true
+              });
+              if (layoutService.rootContainerElement) {
+                layoutService.rootContainerElement.dispatchEvent(endEvent);
+              } else {
+                document.dispatchEvent(endEvent);
+              }
             }
           }
         };
 
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'parker-vue-lab-plugins.local-export.title',
-          tooltip: 'parker-vue-lab-plugins.local-export.tooltip',
+          title: 'parker-nuxt-lab-plugins.local-export.title',
+          tooltip: 'parker-nuxt-lab-plugins.local-export.tooltip',
           icon: 'Vue3DownloadIcon',
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {

@@ -1,12 +1,12 @@
 export default {
-  'parker-vue-lab-plugins': {
+  'parker-nuxt-lab-plugins': {
     'csv-export': {
       title: '匯出 CSV',
-      tooltip: '匯出 CSV',
+      tooltip: '匯出 CSV'
     },
     'csv-import': {
       title: '匯入 CSV',
-      tooltip: '匯入 CSV',
+      tooltip: '匯入 CSV'
     },
     'local-export': {
       title: '匯出檔案',
@@ -19,7 +19,7 @@ export default {
         taskFailed: '呼叫匯出任務失敗，未取得 taskID',
         backendTaskFailed: '後端匯出任務執行失敗: ',
         timeout: '匯出任務超時',
-        exportFailed: '匯出發生錯誤：',
+        exportFailed: '匯出發生錯誤：'
       }
     },
     'local-import': {
@@ -31,7 +31,7 @@ export default {
         unsupportedAll: '不支援的檔案格式，請上傳 DOCX 或 XLSX',
         unsupportedSheet: '不支援的檔案格式，請上傳 XLSX 檔案',
         unsupportedDoc: '不支援的檔案格式，請上傳 DOCX 檔案',
-        importFailed: '匯入失敗：',
+        importFailed: '匯入失敗：'
       }
     }
   }

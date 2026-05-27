@@ -216,8 +216,8 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
 
         const menuItemFactory = () => ({
           id: buttonId,
-          title: 'parker-vue-lab-plugins.csv-import.title',
-          tooltip: 'parker-vue-lab-plugins.csv-import.tooltip',
+          title: 'parker-nuxt-lab-plugins.csv-import.title',
+          tooltip: 'parker-nuxt-lab-plugins.csv-import.tooltip',
           icon: 'Vue3IconCSV', // 圖標名稱
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {

@@ -134,6 +134,7 @@ const container = ref(null);
 const currentDoc = ref({});
 // const currentWorksheet = ref({});
 const loading = ref(true);
+const isRebuilding = ref(false);
 
 const univerInstance = reactive({
   univer: null,
@@ -223,7 +224,7 @@ function handleKeyDown() {
   emits('change', saveData);
 }
 
-function handleLocalImportEvent(customEvent) {
+async function handleLocalImportEvent(customEvent) {
   const detail = customEvent.detail;
   if (detail && detail.snapshot && detail.type === 'doc') {
     const currentUnitId = univerInstance.univerAPI
@@ -233,14 +234,25 @@ function handleLocalImportEvent(customEvent) {
       return; // 忽略不是由當前編輯器觸發的事件
     }
     if (univerInstance.univerAPI) {
+      isRebuilding.value = true;
+
       try {
         // Univer Doc 由於官方設計限制，並不支援像 Sheet 一樣動態建立並切換文件 (會導致 UI 無法正確渲染或拋錯)，
         // 因此我們在此處收到匯入的 snapshot 後，直接透過重新初始化整個 Univer 實例來載入新檔案。
-        handleUniverDoc(detail.snapshot);
+        await handleUniverDoc(detail.snapshot);
       } catch (err) {
         console.error('Failed to replace document:', err);
       }
+
+      isRebuilding.value = false;
+      loading.value = false;
     }
+  }
+}
+
+function handleLocalImportEnded() {
+  if (!isRebuilding.value) {
+    loading.value = false;
   }
 }
 
@@ -295,7 +307,13 @@ onUnmounted(() => {
       ref="container"
       class="univer_doc-editor"
       @keydown="handleKeyDown"
+      @univer-local-import-started="loading = true"
+      @univer-local-import-ended="handleLocalImportEnded"
       @univer-local-import-snapshot="handleLocalImportEvent"
+      @univer-local-export-started="loading = true"
+      @univer-local-export-ended="loading = false"
+      @univer-exchange-started="loading = true"
+      @univer-exchange-ended="loading = false"
     />
   </div>
 </template>
@@ -311,7 +329,7 @@ onUnmounted(() => {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 2;
+    z-index: 11; // 最小要設為 11 才蓋得掉 univer 的所有 UI
 
     &-skeleton {
       width: 100%;
