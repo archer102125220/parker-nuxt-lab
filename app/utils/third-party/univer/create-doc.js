@@ -12,6 +12,7 @@ import { importRegisterVue } from '@app/utils/third-party/univer/register-vue';
 import { createdServerExportButtonPlugin } from '@app/utils/third-party/univer/plugin/server-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
 import { createdUniverExchangeLifecyclePlugin } from '@app/utils/third-party/univer/plugin/exchange-lifecycle';
+import { createdDocLockPlugin } from '@app/utils/third-party/univer/plugin/doc-lock';
 import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
 import CustomPluginZhTW from '@app/utils/third-party/univer/i18n/zh-TW';
 
@@ -545,12 +546,14 @@ export async function createDocInstance(
     // LocalExportButtonPlugin,
     ServerExportButtonPlugin,
     LocalImportButtonPlugin,
-    ExchangeLifecyclePlugin
+    ExchangeLifecyclePlugin,
+    DocLockPlugin
   ] = await Promise.all([
     // createdLocalExportButtonPlugin(),
     createdServerExportButtonPlugin(),
     createdLocalImportButtonPlugin(),
-    createdUniverExchangeLifecyclePlugin()
+    createdUniverExchangeLifecyclePlugin(),
+    createdDocLockPlugin()
   ]);
 
   const univerConfig = {
@@ -748,7 +751,8 @@ export async function createDocInstance(
     // [LocalExportButtonPlugin],
     [ServerExportButtonPlugin],
     [LocalImportButtonPlugin],
-    [ExchangeLifecyclePlugin]
+    [ExchangeLifecyclePlugin],
+    [DocLockPlugin]
   ]);
 
   localeType.list = UniverCore.LocaleType;
