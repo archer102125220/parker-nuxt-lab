@@ -697,7 +697,9 @@ export async function createSheetInstance(
 
     UniverPresetSheetsAdvanced,
     UniverPresetSheetsAdvancedZhTW,
-    UniverPresetSheetsAdvancedEnUS
+    UniverPresetSheetsAdvancedEnUS,
+
+    UniverProSheetsExchangeClient
   } = window;
   const { createUniver } = UniverPresets;
   const { LocaleType, mergeLocales } = UniverCore;
@@ -713,8 +715,8 @@ export async function createSheetInstance(
   const { UniverSheetsThreadCommentPreset } = UniverPresetSheetsThreadComment;
   const { UniverSheetsNotePreset } = UniverPresetSheetsNote;
   const { UniverSheetsTablePreset } = UniverPresetSheetsTable;
-  const { UniverSheetsAdvancedPreset, UniverSheetsExchangeClientPlugin } =
-    UniverPresetSheetsAdvanced;
+  const { UniverSheetsAdvancedPreset } = UniverPresetSheetsAdvanced;
+  const { UniverSheetsExchangeClientPlugin } = UniverProSheetsExchangeClient;
 
   // const { UniverWatermarkPlugin: _UniverWatermarkPlugin } = UniverWatermark;
   const { UniverSheetsCrosshairHighlightPlugin } =
