@@ -10,7 +10,7 @@ export function createdImportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
       UniverSheets = {},
       UniverCore = {}
     } = window;
-    const wendellhuRedi = window['@wendellhu/redi'];
+    const wendellhuRedi = window['@wendellhu/redi'] || {};
 
     const { Observable } = rxjs;
     const { Injector, setDependencies } = wendellhuRedi;

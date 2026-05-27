@@ -3,7 +3,7 @@ import Vue3IconCSVExport from '@app/components/Icon/CSVExport.jsx';
 export function createdExportCSVButtonPlugin(tryLimit = 10, tryCount = 0) {
   return new Promise((resolve, rejects) => {
     const { rxjs = {}, UniverUi = {}, UniverCore = {} } = window;
-    const wendellhuRedi = window['@wendellhu/redi'];
+    const wendellhuRedi = window['@wendellhu/redi'] || {};
 
     const { Observable } = rxjs;
     const { Injector, setDependencies } = wendellhuRedi;

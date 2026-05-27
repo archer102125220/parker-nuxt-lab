@@ -6,7 +6,7 @@ export function createdLocalImportButtonPlugin(tryLimit = 10, tryCount = 0) {
       UniverCoreFacade = {},
       UniverDesign = {}
     } = window;
-    const wendellhuRedi = window['@wendellhu/redi'];
+    const wendellhuRedi = window['@wendellhu/redi'] || {};
 
     const { Injector, setDependencies } = wendellhuRedi;
     const {
