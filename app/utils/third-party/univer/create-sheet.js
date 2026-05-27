@@ -9,7 +9,7 @@ import {
 import { importRegisterVue } from '@app/utils/third-party/univer/plugin/register-vue';
 import { createdImportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-import';
 import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plugin/csv-export';
-// import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
+import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 import { createdServerExportButtonPlugin } from '@app/utils/third-party/univer/plugin/server-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
 import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
@@ -555,7 +555,9 @@ export async function importSheetAdvanced() {
   await Promise.all(univerSheetsAdvancedPromiseList);
 }
 
-export async function importCollaboration() {
+export async function importSheetCollaboration() {
+  await importSheetAdvanced();
+
   const univerSheetCollaborationScriptList = [
     {
       id: 'univer-preset-sheets-collaboration',
@@ -618,10 +620,65 @@ export async function importCollaboration() {
   await Promise.all(univerSheetsCollaborationPromiseList);
 }
 
+export async function importSheetLiveShare() {
+  await importSheetCollaboration();
+
+  const univerSheetLiveShareScriptList = [
+    {
+      id: 'univer-pro-live-share',
+      src: `https://unpkg.com/@univerjs-pro/live-share@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    },
+    {
+      id: 'univer-pro-live-share-facade',
+      src: `https://unpkg.com/@univerjs-pro/live-share@${UNIVERSAL_VERSION}/lib/umd/facade.js`
+    }
+  ];
+  const univerSheetLiveShareCSSList = [
+    {
+      id: 'univer-pro-live-share-css',
+      src: `https://unpkg.com/@univerjs-pro/live-share@${UNIVERSAL_VERSION}/lib/index.css`
+    }
+  ];
+
+  const querySelectorAllString = [
+    ...univerSheetLiveShareScriptList.map(
+      (univerSheetLiveShareScript) => `#${univerSheetLiveShareScript.id}`
+    ),
+    ...univerSheetLiveShareCSSList.map(
+      (univerSheetLiveShareCSS) => `#${univerSheetLiveShareCSS.id}`
+    )
+  ].join(',');
+
+  if (
+    document.querySelectorAll(querySelectorAllString).length ===
+    querySelectorAllString.length
+  ) {
+    return;
+  }
+
+  const univerSheetLiveShareScriptPromiseList =
+    univerSheetLiveShareScriptList.map((univerSheetLiveShareScript) => {
+      return loadScript(
+        univerSheetLiveShareScript.id,
+        univerSheetLiveShareScript.src,
+        univerSheetLiveShareScript.attributes
+      );
+    });
+  await Promise.all(univerSheetLiveShareScriptPromiseList);
+
+  const univerSheetLiveSharePromiseList = [
+    ...univerSheetLiveShareCSSList.map((univerCSSScript) =>
+      loadCSS(univerCSSScript.id, univerCSSScript.src)
+    )
+  ];
+  await Promise.all(univerSheetLiveSharePromiseList);
+}
+
 export async function createSheetInstance(
   container,
   locale = '',
-  collaboration = false
+  collaboration = false,
+  liveShare = false
 ) {
   await importUniver();
   await importSheet();
@@ -730,13 +787,13 @@ export async function createSheetInstance(
   const [
     ImportCSVPlugin,
     ExportCSVPlugin,
-    // LocalExportButtonPlugin,
+    LocalExportButtonPlugin,
     ServerExportButtonPlugin,
     LocalImportButtonPlugin
   ] = await Promise.all([
     createdImportCSVButtonPlugin(),
     createdExportCSVButtonPlugin(),
-    // createdLocalExportButtonPlugin(),
+    createdLocalExportButtonPlugin(),
     createdServerExportButtonPlugin(),
     createdLocalImportButtonPlugin()
   ]);
@@ -788,12 +845,12 @@ export async function createSheetInstance(
   };
 
   if (collaboration === true) {
-    await importCollaboration();
+    await importSheetCollaboration();
 
     const {
       UniverPresetSheetsCollaboration,
-      UniverSheetsCollaborationPresetZhTW,
-      UniverSheetsCollaborationPresetEnUS
+      UniverPresetSheetsCollaborationZhTW,
+      UniverPresetSheetsCollaborationEnUS
     } = window;
 
     const { UniverSheetsCollaborationPreset } = UniverPresetSheetsCollaboration;
@@ -818,7 +875,7 @@ export async function createSheetInstance(
         UniverSheetsZenEditorZhTW,
 
         UniverPresetSheetsAdvancedZhTW,
-        UniverSheetsCollaborationPresetZhTW,
+        UniverPresetSheetsCollaborationZhTW,
 
         CustomPluginZhTW
       ),
@@ -841,7 +898,7 @@ export async function createSheetInstance(
         UniverSheetsZenEditorEnUS,
 
         UniverPresetSheetsAdvancedEnUS,
-        UniverSheetsCollaborationPresetEnUS,
+        UniverPresetSheetsCollaborationEnUS,
 
         CustomPluginEnUS
       )
@@ -913,10 +970,18 @@ export async function createSheetInstance(
   univerInstance.univer.registerPlugins([
     [ImportCSVPlugin],
     [ExportCSVPlugin],
-    // [LocalExportButtonPlugin],
+    [LocalExportButtonPlugin],
     [ServerExportButtonPlugin],
     [LocalImportButtonPlugin]
   ]);
+
+  if (collaboration === true && liveShare === true) {
+    await importSheetLiveShare();
+    const { UniverProLiveShare } = window;
+    const { UniverLiveSharePlugin } = UniverProLiveShare;
+
+    univerInstance.univer.registerPlugin(UniverLiveSharePlugin);
+  }
 
   localeType.list = UniverCore.LocaleType;
   eventType.list = univerInstance.univerAPI.Event;

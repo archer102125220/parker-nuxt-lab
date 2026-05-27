@@ -121,6 +121,14 @@ const props = defineProps({
   unitId: {
     type: String,
     default: ''
+  },
+  collaboration: {
+    type: Boolean,
+    default: false
+  },
+  liveShare: {
+    type: Boolean,
+    default: false
   }
 });
 const emits = defineEmits([
@@ -153,7 +161,8 @@ async function handleUniverSheet(overrideSnapshot) {
     const { univer, univerAPI } = await createSheetInstance(
       container.value,
       props.locale,
-      false
+      props.collaboration,
+      props.liveShare
     );
 
     disposableList.push(
@@ -260,6 +269,13 @@ function handleLocalImportEnded() {
     loading.value = false;
   }
 }
+
+watch(
+  () => [props.collaboration, props.liveShare],
+  () => {
+    handleUniverSheet();
+  }
+);
 
 onMounted(() => {
   handleUniverSheet();

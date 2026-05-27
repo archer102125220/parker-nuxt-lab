@@ -117,6 +117,10 @@ const props = defineProps({
   unitId: {
     type: String,
     default: ''
+  },
+  collaboration: {
+    type: Boolean,
+    default: false
   }
 });
 const emits = defineEmits([
@@ -145,7 +149,8 @@ async function handleUniverDoc(overrideSnapshot) {
   try {
     const { univer, univerAPI } = await createDocInstance(
       container.value,
-      props.locale
+      props.locale,
+      props.collaboration
     );
 
     // 只有出現在 univerAPI.Event 中的事件能被觸發
@@ -255,6 +260,13 @@ function handleLocalImportEnded() {
     loading.value = false;
   }
 }
+
+watch(
+  () => props.collaboration,
+  () => {
+    handleUniverDoc();
+  }
+);
 
 onMounted(() => {
   handleUniverDoc();
