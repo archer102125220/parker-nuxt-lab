@@ -276,10 +276,6 @@ export async function importAdvancedDoc() {
       src: `https://unpkg.com/@univerjs-pro/collaboration-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
     },
     {
-      id: 'univer-pro-collaboration-client-ui',
-      src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
-    },
-    {
       id: 'univer-pro-exchange-client',
       src: `https://unpkg.com/@univerjs-pro/exchange-client@${UNIVERSAL_VERSION}/lib/umd/index.js`
     },
@@ -298,6 +294,10 @@ export async function importAdvancedDoc() {
     //   id: 'univer-pro-docs-print',
     //   src: `https://unpkg.com/@univerjs-pro/docs-print@${UNIVERSAL_VERSION}/lib/umd/index.js`
     // },
+    {
+      id: 'univer-pro-collaboration-client-ui',
+      src: `https://unpkg.com/@univerjs-pro/collaboration-client-ui@${UNIVERSAL_VERSION}/lib/umd/index.js`
+    },
     {
       id: 'univer-preset-docs-advanced',
       src: `https://unpkg.com/@univerjs/preset-docs-advanced@${UNIVERSAL_VERSION}/lib/umd/index.js`
