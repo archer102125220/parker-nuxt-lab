@@ -23,7 +23,7 @@ export default {
       }
     },
     'local-export': {
-      title: '匯出 Snapshot',
+      title: '匯出 Snapshot (JSON)',
       tooltip: '純前端匯出 Snapshot (JSON)',
       info: '正在匯出 Snapshot JSON，請稍候...',
       error: {
@@ -62,8 +62,35 @@ export default {
         noLockedRange: '選取範圍內沒有鎖定的區塊'
       }
     },
+    'sheet-lock': {
+      // title: '鎖定選取範圍 (Sheet)',
+      title: '鎖定選取範圍',
+      tooltip: '鎖定選取範圍',
+      // unlockTitle: '解除鎖定選取範圍 (Sheet)',
+      unlockTitle: '解除鎖定選取範圍',
+      unlockTooltip: '解除鎖定選取範圍',
+      unlockEntireTitle: '解除鎖定選取範圍 (整塊)',
+      unlockEntireTooltip: '解除與選取範圍重疊的整塊鎖定區',
+      error: {
+        selectFirst: '請先選擇要鎖定的儲存格範圍',
+        selectFirstUnlock: '請先選擇要解除鎖定的儲存格範圍',
+        emptySelection: '選取範圍不能為空',
+        lockedBlocked: '此區域已鎖定，無法編輯'
+      },
+      success: {
+        locked: '已標記選取範圍為鎖定狀態',
+        unlocked: '已解除選取範圍的鎖定',
+        noLockedRange: '選取範圍內沒有鎖定的區塊'
+      }
+    },
     'import-export-menu': {
       tooltip: '匯入與匯出選項'
+    },
+    'doc-lock-menu': {
+      tooltip: '文件鎖定選項'
+    },
+    'sheet-lock-menu': {
+      tooltip: '表格鎖定選項'
     }
   }
 };

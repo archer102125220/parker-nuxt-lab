@@ -23,7 +23,7 @@ export default {
       }
     },
     'local-export': {
-      title: '导出 Snapshot',
+      title: '导出 Snapshot (JSON)',
       tooltip: '纯前端导出 Snapshot (JSON)',
       info: '正在导出 Snapshot JSON，请稍候...',
       error: {
@@ -62,8 +62,35 @@ export default {
         noLockedRange: '选区内没有锁定的区块'
       }
     },
+    'sheet-lock': {
+      // title: '锁定选区 (Sheet)',
+      title: '锁定选区',
+      tooltip: '锁定选区',
+      // unlockTitle: '解除锁定选区 (Sheet)',
+      unlockTitle: '解除锁定选区',
+      unlockTooltip: '解除锁定选区',
+      unlockEntireTitle: '解除锁定选区 (整块)',
+      unlockEntireTooltip: '解除与选区重叠的整块锁定区',
+      error: {
+        selectFirst: '请先选择要锁定的单元格范围',
+        selectFirstUnlock: '请先选择要解除锁定的单元格范围',
+        emptySelection: '选区不能为空',
+        lockedBlocked: '此区域已锁定，无法编辑'
+      },
+      success: {
+        locked: '已标记选区为锁定状态',
+        unlocked: '已解除选区的锁定',
+        noLockedRange: '选区内没有锁定的区块'
+      }
+    },
     'import-export-menu': {
       tooltip: '导入与导出选项'
+    },
+    'doc-lock-menu': {
+      tooltip: '文档锁定选项'
+    },
+    'sheet-lock-menu': {
+      tooltip: '表格锁定选项'
     }
   }
 };

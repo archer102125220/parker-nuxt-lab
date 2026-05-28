@@ -24,7 +24,7 @@ export default {
       }
     },
     'local-export': {
-      title: 'Export Snapshot',
+      title: 'Export Snapshot (JSON)',
       tooltip: 'Pure Frontend Export Snapshot (JSON)',
       info: 'Exporting Snapshot JSON, please wait...',
       error: {
@@ -64,8 +64,36 @@ export default {
         noLockedRange: 'No locked blocks in the selection'
       }
     },
+    'sheet-lock': {
+      // title: 'Lock Selection (Sheet)',
+      title: 'Lock Selection',
+      tooltip: 'Lock Selection',
+      // unlockTitle: 'Unlock Selection (Sheet)',
+      unlockTitle: 'Unlock Selection',
+      unlockTooltip: 'Unlock Selection',
+      unlockEntireTitle: 'Unlock Selection (Entire Block)',
+      unlockEntireTooltip:
+        'Unlock entire locked blocks that intersect with selection',
+      error: {
+        selectFirst: 'Please select a cell range to lock first',
+        selectFirstUnlock: 'Please select a cell range to unlock first',
+        emptySelection: 'Selection cannot be empty',
+        lockedBlocked: 'This area is locked and cannot be edited'
+      },
+      success: {
+        locked: 'Marked selection as locked',
+        unlocked: 'Unlocked selection',
+        noLockedRange: 'No locked blocks in the selection'
+      }
+    },
     'import-export-menu': {
       tooltip: 'Import and Export options'
+    },
+    'doc-lock-menu': {
+      tooltip: 'Document Lock Options'
+    },
+    'sheet-lock-menu': {
+      tooltip: 'Sheet Lock Options'
     }
   }
 };
