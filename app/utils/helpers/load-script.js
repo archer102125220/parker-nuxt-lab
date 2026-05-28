@@ -13,6 +13,13 @@ export function loadScript(id, src, attributes = {}, successDelay = 1500) {
     script.src = src;
     script.setAttribute('async', 'false'); // Guarantee execution order for interdependent UMD scripts
 
+    const isCrossOrigin =
+      (/^https?:\/\//.test(src) || /^http?:\/\//.test(src)) &&
+      !src.includes(location.hostname);
+    if (isCrossOrigin) {
+      script.setAttribute('crossorigin', 'anonymous');
+    }
+
     Object.keys(attributes).forEach((key) => {
       script.setAttribute(key, attributes[key]);
     });

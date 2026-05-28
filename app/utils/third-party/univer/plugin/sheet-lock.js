@@ -140,14 +140,12 @@ export function createdSheetLockPlugin(tryLimit = 10, tryCount = 0) {
         if (window.__UNIVER__SHEET_LOCKED_ERROR_FILTERED__ === true) return;
 
         window.addEventListener('error', (event) => {
-          console.dir({ event });
           if (event.error?.message?.includes(this.SHEET_LOCK_ERROR_MESSAGE)) {
             event.preventDefault();
           }
         });
 
         window.addEventListener('unhandledrejection', (event) => {
-          console.dir({ unhandledrejectionEvent: event });
           if (event.reason?.message?.includes(this.SHEET_LOCK_ERROR_MESSAGE)) {
             event.preventDefault();
           }
