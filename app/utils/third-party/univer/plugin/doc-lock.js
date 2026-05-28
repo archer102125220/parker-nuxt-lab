@@ -9,48 +9,6 @@ const COMMAND_ID_LOCK = 'doc.command.lock-selection';
 const COMMAND_ID_UNLOCK = 'doc.command.unlock-selection';
 const MENU_ID_PARENT = 'parker-nuxt-lab-plugins.doc-lock-menu';
 
-function ignoreErrorLog() {
-  if (typeof window === 'undefined') return;
-  if (window.__UNIVER__DOC_LOCKED_ERROR_FILTERED__ === true) return;
-
-  // 1. 攔截未捕獲的例外錯誤 (Uncaught Exception)
-  // 如果 throw new Error 沒有被 try-catch 抓住，它會觸發 window 的 error 事件
-  window.addEventListener('error', (event) => {
-    if (event.error?.message?.includes(DOC_LOCK_ERROR_MESSAGE)) {
-      event.preventDefault(); // 阻止瀏覽器在 Console 印出這個錯誤
-    }
-  });
-
-  // 2. 攔截未處理的 Promise 拒絕 (Unhandled Promise Rejection)
-  window.addEventListener('unhandledrejection', (event) => {
-    if (event.reason?.message?.includes(DOC_LOCK_ERROR_MESSAGE)) {
-      event.preventDefault(); // 阻止瀏覽器在 Console 印出這個錯誤
-    }
-  });
-
-  // 3. 原本的 console.error 覆寫 (以防 Univer 內部有去 catch 並且用 console.error 印出來)
-  window.originalConsoleError = window.console.error;
-
-  window.console.error = function (...args) {
-    // 檢查參數中是否包含特定的鎖定阻擋錯誤（字串或 Error 物件）
-    const isLockedError = args.some(
-      (arg) =>
-        (typeof arg === 'string' && arg.includes(DOC_LOCK_ERROR_MESSAGE)) ||
-        (arg instanceof Error && arg.message.includes(DOC_LOCK_ERROR_MESSAGE))
-    );
-
-    if (isLockedError) {
-      // 攔截到預期的鎖定阻擋錯誤，直接 return 吃掉，保持 console 乾淨
-      return;
-    }
-
-    // 如果不是我們要攔截的錯誤，就照常印出
-    window.originalConsoleError.apply(console, args);
-  };
-
-  window.__UNIVER__DOC_LOCKED_ERROR_FILTERED__ = true;
-}
-
 export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
   if (typeof window === 'undefined') return;
 
@@ -121,6 +79,13 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
     class DocLockPlugin extends Plugin {
       static pluginName = 'doc-lock-plugin';
 
+      #isPluginModifyingLock = false;
+      #_config;
+      #_injector;
+      #menuManagerService;
+      #commandService;
+      #componentManager;
+
       constructor(
         _config,
         _injector,
@@ -130,14 +95,59 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
       ) {
         super();
 
-        this._config = _config || {};
-        this._injector = _injector;
-        this.menuManagerService = menuManagerService;
-        this.commandService = commandService;
-        this.componentManager = componentManager;
+        this.config = _config;
+        this.#_config = _config || {};
+        this.#_injector = _injector;
+        this.#menuManagerService = menuManagerService;
+        this.#commandService = commandService;
+        this.#componentManager = componentManager;
 
         // 修正 Univer 編輯器在鎖定範圍時發出的錯誤訊息
-        ignoreErrorLog();
+        this.#ignoreErrorLog();
+      }
+
+      #ignoreErrorLog() {
+        if (typeof window === 'undefined') return;
+        if (window.__UNIVER__DOC_LOCKED_ERROR_FILTERED__ === true) return;
+
+        // 1. 攔截未捕獲的例外錯誤 (Uncaught Exception)
+        // 如果 throw new Error 沒有被 try-catch 抓住，它會觸發 window 的 error 事件
+        window.addEventListener('error', (event) => {
+          if (event.error?.message?.includes(DOC_LOCK_ERROR_MESSAGE)) {
+            event.preventDefault(); // 阻止瀏覽器在 Console 印出這個錯誤
+          }
+        });
+
+        // 2. 攔截未處理的 Promise 拒絕 (Unhandled Promise Rejection)
+        window.addEventListener('unhandledrejection', (event) => {
+          if (event.reason?.message?.includes(DOC_LOCK_ERROR_MESSAGE)) {
+            event.preventDefault(); // 阻止瀏覽器在 Console 印出這個錯誤
+          }
+        });
+
+        // 3. 原本的 console.error 覆寫 (以防 Univer 內部有去 catch 並且用 console.error 印出來)
+        window.originalConsoleError = window.console.error;
+
+        window.console.error = function (...args) {
+          // 檢查參數中是否包含特定的鎖定阻擋錯誤（字串或 Error 物件）
+          const isLockedError = args.some(
+            (arg) =>
+              (typeof arg === 'string' &&
+                arg.includes(DOC_LOCK_ERROR_MESSAGE)) ||
+              (arg instanceof Error &&
+                arg.message.includes(DOC_LOCK_ERROR_MESSAGE))
+          );
+
+          if (isLockedError) {
+            // 攔截到預期的鎖定阻擋錯誤，直接 return 吃掉，保持 console 乾淨
+            return;
+          }
+
+          // 如果不是我們要攔截的錯誤，就照常印出
+          window.originalConsoleError.apply(console, args);
+        };
+
+        window.__UNIVER__DOC_LOCKED_ERROR_FILTERED__ = true;
       }
 
       onStarting() {
@@ -156,7 +166,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
         };
         for (const [name, component] of Object.entries(iconList)) {
           try {
-            this.componentManager.register(name, component, {
+            this.#componentManager.register(name, component, {
               framework: 'vue3'
             });
           } catch {}
@@ -167,7 +177,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
         // --- Univer Bug Fix: Patch DocSelectionManagerService to prevent preset-docs-hyper-link crash ---
         // The hyper-link plugin reads `activeRanges[0].segmentId` directly on hover,
         // which crashes if `getTextRanges()` returns an empty array.
-        const docSelectionManagerService = this._injector.get(
+        const docSelectionManagerService = this.#_injector.get(
           DocSelectionManagerService
         );
         if (docSelectionManagerService) {
@@ -246,8 +256,8 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
           handler: async (accessor) => this.#_handleUnlock(accessor)
         };
 
-        this.commandService.registerCommand(lockCommand);
-        this.commandService.registerCommand(unlockCommand);
+        this.#commandService.registerCommand(lockCommand);
+        this.#commandService.registerCommand(unlockCommand);
       }
 
       async #_handleLock(accessor) {
@@ -284,7 +294,35 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
           return false;
         }
 
+        const lockedRangeList = this.#_getLockedRangeList(doc);
         const store = useUniverStore();
+
+        // 檢查準備鎖定的範圍，是否與其他帳號的鎖定範圍重疊
+        for (const lockedRange of lockedRangeList) {
+          const lockedStart = lockedRange.startIndex;
+          const lockedEnd = lockedRange.endIndex + 1;
+
+          const overlapStart = Math.max(startOffset, lockedStart);
+          const overlapEnd = Math.min(endOffset, lockedEnd);
+
+          if (overlapStart < overlapEnd) {
+            const allowedRoleList = lockedRange.properties?.allowedRoleList;
+            if (
+              Array.isArray(allowedRoleList) &&
+              allowedRoleList.length > 0 &&
+              !allowedRoleList.includes(store.currentUserRole)
+            ) {
+              messageService.show({
+                type: MessageType.Error,
+                content: localeService.t(
+                  'parker-nuxt-lab-plugins.doc-lock.error.lockedBlocked'
+                )
+              });
+              return false;
+            }
+          }
+        }
+
         const permissionParams = await store.requestLockPermissions();
         if (!permissionParams) return false; // 使用者取消鎖定
 
@@ -299,8 +337,8 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
         };
 
         const noStyle =
-          typeof this._config.noStyle === 'boolean'
-            ? this._config.noStyle
+          typeof this.#_config.noStyle === 'boolean'
+            ? this.#_config.noStyle
             : true;
         const customRangeMutation = addCustomRangeBySelectionFactory(accessor, {
           unitId: doc.getUnitId(),
@@ -314,14 +352,14 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
         });
 
         if (customRangeMutation) {
-          this.isPluginModifyingLock = true;
+          this.#isPluginModifyingLock = true;
           try {
             commandService.syncExecuteCommand(
               customRangeMutation.id,
               customRangeMutation.params
             );
           } finally {
-            this.isPluginModifyingLock = false;
+            this.#isPluginModifyingLock = false;
           }
           messageService.show({
             type: MessageType.Success,
@@ -408,7 +446,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
 
             unlockedCount++;
 
-            this.isPluginModifyingLock = true;
+            this.#isPluginModifyingLock = true;
             try {
               // 刪除原本的鎖定範圍
               const deleteMutation = deleteCustomRangeFactory(accessor, {
@@ -479,7 +517,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                   );
               }
             } finally {
-              this.isPluginModifyingLock = false;
+              this.#isPluginModifyingLock = false;
             }
           }
         }
@@ -503,7 +541,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
 
       #_createMenuHiddenObservable() {
         return new Observable((subscriber) => {
-          const univerInstanceService = this._injector.get(
+          const univerInstanceService = this.#_injector.get(
             IUniverInstanceService
           );
           const subscription = univerInstanceService.focused$.subscribe(
@@ -523,7 +561,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
       #_registerMenus() {
         const hidden$ = this.#_createMenuHiddenObservable();
 
-        this.menuManagerService.mergeMenu({
+        this.#menuManagerService.mergeMenu({
           [RibbonStartGroup.OTHERS]: {
             [MENU_ID_PARENT]: {
               order: 25,
@@ -561,12 +599,12 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
       }
 
       #_registerEditInterceptor() {
-        this.commandService.beforeCommandExecuted((commandInfo) => {
-          if (this.isPluginModifyingLock) return;
+        this.#commandService.beforeCommandExecuted((commandInfo) => {
+          if (this.#isPluginModifyingLock) return;
 
           if (commandInfo.id === 'doc.mutation.rich-text-editing') {
             const params = commandInfo.params;
-            const univerInstanceService = this._injector.get(
+            const univerInstanceService = this.#_injector.get(
               IUniverInstanceService
             );
             const doc = univerInstanceService.getUnit(params.unitId);
@@ -635,8 +673,8 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                 }
 
                 if (isBlocked) {
-                  const messageService = this._injector.get(IMessageService);
-                  const localeService = this._injector.get(LocaleService);
+                  const messageService = this.#_injector.get(IMessageService);
+                  const localeService = this.#_injector.get(LocaleService);
                   messageService.show({
                     type: MessageType.Error,
                     content: localeService.t(

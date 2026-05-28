@@ -12,6 +12,7 @@ import { createdExportCSVButtonPlugin } from '@app/utils/third-party/univer/plug
 import { createdLocalExportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-export';
 import { createdServerExportButtonPlugin } from '@app/utils/third-party/univer/plugin/server-export';
 import { createdLocalImportButtonPlugin } from '@app/utils/third-party/univer/plugin/local-import';
+import { createdSheetLockPlugin } from '@app/utils/third-party/univer/plugin/sheet-lock';
 import CustomPluginEnUS from '@app/utils/third-party/univer/i18n/en-US';
 import CustomPluginZhTW from '@app/utils/third-party/univer/i18n/zh-TW';
 
@@ -799,13 +800,15 @@ export async function createSheetInstance(
     ExportCSVPlugin,
     LocalExportButtonPlugin,
     ServerExportButtonPlugin,
-    LocalImportButtonPlugin
+    LocalImportButtonPlugin,
+    SheetLockPlugin
   ] = await Promise.all([
     createdImportCSVButtonPlugin(),
     createdExportCSVButtonPlugin(),
     createdLocalExportButtonPlugin(),
     createdServerExportButtonPlugin(),
-    createdLocalImportButtonPlugin()
+    createdLocalImportButtonPlugin(),
+    createdSheetLockPlugin()
   ]);
 
   const advancedPreset = UniverSheetsAdvancedPreset({
@@ -982,7 +985,8 @@ export async function createSheetInstance(
     [ExportCSVPlugin],
     [LocalExportButtonPlugin],
     [ServerExportButtonPlugin],
-    [LocalImportButtonPlugin]
+    [LocalImportButtonPlugin],
+    [SheetLockPlugin, { noStyle: false }]
   ]);
 
   if (collaboration === true && liveShare === true) {
