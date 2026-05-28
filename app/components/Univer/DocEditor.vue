@@ -329,6 +329,8 @@ onUnmounted(() => {
       @univer-exchange-started="loading = true"
       @univer-exchange-ended="loading = false"
     />
+
+    <UniverLockPermissionDialog />
   </div>
 </template>
 

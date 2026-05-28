@@ -1,6 +1,8 @@
 import Vue3LockIcon from '@app/components/Icon/Lock';
 import Vue3UnlockedIcon from '@app/components/Icon/Unlocked';
 
+import { useUniverStore } from '@app/store/univer';
+
 const DOC_LOCK_ERROR_MESSAGE = 'Edit blocked: Range is locked.';
 
 function ignoreErrorLog() {
@@ -180,6 +182,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
             );
             const messageService = accessor.get(IMessageService);
             const commandService = accessor.get(ICommandService);
+            const localeService = accessor.get(LocaleService);
 
             const doc = univerInstanceService.getFocusedUnit();
             if (!doc || doc.type !== UniverInstanceType.UNIVER_DOC) {
@@ -191,16 +194,26 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
             if (!activeTextRange) {
               messageService.show({
                 type: MessageType.Warning,
-                content: '請先選擇要鎖定的文字範圍'
+                content: localeService.t(
+                  'parker-nuxt-lab-plugins.doc-lock.error.selectFirst'
+                )
               });
               return false;
+            }
+
+            const store = useUniverStore();
+            const permissionParams = await store.requestLockPermissions();
+            if (!permissionParams) {
+              return false; // 使用者取消鎖定
             }
 
             const { startOffset, endOffset } = activeTextRange;
             if (startOffset === endOffset) {
               messageService.show({
                 type: MessageType.Warning,
-                content: '選取範圍不能為空'
+                content: localeService.t(
+                  'parker-nuxt-lab-plugins.doc-lock.error.emptySelection'
+                )
               });
               return false;
             }
@@ -227,7 +240,10 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                 unitId: doc.getUnitId(),
                 rangeId,
                 rangeType: noStyle ? 8888 : CustomRangeType.CUSTOM,
-                properties: { locked: true },
+                properties: {
+                  locked: true,
+                  allowedRoles: permissionParams.allowedRoles
+                },
                 selections
               }
             );
@@ -244,7 +260,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
               }
               messageService.show({
                 type: MessageType.Success,
-                content: `已標記範圍 ${startOffset} - ${endOffset} 為鎖定狀態`
+                content: `${localeService.t('parker-nuxt-lab-plugins.doc-lock.success.locked')}${startOffset} - ${endOffset}`
               });
               console.log(
                 '[DocLockPlugin] Range locked:',
@@ -308,6 +324,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
               (r) => r.properties?.locked
             );
 
+            const store = useUniverStore();
             let unlockedCount = 0;
 
             for (const lr of lockedRanges) {
@@ -318,6 +335,21 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
               const overlapEnd = Math.min(uEnd, lEnd);
 
               if (overlapStart < overlapEnd) {
+                // 解鎖前先檢查是否有權限
+                const allowedRoles = lr.properties?.allowedRoles;
+                if (
+                  Array.isArray(allowedRoles) &&
+                  allowedRoles.length > 0 &&
+                  !allowedRoles.includes(store.currentUserRole)
+                ) {
+                  messageService.show({
+                    type: MessageType.Error,
+                    content: localeService.t(
+                      'parker-nuxt-lab-plugins.doc-lock.error.lockedBlocked'
+                    ) // 或者提供專門的拒絕解鎖訊息
+                  });
+                  return false; // 阻擋解鎖
+                }
                 unlockedCount++;
 
                 this.isPluginModifyingLock = true;
@@ -353,7 +385,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                         unitId: doc.getUnitId(),
                         rangeId: newRangeIdLeft,
                         rangeType: lr.rangeType,
-                        properties: { locked: true },
+                        properties: { ...lr.properties },
                         selections: selectionsLeft
                       }
                     );
@@ -382,7 +414,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                         unitId: doc.getUnitId(),
                         rangeId: newRangeIdRight,
                         rangeType: lr.rangeType,
-                        properties: { locked: true },
+                        properties: { ...lr.properties },
                         selections: selectionsRight
                       }
                     );
@@ -401,13 +433,15 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
             if (unlockedCount > 0) {
               messageService.show({
                 type: MessageType.Success,
-                content: `已解除範圍 ${uStart} - ${uEnd} 的鎖定`
+                content: `${localeService.t('parker-nuxt-lab-plugins.doc-lock.success.unlocked')}${uStart} - ${uEnd}`
               });
               return true;
             } else {
               messageService.show({
                 type: MessageType.Info,
-                content: '選取範圍內沒有鎖定的區塊'
+                content: localeService.t(
+                  'parker-nuxt-lab-plugins.doc-lock.success.noLockedRange'
+                )
               });
               return false;
             }
@@ -418,8 +452,8 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
 
         const menuItemFactory = () => ({
           id: commandId,
-          title: '鎖定選取範圍',
-          tooltip: '鎖定選取範圍',
+          title: 'parker-nuxt-lab-plugins.doc-lock.title',
+          tooltip: 'parker-nuxt-lab-plugins.doc-lock.tooltip',
           icon: 'Vue3LockIcon',
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {
@@ -442,8 +476,8 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
 
         const unlockMenuItemFactory = () => ({
           id: unlockCommandId,
-          title: '解除鎖定選取範圍',
-          tooltip: '解除鎖定選取範圍',
+          title: 'parker-nuxt-lab-plugins.doc-lock.unlockTitle',
+          tooltip: 'parker-nuxt-lab-plugins.doc-lock.unlockTooltip',
           icon: 'Vue3UnlockedIcon',
           type: MenuItemType.BUTTON,
           hidden$: new Observable((subscriber) => {
@@ -497,6 +531,7 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
               );
 
               if (lockedRanges.length > 0) {
+                const store = useUniverStore();
                 // 從 ot-json1 的 JSONOp 中遞迴尋找 TextX 操作陣列
                 const findTextXActions = (obj) => {
                   if (Array.isArray(obj)) {
@@ -547,6 +582,14 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                           Math.min(editEnd, lEnd) - Math.max(editStart, lStart)
                         );
                         if (overlap > 0) {
+                          const allowedRoles =
+                            lockedRange.properties?.allowedRoles;
+                          if (
+                            Array.isArray(allowedRoles) &&
+                            allowedRoles.includes(store.currentUserRole)
+                          ) {
+                            continue; // 允許編輯
+                          }
                           isBlocked = true;
                           break;
                         }
@@ -559,6 +602,14 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                       const lStart = lockedRange.startIndex;
                       const lEnd = lockedRange.endIndex + 1;
                       if (editOffset > lStart && editOffset < lEnd) {
+                        const allowedRoles =
+                          lockedRange.properties?.allowedRoles;
+                        if (
+                          Array.isArray(allowedRoles) &&
+                          allowedRoles.includes(store.currentUserRole)
+                        ) {
+                          continue; // 允許編輯
+                        }
                         isBlocked = true;
                         break;
                       }
@@ -574,6 +625,14 @@ export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
                         Math.min(editEnd, lEnd) - Math.max(editStart, lStart)
                       );
                       if (overlap > 0) {
+                        const allowedRoles =
+                          lockedRange.properties?.allowedRoles;
+                        if (
+                          Array.isArray(allowedRoles) &&
+                          allowedRoles.includes(store.currentUserRole)
+                        ) {
+                          continue; // 允許編輯
+                        }
                         isBlocked = true;
                         break;
                       }
