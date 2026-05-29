@@ -9,21 +9,36 @@ const unitId = computed(() => route.query.unit);
 <template>
   <div class="univer_sheet_page">
     <div class="univer_sheet_page-remark">
-      <p class="univer_sheet_page-remark-title">⚠️ <b class="univer_sheet_page-remark-bold">Univer 載入與穩定度說明：</b></p>
+      <p class="univer_sheet_page-remark-title">
+        ⚠️
+        <b class="univer_sheet_page-remark-bold">{{
+          $t('univer_sheet_page.remark.univer_title')
+        }}</b>
+      </p>
       <ul class="univer_sheet_page-remark-list">
         <li class="univer_sheet_page-remark-list-item">
-          Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。
+          {{ $t('univer_sheet_page.remark.univer_npm') }}
         </li>
         <li class="univer_sheet_page-remark-list-item">
-          目前 Sheet 版本發展相對成熟，不太會出現無法正常載入的狀況。但若依然遇到編輯器沒有正常載入的情形，請嘗試<b class="univer_sheet_page-remark-bold">重新整理頁面</b>來讓 Univer 套件重新載入。
+          {{ $t('univer_sheet_page.remark.univer_stability_1')
+          }}<b class="univer_sheet_page-remark-bold">{{
+            $t('univer_sheet_page.remark.univer_stability_2')
+          }}</b
+          >{{ $t('univer_sheet_page.remark.univer_stability_3') }}
         </li>
         <li class="univer_sheet_page-remark-list-item">
-          需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本<b class="univer_sheet_page-remark-bold">久上許多</b>，請耐心等候。
+          {{ $t('univer_sheet_page.remark.univer_cdn_wait_1')
+          }}<b class="univer_sheet_page-remark-bold">{{
+            $t('univer_sheet_page.remark.univer_cdn_wait_2')
+          }}</b
+          >{{ $t('univer_sheet_page.remark.univer_cdn_wait_3') }}
         </li>
       </ul>
     </div>
     <div class="univer_sheet_page-tools">
-      <label for="role_select">當前測試身份：</label>
+      <label for="role_select">{{
+        $t('univer_sheet_page.tools.current_role')
+      }}</label>
       <select
         id="role_select"
         v-model="univerStore.currentUserRole"

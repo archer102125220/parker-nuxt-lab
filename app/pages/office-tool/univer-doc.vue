@@ -10,44 +10,55 @@ const unitId = computed(() => route.query.unit);
   <div class="univer_doc_page">
     <div class="univer_doc_page-remark">
       <p class="univer_doc_page-remark-title">
-        💡 <b class="univer_doc_page-remark-bold">鎖定狀態匯出說明：</b>
+        💡
+        <b class="univer_doc_page-remark-bold">{{
+          $t('univer_doc_page.remark.lock_title')
+        }}</b>
       </p>
       <ul class="univer_doc_page-remark-list">
         <li class="univer_doc_page-remark-list-item">
           <b class="univer_doc_page-remark-bold">
-            Local Export (JSON Snapshot)：
+            {{ $t('univer_doc_page.remark.local_export') }}
           </b>
-          可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON
-          後依然生效。
+          {{ $t('univer_doc_page.remark.local_export_desc') }}
         </li>
         <li class="univer_doc_page-remark-list-item">
-          <b class="univer_doc_page-remark-bold">Server Export (DOCX/XLSX)：</b>
-          無法保留鎖定狀態。標準 Office 格式不支援 Univer
-          自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。
+          <b class="univer_doc_page-remark-bold">{{
+            $t('univer_doc_page.remark.server_export')
+          }}</b>
+          {{ $t('univer_doc_page.remark.server_export_desc') }}
         </li>
       </ul>
       <p class="univer_doc_page-remark-title" css-is-spacing="true">
-        ⚠️ <b class="univer_doc_page-remark-bold">Univer 載入與穩定度說明：</b>
+        ⚠️
+        <b class="univer_doc_page-remark-bold">{{
+          $t('univer_doc_page.remark.univer_title')
+        }}</b>
       </p>
       <ul class="univer_doc_page-remark-list">
         <li class="univer_doc_page-remark-list-item">
-          Univer 的 npm 版在 Nuxt
-          上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用
-          CDN 的方式處理。
+          {{ $t('univer_doc_page.remark.univer_npm') }}
         </li>
         <li class="univer_doc_page-remark-list-item">
-          目前 Doc 版的穩定度不是很高，容易出現 error
-          狀況。如果編輯器沒有正常載入，請嘗試
-          <b class="univer_doc_page-remark-bold">重新整理頁面</b>
-          來讓 Univer 套件重新載入。
+          {{ $t('univer_doc_page.remark.univer_stability_1') }}
+          <b class="univer_doc_page-remark-bold">{{
+            $t('univer_doc_page.remark.univer_stability_2')
+          }}</b>
+          {{ $t('univer_doc_page.remark.univer_stability_3') }}
         </li>
         <li class="univer_doc_page-remark-list-item">
-          需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本<b class="univer_doc_page-remark-bold">久上許多</b>，請耐心等候。
+          {{ $t('univer_doc_page.remark.univer_cdn_wait_1')
+          }}<b class="univer_doc_page-remark-bold">{{
+            $t('univer_doc_page.remark.univer_cdn_wait_2')
+          }}</b
+          >{{ $t('univer_doc_page.remark.univer_cdn_wait_3') }}
         </li>
       </ul>
     </div>
     <div class="univer_doc_page-tools">
-      <label for="role_select">當前測試身份：</label>
+      <label for="role_select">{{
+        $t('univer_doc_page.tools.current_role')
+      }}</label>
       <select
         id="role_select"
         v-model="univerStore.currentUserRole"

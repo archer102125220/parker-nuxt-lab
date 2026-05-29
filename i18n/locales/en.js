@@ -1453,6 +1453,35 @@ export const en = {
         description: 'Custom image waving animation component'
       }
     }
+  },
+  univer_doc_page: {
+    remark: {
+      lock_title: 'Lock State Export Notes:',
+      local_export: 'Local Export (JSON Snapshot):',
+      local_export_desc: 'Can retain the lock state. Custom range properties are recorded in the Snapshot and remain effective after reloading JSON.',
+      server_export: 'Server Export (DOCX/XLSX):',
+      server_export_desc: 'Cannot retain the lock state. Standard Office formats do not support Univer\'s custom range locking mechanism, so exported physical files will not contain editing restrictions.',
+      univer_title: 'Univer Loading & Stability Notes:',
+      univer_npm: 'The npm version of Univer seems to trigger endless re-renders in Nuxt due to bundle transpilation settings upon loading, so it has been switched to CDN.',
+      univer_stability_1: 'Currently, the Doc version is not very stable and prone to errors. If the editor fails to load properly, please try ',
+      univer_stability_2: 'refreshing the page',
+      univer_stability_3: ' to reload the Univer package.',
+      univer_cdn_wait_1: 'Note that due to using a CDN, the initial loading time will be ',
+      univer_cdn_wait_2: 'much longer',
+      univer_cdn_wait_3: ' than using the npm version. Please be patient.'
+    }
+  },
+  univer_sheet_page: {
+    remark: {
+      univer_title: 'Univer Loading & Stability Notes:',
+      univer_npm: 'The npm version of Univer seems to trigger endless re-renders in Nuxt due to bundle transpilation settings upon loading, so it has been switched to CDN.',
+      univer_stability_1: 'The Sheet version is relatively mature and rarely fails to load. However, if the editor still does not load properly, please try ',
+      univer_stability_2: 'refreshing the page',
+      univer_stability_3: ' to reload the Univer package.',
+      univer_cdn_wait_1: 'Note that due to using a CDN, the initial loading time will be ',
+      univer_cdn_wait_2: 'much longer',
+      univer_cdn_wait_3: ' than using the npm version. Please be patient.'
+    }
   }
 };
 

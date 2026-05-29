@@ -1394,6 +1394,35 @@ export const zhTw = {
         description: '使用 Canvas 實作圖片隨時間呈現波浪效果的動畫'
       }
     }
+  },
+  univer_doc_page: {
+    remark: {
+      lock_title: '鎖定狀態匯出說明：',
+      local_export: 'Local Export (JSON Snapshot)：',
+      local_export_desc: '可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON 後依然生效。',
+      server_export: 'Server Export (DOCX/XLSX)：',
+      server_export_desc: '無法保留鎖定狀態。標準 Office 格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。',
+      univer_title: 'Univer 載入與穩定度說明：',
+      univer_npm: 'Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。',
+      univer_stability_1: '目前 Doc 版的穩定度不是很高，容易出現 error 狀況。如果編輯器沒有正常載入，請嘗試',
+      univer_stability_2: '重新整理頁面',
+      univer_stability_3: '來讓 Univer 套件重新載入。',
+      univer_cdn_wait_1: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本',
+      univer_cdn_wait_2: '久上許多',
+      univer_cdn_wait_3: '，請耐心等候。'
+    }
+  },
+  univer_sheet_page: {
+    remark: {
+      univer_title: 'Univer 載入與穩定度說明：',
+      univer_npm: 'Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。',
+      univer_stability_1: '目前 Sheet 版本發展相對成熟，不太會出現無法正常載入的狀況。但若依然遇到編輯器沒有正常載入的情形，請嘗試',
+      univer_stability_2: '重新整理頁面',
+      univer_stability_3: '來讓 Univer 套件重新載入。',
+      univer_cdn_wait_1: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本',
+      univer_cdn_wait_2: '久上許多',
+      univer_cdn_wait_3: '，請耐心等候。'
+    }
   }
 };
 
