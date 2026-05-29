@@ -78,6 +78,18 @@ export const en = {
       }
     }
   },
+  collabora_doc_page: {
+    title: 'Collabora Doc Editor',
+    description:
+      'Since the current deployment environment of this project is Vercel (Serverless Functions), and Collabora requires Docker to start the main file editing service, this demonstration can only be shown in a local Docker environment.',
+    docker_btn: 'Collabora Docker'
+  },
+  collabora_sheet_page: {
+    title: 'Collabora Sheet Editor',
+    description:
+      'Since the current deployment environment of this project is Vercel (Serverless Functions), and Collabora requires Docker to start the main file editing service, this demonstration can only be shown in a local Docker environment.',
+    docker_btn: 'Collabora Docker'
+  },
   home: {
     hero: {
       subtitle: 'Explore the Infinite Possibilities of Nuxt 4',

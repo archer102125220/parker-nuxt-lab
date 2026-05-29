@@ -78,6 +78,18 @@ export const zhTw = {
       }
     }
   },
+  collabora_doc_page: {
+    title: 'Collabora Doc 編輯器',
+    description:
+      '礙於本專案目前部署環境為 Vercel（Serverless Functions），而 Collabora 需要 Docker 啟動主要編輯檔案的服務，因此本示範僅能在本機 Docker 環境下展示。',
+    docker_btn: 'Collabora Docker'
+  },
+  collabora_sheet_page: {
+    title: 'Collabora Sheet 編輯器',
+    description:
+      '礙於本專案目前部署環境為 Vercel（Serverless Functions），而 Collabora 需要 Docker 啟動主要編輯檔案的服務，因此本示範僅能在本機 Docker 環境下展示。',
+    docker_btn: 'Collabora Docker'
+  },
   home: {
     hero: {
       subtitle: '探索 Nuxt 4 的無限可能',

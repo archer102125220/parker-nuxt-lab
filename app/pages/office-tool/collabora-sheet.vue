@@ -30,12 +30,8 @@ const wopiHost = computed(() => {
 <template>
   <div class="collabora_sheet_page">
     <div class="collabora_sheet_page-description">
-      <p>Collabora sheet 編輯器</p>
-      <p>
-        礙於本專案目前部署環境為 Vercel（Serverless Functions），而 Collabora
-        需要 Docker 啟動主要編輯檔案的服務，因此本示範僅能在本機 Docker
-        環境下展示。
-      </p>
+      <p>{{ $t('collabora_sheet_page.title') }}</p>
+      <p>{{ $t('collabora_sheet_page.description') }}</p>
 
       <v-btn
         href="https://hub.docker.com/r/collabora/code"
@@ -45,7 +41,7 @@ const wopiHost = computed(() => {
         rounded="xl"
         size="large"
       >
-        <p>Collabora Docker</p>
+        <p>{{ $t('collabora_sheet_page.docker_btn') }}</p>
         <v-icon icon="mdi-open-in-new" size="small" />
       </v-btn>
     </div>
