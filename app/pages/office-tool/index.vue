@@ -1,5 +1,29 @@
-<script setup lang="ts">
-// Office Tool Index Page
+<script setup>
+const toolCategories = [
+  {
+    title: 'Documents (Doc)',
+    items: [
+      { title: 'Collabora Doc', desc: 'Collaborative document editing using Collabora.', path: '/office-tool/collabora-doc' },
+      { title: 'Syncfusion Doc', desc: 'Document editor powered by Syncfusion.', path: '/office-tool/syncfusion-doc' },
+      { title: 'Tiptap Doc', desc: 'Rich text document editing using Tiptap.', path: '/office-tool/tiptap-doc' },
+      { title: 'Univer Doc', desc: 'Document editing capabilities powered by Univer.', path: '/office-tool/univer-doc' }
+    ]
+  },
+  {
+    title: 'Spreadsheets (Sheet)',
+    items: [
+      { title: 'Collabora Sheet', desc: 'Collaborative spreadsheet editing using Collabora.', path: '/office-tool/collabora-sheet' },
+      { title: 'Syncfusion Sheet', desc: 'Spreadsheet editor powered by Syncfusion.', path: '/office-tool/syncfusion-sheet' },
+      { title: 'Univer Sheet', desc: 'Spreadsheet capabilities powered by Univer.', path: '/office-tool/univer-sheet' }
+    ]
+  },
+  {
+    title: 'PDF',
+    items: [
+      { title: 'PDF Reader', desc: 'View and interact with PDF files.', path: '/office-tool/pdf-reader' }
+    ]
+  }
+];
 </script>
 
 <template>
@@ -10,55 +34,21 @@
     </div>
 
     <div class="office_tool_index_page-content">
-      <!-- Doc Section -->
-      <section class="office_tool_index_page-section">
-        <h2 class="office_tool_index_page-section-title">Documents (Doc)</h2>
+      <section 
+        v-for="(category, index) in toolCategories" 
+        :key="index"
+        class="office_tool_index_page-section"
+      >
+        <h2 class="office_tool_index_page-section-title">{{ category.title }}</h2>
         <div class="office_tool_index_page-grid">
-          <NuxtLink to="/office-tool/collabora-doc" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Collabora Doc</h3>
-            <p class="office_tool_index_page-card-desc">Collaborative document editing using Collabora.</p>
-          </NuxtLink>
-          <NuxtLink to="/office-tool/syncfusion-doc" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Syncfusion Doc</h3>
-            <p class="office_tool_index_page-card-desc">Document editor powered by Syncfusion.</p>
-          </NuxtLink>
-          <NuxtLink to="/office-tool/tiptap-doc" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Tiptap Doc</h3>
-            <p class="office_tool_index_page-card-desc">Rich text document editing using Tiptap.</p>
-          </NuxtLink>
-          <NuxtLink to="/office-tool/univer-doc" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Univer Doc</h3>
-            <p class="office_tool_index_page-card-desc">Document editing capabilities powered by Univer.</p>
-          </NuxtLink>
-        </div>
-      </section>
-
-      <!-- Sheet Section -->
-      <section class="office_tool_index_page-section">
-        <h2 class="office_tool_index_page-section-title">Spreadsheets (Sheet)</h2>
-        <div class="office_tool_index_page-grid">
-          <NuxtLink to="/office-tool/collabora-sheet" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Collabora Sheet</h3>
-            <p class="office_tool_index_page-card-desc">Collaborative spreadsheet editing using Collabora.</p>
-          </NuxtLink>
-          <NuxtLink to="/office-tool/syncfusion-sheet" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Syncfusion Sheet</h3>
-            <p class="office_tool_index_page-card-desc">Spreadsheet editor powered by Syncfusion.</p>
-          </NuxtLink>
-          <NuxtLink to="/office-tool/univer-sheet" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">Univer Sheet</h3>
-            <p class="office_tool_index_page-card-desc">Spreadsheet capabilities powered by Univer.</p>
-          </NuxtLink>
-        </div>
-      </section>
-
-      <!-- PDF Section -->
-      <section class="office_tool_index_page-section">
-        <h2 class="office_tool_index_page-section-title">PDF</h2>
-        <div class="office_tool_index_page-grid">
-          <NuxtLink to="/office-tool/pdf-reader" class="office_tool_index_page-card">
-            <h3 class="office_tool_index_page-card-title">PDF Reader</h3>
-            <p class="office_tool_index_page-card-desc">View and interact with PDF files.</p>
+          <NuxtLink 
+            v-for="(item, itemIndex) in category.items" 
+            :key="itemIndex"
+            :to="item.path" 
+            class="office_tool_index_page-card"
+          >
+            <h3 class="office_tool_index_page-card-title">{{ item.title }}</h3>
+            <p class="office_tool_index_page-card-desc">{{ item.desc }}</p>
           </NuxtLink>
         </div>
       </section>
@@ -123,6 +113,8 @@
   }
 
   &-card {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -134,6 +126,23 @@
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/img/icon/NuxtRock.v.10.4.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 0.3s ease;
+    }
+
     &:hover {
       transform: translateY(-4px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -141,6 +150,8 @@
     }
 
     &-title {
+      position: relative;
+      z-index: 1;
       margin: 0;
       font-size: 18px;
       font-weight: 600;
@@ -148,6 +159,8 @@
     }
 
     &-desc {
+      position: relative;
+      z-index: 1;
       margin: 0;
       font-size: 14px;
       color: var(--color_text_secondary, #6b7280);
