@@ -11,11 +11,11 @@ const toolCategories = computed(() => [
         desc: t('office_tool_page.items.collabora_doc.desc'),
         path: '/office-tool/collabora-doc'
       },
-      {
-        title: t('office_tool_page.items.syncfusion_doc.title'),
-        desc: t('office_tool_page.items.syncfusion_doc.desc'),
-        path: '/office-tool/syncfusion-doc'
-      },
+      // {
+      //   title: t('office_tool_page.items.syncfusion_doc.title'),
+      //   desc: t('office_tool_page.items.syncfusion_doc.desc'),
+      //   path: '/office-tool/syncfusion-doc'
+      // },
       {
         title: t('office_tool_page.items.tiptap_doc.title'),
         desc: t('office_tool_page.items.tiptap_doc.desc'),
@@ -37,29 +37,29 @@ const toolCategories = computed(() => [
         desc: t('office_tool_page.items.collabora_sheet.desc'),
         path: '/office-tool/collabora-sheet'
       },
-      {
-        title: t('office_tool_page.items.syncfusion_sheet.title'),
-        desc: t('office_tool_page.items.syncfusion_sheet.desc'),
-        path: '/office-tool/syncfusion-sheet'
-      },
+      // {
+      //   title: t('office_tool_page.items.syncfusion_sheet.title'),
+      //   desc: t('office_tool_page.items.syncfusion_sheet.desc'),
+      //   path: '/office-tool/syncfusion-sheet'
+      // },
       {
         title: t('office_tool_page.items.univer_sheet.title'),
         desc: t('office_tool_page.items.univer_sheet.desc'),
         path: '/office-tool/univer-sheet'
       }
     ]
-  },
-  {
-    title: t('office_tool_page.categories.pdf'),
-    color: '#f43f5e', // Rose/Red
-    items: [
-      {
-        title: t('office_tool_page.items.pdf_reader.title'),
-        desc: t('office_tool_page.items.pdf_reader.desc'),
-        path: '/office-tool/pdf-reader'
-      }
-    ]
   }
+  // {
+  //   title: t('office_tool_page.categories.pdf'),
+  //   color: '#f43f5e', // Rose/Red
+  //   items: [
+  //     {
+  //       title: t('office_tool_page.items.pdf_reader.title'),
+  //       desc: t('office_tool_page.items.pdf_reader.desc'),
+  //       path: '/office-tool/pdf-reader'
+  //     }
+  //   ]
+  // }
 ]);
 </script>
 

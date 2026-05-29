@@ -1,107 +1,3 @@
-<template>
-  <div class="home_page">
-    <!-- Hero Section -->
-    <section
-      v-ripples-auto-drops="{
-        interval: 300,
-        dropRadius: 20,
-        strength: 0.04,
-        strengthVariance: 0.04,
-        interactive: true
-      }"
-      class="home_page-hero"
-    >
-      <div class="home_page-hero-content">
-        <h1 class="home_page-hero-content-title">Parker Nuxt Lab</h1>
-        <p class="home_page-hero-content-subtitle">
-          {{ t('home.hero.subtitle') }}
-        </p>
-        <p class="home_page-hero-content-description">
-          {{ t('home.hero.description') }}
-        </p>
-        <div class="home_page-hero-content-actions">
-          <v-btn
-            class="home_page-hero-content-actions-btn"
-            css-variant="primary"
-            @click="scrollToNavigation"
-          >
-            {{ t('home.hero.cta_explore') }}
-          </v-btn>
-          <NuxtLink
-            v-ripple
-            :to="localePath('/about')"
-            class="home_page-hero-content-actions-btn"
-            css-variant="secondary"
-          >
-            {{ t('home.hero.cta_about') }}
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="home_page-features">
-      <div class="home_page-features-container">
-        <h2 class="home_page-features-title">{{ t('home.features.title') }}</h2>
-        <div class="home_page-features-grid">
-          <div
-            v-for="feature in features"
-            :key="feature.key"
-            class="home_page-features-grid-card"
-          >
-            <div class="home_page-features-grid-card-icon">
-              <img
-                v-lazy="`/img/home/features/${feature.icon}.svg`"
-                class="home_page-features-grid-card-icon-image"
-                :alt="feature.title"
-              />
-            </div>
-            <h3 class="home_page-features-grid-card-title">
-              {{ feature.title }}
-            </h3>
-            <p class="home_page-features-grid-card-description">
-              {{ feature.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Navigation Grid Section -->
-    <section ref="navigationRef" class="home_page-navigation">
-      <div class="home_page-navigation-container">
-        <h2 class="home_page-navigation-title">
-          {{ t('home.navigation.title') }}
-        </h2>
-        <nav class="home_page-navigation-grid" role="navigation">
-          <LinkCard
-            v-for="link in linkList"
-            :key="link.to"
-            :to="link.to"
-            :banner="link.banner"
-            :icon="link.icon"
-            :label="link.label"
-            :description="link.description"
-            :footer-text="link.footerText || t('home.hero.cta_explore')"
-            :has-banner="link.hasBanner"
-            class="home_page-navigation-grid-item"
-          />
-        </nav>
-      </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="home_page-stats">
-      <div class="home_page-stats-container">
-        <div v-for="stat in stats" :key="stat.key" class="home_page-stats-card">
-          <div class="home_page-stats-card-value">{{ stat.value }}</div>
-          <div class="home_page-stats-card-label">{{ stat.label }}</div>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 definePageMeta({
   title: 'system.defaultTitle'
@@ -358,6 +254,110 @@ const linkList = computed(() => [
   }
 ]);
 </script>
+
+<template>
+  <div class="home_page">
+    <!-- Hero Section -->
+    <section
+      v-ripples-auto-drops="{
+        interval: 300,
+        dropRadius: 20,
+        strength: 0.04,
+        strengthVariance: 0.04,
+        interactive: true
+      }"
+      class="home_page-hero"
+    >
+      <div class="home_page-hero-content">
+        <h1 class="home_page-hero-content-title">Parker Nuxt Lab</h1>
+        <p class="home_page-hero-content-subtitle">
+          {{ t('home.hero.subtitle') }}
+        </p>
+        <p class="home_page-hero-content-description">
+          {{ t('home.hero.description') }}
+        </p>
+        <div class="home_page-hero-content-actions">
+          <v-btn
+            class="home_page-hero-content-actions-btn"
+            css-variant="primary"
+            @click="scrollToNavigation"
+          >
+            {{ t('home.hero.cta_explore') }}
+          </v-btn>
+          <NuxtLink
+            v-ripple
+            :to="localePath('/about')"
+            class="home_page-hero-content-actions-btn"
+            css-variant="secondary"
+          >
+            {{ t('home.hero.cta_about') }}
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="home_page-features">
+      <div class="home_page-features-container">
+        <h2 class="home_page-features-title">{{ t('home.features.title') }}</h2>
+        <div class="home_page-features-grid">
+          <div
+            v-for="feature in features"
+            :key="feature.key"
+            class="home_page-features-grid-card"
+          >
+            <div class="home_page-features-grid-card-icon">
+              <img
+                v-lazy="`/img/home/features/${feature.icon}.svg`"
+                class="home_page-features-grid-card-icon-image"
+                :alt="feature.title"
+              />
+            </div>
+            <h3 class="home_page-features-grid-card-title">
+              {{ feature.title }}
+            </h3>
+            <p class="home_page-features-grid-card-description">
+              {{ feature.description }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Grid Section -->
+    <section ref="navigationRef" class="home_page-navigation">
+      <div class="home_page-navigation-container">
+        <h2 class="home_page-navigation-title">
+          {{ t('home.navigation.title') }}
+        </h2>
+        <nav class="home_page-navigation-grid" role="navigation">
+          <LinkCard
+            v-for="link in linkList"
+            :key="link.to"
+            :to="link.to"
+            :banner="link.banner"
+            :icon="link.icon"
+            :label="link.label"
+            :description="link.description"
+            :footer-text="link.footerText || t('home.hero.cta_explore')"
+            :has-banner="link.hasBanner"
+            class="home_page-navigation-grid-item"
+          />
+        </nav>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="home_page-stats">
+      <div class="home_page-stats-container">
+        <div v-for="stat in stats" :key="stat.key" class="home_page-stats-card">
+          <div class="home_page-stats-card-value">{{ stat.value }}</div>
+          <div class="home_page-stats-card-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .home_page {
