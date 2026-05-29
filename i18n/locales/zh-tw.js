@@ -30,7 +30,53 @@ export const zhTw = {
     indexeddb_demo: 'IndexedDB ORM 展示',
     virtual_reality: '虛擬實境實驗室',
     notes: 'Notion 筆記',
-    animation: '動畫效果展示'
+    animation: '動畫效果展示',
+    office_tool: '辦公工具'
+  },
+  office_tool_page: {
+    hero: {
+      title: '辦公工具 (Office Tools)',
+      description: '探索不同的文件、試算表與 PDF 實作方式。'
+    },
+    categories: {
+      doc: '文件 (Doc)',
+      sheet: '試算表 (Sheet)',
+      pdf: 'PDF'
+    },
+    items: {
+      collabora_doc: {
+        title: 'Collabora Doc',
+        desc: '使用 Collabora 進行協作文件編輯。'
+      },
+      syncfusion_doc: {
+        title: 'Syncfusion Doc',
+        desc: '由 Syncfusion 提供的文件編輯器。'
+      },
+      tiptap_doc: {
+        title: 'Tiptap Doc',
+        desc: '使用 Tiptap 的富文本文件編輯。'
+      },
+      univer_doc: {
+        title: 'Univer Doc',
+        desc: '由 Univer 提供的文件編輯功能。'
+      },
+      collabora_sheet: {
+        title: 'Collabora Sheet',
+        desc: '使用 Collabora 進行協作試算表編輯。'
+      },
+      syncfusion_sheet: {
+        title: 'Syncfusion Sheet',
+        desc: '由 Syncfusion 提供的試算表編輯器。'
+      },
+      univer_sheet: {
+        title: 'Univer Sheet',
+        desc: '由 Univer 提供的試算表功能。'
+      },
+      pdf_reader: {
+        title: 'PDF.js 閱讀器',
+        desc: '使用 PDF.js 整合的 PDF 閱讀與互動功能。'
+      }
+    }
   },
   home: {
     hero: {
@@ -86,6 +132,7 @@ export const zhTw = {
       virtual_reality_desc: '探索 WebVR 和 WebXR，包含全景圖與 3D 虛擬視覺展示',
       notes_desc: '日常工作與私下研究的 SEO 及技術實戰紀錄',
       animation_desc: '各種動畫效果與功能展示',
+      office_tool_desc: '探索不同的文件、試算表與 PDF 實作工具',
       read_on_notion: '在 Notion 閱讀'
     },
     stats: {

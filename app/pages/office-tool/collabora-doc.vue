@@ -1,6 +1,7 @@
 <script setup>
 import { COLLABORA_LOCALES } from '@app/components/CollaboraIframe.vue';
 
+const route = useRoute();
 const { locale } = useI18n();
 const language = computed(() => {
   const _locale =

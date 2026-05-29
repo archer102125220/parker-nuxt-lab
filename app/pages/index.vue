@@ -350,6 +350,11 @@ const linkList = computed(() => [
     to: localePath('/animation'),
     label: t('index.animation'),
     description: t('home.nav.animation_desc')
+  },
+  {
+    to: localePath('/office-tool'),
+    label: t('index.office_tool'),
+    description: t('home.nav.office_tool_desc')
   }
 ]);
 </script>

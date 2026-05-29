@@ -30,7 +30,53 @@ export const en = {
     indexeddb_demo: 'IndexedDB ORM Demo',
     virtual_reality: 'Virtual Reality Lab',
     notes: 'Notion Notes',
-    animation: 'Animation Showcase'
+    animation: 'Animation Showcase',
+    office_tool: 'Office Tools'
+  },
+  office_tool_page: {
+    hero: {
+      title: 'Office Tools',
+      description: 'Explore different document, spreadsheet, and PDF implementations.'
+    },
+    categories: {
+      doc: 'Documents (Doc)',
+      sheet: 'Spreadsheets (Sheet)',
+      pdf: 'PDF'
+    },
+    items: {
+      collabora_doc: {
+        title: 'Collabora Doc',
+        desc: 'Collaborative document editing using Collabora.'
+      },
+      syncfusion_doc: {
+        title: 'Syncfusion Doc',
+        desc: 'Document editor powered by Syncfusion.'
+      },
+      tiptap_doc: {
+        title: 'Tiptap Doc',
+        desc: 'Rich text document editing using Tiptap.'
+      },
+      univer_doc: {
+        title: 'Univer Doc',
+        desc: 'Document editing capabilities powered by Univer.'
+      },
+      collabora_sheet: {
+        title: 'Collabora Sheet',
+        desc: 'Collaborative spreadsheet editing using Collabora.'
+      },
+      syncfusion_sheet: {
+        title: 'Syncfusion Sheet',
+        desc: 'Spreadsheet editor powered by Syncfusion.'
+      },
+      univer_sheet: {
+        title: 'Univer Sheet',
+        desc: 'Spreadsheet capabilities powered by Univer.'
+      },
+      pdf_reader: {
+        title: 'PDF.js Reader',
+        desc: 'PDF viewing and interaction powered by PDF.js.'
+      }
+    }
   },
   home: {
     hero: {
@@ -98,6 +144,7 @@ export const en = {
       notes_desc:
         'Practical records of daily work and private research on SEO and technology',
       animation_desc: 'Showcase of various animation effects and utilities',
+      office_tool_desc: 'Explore different document, spreadsheet, and PDF tools',
       read_on_notion: 'Read on Notion'
     },
     stats: {
