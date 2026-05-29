@@ -189,6 +189,22 @@ registerRoute(
   'GET'
 );
 
+// 快取 Univer 相關的 CDN 靜態資源 (包含 Univer 本身及其相依套件 react, rxjs, echarts, vue)
+registerRoute(
+  /^https:\/\/(unpkg\.com|cdn\.jsdelivr\.net)\/(npm\/)?(@univerjs(-pro)?|react(-dom)?|rxjs|echarts|vue)(@[^/]+)?(\/|$)/i,
+  new CacheFirst({
+    cacheName: 'univer-cdn-cache',
+    expiration: {
+      maxEntries: 200,
+      maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
+    },
+    cacheableResponse: {
+      statuses: [0, 200]
+    }
+  }),
+  'GET'
+);
+
 // 設置全局錯誤處理器 - 當所有路由都失敗時的 fallback
 // 這會在用戶離線且訪問未快取的頁面時顯示離線頁面
 setCatchHandler(async ({ event }) => {
