@@ -2,6 +2,7 @@
 const toolCategories = [
   {
     title: 'Documents (Doc)',
+    color: '#3b82f6', // Blue
     items: [
       { title: 'Collabora Doc', desc: 'Collaborative document editing using Collabora.', path: '/office-tool/collabora-doc' },
       { title: 'Syncfusion Doc', desc: 'Document editor powered by Syncfusion.', path: '/office-tool/syncfusion-doc' },
@@ -11,6 +12,7 @@ const toolCategories = [
   },
   {
     title: 'Spreadsheets (Sheet)',
+    color: '#10b981', // Green
     items: [
       { title: 'Collabora Sheet', desc: 'Collaborative spreadsheet editing using Collabora.', path: '/office-tool/collabora-sheet' },
       { title: 'Syncfusion Sheet', desc: 'Spreadsheet editor powered by Syncfusion.', path: '/office-tool/syncfusion-sheet' },
@@ -19,6 +21,7 @@ const toolCategories = [
   },
   {
     title: 'PDF',
+    color: '#f43f5e', // Rose/Red
     items: [
       { title: 'PDF Reader', desc: 'View and interact with PDF files.', path: '/office-tool/pdf-reader' }
     ]
@@ -39,16 +42,26 @@ const toolCategories = [
         :key="index"
         class="office_tool_index_page-section"
       >
-        <h2 class="office_tool_index_page-section-title">{{ category.title }}</h2>
+        <div class="office_tool_index_page-section-header">
+          <div class="office_tool_index_page-section-dot" :style="{ backgroundColor: category.color }"></div>
+          <h2 class="office_tool_index_page-section-title">{{ category.title }}</h2>
+        </div>
         <div class="office_tool_index_page-grid">
           <NuxtLink 
             v-for="(item, itemIndex) in category.items" 
             :key="itemIndex"
             :to="item.path" 
             class="office_tool_index_page-card"
+            :style="{ '--card_accent': category.color }"
           >
-            <h3 class="office_tool_index_page-card-title">{{ item.title }}</h3>
-            <p class="office_tool_index_page-card-desc">{{ item.desc }}</p>
+            <div class="office_tool_index_page-card-icon">
+              {{ item.title.charAt(0) }}
+            </div>
+            <div class="office_tool_index_page-card-content">
+              <h3 class="office_tool_index_page-card-title">{{ item.title }}</h3>
+              <p class="office_tool_index_page-card-desc">{{ item.desc }}</p>
+            </div>
+            <div class="office_tool_index_page-card-glow"></div>
           </NuxtLink>
         </div>
       </section>
@@ -60,111 +73,176 @@ const toolCategories = [
 .office_tool_index_page {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 48px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 60px 24px;
+  min-height: 100vh;
+  
+  /* Subtle dot background pattern */
+  background-color: var(--color_bg_main, #f9fafb);
+  background-image: radial-gradient(var(--color_border, #e5e7eb) 1px, transparent 1px);
+  background-size: 24px 24px;
 
   &-header {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     text-align: center;
 
     &-title {
       margin: 0;
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 40px;
+      font-weight: 800;
       color: var(--color_text_primary, #111827);
+      letter-spacing: -0.02em;
     }
 
     &-desc {
       margin: 0;
-      font-size: 16px;
+      font-size: 18px;
       color: var(--color_text_secondary, #6b7280);
+      max-width: 600px;
+      margin: 0 auto;
     }
   }
 
   &-content {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 56px;
   }
 
   &-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+    
+    &-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--color_border, #e5e7eb);
+    }
+    
+    &-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
 
     &-title {
       margin: 0;
       font-size: 24px;
-      font-weight: 600;
-      color: var(--color_text_primary, #374151);
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--color_border, #e5e7eb);
+      font-weight: 700;
+      color: var(--color_text_primary, #1f2937);
     }
   }
 
   &-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
   }
 
   &-card {
     position: relative;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: flex-start;
+    gap: 16px;
     padding: 24px;
-    background-color: var(--color_bg_surface, #ffffff);
-    border: 1px solid var(--color_border, #e5e7eb);
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
     text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
 
     &::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
+      width: 4px;
       height: 100%;
-      background-image: url('/img/icon/NuxtRock.v.10.4.webp');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 0.1;
-      pointer-events: none;
-      z-index: 0;
-      transition: opacity 0.3s ease;
+      background-color: var(--card_accent);
+      opacity: 0.6;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      border-color: var(--color_primary, #3b82f6);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      border-color: var(--color_border, #e5e7eb);
+
+      &::before {
+        opacity: 1;
+        width: 6px;
+      }
+
+      .office_tool_index_page-card-glow {
+        opacity: 0.1;
+      }
+      
+      .office_tool_index_page-card-icon {
+        transform: scale(1.1) rotate(5deg);
+        background-color: var(--card_accent);
+        color: #ffffff;
+      }
+    }
+
+    &-icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background-color: color-mix(in srgb, var(--card_accent) 12%, transparent);
+      color: var(--card_accent);
+      font-size: 24px;
+      font-weight: 700;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+
+    &-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 1;
     }
 
     &-title {
-      position: relative;
-      z-index: 1;
       margin: 0;
       font-size: 18px;
       font-weight: 600;
-      color: var(--color_primary, #2563eb);
+      color: var(--color_text_primary, #111827);
     }
 
     &-desc {
-      position: relative;
-      z-index: 1;
       margin: 0;
       font-size: 14px;
-      color: var(--color_text_secondary, #6b7280);
+      color: var(--color_text_secondary, #4b5563);
       line-height: 1.5;
+    }
+
+    &-glow {
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, var(--card_accent) 0%, transparent 50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 0;
     }
   }
 }
