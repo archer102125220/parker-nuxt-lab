@@ -17,6 +17,9 @@ const unitId = computed(() => route.query.unit);
         <li class="univer_sheet_page-remark-list-item">
           目前 Sheet 版本發展相對成熟，不太會出現無法正常載入的狀況。但若依然遇到編輯器沒有正常載入的情形，請嘗試<b class="univer_sheet_page-remark-bold">重新整理頁面</b>來讓 Univer 套件重新載入。
         </li>
+        <li class="univer_sheet_page-remark-list-item">
+          需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本<b class="univer_sheet_page-remark-bold">久上許多</b>，請耐心等候。
+        </li>
       </ul>
     </div>
     <div class="univer_sheet_page-tools">
