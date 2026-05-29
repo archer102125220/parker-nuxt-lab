@@ -1410,6 +1410,9 @@ export const zhTw = {
       univer_cdn_wait_1: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本',
       univer_cdn_wait_2: '久上許多',
       univer_cdn_wait_3: '，請耐心等候。'
+    },
+    tools: {
+      current_role: '當前測試身份：'
     }
   },
   univer_sheet_page: {
@@ -1422,6 +1425,9 @@ export const zhTw = {
       univer_cdn_wait_1: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本',
       univer_cdn_wait_2: '久上許多',
       univer_cdn_wait_3: '，請耐心等候。'
+    },
+    tools: {
+      current_role: '當前測試身份：'
     }
   }
 };

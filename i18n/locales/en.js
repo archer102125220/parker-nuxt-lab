@@ -1469,6 +1469,9 @@ export const en = {
       univer_cdn_wait_1: 'Note that due to using a CDN, the initial loading time will be ',
       univer_cdn_wait_2: 'much longer',
       univer_cdn_wait_3: ' than using the npm version. Please be patient.'
+    },
+    tools: {
+      current_role: 'Current Test Role:'
     }
   },
   univer_sheet_page: {
@@ -1481,6 +1484,9 @@ export const en = {
       univer_cdn_wait_1: 'Note that due to using a CDN, the initial loading time will be ',
       univer_cdn_wait_2: 'much longer',
       univer_cdn_wait_3: ' than using the npm version. Please be patient.'
+    },
+    tools: {
+      current_role: 'Current Test Role:'
     }
   }
 };
