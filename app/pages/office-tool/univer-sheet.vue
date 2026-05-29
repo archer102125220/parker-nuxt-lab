@@ -8,6 +8,17 @@ const unitId = computed(() => route.query.unit);
 
 <template>
   <div class="univer_sheet_page">
+    <div class="univer_sheet_page-remark">
+      <p class="univer_sheet_page-remark-title">⚠️ <b class="univer_sheet_page-remark-bold">Univer 載入與穩定度說明：</b></p>
+      <ul class="univer_sheet_page-remark-list">
+        <li class="univer_sheet_page-remark-list-item">
+          Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。
+        </li>
+        <li class="univer_sheet_page-remark-list-item">
+          目前 Sheet 版本發展相對成熟，不太會出現無法正常載入的狀況。但若依然遇到編輯器沒有正常載入的情形，請嘗試<b class="univer_sheet_page-remark-bold">重新整理頁面</b>來讓 Univer 套件重新載入。
+        </li>
+      </ul>
+    </div>
     <div class="univer_sheet_page-tools">
       <label for="role_select">當前測試身份：</label>
       <select
@@ -31,6 +42,34 @@ const unitId = computed(() => route.query.unit);
 <style lang="scss" scoped>
 .univer_sheet_page {
   height: 90vh;
+
+  &-remark {
+    padding: 12px 16px;
+    background-color: #fff3cd;
+    color: #856404;
+    border-bottom: 1px solid #ffeeba;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 10px;
+    margin-bottom: 16px;
+
+    &-title {
+      margin: 0 0 4px 0;
+
+      &[css-is-spacing='true'] {
+        margin-top: 12px;
+      }
+    }
+
+    &-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    &-bold {
+      font-weight: bold;
+    }
+  }
 
   &-tools {
     padding: 10px 16px;
