@@ -22,7 +22,7 @@ const IS_DEV = process.env.NODE_ENV !== 'production';
 
 const CONTENT_SECURITY_POLICY = {
   'default-src': [
-    '\'self\'',
+    "'self'",
     'https://fonts.googleapis.com',
     'https://fonts.gstatic.com',
     'https://www.googletagmanager.com',
@@ -31,22 +31,69 @@ const CONTENT_SECURITY_POLICY = {
     'https://connect.facebook.net',
     'https://*.facebook.com',
     'https://*.fbcdn.net',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
-  'base-uri': ['\'self\''],
+  'base-uri': ["'self'"],
   'font-src': [
-    '\'self\'',
+    "'self'",
     'data:',
     'blob:',
     'https://fonts.gstatic.com',
     'https://*.fbcdn.net',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
-  'form-action': ['\'self\'', 'https://*.facebook.com', 'https://unpkg.com/@univerjs', 'http://localhost:9980'],
+  'form-action': [
+    "'self'",
+    'https://*.facebook.com',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+    'http://localhost:9980'
+  ],
   'img-src': [
-    '\'self\'',
+    "'self'",
     'data:',
     'blob:',
     'https://*.ytimg.com',
@@ -55,11 +102,25 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.fbcdn.net',
     'https://*.googletagmanager.com',
     'https://validator.swagger.io',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // Univer 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
-  'object-src': ['\'none\''],
-  'script-src-attr': ['\'none\''],
+  'object-src': ["'none'"],
+  'script-src-attr': ["'none'"],
   // 'script-src': [
   //   '\'self\'',
   //   '\'unsafe-inline\'',
@@ -72,14 +133,15 @@ const CONTENT_SECURITY_POLICY = {
   //   'https://*.facebook.com',
   //   'https://*.fbcdn.net',
   //   'https://*.googleapis.com',
-  //   'https://va.vercel-scripts.com'
+  //   'https://va.vercel-scripts.com',
+  //   'https://unpkg.com/rxjs',
   //   'https://unpkg.com/@univerjs',
   //   'http://localhost:9980'
   // ],
   'script-src': [
-    '\'self\'',
-    '\'unsafe-inline\'',
-    '\'unsafe-eval\'',
+    "'self'",
+    "'unsafe-inline'",
+    "'unsafe-eval'",
     'https://www.googletagmanager.com',
     'https://*.youtube.com',
     'https://*.ytimg.com',
@@ -91,21 +153,49 @@ const CONTENT_SECURITY_POLICY = {
     'https://gc.kis.v2.scr.kaspersky',
     'wss://gc.kis.v2.scr.kaspersky',
     'https://va.vercel-scripts.com',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
   'style-src': [
-    '\'self\'',
-    '\'unsafe-inline\'',
+    "'self'",
+    "'unsafe-inline'",
     'https://fonts.googleapis.com',
     'https://*.youtube.com',
     'https://*.facebook.com',
     'https://*.fbcdn.net',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
   'connect-src': [
-    '\'self\'',
+    "'self'",
     'https://assets.vercel.com',
     'https://fonts.googleapis.com',
     'https://fonts.gstatic.com',
@@ -117,33 +207,89 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.google-analytics.com',
     'https://*.googleapis.com',
     'https://api.github.com',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
   'frame-ancestors': [
-    '\'self\'',
+    "'self'",
     'https://*.youtube.com',
     'https://*.ytimg.com',
     'https://*.facebook.com',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
   'frame-src': [
-    '\'self\'',
+    "'self'",
     'https://*.youtube.com',
     'https://*.ytimg.com',
     'https://www.googletagmanager.com',
     'https://*.facebook.com',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
   'media-src': [
-    '\'self\'',
+    "'self'",
     'https://*.youtube.com',
     'https://*.ytimg.com',
     'https://*.facebook.com',
     'https://*.fbcdn.net',
-    'https://unpkg.com/@univerjs',
+    // Univer 相關設定
+    'https://unpkg.com/react@18.3.1/',
+    'https://unpkg.com/react-dom@18.3.1/',
+    'https://unpkg.com/rxjs@7.8.2/',
+    'https://unpkg.com/echarts@5.6.0/',
+    'https://unpkg.com/@univerjs/',
+    'https://unpkg.com/@univerjs-pro/',
+    'https://unpkg.com/vue@3/',
+    // 不鎖版本設定
+    'https://cdn.jsdelivr.net/npm/react/',
+    'https://cdn.jsdelivr.net/npm/react-dom/',
+    'https://cdn.jsdelivr.net/npm/rxjs/',
+    'https://cdn.jsdelivr.net/npm/echarts/',
+    'https://cdn.jsdelivr.net/npm/@univerjs/',
+    'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
     'http://localhost:9980'
   ],
   'upgrade-insecure-requests': true
@@ -387,13 +533,13 @@ export default defineNuxtConfig({
   vite: {
     ...(IS_DEBUG === true
       ? {
-        esbuild: {
-          // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
-          // 明确设置为不移除 'console.log' 等
-          drop: ['debugger'], // 仍然移除 debugger
-          pure: []
+          esbuild: {
+            // 默认情况下，esbuild 可能会移除 'debugger' 和 'console'
+            // 明确设置为不移除 'console.log' 等
+            drop: ['debugger'], // 仍然移除 debugger
+            pure: []
+          }
         }
-      }
       : {}),
     plugins: [glsl()],
 
@@ -537,7 +683,7 @@ export default defineNuxtConfig({
     // https://realfavicongenerator.net/
     manifest: {
       name: 'Parker Chen 的Nuxt實驗室',
-      short_name: 'Parker Chen\'s Nuxt Lab',
+      short_name: "Parker Chen's Nuxt Lab",
       // lang: 'zh-tw',
       lang: defaultLang,
       icons: [
@@ -618,8 +764,8 @@ export default defineNuxtConfig({
     reportOnly: IS_DEBUG,
 
     headers: {
-      // contentSecurityPolicy: CONTENT_SECURITY_POLICY,
-      contentSecurityPolicy: [],
+      contentSecurityPolicy: CONTENT_SECURITY_POLICY,
+      // contentSecurityPolicy: [],
       // reportOnly 模式:https://nuxt-security.vercel.app/advanced/faq#set-content-security-policy-report-only
       crossOriginEmbedderPolicy: false,
       // crossOriginEmbedderPolicy: 'credentialless',
@@ -650,12 +796,13 @@ export default defineNuxtConfig({
     url: process.env.VITE_DOMAIN
   },
 
-  robots:{// 定義規則
+  robots: {
+    // 定義規則
     groups: [
       {
         userAgent: ['*'], // 針對所有爬蟲
-        allow: ['/'],     // 允許所有路徑
-          // 禁止爬取 WebRTC 相關路徑
+        allow: ['/'], // 允許所有路徑
+        // 禁止爬取 WebRTC 相關路徑
         disallow: [
           '/web-rtc/server-sent-event/room',
           '/zh/web-rtc/server-sent-event/room',
@@ -675,7 +822,7 @@ export default defineNuxtConfig({
           '/offline',
           '/zh/offline',
           '/en/offline'
-        ],
+        ]
       }
     ],
     sitemap: process.env.VITE_DOMAIN + '/sitemap.xml'
@@ -684,8 +831,23 @@ export default defineNuxtConfig({
   build: {
     transpile:
       IS_DEV === true
-        ? ['vuetify', 'date-fns', '@vuepic/vue-datepicker', 'unhead', '@unhead/vue', /@syncfusion/]
-        : ['vuetify', 'date-fns', '@vuepic/vue-datepicker', 'unhead', '@unhead/vue', /@syncfusion/, 'lodash']
+        ? [
+            'vuetify',
+            'date-fns',
+            '@vuepic/vue-datepicker',
+            'unhead',
+            '@unhead/vue',
+            /@syncfusion/
+          ]
+        : [
+            'vuetify',
+            'date-fns',
+            '@vuepic/vue-datepicker',
+            'unhead',
+            '@unhead/vue',
+            /@syncfusion/,
+            'lodash'
+          ]
   },
 
   runtimeConfig: {

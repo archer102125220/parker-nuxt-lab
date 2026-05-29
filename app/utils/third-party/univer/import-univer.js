@@ -21,7 +21,7 @@ export async function importUniver() {
     },
     {
       id: 'univer-rxjs',
-      src: 'https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js'
+      src: 'https://unpkg.com/rxjs@7.8.2/dist/bundles/rxjs.umd.min.js'
     },
     {
       id: 'univer-echarts',
