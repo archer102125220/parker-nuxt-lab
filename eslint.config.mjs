@@ -30,7 +30,7 @@ export default withNuxt(
       'vue/multi-word-component-names': 0,
       'no-extra-semi': 2,
       semi: [1, 'always'],
-      quotes: [1, 'single'],
+      quotes: [1, 'single', { avoidEscape: true }],
       'prefer-const': 2,
       'no-var': 2,
       'no-console': 0,
