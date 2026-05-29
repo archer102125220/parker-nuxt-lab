@@ -9,16 +9,37 @@ const unitId = computed(() => route.query.unit);
 <template>
   <div class="univer_doc_page">
     <div class="univer_doc_page-remark">
-      <p>💡 <b>鎖定狀態匯出說明：</b></p>
-      <ul>
-        <li>
-          <b>Local Export (JSON Snapshot)：</b>
+      <p class="univer_doc_page-remark-title">
+        💡 <b class="univer_doc_page-remark-bold">鎖定狀態匯出說明：</b>
+      </p>
+      <ul class="univer_doc_page-remark-list">
+        <li class="univer_doc_page-remark-list-item">
+          <b class="univer_doc_page-remark-bold">
+            Local Export (JSON Snapshot)：
+          </b>
           可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON
           後依然生效。
         </li>
-        <li>
-          <b>Server Export (DOCX/XLSX)：</b> 無法保留鎖定狀態。標準 Office
-          格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。
+        <li class="univer_doc_page-remark-list-item">
+          <b class="univer_doc_page-remark-bold">Server Export (DOCX/XLSX)：</b>
+          無法保留鎖定狀態。標準 Office 格式不支援 Univer
+          自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。
+        </li>
+      </ul>
+      <p class="univer_doc_page-remark-title" css-is-spacing="true">
+        ⚠️ <b class="univer_doc_page-remark-bold">Univer 載入與穩定度說明：</b>
+      </p>
+      <ul class="univer_doc_page-remark-list">
+        <li class="univer_doc_page-remark-list-item">
+          Univer 的 npm 版在 Nuxt
+          上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用
+          CDN 的方式處理。
+        </li>
+        <li class="univer_doc_page-remark-list-item">
+          目前 Doc 版的穩定度不是很高，容易出現 error
+          狀況。如果編輯器沒有正常載入，請嘗試
+          <b class="univer_doc_page-remark-bold">重新整理頁面</b>
+          來讓 Univer 套件重新載入。
         </li>
       </ul>
     </div>
@@ -56,13 +77,21 @@ const unitId = computed(() => route.query.unit);
     border-radius: 10px;
     margin-bottom: 16px;
 
-    p {
+    &-title {
       margin: 0 0 4px 0;
+
+      &[css-is-spacing='true'] {
+        margin-top: 12px;
+      }
     }
 
-    ul {
+    &-list {
       margin: 0;
       padding-left: 20px;
+    }
+
+    &-bold {
+      font-weight: bold;
     }
   }
 

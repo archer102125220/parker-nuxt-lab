@@ -39,6 +39,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -46,6 +47,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'base-uri': ["'self'"],
@@ -63,6 +65,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -70,6 +73,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'form-action': [
@@ -83,6 +87,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -90,6 +95,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'img-src': [
@@ -110,6 +116,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // Univer 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -117,6 +124,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'object-src': ["'none'"],
@@ -161,6 +169,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -168,6 +177,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'style-src': [
@@ -185,6 +195,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -192,6 +203,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'connect-src': [
@@ -215,6 +227,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -222,6 +235,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'frame-ancestors': [
@@ -237,6 +251,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -244,6 +259,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'frame-src': [
@@ -260,6 +276,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -267,6 +284,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'media-src': [
@@ -283,6 +301,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs/',
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
+    'http://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -290,6 +309,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/echarts/',
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
+
     'http://localhost:9980'
   ],
   'upgrade-insecure-requests': true
