@@ -18,6 +18,15 @@ const unitId = computed(() => route.query.unit);
       <ul class="univer_sheet_page-remark-list">
         <li class="univer_sheet_page-remark-list-item">
           {{ $t('univer_sheet_page.remark.univer_npm') }}
+          {{ $t('univer_sheet_page.remark.univer_npm_demo_1') }}
+          <a
+            href="https://archer102125220.github.io/parker-vue-lab/sheet-editor/univer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ $t('univer_sheet_page.remark.univer_npm_demo_link') }}
+          </a>
+          {{ $t('univer_sheet_page.remark.univer_npm_demo_2') }}
         </li>
         <li class="univer_sheet_page-remark-list-item">
           {{ $t('univer_sheet_page.remark.univer_stability_1')
