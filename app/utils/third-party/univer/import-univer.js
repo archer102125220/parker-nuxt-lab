@@ -5,7 +5,7 @@ export const UNIVERSAL_VERSION = '0.23.0';
 //   import.meta.env.VITE_UNIVER_SERVER_ENDPOINT ||
 //   'http://localhost:3000/api/univer';
 export const UNIVERSER_DOCKER_HOST =
-  import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
+  import.meta.env.VITE_UNIVERSER_PROXY_PATH || '';
 
 export async function importUniver() {
   if (typeof window === 'undefined') return;

@@ -410,6 +410,13 @@ export default defineNuxtConfig({
         csrf: false
       }
     },
+
+    // 無效解法，無法解決 websocket 問題
+    // 將 /universer-api/ 開頭的請求代理到目標伺服器 (注意後面的 /**)
+    // '/universer-api/**': {
+    //   proxy: `${process.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000'}/universer-api/**`
+    // },
+
     // '/': { isr: true },
     // '/en': { isr: true },
     // '/': { prerender: true },
@@ -564,7 +571,37 @@ export default defineNuxtConfig({
     plugins: [glsl()],
 
     server: {
-      hmr: process.env.HMR !== 'false' ? undefined : false
+      hmr: process.env.HMR !== 'false' ? undefined : false,
+
+      // 開發期解法，如果要正式上線需要多一層代理層
+      proxy: {
+        '/universer-api': {
+          target:
+            process.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000',
+          changeOrigin: true,
+          ws: true,
+          configure: (proxy, options) => {
+            // 監聽代理請求發出
+            proxy.on('proxyReq', (proxyReq, req, _res) => {
+              console.log(
+                `[Proxy 觸發] 請求: ${req.method} ${req.url} 已轉發至 -> ${options.target}`
+              );
+            });
+
+            // 監聽代理收到回應
+            proxy.on('proxyRes', (proxyRes, req, _res) => {
+              console.log(
+                `[Proxy 回應] 狀態碼: ${proxyRes.statusCode} - ${req.url}`
+              );
+            });
+
+            // 監聽代理過程中的錯誤 (非常重要，有時候是轉發失敗而不是沒觸發)
+            proxy.on('error', (err, _req, _res) => {
+              console.error('[Proxy 錯誤]', err);
+            });
+          }
+        }
+      }
     },
     vue: {
       compilerOptions: {

@@ -291,24 +291,24 @@ onUnmounted(() => {
       }
     }
   });
-  if (typeof univerInstance.univer?.dispose === 'function') {
-    try {
-      univerInstance.univer?.dispose();
-    } catch (error) {
-      if (import.meta.dev) {
-        console.error(error);
-      }
-    }
-  }
-  if (typeof univerInstance.univerAPI?.dispose === 'function') {
-    try {
-      univerInstance.univerAPI?.dispose();
-    } catch (error) {
-      if (import.meta.dev) {
-        console.error(error);
-      }
-    }
-  }
+  // if (typeof univerInstance.univer?.dispose === 'function') {
+  //   try {
+  //     univerInstance.univer?.dispose();
+  //   } catch (error) {
+  //     if (import.meta.dev) {
+  //       console.error(error);
+  //     }
+  //   }
+  // }
+  // if (typeof univerInstance.univerAPI?.dispose === 'function') {
+  //   try {
+  //     univerInstance.univerAPI?.dispose();
+  //   } catch (error) {
+  //     if (import.meta.dev) {
+  //       console.error(error);
+  //     }
+  //   }
+  // }
   univerInstance.univer = null;
   univerInstance.univerAPI = null;
 });

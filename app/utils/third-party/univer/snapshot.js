@@ -35,8 +35,7 @@ export function fetchUniverSnapshot(
       return rejects(new Error('Failed to load Univer dependencies'));
     }
 
-    const host =
-      import.meta.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000';
+    const host = import.meta.env.VITE_UNIVERSER_PROXY_PATH || '';
     const res = await fetch(
       `${host}/universer-api/snapshot/${type}/unit/${unitId}/rev/0`
     );

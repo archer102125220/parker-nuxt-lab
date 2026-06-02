@@ -181,8 +181,7 @@ export function createdServerExportButtonPlugin(tryLimit = 10, tryCount = 0) {
 
               // 定義後端 API 路徑 (這裡先預設使用預設的 proxy 或直連路徑)
               const UNIVERSER_HOST =
-                import.meta.env.VITE_UNIVERSER_DOCKER_HOST ||
-                'http://localhost:8000';
+                import.meta.env.VITE_UNIVERSER_PROXY_PATH || '';
               const API_PREFIX =
                 this._config?.apiPrefix || `${UNIVERSER_HOST}/universer-api`;
 

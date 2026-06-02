@@ -8,7 +8,7 @@
     <!-- <NuxtPwaManifest /> -->
     <NuxtPwaAssets />
 
-    <LoadingBar :loading="loading" position="sticky" />
+    <LoadingBar :loading="loading" position="sticky" z-index="101" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
