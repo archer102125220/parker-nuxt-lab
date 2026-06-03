@@ -4,10 +4,10 @@ import Vue3UnlockedIcon from '@app/components/Icon/Unlocked';
 
 import { useUniverStore } from '@app/store/univer';
 
-const DOC_LOCK_ERROR_MESSAGE = 'Edit blocked: Range is locked.';
-const COMMAND_ID_LOCK = 'doc.command.lock-selection';
-const COMMAND_ID_UNLOCK = 'doc.command.unlock-selection';
-const MENU_ID_PARENT = 'parker-nuxt-lab-plugins.doc-lock-menu';
+export const DOC_LOCK_ERROR_MESSAGE = 'Edit blocked: Range is locked.';
+export const COMMAND_ID_LOCK = 'doc.command.lock-selection';
+export const COMMAND_ID_UNLOCK = 'doc.command.unlock-selection';
+export const MENU_ID_PARENT = 'parker-nuxt-lab-plugins.doc-lock-menu';
 
 export function createdDocLockPlugin(tryLimit = 10, tryCount = 0) {
   if (typeof window === 'undefined') return;

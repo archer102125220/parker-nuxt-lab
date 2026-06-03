@@ -1,9 +1,6 @@
 import { loadScript } from '@app/utils/helpers/load-script';
 
 export const UNIVERSAL_VERSION = '0.23.0';
-// const UNIVER_SERVER_ENDPOINT =
-//   import.meta.env.VITE_UNIVER_SERVER_ENDPOINT ||
-//   'http://localhost:3000/api/univer';
 export const UNIVERSER_DOCKER_HOST =
   import.meta.env.VITE_UNIVERSER_PROXY_PATH || '';
 

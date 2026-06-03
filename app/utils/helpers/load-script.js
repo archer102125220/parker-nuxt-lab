@@ -16,7 +16,7 @@ export function loadScript(id, src, attributes = {}, successDelay = 1500) {
     const isCrossOrigin =
       (/^https?:\/\//.test(src) || /^http?:\/\//.test(src)) &&
       !src.includes(location.hostname);
-    if (isCrossOrigin) {
+    if (isCrossOrigin === true) {
       script.setAttribute('crossorigin', 'anonymous');
     }
 

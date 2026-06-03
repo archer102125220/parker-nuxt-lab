@@ -200,7 +200,9 @@ async function createRoom() {
 
 <style lang="scss" scoped>
 .univer_sheet_page {
-  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh + 155px + 180px);
 
   &-remark {
     padding: 12px 16px;
@@ -364,10 +366,10 @@ async function createRoom() {
   }
 
   &-empty {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100% - 50px);
     color: #6c757d;
     font-size: 16px;
     background-color: #fff;

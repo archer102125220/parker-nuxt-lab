@@ -150,6 +150,7 @@ const CONTENT_SECURITY_POLICY = {
     "'self'",
     "'unsafe-inline'",
     "'unsafe-eval'",
+    'blob:',
     'https://www.googletagmanager.com',
     'https://*.youtube.com',
     'https://*.ytimg.com',
@@ -228,6 +229,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
     'http://localhost:8000',
+    'ws://localhost:8000',
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -238,6 +240,7 @@ const CONTENT_SECURITY_POLICY = {
 
     'http://localhost:9980'
   ],
+  'worker-src': ["'self'", 'blob:'],
   'frame-ancestors': [
     "'self'",
     'https://*.youtube.com',
@@ -411,11 +414,10 @@ export default defineNuxtConfig({
       }
     },
 
-    // 無效解法，無法解決 websocket 問題
-    // 將 /universer-api/ 開頭的請求代理到目標伺服器 (注意後面的 /**)
-    // '/universer-api/**': {
-    //   proxy: `${process.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000'}/universer-api/**`
-    // },
+    // 啟用 WebSocket 代理
+    '/universer-api/**': {
+      proxy: `${process.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000'}/universer-api/**`
+    },
 
     // '/': { isr: true },
     // '/en': { isr: true },
@@ -571,37 +573,7 @@ export default defineNuxtConfig({
     plugins: [glsl()],
 
     server: {
-      hmr: process.env.HMR !== 'false' ? undefined : false,
-
-      // 開發期解法，如果要正式上線需要多一層代理層
-      proxy: {
-        '/universer-api': {
-          target:
-            process.env.VITE_UNIVERSER_DOCKER_HOST || 'http://localhost:8000',
-          changeOrigin: true,
-          ws: true,
-          configure: (proxy, options) => {
-            // 監聽代理請求發出
-            proxy.on('proxyReq', (proxyReq, req, _res) => {
-              console.log(
-                `[Proxy 觸發] 請求: ${req.method} ${req.url} 已轉發至 -> ${options.target}`
-              );
-            });
-
-            // 監聽代理收到回應
-            proxy.on('proxyRes', (proxyRes, req, _res) => {
-              console.log(
-                `[Proxy 回應] 狀態碼: ${proxyRes.statusCode} - ${req.url}`
-              );
-            });
-
-            // 監聽代理過程中的錯誤 (非常重要，有時候是轉發失敗而不是沒觸發)
-            proxy.on('error', (err, _req, _res) => {
-              console.error('[Proxy 錯誤]', err);
-            });
-          }
-        }
-      }
+      hmr: process.env.HMR !== 'false' ? undefined : false
     },
     vue: {
       compilerOptions: {
