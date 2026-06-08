@@ -3,7 +3,6 @@ import { loadCSS } from '@app/utils/helpers/load-css';
 import {
   importUniver,
   UNIVERSAL_VERSION,
-  // UNIVER_SERVER_ENDPOINT,
   UNIVERSER_DOCKER_HOST
 } from '@app/utils/third-party/univer/import-univer';
 import { importRegisterVue } from '@app/utils/third-party/univer/plugin/register-vue';
@@ -683,12 +682,12 @@ export async function importSheetLiveShare() {
   await Promise.all(univerSheetLiveSharePromiseList);
 }
 
-export async function createSheetInstance(
+export async function createSheetInstance({
   container,
   locale = '',
   collaboration = false,
   liveShare = false
-) {
+} = {}) {
   if (typeof window === 'undefined') return;
 
   if (container instanceof HTMLElement === false) {
@@ -814,7 +813,6 @@ export async function createSheetInstance(
   const advancedPreset = UniverSheetsAdvancedPreset({
     license: import.meta.env.VITE_UNIVER_LICENSE,
     useWorker: true,
-    // universerEndpoint: UNIVER_SERVER_ENDPOINT,
     universerEndpoint: UNIVERSER_DOCKER_HOST
   });
 
@@ -922,7 +920,6 @@ export async function createSheetInstance(
     univerConfig.presets.push(
       UniverSheetsDrawingPreset({ collaboration: true }),
       UniverSheetsCollaborationPreset({
-        // universerEndpoint: UNIVER_SERVER_ENDPOINT
         universerEndpoint: UNIVERSER_DOCKER_HOST
       })
     );

@@ -1,12 +1,20 @@
+<script>
+import { importDoc } from '@app/utils/third-party/univer/create-doc';
+
+import importUniver from '@app/utils/third-party/univer/import-univer';
+</script>
+
 <script setup>
 const { locale } = useI18n();
 const route = useRoute();
-const system = useSystemStore();
+// const system = useSystemStore();
 const univerStore = useUniverStore();
 
-const isCollaboration = ref(true);
+const isCollaboration = ref(false);
 const unitId = ref('');
 const inputUnitId = ref('');
+
+const license = computed(() => import.meta.env.VITE_UNIVER_LICENSE);
 
 watch(
   () => [route.query.unitId, route.query.unit],
@@ -17,36 +25,40 @@ watch(
   { immediate: true }
 );
 
-function joinRoom() {
-  unitId.value = inputUnitId.value;
-}
+// function joinRoom() {
+//   unitId.value = inputUnitId.value;
+// }
 
-async function createRoom() {
-  system.setLoading(true);
-  try {
-    const res = await fetch('/universer-api/snapshot/1/unit/-/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    });
-    const data = await res.json();
-    if (data && data.unitID) {
-      unitId.value = data.unitID;
-      inputUnitId.value = data.unitID;
-    } else {
-      system.setMessageState({
-        text: '無法建立房間：' + JSON.stringify(data),
-        type: 'error'
-      });
-    }
-  } catch (error) {
-    console.error('Create room error:', error);
-    system.setMessageState({
-      text: '建立房間失敗，請查看 Console。',
-      type: 'error'
-    });
-  }
-  system.setLoading(false);
+// async function createRoom() {
+//   system.setLoading(true);
+//   try {
+//     const res = await fetch('/universer-api/snapshot/1/unit/-/create', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({})
+//     });
+//     const data = await res.json();
+//     if (data && data.unitID) {
+//       unitId.value = data.unitID;
+//       inputUnitId.value = data.unitID;
+//     } else {
+//       system.setMessageState({
+//         text: '無法建立房間：' + JSON.stringify(data),
+//         type: 'error'
+//       });
+//     }
+//   } catch (error) {
+//     console.error('Create room error:', error);
+//     system.setMessageState({
+//       text: '建立房間失敗，請查看 Console。',
+//       type: 'error'
+//     });
+//   }
+//   system.setLoading(false);
+// }
+
+if (import.meta.client) {
+  importUniver().then(() => importDoc());
 }
 </script>
 
@@ -108,6 +120,15 @@ async function createRoom() {
         </li>
       </ul>
     </div>
+    <div class="univer_doc_page-warning">
+      <p>⚠️ <b>協同編輯 CDM 版功能限制說明：</b></p>
+      <ul>
+        <li>
+          目前測試如果用 CDM 版要觸發<b>協同編輯</b>功能，一定會跳缺少套件的
+          error ，所以如果使用 CDM 版，可能就沒辦法使用協同編輯了
+        </li>
+      </ul>
+    </div>
     <div class="univer_doc_page-tools">
       <div class="univer_doc_page-tools-role">
         <label for="role_select">{{
@@ -127,7 +148,7 @@ async function createRoom() {
           </option>
         </select>
       </div>
-      <div class="univer_doc_page-tools-online">
+      <!-- <div class="univer_doc_page-tools-online">
         <div class="univer_doc_page-tools-online-unit">
           <input
             v-model="inputUnitId"
@@ -160,7 +181,7 @@ async function createRoom() {
             type="checkbox"
           />
         </div>
-      </div>
+      </div> -->
     </div>
     <div v-if="!unitId && isCollaboration" class="univer_doc_page-empty">
       <p>目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。</p>
@@ -169,6 +190,7 @@ async function createRoom() {
       v-else
       :key="unitId"
       class="univer_doc_page-editor"
+      :license="license"
       :locale="locale"
       :unit-id="unitId"
       :collaboration="isCollaboration"

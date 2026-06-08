@@ -27,6 +27,10 @@ const props = defineProps({
       return LOCALE_TYPE?.list?.ZH_TW || 'zhTW';
     }
   },
+  license: {
+    type: String,
+    default: ''
+  },
   value: {
     type: Object,
     default: () => ({
@@ -141,7 +145,20 @@ const emits = defineEmits([
   'univerSteady',
   'univerChangeStart',
   'univerChange',
-  'univerChangeEnd'
+  'univerChangeEnd',
+
+  'univerBeforeCreated',
+  'univerCreated',
+  'univerInitError',
+  'localImportStarted',
+  'localImportEnded',
+  'localImportSnapshot',
+  'localExportStarted',
+  'localExportEnded',
+  'serverExportStarted',
+  'serverExportEnded',
+  'exchangeStarted',
+  'exchangeEnded'
 ]);
 
 const container = ref(null);
@@ -149,6 +166,7 @@ const container = ref(null);
 const currentWorkbook = ref({});
 // const currentWorksheet = ref({});
 const isRebuilding = ref(false);
+const univerInitError = ref(false);
 const loading = ref(true);
 
 const univerInstance = reactive({
@@ -158,12 +176,15 @@ const univerInstance = reactive({
 
 async function handleUniverSheet(overrideSnapshot) {
   try {
-    const { univer, univerAPI } = await createSheetInstance(
-      container.value,
-      props.locale,
-      props.collaboration,
-      props.liveShare
-    );
+    emits('univerBeforeCreated');
+    const { univer, univerAPI } = await createSheetInstance({
+      container: container.value,
+      license: props.license,
+      locale: props.locale,
+      collaboration: props.collaboration,
+      liveShare: props.liveShare
+    });
+    emits('univerCreated', { univer, univerAPI });
 
     disposableList.push(
       univerAPI.addEvent(univerAPI.Event.LifeCycleChanged, (event) => {
@@ -201,6 +222,7 @@ async function handleUniverSheet(overrideSnapshot) {
         emits('update:worksheet', event?.worksheet);
       })
     );
+
     if (overrideSnapshot) {
       currentWorkbook.value = univerAPI.createWorkbook(overrideSnapshot);
     } else {
@@ -228,12 +250,15 @@ async function handleUniverSheet(overrideSnapshot) {
     univerInstance.univerAPI = univerAPI;
   } catch (error) {
     console.error(error);
+    univerInitError.value = true;
+    emits('univerInitError', error);
   }
 
   loading.value = false;
 }
 
 function handleLocalImportEvent(customEvent) {
+  emits('localImportSnapshot', customEvent);
   const detail = customEvent.detail;
   if (detail && detail.snapshot && detail.type === 'sheet') {
     const currentUnitId = univerInstance.univerAPI
@@ -264,10 +289,51 @@ function handleLocalImportEvent(customEvent) {
   }
 }
 
-function handleLocalImportEnded() {
+function handleLocalImportStarted(customEvent) {
+  emits('localImportStarted', customEvent);
+  loading.value = true;
+}
+
+function handleLocalImportEnded(customEvent) {
+  emits('localImportEnded', customEvent);
+
   if (!isRebuilding.value) {
     loading.value = false;
   }
+}
+
+function handleLocalExportStarted(customEvent) {
+  emits('localExportStarted', customEvent);
+  loading.value = true;
+}
+
+function handleLocalExportEnded(customEvent) {
+  emits('localExportEnded', customEvent);
+  loading.value = false;
+}
+
+function handleServerExportStarted(customEvent) {
+  emits('serverExportStarted', customEvent);
+  loading.value = true;
+}
+
+function handleServerExportEnded(customEvent) {
+  emits('serverExportEnded', customEvent);
+  loading.value = false;
+}
+
+function handleExchangeStarted(customEvent) {
+  emits('exchangeStarted', customEvent);
+  loading.value = true;
+}
+
+function handleExchangeEnded(customEvent) {
+  emits('exchangeEnded', customEvent);
+  loading.value = false;
+}
+
+function handleReload() {
+  window.location.reload();
 }
 
 watch(
@@ -324,23 +390,39 @@ onUnmounted(() => {
         />
       </slot>
     </div>
+
+    <div v-if="univerInitError" class="univer_sheet-error">
+      <slot name="error">
+        <p class="univer_sheet-error-msg">Univer 初始化失敗</p>
+        <v-btn color="error" @click="handleReload">重試</v-btn>
+      </slot>
+    </div>
+
     <div
       ref="container"
       class="univer_sheet-editor"
-      @univer-local-import-started="loading = true"
+      @univer-local-import-started="handleLocalImportStarted"
       @univer-local-import-ended="handleLocalImportEnded"
       @univer-local-import-snapshot="handleLocalImportEvent"
-      @univer-local-export-started="loading = true"
-      @univer-local-export-ended="loading = false"
-      @univer-server-export-started="loading = true"
-      @univer-server-export-ended="loading = false"
-      @univer-exchange-started="loading = true"
-      @univer-exchange-ended="loading = false"
+      @univer-local-export-started="handleLocalExportStarted"
+      @univer-local-export-ended="handleLocalExportEnded"
+      @univer-server-export-started="handleServerExportStarted"
+      @univer-server-export-ended="handleServerExportEnded"
+      @univer-exchange-started="handleExchangeStarted"
+      @univer-exchange-ended="handleExchangeEnded"
     />
 
     <UniverLockPermissionDialog />
   </div>
 </template>
+
+<style lang="scss">
+body {
+  [data-radix-popper-content-wrapper] > div {
+    background-color: #fff;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .univer_sheet {
@@ -358,6 +440,19 @@ onUnmounted(() => {
     &-skeleton {
       width: 100%;
       height: 100%;
+    }
+  }
+
+  &-error {
+    @extend .univer_sheet-skeleton_wrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &-msg {
+      font-size: 20px;
+      color: #e55e55;
     }
   }
 

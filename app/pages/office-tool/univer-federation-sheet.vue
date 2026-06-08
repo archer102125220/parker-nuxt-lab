@@ -1,13 +1,9 @@
-<script>
-import { importSheet } from '@app/utils/third-party/univer/create-sheet';
-
-import importUniver from '@app/utils/third-party/univer/import-univer';
-</script>
 <script setup>
 const { locale } = useI18n();
 const route = useRoute();
 const system = useSystemStore();
 const univerStore = useUniverStore();
+
 const isCollaboration = ref(false);
 const isLiveShare = ref(false);
 
@@ -26,6 +22,7 @@ watch(
 );
 
 function joinRoom() {
+  if (isCollaboration.value === false || inputUnitId.value === '') return;
   unitId.value = inputUnitId.value;
 }
 
@@ -56,51 +53,11 @@ async function createRoom() {
   }
   system.setLoading(false);
 }
-
-if (import.meta.client) {
-  importUniver().then(() => importSheet());
-}
 </script>
 
 <template>
-  <div class="univer_sheet_page">
-    <div class="univer_sheet_page-remark">
-      <p class="univer_sheet_page-remark-title">
-        ⚠️
-        <b class="univer_sheet_page-remark-bold">{{
-          $t('univer_sheet_page.remark.univer_title')
-        }}</b>
-      </p>
-      <ul class="univer_sheet_page-remark-list">
-        <li class="univer_sheet_page-remark-list-item">
-          {{ $t('univer_sheet_page.remark.univer_npm') }}
-          {{ $t('univer_sheet_page.remark.univer_npm_demo_1') }}
-          <a
-            href="https://archer102125220.github.io/parker-vue-lab/sheet-editor/univer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ $t('univer_sheet_page.remark.univer_npm_demo_link') }}
-          </a>
-          {{ $t('univer_sheet_page.remark.univer_npm_demo_2') }}
-        </li>
-        <li class="univer_sheet_page-remark-list-item">
-          {{ $t('univer_sheet_page.remark.univer_stability_1')
-          }}<b class="univer_sheet_page-remark-bold">{{
-            $t('univer_sheet_page.remark.univer_stability_2')
-          }}</b
-          >{{ $t('univer_sheet_page.remark.univer_stability_3') }}
-        </li>
-        <li class="univer_sheet_page-remark-list-item">
-          {{ $t('univer_sheet_page.remark.univer_cdn_wait_1')
-          }}<b class="univer_sheet_page-remark-bold">{{
-            $t('univer_sheet_page.remark.univer_cdn_wait_2')
-          }}</b
-          >{{ $t('univer_sheet_page.remark.univer_cdn_wait_3') }}
-        </li>
-      </ul>
-    </div>
-    <div class="univer_sheet_page-warning">
+  <div class="univer_federation_sheet_page">
+    <div class="univer_federation_sheet_page-warning">
       <p>⚠️ <b>線上環境功能限制說明：</b></p>
       <ul>
         <li>
@@ -125,15 +82,13 @@ if (import.meta.client) {
         </li>
       </ul>
     </div>
-    <div class="univer_sheet_page-tools">
-      <div class="univer_sheet_page-tools-role">
-        <label for="role_select">{{
-          $t('univer_sheet_page.tools.current_role')
-        }}</label>
+    <div class="univer_federation_sheet_page-tools">
+      <div class="univer_federation_sheet_page-tools-role">
+        <label for="role_select">當前測試身份：</label>
         <select
           id="role_select"
           v-model="univerStore.currentUserRole"
-          class="univer_sheet_page-tools-role-select"
+          class="univer_federation_sheet_page-tools-role-select"
         >
           <option
             v-for="role in univerStore.availableRoles"
@@ -144,32 +99,32 @@ if (import.meta.client) {
           </option>
         </select>
       </div>
-      <div class="univer_sheet_page-tools-online">
-        <div class="univer_sheet_page-tools-online-unit">
+      <div class="univer_federation_sheet_page-tools-online">
+        <div class="univer_federation_sheet_page-tools-online-unit">
           <input
             v-model="inputUnitId"
             type="text"
-            class="univer_sheet_page-tools-online-unit-collaboration_room"
+            class="univer_federation_sheet_page-tools-online-unit-collaboration_room"
             placeholder="輸入房間 ID"
             :disabled="isCollaboration === false"
             @keyup.enter="joinRoom"
           />
           <button
-            class="univer_sheet_page-tools-online-unit-join_btn"
-            :disabled="isCollaboration === false"
+            class="univer_federation_sheet_page-tools-online-unit-join_btn"
+            :disabled="isCollaboration === false || inputUnitId === ''"
             @click="joinRoom"
           >
             加入
           </button>
         </div>
         <button
-          class="univer_sheet_page-tools-online-create_btn"
+          class="univer_federation_sheet_page-tools-online-create_btn"
           :disabled="isCollaboration === false"
           @click="createRoom"
         >
           新建房間
         </button>
-        <div class="univer_sheet_page-tools-online-collaboration">
+        <div class="univer_federation_sheet_page-tools-online-collaboration">
           <label for="collaboration_checkbox">協同編輯</label>
           <input
             id="collaboration_checkbox"
@@ -177,10 +132,10 @@ if (import.meta.client) {
             type="checkbox"
           />
         </div>
-        <div class="univer_sheet_page-tools-online-live_share">
+        <div class="univer_federation_sheet_page-tools-online-live_share">
           <label
             for="live_share_checkbox"
-            class="univer_sheet_page-tools-online-live_share-label"
+            class="univer_federation_sheet_page-tools-online-live_share-label"
             :disabled="isCollaboration === false"
           >
             演示跟隨
@@ -194,13 +149,16 @@ if (import.meta.client) {
         </div>
       </div>
     </div>
-    <div v-if="!unitId && isCollaboration" class="univer_sheet_page-empty">
+    <div
+      v-if="!unitId && isCollaboration"
+      class="univer_federation_sheet_page-empty"
+    >
       <p>目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。</p>
     </div>
-    <UniverSheetEditor
+    <FederationUniverSheet
       v-else
       :key="unitId"
-      class="univer_sheet_page-editor"
+      class="univer_federation_sheet_page-editor"
       :license="license"
       :locale="locale"
       :unit-id="unitId"
@@ -210,39 +168,15 @@ if (import.meta.client) {
   </div>
 </template>
 
+<style lang="scss">
+#univer-history-container {
+  top: 61px !important;
+}
+</style>
+
 <style lang="scss" scoped>
-.univer_sheet_page {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh + 155px + 180px);
-
-  &-remark {
-    padding: 12px 16px;
-    background-color: #fff3cd;
-    color: #856404;
-    border-bottom: 1px solid #ffeeba;
-    font-size: 14px;
-    line-height: 1.5;
-    border-radius: 10px;
-    margin-bottom: 16px;
-
-    &-title {
-      margin: 0 0 4px 0;
-
-      &[css-is-spacing='true'] {
-        margin-top: 12px;
-      }
-    }
-
-    &-list {
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    &-bold {
-      font-weight: bold;
-    }
-  }
+.univer_federation_sheet_page {
+  height: 90vh;
 
   &-warning {
     padding: 12px 16px;
@@ -315,7 +249,7 @@ if (import.meta.client) {
         gap: 4px;
 
         &-collaboration_room {
-          @extend .univer_sheet_page-tools-role-select;
+          @extend .univer_federation_sheet_page-tools-role-select;
           min-width: unset;
 
           &:disabled {
@@ -348,7 +282,7 @@ if (import.meta.client) {
       }
 
       &-create_btn {
-        @extend .univer_sheet_page-tools-online-unit-join_btn;
+        @extend .univer_federation_sheet_page-tools-online-unit-join_btn;
 
         background-color: transparent;
         border-color: #007bff;
@@ -367,7 +301,7 @@ if (import.meta.client) {
       }
 
       &-live_share {
-        @extend .univer_sheet_page-tools-online-collaboration;
+        @extend .univer_federation_sheet_page-tools-online-collaboration;
 
         &-label[disabled='true'] {
           opacity: 0.5;
@@ -378,10 +312,10 @@ if (import.meta.client) {
   }
 
   &-empty {
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: calc(100% - 50px);
     color: #6c757d;
     font-size: 16px;
     background-color: #fff;

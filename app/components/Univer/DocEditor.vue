@@ -27,6 +27,10 @@ const props = defineProps({
       return LOCALE_TYPE?.list?.ZH_TW || 'zhTW';
     }
   },
+  license: {
+    type: String,
+    default: ''
+  },
   value: {
     type: Object,
     default: () => ({
@@ -130,7 +134,20 @@ const emits = defineEmits([
   'univerStarting',
   'univerReady',
   'univerRendered',
-  'univerSteady'
+  'univerSteady',
+
+  'univerBeforeCreated',
+  'univerCreated',
+  'univerInitError',
+  'localImportStarted',
+  'localImportEnded',
+  'localImportSnapshot',
+  'localExportStarted',
+  'localExportEnded',
+  'serverExportStarted',
+  'serverExportEnded',
+  'exchangeStarted',
+  'exchangeEnded'
 ]);
 
 const container = ref(null);
@@ -138,6 +155,7 @@ const container = ref(null);
 const currentDoc = ref({});
 // const currentWorksheet = ref({});
 const loading = ref(true);
+const univerInitError = ref(false);
 const isRebuilding = ref(false);
 
 const univerInstance = reactive({
@@ -147,11 +165,14 @@ const univerInstance = reactive({
 
 async function handleUniverDoc(overrideSnapshot) {
   try {
-    const { univer, univerAPI } = await createDocInstance(
-      container.value,
-      props.locale,
-      props.collaboration
-    );
+    emits('univerBeforeCreated');
+    const { univer, univerAPI } = await createDocInstance({
+      container: container.value,
+      license: props.license,
+      locale: props.locale,
+      collaboration: props.collaboration
+    });
+    emits('univerCreated', { univer, univerAPI });
 
     // 只有出現在 univerAPI.Event 中的事件能被觸發
     // 官網上（https://docs.univer.ai/guides/docs/features/core/general-api#%E4%BA%8B%E4%BB%B6%E9%A1%9E%E5%88%A5）
@@ -208,6 +229,8 @@ async function handleUniverDoc(overrideSnapshot) {
     univerInstance.univerAPI = univerAPI;
   } catch (error) {
     console.error(error);
+    univerInitError.value = true;
+    emits('univerInitError', error);
   }
 
   loading.value = false;
@@ -230,6 +253,8 @@ function handleKeyDown() {
 }
 
 async function handleLocalImportEvent(customEvent) {
+  emits('localImportSnapshot', customEvent);
+
   const detail = customEvent.detail;
   if (detail && detail.snapshot && detail.type === 'doc') {
     const currentUnitId = univerInstance.univerAPI
@@ -255,10 +280,51 @@ async function handleLocalImportEvent(customEvent) {
   }
 }
 
-function handleLocalImportEnded() {
+function handleLocalImportStarted(customEvent) {
+  emits('localImportStarted', customEvent);
+  loading.value = true;
+}
+
+function handleLocalImportEnded(customEvent) {
+  emits('localImportEnded', customEvent);
+
   if (!isRebuilding.value) {
     loading.value = false;
   }
+}
+
+function handleLocalExportStarted(customEvent) {
+  emits('localExportStarted', customEvent);
+  loading.value = true;
+}
+
+function handleLocalExportEnded(customEvent) {
+  emits('localExportEnded', customEvent);
+  loading.value = false;
+}
+
+function handleServerExportStarted(customEvent) {
+  emits('serverExportStarted', customEvent);
+  loading.value = true;
+}
+
+function handleServerExportEnded(customEvent) {
+  emits('serverExportEnded', customEvent);
+  loading.value = false;
+}
+
+function handleExchangeStarted(customEvent) {
+  emits('exchangeStarted', customEvent);
+  loading.value = true;
+}
+
+function handleExchangeEnded(customEvent) {
+  emits('exchangeEnded', customEvent);
+  loading.value = false;
+}
+
+function handleReload() {
+  window.location.reload();
 }
 
 watch(
@@ -275,7 +341,9 @@ onMounted(() => {
 onUnmounted(() => {
   disposableList.forEach((item) => {
     try {
-      item.dispose?.();
+      if (typeof item.dispose === 'function') {
+        item.dispose?.();
+      }
     } catch (error) {
       if (import.meta.dev) {
         console.error(error);
@@ -315,24 +383,40 @@ onUnmounted(() => {
         />
       </slot>
     </div>
+
+    <div v-if="univerInitError" class="univer_doc-error">
+      <slot name="error">
+        <p class="univer_doc-error-msg">Univer 初始化失敗</p>
+        <v-btn color="error" @click="handleReload">重試</v-btn>
+      </slot>
+    </div>
+
     <div
       ref="container"
       class="univer_doc-editor"
       @keydown="handleKeyDown"
-      @univer-local-import-started="loading = true"
+      @univer-local-import-started="handleLocalImportStarted"
       @univer-local-import-ended="handleLocalImportEnded"
       @univer-local-import-snapshot="handleLocalImportEvent"
-      @univer-local-export-started="loading = true"
-      @univer-local-export-ended="loading = false"
-      @univer-server-export-started="loading = true"
-      @univer-server-export-ended="loading = false"
-      @univer-exchange-started="loading = true"
-      @univer-exchange-ended="loading = false"
+      @univer-local-export-started="handleLocalExportStarted"
+      @univer-local-export-ended="handleLocalExportEnded"
+      @univer-server-export-started="handleServerExportStarted"
+      @univer-server-export-ended="handleServerExportEnded"
+      @univer-exchange-started="handleExchangeStarted"
+      @univer-exchange-ended="handleExchangeEnded"
     />
 
     <UniverLockPermissionDialog />
   </div>
 </template>
+
+<style lang="scss">
+body {
+  [data-radix-popper-content-wrapper] > div {
+    background-color: #fff;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .univer_doc {
@@ -350,6 +434,19 @@ onUnmounted(() => {
     &-skeleton {
       width: 100%;
       height: 100%;
+    }
+  }
+
+  &-error {
+    @extend .univer_doc-skeleton_wrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &-msg {
+      font-size: 20px;
+      color: #e55e55;
     }
   }
 

@@ -1,0 +1,30 @@
+diff --git a/node_modules/@originjs/vite-plugin-federation/dist/index.mjs b/node_modules/@originjs/vite-plugin-federation/dist/index.mjs
+index 960932e..2fd489e 100644
+--- a/node_modules/@originjs/vite-plugin-federation/dist/index.mjs
++++ b/node_modules/@originjs/vite-plugin-federation/dist/index.mjs
+@@ -1501,6 +1501,9 @@ export {__federation_method_ensure, __federation_method_getRemote , __federation
+         );
+         return code.replace(getModuleMarker("shareScope"), scopeCode.join(","));
+       }
++      if (id.includes('type=style')) {
++        return;
++      }
+       const fileExtname = getFileExtname(id);
+       if (!transformFileTypeSet.has((fileExtname ?? "").toLowerCase())) {
+         return;
+@@ -1673,14 +1676,12 @@ export {__federation_method_ensure, __federation_method_getRemote , __federation
+         if (!moduleInfo)
+           continue;
+         const moduleFilePath = normalizePath(moduleInfo.id);
+-        const idx = moduleFilePath.indexOf(cwdPath);
+-        const relativePath = idx === 0 ? posix.join(base, moduleFilePath.slice(cwdPath.length)) : null;
+         const sharedName = item[0];
+         const obj = item[1];
+         let str = "";
+         if (typeof obj === "object") {
+           const origin = serverConfiguration.origin;
+-          const pathname = relativePath ?? `/@fs/${moduleInfo.id}`;
++          const pathname = posix.join(base, '@fs', moduleInfo.id);
+           const url = origin ? `'${origin}${pathname}'` : `window.location.origin+'${pathname}'`;
+           str += `get:()=> get(${url}, ${REMOTE_FROM_PARAMETER})`;
+           res.push(`'${sharedName}':{'${obj.version}':{${str}}}`);

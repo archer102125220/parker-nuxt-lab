@@ -12,13 +12,14 @@ export function loadCSS(id, href, attributes = {}, successDelay = 0) {
     link.id = id;
     link.rel = 'stylesheet';
     link.href = href;
-    
+
     Object.keys(attributes).forEach((key) => {
+      if (['load', 'error', 'onload', 'onerror'].includes(key)) return;
       link.setAttribute(key, attributes[key]);
     });
 
-    const loadEvent = attributes.load;
-    const errorEvent = attributes.error;
+    const loadEvent = attributes.load || attributes.onload;
+    const errorEvent = attributes.error || attributes.onerror;
 
     link.onload = (...args) => {
       if (typeof loadEvent === 'function') {

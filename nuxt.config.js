@@ -7,6 +7,7 @@ import glsl from 'vite-plugin-glsl';
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import autoprefixer from 'autoprefixer';
 import postcssPxtorem from 'postcss-pxtorem';
+import federation from '@originjs/vite-plugin-federation';
 
 import {
   strategy,
@@ -16,6 +17,12 @@ import {
   fallbackLocale,
   detectBrowserLanguage
 } from './i18n';
+
+// @originjs/vite-plugin-federation
+// https://archer102125220.github.io/parker-vue-lab/assets/parker-vue-lab-federation.js
+// @app/federation/parker-vue-lab-federation.js
+// https://archer102125220.github.io/parker-vue-lab/types/parker-vue-lab-federation.d.ts
+// @app/federation/parker-vue-lab-federation.d.ts
 
 const IS_DEBUG = process.env.VITE_DEBUG === 'true';
 const IS_DEV = process.env.NODE_ENV !== 'production';
@@ -31,6 +38,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://connect.facebook.net',
     'https://*.facebook.com',
     'https://*.fbcdn.net',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -57,6 +68,10 @@ const CONTENT_SECURITY_POLICY = {
     'blob:',
     'https://fonts.gstatic.com',
     'https://*.fbcdn.net',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -79,6 +94,10 @@ const CONTENT_SECURITY_POLICY = {
   'form-action': [
     "'self'",
     'https://*.facebook.com',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -108,6 +127,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.fbcdn.net',
     'https://*.googletagmanager.com',
     'https://validator.swagger.io',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -162,6 +185,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://gc.kis.v2.scr.kaspersky',
     'wss://gc.kis.v2.scr.kaspersky',
     'https://va.vercel-scripts.com',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -188,6 +215,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.youtube.com',
     'https://*.facebook.com',
     'https://*.fbcdn.net',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -197,6 +228,7 @@ const CONTENT_SECURITY_POLICY = {
     'https://unpkg.com/@univerjs-pro/',
     'https://unpkg.com/vue@3/',
     'http://localhost:8000',
+
     // 不鎖版本設定
     'https://cdn.jsdelivr.net/npm/react/',
     'https://cdn.jsdelivr.net/npm/react-dom/',
@@ -220,6 +252,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.google-analytics.com',
     'https://*.googleapis.com',
     'https://api.github.com',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -246,6 +282,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.youtube.com',
     'https://*.ytimg.com',
     'https://*.facebook.com',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -271,6 +311,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.ytimg.com',
     'https://www.googletagmanager.com',
     'https://*.facebook.com',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -296,6 +340,10 @@ const CONTENT_SECURITY_POLICY = {
     'https://*.ytimg.com',
     'https://*.facebook.com',
     'https://*.fbcdn.net',
+
+    // 模組聯邦
+    'https://archer102125220.github.io',
+
     // Univer 相關設定
     'https://unpkg.com/react@18.3.1/',
     'https://unpkg.com/react-dom@18.3.1/',
@@ -570,6 +618,55 @@ export default defineNuxtConfig({
           }
         }
       : {}),
+    $client: {
+      plugins: [
+        federation({
+          remotes: {
+            // 避免瀏覽器快取到舊版本
+            ['parker-vue-lab-federation']:
+              'https://archer102125220.github.io/parker-vue-lab/assets/parker-vue-lab-federation.js?v=' +
+              Date.now()
+          },
+          shared: {
+            vue: {},
+            vuetify: {},
+            pinia: {
+              version: '2.3.1'
+            },
+            // '@univerjs-pro/collaboration-client': {},
+            // '@univerjs-pro/live-share': {},
+            // '@univerjs/docs-quick-insert-ui': {},
+            // '@univerjs/preset-docs-advanced': {},
+            // '@univerjs/preset-docs-core': {},
+            // '@univerjs/preset-docs-drawing': {},
+            // '@univerjs/preset-docs-hyper-link': {},
+            // '@univerjs/preset-docs-thread-comment': {},
+            // '@univerjs/preset-sheets-advanced': {},
+            // '@univerjs/preset-sheets-collaboration': {},
+            // '@univerjs/preset-sheets-conditional-formatting': {},
+            // '@univerjs/preset-sheets-core': {},
+            // '@univerjs/preset-sheets-data-validation': {},
+            // '@univerjs/preset-sheets-drawing': {},
+            // '@univerjs/preset-sheets-filter': {},
+            // '@univerjs/preset-sheets-find-replace': {},
+            // '@univerjs/preset-sheets-hyper-link': {},
+            // '@univerjs/preset-sheets-note': {},
+            // '@univerjs/preset-sheets-sort': {},
+            // '@univerjs/preset-sheets-table': {},
+            // '@univerjs/preset-sheets-thread-comment': {},
+            // '@univerjs/presets': {},
+            // '@univerjs/sheets-crosshair-highlight': {},
+            // '@univerjs/sheets-zen-editor': {},
+            // '@univerjs/ui-adapter-vue3': {},
+            // '@univerjs/uniscript': {},
+            // '@univerjs/core': {},
+            'vue-i18n': {
+              version: '10.0.8'
+            }
+          }
+        })
+      ]
+    },
     plugins: [glsl()],
 
     server: {
@@ -822,7 +919,8 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: process.env.VITE_DOMAIN
+    url: process.env.VITE_DOMAIN,
+    defaultLocale: defaultLang
   },
 
   robots: {
