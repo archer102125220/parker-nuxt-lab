@@ -158,6 +158,43 @@ Auto-imported components are not available as runtime variables in `<script setu
 </template>
 ```
 
+### Template Text Formatting & I18n (MANDATORY)
+
+To facilitate manual editing, localization, and to strictly adhere to **Vue I18n Official Best Practices**, **DO NOT intersperse HTML tags within plain text sentences**.
+
+1. **No Inline Tags in Sentences**: Avoid placing tags like `<b>`, `<code>`, or `<span>` directly in the middle of a continuous text block in the template.
+2. **Explicit Separation**: If a block of text has a title, label, or icon, explicitly separate them into distinct structural HTML elements (e.g., using `-title` and `-desc` BEM elements).
+3. **Component Interpolation for I18n**: If a sentence *must* contain links or dynamic styling in the middle of a translated string, use Vue I18n's `<i18n-t>` component. **NEVER** use `v-html` for translations due to XSS vulnerabilities.
+
+**❌ Incorrect (Interspersed HTML)**
+```vue
+<li class="item">
+  ⚠️
+  <b class="item-bold">Note:</b>
+  Please configure the <code class="item-code">config.ts</code> file.
+</li>
+```
+
+**✅ Correct (Explicitly Separated)**
+```vue
+<li class="item">
+  <div class="item-title">
+    <span class="item-title-icon">⚠️</span>
+    <span class="item-title-text">Note:</span>
+  </div>
+  <span class="item-desc">Please configure the config.ts file.</span>
+</li>
+```
+
+**✅ Correct (I18n Component Interpolation)**
+```vue
+<i18n-t keypath="message.guide" tag="p">
+  <template #link>
+    <a href="/docs">link</a>
+  </template>
+</i18n-t>
+```
+
 ## SCSS Example
 
 ```scss
