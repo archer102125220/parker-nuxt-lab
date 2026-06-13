@@ -1,5 +1,5 @@
 <script setup>
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const route = useRoute();
 const system = useSystemStore();
 const univerStore = useUniverStore();
@@ -38,14 +38,14 @@ async function createRoom() {
       inputUnitId.value = data.unitID;
     } else {
       system.setMessageState({
-        text: '無法建立房間：' + JSON.stringify(data),
+        text: `${t('univer_federation_doc_page.create_room_fail_title')}${JSON.stringify(data)}`,
         type: 'error'
       });
     }
   } catch (error) {
     console.error('Create room error:', error);
     system.setMessageState({
-      text: '建立房間失敗，請查看 Console。',
+      text: t('univer_federation_doc_page.create_room_fail_desc'),
       type: 'error'
     });
   }
@@ -58,45 +58,45 @@ async function createRoom() {
     <div class="univer_federation_doc_page-remark">
       <div class="univer_federation_doc_page-remark-title">
         <span class="univer_federation_doc_page-remark-title-icon">💡</span>
-        <span class="univer_federation_doc_page-remark-title-text">鎖定狀態匯出說明：</span>
+        <span class="univer_federation_doc_page-remark-title-text">{{ $t('univer_federation_doc_page.remark.lock_title') }}</span>
       </div>
       <ul class="univer_federation_doc_page-remark-list">
         <li class="univer_federation_doc_page-remark-list-item">
-          <span class="univer_federation_doc_page-remark-list-item-title">Local Export (JSON Snapshot)：</span>
-          <span class="univer_federation_doc_page-remark-list-item-desc">可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON 後依然生效。</span>
+          <span class="univer_federation_doc_page-remark-list-item-title">{{ $t('univer_federation_doc_page.remark.local_export') }}</span>
+          <span class="univer_federation_doc_page-remark-list-item-desc">{{ $t('univer_federation_doc_page.remark.local_export_desc') }}</span>
         </li>
         <li class="univer_federation_doc_page-remark-list-item">
-          <span class="univer_federation_doc_page-remark-list-item-title">Server Export (DOCX/XLSX)：</span>
-          <span class="univer_federation_doc_page-remark-list-item-desc">無法保留鎖定狀態。標準 Office 格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。</span>
+          <span class="univer_federation_doc_page-remark-list-item-title">{{ $t('univer_federation_doc_page.remark.server_export') }}</span>
+          <span class="univer_federation_doc_page-remark-list-item-desc">{{ $t('univer_federation_doc_page.remark.server_export_desc') }}</span>
         </li>
       </ul>
     </div>
     <div class="univer_federation_doc_page-warning">
       <div class="univer_federation_doc_page-warning-title">
         <span class="univer_federation_doc_page-warning-title-icon">⚠️</span>
-        <span class="univer_federation_doc_page-warning-title-text">線上環境功能限制說明：</span>
+        <span class="univer_federation_doc_page-warning-title-text">{{ $t('univer_federation_doc_page.warning.title') }}</span>
       </div>
       <ul class="univer_federation_doc_page-warning-list">
         <li class="univer_federation_doc_page-warning-list-item">
-          <span class="univer_federation_doc_page-warning-list-item-title">協同編輯 / 演示跟隨：</span>
-          <span class="univer_federation_doc_page-warning-list-item-desc">依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。</span>
+          <span class="univer_federation_doc_page-warning-list-item-title">{{ $t('univer_federation_doc_page.warning.collab') }}</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">{{ $t('univer_federation_doc_page.warning.collab_desc') }}</span>
         </li>
         <li class="univer_federation_doc_page-warning-list-item">
-          <span class="univer_federation_doc_page-warning-list-item-title">新建 / 加入房間：</span>
-          <span class="univer_federation_doc_page-warning-list-item-desc">依賴 collaboration-helper 服務生成與儲存檔案快照 (Snapshot API)。</span>
+          <span class="univer_federation_doc_page-warning-list-item-title">{{ $t('univer_federation_doc_page.warning.room') }}</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">{{ $t('univer_federation_doc_page.warning.room_desc') }}</span>
         </li>
         <li class="univer_federation_doc_page-warning-list-item">
-          <span class="univer_federation_doc_page-warning-list-item-title">實體檔案匯出 (XLSX)：</span>
-          <span class="univer_federation_doc_page-warning-list-item-desc">若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的 exchange worker 服務。</span>
+          <span class="univer_federation_doc_page-warning-list-item-title">{{ $t('univer_federation_doc_page.warning.export') }}</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">{{ $t('univer_federation_doc_page.warning.export_desc') }}</span>
         </li>
         <li class="univer_federation_doc_page-warning-list-item">
-          <span class="univer_federation_doc_page-warning-list-item-desc">若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker 微服務所導致（例如 /universer-api ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone 專案到本地端串接 univer docker 服務。</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">{{ $t('univer_federation_doc_page.warning.overall_desc') }}</span>
         </li>
       </ul>
     </div>
     <div class="univer_federation_doc_page-tools">
       <div class="univer_federation_doc_page-tools-role">
-        <label for="role_select">當前測試身份：</label>
+        <label for="role_select">{{ $t('univer_federation_doc_page.tools.current_role') }}</label>
         <select
           id="role_select"
           v-model="univerStore.currentUserRole"
@@ -112,12 +112,13 @@ async function createRoom() {
         </select>
       </div>
       <div class="univer_federation_doc_page-tools-online">
+        <span class="univer_federation_doc_page-tools-online-label">{{ $t('univer_federation_doc_page.tools.online_users') }}</span>
         <div class="univer_federation_doc_page-tools-online-unit">
           <input
             v-model="inputUnitId"
             type="text"
             class="univer_federation_doc_page-tools-online-unit-collaboration_room"
-            placeholder="輸入房間 ID"
+            :placeholder="$t('univer_federation_doc_page.tools.input_room_id')"
             :disabled="isCollaboration === false"
             @keyup.enter="joinRoom"
           />
@@ -126,7 +127,7 @@ async function createRoom() {
             :disabled="isCollaboration === false || inputUnitId === ''"
             @click="joinRoom"
           >
-            加入
+            {{ $t('univer_federation_doc_page.tools.join') }}
           </button>
         </div>
         <button
@@ -134,10 +135,10 @@ async function createRoom() {
           :disabled="isCollaboration === false"
           @click="createRoom"
         >
-          新建房間
+          {{ $t('univer_federation_doc_page.tools.create_room') }}
         </button>
         <div class="univer_federation_doc_page-tools-online-collaboration">
-          <label for="collaboration_checkbox">協同編輯</label>
+          <label for="collaboration_checkbox">{{ $t('univer_federation_doc_page.tools.collab_edit') }}</label>
           <input
             id="collaboration_checkbox"
             v-model="isCollaboration"
@@ -146,11 +147,8 @@ async function createRoom() {
         </div>
       </div>
     </div>
-    <div
-      v-if="!unitId && isCollaboration"
-      class="univer_federation_doc_page-empty"
-    >
-      <p>目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。</p>
+    <div v-if="!unitId && isCollaboration" class="univer_federation_doc_page-empty">
+      <p>{{ $t('univer_federation_doc_page.empty_room') }}</p>
     </div>
     <FederationUniverDoc
       v-else

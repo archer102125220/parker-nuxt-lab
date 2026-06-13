@@ -1403,38 +1403,111 @@ export const zhTw = {
       server_export: 'Server Export (DOCX/XLSX)：',
       server_export_desc: '無法保留鎖定狀態。標準 Office 格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。',
       univer_title: 'Univer 載入與穩定度說明：',
-      univer_npm: 'Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。',
-      univer_npm_demo_1: '（為了證明同樣的程式碼在 NPM 版上是正常的，請參考使用乾淨 Vue SPA 建立的',
+      univer_npm_desc: 'Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。（為了證明同樣的程式碼在 NPM 版上是正常的，請參考使用乾淨 Vue SPA 建立的{link}）',
       univer_npm_demo_link: '測試頁面',
-      univer_npm_demo_2: '）',
-      univer_stability_1: '目前 Doc 版的穩定度不是很高，容易出現 error 狀況。如果編輯器沒有正常載入，請嘗試',
-      univer_stability_2: '重新整理頁面',
-      univer_stability_3: '來讓 Univer 套件重新載入。',
-      univer_cdn_wait_1: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本',
-      univer_cdn_wait_2: '久上許多',
-      univer_cdn_wait_3: '，請耐心等候。'
+      univer_stability: '目前 Doc 版的穩定度不是很高，容易出現 error 狀況。如果編輯器沒有正常載入，請嘗試重新整理頁面來讓 Univer 套件重新載入。',
+      univer_cdn_wait: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本久上許多，請耐心等候。'
+    },
+    warning: {
+      title: '協同編輯 CDM 版功能限制說明：',
+      desc: '目前測試如果用 CDM 版要觸發協同編輯功能，一定會跳缺少套件的 error ，所以如果使用 CDM 版，很可能無法使用協同編輯功能'
     },
     tools: {
-      current_role: '當前測試身份：'
-    }
+      current_role: '當前測試身份：',
+      input_room_id: '輸入房間 ID',
+      join: '加入',
+      create_room: '新建房間',
+      collab_edit: '協同編輯',
+      live_share: '演示跟隨'
+    },
+    empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
+    create_room_fail_title: '無法建立房間：',
+    create_room_fail_desc: '建立房間失敗，請查看 Console。'
   },
   univer_sheet_page: {
     remark: {
       univer_title: 'Univer 載入與穩定度說明：',
-      univer_npm: 'Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。',
-      univer_npm_demo_1: '（為了證明同樣的程式碼在 NPM 版上是正常的，請參考使用乾淨 Vue SPA 建立的',
+      univer_npm_desc: 'Univer 的 npm 版在 Nuxt 上疑似因為打包轉譯設定的問題，光是載入就會觸發無盡 rerender，因此改用 CDN 的方式處理。（為了證明同樣的程式碼在 NPM 版上是正常的，請參考使用乾淨 Vue SPA 建立的{link}）',
       univer_npm_demo_link: '測試頁面',
-      univer_npm_demo_2: '）',
-      univer_stability_1: '目前 Sheet 版本發展相對成熟，不太會出現無法正常載入的狀況。但若依然遇到編輯器沒有正常載入的情形，請嘗試',
-      univer_stability_2: '重新整理頁面',
-      univer_stability_3: '來讓 Univer 套件重新載入。',
-      univer_cdn_wait_1: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本',
-      univer_cdn_wait_2: '久上許多',
-      univer_cdn_wait_3: '，請耐心等候。'
+      univer_stability: '目前 Sheet 版本發展相對成熟，不太會出現無法正常載入的狀況。但若依然遇到編輯器沒有正常載入的情形，請嘗試重新整理頁面來讓 Univer 套件重新載入。',
+      univer_cdn_wait: '需要注意的是，由於改用 CDN 載入，初次載入的等待時間會比直接使用 npm 版本久上許多，請耐心等候。'
+    },
+    warning: {
+      title: '線上環境功能限制說明：',
+      collab: '協同編輯 / 演示跟隨：',
+      collab_desc: '依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。',
+      room: '新建 / 加入房間：',
+      room_desc: '依賴 collaboration-helper 服務生成與儲存檔案快照 (Snapshot API)。',
+      export: '實體檔案匯出 (XLSX)：',
+      export_desc: '若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的 exchange worker 服務。',
+      overall_desc: '若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker 微服務所導致（例如 /universer-api ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone 專案到本地端串接 univer docker 服務。'
     },
     tools: {
-      current_role: '當前測試身份：'
-    }
+      current_role: '當前測試身份：',
+      input_room_id: '輸入房間 ID',
+      join: '加入',
+      create_room: '新建房間',
+      collab_edit: '協同編輯',
+      live_share: '演示跟隨'
+    },
+    empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
+    create_room_fail_title: '無法建立房間：',
+    create_room_fail_desc: '建立房間失敗，請查看 Console。'
+  },
+  univer_federation_doc_page: {
+    remark: {
+      lock_title: '鎖定狀態匯出說明：',
+      local_export: 'Local Export (JSON Snapshot)：',
+      local_export_desc: '可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON 後依然生效。',
+      server_export: 'Server Export (DOCX/XLSX)：',
+      server_export_desc: '無法保留鎖定狀態。標準 Office 格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。'
+    },
+    warning: {
+      title: '線上環境功能限制說明：',
+      collab: '協同編輯 / 演示跟隨：',
+      collab_desc: '依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。',
+      room: '新建 / 加入房間：',
+      room_desc: '依賴 collaboration-helper 服務生成與儲存檔案快照 (Snapshot API)。',
+      export: '實體檔案匯出 (XLSX)：',
+      export_desc: '若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的 exchange worker 服務。',
+      overall_desc: '若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker 微服務所導致（例如 /universer-api ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone 專案到本地端串接 univer docker 服務。'
+    },
+    tools: {
+      current_role: '當前測試身份：',
+      online_users: '線上人數：',
+      input_room_id: '輸入房間 ID',
+      join: '加入',
+      create_room: '新建房間',
+      collab_edit: '協同編輯',
+      live_share: '演示跟隨'
+    },
+    empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
+    create_room_fail_title: '無法建立房間：',
+    create_room_fail_desc: '建立房間失敗，請查看 Console。'
+  },
+  univer_federation_sheet_page: {
+    warning: {
+      title: '線上環境功能限制說明：',
+      collab: '協同編輯 / 演示跟隨：',
+      collab_desc: '依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。',
+      room: '新建 / 加入房間：',
+      room_desc: '依賴 collaboration-helper 服務生成與儲存檔案快照 (Snapshot API)。',
+      export: '實體檔案匯出 (XLSX)：',
+      export_desc: '若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的 exchange worker 服務。',
+      overall_desc: '若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker 微服務所導致（例如 /universer-api ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone 專案到本地端串接 univer docker 服務。'
+    },
+    tools: {
+      current_role: '當前測試身份：',
+      online_users: '線上人數：',
+      input_room_id: '輸入房間 ID',
+      join: '加入',
+      create_room: '新建房間',
+      collab_edit: '協同編輯',
+      live_share: '演示跟隨'
+    },
+    empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
+    create_room_fail_title: '無法建立房間：',
+    create_room_fail_desc: '建立房間失敗，請查看 Console。'
   }
 };
 

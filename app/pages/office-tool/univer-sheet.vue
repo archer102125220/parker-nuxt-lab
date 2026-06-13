@@ -4,7 +4,7 @@ import { importSheet } from '@app/utils/third-party/univer/create-sheet';
 import importUniver from '@app/utils/third-party/univer/import-univer';
 </script>
 <script setup>
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const route = useRoute();
 const system = useSystemStore();
 const univerStore = useUniverStore();
@@ -43,14 +43,14 @@ async function createRoom() {
       inputUnitId.value = data.unitID;
     } else {
       system.setMessageState({
-        text: '無法建立房間：' + JSON.stringify(data),
+        text: `${t('univer_sheet_page.create_room_fail_title')}${JSON.stringify(data)}`,
         type: 'error'
       });
     }
   } catch (error) {
     console.error('Create room error:', error);
     system.setMessageState({
-      text: '建立房間失敗，請查看 Console。',
+      text: t('univer_sheet_page.create_room_fail_desc'),
       type: 'error'
     });
   }
@@ -71,36 +71,50 @@ if (import.meta.client) {
       </div>
       <ul class="univer_sheet_page-remark-list">
         <li class="univer_sheet_page-remark-list-item">
-          <span class="univer_sheet_page-remark-list-item-desc">{{ $t('univer_sheet_page.remark.univer_npm') }}{{ $t('univer_sheet_page.remark.univer_npm_demo_1') }} <a href="https://archer102125220.github.io/parker-vue-lab/sheet-editor/univer" target="_blank" rel="noopener noreferrer">{{ $t('univer_sheet_page.remark.univer_npm_demo_link') }}</a> {{ $t('univer_sheet_page.remark.univer_npm_demo_2') }}</span>
+          <!-- 
+            使用 <i18n-t> 進行多國語系字串替換：
+            1. keypath: 對應 i18n JSON 檔中定義的翻譯鍵值（字串中包含 {link} 佔位符）。
+            2. tag: 指定渲染後要包裝這段翻譯的 HTML 標籤（在此為 <span>）。
+            3. <template #link>: 對應翻譯字串中的 {link} 佔位符。裡面的內容（如超連結 <a>）會被插入到該佔位符的位置，避免在翻譯檔內直接寫 HTML。
+          -->
+          <i18n-t
+            keypath="univer_sheet_page.remark.univer_npm_desc"
+            tag="span"
+            class="univer_sheet_page-remark-list-item-desc"
+          >
+            <template #link>
+              <a href="https://archer102125220.github.io/parker-vue-lab/sheet-editor/univer" target="_blank" rel="noopener noreferrer">{{ $t('univer_sheet_page.remark.univer_npm_demo_link') }}</a>
+            </template>
+          </i18n-t>
         </li>
         <li class="univer_sheet_page-remark-list-item">
-          <span class="univer_sheet_page-remark-list-item-desc">{{ $t('univer_sheet_page.remark.univer_stability_1') }}{{ $t('univer_sheet_page.remark.univer_stability_2') }}{{ $t('univer_sheet_page.remark.univer_stability_3') }}</span>
+          <span class="univer_sheet_page-remark-list-item-desc">{{ $t('univer_sheet_page.remark.univer_stability') }}</span>
         </li>
         <li class="univer_sheet_page-remark-list-item">
-          <span class="univer_sheet_page-remark-list-item-desc">{{ $t('univer_sheet_page.remark.univer_cdn_wait_1') }}{{ $t('univer_sheet_page.remark.univer_cdn_wait_2') }}{{ $t('univer_sheet_page.remark.univer_cdn_wait_3') }}</span>
+          <span class="univer_sheet_page-remark-list-item-desc">{{ $t('univer_sheet_page.remark.univer_cdn_wait') }}</span>
         </li>
       </ul>
     </div>
     <div class="univer_sheet_page-warning">
       <div class="univer_sheet_page-warning-title">
         <span class="univer_sheet_page-warning-title-icon">⚠️</span>
-        <span class="univer_sheet_page-warning-title-text">線上環境功能限制說明：</span>
+        <span class="univer_sheet_page-warning-title-text">{{ $t('univer_sheet_page.warning.title') }}</span>
       </div>
       <ul class="univer_sheet_page-warning-list">
         <li class="univer_sheet_page-warning-list-item">
-          <span class="univer_sheet_page-warning-list-item-title">協同編輯 / 演示跟隨：</span>
-          <span class="univer_sheet_page-warning-list-item-desc">依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。</span>
+          <span class="univer_sheet_page-warning-list-item-title">{{ $t('univer_sheet_page.warning.collab') }}</span>
+          <span class="univer_sheet_page-warning-list-item-desc">{{ $t('univer_sheet_page.warning.collab_desc') }}</span>
         </li>
         <li class="univer_sheet_page-warning-list-item">
-          <span class="univer_sheet_page-warning-list-item-title">新建 / 加入房間：</span>
-          <span class="univer_sheet_page-warning-list-item-desc">依賴 collaboration-helper 服務生成與儲存檔案快照 (Snapshot API)。</span>
+          <span class="univer_sheet_page-warning-list-item-title">{{ $t('univer_sheet_page.warning.room') }}</span>
+          <span class="univer_sheet_page-warning-list-item-desc">{{ $t('univer_sheet_page.warning.room_desc') }}</span>
         </li>
         <li class="univer_sheet_page-warning-list-item">
-          <span class="univer_sheet_page-warning-list-item-title">實體檔案匯出 (XLSX)：</span>
-          <span class="univer_sheet_page-warning-list-item-desc">若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的 exchange worker 服務。</span>
+          <span class="univer_sheet_page-warning-list-item-title">{{ $t('univer_sheet_page.warning.export') }}</span>
+          <span class="univer_sheet_page-warning-list-item-desc">{{ $t('univer_sheet_page.warning.export_desc') }}</span>
         </li>
         <li class="univer_sheet_page-warning-list-item">
-          <span class="univer_sheet_page-warning-list-item-desc">若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker 微服務所導致（例如 /universer-api ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone 專案到本地端串接 univer docker 服務。</span>
+          <span class="univer_sheet_page-warning-list-item-desc">{{ $t('univer_sheet_page.warning.overall_desc') }}</span>
         </li>
       </ul>
     </div>
@@ -129,16 +143,16 @@ if (import.meta.client) {
             v-model="inputUnitId"
             type="text"
             class="univer_sheet_page-tools-online-unit-collaboration_room"
-            placeholder="輸入房間 ID"
+            :placeholder="$t('univer_sheet_page.tools.input_room_id')"
             :disabled="isCollaboration === false"
             @keyup.enter="joinRoom"
           />
           <button
             class="univer_sheet_page-tools-online-unit-join_btn"
-            :disabled="isCollaboration === false"
+            :disabled="isCollaboration === false || inputUnitId === ''"
             @click="joinRoom"
           >
-            加入
+            {{ $t('univer_sheet_page.tools.join') }}
           </button>
         </div>
         <button
@@ -146,10 +160,10 @@ if (import.meta.client) {
           :disabled="isCollaboration === false"
           @click="createRoom"
         >
-          新建房間
+          {{ $t('univer_sheet_page.tools.create_room') }}
         </button>
         <div class="univer_sheet_page-tools-online-collaboration">
-          <label for="collaboration_checkbox">協同編輯</label>
+          <label for="collaboration_checkbox">{{ $t('univer_sheet_page.tools.collab_edit') }}</label>
           <input
             id="collaboration_checkbox"
             v-model="isCollaboration"
@@ -162,7 +176,7 @@ if (import.meta.client) {
             class="univer_sheet_page-tools-online-live_share-label"
             :disabled="isCollaboration === false"
           >
-            演示跟隨
+            {{ $t('univer_sheet_page.tools.live_share') }}
           </label>
           <input
             id="live_share_checkbox"
@@ -174,7 +188,7 @@ if (import.meta.client) {
       </div>
     </div>
     <div v-if="!unitId && isCollaboration" class="univer_sheet_page-empty">
-      <p>目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。</p>
+      <p>{{ $t('univer_sheet_page.empty_room') }}</p>
     </div>
     <UniverSheetEditor
       v-else

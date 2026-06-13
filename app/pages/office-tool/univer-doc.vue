@@ -5,7 +5,7 @@ import importUniver from '@app/utils/third-party/univer/import-univer';
 </script>
 
 <script setup>
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const route = useRoute();
 // const system = useSystemStore();
 const univerStore = useUniverStore();
@@ -43,14 +43,14 @@ watch(
 //       inputUnitId.value = data.unitID;
 //     } else {
 //       system.setMessageState({
-//         text: '無法建立房間：' + JSON.stringify(data),
+//         text: `${t('univer_doc_page.create_room_fail_title')}${JSON.stringify(data)}`,
 //         type: 'error'
 //       });
 //     }
 //   } catch (error) {
 //     console.error('Create room error:', error);
 //     system.setMessageState({
-//       text: '建立房間失敗，請查看 Console。',
+//       text: t('univer_doc_page.create_room_fail_desc'),
 //       type: 'error'
 //     });
 //   }
@@ -85,24 +85,38 @@ if (import.meta.client) {
       </div>
       <ul class="univer_doc_page-remark-list">
         <li class="univer_doc_page-remark-list-item">
-          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_npm') }}{{ $t('univer_doc_page.remark.univer_npm_demo_1') }} <a href="https://archer102125220.github.io/parker-vue-lab/doc-editor/univer" target="_blank" rel="noopener noreferrer">{{ $t('univer_doc_page.remark.univer_npm_demo_link') }}</a> {{ $t('univer_doc_page.remark.univer_npm_demo_2') }}</span>
+          <!-- 
+            使用 <i18n-t> 進行多國語系字串替換：
+            1. keypath: 對應 i18n JSON 檔中定義的翻譯鍵值（字串中包含 {link} 佔位符）。
+            2. tag: 指定渲染後要包裝這段翻譯的 HTML 標籤（在此為 <span>）。
+            3. <template #link>: 對應翻譯字串中的 {link} 佔位符。裡面的內容（如超連結 <a>）會被插入到該佔位符的位置，避免在翻譯檔內直接寫 HTML。
+          -->
+          <i18n-t
+            keypath="univer_doc_page.remark.univer_npm_desc"
+            tag="span"
+            class="univer_doc_page-remark-list-item-desc"
+          >
+            <template #link>
+              <a href="https://archer102125220.github.io/parker-vue-lab/doc-editor/univer" target="_blank" rel="noopener noreferrer">{{ $t('univer_doc_page.remark.univer_npm_demo_link') }}</a>
+            </template>
+          </i18n-t>
         </li>
         <li class="univer_doc_page-remark-list-item">
-          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_stability_1') }}{{ $t('univer_doc_page.remark.univer_stability_2') }}{{ $t('univer_doc_page.remark.univer_stability_3') }}</span>
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_stability') }}</span>
         </li>
         <li class="univer_doc_page-remark-list-item">
-          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_cdn_wait_1') }}{{ $t('univer_doc_page.remark.univer_cdn_wait_2') }}{{ $t('univer_doc_page.remark.univer_cdn_wait_3') }}</span>
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_cdn_wait') }}</span>
         </li>
       </ul>
     </div>
     <div class="univer_doc_page-warning">
       <div class="univer_doc_page-warning-title">
         <span class="univer_doc_page-warning-title-icon">⚠️</span>
-        <span class="univer_doc_page-warning-title-text">協同編輯 CDM 版功能限制說明：</span>
+        <span class="univer_doc_page-warning-title-text">{{ $t('univer_doc_page.warning.title') }}</span>
       </div>
       <ul class="univer_doc_page-warning-list">
         <li class="univer_doc_page-warning-list-item">
-          <span class="univer_doc_page-warning-list-item-desc">目前測試如果用 CDM 版要觸發協同編輯功能，一定會跳缺少套件的 error ，所以如果使用 CDM 版，很可能無法使用協同編輯功能</span>
+          <span class="univer_doc_page-warning-list-item-desc">{{ $t('univer_doc_page.warning.desc') }}</span>
         </li>
       </ul>
     </div>
@@ -131,16 +145,16 @@ if (import.meta.client) {
             v-model="inputUnitId"
             type="text"
             class="univer_doc_page-tools-online-unit-collaboration_room"
-            placeholder="輸入房間 ID"
+            :placeholder="$t('univer_doc_page.tools.input_room_id')"
             :disabled="isCollaboration === false"
             @keyup.enter="joinRoom"
           />
           <button
             class="univer_doc_page-tools-online-unit-join_btn"
-            :disabled="isCollaboration === false"
+            :disabled="isCollaboration === false || inputUnitId === ''"
             @click="joinRoom"
           >
-            加入
+            {{ $t('univer_doc_page.tools.join') }}
           </button>
         </div>
         <button
@@ -148,10 +162,10 @@ if (import.meta.client) {
           :disabled="isCollaboration === false"
           @click="createRoom"
         >
-          新建房間
+          {{ $t('univer_doc_page.tools.create_room') }}
         </button>
         <div class="univer_doc_page-tools-online-collaboration">
-          <label for="collaboration_checkbox">協同編輯</label>
+          <label for="collaboration_checkbox">{{ $t('univer_doc_page.tools.collab_edit') }}</label>
           <input
             id="collaboration_checkbox"
             v-model="isCollaboration"
@@ -161,7 +175,7 @@ if (import.meta.client) {
       </div> -->
     </div>
     <div v-if="!unitId && isCollaboration" class="univer_doc_page-empty">
-      <p>目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。</p>
+      <p>{{ $t('univer_doc_page.empty_room') }}</p>
     </div>
     <UniverDocEditor
       v-else
