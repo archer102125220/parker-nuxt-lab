@@ -32,6 +32,7 @@
 > - **Anthropic Claude (`CLAUDE.md`)**：官方強烈建議使用 **XML 標籤**（如 `<rule>`, `<constraints>`, `<examples>`）來建立層級，這能大幅降低 Claude 忽略規則的機率。
 > - **Google Gemini (`GEMINI.md`)**：官方偏好結構化的 Markdown，並結合明確的任務邊界（如 `<task_constraints>`）、條列式的 **DO / DO NOT** 約束，以及 **Few-Shot Examples**（明確的 Good/Bad 範例對照）。
 > - **OpenAI / Codex (`AGENTS.md`)**：官方指南建議提供清晰的標題劃分、明確的系統角色定義、並盡量使用「要做什麼」取代「不要做什麼」的正向指令約束，未來也應調整使其更貼近 OpenAI 模型的解析偏好。
+> - **Antigravity Agent (`.agent/rules/`)**：作為高度自主的 Agent 系統，其最佳實踐是將規範拆分為單一職責的 Markdown 檔案（類似 Skills 或 Knowledge Items 機制），並在檔案中加上描述性質的結構化 Meta 資訊，讓 Agent 能根據當下任務精準檢索與載入所需規則。
 > - **Cursor / Copilot 等**：需視其預設底層模型（如 Claude 3.5 Sonnet 或 GPT-4o）與其 IDE 官方的最新建議，進一步適配 `.mdc` 或專屬規則語法。
 
 ---
