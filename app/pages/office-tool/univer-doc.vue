@@ -65,74 +65,44 @@ if (import.meta.client) {
 <template>
   <div class="univer_doc_page">
     <div class="univer_doc_page-remark">
-      <p class="univer_doc_page-remark-title">
-        💡
-        <b class="univer_doc_page-remark-bold">{{
-          $t('univer_doc_page.remark.lock_title')
-        }}</b>
-      </p>
+      <div class="univer_doc_page-remark-title">
+        <span class="univer_doc_page-remark-title-icon">💡</span>
+        <span class="univer_doc_page-remark-title-text">{{ $t('univer_doc_page.remark.lock_title') }}</span>
+      </div>
       <ul class="univer_doc_page-remark-list">
         <li class="univer_doc_page-remark-list-item">
-          <b class="univer_doc_page-remark-bold">
-            {{ $t('univer_doc_page.remark.local_export') }}
-          </b>
-          {{ $t('univer_doc_page.remark.local_export_desc') }}
+          <span class="univer_doc_page-remark-list-item-title">{{ $t('univer_doc_page.remark.local_export') }}</span>
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.local_export_desc') }}</span>
         </li>
         <li class="univer_doc_page-remark-list-item">
-          <b class="univer_doc_page-remark-bold">{{
-            $t('univer_doc_page.remark.server_export')
-          }}</b>
-          {{ $t('univer_doc_page.remark.server_export_desc') }}
+          <span class="univer_doc_page-remark-list-item-title">{{ $t('univer_doc_page.remark.server_export') }}</span>
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.server_export_desc') }}</span>
         </li>
       </ul>
-      <p class="univer_doc_page-remark-title" css-is-spacing="true">
-        ⚠️
-        <b class="univer_doc_page-remark-bold">{{
-          $t('univer_doc_page.remark.univer_title')
-        }}</b>
-      </p>
+      <div class="univer_doc_page-remark-title" css-is-spacing="true">
+        <span class="univer_doc_page-remark-title-icon">⚠️</span>
+        <span class="univer_doc_page-remark-title-text">{{ $t('univer_doc_page.remark.univer_title') }}</span>
+      </div>
       <ul class="univer_doc_page-remark-list">
         <li class="univer_doc_page-remark-list-item">
-          {{ $t('univer_doc_page.remark.univer_npm') }}
-          {{ $t('univer_doc_page.remark.univer_npm_demo_1') }}
-          <a
-            href="https://archer102125220.github.io/parker-vue-lab/doc-editor/univer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ $t('univer_doc_page.remark.univer_npm_demo_link') }}
-          </a>
-          {{ $t('univer_doc_page.remark.univer_npm_demo_2') }}
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_npm') }}{{ $t('univer_doc_page.remark.univer_npm_demo_1') }} <a href="https://archer102125220.github.io/parker-vue-lab/doc-editor/univer" target="_blank" rel="noopener noreferrer">{{ $t('univer_doc_page.remark.univer_npm_demo_link') }}</a> {{ $t('univer_doc_page.remark.univer_npm_demo_2') }}</span>
         </li>
         <li class="univer_doc_page-remark-list-item">
-          {{ $t('univer_doc_page.remark.univer_stability_1') }}
-          <b class="univer_doc_page-remark-bold">{{
-            $t('univer_doc_page.remark.univer_stability_2')
-          }}</b>
-          {{ $t('univer_doc_page.remark.univer_stability_3') }}
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_stability_1') }}{{ $t('univer_doc_page.remark.univer_stability_2') }}{{ $t('univer_doc_page.remark.univer_stability_3') }}</span>
         </li>
         <li class="univer_doc_page-remark-list-item">
-          {{ $t('univer_doc_page.remark.univer_cdn_wait_1')
-          }}<b class="univer_doc_page-remark-bold">{{
-            $t('univer_doc_page.remark.univer_cdn_wait_2')
-          }}</b
-          >{{ $t('univer_doc_page.remark.univer_cdn_wait_3') }}
+          <span class="univer_doc_page-remark-list-item-desc">{{ $t('univer_doc_page.remark.univer_cdn_wait_1') }}{{ $t('univer_doc_page.remark.univer_cdn_wait_2') }}{{ $t('univer_doc_page.remark.univer_cdn_wait_3') }}</span>
         </li>
       </ul>
     </div>
     <div class="univer_doc_page-warning">
-      <p class="univer_doc_page-warning-title">
-        ⚠️
-        <b class="univer_doc_page-warning-title-bold">
-          協同編輯 CDM 版功能限制說明：
-        </b>
-      </p>
+      <div class="univer_doc_page-warning-title">
+        <span class="univer_doc_page-warning-title-icon">⚠️</span>
+        <span class="univer_doc_page-warning-title-text">協同編輯 CDM 版功能限制說明：</span>
+      </div>
       <ul class="univer_doc_page-warning-list">
         <li class="univer_doc_page-warning-list-item">
-          目前測試如果用 CDM 版要觸發
-          <b class="univer_doc_page-warning-list-item-bold">協同編輯</b>
-          功能，一定會跳缺少套件的 error ，所以如果使用 CDM
-          版，很可能無法使用協同編輯功能
+          <span class="univer_doc_page-warning-list-item-desc">目前測試如果用 CDM 版要觸發協同編輯功能，一定會跳缺少套件的 error ，所以如果使用 CDM 版，很可能無法使用協同編輯功能</span>
         </li>
       </ul>
     </div>
@@ -231,7 +201,7 @@ if (import.meta.client) {
         margin-top: 12px;
       }
 
-      &-bold {
+      &-text {
         @extend %bold;
       }
     }
@@ -240,7 +210,7 @@ if (import.meta.client) {
       margin: 0;
       padding-left: 20px;
       &-item {
-        &-bold {
+        &-title {
           @extend %bold;
         }
       }
@@ -255,15 +225,15 @@ if (import.meta.client) {
 
     &-title {
       margin: 0 0 4px 0;
+
+      &-text {
+        @extend %bold;
+      }
     }
 
     &-list {
       margin: 0;
       padding-left: 20px;
-    }
-
-    &-bold {
-      @extend %bold;
     }
   }
 

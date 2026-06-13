@@ -56,79 +56,41 @@ async function createRoom() {
 <template>
   <div class="univer_federation_doc_page">
     <div class="univer_federation_doc_page-remark">
-      <p class="univer_federation_doc_page-remark-title">
-        💡
-        <b class="univer_federation_doc_page-remark-title-bold">
-          鎖定狀態匯出說明：
-        </b>
-      </p>
+      <div class="univer_federation_doc_page-remark-title">
+        <span class="univer_federation_doc_page-remark-title-icon">💡</span>
+        <span class="univer_federation_doc_page-remark-title-text">鎖定狀態匯出說明：</span>
+      </div>
       <ul class="univer_federation_doc_page-remark-list">
         <li class="univer_federation_doc_page-remark-list-item">
-          <b class="univer_federation_doc_page-remark-list-item-bold">
-            Local Export (JSON Snapshot)：
-          </b>
-          可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON
-          後依然生效。
+          <span class="univer_federation_doc_page-remark-list-item-title">Local Export (JSON Snapshot)：</span>
+          <span class="univer_federation_doc_page-remark-list-item-desc">可以保留鎖定狀態。自訂區域屬性會記錄於 Snapshot 中，重新載入 JSON 後依然生效。</span>
         </li>
         <li class="univer_federation_doc_page-remark-list-item">
-          <b class="univer_federation_doc_page-remark-list-item-bold">
-            Server Export (DOCX/XLSX)：
-          </b>
-          無法保留鎖定狀態。標準 Office 格式不支援 Univer
-          自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。
+          <span class="univer_federation_doc_page-remark-list-item-title">Server Export (DOCX/XLSX)：</span>
+          <span class="univer_federation_doc_page-remark-list-item-desc">無法保留鎖定狀態。標準 Office 格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。</span>
         </li>
       </ul>
     </div>
     <div class="univer_federation_doc_page-warning">
-      <p class="univer_federation_doc_page-warning-title">
-        ⚠️
-        <b class="univer_federation_doc_page-warning-title-bold">
-          線上環境功能限制說明：
-        </b>
-      </p>
+      <div class="univer_federation_doc_page-warning-title">
+        <span class="univer_federation_doc_page-warning-title-icon">⚠️</span>
+        <span class="univer_federation_doc_page-warning-title-text">線上環境功能限制說明：</span>
+      </div>
       <ul class="univer_federation_doc_page-warning-list">
         <li class="univer_federation_doc_page-warning-list-item">
-          <b class="univer_federation_doc_page-warning-list-item-bold">
-            協同編輯 / 演示跟隨：
-          </b>
-          依賴後端
-          <code class="univer_federation_doc_page-warning-list-item-code">
-            universer
-          </code>
-          服務進行 WebSocket 訊息廣播，以及
-          <code class="univer_federation_doc_page-warning-list-item-code">
-            collaboration-server
-          </code>
-          處理 OT (Operational Transformation) 演算法同步。
+          <span class="univer_federation_doc_page-warning-list-item-title">協同編輯 / 演示跟隨：</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。</span>
         </li>
         <li class="univer_federation_doc_page-warning-list-item">
-          <b class="univer_federation_doc_page-warning-list-item-bold">
-            新建 / 加入房間：
-          </b>
-          依賴
-          <code class="univer_federation_doc_page-warning-list-item-code">
-            collaboration-helper
-          </code>
-          服務生成與儲存檔案快照 (Snapshot API)。
+          <span class="univer_federation_doc_page-warning-list-item-title">新建 / 加入房間：</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">依賴 collaboration-helper 服務生成與儲存檔案快照 (Snapshot API)。</span>
         </li>
         <li class="univer_federation_doc_page-warning-list-item">
-          <b class="univer_federation_doc_page-warning-list-item-bold">
-            實體檔案匯出 (XLSX)：
-          </b>
-          若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的
-          <code class="univer_federation_doc_page-warning-list-item-code">
-            exchange worker
-          </code>
-          服務。
+          <span class="univer_federation_doc_page-warning-list-item-title">實體檔案匯出 (XLSX)：</span>
+          <span class="univer_federation_doc_page-warning-list-item-desc">若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的 exchange worker 服務。</span>
         </li>
         <li class="univer_federation_doc_page-warning-list-item">
-          若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker
-          微服務所導致（例如
-          <code class="univer_federation_doc_page-warning-list-item-code">
-            /universer-api
-          </code>
-          ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone
-          專案到本地端串接 univer docker 服務。
+          <span class="univer_federation_doc_page-warning-list-item-desc">若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker 微服務所導致（例如 /universer-api ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone 專案到本地端串接 univer docker 服務。</span>
         </li>
       </ul>
     </div>
@@ -227,15 +189,20 @@ async function createRoom() {
       &[css-is-spacing='true'] {
         margin-top: 12px;
       }
+
+      &-text {
+        @extend %bold;
+      }
     }
 
     &-list {
       margin: 0;
       padding-left: 20px;
-    }
-
-    &-bold {
-      @extend %bold;
+      &-item {
+        &-title {
+          @extend %bold;
+        }
+      }
     }
   }
 
@@ -248,7 +215,7 @@ async function createRoom() {
     &-title {
       margin: 0 0 4px 0;
 
-      &-bold {
+      &-text {
         @extend %bold;
       }
     }
@@ -257,15 +224,8 @@ async function createRoom() {
       margin: 0;
       padding-left: 20px;
       &-item {
-        &-bold {
+        &-title {
           @extend %bold;
-        }
-        &-code {
-          background-color: rgba(0, 0, 0, 0.05);
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-family: monospace;
-          font-size: 0.9em;
         }
       }
     }
