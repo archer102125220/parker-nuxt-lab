@@ -78,6 +78,23 @@ async function createRoom() {
       </div>
       <ul class="univer_federation_doc_page-warning-list">
         <li class="univer_federation_doc_page-warning-list-item">
+          <!-- 
+            使用 <i18n-t> 進行多國語系字串替換：
+            1. keypath: 對應 i18n JSON 檔中定義的翻譯鍵值（字串中包含 {link} 佔位符）。
+            2. tag: 指定渲染後要包裝這段翻譯的 HTML 標籤（在此為 <span>）。
+            3. <template #link>: 對應翻譯字串中的 {link} 佔位符。裡面的內容（如超連結 <a>）會被插入到該佔位符的位置，避免在翻譯檔內直接寫 HTML。
+          -->
+          <i18n-t
+            keypath="univer_federation_doc_page.warning.performance_issue"
+            tag="span"
+            class="univer_federation_doc_page-warning-list-item-desc"
+          >
+            <template #link>
+              <a href="https://github.com/archer102125220/parker-vue-lab" target="_blank" rel="noopener noreferrer">{{ $t('univer_federation_doc_page.warning.parker_vue_lab') }}</a>
+            </template>
+          </i18n-t>
+        </li>
+        <li class="univer_federation_doc_page-warning-list-item">
           <span class="univer_federation_doc_page-warning-list-item-title">{{ $t('univer_federation_doc_page.warning.collab') }}</span>
           <span class="univer_federation_doc_page-warning-list-item-desc">{{ $t('univer_federation_doc_page.warning.collab_desc') }}</span>
         </li>

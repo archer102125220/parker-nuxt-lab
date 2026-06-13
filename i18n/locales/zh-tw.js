@@ -1463,6 +1463,8 @@ export const zhTw = {
       server_export_desc: '無法保留鎖定狀態。標準 Office 格式不支援 Univer 自訂的區域鎖定機制，匯出的實體檔案將不含編輯限制。'
     },
     warning: {
+      performance_issue: '嘗試透過模組聯邦將 {link} 的版本導出並使用，但是目前發現載入很慢，並且有時候會出現整個網站變得很卡頓的狀況，目前還沒找到原因及解決辦法。',
+      parker_vue_lab: 'parker-vue-lab',
       title: '線上環境功能限制說明：',
       collab: '協同編輯 / 演示跟隨：',
       collab_desc: '依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。',
@@ -1487,6 +1489,8 @@ export const zhTw = {
   },
   univer_federation_sheet_page: {
     warning: {
+      performance_issue: '嘗試透過模組聯邦將 {link} 的版本導出並使用，但是目前發現載入很慢，並且有時候會出現整個網站變得很卡頓的狀況，目前還沒找到原因及解決辦法。',
+      parker_vue_lab: 'parker-vue-lab',
       title: '線上環境功能限制說明：',
       collab: '協同編輯 / 演示跟隨：',
       collab_desc: '依賴後端 universer 服務進行 WebSocket 訊息廣播，以及 collaboration-server 處理 OT (Operational Transformation) 演算法同步。',

@@ -1522,6 +1522,8 @@ export const en = {
       server_export_desc: 'Cannot retain the lock state. Standard Office formats do not support Univer\'s custom range locking mechanism, so exported physical files will not contain editing restrictions.'
     },
     warning: {
+      performance_issue: 'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
+      parker_vue_lab: 'parker-vue-lab',
       title: 'Online Environment Limitations:',
       collab: 'Collaborative Editing / Presentation Follow:',
       collab_desc: 'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
@@ -1546,6 +1548,8 @@ export const en = {
   },
   univer_federation_sheet_page: {
     warning: {
+      performance_issue: 'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
+      parker_vue_lab: 'parker-vue-lab',
       title: 'Online Environment Limitations:',
       collab: 'Collaborative Editing / Presentation Follow:',
       collab_desc: 'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
