@@ -25,7 +25,13 @@
 | **GitHub Copilot** | `.github/copilot-instructions.md` | GitHub Copilot Chat 專用指令 |
 | **Cursor AI** | `.cursor/rules/` | Cursor IDE 專用的 `.mdc` 規則檔 |
 
-> **注意**：`CLAUDE.md` 與 `GEMINI.md` 的內容應保持完全一致。
+> **注意**：`CLAUDE.md` 與 `GEMINI.md` 的內容目前應保持邏輯一致，但排版格式可能因 AI 模型而異。
+
+> 📝 **TODO (2026-06-13 紀錄)**：
+> 根據各 AI 官方提示詞工程（Prompt Engineering）指南的最新確認，不同的 AI 模型對於規則的吸收能力會因為排版格式而有顯著差異。為了讓 AI 嚴格遵守規範，未來需計畫將各個 Agent 的專屬規則檔重構為官方推薦的「最強約束格式」：
+> - **Anthropic Claude (`CLAUDE.md`)**：官方強烈建議使用 **XML 標籤**（如 `<rule>`, `<constraints>`, `<examples>`）來建立層級，這能大幅降低 Claude 忽略規則的機率。
+> - **Google Gemini (`GEMINI.md`)**：官方偏好結構化的 Markdown，並結合明確的任務邊界（如 `<task_constraints>`）、條列式的 **DO / DO NOT** 約束，以及 **Few-Shot Examples**（明確的 Good/Bad 範例對照）。
+> - **Cursor / Copilot 等**：需視其預設底層模型（如 Claude 3.5 Sonnet 或 GPT-4o）與其 IDE 官方的最新建議，進一步適配 `.mdc` 或專屬規則語法。
 
 ---
 
@@ -36,6 +42,7 @@
 | 文件 | 說明 |
 |------|------|
 | [css-conventions.md](./css-conventions.md) | CSS/SCSS 開發規範（屬性順序、BEM 命名、檔案組織） |
+| [vue-conventions.md](./vue-conventions.md) | Vue/Nuxt 開發規範（組件使用、模板排版與 I18n） |
 | [frontend-testing-guide.md](./frontend-testing-guide.md) | 前端測試設計指南 |
 
 ### Cursor IDE 規則 (`.cursor/rules/`)
@@ -98,6 +105,11 @@
    - ❌ 錯誤：直接使用 `NuxtLink`（會導致 `Property "NuxtLink" was accessed during render...` 錯誤）
    - ✅ 正確：`const NuxtLink = resolveComponent('NuxtLink')`
 
+2. **模板內文排版與 I18n**（必須遵守）：
+   - 為了方便翻譯與人工維護，**絕對禁止**在句子中間穿插 HTML 標籤（如 `<b>`, `<code>`）。
+   - 若翻譯字串需包含動態元件或連結，必須使用 Vue I18n 的 `<i18n-t>` 組件進行插值，嚴禁使用 `v-html`。
+   - 應將標題、圖示與內文明確切分為獨立的 HTML 結構（搭配 BEM 命名）。
+
 ---
 
 ## 📖 詳細規範
@@ -105,6 +117,7 @@
 請參閱各個規範文件獲取完整說明與範例：
 
 - **CSS 開發規範**: [css-conventions.md](./css-conventions.md)
+- **Vue/Nuxt 開發規範**: [vue-conventions.md](./vue-conventions.md)
 
 ---
 
