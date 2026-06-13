@@ -31,6 +31,11 @@ You are an AI assistant helping with a Nuxt 3 project (Vue 3, TypeScript, SCSS).
 - **Component Organization**:
   - `components/PascalCasePageName/` for single-page components.
   - `components/SharedFeature/` for multi-page shared components.
+- **Template Text Formatting & I18n**:
+  - **No Inline Tags**: DO NOT intersperse HTML tags (`<b>`, `<span>`) within plain text sentences.
+  - **Explicit Separation**: Separate text, titles, and icons into distinct structural HTML elements (BEM).
+  - **I18n Component**: Use `<i18n-t>` for translating strings with links/components. NEVER use `v-html`.
+
 
 ### TypeScript
 - **Strict Equality**: ALWAYS use `===` and `!==`.
