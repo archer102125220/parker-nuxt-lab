@@ -189,6 +189,21 @@ registerRoute(
   'GET'
 );
 
+registerRoute(
+  /^https:\/\/archer102125220\.github\.io\/parker-vue-lab\/.*$/i,
+  new CacheFirst({
+    cacheName: 'federation-cache',
+    expiration: {
+      maxEntries: 10,
+      maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+    },
+    cacheableResponse: {
+      statuses: [0, 200]
+    }
+  }),
+  'GET'
+);
+
 // 快取 Univer 相關的 CDN 靜態資源 (包含 Univer 本身及其相依套件 react, rxjs, echarts, vue)
 registerRoute(
   /^https:\/\/(unpkg\.com|cdn\.jsdelivr\.net)\/(npm\/)?(@univerjs(-pro)?|react(-dom)?|rxjs|echarts|vue)(@[^/]+)?(\/|$)/i,

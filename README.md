@@ -61,7 +61,7 @@ yarn dev
 HTTPS (uses certificates in `local-ssl/`, already wired via CLI flags):
 
 ```bash
-yarn dev-https
+yarn dev:https
 ```
 
 > Provide your own `local-ssl/cert.pem` and `local-ssl/key.pem` if needed.
@@ -89,7 +89,7 @@ yarn start
 # deps/dev
 yarn install
 yarn dev
-yarn dev-https
+yarn dev:https
 yarn build
 yarn preview
 yarn start

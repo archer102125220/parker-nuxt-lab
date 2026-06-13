@@ -108,7 +108,7 @@ webServer: {
 - **解決**：在 `.env.e2e` 中填入正確的環境變數（在本地開發時），並在 GitHub CI 中透過 Secrets 注入這些變數。
 
 ### 問題 3：Playwright "Connection refused" 錯誤
-- **原因**：Playwright 嘗試連線到 HTTP 3000，但在開發環境 (`yarn dev-https`) 我們是跑在 HTTPS 3000。
+- **原因**：Playwright 嘗試連線到 HTTP 3000，但在開發環境 (`yarn dev:https`) 我們是跑在 HTTPS 3000。
 - **解決**：
     1.  修改 `.env.e2e` 將 `VITE_API_BASE` 和 `VITE_DOMAIN` 指向 `http://localhost:3001` (生產模式 Port)。
     2.  確保測試前執行 `yarn build` 和 `yarn start`，讓應用程式跑在 HTTP 3001 上。

@@ -101,27 +101,55 @@ if (import.meta.client) {
       </ul>
     </div>
     <div class="univer_sheet_page-warning">
-      <p>⚠️ <b>線上環境功能限制說明：</b></p>
-      <ul>
-        <li>
-          <b>協同編輯 / 演示跟隨：</b> 依賴後端 <code>universer</code> 服務進行
-          WebSocket 訊息廣播，以及 <code>collaboration-server</code> 處理 OT
-          (Operational Transformation) 演算法同步。
+      <p class="univer_sheet_page-warning-title">
+        ⚠️
+        <b class="univer_sheet_page-warning-title-bold">
+          線上環境功能限制說明：
+        </b>
+      </p>
+      <ul class="univer_sheet_page-warning-list">
+        <li class="univer_sheet_page-warning-list-item">
+          <b class="univer_sheet_page-warning-list-item-bold">
+            協同編輯 / 演示跟隨：
+          </b>
+          依賴後端
+          <code class="univer_sheet_page-warning-list-item-code">
+            universer
+          </code>
+          服務進行 WebSocket 訊息廣播，以及
+          <code class="univer_sheet_page-warning-list-item-code">
+            collaboration-server
+          </code>
+          處理 OT (Operational Transformation) 演算法同步。
         </li>
-        <li>
-          <b>新建 / 加入房間：</b> 依賴
-          <code>collaboration-helper</code> 服務生成與儲存檔案快照 (Snapshot
-          API)。
+        <li class="univer_sheet_page-warning-list-item">
+          <b class="univer_sheet_page-warning-list-item-bold">
+            新建 / 加入房間：
+          </b>
+          依賴
+          <code class="univer_sheet_page-warning-list-item-code">
+            collaboration-helper
+          </code>
+          服務生成與儲存檔案快照 (Snapshot API)。
         </li>
-        <li>
-          <b>實體檔案匯出 (XLSX)：</b> 若需在伺服器端轉換並匯出實體 Office
-          檔案，需依賴高運算資源的 <code>exchange worker</code> 服務。
+        <li class="univer_sheet_page-warning-list-item">
+          <b class="univer_sheet_page-warning-list-item-bold">
+            實體檔案匯出 (XLSX)：
+          </b>
+          若需在伺服器端轉換並匯出實體 Office 檔案，需依賴高運算資源的
+          <code class="univer_sheet_page-warning-list-item-code">
+            exchange worker
+          </code>
+          服務。
         </li>
-        <li>
+        <li class="univer_sheet_page-warning-list-item">
           若在線上環境中遇到功能失效或 API 報錯，通常是因為缺乏上述後端 Docker
-          微服務所導致（例如 <code>/universer-api</code>），由於目前是 github
-          static page 做上線部署，因此若要測試需自行 clone 專案到本地端串接
-          univer docker 服務。
+          微服務所導致（例如
+          <code class="univer_sheet_page-warning-list-item-code">
+            /universer-api
+          </code>
+          ），由於目前是 Vercel 做上線部署，因此若要測試需自行 clone
+          專案到本地端串接 univer docker 服務。
         </li>
       </ul>
     </div>
@@ -211,6 +239,9 @@ if (import.meta.client) {
 </template>
 
 <style lang="scss" scoped>
+%bold {
+  font-weight: bold;
+}
 .univer_sheet_page {
   display: flex;
   flex-direction: column;
@@ -240,39 +271,39 @@ if (import.meta.client) {
     }
 
     &-bold {
-      font-weight: bold;
+      @extend %bold;
     }
   }
 
   &-warning {
-    padding: 12px 16px;
+    @extend .univer_sheet_page-remark;
     background-color: #f8d7da;
     color: #721c24;
-    border-bottom: 1px solid #f5c6cb;
-    font-size: 14px;
-    line-height: 1.5;
-    border-radius: 10px;
-    margin-bottom: 16px;
+    border-bottom-color: #f5c6cb;
 
-    p {
+    &-title {
       margin: 0 0 4px 0;
+
+      &-bold {
+        @extend %bold;
+      }
     }
 
-    ul {
+    &-list {
       margin: 0;
       padding-left: 20px;
-    }
-
-    b {
-      font-weight: bold;
-    }
-
-    code {
-      background-color: rgba(0, 0, 0, 0.05);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.9em;
+      &-item {
+        &-bold {
+          @extend %bold;
+        }
+        &-code {
+          background-color: rgba(0, 0, 0, 0.05);
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 0.9em;
+        }
+      }
     }
   }
 
@@ -385,6 +416,10 @@ if (import.meta.client) {
     color: #6c757d;
     font-size: 16px;
     background-color: #fff;
+  }
+
+  &-editor {
+    flex: 1;
   }
 }
 </style>

@@ -121,11 +121,18 @@ if (import.meta.client) {
       </ul>
     </div>
     <div class="univer_doc_page-warning">
-      <p>⚠️ <b>協同編輯 CDM 版功能限制說明：</b></p>
-      <ul>
-        <li>
-          目前測試如果用 CDM 版要觸發<b>協同編輯</b>功能，一定會跳缺少套件的
-          error ，所以如果使用 CDM 版，可能就沒辦法使用協同編輯了
+      <p class="univer_doc_page-warning-title">
+        ⚠️
+        <b class="univer_doc_page-warning-title-bold">
+          協同編輯 CDM 版功能限制說明：
+        </b>
+      </p>
+      <ul class="univer_doc_page-warning-list">
+        <li class="univer_doc_page-warning-list-item">
+          目前測試如果用 CDM 版要觸發
+          <b class="univer_doc_page-warning-list-item-bold">協同編輯</b>
+          功能，一定會跳缺少套件的 error ，所以如果使用 CDM
+          版，很可能無法使用協同編輯功能
         </li>
       </ul>
     </div>
@@ -199,6 +206,9 @@ if (import.meta.client) {
 </template>
 
 <style lang="scss" scoped>
+%bold {
+  font-weight: bold;
+}
 .univer_doc_page {
   display: flex;
   flex-direction: column;
@@ -220,15 +230,20 @@ if (import.meta.client) {
       &[css-is-spacing='true'] {
         margin-top: 12px;
       }
+
+      &-bold {
+        @extend %bold;
+      }
     }
 
     &-list {
       margin: 0;
       padding-left: 20px;
-    }
-
-    &-bold {
-      font-weight: bold;
+      &-item {
+        &-bold {
+          @extend %bold;
+        }
+      }
     }
   }
 
@@ -237,6 +252,19 @@ if (import.meta.client) {
     background-color: #f8d7da;
     color: #721c24;
     border-bottom-color: #f5c6cb;
+
+    &-title {
+      margin: 0 0 4px 0;
+    }
+
+    &-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    &-bold {
+      @extend %bold;
+    }
   }
 
   &-tools {

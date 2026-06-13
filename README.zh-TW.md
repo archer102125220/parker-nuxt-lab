@@ -52,7 +52,7 @@ yarn dev
 HTTPS 開發（使用 `local-ssl/` 憑證，已在指令內設好 `--https` 與 cert/key 路徑）：
 
 ```bash
-yarn dev-https
+yarn dev:https
 ```
 
 > 若需自備憑證，請將 `local-ssl/cert.pem`、`local-ssl/key.pem` 放入對應路徑。
@@ -80,7 +80,7 @@ yarn start
 # 依賴/開發
 yarn install
 yarn dev
-yarn dev-https
+yarn dev:https
 yarn build
 yarn preview
 yarn start
