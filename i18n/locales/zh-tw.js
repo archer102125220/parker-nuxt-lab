@@ -60,6 +60,10 @@ export const zhTw = {
         title: 'Univer Doc',
         desc: '由 Univer 提供的文件編輯功能。'
       },
+      univer_federation_doc: {
+        title: 'Univer Federation Doc',
+        desc: '透過模組聯邦整合 Univer 的文件編輯功能。'
+      },
       collabora_sheet: {
         title: 'Collabora Sheet',
         desc: '使用 Collabora 進行協作試算表編輯。'
@@ -71,6 +75,10 @@ export const zhTw = {
       univer_sheet: {
         title: 'Univer Sheet',
         desc: '由 Univer 提供的試算表功能。'
+      },
+      univer_federation_sheet: {
+        title: 'Univer Federation Sheet',
+        desc: '透過模組聯邦整合 Univer 的試算表功能。'
       },
       pdf_reader: {
         title: 'PDF.js 閱讀器',

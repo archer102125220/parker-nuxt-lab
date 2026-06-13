@@ -25,6 +25,11 @@ const toolCategories = computed(() => [
         title: t('office_tool_page.items.univer_doc.title'),
         desc: t('office_tool_page.items.univer_doc.desc'),
         path: '/office-tool/univer-doc'
+      },
+      {
+        title: t('office_tool_page.items.univer_federation_doc.title'),
+        desc: t('office_tool_page.items.univer_federation_doc.desc'),
+        path: '/office-tool/univer-federation-doc'
       }
     ]
   },
@@ -46,6 +51,11 @@ const toolCategories = computed(() => [
         title: t('office_tool_page.items.univer_sheet.title'),
         desc: t('office_tool_page.items.univer_sheet.desc'),
         path: '/office-tool/univer-sheet'
+      },
+      {
+        title: t('office_tool_page.items.univer_federation_sheet.title'),
+        desc: t('office_tool_page.items.univer_federation_sheet.desc'),
+        path: '/office-tool/univer-federation-sheet'
       }
     ]
   }

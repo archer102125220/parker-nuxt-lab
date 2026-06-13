@@ -60,6 +60,10 @@ export const en = {
         title: 'Univer Doc',
         desc: 'Document editing capabilities powered by Univer.'
       },
+      univer_federation_doc: {
+        title: 'Univer Federation Doc',
+        desc: 'Document editing integrating Univer via Module Federation.'
+      },
       collabora_sheet: {
         title: 'Collabora Sheet',
         desc: 'Collaborative spreadsheet editing using Collabora.'
@@ -71,6 +75,10 @@ export const en = {
       univer_sheet: {
         title: 'Univer Sheet',
         desc: 'Spreadsheet capabilities powered by Univer.'
+      },
+      univer_federation_sheet: {
+        title: 'Univer Federation Sheet',
+        desc: 'Spreadsheet integrating Univer via Module Federation.'
       },
       pdf_reader: {
         title: 'PDF.js Reader',
