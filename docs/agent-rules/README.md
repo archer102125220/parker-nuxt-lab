@@ -29,11 +29,12 @@
 
 > 📝 **TODO (2026-06-13 紀錄)**：
 > 根據各 AI 官方提示詞工程（Prompt Engineering）指南的最新確認，不同的 AI 模型對於規則的吸收能力會因為排版格式而有顯著差異。為了讓 AI 嚴格遵守規範，未來需計畫將各個 Agent 的專屬規則檔重構為官方推薦的「最強約束格式」：
-> - **Anthropic Claude (`CLAUDE.md`)**：官方強烈建議使用 **XML 標籤**（如 `<rule>`, `<constraints>`, `<examples>`）來建立層級，這能大幅降低 Claude 忽略規則的機率。
+> - **Anthropic Claude (`CLAUDE.md` 與 `.claude/rules/`)**：官方強烈建議使用 **XML 標籤**（如 `<rule>`, `<constraints>`, `<examples>`）來建立層級，這能大幅降低 Claude 忽略規則的機率。
 > - **Google Gemini (`GEMINI.md`)**：官方偏好結構化的 Markdown，並結合明確的任務邊界（如 `<task_constraints>`）、條列式的 **DO / DO NOT** 約束，以及 **Few-Shot Examples**（明確的 Good/Bad 範例對照）。
 > - **OpenAI / Codex (`AGENTS.md`)**：官方指南建議提供清晰的標題劃分、明確的系統角色定義、並盡量使用「要做什麼」取代「不要做什麼」的正向指令約束，未來也應調整使其更貼近 OpenAI 模型的解析偏好。
 > - **Antigravity Agent (`.agent/rules/`)**：作為高度自主的 Agent 系統，其最佳實踐是將規範拆分為單一職責的 Markdown 檔案（類似 Skills 或 Knowledge Items 機制），並在檔案中加上描述性質的結構化 Meta 資訊，讓 Agent 能根據當下任務精準檢索與載入所需規則。
-> - **Cursor / Copilot 等**：需視其預設底層模型（如 Claude 3.5 Sonnet 或 GPT-4o）與其 IDE 官方的最新建議，進一步適配 `.mdc` 或專屬規則語法。
+> - **Cursor (`.cursor/rules/`)**：目前已採用官方的 `.mdc` 附帶 YAML Frontmatter 的結構，但內文格式仍為通用 Markdown。未來需視其預設底層模型（如 Claude 3.5 Sonnet 或 GPT-4o）的解析偏好與其 IDE 官方的最新文件，決定內文是否應改用 XML 或其他特定標記語言。
+> - **GitHub Copilot (`.github/copilot-instructions.md`)**：需持續追蹤 GitHub Copilot 官方指引，必要時適配專屬規則語法。
 
 ---
 
