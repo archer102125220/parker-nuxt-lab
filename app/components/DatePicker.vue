@@ -13,6 +13,7 @@
 
 <script setup>
 import { zhTW, enUS, zhCN, zhHK } from 'date-fns/locale';
+// TODO:實作民國年份轉換（西元年-1911）及資料流雙向綁定
 
 const { locale: i18nLocale } = useI18n();
 
