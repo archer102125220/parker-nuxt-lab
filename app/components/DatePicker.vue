@@ -14,6 +14,9 @@
 <script setup>
 import { zhTW, enUS, zhCN, zhHK } from 'date-fns/locale';
 // TODO:實作民國年份轉換（西元年-1911）及資料流雙向綁定
+// https://vue3datepicker.com/slots/content/#action-preview
+// https://vue3datepicker.com/slots/trigger-and-input/#trigger
+// https://vue3datepicker.com/slots/sections/#action-row
 
 const { locale: i18nLocale } = useI18n();
 
@@ -23,12 +26,12 @@ const props = defineProps({
 });
 
 const safeLocale = computed(() => {
-  const _locale = (props.locale || '').toLowerCase();
-  if (_locale === 'zh-cn' || i18nLocale.value === 'zh-cn') {
+  const _locale = (props.locale || i18nLocale.value).toLowerCase();
+  if (_locale === 'zh-cn') {
     return zhCN;
-  } else if (_locale === 'zh-hk' || i18nLocale.value === 'zh-hk') {
+  } else if (_locale === 'zh-hk') {
     return zhHK;
-  } else if (_locale === 'zh-tw' || i18nLocale.value.includes('zh')) {
+  } else if (_locale === 'zh-tw' || _locale.includes('zh')) {
     return zhTW;
   }
   return enUS;
