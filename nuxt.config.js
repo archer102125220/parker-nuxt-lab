@@ -734,36 +734,18 @@ export default defineNuxtConfig({
   },
   css: ['@app/assets/styles/global.scss', '@app/assets/styles/animation.scss'],
   imports: {
-    // presets: [
-    //   {
-    //     from: '@gtm-support/vue-gtm',
-    //     imports: ['createGtm', 'useGtm']
-    //   }
-    // ],
     dirs: [
-      // Scan top-level modules
-      'composables',
-      // ... or scan modules nested one level deep with a specific name and file extension
-      'composables/*/index.{ts,js,mjs,mts}',
-      // ... or scan all modules within given directory
-      'composables/**',
-
-      'store',
-      'store/*/index.{ts,js,mjs,mts}',
-      'store/**',
-
-      'aframe/composables',
-      'aframe/composables/**'
+      '@app/composables',
+      '@app/composables/debounce',
+      '@app/composables/useRequest',
+      '@app/store',
+      '@app/aframe/composables'
     ]
   },
   components: {
     dirs: [
       { path: '@app/aframe/components', extensions: ['.vue'], prefix: false },
-      { path: '@/app/aframe/components', extensions: ['.vue'], prefix: false },
-      '~app/components',
-      '~/app/components/**',
-      '@app/components',
-      '@/app/components/**'
+      { path: '@app/components', extensions: ['.vue'], prefix: false }
     ]
   },
   modules: [

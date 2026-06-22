@@ -1,2 +1,2 @@
-export * from './useDebounceFn';
-export * from './useDebouncedValue';
+export { useDebounceFn } from './useDebounceFn';
+export { useDebouncedValue } from './useDebouncedValue';
