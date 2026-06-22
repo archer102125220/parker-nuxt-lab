@@ -36,7 +36,8 @@ export const en = {
   office_tool_page: {
     hero: {
       title: 'Office Tools',
-      description: 'Explore different document, spreadsheet, and PDF implementations.'
+      description:
+        'Explore different document, spreadsheet, and PDF implementations.'
     },
     categories: {
       doc: 'Documents (Doc)',
@@ -164,7 +165,8 @@ export const en = {
       notes_desc:
         'Practical records of daily work and private research on SEO and technology',
       animation_desc: 'Showcase of various animation effects and utilities',
-      office_tool_desc: 'Explore different document, spreadsheet, and PDF tools',
+      office_tool_desc:
+        'Explore different document, spreadsheet, and PDF tools',
       read_on_notion: 'Read on Notion'
     },
     stats: {
@@ -1049,9 +1051,7 @@ export const en = {
         'Testing custom flip-style countdown timer component functionality'
     },
     describe: {
-      text: 'Handcrafted flip-style countdown timer to avoid package conflicts in company projects',
-      strikethrough:
-        "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+      text: 'Handcrafted flip-style countdown timer to avoid package conflicts in company projects'
     }
   },
   components_test_page: {
@@ -1466,14 +1466,19 @@ export const en = {
     remark: {
       lock_title: 'Lock State Export Notes:',
       local_export: 'Local Export (JSON Snapshot):',
-      local_export_desc: 'Can retain the lock state. Custom range properties are recorded in the Snapshot and remain effective after reloading JSON.',
+      local_export_desc:
+        'Can retain the lock state. Custom range properties are recorded in the Snapshot and remain effective after reloading JSON.',
       server_export: 'Server Export (DOCX/XLSX):',
-      server_export_desc: 'Cannot retain the lock state. Standard Office formats do not support Univer\'s custom range locking mechanism, so exported physical files will not contain editing restrictions.',
+      server_export_desc:
+        "Cannot retain the lock state. Standard Office formats do not support Univer's custom range locking mechanism, so exported physical files will not contain editing restrictions.",
       univer_title: 'Univer Loading & Stability Notes:',
-      univer_npm_desc: 'The npm version of Univer seems to trigger endless re-renders in Nuxt due to bundle transpilation settings upon loading, so it has been switched to CDN. (To prove that the same code works properly in the NPM version, please refer to the {link} built with a clean Vue SPA project.)',
+      univer_npm_desc:
+        'The npm version of Univer seems to trigger endless re-renders in Nuxt due to bundle transpilation settings upon loading, so it has been switched to CDN. (To prove that the same code works properly in the NPM version, please refer to the {link} built with a clean Vue SPA project.)',
       univer_npm_demo_link: 'test page',
-      univer_stability: 'Currently, the Doc version is not very stable and prone to errors. If the editor fails to load properly, please try refreshing the page to reload the Univer package.',
-      univer_cdn_wait: 'Note that due to using a CDN, the initial loading time will be much longer than using the npm version. Please be patient.'
+      univer_stability:
+        'Currently, the Doc version is not very stable and prone to errors. If the editor fails to load properly, please try refreshing the page to reload the Univer package.',
+      univer_cdn_wait:
+        'Note that due to using a CDN, the initial loading time will be much longer than using the npm version. Please be patient.'
     },
     warning: {
       title: 'CDM Collab Edit Limitations:',
@@ -1487,27 +1492,35 @@ export const en = {
       collab_edit: 'Collaborative Editing',
       live_share: 'Presentation Follow'
     },
-    empty_room: 'Currently no room specified. Please "Create Room" to test collaborative editing.',
+    empty_room:
+      'Currently no room specified. Please "Create Room" to test collaborative editing.',
     create_room_fail_title: 'Cannot Create Room:',
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   },
   univer_sheet_page: {
     remark: {
       univer_title: 'Univer Loading & Stability Notes:',
-      univer_npm_desc: 'The npm version of Univer seems to trigger endless re-renders in Nuxt due to bundle transpilation settings upon loading, so it has been switched to CDN. (To prove that the same code works properly in the NPM version, please refer to the {link} built with a clean Vue SPA project.)',
+      univer_npm_desc:
+        'The npm version of Univer seems to trigger endless re-renders in Nuxt due to bundle transpilation settings upon loading, so it has been switched to CDN. (To prove that the same code works properly in the NPM version, please refer to the {link} built with a clean Vue SPA project.)',
       univer_npm_demo_link: 'test page',
-      univer_stability: 'The Sheet version is relatively mature and rarely fails to load. However, if the editor still does not load properly, please try refreshing the page to reload the Univer package.',
-      univer_cdn_wait: 'Note that due to using a CDN, the initial loading time will be much longer than using the npm version. Please be patient.'
+      univer_stability:
+        'The Sheet version is relatively mature and rarely fails to load. However, if the editor still does not load properly, please try refreshing the page to reload the Univer package.',
+      univer_cdn_wait:
+        'Note that due to using a CDN, the initial loading time will be much longer than using the npm version. Please be patient.'
     },
     warning: {
       title: 'Online Environment Limitations:',
       collab: 'Collaborative Editing / Presentation Follow:',
-      collab_desc: 'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
+      collab_desc:
+        'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
       room: 'Create / Join Room:',
-      room_desc: 'Relies on the collaboration-helper service to generate and store document snapshots (Snapshot API).',
+      room_desc:
+        'Relies on the collaboration-helper service to generate and store document snapshots (Snapshot API).',
       export: 'Physical File Export (XLSX):',
-      export_desc: 'To convert and export physical Office files on the server side, the high-resource exchange worker service is required.',
-      overall_desc: 'If you encounter feature failures or API errors in the online environment, it is usually due to the lack of the above backend Docker microservices (e.g., /universer-api). Since Vercel is currently used for deployment, you need to clone the project locally and connect the Univer docker services to test.'
+      export_desc:
+        'To convert and export physical Office files on the server side, the high-resource exchange worker service is required.',
+      overall_desc:
+        'If you encounter feature failures or API errors in the online environment, it is usually due to the lack of the above backend Docker microservices (e.g., /universer-api). Since Vercel is currently used for deployment, you need to clone the project locally and connect the Univer docker services to test.'
     },
     tools: {
       current_role: 'Current Test Role:',
@@ -1517,7 +1530,8 @@ export const en = {
       collab_edit: 'Collaborative Editing',
       live_share: 'Presentation Follow'
     },
-    empty_room: 'Currently no room specified. Please "Create Room" to test collaborative editing.',
+    empty_room:
+      'Currently no room specified. Please "Create Room" to test collaborative editing.',
     create_room_fail_title: 'Cannot Create Room:',
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   },
@@ -1525,21 +1539,28 @@ export const en = {
     remark: {
       lock_title: 'Lock State Export Notes:',
       local_export: 'Local Export (JSON Snapshot):',
-      local_export_desc: 'Can retain the lock state. Custom range properties are recorded in the Snapshot and remain effective after reloading JSON.',
+      local_export_desc:
+        'Can retain the lock state. Custom range properties are recorded in the Snapshot and remain effective after reloading JSON.',
       server_export: 'Server Export (DOCX/XLSX):',
-      server_export_desc: 'Cannot retain the lock state. Standard Office formats do not support Univer\'s custom range locking mechanism, so exported physical files will not contain editing restrictions.'
+      server_export_desc:
+        "Cannot retain the lock state. Standard Office formats do not support Univer's custom range locking mechanism, so exported physical files will not contain editing restrictions."
     },
     warning: {
-      performance_issue: 'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
+      performance_issue:
+        'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
       parker_vue_lab: 'parker-vue-lab',
       title: 'Online Environment Limitations:',
       collab: 'Collaborative Editing / Presentation Follow:',
-      collab_desc: 'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
+      collab_desc:
+        'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
       room: 'Create / Join Room:',
-      room_desc: 'Relies on the collaboration-helper service to generate and store document snapshots (Snapshot API).',
+      room_desc:
+        'Relies on the collaboration-helper service to generate and store document snapshots (Snapshot API).',
       export: 'Physical File Export (XLSX):',
-      export_desc: 'To convert and export physical Office files on the server side, the high-resource exchange worker service is required.',
-      overall_desc: 'If you encounter feature failures or API errors in the online environment, it is usually due to the lack of the above backend Docker microservices (e.g., /universer-api). Since Vercel is currently used for deployment, you need to clone the project locally and connect the Univer docker services to test.'
+      export_desc:
+        'To convert and export physical Office files on the server side, the high-resource exchange worker service is required.',
+      overall_desc:
+        'If you encounter feature failures or API errors in the online environment, it is usually due to the lack of the above backend Docker microservices (e.g., /universer-api). Since Vercel is currently used for deployment, you need to clone the project locally and connect the Univer docker services to test.'
     },
     tools: {
       current_role: 'Current Test Role:',
@@ -1550,22 +1571,28 @@ export const en = {
       collab_edit: 'Collaborative Editing',
       live_share: 'Presentation Follow'
     },
-    empty_room: 'Currently no room specified. Please "Create Room" to test collaborative editing.',
+    empty_room:
+      'Currently no room specified. Please "Create Room" to test collaborative editing.',
     create_room_fail_title: 'Cannot Create Room:',
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   },
   univer_federation_sheet_page: {
     warning: {
-      performance_issue: 'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
+      performance_issue:
+        'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
       parker_vue_lab: 'parker-vue-lab',
       title: 'Online Environment Limitations:',
       collab: 'Collaborative Editing / Presentation Follow:',
-      collab_desc: 'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
+      collab_desc:
+        'Relies on the backend universer service for WebSocket message broadcasting, and collaboration-server for OT (Operational Transformation) algorithm synchronization.',
       room: 'Create / Join Room:',
-      room_desc: 'Relies on the collaboration-helper service to generate and store document snapshots (Snapshot API).',
+      room_desc:
+        'Relies on the collaboration-helper service to generate and store document snapshots (Snapshot API).',
       export: 'Physical File Export (XLSX):',
-      export_desc: 'To convert and export physical Office files on the server side, the high-resource exchange worker service is required.',
-      overall_desc: 'If you encounter feature failures or API errors in the online environment, it is usually due to the lack of the above backend Docker microservices (e.g., /universer-api). Since Vercel is currently used for deployment, you need to clone the project locally and connect the Univer docker services to test.'
+      export_desc:
+        'To convert and export physical Office files on the server side, the high-resource exchange worker service is required.',
+      overall_desc:
+        'If you encounter feature failures or API errors in the online environment, it is usually due to the lack of the above backend Docker microservices (e.g., /universer-api). Since Vercel is currently used for deployment, you need to clone the project locally and connect the Univer docker services to test.'
     },
     tools: {
       current_role: 'Current Test Role:',
@@ -1576,7 +1603,8 @@ export const en = {
       collab_edit: 'Collaborative Editing',
       live_share: 'Presentation Follow'
     },
-    empty_room: 'Currently no room specified. Please "Create Room" to test collaborative editing.',
+    empty_room:
+      'Currently no room specified. Please "Create Room" to test collaborative editing.',
     create_room_fail_title: 'Cannot Create Room:',
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   }

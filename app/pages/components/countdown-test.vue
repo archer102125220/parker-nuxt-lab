@@ -22,46 +22,45 @@
     <!-- Main Content -->
     <section class="countdown_test_page-section">
       <div class="countdown_test_page-describe">
-        <p class="countdown_test_page-describe-text">{{ $t('countdown_test_page.describe.text') }}</p>
-        <span class="countdown_test_page-describe-note">（</span>
-        <del class="countdown_test_page-describe-strikethrough">{{ $t('countdown_test_page.describe.strikethrough') }}</del>
-        <span class="countdown_test_page-describe-note">）</span>
+        <p class="countdown_test_page-describe-text">
+          {{ $t('countdown_test_page.describe.text') }}
+        </p>
       </div>
 
-    <form class="countdown_test_page-form" @submit.prevent="handleSecondDemo">
-      <p class="countdown_test_page-form-title">測試秒數：</p>
-      <v-number-input
-        v-model="demoInput"
-        clearable
-        label="測試秒數："
-        control-variant="stacked"
-        class="countdown_test_page-form-input"
-        :reverse="false"
-        :hide-input="false"
-        :inset="false"
+      <form class="countdown_test_page-form" @submit.prevent="handleSecondDemo">
+        <p class="countdown_test_page-form-title">測試秒數：</p>
+        <v-number-input
+          v-model="demoInput"
+          clearable
+          label="測試秒數："
+          control-variant="stacked"
+          class="countdown_test_page-form-input"
+          :reverse="false"
+          :hide-input="false"
+          :inset="false"
+        />
+
+        <v-radio-group v-model="demoRadio">
+          <v-radio label="向上翻" value="up" color="primary" />
+          <v-radio label="向下翻" value="down" color="primary" />
+          <!-- <v-radio label="淡出淡入" value="fade" color="primary" /> -->
+        </v-radio-group>
+
+        <div class="countdown_test_page-form-submit">
+          <v-btn color="primary" type="submit">更新</v-btn>
+        </div>
+      </form>
+
+      <Countdown
+        :initial-seconds="demoNumber"
+        :countdown-type="demoCountdownType"
       />
 
-      <v-radio-group v-model="demoRadio">
-        <v-radio label="向上翻" value="up" color="primary" />
-        <v-radio label="向下翻" value="down" color="primary" />
-        <!-- <v-radio label="淡出淡入" value="fade" color="primary" /> -->
-      </v-radio-group>
+      <p style="margin: 16px 0">*製作中↓</p>
 
-      <div class="countdown_test_page-form-submit">
-        <v-btn color="primary" type="submit">更新</v-btn>
-      </div>
-    </form>
-
-    <Countdown
-      :initial-seconds="demoNumber"
-      :countdown-type="demoCountdownType"
-    />
-
-    <p style="margin: 16px 0">*製作中↓</p>
-
-    <form class="countdown_test_page-form" @submit.prevent="handleDateDemo">
-      <p class="countdown_test_page-form-title">測試秒數：</p>
-      <!-- <v-number-input
+      <form class="countdown_test_page-form" @submit.prevent="handleDateDemo">
+        <p class="countdown_test_page-form-title">測試秒數：</p>
+        <!-- <v-number-input
         clearable
         label="測試秒數："
         control-variant="stacked"
@@ -71,62 +70,62 @@
         :inset="false"
         v-model="demoInput"
       /> -->
-      <DatePicker v-model="demoDate" />
+        <DatePicker v-model="demoDate" />
 
-      <v-radio-group v-model="demoDateRadio">
-        <v-radio label="向上翻" value="up" color="primary" />
-        <v-radio label="向下翻" value="down" color="primary" />
-        <!-- <v-radio label="淡出淡入" value="fade" color="primary" /> -->
-      </v-radio-group>
+        <v-radio-group v-model="demoDateRadio">
+          <v-radio label="向上翻" value="up" color="primary" />
+          <v-radio label="向下翻" value="down" color="primary" />
+          <!-- <v-radio label="淡出淡入" value="fade" color="primary" /> -->
+        </v-radio-group>
 
-      <div class="countdown_test_page-form-submit">
-        <v-btn color="primary" type="submit">更新</v-btn>
+        <div class="countdown_test_page-form-submit">
+          <v-btn color="primary" type="submit">更新</v-btn>
+        </div>
+      </form>
+
+      <div class="countdown_test_page-count_down_date">
+        <Countdown
+          v-model="demoCountdownYear"
+          v-model:is-countdown-start="demoCountdownYearStart"
+          :initial-seconds="demoCountdownLimitYear"
+          :countdown-type="demoCountdownType"
+        />
+        <p>/</p>
+        <Countdown
+          v-model="demoCountdownMonth"
+          v-model:is-countdown-start="demoCountdownMonthStart"
+          :initial-seconds="demoCountdownLimitMonth"
+          :countdown-type="demoCountdownType"
+        />
+        <p>/</p>
+        <Countdown
+          v-model="demoCountdownDay"
+          v-model:is-countdown-start="demoCountdownDayStart"
+          :initial-seconds="demoCountdownLimitDay"
+          :countdown-type="demoCountdownType"
+        />
+        <p>/</p>
+        <Countdown
+          v-model="demoCountdownHour"
+          v-model:is-countdown-start="demoCountdownHourStart"
+          :initial-seconds="demoCountdownLimitHour"
+          :countdown-type="demoCountdownType"
+        />
+        <p>:</p>
+        <Countdown
+          v-model="demoCountdownMinute"
+          v-model:is-countdown-start="demoCountdownMinuteStart"
+          :initial-seconds="demoCountdownLimitMinute"
+          :countdown-type="demoCountdownType"
+        />
+        <p>:</p>
+        <Countdown
+          v-model="demoCountdownSecond"
+          v-model:is-countdown-start="demoCountdownSecondStart"
+          :initial-seconds="demoCountdownLimitSecond"
+          :countdown-type="demoCountdownType"
+        />
       </div>
-    </form>
-
-    <div class="countdown_test_page-count_down_date">
-      <Countdown
-        v-model="demoCountdownYear"
-        v-model:is-countdown-start="demoCountdownYearStart"
-        :initial-seconds="demoCountdownLimitYear"
-        :countdown-type="demoCountdownType"
-      />
-      <p>/</p>
-      <Countdown
-        v-model="demoCountdownMonth"
-        v-model:is-countdown-start="demoCountdownMonthStart"
-        :initial-seconds="demoCountdownLimitMonth"
-        :countdown-type="demoCountdownType"
-      />
-      <p>/</p>
-      <Countdown
-        v-model="demoCountdownDay"
-        v-model:is-countdown-start="demoCountdownDayStart"
-        :initial-seconds="demoCountdownLimitDay"
-        :countdown-type="demoCountdownType"
-      />
-      <p>/</p>
-      <Countdown
-        v-model="demoCountdownHour"
-        v-model:is-countdown-start="demoCountdownHourStart"
-        :initial-seconds="demoCountdownLimitHour"
-        :countdown-type="demoCountdownType"
-      />
-      <p>:</p>
-      <Countdown
-        v-model="demoCountdownMinute"
-        v-model:is-countdown-start="demoCountdownMinuteStart"
-        :initial-seconds="demoCountdownLimitMinute"
-        :countdown-type="demoCountdownType"
-      />
-      <p>:</p>
-      <Countdown
-        v-model="demoCountdownSecond"
-        v-model:is-countdown-start="demoCountdownSecondStart"
-        :initial-seconds="demoCountdownLimitSecond"
-        :countdown-type="demoCountdownType"
-      />
-    </div>
     </section>
   </div>
 </template>
@@ -239,7 +238,7 @@ function handleDateDemo() {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -247,7 +246,11 @@ function handleDateDemo() {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

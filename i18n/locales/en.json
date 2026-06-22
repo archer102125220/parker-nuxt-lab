@@ -883,8 +883,7 @@
             "description": "Testing custom flip-style countdown timer component functionality"
         },
         "describe": {
-            "text": "Handcrafted flip-style countdown timer to avoid package conflicts in company projects",
-            "strikethrough": "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+            "text": "Handcrafted flip-style countdown timer to avoid package conflicts in company projects"
         }
     },
     "components_test_page": {

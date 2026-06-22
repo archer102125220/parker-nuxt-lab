@@ -30,7 +30,8 @@ export function getFirebaseAdminAndroid() {
   return firebaseAdminAndroid;
 }
 
-export const IOS_CREDENTIAL = import.meta.env.VITE_IOS_FIREBASE_CREDENTIAL || '{}';
+export const IOS_CREDENTIAL =
+  import.meta.env.VITE_IOS_FIREBASE_CREDENTIAL || '{}';
 
 export const IOS_FIREBASE_ADMIN_CONFIG = {
   authDomain: 'httpsbibiancojp.firebaseapp.com',
@@ -58,7 +59,11 @@ export function firebaseAdminServerInit() {
 
     if (getFirebaseAdmin('[DEFAULT]')) {
       firebaseAdminWeb = getFirebaseAdmin('[DEFAULT]');
-    } else if (typeof CREDENTIAL === 'string' && CREDENTIAL !== '{}' && CREDENTIAL !== '') {
+    } else if (
+      typeof CREDENTIAL === 'string' &&
+      CREDENTIAL !== '{}' &&
+      CREDENTIAL !== ''
+    ) {
       firebaseAdminWeb = firebaseAdmin.initializeApp({
         ...FIREBASE_ADMIN_CONFIG,
         credential: firebaseAdmin.credential.cert(JSON.parse(CREDENTIAL))
@@ -67,7 +72,11 @@ export function firebaseAdminServerInit() {
 
     if (getFirebaseAdmin('androidFirebaseAdmin')) {
       firebaseAdminAndroid = getFirebaseAdmin('androidFirebaseAdmin');
-    } else if (typeof ANDROID_CREDENTIAL === 'string' && ANDROID_CREDENTIAL !== '{}' && ANDROID_CREDENTIAL !== '') {
+    } else if (
+      typeof ANDROID_CREDENTIAL === 'string' &&
+      ANDROID_CREDENTIAL !== '{}' &&
+      ANDROID_CREDENTIAL !== ''
+    ) {
       firebaseAdminAndroid = firebaseAdmin.initializeApp(
         {
           ...ANDROID_FIREBASE_ADMIN_CONFIG,
@@ -81,7 +90,11 @@ export function firebaseAdminServerInit() {
 
     if (getFirebaseAdmin('iosFirebaseAdmin')) {
       firebaseAdminIos = getFirebaseAdmin('iosFirebaseAdmin');
-    } else if (typeof IOS_CREDENTIAL === 'string' && IOS_CREDENTIAL !== '{}' && IOS_CREDENTIAL !== '') {
+    } else if (
+      typeof IOS_CREDENTIAL === 'string' &&
+      IOS_CREDENTIAL !== '{}' &&
+      IOS_CREDENTIAL !== ''
+    ) {
       firebaseAdminIos = firebaseAdmin.initializeApp(
         {
           ...IOS_FIREBASE_ADMIN_CONFIG,
@@ -95,21 +108,18 @@ export function firebaseAdminServerInit() {
   }
 
   if (typeof firebaseAdminWeb !== 'object' || firebaseAdminWeb === null) {
-    console.warn(
-      'Firebase Admin app initialization failed.'
-    );
+    console.warn('Firebase Admin app initialization failed.');
   }
 
-  if (typeof firebaseAdminAndroid !== 'object' || firebaseAdminAndroid === null) {
-    console.warn(
-      'Android Firebase Admin app initialization failed.'
-    );
+  if (
+    typeof firebaseAdminAndroid !== 'object' ||
+    firebaseAdminAndroid === null
+  ) {
+    console.warn('Android Firebase Admin app initialization failed.');
   }
 
   if (typeof firebaseAdminIos !== 'object' || firebaseAdminIos === null) {
-    console.warn(
-      'IOS Firebase Admin app initialization failed.'
-    );
+    console.warn('IOS Firebase Admin app initialization failed.');
   }
 
   return { firebaseAdminWeb, firebaseAdminAndroid, firebaseAdminIos };
@@ -119,4 +129,3 @@ export function firebaseAdminServerInit() {
 // https://vercel.com/archer102125220/resume-web
 
 firebaseAdminServerInit();
-

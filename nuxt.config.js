@@ -745,7 +745,7 @@ export default defineNuxtConfig({
   components: {
     dirs: [
       { path: '@app/aframe/components', extensions: ['.vue'], prefix: false },
-      { path: '@app/components', extensions: ['.vue'], prefix: false }
+      '@app/components'
     ]
   },
   modules: [
