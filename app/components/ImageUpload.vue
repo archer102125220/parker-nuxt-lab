@@ -184,8 +184,8 @@ function drop(e) {
     file.height = e.target.height;
 
     if (typeof props.fileCheck === 'function') {
-      const fileChecked = await props.fileCheck(file);
-      if (fileChecked === false) return;
+      const isValid = await props.fileCheck(file);
+      if (isValid === false) return;
     }
     emit('change', file);
     modelValue.value = file;
