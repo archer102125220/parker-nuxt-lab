@@ -35,7 +35,7 @@ const props = defineProps({
   },
   collaboraHost: {
     type: String,
-    default: ''
+    default: import.meta.env.VITE_COLLABORA_HOST || ''
   },
   fileId: {
     type: String,
@@ -43,7 +43,7 @@ const props = defineProps({
   },
   wopiHost: {
     type: String,
-    default: import.meta.env.VITE_DOMAIN
+    default: import.meta.env.VITE_WOPI_HOST || ''
   },
   language: {
     type: String,
