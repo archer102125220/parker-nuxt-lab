@@ -1,5 +1,3 @@
-import { verifyWopiToken } from '@server/utils/wopiAuth';
-
 // WOPI Lock / Unlock / RefreshLock / GetLock handler
 // Collabora 在存檔前一定會先嘗試 Lock，收到非 200 就會拒絕儲存
 // Reference: https://learn.microsoft.com/en-us/microsoft-365/cloud-storage-partner-program/rest/files/lock
@@ -8,16 +6,8 @@ import { verifyWopiToken } from '@server/utils/wopiAuth';
 const lockStore = new Map();
 
 export default defineEventHandler(async (event) => {
-  const filesId = getRouterParam(event, 'filesId');
-  const { access_token } = getQuery(event);
+  const { filesId } = event.context.wopi;
   const operation = getHeader(event, 'X-WOPI-Override');
-
-  try {
-    verifyWopiToken(access_token);
-  } catch (err) {
-    console.error(`[WOPI ${operation}] Token validation failed:`, err.message);
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
-  }
 
   console.log(`[WOPI Lock] operation=${operation}, filesId=${filesId}`);
 
