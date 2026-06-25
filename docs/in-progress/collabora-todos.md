@@ -21,7 +21,7 @@ Collabora 編輯器在 Iframe 內運作時，會透過原生的 `postMessage` �
 
 **待完成：**
 - [ ] 支援 `PutRelativeFile`：讓使用者可以在 Collabora 介面中「另存新檔」。
-- [ ] 支援 `RenameFile`：允許直接從 Collabora 的標題列重新命名檔案。
+- [x] 支援 `RenameFile`：允許直接從 Collabora 的標題列重新命名檔案。
 - [ ] 支援多人協作廣播：目前我們使用簡單的 Map 來做 Lock，如果是真實環境，可能需要搭配 Redis 或資料庫來確保 Lock 狀態，甚至是紀錄正在協作的 user。
 
 ---

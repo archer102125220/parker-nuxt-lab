@@ -1,15 +1,77 @@
+import path from 'path';
+import fs from 'fs-extra';
+
+import { lockStore, renameMap } from '@server/utils/wopiStore';
+
 // WOPI Lock / Unlock / RefreshLock / GetLock handler
 // Collabora 在存檔前一定會先嘗試 Lock，收到非 200 就會拒絕儲存
 // Reference: https://learn.microsoft.com/en-us/microsoft-365/cloud-storage-partner-program/rest/files/lock
 
-// 簡易的 in-memory lock store（lab 用，正式環境應改用 Redis / DB）
-const lockStore = new Map();
+const __dirname = path.resolve();
+const FILE_DIR = path.join(__dirname, 'public');
 
 export default defineEventHandler(async (event) => {
-  const { filesId } = event.context.wopi;
+  const { filesId, filetype } = event.context.wopi;
   const operation = getHeader(event, 'X-WOPI-Override');
 
   console.log(`[WOPI Lock] operation=${operation}, filesId=${filesId}`);
+
+  if (operation === 'RENAME_FILE') {
+    console.log('RENAME_FILE');
+
+    // 從 header 取得新檔名
+    let requestedName = getHeader(event, 'X-WOPI-RequestedName') || '';
+
+    try {
+      // 嘗試 decode，以防傳過來的是 URL encoded 的字串
+      requestedName = decodeURIComponent(requestedName);
+    } catch (_e) {}
+
+    // 取出副檔名確保一致性，或者允許使用者自己改副檔名
+    let newName = requestedName;
+    if (!newName.toLowerCase().endsWith(`.${filetype.toLowerCase()}`)) {
+      newName = `${newName}.${filetype}`;
+    }
+
+    const dirPath = path.join(FILE_DIR, filetype);
+
+    // 若曾經改名過，要拿真實檔名來做 oldFilePath
+    const actualOldFilename = renameMap.get(filesId) || filesId;
+    const oldFilePath = path.join(dirPath, actualOldFilename);
+    const newFilePath = path.join(dirPath, newName);
+
+    // 檢查有沒有 lock 衝突
+    const lockToken = getHeader(event, 'X-WOPI-Lock');
+    const currentLock = lockStore.get(filesId);
+    if (currentLock && currentLock !== lockToken) {
+      setHeader(event, 'X-WOPI-Lock', currentLock);
+      setResponseStatus(event, 409);
+      return 'Lock mismatch';
+    }
+
+    try {
+      fs.renameSync(oldFilePath, newFilePath);
+
+      // 將 filesId 指向新的實體檔名
+      renameMap.set(filesId, newName);
+
+      // 注意：rename 後，如果是用 filesId 存取，那麼新的 ID 就是 newName
+      // 把 Lock 的對應也移轉過去
+      if (currentLock) {
+        lockStore.delete(filesId);
+        lockStore.set(newName, currentLock);
+        // 同時也保留舊的 lock 對應，因為 filesId 沒變
+        lockStore.set(filesId, currentLock);
+      }
+
+      setResponseStatus(event, 200);
+      return { Name: newName };
+    } catch (error) {
+      console.error('Rename failed', error);
+      setResponseStatus(event, 500);
+      return 'Internal Server Error';
+    }
+  }
 
   if (operation === 'LOCK') {
     console.log('LOCK');

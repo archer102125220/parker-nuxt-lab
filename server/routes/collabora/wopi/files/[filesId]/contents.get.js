@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 
+import { renameMap } from '@server/utils/wopiStore';
 
 const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
@@ -14,9 +15,9 @@ export default defineEventHandler((event) => {
   console.log({ filesId, filetype });
 
   const dirPath = path.join(FILE_DIR, filetype);
-  // 正式時應替換為 filesId
-  // const filePath = path.join(FILE_DIR, 'test.xlsx');
-  const filePath = path.join(dirPath, filesId);
+  // 若檔案有被改名過，則取其真正的實體檔名
+  const actualFilename = renameMap.get(filesId) || filesId;
+  const filePath = path.join(dirPath, actualFilename);
 
   // 建立可讀串流並直接回傳
   const readStream = fs.createReadStream(filePath);

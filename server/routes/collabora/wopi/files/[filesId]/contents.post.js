@@ -1,6 +1,8 @@
 import path from 'path';
 import fs from 'fs-extra';
 
+import { renameMap } from '@server/utils/wopiStore';
+
 const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
@@ -9,17 +11,19 @@ export default defineEventHandler(async (event) => {
   // 由 middleware wopi.js 統一處理驗證與參數解析
   const { filesId, filetype } = event.context.wopi;
 
+  // 參數 false 非常重要！它確保 Nitro 回傳的是 Node.js Buffer，而不是被編碼過的 String
+  const rawBinary = await readRawBody(event, false);
+  console.log('filesId', filesId);
+
   const dirPath = path.join(FILE_DIR, filetype);
-  // const filePath = path.join(FILE_DIR, 'test.xlsx');
-  const filePath = path.join(dirPath, filesId);
+  // 若檔案有被改名過，則取其真正的實體檔名
+  const actualFilename = renameMap.get(filesId) || filesId;
+  const filePath = path.join(dirPath, actualFilename);
 
   console.log('save');
   console.log({ filesId, filetype });
   console.log('[PutFile] 實際寫入路徑:', filePath); // ← 確認寫入位置
   console.log('[PutFile] FILE_DIR:', FILE_DIR);
-
-  // 參數 false 非常重要！它確保 Nitro 回傳的是 Node.js Buffer，而不是被編碼過的 String
-  const rawBinary = await readRawBody(event, false);
 
   if (Buffer.isBuffer(rawBinary) === false || rawBinary.length === 0) {
     const error = createError({
