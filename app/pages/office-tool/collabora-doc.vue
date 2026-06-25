@@ -34,14 +34,23 @@ const userId = useState(
 );
 const userName = ref('Test User');
 const token = ref('');
+
+const { $successMessage } = useNuxtApp();
+
+const onCollaboraClose = () => {
+  // 關閉編輯器：清除 token 即可返回表單
+  token.value = '';
+};
+
+const onCollaboraSave = () => {
+  $successMessage('文件已儲存！ (File Saved)');
+};
 </script>
 
 <template>
   <div class="collabora_doc_page">
     <div class="collabora_doc_page-description">
       <p>{{ $t('collabora_doc_page.title') }}</p>
-      <p>{{ $t('collabora_doc_page.description') }}</p>
-
       <a
         href="https://hub.docker.com/r/collabora/code"
         target="_blank"
@@ -49,6 +58,9 @@ const token = ref('');
       >
         {{ $t('collabora_doc_page.docker_btn') }}
       </a>
+
+      <p>{{ $t('collabora_doc_page.description') }}</p>
+
       <!-- <v-btn
         href="https://hub.docker.com/r/collabora/code"
         target="_blank"
@@ -80,6 +92,8 @@ const token = ref('');
       :file-id="fileId"
       :wopi-host="wopiHost"
       :language="language"
+      @close="onCollaboraClose"
+      @save="onCollaboraSave"
     />
   </div>
 </template>

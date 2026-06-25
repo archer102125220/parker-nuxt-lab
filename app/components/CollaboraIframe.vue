@@ -51,7 +51,10 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['close', 'save']);
+
 const loading = ref(true);
+const iframeRef = ref(null);
 
 const iframeUrl = computed(() => {
   const fileType =
@@ -61,9 +64,42 @@ const iframeUrl = computed(() => {
     `${props.wopiHost}/wopi/files/${props.fileId}`
   );
   console.log({
-    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}`
+    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}&closebutton=1`
   });
-  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}`;
+  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}&closebutton=1`;
+});
+
+const handleMessage = (e) => {
+  try {
+    const msg = JSON.parse(e.data);
+    if (msg.MessageId === 'UI_Close') {
+      console.log('Collabora: UI_Close received');
+      emit('close');
+    } else if (msg.MessageId === 'UI_Save') {
+      console.log('Collabora: UI_Save received');
+      emit('save');
+    }
+  } catch (error) {
+    // 忽略非 JSON 格式的訊息
+  }
+};
+
+const onIframeLoad = () => {
+  loading.value = false;
+  if (iframeRef.value && iframeRef.value.contentWindow) {
+    iframeRef.value.contentWindow.postMessage(
+      JSON.stringify({ MessageId: 'Host_PostmessageReady' }),
+      '*'
+    );
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('message', handleMessage);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('message', handleMessage);
 });
 </script>
 
@@ -76,10 +112,11 @@ const iframeUrl = computed(() => {
     />
     <ClientOnly>
       <iframe
+        ref="iframeRef"
         class="collabora_iframe-iframe"
         :src="iframeUrl"
         frameborder="0"
-        @load="loading = false"
+        @load="onIframeLoad"
       />
     </ClientOnly>
   </div>

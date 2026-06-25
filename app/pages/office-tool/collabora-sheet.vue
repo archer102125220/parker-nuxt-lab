@@ -33,6 +33,17 @@ const userId = useState(
 );
 const userName = ref('Test User');
 const token = ref('');
+
+const { $successMessage } = useNuxtApp();
+
+const onCollaboraClose = () => {
+  // 關閉編輯器：清除 token 即可返回表單
+  token.value = '';
+};
+
+const onCollaboraSave = () => {
+  $successMessage('文件已儲存！ (File Saved)');
+};
 </script>
 
 <template>
@@ -67,6 +78,8 @@ const token = ref('');
       :file-type="fileType"
       :wopi-host="wopiHost"
       :language="language"
+      @close="onCollaboraClose"
+      @save="onCollaboraSave"
     />
   </div>
 </template>

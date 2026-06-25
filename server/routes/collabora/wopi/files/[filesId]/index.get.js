@@ -28,6 +28,8 @@ export default defineEventHandler((event) => {
     UserCanWrite: true, // 允許目前 user 編輯
     SupportsUpdate: true, // 關鍵！告訴 Collabora: 此 WOPI Host 支援 PutFile
     SupportsLocks: true, // 告訴 Collabora: 此 WOPI Host 支援 Lock/Unlock
+    ClosePostMessage: true, // 允許透過 PostMessage 傳遞關閉事件
+    PostMessageOrigin: '*', // 允許接收 PostMessage 的來源 (建議生產環境設為確切網域)
     Version: stats.mtimeMs.toString() // 版本號，存檔後應更新，Collabora 用來偵測衝突
   };
 });
