@@ -34,7 +34,6 @@ const userId = useState(
 );
 const userName = ref('Test User');
 const token = ref('');
-
 </script>
 
 <template>
@@ -81,19 +80,16 @@ const token = ref('');
 <style lang="scss" scoped>
 .collabora_sheet_page {
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
 
   &-description {
     margin-bottom: 16px;
   }
 
-
-
-
-
   &-collabora {
     width: 100%;
-    height: 100%;
+    height: 90vh;
   }
 }
 </style>
