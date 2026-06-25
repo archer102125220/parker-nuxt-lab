@@ -1,23 +1,13 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { verifyWopiToken } from '@server/utils/wopiAuth';
 
 const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler(async (event) => {
-  // const { filesId } = event.context.params;
-  const filesId = getRouterParam(event, 'filesId');
-  const filetype = filesId.split('.').pop();
-  const { access_token } = getQuery(event);
-
-  try {
-    verifyWopiToken(access_token);
-  } catch (err) {
-    console.error('[WOPI PutFile] Token validation failed:', err.message);
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
-  }
+  // 由 middleware wopi.js 統一處理驗證與參數解析
+  const { filesId, filetype } = event.context.wopi;
 
   const dirPath = path.join(FILE_DIR, filetype);
   // const filePath = path.join(FILE_DIR, 'test.xlsx');
@@ -31,7 +21,7 @@ export default defineEventHandler(async (event) => {
   // 參數 false 非常重要！它確保 Nitro 回傳的是 Node.js Buffer，而不是被編碼過的 String
   const rawBinary = await readRawBody(event, false);
 
-  if (!rawBinary) {
+  if (Buffer.isBuffer(rawBinary) === false || rawBinary.length === 0) {
     const error = createError({
       statusCode: 400,
       statusMessage: 'Empty File Body'

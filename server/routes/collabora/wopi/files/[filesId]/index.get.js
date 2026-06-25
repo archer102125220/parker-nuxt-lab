@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { verifyWopiToken } from '@server/utils/wopiAuth';
+
 
 const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
@@ -8,21 +8,10 @@ const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler((event) => {
-  const filesId = getRouterParam(event, 'filesId');
-  const filetype = filesId.split('.').pop();
-  const { access_token } = getQuery(event);
+  const { filesId, filetype, userInfo } = event.context.wopi;
 
   console.log('read');
   console.log({ filesId, filetype });
-
-  let userInfo;
-  try {
-    // 這裡使用自動 import 的 verifyWopiToken
-    userInfo = verifyWopiToken(access_token);
-  } catch (err) {
-    console.error('[WOPI CheckFileInfo] Token validation failed:', err.message);
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
-  }
 
   const dirPath = path.join(FILE_DIR, filetype);
   // 正式時應替換為 filesId

@@ -1,26 +1,17 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { verifyWopiToken } from '@server/utils/wopiAuth';
+
 
 const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler((event) => {
-  // const { filesId } = event.context.params;
-  const filesId = getRouterParam(event, 'filesId');
-  const filetype = filesId.split('.').pop();
-  const { access_token } = getQuery(event);
+  // 由 middleware wopi.js 統一處理驗證與參數解析
+  const { filesId, filetype } = event.context.wopi;
 
   console.log('edit');
   console.log({ filesId, filetype });
-
-  try {
-    verifyWopiToken(access_token);
-  } catch (err) {
-    console.error('[WOPI GetFile] Token validation failed:', err.message);
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
-  }
 
   const dirPath = path.join(FILE_DIR, filetype);
   // 正式時應替換為 filesId

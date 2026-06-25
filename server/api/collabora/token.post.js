@@ -12,7 +12,6 @@ export default defineEventHandler(async (event) => {
   }
 
   // 這裡使用剛剛建立的 wopiAuth util
-  // 因為是放在 server/utils 裡，Nuxt 3 會自動 import
   const token = generateWopiToken(userId, userName);
 
   return {
