@@ -3,7 +3,6 @@ import { COLLABORA_LOCALES } from '@app/components/CollaboraIframe.vue';
 
 const route = useRoute();
 const { locale } = useI18n();
-const systemStore = useSystemStore();
 
 const language = computed(() => {
   const _locale =
@@ -43,7 +42,14 @@ const token = ref('');
       <p>{{ $t('collabora_doc_page.title') }}</p>
       <p>{{ $t('collabora_doc_page.description') }}</p>
 
-      <v-btn
+      <a
+        href="https://hub.docker.com/r/collabora/code"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ $t('collabora_doc_page.docker_btn') }}
+      </a>
+      <!-- <v-btn
         href="https://hub.docker.com/r/collabora/code"
         target="_blank"
         rel="noopener noreferrer"
@@ -53,7 +59,7 @@ const token = ref('');
       >
         <p>{{ $t('collabora_doc_page.docker_btn') }}</p>
         <v-icon icon="mdi-open-in-new" size="small" />
-      </v-btn>
+      </v-btn> -->
     </div>
 
     <OfficeToolCollaboraGuide />
@@ -85,6 +91,12 @@ const token = ref('');
   min-height: 100vh;
 
   &-description {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    column-gap: 16px;
+
     margin-bottom: 16px;
   }
 
