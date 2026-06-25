@@ -59,7 +59,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'base-uri': ["'self'"],
   'font-src': [
@@ -89,7 +90,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'form-action': [
     "'self'",
@@ -115,7 +117,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'img-src': [
     "'self'",
@@ -148,7 +151,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'object-src': ["'none'"],
   'script-src-attr': ["'none'"],
@@ -167,7 +171,8 @@ const CONTENT_SECURITY_POLICY = {
   //   'https://va.vercel-scripts.com',
   //   'https://unpkg.com/rxjs',
   //   'https://unpkg.com/@univerjs',
-  //   'http://localhost:9980'
+  //   'http://localhost:9980',
+  //   'https://localhost:9980'
   // ],
   'script-src': [
     "'self'",
@@ -206,7 +211,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'style-src': [
     "'self'",
@@ -237,7 +243,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'connect-src': [
     "'self'",
@@ -274,7 +281,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'worker-src': ["'self'", 'blob:'],
   'frame-ancestors': [
@@ -303,7 +311,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'frame-src': [
     "'self'",
@@ -332,7 +341,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'media-src': [
     "'self'",
@@ -361,7 +371,8 @@ const CONTENT_SECURITY_POLICY = {
     'https://cdn.jsdelivr.net/npm/@univerjs/',
     'https://cdn.jsdelivr.net/npm/@univerjs-pro/',
 
-    'http://localhost:9980'
+    'http://localhost:9980',
+    'https://localhost:9980'
   ],
   'upgrade-insecure-requests': true
 };

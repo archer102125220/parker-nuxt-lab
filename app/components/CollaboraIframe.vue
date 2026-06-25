@@ -58,12 +58,12 @@ const iframeUrl = computed(() => {
     COLLABORA_FILE_TYPE.find((item) => item.code === props.fileType)?.code ||
     'xlsx';
   const encodedWopiSrc = encodeURIComponent(
-    `${props.wopiHost}/wopi/files/${props.fileId}?token=${props.token}&filetype=${fileType}`
+    `${props.wopiHost}/wopi/files/${props.fileId}`
   );
   console.log({
-    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&lang=${props.language}`
+    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}`
   });
-  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&lang=${props.language}`;
+  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}`;
 });
 </script>
 
