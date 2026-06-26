@@ -36,14 +36,14 @@ const token = ref('');
 
 const { $successMessage } = useNuxtApp();
 
-const onCollaboraClose = () => {
+function onCollaboraClose() {
   // 關閉編輯器：清除 token 即可返回表單
   token.value = '';
-};
+}
 
-const onCollaboraSave = () => {
+function onCollaboraSave() {
   $successMessage('文件已儲存！ (File Saved)');
-};
+}
 </script>
 
 <template>

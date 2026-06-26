@@ -7,15 +7,15 @@ const dockerCommandHttp =
 const dockerCommandHttps =
   'docker run -t -d -p 9980:9980 -e "aliasgroup1=https://192.168.139.3:3000,https://host.docker.internal:3000" -e "extra_params=--o:ssl.enable=true --o:ssl.ssl_verification=false" collabora/code';
 
-const copyDockerCommand = async (cmd) => {
+async function copyDockerCommand(copyContent) {
   try {
-    await navigator.clipboard.writeText(cmd);
+    await navigator.clipboard.writeText(copyContent);
     $successMessage('已複製指令');
   } catch (err) {
     console.error(err);
     $errorMessage('複製失敗');
   }
-};
+}
 </script>
 
 <template>
@@ -69,8 +69,7 @@ const copyDockerCommand = async (cmd) => {
             host.docker.internal。
           </p>
           <p class="office_tool_collabora_guide-content-note-item">
-            同時也必須在啟動指令的 aliasgroup1 中包含對應的 IP
-            網域以通過授權。
+            同時也必須在啟動指令的 aliasgroup1 中包含對應的 IP 網域以通過授權。
           </p>
         </div>
         <div class="office_tool_collabora_guide-content-troubleshoot">
@@ -100,8 +99,8 @@ const copyDockerCommand = async (cmd) => {
             Collabora 阻擋斷線。
           </p>
           <p class="office_tool_collabora_guide-content-troubleshoot-item">
-            解決方案：HTTPS 指令中必須加上 --o:ssl.ssl_verification=false
-            來關閉 Collabora 的 SSL 驗證。
+            解決方案：HTTPS 指令中必須加上 --o:ssl.ssl_verification=false 來關閉
+            Collabora 的 SSL 驗證。
           </p>
         </div>
       </v-expansion-panel-text>
