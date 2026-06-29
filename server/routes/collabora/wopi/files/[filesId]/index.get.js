@@ -35,13 +35,15 @@ export default defineEventHandler(async (event) => {
     OwnerId: 'test-owner', // 檔案擁有者 ID（通常是開檔者或系統寫死）
     UserId: userInfo.userId, // 目前操作者 ID（必填，沒有會拒絕寫入）
     UserFriendlyName: userInfo.userName, // 顯示給其他協作者看的名稱（必填）
-    UserCanWrite: true, // 允許目前 user 編輯
+    UserCanWrite: (userInfo.permissions?.DisableWrite ?? false) === false, // 允許目前 user 編輯
     SupportsUpdate: true, // 關鍵！告訴 Collabora: 此 WOPI Host 支援 PutFile
     SupportsLocks: true, // 告訴 Collabora: 此 WOPI Host 支援 Lock/Unlock
     SupportsRename: true, // 告訴 Collabora: 支援 RENAME_FILE
-    UserCanRename: true, // 允許此使用者重新命名
-    UserCanNotWriteRelative: false, // 允許「另存新檔」
-    DisableExport: false, // 允許「匯出為」
+    UserCanRename: (userInfo.permissions?.DisableRename ?? false) === false, // 允許此使用者重新命名
+    UserCanNotWriteRelative: userInfo.permissions?.DisableSaveAs ?? false, // 允許「另存新檔」
+    DisableExport: userInfo.permissions?.DisableExport ?? false, // 允許「匯出為」
+    DisableCopy: userInfo.permissions?.DisableCopy ?? false, // 允許「複製」
+    DisablePrint: userInfo.permissions?.DisablePrint ?? false, // 允許「列印」
     ClosePostMessage: true, // 允許透過 PostMessage 傳遞關閉事件
     PostMessageOrigin: '*', // 允許接收 PostMessage 的來源 (建議生產環境設為確切網域)
     Version: stats.mtimeMs.toString() // 版本號，存檔後應更新，Collabora 用來偵測衝突

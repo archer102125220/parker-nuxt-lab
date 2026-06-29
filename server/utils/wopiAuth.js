@@ -10,10 +10,11 @@ const WOPI_SECRET =
 /**
  * 產生一個帶有 HMAC 簽章的 Base64 Token
  */
-export function generateWopiToken(userId, userName) {
+export function generateWopiToken(userId, userName, permissions = {}) {
   const payload = {
     userId,
     userName,
+    permissions,
     exp: Date.now() + 24 * 60 * 60 * 1000 // 24小時後過期
   };
 

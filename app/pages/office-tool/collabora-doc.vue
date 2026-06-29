@@ -37,6 +37,14 @@ const userId = useState(
 );
 const userName = ref('Test User');
 const token = ref('');
+const permissions = useState('collabora_permissions', () => ({
+  DisableWrite: false,
+  DisableRename: false,
+  DisableSaveAs: false,
+  DisableExport: false,
+  DisableCopy: false,
+  DisablePrint: false
+}));
 
 const { $successMessage } = useNuxtApp();
 
@@ -111,6 +119,7 @@ watch(
       v-model:user-id="userId"
       v-model:user-name="userName"
       v-model:token="token"
+      v-model:permissions="permissions"
     />
 
     <CollaboraIframe

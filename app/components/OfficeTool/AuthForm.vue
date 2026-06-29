@@ -10,6 +10,18 @@ const { $request, $errorMessage } = useNuxtApp();
 const isGenerating = ref(false);
 const panel = ref(0);
 
+const permissions = defineModel('permissions', {
+  type: Object,
+  default: () => ({
+    DisableWrite: false,
+    DisableRename: false,
+    DisableSaveAs: false,
+    DisableExport: false,
+    DisableCopy: false,
+    DisablePrint: false
+  })
+});
+
 async function generateToken() {
   if (
     typeof userId.value !== 'string' ||
@@ -26,7 +38,8 @@ async function generateToken() {
     isGenerating.value = true;
     const response = await $request.post('/collabora/token', {
       userId: userId.value,
-      userName: userName.value
+      userName: userName.value,
+      permissions: permissions.value
     });
     token.value = response.token;
     emit('success', response.token);
@@ -80,6 +93,55 @@ watch(
               hide-details="auto"
             />
           </div>
+
+          <div class="office_tool_auth_form-form-permissions">
+            <p class="office_tool_auth_form-form-permissions-title">權限設定 (Permissions)</p>
+            <div class="office_tool_auth_form-form-permissions-grid">
+              <v-switch
+                v-model="permissions.DisableWrite"
+                label="停用編輯"
+                color="primary"
+                hide-details
+                density="compact"
+              />
+              <v-switch
+                v-model="permissions.DisableRename"
+                label="停用重新命名"
+                color="primary"
+                hide-details
+                density="compact"
+              />
+              <v-switch
+                v-model="permissions.DisableSaveAs"
+                label="停用另存新檔"
+                color="primary"
+                hide-details
+                density="compact"
+              />
+              <v-switch
+                v-model="permissions.DisableExport"
+                label="停用匯出"
+                color="primary"
+                hide-details
+                density="compact"
+              />
+              <v-switch
+                v-model="permissions.DisableCopy"
+                label="停用複製"
+                color="primary"
+                hide-details
+                density="compact"
+              />
+              <v-switch
+                v-model="permissions.DisablePrint"
+                label="停用列印"
+                color="primary"
+                hide-details
+                density="compact"
+              />
+            </div>
+          </div>
+
           <v-btn
             class="office_tool_auth_form-form-btn"
             color="primary"
@@ -125,6 +187,25 @@ watch(
 
       &-input {
         flex: 1;
+      }
+    }
+
+    &-permissions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      &-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        margin-bottom: 4px;
+      }
+
+      &-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px;
       }
     }
 

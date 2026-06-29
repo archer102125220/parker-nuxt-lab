@@ -2,7 +2,7 @@ import { generateWopiToken } from '@server/utils/wopiAuth';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { userId, userName } = body;
+  const { userId, userName, permissions } = body;
 
   if (!userId || !userName) {
     throw createError({
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // 這裡使用剛剛建立的 wopiAuth util
-  const token = generateWopiToken(userId, userName);
+  const token = generateWopiToken(userId, userName, permissions || {});
 
   return {
     success: true,
