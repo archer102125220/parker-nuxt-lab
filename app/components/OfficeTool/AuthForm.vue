@@ -3,6 +3,7 @@ const emit = defineEmits(['success', 'error']);
 
 const userId = defineModel('userId', { type: String, required: true });
 const userName = defineModel('userName', { type: String, required: true });
+const token = defineModel('token', { type: String, default: '' });
 
 const systemStore = useSystemStore();
 const { $request, $errorMessage } = useNuxtApp();
@@ -27,6 +28,7 @@ async function generateToken() {
       userId: userId.value,
       userName: userName.value
     });
+    token.value = response.token;
     emit('success', response.token);
     panel.value = undefined;
   } catch (error) {
@@ -38,6 +40,14 @@ async function generateToken() {
     systemStore.setLoading(false);
   }
 }
+
+watch(
+  () => token.value,
+  (newToken) => {
+    panel.value =
+      typeof newToken !== 'string' || newToken === '' ? 0 : undefined;
+  }
+);
 </script>
 
 <template>

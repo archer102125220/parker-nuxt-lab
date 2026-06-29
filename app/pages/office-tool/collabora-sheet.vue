@@ -65,7 +65,7 @@ function onCollaboraSave() {
     <OfficeToolAuthForm
       v-model:user-id="userId"
       v-model:user-name="userName"
-      @success="token = $event"
+      v-model:token="token"
     />
 
     <CollaboraIframe

@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
   const dirPath = path.join(FILE_DIR, filetype);
   // 若檔案有被改名過，則取其真正的實體檔名
-  const actualFilename = renameMap.get(filesId) || filesId;
+  const actualFilename = (await renameMap.getItem(filesId)) || filesId;
   const filePath = path.join(dirPath, actualFilename);
 
   console.log('save');

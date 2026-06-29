@@ -64,35 +64,78 @@ const iframeUrl = computed(() => {
     `${props.wopiHost}/wopi/files/${props.fileId}`
   );
   console.log({
-    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}&closebutton=1`
+    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&type=${fileType}&access_token=${props.token}&lang=${props.language}&closebutton=1`
   });
-  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&access_token=${props.token}&lang=${props.language}&closebutton=1`;
+  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&type=${fileType}&access_token=${props.token}&lang=${props.language}&closebutton=1`;
 });
 
-const handleMessage = (e) => {
+function handleMessage(e) {
   try {
+    if (typeof e?.data !== 'string' || e.data === '') {
+      return;
+    }
     const msg = JSON.parse(e.data);
+    e.msgData = msg;
+
+    // 開發階段方便觀察所有從 Collabora 送出來的事件
+    if (
+      !['Status_Indicator', 'Doc_SizeChanged', 'View_Added'].includes(
+        msg.MessageId
+      )
+    ) {
+      console.log('Collabora message received:', msg.MessageId, msg);
+    }
+
+    if (
+      msg.MessageId === 'App_LoadingStatus' &&
+      (msg.Values?.Status === 'Document_Loaded' ||
+        msg.Values?.Status === 'Frame_Ready')
+    ) {
+      if (typeof iframeRef.value?.contentWindow?.postMessage === 'function') {
+        iframeRef.value.contentWindow.postMessage(
+          JSON.stringify({ MessageId: 'Host_PostmessageReady' }),
+          props.collaboraHost
+        );
+      }
+    }
+
     if (msg.MessageId === 'UI_Close') {
-      console.log('Collabora: UI_Close received');
-      emit('close');
+      emit('close', e);
     } else if (msg.MessageId === 'UI_Save') {
-      console.log('Collabora: UI_Save received');
-      emit('save');
+      emit('save', e);
+    } else if (msg.MessageId === 'UI_SaveAs') {
+      // 攔截「另存新檔」事件，向使用者詢問新檔名
+      const newName = prompt(
+        '請輸入新檔名 (請保留副檔名，例如 filename.docx)',
+        ''
+      );
+      if (typeof newName === 'string' && newName !== '') {
+        // 回傳 Action_SaveAs，Collabora 收到後就會觸發後端 PUT_RELATIVE
+        if (typeof iframeRef.value?.contentWindow?.postMessage === 'function') {
+          iframeRef.value.contentWindow.postMessage(
+            JSON.stringify({
+              MessageId: 'Action_SaveAs',
+              SendTime: Date.now(),
+              Values: { Filename: newName }
+            }),
+            props.collaboraHost
+          );
+        }
+      }
+    } else if (msg.MessageId === 'UI_InsertGraphic') {
+      // 未來若要支援插入圖片，可在此攔截並開啟自己的檔案選擇器
+      // 然後回傳 Action_InsertGraphic
+      console.log('User clicked insert graphic');
     }
   } catch (error) {
     // 忽略非 JSON 格式的訊息
+    console.error(error);
   }
-};
+}
 
-const onIframeLoad = () => {
+function onIframeLoad() {
   loading.value = false;
-  if (iframeRef.value && iframeRef.value.contentWindow) {
-    iframeRef.value.contentWindow.postMessage(
-      JSON.stringify({ MessageId: 'Host_PostmessageReady' }),
-      '*'
-    );
-  }
-};
+}
 
 onMounted(() => {
   window.addEventListener('message', handleMessage);

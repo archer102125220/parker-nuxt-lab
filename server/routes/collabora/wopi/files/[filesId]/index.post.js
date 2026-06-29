@@ -36,13 +36,13 @@ export default defineEventHandler(async (event) => {
     const dirPath = path.join(FILE_DIR, filetype);
 
     // 若曾經改名過，要拿真實檔名來做 oldFilePath
-    const actualOldFilename = renameMap.get(filesId) || filesId;
+    const actualOldFilename = (await renameMap.getItem(filesId)) || filesId;
     const oldFilePath = path.join(dirPath, actualOldFilename);
     const newFilePath = path.join(dirPath, newName);
 
     // 檢查有沒有 lock 衝突
     const lockToken = getHeader(event, 'X-WOPI-Lock');
-    const currentLock = lockStore.get(filesId);
+    const currentLock = await lockStore.getItem(filesId);
     if (currentLock && currentLock !== lockToken) {
       setHeader(event, 'X-WOPI-Lock', currentLock);
       setResponseStatus(event, 409);
@@ -53,15 +53,15 @@ export default defineEventHandler(async (event) => {
       fs.renameSync(oldFilePath, newFilePath);
 
       // 將 filesId 指向新的實體檔名
-      renameMap.set(filesId, newName);
+      await renameMap.setItem(filesId, newName);
 
       // 注意：rename 後，如果是用 filesId 存取，那麼新的 ID 就是 newName
       // 把 Lock 的對應也移轉過去
       if (currentLock) {
-        lockStore.delete(filesId);
-        lockStore.set(newName, currentLock);
+        await lockStore.removeItem(filesId);
+        await lockStore.setItem(newName, currentLock);
         // 同時也保留舊的 lock 對應，因為 filesId 沒變
-        lockStore.set(filesId, currentLock);
+        await lockStore.setItem(filesId, currentLock);
       }
 
       setResponseStatus(event, 200);
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     console.log('LOCK');
 
     const lockToken = getHeader(event, 'X-WOPI-Lock');
-    const currentLock = lockStore.get(filesId);
+    const currentLock = await lockStore.getItem(filesId);
 
     if (typeof currentLock === 'string' && currentLock !== '') {
       // 已有 lock
@@ -99,7 +99,7 @@ export default defineEventHandler(async (event) => {
 
     console.log('X-WOPI-LOCK', lockToken, 200);
     // 無 lock → 建立新 lock
-    lockStore.set(filesId, lockToken);
+    await lockStore.setItem(filesId, lockToken);
     setHeader(event, 'X-WOPI-Lock', lockToken);
     setResponseStatus(event, 200);
     return '';
@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
     console.log('UNLOCK');
 
     const lockToken = getHeader(event, 'X-WOPI-Lock');
-    const currentLock = lockStore.get(filesId);
+    const currentLock = await lockStore.getItem(filesId);
 
     if (currentLock !== lockToken) {
       console.log('X-WOPI-Lock', currentLock ?? '', 409);
@@ -119,7 +119,7 @@ export default defineEventHandler(async (event) => {
     }
 
     console.log('X-WOPI-Lock', 200);
-    lockStore.delete(filesId);
+    await lockStore.removeItem(filesId);
     setResponseStatus(event, 200);
     return '';
   }
@@ -128,7 +128,7 @@ export default defineEventHandler(async (event) => {
     console.log('REFRESH_LOCK');
 
     const lockToken = getHeader(event, 'X-WOPI-Lock');
-    const currentLock = lockStore.get(filesId);
+    const currentLock = await lockStore.getItem(filesId);
 
     if (currentLock !== lockToken) {
       console.log('X-WOPI-Lock', currentLock ?? '', 409);
@@ -146,7 +146,7 @@ export default defineEventHandler(async (event) => {
   if (operation === 'GET_LOCK') {
     console.log('GET_LOCK');
 
-    const currentLock = lockStore.get(filesId);
+    const currentLock = await lockStore.getItem(filesId);
     setHeader(event, 'X-WOPI-Lock', currentLock ?? '');
     setResponseStatus(event, 200);
     return '';

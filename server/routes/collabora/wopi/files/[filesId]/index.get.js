@@ -7,7 +7,7 @@ const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
 console.log({ __dirname, FILE_DIR });
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const { filesId, filetype, userInfo } = event.context.wopi;
 
   console.log('read');
@@ -15,7 +15,7 @@ export default defineEventHandler((event) => {
 
   const dirPath = path.join(FILE_DIR, filetype);
   // 若檔案有被改名過，則取其真正的實體檔名
-  const actualFilename = renameMap.get(filesId) || filesId;
+  const actualFilename = (await renameMap.getItem(filesId)) || filesId;
   const filePath = path.join(dirPath, actualFilename);
   const stats = fs.statSync(filePath);
 

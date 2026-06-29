@@ -38,6 +38,7 @@ const token = ref('');
 const { $successMessage } = useNuxtApp();
 
 function onCollaboraClose() {
+  console.log('onCollaboraClose');
   // 關閉編輯器：清除 token 即可返回表單
   token.value = '';
 }
@@ -79,7 +80,7 @@ function onCollaboraSave() {
     <OfficeToolAuthForm
       v-model:user-id="userId"
       v-model:user-name="userName"
-      @success="token = $event"
+      v-model:token="token"
     />
 
     <CollaboraIframe

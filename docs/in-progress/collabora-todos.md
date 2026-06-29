@@ -20,9 +20,9 @@ Collabora 編輯器在 Iframe 內運作時，會透過原生的 `postMessage` �
 若未來有進階需求，可擴充實作以下功能：
 
 **待完成：**
-- [ ] 支援 `PutRelativeFile`：讓使用者可以在 Collabora 介面中「另存新檔」。
+- [x] 支援 `PutRelativeFile`：讓使用者可以在 Collabora 介面中「另存新檔」。
 - [x] 支援 `RenameFile`：允許直接從 Collabora 的標題列重新命名檔案。
-- [ ] 支援多人協作廣播：目前我們使用簡單的 Map 來做 Lock，如果是真實環境，可能需要搭配 Redis 或資料庫來確保 Lock 狀態，甚至是紀錄正在協作的 user。
+- [x] 支援多人協作廣播：目前我們使用簡單的 Map 來做 Lock，如果是真實環境，可能需要搭配 Redis 或資料庫來確保 Lock 狀態，甚至是紀錄正在協作的 user。（已改為使用 Nitro 的 `useStorage('wopi')`，未來可輕鬆抽換為 Redis 等儲存層）。
 
 ---
 

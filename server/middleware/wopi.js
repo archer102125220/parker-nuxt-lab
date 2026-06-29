@@ -10,30 +10,57 @@ export default defineEventHandler((event) => {
     const filesId = parts[4];
 
     if (filesId) {
+      const { access_token, type } = getQuery(event);
+
       // 1. 檔案型別驗證
-      const filetype = filesId.split('.').pop();
-      const allowedTypes = ['xlsx', 'docx', 'pptx'];
-      
-      if (!allowedTypes.includes(filetype)) {
-        console.error('[WOPI Middleware] 不支援的檔案格式:', filetype);
-        throw createError({ statusCode: 400, statusMessage: 'Unsupported file type' });
+      let filetype = type?.substring(0, type?.indexOf('?')) || '';
+      let baseId = filesId;
+
+      if (filesId.includes('.')) {
+        const partsId = filesId.split('.');
+        const originalExt = partsId.pop();
+        baseId = partsId.join('.');
+        if (!filetype) {
+          filetype = originalExt;
+        }
       }
 
+      const allowedTypes = ['xlsx', 'docx', 'pptx'];
+
+      if (
+        typeof filetype !== 'string' ||
+        filetype === '' ||
+        allowedTypes.includes(filetype) === false
+      ) {
+        console.error('[WOPI Middleware] 不支援的檔案格式:', filetype);
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Unsupported file type'
+        });
+      }
+
+      const actualFilename = decodeURIComponent(`${baseId}.${filetype}`);
+
       // 2. Token 授權驗證
-      const { access_token } = getQuery(event);
       let userInfo;
       try {
         userInfo = verifyWopiToken(access_token);
       } catch (err) {
-        console.error('[WOPI Middleware] Token validation failed:', err.message);
+        console.error(
+          '[WOPI Middleware] Token validation failed:',
+          err.message
+        );
         throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
       }
+
+      const correctedFilesId = `${baseId}.${filetype}`;
 
       // 將驗證結果綁定到 context 供後面的 API 使用
       event.context.wopi = {
         userInfo,
         filetype,
-        filesId
+        filesId: correctedFilesId,
+        actualFilename
       };
     }
   }
