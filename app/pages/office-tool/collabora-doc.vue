@@ -2,6 +2,7 @@
 import { COLLABORA_LOCALES } from '@app/components/CollaboraIframe.vue';
 
 const route = useRoute();
+// const router = useRouter();
 const { locale } = useI18n();
 
 const language = computed(() => {
@@ -16,8 +17,10 @@ const language = computed(() => {
   return target?.code ?? 'zh-TW';
 });
 
-const fileType = computed(() => route.query.type || 'docx');
-const fileId = computed(() => route.query.file || 'test.docx');
+const queryFileType = computed(() => route.query.type || 'docx');
+const queryFileId = computed(() => route.query.file || 'test.docx');
+const fileType = ref(queryFileType.value);
+const fileId = ref(queryFileId.value);
 const collaboraHost = computed(() => {
   return import.meta.env.VITE_COLLABORA_HOST || 'http://localhost:9980';
 });
@@ -46,6 +49,33 @@ function onCollaboraClose() {
 function onCollaboraSave() {
   $successMessage('文件已儲存！ (File Saved)');
 }
+
+function onCollaboraSaveAs(msgData, newFilename) {
+  $successMessage(`已另存新檔為 ${newFilename}！`);
+  // const newFileType = newFilename.includes('.')
+  //   ? newFilename.split('.').pop()
+  //   : fileType.value;
+
+  // router.push({
+  //   query: {
+  //     ...route.query,
+  //     file: newFilename,
+  //     type: newFileType
+  //   }
+  // });
+}
+
+watch(
+  () => [queryFileType.value, queryFileId.value],
+  ([newQueryFileType, newQueryFileId]) => {
+    if (newQueryFileType !== fileType.value) {
+      fileType.value = newQueryFileType;
+    }
+    if (newQueryFileId !== fileId.value) {
+      fileId.value = newQueryFileId;
+    }
+  }
+);
 </script>
 
 <template>
@@ -86,15 +116,16 @@ function onCollaboraSave() {
     <CollaboraIframe
       v-if="token"
       :key="token"
+      v-model:file-id="fileId"
+      v-model:file-type="fileType"
       class="collabora_doc_page-collabora"
       :token="token"
       :collabora-host="collaboraHost"
-      :file-type="fileType"
-      :file-id="fileId"
       :wopi-host="wopiHost"
       :language="language"
       @close="onCollaboraClose"
       @save="onCollaboraSave"
+      @save-as-completed="onCollaboraSaveAs"
     />
   </div>
 </template>

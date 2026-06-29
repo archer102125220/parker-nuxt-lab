@@ -144,6 +144,81 @@ export default defineEventHandler(async (event) => {
     return '';
   }
 
+  if (operation === 'PUT_RELATIVE') {
+    console.log('PUT_RELATIVE');
+
+    // 取得想要的檔名
+    let suggestedTarget = getHeader(event, 'X-WOPI-SuggestedTarget');
+    let relativeTarget = getHeader(event, 'X-WOPI-RelativeTarget');
+    let targetName = '';
+
+    try {
+      if (suggestedTarget) {
+        suggestedTarget = decodeURIComponent(suggestedTarget);
+      }
+    } catch (_e) {}
+    try {
+      if (relativeTarget) {
+        relativeTarget = decodeURIComponent(relativeTarget);
+      }
+    } catch (_e) {}
+
+    const { actualFilename } = event.context.wopi;
+    const baseNameWithoutExt = actualFilename.includes('.')
+      ? actualFilename.substring(0, actualFilename.lastIndexOf('.'))
+      : actualFilename;
+
+    if (relativeTarget) {
+      targetName = relativeTarget;
+    } else if (
+      typeof suggestedTarget === 'string' &&
+      suggestedTarget.startsWith('.')
+    ) {
+      targetName = `${baseNameWithoutExt}${suggestedTarget}`;
+    } else if (typeof suggestedTarget === 'string') {
+      targetName = suggestedTarget;
+    } else {
+      targetName = `Copy_${actualFilename}`;
+    }
+
+    // 副檔名防護
+    const newExt = targetName.includes('.')
+      ? targetName.split('.').pop().toLowerCase()
+      : filetype;
+    const dirPath = path.join(FILE_DIR, newExt);
+    const newFilePath = path.join(dirPath, targetName);
+
+    try {
+      // 確保目錄存在
+      fs.ensureDirSync(dirPath);
+
+      // 讀取傳過來的內容
+      const rawBody = await readRawBody(event, false);
+      if (rawBody && rawBody.length > 0) {
+        fs.writeFileSync(newFilePath, rawBody);
+      } else {
+        // 如果沒有 body，則複製目前的檔案
+        const oldFilePath = path.join(FILE_DIR, filetype, actualFilename);
+        fs.copyFileSync(oldFilePath, newFilePath);
+      }
+
+      // 產生新檔案的 Url (提供給 Collabora，讓它知道新檔存在哪裡)
+      const hostURL = `${getRequestProtocol(event)}://${getRequestHost(event)}`;
+      // WOPI URL
+      const wopiUrl = `${hostURL}/collabora/wopi/files/${targetName}`;
+
+      setResponseStatus(event, 200);
+      return {
+        Name: targetName,
+        Url: wopiUrl
+      };
+    } catch (error) {
+      console.error('PutRelative failed:', error);
+      setResponseStatus(event, 500);
+      return 'Internal Server Error';
+    }
+  }
+
   if (operation === 'GET_LOCK') {
     console.log('GET_LOCK');
 

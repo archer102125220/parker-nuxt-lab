@@ -29,17 +29,9 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  fileType: {
-    type: String,
-    default: COLLABORA_FILE_TYPE[0].code
-  },
   collaboraHost: {
     type: String,
     default: import.meta.env.VITE_COLLABORA_HOST || ''
-  },
-  fileId: {
-    type: String,
-    default: ''
   },
   wopiHost: {
     type: String,
@@ -48,25 +40,73 @@ const props = defineProps({
   language: {
     type: String,
     default: COLLABORA_LOCALES[0].code
+  },
+  hasClosebutton: {
+    type: Boolean,
+    default: true
+  },
+  usePrompt: {
+    type: Boolean,
+    default: true
+  },
+  useRouteForSaveAs: {
+    type: Boolean,
+    default: false
   }
 });
 
-const emit = defineEmits(['close', 'save']);
+const emit = defineEmits([
+  'close',
+  'save',
+  'saveAs',
+  'saveCompleted',
+  'saveAsCompleted'
+]);
+
+const saveAsNewName = defineModel('saveAsNewName', {
+  type: String,
+  default: ''
+});
+const fileId = defineModel('fileId', {
+  type: String,
+  default: ''
+});
+const fileType = defineModel('fileType', {
+  type: String,
+  default: COLLABORA_FILE_TYPE[0].code
+});
 
 const loading = ref(true);
 const iframeRef = ref(null);
+const iframeMessageId = ref('');
 
+const safeLanguage = computed(() => {
+  const newSafeLanguage =
+    COLLABORA_LOCALES.find((item) => item.code === props.language) ||
+    COLLABORA_LOCALES[0].code;
+  return newSafeLanguage.code;
+});
 const iframeUrl = computed(() => {
-  const fileType =
-    COLLABORA_FILE_TYPE.find((item) => item.code === props.fileType)?.code ||
+  let newIframeUrl = '';
+
+  const currentFileType =
+    COLLABORA_FILE_TYPE.find((item) => item.code === fileType.value)?.code ||
     'xlsx';
+  const closebutton = props.hasClosebutton === true ? 1 : 0;
   const encodedWopiSrc = encodeURIComponent(
-    `${props.wopiHost}/wopi/files/${props.fileId}`
+    `${props.wopiHost}/wopi/files/${fileId.value}`
   );
+
+  newIframeUrl = `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${
+    encodedWopiSrc
+  }&type=${currentFileType}&access_token=${props.token}&lang=${
+    safeLanguage.value
+  }&closebutton=${closebutton}`;
+
   console.log({
-    iframeUrl: `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&type=${fileType}&access_token=${props.token}&lang=${props.language}&closebutton=1`
+    iframeUrl: newIframeUrl
   });
-  return `${props.collaboraHost}/browser/dist/cool.html?WOPISrc=${encodedWopiSrc}&type=${fileType}&access_token=${props.token}&lang=${props.language}&closebutton=1`;
+  return newIframeUrl;
 });
 
 function handleMessage(e) {
@@ -77,13 +117,50 @@ function handleMessage(e) {
     const msg = JSON.parse(e.data);
     e.msgData = msg;
 
+    iframeMessageId.value = msg.MessageId || '';
+
     // 開發階段方便觀察所有從 Collabora 送出來的事件
-    if (
-      !['Status_Indicator', 'Doc_SizeChanged', 'View_Added'].includes(
-        msg.MessageId
-      )
-    ) {
-      console.log('Collabora message received:', msg.MessageId, msg);
+    // if (
+    //   !['Status_Indicator', 'Doc_SizeChanged', 'View_Added'].includes(
+    //     msg.MessageId
+    //   )
+    // ) {
+    //   console.log('Collabora message received:', msg.MessageId, msg);
+    // }
+
+    if (['Action_Save_Resp', 'File_Rename'].includes(msg.MessageId) === true) {
+      console.log('Save response received:', msg);
+      if (msg.MessageId === 'Action_Save_Resp' && msg.Values?.success) {
+        if (
+          typeof msg.Values.fileName === 'string' &&
+          msg.Values.fileName === saveAsNewName.value
+        ) {
+          // 另存新檔成功
+
+          if (props.useRouteForSaveAs === false) {
+            const newFileName = msg.Values.fileName || '';
+            const newFileType = newFileName.includes('.')
+              ? newFileName.split('.').pop()
+              : '';
+            console.log({ newFileName, newFileType });
+            if (typeof newFileName === 'string' && newFileName !== '') {
+              fileId.value = newFileName;
+            }
+            if (
+              typeof newFileType === 'string' &&
+              newFileType !== '' &&
+              COLLABORA_FILE_TYPE.some((item) => item.code === newFileType)
+            ) {
+              fileType.value = newFileType;
+            }
+          }
+
+          emit('saveAsCompleted', msg, msg.Values.fileName, e);
+        } else {
+          // 一般存檔成功 (或者檔名沒有改變)
+          emit('saveCompleted', msg, msg.Values.fileName, e);
+        }
+      }
     }
 
     if (
@@ -104,23 +181,14 @@ function handleMessage(e) {
     } else if (msg.MessageId === 'UI_Save') {
       emit('save', e);
     } else if (msg.MessageId === 'UI_SaveAs') {
-      // 攔截「另存新檔」事件，向使用者詢問新檔名
-      const newName = prompt(
-        '請輸入新檔名 (請保留副檔名，例如 filename.docx)',
-        ''
-      );
-      if (typeof newName === 'string' && newName !== '') {
-        // 回傳 Action_SaveAs，Collabora 收到後就會觸發後端 PUT_RELATIVE
-        if (typeof iframeRef.value?.contentWindow?.postMessage === 'function') {
-          iframeRef.value.contentWindow.postMessage(
-            JSON.stringify({
-              MessageId: 'Action_SaveAs',
-              SendTime: Date.now(),
-              Values: { Filename: newName }
-            }),
-            props.collaboraHost
-          );
-        }
+      if (props.usePrompt === true) {
+        // 攔截「另存新檔」事件，向使用者詢問新檔名
+        saveAsNewName.value = prompt(
+          '請輸入新檔名 (請保留副檔名，例如 filename.docx)',
+          ''
+        );
+      } else {
+        emit('saveAs', e);
       }
     } else if (msg.MessageId === 'UI_InsertGraphic') {
       // 未來若要支援插入圖片，可在此攔截並開啟自己的檔案選擇器
@@ -136,6 +204,33 @@ function handleMessage(e) {
 function onIframeLoad() {
   loading.value = false;
 }
+
+watch(
+  () => [iframeRef.value, iframeMessageId.value, saveAsNewName.value],
+  ([newIframeRef, newIframeMessageId, newSaveAsNewName]) => {
+    if (
+      newIframeMessageId !== 'UI_SaveAs' ||
+      typeof newSaveAsNewName !== 'string' ||
+      newSaveAsNewName === '' ||
+      typeof newIframeRef?.contentWindow?.postMessage !== 'function'
+    ) {
+      return;
+    }
+
+    // 回傳 Action_SaveAs，Collabora 收到後就會觸發後端 PUT_RELATIVE
+    newIframeRef.contentWindow.postMessage(
+      JSON.stringify({
+        MessageId: 'Action_SaveAs',
+        SendTime: Date.now(),
+        Values: {
+          Filename: newSaveAsNewName,
+          Notify: true
+        }
+      }),
+      props.collaboraHost
+    );
+  }
+);
 
 onMounted(() => {
   window.addEventListener('message', handleMessage);
