@@ -13,7 +13,10 @@ export default defineEventHandler((event) => {
       const { access_token, type } = getQuery(event);
 
       // 1. 檔案型別驗證
-      let filetype = type?.substring(0, type?.indexOf('?')) || '';
+      let filetype = type || '';
+      if (filetype.includes('?')) {
+        filetype = filetype.split('?')[0];
+      }
       let baseId = filesId;
 
       if (filesId.includes('.')) {

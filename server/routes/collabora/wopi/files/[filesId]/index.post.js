@@ -11,7 +11,7 @@ const __dirname = path.resolve();
 const FILE_DIR = path.join(__dirname, 'public');
 
 export default defineEventHandler(async (event) => {
-  const { filesId, filetype } = event.context.wopi;
+  const { filesId, filetype, actualFilename } = event.context.wopi;
   const operation = getHeader(event, 'X-WOPI-Override');
 
   console.log(`[WOPI Lock] operation=${operation}, filesId=${filesId}`);
@@ -36,7 +36,8 @@ export default defineEventHandler(async (event) => {
     const dirPath = path.join(FILE_DIR, filetype);
 
     // 若曾經改名過，要拿真實檔名來做 oldFilePath
-    const actualOldFilename = (await renameMap.getItem(filesId)) || filesId;
+    const actualOldFilename =
+      (await renameMap.getItem(filesId)) || actualFilename;
     const oldFilePath = path.join(dirPath, actualOldFilename);
     const newFilePath = path.join(dirPath, newName);
 

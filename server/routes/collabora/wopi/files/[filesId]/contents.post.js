@@ -9,7 +9,7 @@ console.log({ __dirname, FILE_DIR });
 
 export default defineEventHandler(async (event) => {
   // 由 middleware wopi.js 統一處理驗證與參數解析
-  const { filesId, filetype } = event.context.wopi;
+  const { filesId, filetype, actualFilename } = event.context.wopi;
 
   // 參數 false 非常重要！它確保 Nitro 回傳的是 Node.js Buffer，而不是被編碼過的 String
   const rawBinary = await readRawBody(event, false);
@@ -17,8 +17,8 @@ export default defineEventHandler(async (event) => {
 
   const dirPath = path.join(FILE_DIR, filetype);
   // 若檔案有被改名過，則取其真正的實體檔名
-  const actualFilename = (await renameMap.getItem(filesId)) || filesId;
-  const filePath = path.join(dirPath, actualFilename);
+  const resolvedFilename = (await renameMap.getItem(filesId)) || actualFilename;
+  const filePath = path.join(dirPath, resolvedFilename);
 
   console.log('save');
   console.log({ filesId, filetype });
