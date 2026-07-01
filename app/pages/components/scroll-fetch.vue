@@ -43,14 +43,14 @@
             target="_blank"
             href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/pages/components/scroll-fetch.vue"
           >
-            本頁GitHub
+            {{ $t('scroll_fetch_page.page_github') }}
           </a>
           <a
             rel="noopener"
             target="_blank"
             href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/components/ScrollFetch.vue"
           >
-            本組件GitHub
+            {{ $t('scroll_fetch_page.component_github') }}
           </a>
         </div>
         <form
@@ -64,19 +64,19 @@
           >
             <v-radio
               color="primary"
-              label="使用專案設定GitHub Token"
+              :label="$t('scroll_fetch_page.use_project_token')"
               value="default"
             />
 
             <v-radio
               color="primary"
-              label="自行輸入GitHub Token"
+              :label="$t('scroll_fetch_page.input_token')"
               value="input"
             />
             <v-text-field
               v-model="userInputToken"
               clearable
-              label="GitHub Token"
+              :label="$t('scroll_fetch_page.github_token')"
               class="scroll_fetch_test_page-form-token_type-token_input"
               :disabled="userTokenType !== 'input'"
             />
@@ -89,26 +89,26 @@
           >
             <v-radio
               color="primary"
-              label="使用專案設定GitHub 帳號"
+              :label="$t('scroll_fetch_page.use_project_account')"
               value="default"
             />
 
-            <v-radio color="primary" label="自行輸入GitHub帳號" value="input" />
+            <v-radio color="primary" :label="$t('scroll_fetch_page.input_account')" value="input" />
             <v-text-field
               v-model="userInputAccount"
               clearable
-              label="GitHub帳號"
+              :label="$t('scroll_fetch_page.github_account')"
               class="scroll_fetch_test_page-form-account_type-account_input"
               :disabled="userAccountType !== 'input'"
             />
           </v-radio-group>
 
-          <v-btn block color="primary" type="submit">重新載入</v-btn>
+          <v-btn block color="primary" type="submit">{{ $t('scroll_fetch_page.reload') }}</v-btn>
         </form>
 
         <v-checkbox
           v-model="userSelect"
-          label="停用user-select"
+          :label="$t('scroll_fetch_page.disable_user_select')"
           color="primary"
           :value="true"
           class="scroll_fetch_test_page-user_select_disabled"
@@ -116,7 +116,7 @@
 
         <v-checkbox
           v-model="pullRefeshDisabled"
-          label="停用下拉重整"
+          :label="$t('scroll_fetch_page.disable_pull_refresh')"
           color="primary"
           :value="true"
           class="scroll_fetch_test_page-pull_Refresh_disabled"
@@ -139,13 +139,13 @@
             {{ displayData.full_name }}
           </p> -->
               <p class="scroll_fetch_test_page-list-content-item-name">
-                respo名稱: {{ displayData.name }}
+                {{ $t('scroll_fetch_page.repo_name') }} {{ displayData.name }}
               </p>
               <p class="scroll_fetch_test_page-list-content-item-description">
-                repo描述: {{ displayData.description }}
+                {{ $t('scroll_fetch_page.repo_desc') }} {{ displayData.description }}
               </p>
               <div class="scroll_fetch_test_page-list-content-item-html_link">
-                <p>repo連結:</p>
+                <p>{{ $t('scroll_fetch_page.repo_link') }}</p>
                 <a
                   class="scroll_fetch_test_page-list-content-item-html_link-repo_link"
                   target="_blank"
@@ -160,7 +160,7 @@
               v-if="displayDataList.length <= 0"
               class="scroll_fetch_test_page-list-content-empty"
             >
-              目前沒有資料
+              {{ $t('scroll_fetch_page.no_data') }}
             </p>
           </div>
         </div>
@@ -171,8 +171,9 @@
 
 <script setup>
 import _cloneDeep from 'lodash/cloneDeep';
+const { t } = useI18n();
 useHeadMataData({
-  title: '自製下拉重整及無限滾動測試'
+  title: computed(() => t('scroll_fetch_page.page_title'))
 });
 const nuxtApp = useNuxtApp();
 
@@ -273,9 +274,9 @@ watch(
 
       if (typeof newError?.message === 'string') {
         if (newError.message === 'invalid token') {
-          nuxtApp.$warningMessage('請輸入有效token');
+          nuxtApp.$warningMessage(t('scroll_fetch_page.warn_invalid_token'));
         } else if (newError.message === 'invalid account') {
-          nuxtApp.$warningMessage('請輸入有效GitHub帳號');
+          nuxtApp.$warningMessage(t('scroll_fetch_page.warn_invalid_account'));
         } else {
           nuxtApp.$errorMessage(newError.message);
         }

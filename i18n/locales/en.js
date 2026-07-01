@@ -1035,7 +1035,27 @@ export const en = {
       subtitle: 'Custom ScrollFetch Component Demo',
       description:
         'Testing custom pull-to-refresh and infinite scroll component with GitHub API integration'
-    }
+    },
+    page_title: 'Custom Pull-to-Refresh & Infinite Scroll Test',
+    page_github: 'Page GitHub',
+    component_github: 'Component GitHub',
+    use_project_token: 'Use project GitHub Token',
+    input_token: 'Input GitHub Token',
+    use_project_account: 'Use project GitHub Account',
+    input_account: 'Input GitHub Account',
+    github_account: 'GitHub Account',
+    github_token: 'GitHub Token',
+    reload: 'Reload',
+    disable_user_select: 'Disable user-select',
+    disable_pull_refresh: 'Disable pull-refresh',
+    repo_name: 'Repo Name:',
+    repo_desc: 'Repo Description:',
+    repo_link: 'Repo Link:',
+    repo_language: 'Main Language:',
+    stargazers: 'Stars:',
+    no_data: 'No data currently',
+    warn_invalid_token: 'Please enter a valid token',
+    warn_invalid_account: 'Please enter a valid GitHub account'
   },
   components: {
     description: {},
@@ -1434,6 +1454,49 @@ export const en = {
         'If the editor screen freezes and this error appears in the Console, it is usually because Collabora tries to connect back to your Nuxt HTTPS API to read the file, but because your certificate is self-signed, it is blocked and disconnected by Collabora.',
       troubleshoot_websocket_desc2:
         'Solution: The HTTPS command must include --o:ssl.ssl_verification=false to disable Collabora SSL verification.'
+    }
+  },
+  tiptap_doc_page: {
+    limitations_title: 'Tiptap + docx + mammoth POC Limitations',
+    limitations_summary: 'The following items are features that "cannot be done" or "cannot be reliably saved back to Word even if visually possible".',
+    word_impact: 'Impact on Word Save:',
+    limits: {
+      open_word: {
+        statusText: 'Possible but may distort',
+        title: '1. Open Word Online',
+        reason: 'mammoth can convert .docx to HTML for Tiptap editing, but it is not a Word layout engine. Headers, footers, comments, track changes, complex styles, text boxes, etc. may be lost.',
+        wordImpact: 'Can be saved as a new .docx, but not a full round-trip of the original file. Word-specific information lost during import cannot be restored.'
+      },
+      editable_region: {
+        statusText: 'Currently not possible',
+        title: '4. Support for editable regions',
+        reason: 'Tiptap can make the whole document read-only/editable; partial editable regions require a custom NodeView, extension, or permission model, which is not built into Tiptap + mammoth + docx.',
+        wordImpact: 'Even if the frontend implements partial locking, it cannot use content controls or protection zone settings that convert reliably to Word.'
+      },
+      edit_history: {
+        statusText: 'Possible but cannot naturally save back',
+        title: '5. Edit history for every user',
+        reason: 'The current POC history is a frontend memory list, only showing who did what. Formal multi-person history requires backend storage of transactions, diffs, or version records.',
+        wordImpact: 'docx can write comments or custom metadata separately, but it is not equivalent to Word native track changes; history cannot be saved into .docx.'
+      },
+      auto_chapter_numbering: {
+        statusText: 'Partially possible',
+        title: '6. Auto-increment chapter numbering on adding chapters',
+        reason: 'Currently, chapter scanning on screen and CSS counters can demonstrate automatic chapter addition; but formal chapter/list continuation requires a stricter document model, not just HTML text scanning.',
+        wordImpact: 'Can use docx numbering to generate multi-level lists, but if required to seamlessly connect with existing Word document list definitions, mammoth import may not retain original numbering ids.'
+      },
+      full_toolbar: {
+        statusText: 'Not equivalent to Word toolbar',
+        title: '8. Full toolbar display',
+        reason: 'Tiptap only provides editing commands supported by extensions. To make a full ribbon close to Word requires massive extensions, custom UI, and formatting conversion rules.',
+        wordImpact: 'Even if the frontend shows many format buttons, only formats written into the HTML -> docx converter can be reliably saved into .docx.'
+      },
+      excel_formula: {
+        statusText: 'Currently not possible',
+        title: '9. Excel embedding and formulas',
+        reason: 'Word embedded Excel is an OLE object, browser-side Tiptap/docx is not suitable for creating or editing such binary embedded objects. Formulas can use a math extension, but that is for math, not Excel spreadsheet formulas.',
+        wordImpact: 'Can consider exporting tables or formulas as images, HTML tables, text results, or OMML math formulas; cannot save editable Excel or Excel formulas into .docx.'
+      }
     }
   }
 };
