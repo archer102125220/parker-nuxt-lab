@@ -2,9 +2,10 @@
   <div class="v_selector" :style="cssVariable">
     <button
       ref="buttonRef"
-      v-ripple="ripple"
+      v-ripple="ripple && disabled === false"
       class="v_selector-button"
       :aria-label="ariaLabel"
+      :disabled="disabled"
       @click="toggleMenu"
     >
       <slot :is-open="isOpen">
@@ -31,7 +32,7 @@
           <button
             v-for="option in optionList"
             :key="getValue(option)"
-            v-ripple="ripple"
+            v-ripple="ripple && disabled === false"
             class="v_selector-menu-item"
             :class="{
               'v_selector-menu-item-active':
@@ -52,6 +53,10 @@ const props = defineProps({
   ripple: {
     type: Boolean,
     default: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   },
   returnObject: {
     type: Boolean,
@@ -116,6 +121,7 @@ function getLabel(item) {
 }
 
 function toggleMenu() {
+  if (props.disabled === true) return;
   isOpen.value = !isOpen.value;
 }
 

@@ -28,7 +28,21 @@ export default defineEventHandler((event) => {
         }
       }
 
-      const allowedTypes = ['xlsx', 'docx', 'pptx'];
+      const allowedTypes = [
+        'xlsx',
+        'xls',
+        'ods',
+        'csv',
+        'docx',
+        'doc',
+        'odt',
+        'rtf',
+        'txt',
+        'pptx',
+        'ppt',
+        'odp',
+        'pdf'
+      ];
 
       if (
         typeof filetype !== 'string' ||

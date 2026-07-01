@@ -95,7 +95,9 @@ watch(
           </div>
 
           <div class="office_tool_auth_form-form-permissions">
-            <p class="office_tool_auth_form-form-permissions-title">權限設定 (Permissions)</p>
+            <p class="office_tool_auth_form-form-permissions-title">
+              權限設定 (Permissions)
+            </p>
             <div class="office_tool_auth_form-form-permissions-grid">
               <v-switch
                 v-model="permissions.DisableWrite"
@@ -113,14 +115,14 @@ watch(
               />
               <v-switch
                 v-model="permissions.DisableSaveAs"
-                label="停用另存新檔"
+                label="停用另存新檔/匯出"
                 color="primary"
                 hide-details
                 density="compact"
               />
               <v-switch
                 v-model="permissions.DisableExport"
-                label="停用匯出"
+                label="停用下載"
                 color="primary"
                 hide-details
                 density="compact"

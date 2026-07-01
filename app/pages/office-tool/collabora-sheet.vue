@@ -36,14 +36,14 @@ const userId = useState(
 );
 const userName = ref('Test User');
 const token = ref('');
-const permissions = useState('collabora_permissions', () => ({
+const permissions = ref({
   DisableWrite: false,
   DisableRename: false,
   DisableSaveAs: false,
   DisableExport: false,
   DisableCopy: false,
   DisablePrint: false
-}));
+});
 
 const { $successMessage } = useNuxtApp();
 
@@ -109,6 +109,7 @@ watch(
 
     <CollaboraIframe
       v-if="token"
+      ref="collaboraRef"
       :key="token"
       v-model:file-id="fileId"
       v-model:file-type="fileType"
@@ -129,6 +130,7 @@ watch(
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  padding: 16px;
 
   &-description {
     display: flex;
@@ -136,7 +138,6 @@ watch(
     flex-wrap: wrap;
     align-content: center;
     column-gap: 16px;
-
     margin-bottom: 16px;
   }
 

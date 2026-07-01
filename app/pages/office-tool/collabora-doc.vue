@@ -144,6 +144,7 @@ watch(
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  padding: 16px;
 
   &-description {
     display: flex;
@@ -151,7 +152,6 @@ watch(
     flex-wrap: wrap;
     align-content: center;
     column-gap: 16px;
-
     margin-bottom: 16px;
   }
 

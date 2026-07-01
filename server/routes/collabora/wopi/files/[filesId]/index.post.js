@@ -181,11 +181,18 @@ export default defineEventHandler(async (event) => {
       targetName = `Copy_${actualFilename}`;
     }
 
-    // 副檔名防護
-    const newExt = targetName.includes('.')
-      ? targetName.split('.').pop().toLowerCase()
-      : filetype;
-    const dirPath = path.join(FILE_DIR, newExt);
+    // 處理副檔名：如果使用者輸入的檔名沒有包含副檔名，自動補上原本的副檔名
+    let newFiletype = filetype;
+    if (targetName.includes('.')) {
+      newFiletype = targetName.split('.').pop().toLowerCase();
+    } else {
+      targetName = `${targetName}.${filetype}`;
+    }
+
+    // 允許「匯出為 (Export As)」或「另存新檔 (Save As)」轉換成其他格式 (如 pdf, ods, xlsx)
+    // 所以移除了之前阻擋 newFiletype !== filetype 的邏輯
+
+    const dirPath = path.join(FILE_DIR, newFiletype);
     const newFilePath = path.join(dirPath, targetName);
 
     try {

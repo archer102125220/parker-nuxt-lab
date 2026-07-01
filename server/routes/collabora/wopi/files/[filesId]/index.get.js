@@ -41,8 +41,8 @@ export default defineEventHandler(async (event) => {
     SupportsRename: true, // 告訴 Collabora: 支援 RENAME_FILE
     UserCanRename: (userInfo.permissions?.DisableRename ?? false) === false, // 允許此使用者重新命名
     UserCanNotWriteRelative: userInfo.permissions?.DisableSaveAs ?? false, // 允許「另存新檔」
-    DisableExport: userInfo.permissions?.DisableExport ?? false, // 允許「匯出為」
-    DisableCopy: userInfo.permissions?.DisableCopy ?? false, // 允許「複製」
+    DisableExport: userInfo.permissions?.DisableExport ?? false, // 隱藏原生 UI 的匯出與下載按鈕
+    DisableCopy: (userInfo.permissions?.DisableCopy ?? false) === false, // 允許「複製」
     DisablePrint: userInfo.permissions?.DisablePrint ?? false, // 允許「列印」
     ClosePostMessage: true, // 允許透過 PostMessage 傳遞關閉事件
     PostMessageOrigin: '*', // 允許接收 PostMessage 的來源 (建議生產環境設為確切網域)
