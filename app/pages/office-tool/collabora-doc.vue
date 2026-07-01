@@ -3,7 +3,7 @@ import { COLLABORA_LOCALES } from '@app/components/CollaboraIframe.vue';
 
 const route = useRoute();
 // const router = useRouter();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 
 const language = computed(() => {
   const _locale =
@@ -55,11 +55,11 @@ function onCollaboraClose() {
 }
 
 function onCollaboraSave() {
-  $successMessage('文件已儲存！ (File Saved)');
+  $successMessage(t('collabora.file_saved'));
 }
 
 function onCollaboraSaveAs(msgData, newFilename) {
-  $successMessage(`已另存新檔為 ${newFilename}！`);
+  $successMessage(t('collabora.file_saved_as', { filename: newFilename }));
   // const newFileType = newFilename.includes('.')
   //   ? newFilename.split('.').pop()
   //   : fileType.value;

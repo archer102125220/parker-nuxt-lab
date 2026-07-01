@@ -7,6 +7,7 @@ const token = defineModel('token', { type: String, default: '' });
 
 const systemStore = useSystemStore();
 const { $request, $errorMessage } = useNuxtApp();
+const { t } = useI18n();
 const isGenerating = ref(false);
 const panel = ref(0);
 
@@ -46,7 +47,7 @@ async function generateToken() {
     panel.value = undefined;
   } catch (error) {
     console.error('Failed to generate token:', error);
-    $errorMessage('產生 Token 失敗，請重試');
+    $errorMessage(t('office_tool.auth_form.generate_token_failed'));
     emit('error', error);
   } finally {
     isGenerating.value = false;
@@ -68,7 +69,7 @@ watch(
     <v-expansion-panel>
       <v-expansion-panel-title class="office_tool_auth_form-header">
         <span class="office_tool_auth_form-header-icon">🔑</span>
-        <span class="office_tool_auth_form-header-text">使用者登入資訊</span>
+        <span class="office_tool_auth_form-header-text">{{ $t('office_tool.auth_form.title') }}</span>
       </v-expansion-panel-title>
       <v-expansion-panel-text>
         <form
@@ -79,7 +80,7 @@ watch(
             <v-text-field
               v-model="userId"
               class="office_tool_auth_form-form-fields-input"
-              label="User ID"
+              :label="$t('office_tool.auth_form.user_id')"
               variant="outlined"
               required
               hide-details="auto"
@@ -87,7 +88,7 @@ watch(
             <v-text-field
               v-model="userName"
               class="office_tool_auth_form-form-fields-input"
-              label="User Name"
+              :label="$t('office_tool.auth_form.user_name')"
               variant="outlined"
               required
               hide-details="auto"
@@ -96,47 +97,47 @@ watch(
 
           <div class="office_tool_auth_form-form-permissions">
             <p class="office_tool_auth_form-form-permissions-title">
-              權限設定 (Permissions)
+              {{ $t('office_tool.auth_form.permissions_title') }}
             </p>
             <div class="office_tool_auth_form-form-permissions-grid">
               <v-switch
                 v-model="permissions.DisableWrite"
-                label="停用編輯"
+                :label="$t('office_tool.auth_form.disable_write')"
                 color="primary"
                 hide-details
                 density="compact"
               />
               <v-switch
                 v-model="permissions.DisableRename"
-                label="停用重新命名"
+                :label="$t('office_tool.auth_form.disable_rename')"
                 color="primary"
                 hide-details
                 density="compact"
               />
               <v-switch
                 v-model="permissions.DisableSaveAs"
-                label="停用另存新檔/匯出"
+                :label="$t('office_tool.auth_form.disable_save_as')"
                 color="primary"
                 hide-details
                 density="compact"
               />
               <v-switch
                 v-model="permissions.DisableExport"
-                label="停用下載"
+                :label="$t('office_tool.auth_form.disable_export')"
                 color="primary"
                 hide-details
                 density="compact"
               />
               <v-switch
                 v-model="permissions.DisableCopy"
-                label="停用複製"
+                :label="$t('office_tool.auth_form.disable_copy')"
                 color="primary"
                 hide-details
                 density="compact"
               />
               <v-switch
                 v-model="permissions.DisablePrint"
-                label="停用列印"
+                :label="$t('office_tool.auth_form.disable_print')"
                 color="primary"
                 hide-details
                 density="compact"
@@ -151,7 +152,7 @@ watch(
             :loading="isGenerating"
             :disabled="!userId || !userName"
           >
-            產生 Token 並開啟編輯器
+            {{ $t('office_tool.auth_form.submit_btn') }}
           </v-btn>
         </form>
       </v-expansion-panel-text>

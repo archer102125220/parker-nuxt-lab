@@ -399,14 +399,14 @@ onBeforeUnmount(() => {
       persistent
     >
       <v-card @keydown.enter="confirmSaveAs">
-        <v-card-title>另存新檔 (Save As)</v-card-title>
+        <v-card-title>{{ $t('collabora.save_as_dialog.title') }}</v-card-title>
         <v-card-text>
           <v-text-field
             v-model="saveAsNameInput"
-            label="新檔名 (不含副檔名)"
+            :label="$t('collabora.save_as_dialog.new_filename')"
             :rules="[
-              (newName) => !!newName || '請輸入檔名',
-              (newName) => !newName?.includes('.') || '請勿輸入副檔名'
+              (newName) => !!newName || $t('collabora.save_as_dialog.error_empty'),
+              (newName) => !newName?.includes('.') || $t('collabora.save_as_dialog.error_ext')
             ]"
             autofocus
           />
@@ -414,18 +414,18 @@ onBeforeUnmount(() => {
             v-model="saveAsExtInput"
             :option-list="availableExtensions"
             :disabled="saveAsExtInputDisabled"
-            label="副檔名"
+            :label="$t('collabora.save_as_dialog.extension')"
           />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="text" @click="showSaveAsDialog = false">取消</v-btn>
+          <v-btn variant="text" @click="showSaveAsDialog = false">{{ $t('collabora.save_as_dialog.cancel') }}</v-btn>
           <v-btn
             color="primary"
             :disabled="confirmSaveAsDisabled"
             @click="confirmSaveAs"
           >
-            確認
+            {{ $t('collabora.save_as_dialog.confirm') }}
           </v-btn>
         </v-card-actions>
       </v-card>

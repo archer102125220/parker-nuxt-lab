@@ -1,5 +1,6 @@
 <script setup>
 const { $successMessage, $errorMessage } = useNuxtApp();
+const { t } = useI18n();
 
 const dockerCommandHttp =
   'docker run -t -d -p 9980:9980 -e "aliasgroup1=http://192.168.139.3:3000,http://host.docker.internal:3000" -e "extra_params=--o:ssl.enable=false" collabora/code';
@@ -10,10 +11,10 @@ const dockerCommandHttps =
 async function copyDockerCommand(copyContent) {
   try {
     await navigator.clipboard.writeText(copyContent);
-    $successMessage('已複製指令');
+    $successMessage(t('office_tool.guide.copy_success'));
   } catch (err) {
     console.error(err);
-    $errorMessage('複製失敗');
+    $errorMessage(t('office_tool.guide.copy_failed'));
   }
 }
 </script>
@@ -24,17 +25,15 @@ async function copyDockerCommand(copyContent) {
       <v-expansion-panel-title class="office_tool_collabora_guide-header">
         <span class="office_tool_collabora_guide-header-icon">ℹ️</span>
         <span class="office_tool_collabora_guide-header-text">
-          Docker 啟動與常見問題說明
+          {{ $t('office_tool.guide.title') }}
         </span>
       </v-expansion-panel-title>
       <v-expansion-panel-text class="office_tool_collabora_guide-content">
         <p class="office_tool_collabora_guide-content-desc">
-          若在編輯器中看見「Unauthorized Host」錯誤，表示 Collabora
-          尚未授權專案的網址存取。請根據您的 Nuxt 執行環境選擇對應的指令啟動
-          (Port 為 9980)：
+          {{ $t('office_tool.guide.unauthorized_host_desc') }}
         </p>
         <p class="office_tool_collabora_guide-content-subtitle">
-          HTTP 環境 (最單純推薦)
+          {{ $t('office_tool.guide.http_env') }}
         </p>
         <div class="office_tool_collabora_guide-content-code">
           <span>{{ dockerCommandHttp }}</span>
@@ -47,7 +46,7 @@ async function copyDockerCommand(copyContent) {
           />
         </div>
         <p class="office_tool_collabora_guide-content-subtitle">
-          HTTPS 環境 (需避開自簽憑證檢查)
+          {{ $t('office_tool.guide.https_env') }}
         </p>
         <div class="office_tool_collabora_guide-content-code">
           <span>{{ dockerCommandHttps }}</span>
@@ -61,46 +60,37 @@ async function copyDockerCommand(copyContent) {
         </div>
         <div class="office_tool_collabora_guide-content-note">
           <p class="office_tool_collabora_guide-content-note-item">
-            注意：因為 Collabora 是跑在 Docker 容器內，無法直接透過 localhost
-            存取本機的 Nuxt API。
+            {{ $t('office_tool.guide.note_1') }}
           </p>
           <p class="office_tool_collabora_guide-content-note-item">
-            因此，wopiHost 必須填寫您的區域網路 IP（如 192.168.x.x）或是
-            host.docker.internal。
+            {{ $t('office_tool.guide.note_2') }}
           </p>
           <p class="office_tool_collabora_guide-content-note-item">
-            同時也必須在啟動指令的 aliasgroup1 中包含對應的 IP 網域以通過授權。
+            {{ $t('office_tool.guide.note_3') }}
           </p>
         </div>
         <div class="office_tool_collabora_guide-content-troubleshoot">
           <p class="office_tool_collabora_guide-content-troubleshoot-title">
-            【常見問題】Mixed Content 混合內容封鎖 (無法建立連線)
+            {{ $t('office_tool.guide.troubleshoot_mixed_content_title') }}
           </p>
           <p class="office_tool_collabora_guide-content-troubleshoot-item">
-            若您的 Nuxt 跑在 https://localhost:3000，但 Collabora 跑
-            HTTP，瀏覽器會直接封鎖 Iframe。
+            {{ $t('office_tool.guide.troubleshoot_mixed_content_desc1') }}
           </p>
           <p class="office_tool_collabora_guide-content-troubleshoot-item">
-            解決方案：改用上方的 HTTPS 環境 Docker 指令，並在 .env 設定
-            VITE_COLLABORA_HOST 為 https://localhost:9980。
+            {{ $t('office_tool.guide.troubleshoot_mixed_content_desc2') }}
           </p>
           <p class="office_tool_collabora_guide-content-troubleshoot-item">
-            【注意】若改用 HTTPS，由於 Collabora
-            產生的為自簽憑證，必須手動開新分頁前往 https://localhost:9980
-            點擊「進階 -> 繼續前往」信任憑證。
+            {{ $t('office_tool.guide.troubleshoot_mixed_content_desc3') }}
           </p>
 
           <p class="office_tool_collabora_guide-content-troubleshoot-title">
-            【常見問題】WebSocket 斷線 (Data frame received after close)
+            {{ $t('office_tool.guide.troubleshoot_websocket_title') }}
           </p>
           <p class="office_tool_collabora_guide-content-troubleshoot-item">
-            若編輯器畫面卡死且 Console 出現此錯誤，通常是因為 Collabora
-            嘗試連回您的 Nuxt HTTPS API 讀取檔案，但因為您的憑證是自簽的而被
-            Collabora 阻擋斷線。
+            {{ $t('office_tool.guide.troubleshoot_websocket_desc1') }}
           </p>
           <p class="office_tool_collabora_guide-content-troubleshoot-item">
-            解決方案：HTTPS 指令中必須加上 --o:ssl.ssl_verification=false 來關閉
-            Collabora 的 SSL 驗證。
+            {{ $t('office_tool.guide.troubleshoot_websocket_desc2') }}
           </p>
         </div>
       </v-expansion-panel-text>

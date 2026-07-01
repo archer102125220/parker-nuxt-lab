@@ -1607,6 +1607,64 @@ export const en = {
       'Currently no room specified. Please "Create Room" to test collaborative editing.',
     create_room_fail_title: 'Cannot Create Room:',
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
+  },
+  collabora: {
+    file_saved: 'File Saved!',
+    file_saved_as: 'Saved as {filename}!',
+    save_as_dialog: {
+      title: 'Save As',
+      new_filename: 'New Filename (without extension)',
+      error_empty: 'Please enter a filename',
+      error_ext: 'Please do not enter the extension',
+      extension: 'Extension',
+      cancel: 'Cancel',
+      confirm: 'Confirm'
+    }
+  },
+  office_tool: {
+    auth_form: {
+      title: 'User Login Information',
+      user_id: 'User ID',
+      user_name: 'User Name',
+      permissions_title: 'Permissions',
+      disable_write: 'Disable Write',
+      disable_rename: 'Disable Rename',
+      disable_save_as: 'Disable Save As/Export',
+      disable_export: 'Disable Download',
+      disable_copy: 'Disable Copy',
+      disable_print: 'Disable Print',
+      submit_btn: 'Generate Token and Open Editor',
+      generate_token_failed: 'Failed to generate Token, please try again'
+    },
+    guide: {
+      title: 'Docker Startup and Troubleshooting Guide',
+      copy_success: 'Command copied',
+      copy_failed: 'Copy failed',
+      unauthorized_host_desc:
+        'If you see an "Unauthorized Host" error in the editor, it means Collabora has not authorized access to the project URL. Please choose the corresponding startup command according to your Nuxt runtime environment (Port is 9980):',
+      http_env: 'HTTP Environment (Simplest and Recommended)',
+      https_env: 'HTTPS Environment (Need to bypass self-signed cert check)',
+      note_1:
+        'Note: Because Collabora runs inside a Docker container, it cannot access the local Nuxt API directly via localhost.',
+      note_2:
+        'Therefore, wopiHost must be filled with your local network IP (e.g., 192.168.x.x) or host.docker.internal.',
+      note_3:
+        'At the same time, the corresponding IP domain must be included in the aliasgroup1 of the startup command to pass authorization.',
+      troubleshoot_mixed_content_title:
+        '[Troubleshooting] Mixed Content Blocked (Cannot establish connection)',
+      troubleshoot_mixed_content_desc1:
+        'If your Nuxt is running on https://localhost:3000 but Collabora is running on HTTP, the browser will directly block the Iframe.',
+      troubleshoot_mixed_content_desc2:
+        'Solution: Use the HTTPS environment Docker command above, and set VITE_COLLABORA_HOST to https://localhost:9980 in your .env.',
+      troubleshoot_mixed_content_desc3:
+        '[Note] If using HTTPS, since Collabora generates a self-signed certificate, you must manually open a new tab to https://localhost:9980 and click "Advanced -> Proceed" to trust the certificate.',
+      troubleshoot_websocket_title:
+        '[Troubleshooting] WebSocket Disconnected (Data frame received after close)',
+      troubleshoot_websocket_desc1:
+        'If the editor screen freezes and this error appears in the Console, it is usually because Collabora tries to connect back to your Nuxt HTTPS API to read the file, but because your certificate is self-signed, it is blocked and disconnected by Collabora.',
+      troubleshoot_websocket_desc2:
+        'Solution: The HTTPS command must include --o:ssl.ssl_verification=false to disable Collabora SSL verification.'
+    }
   }
 };
 

@@ -1543,6 +1543,64 @@ export const zhTw = {
     empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
     create_room_fail_title: '無法建立房間：',
     create_room_fail_desc: '建立房間失敗，請查看 Console。'
+  },
+  collabora: {
+    file_saved: '文件已儲存！',
+    file_saved_as: '已另存新檔為 {filename}！',
+    save_as_dialog: {
+      title: '另存新檔 (Save As)',
+      new_filename: '新檔名 (不含副檔名)',
+      error_empty: '請輸入檔名',
+      error_ext: '請勿輸入副檔名',
+      extension: '副檔名',
+      cancel: '取消',
+      confirm: '確認'
+    }
+  },
+  office_tool: {
+    auth_form: {
+      title: '使用者登入資訊',
+      user_id: 'User ID',
+      user_name: 'User Name',
+      permissions_title: '權限設定 (Permissions)',
+      disable_write: '停用編輯',
+      disable_rename: '停用重新命名',
+      disable_save_as: '停用另存新檔/匯出',
+      disable_export: '停用下載',
+      disable_copy: '停用複製',
+      disable_print: '停用列印',
+      submit_btn: '產生 Token 並開啟編輯器',
+      generate_token_failed: '產生 Token 失敗，請重試'
+    },
+    guide: {
+      title: 'Docker 啟動與常見問題說明',
+      copy_success: '已複製指令',
+      copy_failed: '複製失敗',
+      unauthorized_host_desc:
+        '若在編輯器中看見「Unauthorized Host」錯誤，表示 Collabora 尚未授權專案的網址存取。請根據您的 Nuxt 執行環境選擇對應的指令啟動 (Port 為 9980)：',
+      http_env: 'HTTP 環境 (最單純推薦)',
+      https_env: 'HTTPS 環境 (需避開自簽憑證檢查)',
+      note_1:
+        '注意：因為 Collabora 是跑在 Docker 容器內，無法直接透過 localhost 存取本機的 Nuxt API。',
+      note_2:
+        '因此，wopiHost 必須填寫您的區域網路 IP（如 192.168.x.x）或是 host.docker.internal。',
+      note_3:
+        '同時也必須在啟動指令的 aliasgroup1 中包含對應的 IP 網域以通過授權。',
+      troubleshoot_mixed_content_title:
+        '【常見問題】Mixed Content 混合內容封鎖 (無法建立連線)',
+      troubleshoot_mixed_content_desc1:
+        '若您的 Nuxt 跑在 https://localhost:3000，但 Collabora 跑 HTTP，瀏覽器會直接封鎖 Iframe。',
+      troubleshoot_mixed_content_desc2:
+        '解決方案：改用上方的 HTTPS 環境 Docker 指令，並在 .env 設定 VITE_COLLABORA_HOST 為 https://localhost:9980。',
+      troubleshoot_mixed_content_desc3:
+        '【注意】若改用 HTTPS，由於 Collabora 產生的為自簽憑證，必須手動開新分頁前往 https://localhost:9980 點擊「進階 -> 繼續前往」信任憑證。',
+      troubleshoot_websocket_title:
+        '【常見問題】WebSocket 斷線 (Data frame received after close)',
+      troubleshoot_websocket_desc1:
+        '若編輯器畫面卡死且 Console 出現此錯誤，通常是因為 Collabora 嘗試連回您的 Nuxt HTTPS API 讀取檔案，但因為您的憑證是自簽的而被 Collabora 阻擋斷線。',
+      troubleshoot_websocket_desc2:
+        '解決方案：HTTPS 指令中必須加上 --o:ssl.ssl_verification=false 來關閉 Collabora 的 SSL 驗證。'
+    }
   }
 };
 
