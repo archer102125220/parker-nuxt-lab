@@ -1,5 +1,6 @@
 // Import Univer specific locales
 import univerCustomZhTw from '../../app/utils/third-party/univer/i18n/zh-TW.js';
+import vuetifyZhHant from 'vuetify/lib/locale/zh-Hant.mjs';
 
 export const zhTw = {
   en: '英文',
@@ -170,17 +171,6 @@ export const zhTw = {
     krpano_demo: 'Krpano 展示',
     krpano_desc: '使用 Krpano 實現互動式 360° 全景圖導覽的展示。'
   },
-  notes_page: {
-    hero: {
-      title: 'Notion 筆記',
-      description: '日常工作與私下研究的實戰紀錄'
-    },
-    seo: {
-      title: 'Notion 筆記 - Parker Nuxt Lab',
-      description: '日常工作與私下研究的實戰紀錄，包含 SEO 與其他技術筆記。'
-    },
-    read_on_notion: '在 Notion 閱讀'
-  },
   about: {
     hero: {
       title: '關於本站',
@@ -220,32 +210,22 @@ export const zhTw = {
     features: {
       title: '核心功能',
       pwa: {
-        title: 'PWA 支援',
-        description:
-          '完整的漸進式網頁應用支援，包含 Service Worker、離線快取、推播通知等功能'
+        title: 'PWA 支援'
       },
       realtime: {
-        title: '即時通訊',
-        description:
-          '整合 WebRTC、Socket.IO、WebSocket 和 Server-Sent Events 等多種即時通訊技術'
+        title: '即時通訊'
       },
       ai: {
-        title: 'AI/ML 整合',
-        description:
-          '整合 face-api.js、TensorFlow.js 等機器學習框架，實現人臉辨識、換臉等 AI 功能'
+        title: 'AI/ML 整合'
       },
       testing: {
-        title: '完整測試',
-        description: '使用 Playwright 進行 E2E 測試，確保專案品質與穩定性'
+        title: '完整測試'
       },
       components: {
-        title: '自製組件',
-        description:
-          '為避免套件相容性問題，自行實作多個常用組件，確保專案的穩定性和可控性'
+        title: '自製組件'
       },
       i18n: {
-        title: '國際化',
-        description: '完整的多語言支援，提供繁體中文和英文介面'
+        title: '國際化'
       }
     },
     development: {
@@ -710,7 +690,6 @@ export const zhTw = {
       download: '下載結果'
     },
     status: {
-      uploading: '正在上傳圖片...',
       processing: '正在處理中，請稍候...',
       success: '人臉替換完成！',
       error: '處理失敗',
@@ -791,10 +770,7 @@ export const zhTw = {
       text: '為了避免公司專案上的套件衝突，因此手刻一版訊息佇列',
       strikethrough: '我也想既優雅又輕鬆愜意的使用套件，但現實不允許'
     },
-    buttons: {
-      left: '左側',
-      right: '右側'
-    }
+    buttons: {}
   },
   image_upload_page: {
     hero: {
@@ -804,11 +780,7 @@ export const zhTw = {
     }
   },
   phone_input_page: {
-    hero: {
-      title: '電話號碼輸入組件',
-      subtitle: '帶國碼選擇器的電話輸入組件',
-      description: '使用 flag-icons 顯示國旗，支援多國國碼選擇'
-    }
+    hero: {}
   },
   selector_page: {
     hero: {
@@ -892,11 +864,7 @@ export const zhTw = {
     loaded_content: '載入完成區塊'
   },
   countdown_page: {
-    hero: {
-      title: '倒數計時組件測試',
-      subtitle: '自製翻頁式倒數計時器展示',
-      description: '測試自製翻頁式倒數計時器組件功能'
-    }
+    hero: {}
   },
   virtual_scroller_page: {
     hero: {
@@ -924,10 +892,7 @@ export const zhTw = {
       subtitle: '自製輪播圖組件展示',
       description: '測試自製觸控滑動輪播圖組件'
     },
-    describe: {
-      text: '為了避免公司專案上的套件衝突，因此手刻一版輪播圖',
-      strikethrough: '我也想既優雅又輕鬆愜意的使用套件，但現實不允許'
-    },
+    describe: {},
     demo: {
       current_slide: '當前幻燈片',
       basic: {
@@ -1023,204 +988,29 @@ export const zhTw = {
     }
   },
   components: {
-    description: {
-      span1:
-        '自製組件主要是為避免因套件版本相容性或專案性質不合適使用npm上相關工具之狀況，因此自己實作相關components',
-      span2:
-        '其餘主要是因為該套件並未提供vue版本，因此整合供純js之版本為組件的方式做實作'
-    },
+    description: {},
     tab: 'Tabs組件測試',
     scroll_fetch: '下拉重載/無限滾動測試',
     wang_editor: 'WangEditor（HTML編輯器）測試',
     youtube: 'Youtube測試',
-    components:
-      '組件綜合測試（Tabs組件、下拉重載/無限滾動測試、WangEditor（HTML編輯器）、Youtube測試）',
-    swiper_js: 'SwiperJs測試',
-    swiper: '自製Swiper測試',
-    qrcode: 'QRcode測試',
-    slide_in_panel: '訊息佇列測試',
-    switch: 'switch組件測試',
-    go_top: '返回置頂組件測試',
-    virtual_scroller: 'virtual-scroller組件測試',
-    enter_label: '文字特效測試',
-    image_upload: '選擇圖片組件測試',
     dialog: '彈窗組件',
+    components: '組件綜合測試（Tabs、下拉重載、WangEditor、Youtube）',
     drawer: '抽屜收展組件',
-    selector: '下拉選單組件'
+    selector: '下拉選單組件',
+    switch: 'Switch 組件測試',
+    skeleton_loader: 'Skeleton 組件',
+    countdown_test: '倒數計時組件',
+    image_upload_test: '選擇圖片組件測試',
+    phone_input: '電話號碼輸入組件',
+    go_top: '返回置頂組件測試',
+    virtual_scroller: 'Virtual Scroller 組件測試',
+    slide_in_panel: '訊息佇列測試',
+    qr_code_test: 'QR Code 測試',
+    swiper_test: '自製 Swiper 測試',
+    swiper_js_test: 'SwiperJS 測試',
+    banner_demo: 'Banner 輪播組件測試'
   },
-  $vuetify: {
-    badge: '徽章',
-    open: '開啟',
-    close: '關閉',
-    dismiss: '關閉',
-    confirmEdit: {
-      ok: '確定',
-      cancel: '取消'
-    },
-    dataIterator: {
-      noResultsText: '沒有符合條件的結果',
-      loadingText: '讀取中...'
-    },
-    dataTable: {
-      itemsPerPageText: '每頁列數：',
-      ariaLabel: {
-        sortDescending: '：降序排列。',
-        sortAscending: '：升序排列。',
-        sortNone: '無排序方式。點擊以升序排列。',
-        activateNone: '點擊以移除排序方式。',
-        activateDescending: '點擊以降序排列。',
-        activateAscending: '點擊以移除排序方式。'
-      },
-      sortBy: '排序方式'
-    },
-    dataFooter: {
-      itemsPerPageText: '每頁項目：',
-      itemsPerPageAll: '全部',
-      nextPage: '下一頁',
-      prevPage: '上一頁',
-      firstPage: '第一頁',
-      lastPage: '最後頁',
-      pageText: '{2} 條中的 {0}~{1} 條'
-    },
-    dateRangeInput: {
-      divider: '至'
-    },
-    datePicker: {
-      itemsSelected: '已選擇 {0} 個日期',
-      range: {
-        title: '選擇日期範圍',
-        header: '輸入日期範圍'
-      },
-      title: '選擇日期',
-      header: '輸入日期',
-      input: {
-        placeholder: '請輸入日期'
-      },
-      ariaLabel: {
-        previousMonth: '上個月',
-        nextMonth: '下個月',
-        selectYear: '選擇年份',
-        selectDate: '{0}',
-        currentDate: '今天，{0}'
-      }
-    },
-    noDataText: '沒有資料',
-    carousel: {
-      prev: '上一張',
-      next: '下一張',
-      ariaLabel: {
-        delimiter: '第 {0} 張 / 共 {1} 張'
-      }
-    },
-    calendar: {
-      moreEvents: '還有其他 {0} 項',
-      today: '今天'
-    },
-    input: {
-      clear: '清除 {0}',
-      prependAction: '{0} 前置操作',
-      appendAction: '{0} 附加操作',
-      otp: '請輸入第 {0} 個 OTP 字元'
-    },
-    fileInput: {
-      counter: '{0} 個檔案',
-      counterSize: '{0} 個檔案（共 {1}）'
-    },
-    fileUpload: {
-      title: '拖曳檔案至此',
-      divider: '或',
-      browse: '瀏覽檔案'
-    },
-    timePicker: {
-      am: '上午',
-      pm: '下午',
-      title: '選擇時間'
-    },
-    pagination: {
-      ariaLabel: {
-        root: '分頁導航',
-        next: '下一頁',
-        previous: '上一頁',
-        page: '轉到頁面 {0}',
-        currentPage: '當前頁 {0}',
-        first: '第一頁',
-        last: '最後一頁'
-      }
-    },
-    stepper: {
-      next: '下一步',
-      prev: '上一步'
-    },
-    rating: {
-      ariaLabel: {
-        item: '評分 {0} / {1}'
-      }
-    },
-    loading: '載入中...',
-    infiniteScroll: {
-      loadMore: '載入更多',
-      empty: '沒有更多內容'
-    },
-    rules: {
-      required: '此欄位為必填項',
-      email: '請輸入有效的電子郵件地址',
-      number: '此欄位只能包含數字',
-      integer: '此欄位只能包含整數',
-      capital: '此欄位只能包含大寫字母',
-      maxLength: '您最多可以輸入{0}個字符',
-      minLength: '您必須至少輸入{0}個字符',
-      strictLength: '輸入欄位的長度無效',
-      exclude: '字符{0}是不允許的',
-      notEmpty: '請至少選擇一個值',
-      pattern: '格式無效'
-    },
-    hotkey: {
-      then: '然後',
-      ctrl: 'Ctrl',
-      command: 'Command',
-      shift: 'Shift',
-      alt: 'Alt',
-      option: 'Option',
-      enter: 'Enter',
-      escape: 'Escape',
-      upArrow: '上箭頭',
-      downArrow: '下箭頭',
-      leftArrow: '左箭頭',
-      rightArrow: '右箭頭',
-      backspace: '退格',
-      space: '空格',
-      plus: '加',
-      shortcut: '鍵盤快捷鍵：{0}'
-    },
-    video: {
-      play: '播放',
-      pause: '暫停',
-      seek: '搜尋',
-      volume: '音量',
-      showVolume: '顯示音量控制',
-      mute: '靜音',
-      unmute: '取消靜音',
-      enterFullscreen: '全螢幕',
-      exitFullscreen: '退出全螢幕'
-    },
-    colorPicker: {
-      ariaLabel: {
-        eyedropper: '從螢幕上選取顏色',
-        hueSlider: '色相',
-        alphaSlider: '透明度',
-        redInput: '紅色',
-        greenInput: '綠色',
-        blueInput: '藍色',
-        alphaInput: '透明度',
-        hueInput: '色相',
-        saturationInput: '飽和度',
-        lightnessInput: '亮度',
-        hexInput: '十六進位值',
-        hexaInput: '帶透明度的十六進位值',
-        changeFormat: '變更顏色格式'
-      }
-    }
-  },
+  $vuetify: vuetifyZhHant,
   offline: {
     title: '目前沒有網路連線',
     description: '請檢查您的網路連線，或稍後再試。',
@@ -1309,7 +1099,6 @@ export const zhTw = {
     },
     view_component: '查看元件版本',
     code_example: '程式碼範例',
-    view_source: '查看 GitHub 原始碼',
     animation: {
       description: '基本的水波紋動畫指令，支援滑鼠/觸控互動',
       hint: '滑鼠移動或點擊產生水波紋'
@@ -1332,33 +1121,23 @@ export const zhTw = {
   },
   krpano_demo_page: {
     hero: {
-      title: 'Krpano 全景圖展示',
-      subtitle: '360° 全景圖查看器組件',
-      description:
-        '使用 Krpano 實現互動式 360° 全景圖瀏覽，支援場景切換、熱點管理等功能'
+      title: 'Krpano 全景圖展示'
     },
     scenes: {
       scene1: '場景 1 - 極光',
       scene2: '場景 2 - 星空'
     },
     controls: {
-      title: '控制面板',
       show: '顯示控制',
       hide: '隱藏控制',
       scene: '場景切換',
       hotspots: '熱點管理',
       add_hotspot: '新增熱點',
-      remove_hotspot: '移除最後一個',
-      clear_hotspots: '清除全部',
       debug: 'Debug 模式',
       debug_on: '開啟',
-      debug_off: '關閉',
-      text_layer: '文字圖層',
-      text_content: '輸入文字內容'
+      debug_off: '關閉'
     },
-    log: {
-      title: '事件日誌'
-    },
+    log: {},
     hotspot_form: {
       name_placeholder: '熱點名稱',
       ath_placeholder: '水平角度 (ATH)',
@@ -1371,7 +1150,6 @@ export const zhTw = {
     }
   },
   animation_page: {
-    badge: 'Animation Lab',
     hero: {
       title: '動畫效果展示',
       subtitle: 'CSS、WebGL 與動畫庫整合',
@@ -1429,8 +1207,7 @@ export const zhTw = {
       input_room_id: '輸入房間 ID',
       join: '加入',
       create_room: '新建房間',
-      collab_edit: '協同編輯',
-      live_share: '演示跟隨'
+      collab_edit: '協同編輯'
     },
     empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
     create_room_fail_title: '無法建立房間：',
@@ -1506,8 +1283,7 @@ export const zhTw = {
       input_room_id: '輸入房間 ID',
       join: '加入',
       create_room: '新建房間',
-      collab_edit: '協同編輯',
-      live_share: '演示跟隨'
+      collab_edit: '協同編輯'
     },
     empty_room: '目前沒有指定房間，請先「新建協同房間」以測試協同編輯功能。',
     create_room_fail_title: '無法建立房間：',

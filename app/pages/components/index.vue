@@ -167,37 +167,37 @@ useSchemaOrg([
         {
           '@type': 'ListItem',
           position: 2,
-          name: '彈窗組件',
+          name: t('components.dialog'),
           url: `${DOMAIN}${localePath('/components/dialog')}`
         },
         {
           '@type': 'ListItem',
           position: 3,
-          name: '抽屜收展組件',
+          name: t('components.drawer'),
           url: `${DOMAIN}${localePath('/components/drawer')}`
         },
         {
           '@type': 'ListItem',
           position: 4,
-          name: '下拉選單組件',
+          name: t('components.selector'),
           url: `${DOMAIN}${localePath('/components/selector')}`
         },
         {
           '@type': 'ListItem',
           position: 5,
-          name: 'Switch 組件測試',
+          name: t('components.switch'),
           url: `${DOMAIN}${localePath('/components/switch-button')}`
         },
         {
           '@type': 'ListItem',
           position: 6,
-          name: 'Skeleton 組件',
+          name: t('components.skeleton_loader'),
           url: `${DOMAIN}${localePath('/components/skeleton-loader')}`
         },
         {
           '@type': 'ListItem',
           position: 8,
-          name: '倒數計時組件',
+          name: t('components.countdown_test'),
           url: `${DOMAIN}${localePath('/components/countdown-test')}`
         },
         // Functional Components
@@ -210,37 +210,37 @@ useSchemaOrg([
         {
           '@type': 'ListItem',
           position: 10,
-          name: '選擇圖片組件測試',
+          name: t('components.image_upload_test'),
           url: `${DOMAIN}${localePath('/components/image-upload-test')}`
         },
         {
           '@type': 'ListItem',
           position: 11,
-          name: '電話號碼輸入組件',
+          name: t('components.phone_input'),
           url: `${DOMAIN}${localePath('/components/phone-input')}`
         },
         {
           '@type': 'ListItem',
           position: 12,
-          name: '返回置頂組件測試',
+          name: t('components.go_top'),
           url: `${DOMAIN}${localePath('/components/go-top')}`
         },
         {
           '@type': 'ListItem',
           position: 13,
-          name: 'Virtual Scroller 組件測試',
+          name: t('components.virtual_scroller'),
           url: `${DOMAIN}${localePath('/components/virtual-scroller')}`
         },
         {
           '@type': 'ListItem',
           position: 14,
-          name: '訊息佇列測試',
+          name: t('components.slide_in_panel'),
           url: `${DOMAIN}${localePath('/components/slide-in-panel')}`
         },
         {
           '@type': 'ListItem',
           position: 15,
-          name: 'QR Code 測試',
+          name: t('components.qr_code_test'),
           url: `${DOMAIN}${localePath('/components/qr-code-test')}`
         },
         // Third-party Integrations
@@ -259,26 +259,26 @@ useSchemaOrg([
         {
           '@type': 'ListItem',
           position: 18,
-          name: '自製 Swiper 測試',
+          name: t('components.swiper_test'),
           url: `${DOMAIN}${localePath('/components/swiper-test')}`
         },
         {
           '@type': 'ListItem',
           position: 19,
-          name: 'SwiperJS 測試',
+          name: t('components.swiper_js_test'),
           url: `${DOMAIN}${localePath('/components/swiper-js-test')}`
         },
         {
           '@type': 'ListItem',
           position: 20,
-          name: 'Banner 輪播組件測試',
+          name: t('components.banner_demo'),
           url: `${DOMAIN}${localePath('/components/banner-demo')}`
         },
         // Combined Tests
         {
           '@type': 'ListItem',
           position: 22,
-          name: '組件綜合測試（Tabs、下拉重載、WangEditor、Youtube）',
+          name: t('components.components'),
           url: `${DOMAIN}${localePath('/components/components-test')}`
         }
       ]
@@ -289,12 +289,12 @@ useSchemaOrg([
 // UI Components
 const uiComponents = computed(() => [
   { to: localePath('/components/tab-test'), label: t('components.tab') },
-  { to: localePath('/components/dialog'), label: '彈窗組件' },
-  { to: localePath('/components/drawer'), label: '抽屜收展組件' },
-  { to: localePath('/components/selector'), label: '下拉選單組件' },
-  { to: localePath('/components/switch-button'), label: 'Switch 組件測試' },
-  { to: localePath('/components/skeleton-loader'), label: 'Skeleton 組件' },
-  { to: localePath('/components/countdown-test'), label: '倒數計時組件' }
+  { to: localePath('/components/dialog'), label: t('components.dialog') },
+  { to: localePath('/components/drawer'), label: t('components.drawer') },
+  { to: localePath('/components/selector'), label: t('components.selector') },
+  { to: localePath('/components/switch-button'), label: t('components.switch') },
+  { to: localePath('/components/skeleton-loader'), label: t('components.skeleton_loader') },
+  { to: localePath('/components/countdown-test'), label: t('components.countdown_test') }
 ]);
 
 // Functional Components
@@ -305,16 +305,16 @@ const functionalComponents = computed(() => [
   },
   {
     to: localePath('/components/image-upload-test'),
-    label: '選擇圖片組件測試'
+    label: t('components.image_upload_test')
   },
-  { to: localePath('/components/phone-input'), label: '電話號碼輸入組件' },
-  { to: localePath('/components/go-top'), label: '返回置頂組件測試' },
+  { to: localePath('/components/phone-input'), label: t('components.phone_input') },
+  { to: localePath('/components/go-top'), label: t('components.go_top') },
   {
     to: localePath('/components/virtual-scroller'),
-    label: 'Virtual Scroller 組件測試'
+    label: t('components.virtual_scroller')
   },
-  { to: localePath('/components/slide-in-panel'), label: '訊息佇列測試' },
-  { to: localePath('/components/qr-code-test'), label: 'QR Code 測試' }
+  { to: localePath('/components/slide-in-panel'), label: t('components.slide_in_panel') },
+  { to: localePath('/components/qr-code-test'), label: t('components.qr_code_test') }
 ]);
 
 // Third-party Integrations
@@ -327,9 +327,9 @@ const integrationComponents = computed(() => [
     to: localePath('/components/youtube-test'),
     label: t('components.youtube')
   },
-  { to: localePath('/components/swiper-test'), label: '自製 Swiper 測試' },
-  { to: localePath('/components/swiper-js-test'), label: 'SwiperJS 測試' },
-  { to: localePath('/components/banner-demo'), label: 'Banner 輪播組件測試' }
+  { to: localePath('/components/swiper-test'), label: t('components.swiper_test') },
+  { to: localePath('/components/swiper-js-test'), label: t('components.swiper_js_test') },
+  { to: localePath('/components/banner-demo'), label: t('components.banner_demo') }
 ]);
 
 // Combined Tests
@@ -337,7 +337,7 @@ const combinedComponents = computed(() => [
   {
     to: localePath('/components/components-test'),
     banner: '/img/components-test/components-test-v.05.webp',
-    label: '組件綜合測試（Tabs、下拉重載、WangEditor、Youtube）'
+    label: t('components.components')
   }
 ]);
 </script>

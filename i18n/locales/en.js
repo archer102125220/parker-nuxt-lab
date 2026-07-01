@@ -1,5 +1,6 @@
 // Import Univer specific locales
 import univerCustomEnUS from '../../app/utils/third-party/univer/i18n/en-US.js';
+import vuetifyEn from 'vuetify/lib/locale/en.mjs';
 
 export const en = {
   en: 'English',
@@ -184,18 +185,6 @@ export const en = {
     krpano_demo: 'Krpano Demo',
     krpano_desc: 'Interactive 360° Panorama and Virtual Tour Demo using Krpano.'
   },
-  notes_page: {
-    hero: {
-      title: 'Notion Notes',
-      description: 'Practical records of daily work and private research'
-    },
-    seo: {
-      title: 'Notion Notes - Parker Nuxt Lab',
-      description:
-        'Practical records of daily work and private research, including SEO and other technical notes.'
-    },
-    read_on_notion: 'Read on Notion'
-  },
   about: {
     hero: {
       title: 'About',
@@ -236,34 +225,22 @@ export const en = {
     features: {
       title: 'Core Features',
       pwa: {
-        title: 'PWA Support',
-        description:
-          'Complete Progressive Web App support including Service Worker, offline caching, and push notifications'
+        title: 'PWA Support'
       },
       realtime: {
-        title: 'Real-time Communication',
-        description:
-          'Integration of multiple real-time technologies including WebRTC, Socket.IO, WebSocket, and Server-Sent Events'
+        title: 'Real-time Communication'
       },
       ai: {
-        title: 'AI/ML Integration',
-        description:
-          'Integration with face-api.js, TensorFlow.js and other ML frameworks for facial recognition, face swapping, and more'
+        title: 'AI/ML Integration'
       },
       testing: {
-        title: 'Comprehensive Testing',
-        description:
-          'E2E testing with Playwright to ensure project quality and stability'
+        title: 'Comprehensive Testing'
       },
       components: {
-        title: 'Custom Components',
-        description:
-          'To avoid package compatibility issues, we implement multiple common components ourselves to ensure project stability and controllability'
+        title: 'Custom Components'
       },
       i18n: {
-        title: 'Internationalization',
-        description:
-          'Complete multilingual support with Traditional Chinese and English interfaces'
+        title: 'Internationalization'
       }
     },
     development: {
@@ -749,7 +726,6 @@ export const en = {
       download: 'Download Result'
     },
     status: {
-      uploading: 'Uploading images...',
       processing: 'Processing, please wait...',
       success: 'Face swap completed!',
       error: 'Processing failed',
@@ -778,11 +754,11 @@ export const en = {
       image_label: 'Notification Image URL',
       reset: 'Reset',
       submit: 'Submit',
-      title_error: 'Please check notification title',
-      message_error: 'Please check notification message'
+      title_error: 'Please check the notification title',
+      message_error: 'Please check the notification message'
     },
     table: {
-      os: 'Operating System',
+      os: 'OS',
       token: 'Token',
       action: 'Action',
       delete: 'Delete',
@@ -792,8 +768,8 @@ export const en = {
     },
     status: {
       success:
-        'Completed, successfully sent to {success} devices, {failure} devices failed',
-      delete_success: 'Deleted successfully',
+        'Execution completed. Successfully sent push notifications to {success} devices, failed to send to {failure} devices',
+      delete_success: 'Delete successful',
       delete_error: 'Delete failed'
     }
   },
@@ -832,10 +808,7 @@ export const en = {
       strikethrough:
         "I'd love to use packages elegantly and easily, but reality doesn't allow it"
     },
-    buttons: {
-      left: 'Left',
-      right: 'Right'
-    }
+    buttons: {}
   },
   image_upload_page: {
     hero: {
@@ -846,12 +819,7 @@ export const en = {
     }
   },
   phone_input_page: {
-    hero: {
-      title: 'Phone Number Input Component',
-      subtitle: 'Phone input with country code selector',
-      description:
-        'Using flag-icons to display country flags with multi-country code support'
-    }
+    hero: {}
   },
   selector_page: {
     hero: {
@@ -936,12 +904,7 @@ export const en = {
     loaded_content: 'Content loaded'
   },
   countdown_page: {
-    hero: {
-      title: 'Countdown Component Test',
-      subtitle: 'Custom Flip Countdown Timer Demo',
-      description:
-        'Testing custom flip-style countdown timer component functionality'
-    }
+    hero: {}
   },
   virtual_scroller_page: {
     hero: {
@@ -970,11 +933,7 @@ export const en = {
       subtitle: 'Custom Carousel Component Demo',
       description: 'Testing custom touch-enabled carousel component'
     },
-    describe: {
-      text: 'Handcrafted carousel component to avoid package conflicts in company projects',
-      strikethrough:
-        "I'd love to use packages elegantly and easily, but reality doesn't allow it"
-    },
+    describe: {},
     demo: {
       current_slide: 'Current Slide',
       basic: {
@@ -1079,204 +1038,29 @@ export const en = {
     }
   },
   components: {
-    description: {
-      span1:
-        'Custom components are implemented to avoid issues with package compatibility or project fit when using npm tools, so we build components ourselves.',
-      span2:
-        'Others are integrated because no official Vue version exists; we wrap vanilla JS libraries as components.'
-    },
+    description: {},
     tab: 'Tabs component test',
     scroll_fetch: 'Pull-to-refresh / Infinite scroll test',
     wang_editor: 'WangEditor (HTML editor) test',
     youtube: 'YouTube test',
-    components:
-      'Combined components test (Tabs, Pull-to-refresh / Infinite scroll, WangEditor (HTML editor), YouTube)',
-    swiper_js: 'SwiperJs test',
-    swiper: 'Custom Swiper test',
-    qrcode: 'QR code test',
-    slide_in_panel: 'Message queue test',
-    switch: 'Switch component test',
-    go_top: 'Back to top component test',
-    virtual_scroller: 'virtual-scroller component test',
-    enter_label: 'Text effect test',
-    image_upload: 'Image upload selector test',
-    dialog: 'Dialog component',
-    drawer: 'Drawer expand/collapse component',
-    selector: 'Dropdown selector component'
+    dialog: 'Dialog Component Test',
+    components: 'Components Test (Tabs, Scroll Fetch, WangEditor, Youtube)',
+    drawer: 'Drawer Component Test',
+    selector: 'Selector Component Test',
+    switch: 'Switch Component Test',
+    skeleton_loader: 'Skeleton Loader Component',
+    countdown_test: 'Countdown Component Test',
+    image_upload_test: 'Image Upload Component Test',
+    phone_input: 'Phone Input Component',
+    go_top: 'Go Top Component Test',
+    virtual_scroller: 'Virtual Scroller Component Test',
+    slide_in_panel: 'Slide-in Panel Test',
+    qr_code_test: 'QR Code Test',
+    swiper_test: 'Custom Swiper Test',
+    swiper_js_test: 'SwiperJS Test',
+    banner_demo: 'Banner Carousel Component Test'
   },
-  $vuetify: {
-    badge: 'Badge',
-    open: 'Open',
-    close: 'Close',
-    dismiss: 'Dismiss',
-    confirmEdit: {
-      ok: 'OK',
-      cancel: 'Cancel'
-    },
-    dataIterator: {
-      noResultsText: 'No matching records found',
-      loadingText: 'Loading items...'
-    },
-    dataTable: {
-      itemsPerPageText: 'Rows per page:',
-      ariaLabel: {
-        sortDescending: 'Sorted descending.',
-        sortAscending: 'Sorted ascending.',
-        sortNone: 'Not sorted.',
-        activateNone: 'Activate to remove sorting.',
-        activateDescending: 'Activate to sort descending.',
-        activateAscending: 'Activate to sort ascending.'
-      },
-      sortBy: 'Sort by'
-    },
-    dataFooter: {
-      itemsPerPageText: 'Items per page:',
-      itemsPerPageAll: 'All',
-      nextPage: 'Next page',
-      prevPage: 'Previous page',
-      firstPage: 'First page',
-      lastPage: 'Last page',
-      pageText: '{0}-{1} of {2}'
-    },
-    dateRangeInput: {
-      divider: 'to'
-    },
-    datePicker: {
-      itemsSelected: '{0} selected',
-      range: {
-        title: 'Select dates',
-        header: 'Enter dates'
-      },
-      title: 'Select date',
-      header: 'Enter date',
-      input: {
-        placeholder: 'Enter date'
-      },
-      ariaLabel: {
-        previousMonth: 'Previous month',
-        nextMonth: 'Next month',
-        selectYear: 'Select year',
-        selectDate: '{0}',
-        currentDate: 'Today, {0}'
-      }
-    },
-    noDataText: 'No data available',
-    carousel: {
-      prev: 'Previous visual',
-      next: 'Next visual',
-      ariaLabel: {
-        delimiter: 'Carousel slide {0} of {1}'
-      }
-    },
-    calendar: {
-      moreEvents: '{0} more',
-      today: 'Today'
-    },
-    input: {
-      clear: 'Clear {0}',
-      prependAction: '{0} prepended action',
-      appendAction: '{0} appended action',
-      otp: 'Please enter OTP character {0}'
-    },
-    fileInput: {
-      counter: '{0} files',
-      counterSize: '{0} files ({1} in total)'
-    },
-    fileUpload: {
-      title: 'Drag and drop files here',
-      divider: 'or',
-      browse: 'Browse Files'
-    },
-    timePicker: {
-      am: 'AM',
-      pm: 'PM',
-      title: 'Select Time'
-    },
-    pagination: {
-      ariaLabel: {
-        root: 'Pagination Navigation',
-        next: 'Next page',
-        previous: 'Previous page',
-        page: 'Go to page {0}',
-        currentPage: 'Page {0}, Current page',
-        first: 'First page',
-        last: 'Last page'
-      }
-    },
-    stepper: {
-      next: 'Next',
-      prev: 'Previous'
-    },
-    rating: {
-      ariaLabel: {
-        item: 'Rating {0} of {1}'
-      }
-    },
-    loading: 'Loading...',
-    infiniteScroll: {
-      loadMore: 'Load more',
-      empty: 'No more'
-    },
-    rules: {
-      required: 'This field is required',
-      email: 'Please enter a valid email',
-      number: 'This field can only contain numbers',
-      integer: 'This field can only contain integer values',
-      capital: 'This field can only contain uppercase letters',
-      maxLength: 'You must enter a maximum of {0} characters',
-      minLength: 'You must enter a minimum of {0} characters',
-      strictLength: 'The length of the entered field is invalid',
-      exclude: 'The {0} character is not allowed',
-      notEmpty: 'Please choose at least one value',
-      pattern: 'Invalid format'
-    },
-    hotkey: {
-      then: 'then',
-      ctrl: 'Ctrl',
-      command: 'Command',
-      space: 'Space',
-      shift: 'Shift',
-      alt: 'Alt',
-      enter: 'Enter',
-      escape: 'Escape',
-      upArrow: 'Up Arrow',
-      downArrow: 'Down Arrow',
-      leftArrow: 'Left Arrow',
-      rightArrow: 'Right Arrow',
-      backspace: 'Backspace',
-      option: 'Option',
-      plus: 'plus',
-      shortcut: 'Keyboard shortcut: {0}'
-    },
-    video: {
-      play: 'Play',
-      pause: 'Pause',
-      seek: 'Seek',
-      volume: 'Volume',
-      showVolume: 'Show volume control',
-      mute: 'Mute',
-      unmute: 'Unmute',
-      enterFullscreen: 'Full screen',
-      exitFullscreen: 'Exit full screen'
-    },
-    colorPicker: {
-      ariaLabel: {
-        eyedropper: 'Select color with eyedropper',
-        hueSlider: 'Hue',
-        alphaSlider: 'Alpha',
-        redInput: 'Red value',
-        greenInput: 'Green value',
-        blueInput: 'Blue value',
-        alphaInput: 'Alpha value',
-        hueInput: 'Hue value',
-        saturationInput: 'Saturation value',
-        lightnessInput: 'Lightness value',
-        hexInput: 'HEX value',
-        hexaInput: 'HEX with alpha value',
-        changeFormat: 'Change color format'
-      }
-    }
-  },
+  $vuetify: vuetifyEn,
   offline: {
     title: 'No Internet Connection',
     description: 'Please check your internet connection and try again later.',
@@ -1366,7 +1150,6 @@ export const en = {
     },
     view_component: 'View Component Version',
     code_example: 'Code Example',
-    view_source: 'View Source on GitHub',
     animation: {
       description:
         'Basic water ripple animation directive with mouse/touch interaction',
@@ -1390,33 +1173,23 @@ export const en = {
   },
   krpano_demo_page: {
     hero: {
-      title: 'Krpano Panorama Demo',
-      subtitle: '360° Panorama Viewer Component',
-      description:
-        'Interactive 360° panorama viewing with Krpano, supporting scene switching, hotspot management and more'
+      title: 'Krpano Panorama Demo'
     },
     scenes: {
       scene1: 'Scene 1 - Aurora',
       scene2: 'Scene 2 - Starry Sky'
     },
     controls: {
-      title: 'Control Panel',
       show: 'Show Controls',
       hide: 'Hide Controls',
       scene: 'Scene Switching',
       hotspots: 'Hotspot Management',
       add_hotspot: 'Add Hotspot',
-      remove_hotspot: 'Remove Last',
-      clear_hotspots: 'Clear All',
       debug: 'Debug Mode',
       debug_on: 'On',
-      debug_off: 'Off',
-      text_layer: 'Text Layer',
-      text_content: 'Enter text content'
+      debug_off: 'Off'
     },
-    log: {
-      title: 'Event Log'
-    },
+    log: {},
     hotspot_form: {
       name_placeholder: 'Hotspot Name',
       ath_placeholder: 'Horizontal Angle (ATH)',
@@ -1429,7 +1202,6 @@ export const en = {
     }
   },
   animation_page: {
-    badge: 'Animation Lab',
     hero: {
       title: 'Animation Showcase',
       subtitle: 'CSS, WebGL & Animation Library Integrations',
@@ -1489,8 +1261,7 @@ export const en = {
       input_room_id: 'Input Room ID',
       join: 'Join',
       create_room: 'Create Room',
-      collab_edit: 'Collaborative Editing',
-      live_share: 'Presentation Follow'
+      collab_edit: 'Collaborative Editing'
     },
     empty_room:
       'Currently no room specified. Please "Create Room" to test collaborative editing.',
@@ -1568,8 +1339,7 @@ export const en = {
       input_room_id: 'Input Room ID',
       join: 'Join',
       create_room: 'Create Room',
-      collab_edit: 'Collaborative Editing',
-      live_share: 'Presentation Follow'
+      collab_edit: 'Collaborative Editing'
     },
     empty_room:
       'Currently no room specified. Please "Create Room" to test collaborative editing.',

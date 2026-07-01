@@ -290,9 +290,9 @@ if (typeof error.value === 'object' && error.value !== null) {
   console.error('Error fetching cloud messaging tokens:', error.value);
 }
 
-const OS_TD_TITLE = computed(() => '作業系統');
-const TOKEN_TD_TITLE = computed(() => 'token');
-const ACRION_TITLE = computed(() => '操作');
+const OS_TD_TITLE = computed(() => t('cloud_messaging_page.table.os'));
+const TOKEN_TD_TITLE = computed(() => t('cloud_messaging_page.table.token'));
+const ACRION_TITLE = computed(() => t('cloud_messaging_page.table.action'));
 
 const appMessageTitle = ref('appMessageTitle');
 const appMessageData = ref('appMessage');
@@ -322,7 +322,7 @@ const hasData = computed(
 const handleCheckMessageTitle = computed(() => [
   function handleCheckMessageTitle(messageTitle) {
     if (!messageTitle || messageTitle.trim() === '') {
-      return '請檢查推播標題';
+      return t('cloud_messaging_page.form.title_error');
     }
     return true;
   }
@@ -330,7 +330,7 @@ const handleCheckMessageTitle = computed(() => [
 const handleCheckMessageData = computed(() => [
   function handleCheckMessageData(messageData) {
     if (!messageData || messageData.trim() === '') {
-      return '請檢查推播訊息';
+      return t('cloud_messaging_page.form.message_error');
     }
     return true;
   }
@@ -392,7 +392,7 @@ async function handlePushNotification() {
 
     const { failureCount = 0, successCount = 0 } = response;
     nuxtApp.$infoMessage(
-      `執行完畢，成功向${successCount}份裝置發送推播訊息，${failureCount}份裝置發送失敗`
+      t('cloud_messaging_page.status.success', { success: successCount, failure: failureCount })
     );
   } catch (error) {
     console.error('Error sending push notification:', error);
@@ -413,10 +413,10 @@ async function handleDeleteToken(token) {
   try {
     await DELETE_DeleteToken(token);
     await handleRefresh();
-    nuxtApp.$successMessage('刪除成功');
+    nuxtApp.$successMessage(t('cloud_messaging_page.status.delete_success'));
   } catch (error) {
     console.error('Error deleting token:', error);
-    nuxtApp.$errorMessage('刪除失敗');
+    nuxtApp.$errorMessage(t('cloud_messaging_page.status.delete_error'));
   } finally {
     loading.value = false;
     nuxtApp.$store.system.setLoading(false);
