@@ -475,7 +475,11 @@ export const zhTw = {
         '整合 Firebase 雲端服務，包含 FCM 推播通知、Service Worker 等功能測試'
     },
     intro:
-      '原本在電子履歷中實作並測試的功能，但由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試。'
+      '原本在電子履歷中實作並測試的功能，但由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試。',
+    intro_original: '原本在 {link} 中實作。',
+    resume: '電子履歷',
+    feature_test: 'Firebase 功能測試',
+    fcm_dashboard: 'FCM 推播通知後台'
   },
   face_swap_page: {
     hero: {
@@ -792,7 +796,13 @@ export const zhTw = {
       text: '為了避免公司專案上的套件衝突，因此手刻一版訊息佇列',
       strikethrough: '我也想既優雅又輕鬆愜意的使用套件，但現實不允許'
     },
-    buttons: {}
+    buttons: {
+      test: '測試彈跳訊息'
+    },
+    form: {
+      message_label: '新增彈跳訊息',
+      left_enter_label: '從左側進入通知訊息'
+    }
   },
   image_upload_page: {
     hero: {

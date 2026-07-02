@@ -35,21 +35,21 @@
         <v-text-field
           v-model="message"
           clearable
-          label="新增彈跳訊息"
+          :label="$t('slide_in_panel_page.form.message_label')"
           class="slide_in_panel_page-form-input"
         />
 
         <v-checkbox
           v-model="leftEnter"
           class="slide_in_panel_page-form-checkbox"
-          label="從左側進入通知訊息"
+          :label="$t('slide_in_panel_page.form.left_enter_label')"
           color="primary"
           hide-details
           :value="true"
         />
 
         <div class="slide_in_panel_page-form-submit">
-          <v-btn color="primary" type="submit" size="large">測試彈跳訊息</v-btn>
+          <v-btn color="primary" type="submit" size="large">{{ $t('slide_in_panel_page.buttons.test') }}</v-btn>
         </div>
 
         <TabsBar

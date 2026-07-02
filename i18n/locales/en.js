@@ -504,7 +504,11 @@ export const en = {
         'Integrating Firebase cloud services, including FCM push notifications, Service Worker, and other functionality tests'
     },
     intro:
-      'Originally implemented and tested in the electronic resume, but since that project did not implement PWA or other features requiring Service Worker, this project attempts to integrate Service Worker and conduct tests.'
+      'Originally implemented and tested in the electronic resume, but since that project did not implement PWA or other features requiring Service Worker, this project attempts to integrate Service Worker and conduct tests.',
+    intro_original: 'Originally implemented in {link}.',
+    resume: 'E-Resume',
+    feature_test: 'Firebase Feature Test',
+    fcm_dashboard: 'FCM Push Notification Dashboard'
   },
   face_swap_page: {
     hero: {
@@ -821,17 +825,24 @@ export const en = {
   },
   slide_in_panel_page: {
     hero: {
-      title: 'Slide-in Panel Component Test',
-      subtitle: 'Custom Slide-in Panel Component Demo',
-      description: 'Testing custom slide-in side panel component functionality'
+      title: 'Slide-in Panel Test',
+      subtitle: 'Custom Slide-in Panel Display',
+      description: 'Testing the functionality of custom slide-in side panel'
     },
     describe: {
-      text: 'Handcrafted message queue component to avoid package conflicts in company projects',
+      text: 'Created a custom message queue to avoid package conflicts in company projects',
       strikethrough:
-        "I'd love to use packages elegantly and easily, but reality doesn't allow it"
+        'I wanted to use packages elegantly and easily, but reality did not permit it'
     },
-    buttons: {}
+    buttons: {
+      test: 'Test Notification'
+    },
+    form: {
+      message_label: 'Add Notification Message',
+      left_enter_label: 'Enter from Left Side'
+    }
   },
+
   image_upload_page: {
     hero: {
       title: 'Image Upload Component Test',

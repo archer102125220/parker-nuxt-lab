@@ -30,18 +30,18 @@
         <p class="firebase_page-intro-text">
           {{ $t('firebase_page.intro') }}
         </p>
-        <p class="firebase_page-intro-link">
-          原本在
-          <a
-            href="https://resume-web-orpin.vercel.app/portfolio/firebase-admin"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="firebase_page-intro-link-anchor"
-          >
-            電子履歷
-          </a>
-          中實作。
-        </p>
+        <i18n-t keypath="firebase_page.intro_original" tag="p" class="firebase_page-intro-link">
+          <template #link>
+            <a
+              href="https://resume-web-orpin.vercel.app/portfolio/firebase-admin"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="firebase_page-intro-link-anchor"
+            >
+              {{ $t('firebase_page.resume') }}
+            </a>
+          </template>
+        </i18n-t>
       </div>
     </section>
 
@@ -49,7 +49,7 @@
     <section class="firebase_page-section">
       <div class="firebase_page-section-container">
         <h2 class="firebase_page-section-title">
-          Firebase 功能測試
+          {{ $t('firebase_page.feature_test') }}
         </h2>
         <div class="firebase_page-grid">
           <LinkCard
@@ -98,7 +98,7 @@ useSchemaOrg([
 const firebaseTests = computed(() => [
   {
     to: localePath('/firebase/cloud-messaging'),
-    label: 'FCM 推播通知後台'
+    label: t('firebase_page.fcm_dashboard')
   }
 ]);
 </script>
