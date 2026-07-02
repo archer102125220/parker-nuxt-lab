@@ -344,21 +344,39 @@ export const zhTw = {
     intro:
       '紀錄原生配合 Nuxt 4 內建的 WebSocket 以及前後端皆由 Socket.IO 實作的結果。',
     warning:
-      '當前部署環境可能不支援 WebSocket（如：Vercel 等部署平台），可能會無效。'
+      '當前部署環境可能不支援 WebSocket（如：Vercel 等部署平台），可能會無效。',
+    tests_list_title: 'Socket 測試列表',
+    test_socket_io_label: '前後端皆由 Socket.IO 做處理',
+    test_websocket_label: '前端原生 / 後端 Nuxt 4 內建'
   },
   socket_io_page: {
     hero: {
       title: 'Socket.IO 測試',
       subtitle: 'Socket.IO 雙向通訊測試',
       description: '使用 Socket.IO 實現前後端即時雙向通訊'
-    }
+    },
+    connection_status: '連線狀態:',
+    connected: '已連線',
+    disconnected: '未連線',
+    send_message_title: '發送訊息',
+    input_message_label: '輸入訊息',
+    input_message_placeholder: '輸入要發送的測試訊息...',
+    send_btn: '發送',
+    received_data_label: '接收到的 data：',
+    no_message_yet: '尚未收到任何訊息...'
   },
   websocket_page: {
     hero: {
       title: '原生 WebSocket 測試',
       subtitle: 'Nuxt 4 內建 WebSocket 測試',
       description: '使用 Nuxt 4 內建的 WebSocket 功能進行原生通訊測試'
-    }
+    },
+    send_message_title: '發送訊息',
+    input_message_label: '輸入訊息',
+    input_message_placeholder: '輸入要發送的測試訊息...',
+    send_btn: '發送',
+    received_data_label: '接收到的 data：',
+    no_message_yet: '尚未收到任何訊息...'
   },
   sse_page: {
     hero: {
@@ -406,7 +424,11 @@ export const zhTw = {
     },
     intro:
       'WebRTC 的實作測試，主要分為配合 Socket.IO、WebSocket 和 Server-Sent Events 三種信令傳輸方式。',
-    note: '目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試。'
+    note: '目前視訊功能已初步完成，但是詳細的流程尚未完成，若要測試需手動複製網址才能做測試。',
+    tests_list_title: 'WebRTC 測試列表',
+    test_socket_io_label: '配合 Socket.IO 實作',
+    test_websocket_label: '配合前端原生 / 後端 Nuxt 4 內建實作',
+    test_sse_label: '配合 SSE 實作'
   },
   web_rtc_socket_io_page: {
     hero: {

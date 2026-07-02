@@ -40,7 +40,7 @@
     <section class="web_rtc_page-section">
       <div class="web_rtc_page-section-container">
         <h2 class="web_rtc_page-section-title">
-          WebRTC 測試列表
+          {{ $t('web_rtc_page.tests_list_title') }}
         </h2>
         <div class="web_rtc_page-grid">
           <LinkCard
@@ -89,15 +89,15 @@ useSchemaOrg([
 const webrtcTests = computed(() => [
   {
     to: localePath('/web-rtc/socket.io'),
-    label: '配合 Socket.IO 實作'
+    label: t('web_rtc_page.test_socket_io_label')
   },
   {
     to: localePath('/web-rtc/websocket'),
-    label: '配合前端原生 / 後端 Nuxt 4 內建實作'
+    label: t('web_rtc_page.test_websocket_label')
   },
   {
     to: localePath('/web-rtc/server-sent-event'),
-    label: '配合 SSE 實作'
+    label: t('web_rtc_page.test_sse_label')
   }
 ]);
 </script>

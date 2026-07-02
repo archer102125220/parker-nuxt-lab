@@ -365,7 +365,10 @@ export const en = {
     intro:
       'Recording results of native WebSocket with Nuxt 4 built-in features, and Socket.IO implementation on both frontend and backend.',
     warning:
-      'The current deployment environment may not support WebSocket (e.g., Vercel and other deployment platforms), which may cause it to be ineffective.'
+      'The current deployment environment may not support WebSocket (e.g., Vercel and other deployment platforms), which may cause it to be ineffective.',
+    tests_list_title: 'Socket Tests List',
+    test_socket_io_label: 'Socket.IO handled on both frontend and backend',
+    test_websocket_label: 'Native frontend / Nuxt 4 built-in backend'
   },
   socket_io_page: {
     hero: {
@@ -373,7 +376,16 @@ export const en = {
       subtitle: 'Socket.IO Bidirectional Communication Test',
       description:
         'Using Socket.IO for real-time bidirectional communication between frontend and backend'
-    }
+    },
+    connection_status: 'Connection Status:',
+    connected: 'Connected',
+    disconnected: 'Disconnected',
+    send_message_title: 'Send Message',
+    input_message_label: 'Input Message',
+    input_message_placeholder: 'Enter test message to send...',
+    send_btn: 'Send',
+    received_data_label: 'Received Data:',
+    no_message_yet: 'No message received yet...'
   },
   websocket_page: {
     hero: {
@@ -381,7 +393,13 @@ export const en = {
       subtitle: 'Nuxt 4 Built-in WebSocket Test',
       description:
         'Testing native WebSocket communication using Nuxt 4 built-in features'
-    }
+    },
+    send_message_title: 'Send Message',
+    input_message_label: 'Input Message',
+    input_message_placeholder: 'Enter test message to send...',
+    send_btn: 'Send',
+    received_data_label: 'Received Data:',
+    no_message_yet: 'No message received yet...'
   },
   sse_page: {
     hero: {
@@ -432,7 +450,11 @@ export const en = {
     },
     intro:
       'WebRTC implementation tests, primarily divided into three signaling transport methods: Socket.IO, WebSocket, and Server-Sent Events.',
-    note: 'The video functionality is currently in its initial completion stage, but the detailed workflow is not yet complete. Manual URL copying is required for testing.'
+    note: 'The video functionality is currently in its initial completion stage, but the detailed workflow is not yet complete. Manual URL copying is required for testing.',
+    tests_list_title: 'WebRTC Tests List',
+    test_socket_io_label: 'Implemented with Socket.IO',
+    test_websocket_label: 'Implemented with native frontend / Nuxt 4 built-in backend',
+    test_sse_label: 'Implemented with SSE'
   },
   web_rtc_socket_io_page: {
     hero: {

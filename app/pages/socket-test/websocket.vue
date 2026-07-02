@@ -23,12 +23,12 @@
     <section class="websocket_page-section">
       <!-- Send Message Form -->
       <div class="websocket_page-section-send">
-        <h3 class="websocket_page-section-send-title">發送訊息</h3>
+        <h3 class="websocket_page-section-send-title">{{ $t('websocket_page.send_message_title') }}</h3>
         <form class="websocket_page-section-send-form" @submit.prevent="sendMessage">
           <v-text-field
             v-model="messageToSend"
-            label="輸入訊息"
-            placeholder="輸入要發送的測試訊息..."
+            :label="$t('websocket_page.input_message_label')"
+            :placeholder="$t('websocket_page.input_message_placeholder')"
             class="websocket_page-section-send-form-input"
             hide-details
           />
@@ -37,12 +37,12 @@
             color="primary"
             :disabled="!messageToSend"
           >
-            發送
+            {{ $t('websocket_page.send_btn') }}
           </v-btn>
         </form>
       </div>
 
-      <p class="websocket_page-section-label">接收到的 data：</p>
+      <p class="websocket_page-section-label">{{ $t('websocket_page.received_data_label') }}</p>
       <div class="websocket_page-section-messages">
         <p
           v-for="(webSocketMessage, index) in webSocketMessageList"
@@ -52,7 +52,7 @@
           {{ webSocketMessage }}
         </p>
         <p v-if="webSocketMessageList.length === 0" class="websocket_page-section-messages-empty">
-          尚未收到任何訊息...
+          {{ $t('websocket_page.no_message_yet') }}
         </p>
       </div>
     </section>

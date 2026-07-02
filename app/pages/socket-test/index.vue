@@ -43,7 +43,7 @@
     <section class="socket_test_page-section">
       <div class="socket_test_page-section-container">
         <h2 class="socket_test_page-section-title">
-          Socket 測試列表
+          {{ $t('socket_test_page.tests_list_title') }}
         </h2>
         <div class="socket_test_page-grid">
           <LinkCard
@@ -92,11 +92,11 @@ useSchemaOrg([
 const socketTests = computed(() => [
   {
     to: localePath('/socket-test/socket.io'),
-    label: '前後端皆由 Socket.IO 做處理'
+    label: t('socket_test_page.test_socket_io_label')
   },
   {
     to: localePath('/socket-test/websocket'),
-    label: '前端原生 / 後端 Nuxt 4 內建'
+    label: t('socket_test_page.test_websocket_label')
   }
 ]);
 </script>

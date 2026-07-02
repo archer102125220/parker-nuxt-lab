@@ -22,23 +22,23 @@
     <!-- Main Content -->
     <section class="socket_io_page-section">
       <div class="socket_io_page-section-status">
-        <span class="socket_io_page-section-status-label">連線狀態:</span>
+        <span class="socket_io_page-section-status-label">{{ $t('socket_io_page.connection_status') }}</span>
         <span
           class="socket_io_page-section-status-indicator"
           :css-connected="socketIoClientConnected"
         >
-          {{ socketIoClientConnected ? '已連線' : '未連線' }}
+          {{ socketIoClientConnected ? $t('socket_io_page.connected') : $t('socket_io_page.disconnected') }}
         </span>
       </div>
 
       <!-- Send Message Form -->
       <div class="socket_io_page-section-send">
-        <h3 class="socket_io_page-section-send-title">發送訊息</h3>
+        <h3 class="socket_io_page-section-send-title">{{ $t('socket_io_page.send_message_title') }}</h3>
         <form class="socket_io_page-section-send-form" @submit.prevent="sendMessage">
           <v-text-field
             v-model="messageToSend"
-            label="輸入訊息"
-            placeholder="輸入要發送的測試訊息..."
+            :label="$t('socket_io_page.input_message_label')"
+            :placeholder="$t('socket_io_page.input_message_placeholder')"
             class="socket_io_page-section-send-form-input"
             hide-details
             :disabled="!socketIoClientConnected"
@@ -48,12 +48,12 @@
             color="primary"
             :disabled="!messageToSend || !socketIoClientConnected"
           >
-            發送
+            {{ $t('socket_io_page.send_btn') }}
           </v-btn>
         </form>
       </div>
 
-      <p class="socket_io_page-section-label">接收到的 data：</p>
+      <p class="socket_io_page-section-label">{{ $t('socket_io_page.received_data_label') }}</p>
       <div class="socket_io_page-section-messages">
         <p
           v-for="(socketIoClientMessage, index) in socketIoClientMessageList"
@@ -63,7 +63,7 @@
           {{ socketIoClientMessage }}
         </p>
         <p v-if="socketIoClientMessageList.length === 0" class="socket_io_page-section-messages-empty">
-          尚未收到任何訊息...
+          {{ $t('socket_io_page.no_message_yet') }}
         </p>
       </div>
     </section>
