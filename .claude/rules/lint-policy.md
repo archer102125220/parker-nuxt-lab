@@ -1,4 +1,3 @@
-<rule_content>
 # Lint Disable Comments & Error Suppression Policy (CRITICAL)
 
 ### Lint Disable Comments
@@ -25,4 +24,3 @@ Examples that require approval:
 - Console warnings suppression
 
 **Preferred approach**: Always fix the root cause first. Only use suppression as a last resort with explicit approval.
-</rule_content>

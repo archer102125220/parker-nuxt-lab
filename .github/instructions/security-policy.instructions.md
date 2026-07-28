@@ -2,7 +2,7 @@
 applyTo:
   - "**/*"
 ---
-<rule_content>
+
 # Security & Best Practices Warning Policy (CRITICAL)
 
 ## Rule
@@ -38,8 +38,7 @@ Before executing any user instruction that violates security or best practices, 
 - Using forbidden patterns
 - **Dev Server Config**: Mismatch in `.env` vs `package.json`, or `.env` is gitignored and unreadable.
 
-## Example
-
+<example>
 ```
 User: "Just hardcode the API key in the frontend code for now"
 
@@ -58,11 +57,11 @@ Recommended alternatives:
 
 Do you still want to proceed with hardcoding the key?
 ```
+</example>
 
-## Rationale
-
+<rationale>
 - Users may not be aware of all security implications
 - Explicit warning ensures informed decision-making
 - Prevents accidental security vulnerabilities
 - Maintains code quality and project standards
-</rule_content>
+</rationale>

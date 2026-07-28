@@ -1,4 +1,3 @@
-<rule_content>
 # CSS/SCSS Coding Rules
 
 ## Property Order (MANDATORY)
@@ -68,8 +67,8 @@ When class name has clear semantic meaning:
 5. Use Placeholders (`%name`) for static shared styles
 6. Use Mixins (`@mixin`) for parameterized styles
 
-## SCSS Example
-
+<example type="good">
+  <description>SCSS Component Example</description>
 ```scss
 .my_component {
   position: relative;
@@ -91,5 +90,5 @@ When class name has clear semantic meaning:
     opacity: 1;
   }
 }
-</rule_content>
 ```
+</example>

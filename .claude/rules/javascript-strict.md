@@ -1,4 +1,3 @@
-<rule_content>
 # JavaScript Strict Type Checking (MANDATORY)
 
 In this project, use strict type checks based on the variable's initialization state. Avoid loose truthy/falsy checks.
@@ -26,4 +25,3 @@ In this project, use strict type checks based on the variable's initialization s
 ### 5. Strict Equality
 - **ALWAYS** use `===` and `!==`.
 - **NEVER** use `==` or `!=`.
-</rule_content>

@@ -2,14 +2,15 @@
 description: No Scripts for Code Refactoring Policy
 globs: **/*
 ---
-<rule_content>
+
 # No Scripts for Code Refactoring (CRITICAL)
 
 **ABSOLUTELY FORBIDDEN: Using automated scripts (sed, awk, powershell, batch scripts) to modify code files.**
 
-### Why
+<rationale>
 - Scripts only change text, they don't understand context or imports
 - 2026-01-23 incident: `sed` changed `React.FormEvent` → `FormEvent` but forgot imports → compilation errors
+</rationale>
 
 ### ✅ Allowed
 - Use AI tools: `replace_file_content`, `multi_replace_file_content`
@@ -27,4 +28,3 @@ If absolutely necessary:
 
 ### Remember
 **Scripts are blind. AI should be intelligent.**
-</rule_content>

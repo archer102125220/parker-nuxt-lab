@@ -2,7 +2,7 @@
 applyTo:
   - "**/*.vue"
 ---
-<rule_content>
+
 # Vue/Nuxt Coding Rules
 
 ## Dynamic Components with Auto-Imported Components (MANDATORY)
@@ -25,11 +25,11 @@ const NuxtLink = resolveComponent('NuxtLink');
 </template>
 ```
 
-### Why This is Required
-
+<rationale>
 Auto-imported components are not available as runtime variables in `<script setup>`. Without `resolveComponent()`, you'll get the error:
 
 > `[Vue warn]: Property "NuxtLink" was accessed during render but is not defined on instance.`
+</rationale>
 
 ### Common Auto-Imported Components That Need This Treatment
 
@@ -39,8 +39,8 @@ Auto-imported components are not available as runtime variables in `<script setu
 - `ClientOnly`
 - Any component auto-imported from `components/` directory
 
-### Incorrect Usage (DO NOT DO THIS)
-
+<example type="bad">
+  <description>Incorrect Usage: Direct referencing of NuxtLink in template</description>
 ```vue
 <script setup>
 // ❌ Wrong: NuxtLink is not available as a runtime variable
@@ -53,7 +53,7 @@ Auto-imported components are not available as runtime variables in `<script setu
   </component>
 </template>
 ```
-
+</example>
 ### Template Text Formatting & I18n (MANDATORY)
 
 To facilitate manual editing, localization, and to strictly adhere to **Vue I18n Official Best Practices**, **DO NOT intersperse HTML tags within plain text sentences**.
@@ -62,7 +62,8 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
 2. **Explicit Separation**: If a block of text has a title, label, or icon, explicitly separate them into distinct structural HTML elements (e.g., using `-title` and `-desc` BEM elements).
 3. **Component Interpolation for I18n**: If a sentence *must* contain links or dynamic styling in the middle of a translated string, use Vue I18n's `<i18n-t>` component. **NEVER** use `v-html` for translations due to XSS vulnerabilities.
 
-**❌ Incorrect (Interspersed HTML)**
+<example type="bad">
+  <description>Incorrect: Interspersed HTML</description>
 ```vue
 <li class="item">
   ⚠️
@@ -70,8 +71,10 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
   Please configure the <code class="item-code">config.ts</code> file.
 </li>
 ```
+</example>
 
-**✅ Correct (Explicitly Separated)**
+<example type="good">
+  <description>Correct: Explicitly Separated</description>
 ```vue
 <li class="item">
   <div class="item-title">
@@ -81,8 +84,10 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
   <span class="item-desc">Please configure the config.ts file.</span>
 </li>
 ```
+</example>
 
-**✅ Correct (I18n Component Interpolation)**
+<example type="good">
+  <description>Correct: I18n Component Interpolation</description>
 ```vue
 <i18n-t keypath="message.guide" tag="p">
   <template #link>
@@ -90,4 +95,4 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
   </template>
 </i18n-t>
 ```
-</rule_content>
+</example>
