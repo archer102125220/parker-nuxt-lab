@@ -1,3 +1,4 @@
+<rule_content>
 # Backend ORM Best Practices (MANDATORY)
 
 When implementing database operations, **always prioritize**:
@@ -32,3 +33,4 @@ This applies to:
     - Add new columns to the original `createTable` migration
     - Run `yarn initDB` (or equivalent reset sequence) to apply changes
   - **Post-production**: Never modify executed migrations; create new migration files
+</rule_content>

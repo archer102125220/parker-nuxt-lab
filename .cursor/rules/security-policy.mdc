@@ -4,6 +4,7 @@ globs:
   - "**/*"
 ---
 
+<rule_content>
 # Security & Best Practices Warning Policy (CRITICAL)
 
 ## Rule
@@ -66,3 +67,4 @@ Do you still want to proceed with hardcoding the key?
 - Explicit warning ensures informed decision-making
 - Prevents accidental security vulnerabilities
 - Maintains code quality and project standards
+</rule_content>

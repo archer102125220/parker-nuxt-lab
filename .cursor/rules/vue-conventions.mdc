@@ -3,6 +3,7 @@ description: Vue/Nuxt coding standards for this Nuxt project
 globs: ["**/*.vue"]
 ---
 
+<rule_content>
 # Vue/Nuxt Coding Rules
 
 ## Dynamic Components with Auto-Imported Components (MANDATORY)
@@ -90,3 +91,4 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
   </template>
 </i18n-t>
 ```
+</rule_content>

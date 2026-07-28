@@ -1,3 +1,7 @@
+---
+applyTo:
+  - "**/*"
+---
 <rule_content>
 # No Scripts for Code Refactoring (CRITICAL)
 

@@ -1,3 +1,4 @@
+<rule_content>
 # CSS/SCSS Coding Rules
 
 ## Property Order (MANDATORY)
@@ -90,4 +91,5 @@ When class name has clear semantic meaning:
     opacity: 1;
   }
 }
+</rule_content>
 ```

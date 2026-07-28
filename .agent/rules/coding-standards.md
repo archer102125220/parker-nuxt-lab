@@ -1,3 +1,4 @@
+<rule_content>
 # Coding Standards - Antigravity
 
 > This file contains coding standards for Google Antigravity AI. All rules must be strictly followed.
@@ -129,3 +130,4 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
   </template>
 </i18n-t>
 ```
+</rule_content>

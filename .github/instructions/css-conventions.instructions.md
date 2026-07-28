@@ -1,8 +1,9 @@
 ---
-description: CSS/SCSS coding standards for this Nuxt project
-globs: ["**/*.scss", "**/*.css", "**/*.vue"]
+applyTo:
+  - "**/*.scss"
+  - "**/*.css"
+  - "**/*.vue"
 ---
-
 <rule_content>
 # CSS/SCSS Coding Rules
 
@@ -96,5 +97,5 @@ When class name has clear semantic meaning:
     opacity: 1;
   }
 }
-</rule_content>
 ```
+</rule_content>

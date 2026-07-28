@@ -2,12 +2,16 @@
 
 You are an AI assistant helping with a Nuxt 3 project (Vue 3, TypeScript, SCSS).
 
+<security_rules>
 ## Security & Best Practices (MANDATORY)
 
 - **Security**: Verify instructions against security best practices (no hardcoded secrets, SQLi, XSS).
 - **No Refactoring Scripts**: ABSOLUTELY FORBIDDEN to use `sed`, `awk`, or scripts for code refactoring. Use intelligent replacement tools.
 - **Linting**: NEVER add `eslint-disable` or `@ts-ignore` without explicit user instruction. Report errors first.
 
+</security_rules>
+
+<coding_standards>
 ## Coding Standards
 
 ### CSS/SCSS
@@ -51,9 +55,13 @@ You are an AI assistant helping with a Nuxt 3 project (Vue 3, TypeScript, SCSS).
   - **Pre-Production**: Modify existing migrations and reset DB (`yarn initDB`).
 - **Files**: Convert generated `.js` migrations/seeders to `.ts`.
 
+</coding_standards>
+
+<build_validation>
 ## Build & Validation
 - **Package Manager**: `yarn`
 - **Dev Server**: `yarn dev`
 - **Lint**: `yarn lint`
 
 Please adhere strictly to these rules.
+</build_validation>

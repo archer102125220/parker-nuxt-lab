@@ -1,3 +1,10 @@
+---
+applyTo:
+  - "**/*.js"
+  - "**/*.mjs"
+  - "**/*.vue"
+  - "**/*.ts"
+---
 <rule_content>
 # JavaScript Strict Type Checking (MANDATORY)
 

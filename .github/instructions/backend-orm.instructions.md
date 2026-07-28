@@ -1,3 +1,7 @@
+---
+applyTo:
+  - "models/**/*"
+---
 <rule_content>
 # Backend ORM Best Practices (MANDATORY)
 

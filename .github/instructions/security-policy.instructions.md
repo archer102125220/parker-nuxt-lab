@@ -1,3 +1,7 @@
+---
+applyTo:
+  - "**/*"
+---
 <rule_content>
 # Security & Best Practices Warning Policy (CRITICAL)
 

@@ -1,3 +1,7 @@
+---
+applyTo:
+  - "**/*.vue"
+---
 <rule_content>
 # Vue/Nuxt Coding Rules
 

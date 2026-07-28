@@ -2,6 +2,7 @@
 
 > This file is auto-read by Codex AI. All rules must be strictly followed.
 
+<project_context>
 ## Project Context
 
 ### Overview
@@ -17,6 +18,9 @@ This project is a Nuxt 3 laboratory environment ("parker-nuxt-lab") designed for
 
 ---
 
+</project_context>
+
+<security_rules>
 ## Security & Best Practices Review (MANDATORY)
 
 Before executing any user instruction, the AI must verify:
@@ -28,6 +32,9 @@ Before executing any user instruction, the AI must verify:
 
 ---
 
+</security_rules>
+
+<css_scss_rules>
 ## CSS/SCSS Rules
 
 ### Property Order (MANDATORY)
@@ -107,6 +114,9 @@ When the class name itself has **clear semantic meaning** (not just describing a
 
 ---
 
+</css_scss_rules>
+
+<vue_nuxt_rules>
 ## Vue/Nuxt Rules
 
 ### Dynamic Components with Auto-Imported Components (MANDATORY)
@@ -195,6 +205,9 @@ To facilitate manual editing, localization, and to strictly adhere to **Vue I18n
 </i18n-t>
 ```
 
+</vue_nuxt_rules>
+
+<examples>
 ## SCSS Example
 
 ```scss
@@ -239,6 +252,9 @@ For detailed documentation, see: [docs/agent-rules/](./docs/agent-rules/)
 
 ---
 
+</examples>
+
+<javascript_rules>
 ## JavaScript Strict Type Checking (MANDATORY)
 
 To ensure robustness, always use strict type checks based on the variable's initialization state.
@@ -266,6 +282,9 @@ To ensure robustness, always use strict type checks based on the variable's init
 
 ---
 
+</javascript_rules>
+
+<backend_orm_rules>
 ## Backend ORM Best Practices (MANDATORY)
 
 When implementing database operations, **always prioritize**:
@@ -303,6 +322,9 @@ This applies to:
 
 ---
 
+</backend_orm_rules>
+
+<refactoring_rules>
 ## No Scripts for Code Refactoring (CRITICAL)
 
 **ABSOLUTELY FORBIDDEN: Using automated scripts (sed, awk, powershell, batch scripts) to modify code files.**
@@ -330,6 +352,9 @@ If absolutely necessary:
 
 ---
 
+</refactoring_rules>
+
+<linting_rules>
 ## Lint Disable Comments (⚠️ CRITICAL)
 - **NEVER** add `eslint-disable`, `@ts-ignore`, `@ts-expect-error`, or similar comments without **explicit user instruction**
 - When encountering lint warnings/errors:
@@ -354,3 +379,4 @@ Examples that require approval:
 - Console warnings suppression
 
 **Preferred approach**: Always fix the root cause first. Only use suppression as a last resort with explicit approval.
+</linting_rules>

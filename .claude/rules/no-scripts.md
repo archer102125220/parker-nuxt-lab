@@ -1,3 +1,4 @@
+<rule_content>
 # No Scripts for Code Refactoring (CRITICAL)
 
 **ABSOLUTELY FORBIDDEN: Using automated scripts (sed, awk, powershell, batch scripts) to modify code files.**
@@ -22,3 +23,4 @@ If absolutely necessary:
 
 ### Remember
 **Scripts are blind. AI should be intelligent.**
+</rule_content>

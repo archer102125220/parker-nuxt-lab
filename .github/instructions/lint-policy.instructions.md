@@ -1,6 +1,8 @@
 ---
-description: Lint Disable and Error Suppression Policy
-globs: **/*.ts, **/*.js, **/*.vue
+applyTo:
+  - "**/*.ts"
+  - "**/*.js"
+  - "**/*.vue"
 ---
 <rule_content>
 # Lint Disable Comments & Error Suppression Policy (CRITICAL)

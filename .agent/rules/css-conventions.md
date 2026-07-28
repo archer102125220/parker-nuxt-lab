@@ -1,3 +1,4 @@
+<rule_content>
 # CSS/SCSS Coding Rules
 
 ## Property Order (MANDATORY)
@@ -66,3 +67,4 @@ When class name has clear semantic meaning:
 4. Do NOT share CSS class names between pages
 5. Use Placeholders (`%name`) for static shared styles
 6. Use Mixins (`@mixin`) for parameterized styles
+</rule_content>
