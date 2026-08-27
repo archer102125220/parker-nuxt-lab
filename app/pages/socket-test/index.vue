@@ -1,3 +1,44 @@
+<script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+useHeadMataData({
+  title: t('socket_test_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('socket_test_page.hero.description')
+    }
+  ]
+});
+
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('socket_test_page.hero.title'),
+    description: t('socket_test_page.hero.description'),
+    url: `${DOMAIN}${localePath('/socket-test')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/socket/socket-v.05.webp`
+  })
+]);
+
+// Socket Tests List
+const socketTests = computed(() => [
+  {
+    to: localePath('/socket-test/socket.io'),
+    label: t('socket_test_page.test_socket_io_label')
+  },
+  {
+    to: localePath('/socket-test/websocket'),
+    label: t('socket_test_page.test_websocket_label')
+  }
+]);
+</script>
+
 <template>
   <div class="socket_test_page">
     <!-- Hero Section -->
@@ -60,47 +101,6 @@
   </div>
 </template>
 
-<script setup>
-const { t } = useI18n();
-const localePath = useLocalePath();
-
-useHeadMataData({
-  title: t('socket_test_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('socket_test_page.hero.description')
-    }
-  ]
-});
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'WebPage',
-    name: t('socket_test_page.hero.title'),
-    description: t('socket_test_page.hero.description'),
-    url: `${DOMAIN}${localePath('/socket-test')}`,
-    inLanguage: ['zh-TW', 'en'],
-    image: `${DOMAIN}/img/socket/socket-v.05.webp`
-  })
-]);
-
-// Socket Tests List
-const socketTests = computed(() => [
-  {
-    to: localePath('/socket-test/socket.io'),
-    label: t('socket_test_page.test_socket_io_label')
-  },
-  {
-    to: localePath('/socket-test/websocket'),
-    label: t('socket_test_page.test_websocket_label')
-  }
-]);
-</script>
-
 <style lang="scss" scoped>
 // ========================================
 // Hero Section
@@ -150,7 +150,11 @@ const socketTests = computed(() => [
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -311,8 +315,12 @@ const socketTests = computed(() => [
     // Animation
     animation: fade-in-up 0.5s ease-out both;
 
-    &:nth-child(1) { animation-delay: 0.05s; }
-    &:nth-child(2) { animation-delay: 0.1s; }
+    &:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
   }
 }
 

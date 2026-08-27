@@ -1,3 +1,107 @@
+<script>
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+</script>
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('frontend_api_cache_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('frontend_api_cache_page.hero.description')
+    }
+  ]
+});
+
+const localePath = useLocalePath();
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('frontend_api_cache_page.hero.title'),
+    description: t('frontend_api_cache_page.hero.description'),
+    url: `${DOMAIN}${localePath('/frontend-api-cach-test')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/frontend-api-cach/frontend-api-cach-v.06.webp`
+  })
+]);
+
+const nuxtApp = useNuxtApp();
+const { $store } = nuxtApp;
+
+const queryData = ref('queryTest');
+const payloadData = ref('payloadTest');
+const isPost = ref(true);
+const timeConsuming = ref('');
+const useCache = ref(false);
+const useServiceWorkerCache = ref(false);
+const response = ref(null);
+
+function handleSubmit() {
+  if (isPost.value !== true) {
+    handleGetApi();
+  } else {
+    handlePostApi();
+  }
+}
+
+async function handlePostApi() {
+  if ($store.system.loading === true) return;
+  console.log('--test post api start--');
+  const startTime = Date.now();
+  console.time();
+  $store.system.setLoading(true);
+  try {
+    const _response = await nuxtApp.$nuxtServer.POST_frontendApiCachTest(
+      {
+        query: { data: queryData.value },
+        payload: { data: payloadData.value }
+      },
+      {
+        useCache: useCache.value
+      }
+    );
+    console.log({ response: _response });
+    response.value = _response;
+  } catch (error) {
+    console.log(error);
+  }
+  $store.system.setLoading(false);
+  console.timeEnd();
+  timeConsuming.value = Date.now() - startTime;
+  console.log('--test post api end--', timeConsuming.value);
+}
+
+async function handleGetApi() {
+  if ($store.system.loading === true) return;
+  console.log('--test get api start--');
+  const startTime = Date.now();
+  console.time();
+  $store.system.setLoading(true);
+  try {
+    const _response = await nuxtApp.$nuxtServer.GET_frontendApiCachTest(
+      {
+        query: { data: queryData.value }
+      },
+      {
+        useCache: useCache.value,
+        useServiceWorkerCache: useServiceWorkerCache.value
+      }
+    );
+    console.log({ response: _response });
+    response.value = _response;
+  } catch (error) {
+    console.log(error);
+  }
+  $store.system.setLoading(false);
+  console.timeEnd();
+  timeConsuming.value = Date.now() - startTime;
+  console.log('--test get api end--', timeConsuming.value);
+}
+</script>
+
 <template>
   <div class="frontend_api_cache_page">
     <!-- Hero Section -->
@@ -100,7 +204,9 @@
                 class="frontend_api_cache_page-test_card-form-checkbox_group-item"
               >
                 <template #label>
-                  <span class="frontend_api_cache_page-test_card-form-checkbox_group-item-label">
+                  <span
+                    class="frontend_api_cache_page-test_card-form-checkbox_group-item-label"
+                  >
                     {{ $t('frontend_api_cache_page.form.enable_cache') }}
                   </span>
                 </template>
@@ -112,7 +218,9 @@
                 class="frontend_api_cache_page-test_card-form-checkbox_group-item"
               >
                 <template #label>
-                  <span class="frontend_api_cache_page-test_card-form-checkbox_group-item-label">
+                  <span
+                    class="frontend_api_cache_page-test_card-form-checkbox_group-item-label"
+                  >
                     {{ $t('frontend_api_cache_page.form.enable_sw_cache') }}
                   </span>
                 </template>
@@ -134,10 +242,14 @@
           <!-- Results Display -->
           <div class="frontend_api_cache_page-test_card-results">
             <div class="frontend_api_cache_page-test_card-results-time">
-              <span class="frontend_api_cache_page-test_card-results-time-label">
+              <span
+                class="frontend_api_cache_page-test_card-results-time-label"
+              >
                 {{ $t('frontend_api_cache_page.results.time_label') }}
               </span>
-              <span class="frontend_api_cache_page-test_card-results-time-value">
+              <span
+                class="frontend_api_cache_page-test_card-results-time-value"
+              >
                 {{ timeConsuming }}
               </span>
               <span class="frontend_api_cache_page-test_card-results-time-unit">
@@ -146,10 +258,15 @@
             </div>
 
             <div class="frontend_api_cache_page-test_card-results-response">
-              <h3 class="frontend_api_cache_page-test_card-results-response-label">
+              <h3
+                class="frontend_api_cache_page-test_card-results-response-label"
+              >
                 {{ $t('frontend_api_cache_page.results.response_label') }}
               </h3>
-              <pre class="frontend_api_cache_page-test_card-results-response-content">{{ JSON.stringify(response, null, 2) }}</pre>
+              <pre
+                class="frontend_api_cache_page-test_card-results-response-content"
+                >{{ JSON.stringify(response, null, 2) }}</pre
+              >
             </div>
           </div>
         </div>
@@ -157,108 +274,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('frontend_api_cache_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('frontend_api_cache_page.hero.description')
-    }
-  ]
-});
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-const localePath = useLocalePath();
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'WebPage',
-    name: t('frontend_api_cache_page.hero.title'),
-    description: t('frontend_api_cache_page.hero.description'),
-    url: `${DOMAIN}${localePath('/frontend-api-cach-test')}`,
-    inLanguage: ['zh-TW', 'en'],
-    image: `${DOMAIN}/img/frontend-api-cach/frontend-api-cach-v.06.webp`
-  })
-]);
-
-const nuxtApp = useNuxtApp();
-const { $store } = nuxtApp;
-
-const queryData = ref('queryTest');
-const payloadData = ref('payloadTest');
-const isPost = ref(true);
-const timeConsuming = ref('');
-const useCache = ref(false);
-const useServiceWorkerCache = ref(false);
-const response = ref(null);
-
-function handleSubmit() {
-  if (isPost.value !== true) {
-    handleGetApi();
-  } else {
-    handlePostApi();
-  }
-}
-
-async function handlePostApi() {
-  if ($store.system.loading === true) return;
-  console.log('--test post api start--');
-  const startTime = Date.now();
-  console.time();
-  $store.system.setLoading(true);
-  try {
-    const _response = await nuxtApp.$nuxtServer.POST_frontendApiCachTest(
-      {
-        query: { data: queryData.value },
-        payload: { data: payloadData.value }
-      },
-      {
-        useCache: useCache.value
-      }
-    );
-    console.log({ response: _response });
-    response.value = _response;
-  } catch (error) {
-    console.log(error);
-  }
-  $store.system.setLoading(false);
-  console.timeEnd();
-  timeConsuming.value = Date.now() - startTime;
-  console.log('--test post api end--', timeConsuming.value);
-}
-
-async function handleGetApi() {
-  if ($store.system.loading === true) return;
-  console.log('--test get api start--');
-  const startTime = Date.now();
-  console.time();
-  $store.system.setLoading(true);
-  try {
-    const _response = await nuxtApp.$nuxtServer.GET_frontendApiCachTest(
-      {
-        query: { data: queryData.value }
-      },
-      {
-        useCache: useCache.value,
-        useServiceWorkerCache: useServiceWorkerCache.value
-      }
-    );
-    console.log({ response: _response });
-    response.value = _response;
-  } catch (error) {
-    console.log(error);
-  }
-  $store.system.setLoading(false);
-  console.timeEnd();
-  timeConsuming.value = Date.now() - startTime;
-  console.log('--test get api end--', timeConsuming.value);
-}
-</script>
 
 <style lang="scss" scoped>
 // ========================================
@@ -309,7 +324,11 @@ async function handleGetApi() {
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -421,7 +440,7 @@ async function handleGetApi() {
       // Typography
       font-size: 16px;
       font-weight: 600;
-      color: var(--color-primary, #44A08D);
+      color: var(--color-primary, #44a08d);
       text-decoration: none;
 
       // Animation
@@ -528,7 +547,7 @@ async function handleGetApi() {
         // Typography
         font-size: 24px;
         font-weight: 700;
-        color: var(--color-primary, #44A08D);
+        color: var(--color-primary, #44a08d);
       }
 
       &-unit {

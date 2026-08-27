@@ -1,3 +1,95 @@
+<script setup>
+const { t } = useI18n();
+
+// Tech Stack Items - defined directly to avoid i18n array handling issues
+const techStack = {
+  frontend: ['Nuxt 4', 'Vue 3', 'Vuetify 3', 'TypeScript', 'SCSS'],
+  backend: ['Nuxt Server', 'H3', 'Nitro', 'Node.js'],
+  tools: ['Vite', 'Playwright', 'ESLint', 'Git'],
+  features_tech: ['PWA', 'i18n', 'WebRTC', 'Socket.IO', 'face-api.js']
+};
+
+const frontendItems = computed(() => techStack.frontend);
+const backendItems = computed(() => techStack.backend);
+const toolsItems = computed(() => techStack.tools);
+const featuresTechItems = computed(() => techStack.features_tech);
+
+// Features
+const features = [
+  { key: 'pwa' },
+  { key: 'realtime' },
+  { key: 'ai' },
+  { key: 'testing' },
+  { key: 'components' },
+  { key: 'i18n' }
+];
+
+// Statistics
+const stats = [
+  { key: 'components', value: '30+' },
+  { key: 'pages', value: '60+' },
+  { key: 'features', value: '15+' },
+  { key: 'tests', value: '100+' }
+];
+
+useHeadMataData({
+  title: t('about.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('about.hero.description')
+    }
+  ]
+});
+
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+const localePath = useLocalePath();
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': ['WebPage', 'AboutPage'],
+    name: t('about.hero.title'),
+    description: t('about.hero.description'),
+    url: `${DOMAIN}${localePath('/about')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/about/about-v.10.webp`,
+    author: {
+      '@type': 'Person',
+      name: 'Parker Chen',
+      url: `${DOMAIN}${localePath('/about')}`
+    },
+    about: {
+      '@type': 'SoftwareApplication',
+      name: 'Parker Nuxt Lab',
+      applicationCategory: 'DeveloperApplication',
+      description: t('about.hero.description'),
+      operatingSystem: 'Web Browser',
+      url: DOMAIN,
+      featureList: [
+        t('about.features.pwa.title'),
+        t('about.features.realtime.title'),
+        t('about.features.ai.title'),
+        t('about.features.testing.title'),
+        t('about.features.components.title'),
+        t('about.features.i18n.title')
+      ],
+      applicationSubCategory: [
+        ...techStack.frontend,
+        ...techStack.backend,
+        ...techStack.tools,
+        ...techStack.features_tech
+      ]
+    }
+  }),
+  definePerson({
+    name: 'Parker Chen',
+    url: `${DOMAIN}${localePath('/about')}`,
+    sameAs: ['https://github.com/archer102125220']
+  })
+]);
+</script>
+
 <template>
   <div class="about_page">
     <!-- Hero Section -->
@@ -214,98 +306,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-// Tech Stack Items - defined directly to avoid i18n array handling issues
-const techStack = {
-  frontend: ['Nuxt 4', 'Vue 3', 'Vuetify 3', 'TypeScript', 'SCSS'],
-  backend: ['Nuxt Server', 'H3', 'Nitro', 'Node.js'],
-  tools: ['Vite', 'Playwright', 'ESLint', 'Git'],
-  features_tech: ['PWA', 'i18n', 'WebRTC', 'Socket.IO', 'face-api.js']
-};
-
-const frontendItems = computed(() => techStack.frontend);
-const backendItems = computed(() => techStack.backend);
-const toolsItems = computed(() => techStack.tools);
-const featuresTechItems = computed(() => techStack.features_tech);
-
-// Features
-const features = [
-  { key: 'pwa' },
-  { key: 'realtime' },
-  { key: 'ai' },
-  { key: 'testing' },
-  { key: 'components' },
-  { key: 'i18n' }
-];
-
-// Statistics
-const stats = [
-  { key: 'components', value: '30+' },
-  { key: 'pages', value: '60+' },
-  { key: 'features', value: '15+' },
-  { key: 'tests', value: '100+' }
-];
-
-useHeadMataData({
-  title: t('about.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('about.hero.description')
-    }
-  ]
-});
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-const localePath = useLocalePath();
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': ['WebPage', 'AboutPage'],
-    name: t('about.hero.title'),
-    description: t('about.hero.description'),
-    url: `${DOMAIN}${localePath('/about')}`,
-    inLanguage: ['zh-TW', 'en'],
-    image: `${DOMAIN}/img/about/about-v.10.webp`,
-    author: {
-      '@type': 'Person',
-      name: 'Parker Chen',
-      url: `${DOMAIN}${localePath('/about')}`
-    },
-    about: {
-      '@type': 'SoftwareApplication',
-      name: 'Parker Nuxt Lab',
-      applicationCategory: 'DeveloperApplication',
-      description: t('about.hero.description'),
-      operatingSystem: 'Web Browser',
-      url: DOMAIN,
-      featureList: [
-        t('about.features.pwa.title'),
-        t('about.features.realtime.title'),
-        t('about.features.ai.title'),
-        t('about.features.testing.title'),
-        t('about.features.components.title'),
-        t('about.features.i18n.title')
-      ],
-      applicationSubCategory: [
-        ...techStack.frontend,
-        ...techStack.backend,
-        ...techStack.tools,
-        ...techStack.features_tech
-      ]
-    }
-  }),
-  definePerson({
-    name: 'Parker Chen',
-    url: `${DOMAIN}${localePath('/about')}`,
-    sameAs: ['https://github.com/archer102125220']
-  })
-]);
-</script>
 
 <style lang="scss" scoped>
 .about_page {

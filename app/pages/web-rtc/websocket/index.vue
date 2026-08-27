@@ -1,3 +1,31 @@
+<script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+const router = useRouter();
+
+useHeadMataData({
+  title: t('web_rtc_websocket_page.hero.title')
+});
+
+const roomId = ref('');
+const disabledJoinLink = computed(
+  () =>
+    typeof roomId.value !== 'string' ||
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+      roomId.value
+    ) === false
+);
+const rules = computed(
+  () => () =>
+    disabledJoinLink.value === false || roomId.value === '' || '無效視訊 ID'
+);
+
+function joinRoom() {
+  if (disabledJoinLink.value) return;
+  router.push(localePath(`/web-rtc/websocket/room/${roomId.value}`));
+}
+</script>
+
 <template>
   <div class="web_rtc_websocket_page">
     <!-- Hero Section -->
@@ -30,7 +58,9 @@
 
       <div class="web_rtc_websocket_page-section-actions">
         <div class="web_rtc_websocket_page-section-actions-create">
-          <h3 class="web_rtc_websocket_page-section-actions-create-title">建立視訊聊天</h3>
+          <h3 class="web_rtc_websocket_page-section-actions-create-title">
+            建立視訊聊天
+          </h3>
           <NuxtLink :to="$localePath('/web-rtc/websocket/room')">
             <v-btn color="primary" size="large" block>
               <v-icon class="mr-2">mdi-video-plus</v-icon>
@@ -44,8 +74,13 @@
         </div>
 
         <div class="web_rtc_websocket_page-section-actions-join">
-          <h3 class="web_rtc_websocket_page-section-actions-join-title">加入視訊聊天</h3>
-          <form class="web_rtc_websocket_page-section-actions-join-form" @submit.prevent="joinRoom">
+          <h3 class="web_rtc_websocket_page-section-actions-join-title">
+            加入視訊聊天
+          </h3>
+          <form
+            class="web_rtc_websocket_page-section-actions-join-form"
+            @submit.prevent="joinRoom"
+          >
             <v-text-field
               v-model="roomId"
               label="Room ID"
@@ -69,34 +104,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-const localePath = useLocalePath();
-const router = useRouter();
-
-useHeadMataData({
-  title: t('web_rtc_websocket_page.hero.title')
-});
-
-const roomId = ref('');
-const disabledJoinLink = computed(
-  () =>
-    typeof roomId.value !== 'string' ||
-    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
-      roomId.value
-    ) === false
-);
-const rules = computed(
-  () => () =>
-    disabledJoinLink.value === false || roomId.value === '' || '無效視訊 ID'
-);
-
-function joinRoom() {
-  if (disabledJoinLink.value) return;
-  router.push(localePath(`/web-rtc/websocket/room/${roomId.value}`));
-}
-</script>
 
 <style lang="scss">
 .web_rtc_websocket_page {
@@ -193,7 +200,8 @@ function joinRoom() {
         align-items: stretch;
       }
 
-      &-create, &-join {
+      &-create,
+      &-join {
         flex: 1;
         padding: 24px;
         border-radius: 12px;

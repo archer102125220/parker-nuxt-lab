@@ -1,3 +1,192 @@
+<script>
+import IndexedDBORM from '@app/utils/indexeddb/indexeddb-orm';
+</script>
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('indexeddb_demo_page.hero.title')
+});
+
+const localePath = useLocalePath();
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('indexeddb_demo_page.hero.title'),
+    description: t('indexeddb_demo_page.hero.description'),
+    url: `${DOMAIN}${localePath('/indexeddb-demo')}`,
+    inLanguage: ['zh-TW', 'en']
+  })
+]);
+
+// Database setup
+const dbName = 'indexeddb_demo';
+const dbVersion = 1;
+const isInitialized = ref(false);
+const isLoading = ref(false);
+
+// Data state
+const users = ref([]);
+const newUser = ref({ name: '', email: '', age: 25 });
+const minAge = ref(0);
+const maxAge = ref(100);
+const logs = ref([]);
+
+// ORM instance
+let db = null;
+let User = null;
+
+// Logging helper
+function addLog(message, type = 'info') {
+  const time = new Date().toLocaleTimeString();
+  logs.value.unshift({ time, message, type });
+  if (logs.value.length > 20) {
+    logs.value.pop();
+  }
+}
+
+// Initialize database
+async function initDatabase() {
+  try {
+    db = new IndexedDBORM(dbName, { version: dbVersion });
+
+    User = db.define(
+      'users',
+      {
+        id: { type: 'number', primaryKey: true, autoIncrement: true },
+        name: { type: 'string', allowNull: false },
+        email: { type: 'string', unique: true },
+        age: { type: 'number', defaultValue: 0 }
+      },
+      {
+        indexes: [{ fields: ['age'] }]
+      }
+    );
+
+    // Explicitly initialize the database connection
+    await db._initDatabase();
+
+    isInitialized.value = true;
+    addLog('Database initialized successfully', 'success');
+    await handleLoadAll();
+  } catch (error) {
+    isInitialized.value = false;
+    addLog(`Error initializing database: ${error.message}`, 'error');
+    console.error('IndexedDB initialization error:', error);
+  }
+}
+
+// CRUD Operations
+async function handleCreate() {
+  if (!newUser.value.name || !newUser.value.email) {
+    addLog('Name and email are required', 'error');
+    return;
+  }
+
+  isLoading.value = true;
+  try {
+    const created = await User.create({
+      name: newUser.value.name,
+      email: newUser.value.email,
+      age: newUser.value.age || 0
+    });
+    addLog(`Created user: ${created.name} (ID: ${created.id})`, 'success');
+    newUser.value = { name: '', email: '', age: 25 };
+    await handleLoadAll();
+  } catch (error) {
+    addLog(`Error creating user: ${error.message}`, 'error');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleLoadAll() {
+  isLoading.value = true;
+  try {
+    const result = await User.findAll();
+    users.value = result;
+    addLog(`Loaded ${result.length} users`, 'info');
+  } catch (error) {
+    addLog(`Error loading users: ${error.message}`, 'error');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleQuery() {
+  isLoading.value = true;
+  try {
+    const result = await User.findAll({
+      where: {
+        age: { $gte: minAge.value, $lte: maxAge.value }
+      },
+      order: [['age', 'ASC']]
+    });
+    users.value = result;
+    addLog(
+      `Found ${result.length} users with age between ${minAge.value} and ${maxAge.value}`,
+      'info'
+    );
+  } catch (error) {
+    addLog(`Error querying users: ${error.message}`, 'error');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleDelete(id) {
+  isLoading.value = true;
+  try {
+    await User.destroy({ where: { id } });
+    addLog(`Deleted user with ID: ${id}`, 'success');
+    await handleLoadAll();
+  } catch (error) {
+    addLog(`Error deleting user: ${error.message}`, 'error');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleBulkAdd() {
+  isLoading.value = true;
+  try {
+    const sampleUsers = [
+      { name: 'Alice', email: `alice_${Date.now()}@example.com`, age: 28 },
+      { name: 'Bob', email: `bob_${Date.now()}@example.com`, age: 35 },
+      { name: 'Charlie', email: `charlie_${Date.now()}@example.com`, age: 22 }
+    ];
+    await User.bulkCreate(sampleUsers);
+    addLog(`Added ${sampleUsers.length} sample users`, 'success');
+    await handleLoadAll();
+  } catch (error) {
+    addLog(`Error adding sample users: ${error.message}`, 'error');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleClearAll() {
+  isLoading.value = true;
+  try {
+    await User.clear();
+    users.value = [];
+    addLog('Cleared all users', 'success');
+  } catch (error) {
+    addLog(`Error clearing users: ${error.message}`, 'error');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+// Initialize on mount
+onMounted(() => {
+  initDatabase();
+});
+</script>
+
 <template>
   <div class="indexeddb_demo_page">
     <!-- Hero Section -->
@@ -200,194 +389,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-import IndexedDBORM from '@app/utils/indexeddb/indexeddb-orm';
-
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('indexeddb_demo_page.hero.title')
-});
-
-const localePath = useLocalePath();
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'WebPage',
-    name: t('indexeddb_demo_page.hero.title'),
-    description: t('indexeddb_demo_page.hero.description'),
-    url: `${DOMAIN}${localePath('/indexeddb-demo')}`,
-    inLanguage: ['zh-TW', 'en']
-  })
-]);
-
-// Database setup
-const dbName = 'indexeddb_demo';
-const dbVersion = 1;
-const isInitialized = ref(false);
-const isLoading = ref(false);
-
-// Data state
-const users = ref([]);
-const newUser = ref({ name: '', email: '', age: 25 });
-const minAge = ref(0);
-const maxAge = ref(100);
-const logs = ref([]);
-
-// ORM instance
-let db = null;
-let User = null;
-
-// Logging helper
-function addLog(message, type = 'info') {
-  const time = new Date().toLocaleTimeString();
-  logs.value.unshift({ time, message, type });
-  if (logs.value.length > 20) {
-    logs.value.pop();
-  }
-}
-
-// Initialize database
-async function initDatabase() {
-  try {
-    db = new IndexedDBORM(dbName, { version: dbVersion });
-
-    User = db.define(
-      'users',
-      {
-        id: { type: 'number', primaryKey: true, autoIncrement: true },
-        name: { type: 'string', allowNull: false },
-        email: { type: 'string', unique: true },
-        age: { type: 'number', defaultValue: 0 }
-      },
-      {
-        indexes: [{ fields: ['age'] }]
-      }
-    );
-
-    // Explicitly initialize the database connection
-    await db._initDatabase();
-
-    isInitialized.value = true;
-    addLog('Database initialized successfully', 'success');
-    await handleLoadAll();
-  } catch (error) {
-    isInitialized.value = false;
-    addLog(`Error initializing database: ${error.message}`, 'error');
-    console.error('IndexedDB initialization error:', error);
-  }
-}
-
-// CRUD Operations
-async function handleCreate() {
-  if (!newUser.value.name || !newUser.value.email) {
-    addLog('Name and email are required', 'error');
-    return;
-  }
-
-  isLoading.value = true;
-  try {
-    const created = await User.create({
-      name: newUser.value.name,
-      email: newUser.value.email,
-      age: newUser.value.age || 0
-    });
-    addLog(`Created user: ${created.name} (ID: ${created.id})`, 'success');
-    newUser.value = { name: '', email: '', age: 25 };
-    await handleLoadAll();
-  } catch (error) {
-    addLog(`Error creating user: ${error.message}`, 'error');
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-async function handleLoadAll() {
-  isLoading.value = true;
-  try {
-    const result = await User.findAll();
-    users.value = result;
-    addLog(`Loaded ${result.length} users`, 'info');
-  } catch (error) {
-    addLog(`Error loading users: ${error.message}`, 'error');
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-async function handleQuery() {
-  isLoading.value = true;
-  try {
-    const result = await User.findAll({
-      where: {
-        age: { $gte: minAge.value, $lte: maxAge.value }
-      },
-      order: [['age', 'ASC']]
-    });
-    users.value = result;
-    addLog(
-      `Found ${result.length} users with age between ${minAge.value} and ${maxAge.value}`,
-      'info'
-    );
-  } catch (error) {
-    addLog(`Error querying users: ${error.message}`, 'error');
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-async function handleDelete(id) {
-  isLoading.value = true;
-  try {
-    await User.destroy({ where: { id } });
-    addLog(`Deleted user with ID: ${id}`, 'success');
-    await handleLoadAll();
-  } catch (error) {
-    addLog(`Error deleting user: ${error.message}`, 'error');
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-async function handleBulkAdd() {
-  isLoading.value = true;
-  try {
-    const sampleUsers = [
-      { name: 'Alice', email: `alice_${Date.now()}@example.com`, age: 28 },
-      { name: 'Bob', email: `bob_${Date.now()}@example.com`, age: 35 },
-      { name: 'Charlie', email: `charlie_${Date.now()}@example.com`, age: 22 }
-    ];
-    await User.bulkCreate(sampleUsers);
-    addLog(`Added ${sampleUsers.length} sample users`, 'success');
-    await handleLoadAll();
-  } catch (error) {
-    addLog(`Error adding sample users: ${error.message}`, 'error');
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-async function handleClearAll() {
-  isLoading.value = true;
-  try {
-    await User.clear();
-    users.value = [];
-    addLog('Cleared all users', 'success');
-  } catch (error) {
-    addLog(`Error clearing users: ${error.message}`, 'error');
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-// Initialize on mount
-onMounted(() => {
-  initDatabase();
-});
-</script>
 
 <style lang="scss">
 .indexeddb_demo_page {

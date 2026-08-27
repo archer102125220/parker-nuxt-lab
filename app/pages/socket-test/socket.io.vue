@@ -1,77 +1,7 @@
-<template>
-  <div class="socket_io_page">
-    <!-- Hero Section -->
-    <section class="socket_io_page-hero">
-      <div class="socket_io_page-hero-background">
-        <div class="socket_io_page-hero-background-overlay" />
-      </div>
-
-      <div class="socket_io_page-hero-content">
-        <h1 class="socket_io_page-hero-content-title">
-          {{ $t('socket_io_page.hero.title') }}
-        </h1>
-        <p class="socket_io_page-hero-content-subtitle">
-          {{ $t('socket_io_page.hero.subtitle') }}
-        </p>
-        <p class="socket_io_page-hero-content-description">
-          {{ $t('socket_io_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="socket_io_page-section">
-      <div class="socket_io_page-section-status">
-        <span class="socket_io_page-section-status-label">{{ $t('socket_io_page.connection_status') }}</span>
-        <span
-          class="socket_io_page-section-status-indicator"
-          :css-connected="socketIoClientConnected"
-        >
-          {{ socketIoClientConnected ? $t('socket_io_page.connected') : $t('socket_io_page.disconnected') }}
-        </span>
-      </div>
-
-      <!-- Send Message Form -->
-      <div class="socket_io_page-section-send">
-        <h3 class="socket_io_page-section-send-title">{{ $t('socket_io_page.send_message_title') }}</h3>
-        <form class="socket_io_page-section-send-form" @submit.prevent="sendMessage">
-          <v-text-field
-            v-model="messageToSend"
-            :label="$t('socket_io_page.input_message_label')"
-            :placeholder="$t('socket_io_page.input_message_placeholder')"
-            class="socket_io_page-section-send-form-input"
-            hide-details
-            :disabled="!socketIoClientConnected"
-          />
-          <v-btn
-            type="submit"
-            color="primary"
-            :disabled="!messageToSend || !socketIoClientConnected"
-          >
-            {{ $t('socket_io_page.send_btn') }}
-          </v-btn>
-        </form>
-      </div>
-
-      <p class="socket_io_page-section-label">{{ $t('socket_io_page.received_data_label') }}</p>
-      <div class="socket_io_page-section-messages">
-        <p
-          v-for="(socketIoClientMessage, index) in socketIoClientMessageList"
-          :key="index"
-          class="socket_io_page-section-messages-item"
-        >
-          {{ socketIoClientMessage }}
-        </p>
-        <p v-if="socketIoClientMessageList.length === 0" class="socket_io_page-section-messages-empty">
-          {{ $t('socket_io_page.no_message_yet') }}
-        </p>
-      </div>
-    </section>
-  </div>
-</template>
-
-<script setup>
+<script>
 import _cloneDeep from 'lodash/cloneDeep';
+</script>
+<script setup>
 const { t } = useI18n();
 
 useHeadMataData({
@@ -139,6 +69,94 @@ watch(
   { immediate: true }
 );
 </script>
+
+<template>
+  <div class="socket_io_page">
+    <!-- Hero Section -->
+    <section class="socket_io_page-hero">
+      <div class="socket_io_page-hero-background">
+        <div class="socket_io_page-hero-background-overlay" />
+      </div>
+
+      <div class="socket_io_page-hero-content">
+        <h1 class="socket_io_page-hero-content-title">
+          {{ $t('socket_io_page.hero.title') }}
+        </h1>
+        <p class="socket_io_page-hero-content-subtitle">
+          {{ $t('socket_io_page.hero.subtitle') }}
+        </p>
+        <p class="socket_io_page-hero-content-description">
+          {{ $t('socket_io_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="socket_io_page-section">
+      <div class="socket_io_page-section-status">
+        <span class="socket_io_page-section-status-label">{{
+          $t('socket_io_page.connection_status')
+        }}</span>
+        <span
+          class="socket_io_page-section-status-indicator"
+          :css-connected="socketIoClientConnected"
+        >
+          {{
+            socketIoClientConnected
+              ? $t('socket_io_page.connected')
+              : $t('socket_io_page.disconnected')
+          }}
+        </span>
+      </div>
+
+      <!-- Send Message Form -->
+      <div class="socket_io_page-section-send">
+        <h3 class="socket_io_page-section-send-title">
+          {{ $t('socket_io_page.send_message_title') }}
+        </h3>
+        <form
+          class="socket_io_page-section-send-form"
+          @submit.prevent="sendMessage"
+        >
+          <v-text-field
+            v-model="messageToSend"
+            :label="$t('socket_io_page.input_message_label')"
+            :placeholder="$t('socket_io_page.input_message_placeholder')"
+            class="socket_io_page-section-send-form-input"
+            hide-details
+            :disabled="!socketIoClientConnected"
+          />
+          <v-btn
+            type="submit"
+            color="primary"
+            :disabled="!messageToSend || !socketIoClientConnected"
+          >
+            {{ $t('socket_io_page.send_btn') }}
+          </v-btn>
+        </form>
+      </div>
+
+      <p class="socket_io_page-section-label">
+        {{ $t('socket_io_page.received_data_label') }}
+      </p>
+      <div class="socket_io_page-section-messages">
+        <p
+          v-for="(socketIoClientMessage, index) in socketIoClientMessageList"
+          :key="index"
+          class="socket_io_page-section-messages-item"
+        >
+          {{ socketIoClientMessage }}
+        </p>
+        <p
+          v-if="socketIoClientMessageList.length === 0"
+          class="socket_io_page-section-messages-empty"
+        >
+          {{ $t('socket_io_page.no_message_yet') }}
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .socket_io_page {
@@ -237,7 +255,7 @@ watch(
         background: #fed7d7;
         color: #c53030;
 
-        &[css-connected="true"] {
+        &[css-connected='true'] {
           background: #c6f6d5;
           color: #276749;
         }

@@ -1,68 +1,3 @@
-<template>
-  <div class="web_rtc_sse_page">
-    <!-- Hero Section -->
-    <section class="web_rtc_sse_page-hero">
-      <div class="web_rtc_sse_page-hero-background">
-        <div class="web_rtc_sse_page-hero-background-overlay" />
-      </div>
-
-      <div class="web_rtc_sse_page-hero-content">
-        <h1 class="web_rtc_sse_page-hero-content-title">
-          {{ $t('web_rtc_sse_page.hero.title') }}
-        </h1>
-        <p class="web_rtc_sse_page-hero-content-subtitle">
-          {{ $t('web_rtc_sse_page.hero.subtitle') }}
-        </p>
-        <p class="web_rtc_sse_page-hero-content-description">
-          {{ $t('web_rtc_sse_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="web_rtc_sse_page-section">
-      <div class="web_rtc_sse_page-section-actions">
-        <div class="web_rtc_sse_page-section-actions-create">
-          <h3 class="web_rtc_sse_page-section-actions-create-title">建立視訊聊天</h3>
-          <NuxtLink :to="$localePath('/web-rtc/server-sent-event/room')">
-            <v-btn color="primary" size="large" block>
-              <v-icon class="mr-2">mdi-video-plus</v-icon>
-              建立新房間
-            </v-btn>
-          </NuxtLink>
-        </div>
-
-        <div class="web_rtc_sse_page-section-actions-divider">
-          <span>或</span>
-        </div>
-
-        <div class="web_rtc_sse_page-section-actions-join">
-          <h3 class="web_rtc_sse_page-section-actions-join-title">加入視訊聊天</h3>
-          <form class="web_rtc_sse_page-section-actions-join-form" @submit.prevent="joinRoom">
-            <v-text-field
-              v-model="roomId"
-              label="Room ID"
-              placeholder="輸入房間 ID..."
-              :rules="[rules]"
-              hide-details="auto"
-            />
-            <v-btn
-              type="submit"
-              color="primary"
-              variant="tonal"
-              size="large"
-              :disabled="disabledJoinLink"
-            >
-              <v-icon class="mr-2">mdi-video-account</v-icon>
-              加入房間
-            </v-btn>
-          </form>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -90,6 +25,78 @@ function joinRoom() {
   router.push(localePath(`/web-rtc/server-sent-event/room/${roomId.value}`));
 }
 </script>
+
+<template>
+  <div class="web_rtc_sse_page">
+    <!-- Hero Section -->
+    <section class="web_rtc_sse_page-hero">
+      <div class="web_rtc_sse_page-hero-background">
+        <div class="web_rtc_sse_page-hero-background-overlay" />
+      </div>
+
+      <div class="web_rtc_sse_page-hero-content">
+        <h1 class="web_rtc_sse_page-hero-content-title">
+          {{ $t('web_rtc_sse_page.hero.title') }}
+        </h1>
+        <p class="web_rtc_sse_page-hero-content-subtitle">
+          {{ $t('web_rtc_sse_page.hero.subtitle') }}
+        </p>
+        <p class="web_rtc_sse_page-hero-content-description">
+          {{ $t('web_rtc_sse_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="web_rtc_sse_page-section">
+      <div class="web_rtc_sse_page-section-actions">
+        <div class="web_rtc_sse_page-section-actions-create">
+          <h3 class="web_rtc_sse_page-section-actions-create-title">
+            建立視訊聊天
+          </h3>
+          <NuxtLink :to="$localePath('/web-rtc/server-sent-event/room')">
+            <v-btn color="primary" size="large" block>
+              <v-icon class="mr-2">mdi-video-plus</v-icon>
+              建立新房間
+            </v-btn>
+          </NuxtLink>
+        </div>
+
+        <div class="web_rtc_sse_page-section-actions-divider">
+          <span>或</span>
+        </div>
+
+        <div class="web_rtc_sse_page-section-actions-join">
+          <h3 class="web_rtc_sse_page-section-actions-join-title">
+            加入視訊聊天
+          </h3>
+          <form
+            class="web_rtc_sse_page-section-actions-join-form"
+            @submit.prevent="joinRoom"
+          >
+            <v-text-field
+              v-model="roomId"
+              label="Room ID"
+              placeholder="輸入房間 ID..."
+              :rules="[rules]"
+              hide-details="auto"
+            />
+            <v-btn
+              type="submit"
+              color="primary"
+              variant="tonal"
+              size="large"
+              :disabled="disabledJoinLink"
+            >
+              <v-icon class="mr-2">mdi-video-account</v-icon>
+              加入房間
+            </v-btn>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .web_rtc_sse_page {
@@ -175,7 +182,8 @@ function joinRoom() {
         align-items: stretch;
       }
 
-      &-create, &-join {
+      &-create,
+      &-join {
         flex: 1;
         padding: 24px;
         border-radius: 12px;

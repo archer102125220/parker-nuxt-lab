@@ -1,23 +1,17 @@
-<template>
-  <div class="web_rtc_room_redirect_page">
-    <div class="web_rtc_room_redirect_page-loader">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        size="64"
-      />
-      <p class="web_rtc_room_redirect_page-loader-text">
-        正在建立視訊房間...
-      </p>
-    </div>
-  </div>
-</template>
-
 <script setup>
 definePageMeta({
   middleware: 'generate-params-uuid'
 });
 </script>
+
+<template>
+  <div class="web_rtc_room_redirect_page">
+    <div class="web_rtc_room_redirect_page-loader">
+      <v-progress-circular indeterminate color="primary" size="64" />
+      <p class="web_rtc_room_redirect_page-loader-text">正在建立視訊房間...</p>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 .web_rtc_room_redirect_page {

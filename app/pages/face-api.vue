@@ -1,205 +1,3 @@
-<template>
-  <div class="face_api_page">
-    <!-- Hero Section -->
-    <section class="face_api_page-hero">
-      <div class="face_api_page-hero-background">
-        <img
-          src="/img/face-api/face-api-v.04.webp"
-          alt="Face API Test"
-          class="face_api_page-hero-background-image"
-        />
-        <div class="face_api_page-hero-background-overlay" />
-      </div>
-
-      <div class="face_api_page-hero-content">
-        <h1 class="face_api_page-hero-content-title">
-          {{ $t('face_api_page.hero.title') }}
-        </h1>
-        <p class="face_api_page-hero-content-subtitle">
-          {{ $t('face_api_page.hero.subtitle') }}
-        </p>
-        <p class="face_api_page-hero-content-description">
-          {{ $t('face_api_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="face_api_page-intro">
-      <div class="face_api_page-intro-container">
-        <p class="face_api_page-intro-text">
-          {{ $t('face_api_page.intro') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Face Comparison Form -->
-    <section class="face_api_page-section">
-      <div class="face_api_page-section-container">
-        <div class="face_api_page-card">
-          <form class="face_api_page-card-form" @submit.prevent="handleDiscern">
-            <ImageUpload
-              ref="imgSelectorEl"
-              v-model="identifyImage"
-              :btn-label="$t('face_api_page.form.upload_button')"
-              :label="$t('face_api_page.form.upload_label')"
-              :mask-label="$t('face_api_page.form.upload_mask')"
-            />
-
-            <v-btn
-              color="primary"
-              type="submit"
-              size="large"
-              block
-              class="face_api_page-card-form-submit"
-            >
-              {{ $t('face_api_page.form.submit_button') }}
-            </v-btn>
-
-            <div class="face_api_page-card-form-result">
-              <span class="face_api_page-card-form-result-label">
-                {{ $t('face_api_page.form.similarity_label') }}
-              </span>
-              <span class="face_api_page-card-form-result-value">
-                {{ distance.toFixed(4) }}
-              </span>
-              <span
-                class="face_api_page-card-form-result-status"
-                :css-status="distance < 0.6 ? 'same' : 'different'"
-              >
-                {{ distance < 0.6 ? $t('face_api_page.form.same_person') : $t('face_api_page.form.different_person') }}
-              </span>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Video Preview Section -->
-    <section class="face_api_page-section">
-      <div class="face_api_page-section-container">
-        <h2 class="face_api_page-section-title">
-          {{ $t('face_api_page.sections.video_preview') }}
-        </h2>
-        <div class="face_api_page-video_row">
-          <div class="face_api_page-video_row-item">
-            <video
-              ref="videoEl"
-              class="face_api_page-video_row-item-video"
-              width="480"
-              height="360"
-              autoplay
-              controls
-              :srcObject="streamObj"
-            />
-          </div>
-          <div class="face_api_page-video_row-item">
-            <canvas
-              ref="canvasVideo"
-              class="face_api_page-video_row-item-canvas"
-              width="480"
-              height="360"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bounding Boxes Section -->
-    <section class="face_api_page-section">
-      <div class="face_api_page-section-container">
-        <h2 class="face_api_page-section-title">
-          {{ $t('face_api_page.sections.bounding_boxes') }}
-        </h2>
-        <div class="face_api_page-detection_row">
-          <div class="face_api_page-detection_row-canvas_wrapper">
-            <canvas
-              ref="detectionsVideo"
-              class="face_api_page-detection_row-canvas_wrapper-canvas"
-              width="480"
-              height="360"
-            />
-            <canvas
-              ref="detectionsOutput"
-              class="face_api_page-detection_row-canvas_wrapper-overlay"
-              width="480"
-              height="360"
-            />
-          </div>
-          <div class="face_api_page-detection_row-data">
-            <h3 class="face_api_page-detection_row-data-title">
-              {{ $t('face_api_page.data.bounding_boxes') }}
-            </h3>
-            <pre class="face_api_page-detection_row-data-content">{{ JSON.stringify(faceBoundingBoxesData, null, 2) }}</pre>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Landmarks Section -->
-    <section class="face_api_page-section">
-      <div class="face_api_page-section-container">
-        <h2 class="face_api_page-section-title">
-          {{ $t('face_api_page.sections.landmarks') }}
-        </h2>
-        <div class="face_api_page-detection_row">
-          <div class="face_api_page-detection_row-canvas_wrapper">
-            <canvas
-              ref="detectionsWithLandmarksVideo"
-              class="face_api_page-detection_row-canvas_wrapper-canvas"
-              width="480"
-              height="360"
-            />
-            <canvas
-              ref="detectionsWithLandmarksOutput"
-              class="face_api_page-detection_row-canvas_wrapper-overlay"
-              width="480"
-              height="360"
-            />
-          </div>
-          <div class="face_api_page-detection_row-data">
-            <h3 class="face_api_page-detection_row-data-title">
-              {{ $t('face_api_page.data.landmarks') }}
-            </h3>
-            <pre class="face_api_page-detection_row-data-content">{{ JSON.stringify(faceLandmarksData, null, 2) }}</pre>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Expressions Section -->
-    <section class="face_api_page-section">
-      <div class="face_api_page-section-container">
-        <h2 class="face_api_page-section-title">
-          {{ $t('face_api_page.sections.expressions') }}
-        </h2>
-        <div class="face_api_page-detection_row">
-          <div class="face_api_page-detection_row-canvas_wrapper">
-            <canvas
-              ref="detectionsWithExpressionsVideo"
-              class="face_api_page-detection_row-canvas_wrapper-canvas"
-              width="480"
-              height="360"
-            />
-            <canvas
-              ref="detectionsWithExpressionsOutput"
-              class="face_api_page-detection_row-canvas_wrapper-overlay"
-              width="480"
-              height="360"
-            />
-          </div>
-          <div class="face_api_page-detection_row-data">
-            <h3 class="face_api_page-detection_row-data-title">
-              {{ $t('face_api_page.data.expressions') }}
-            </h3>
-            <pre class="face_api_page-detection_row-data-content">{{ JSON.stringify(faceExpressionResultsData, null, 2) }}</pre>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -227,7 +25,6 @@ useSchemaOrg([
     image: `${DOMAIN}/img/face-api/face-api-v.04.webp`
   })
 ]);
-
 
 // https://justadudewhohacks.github.io/face-api.js/docs/globals.html
 // https://gitee.com/tongjh/face-api-demo
@@ -486,6 +283,218 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
 }
 </script>
 
+<template>
+  <div class="face_api_page">
+    <!-- Hero Section -->
+    <section class="face_api_page-hero">
+      <div class="face_api_page-hero-background">
+        <img
+          src="/img/face-api/face-api-v.04.webp"
+          alt="Face API Test"
+          class="face_api_page-hero-background-image"
+        />
+        <div class="face_api_page-hero-background-overlay" />
+      </div>
+
+      <div class="face_api_page-hero-content">
+        <h1 class="face_api_page-hero-content-title">
+          {{ $t('face_api_page.hero.title') }}
+        </h1>
+        <p class="face_api_page-hero-content-subtitle">
+          {{ $t('face_api_page.hero.subtitle') }}
+        </p>
+        <p class="face_api_page-hero-content-description">
+          {{ $t('face_api_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="face_api_page-intro">
+      <div class="face_api_page-intro-container">
+        <p class="face_api_page-intro-text">
+          {{ $t('face_api_page.intro') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Face Comparison Form -->
+    <section class="face_api_page-section">
+      <div class="face_api_page-section-container">
+        <div class="face_api_page-card">
+          <form class="face_api_page-card-form" @submit.prevent="handleDiscern">
+            <ImageUpload
+              ref="imgSelectorEl"
+              v-model="identifyImage"
+              :btn-label="$t('face_api_page.form.upload_button')"
+              :label="$t('face_api_page.form.upload_label')"
+              :mask-label="$t('face_api_page.form.upload_mask')"
+            />
+
+            <v-btn
+              color="primary"
+              type="submit"
+              size="large"
+              block
+              class="face_api_page-card-form-submit"
+            >
+              {{ $t('face_api_page.form.submit_button') }}
+            </v-btn>
+
+            <div class="face_api_page-card-form-result">
+              <span class="face_api_page-card-form-result-label">
+                {{ $t('face_api_page.form.similarity_label') }}
+              </span>
+              <span class="face_api_page-card-form-result-value">
+                {{ distance.toFixed(4) }}
+              </span>
+              <span
+                class="face_api_page-card-form-result-status"
+                :css-status="distance < 0.6 ? 'same' : 'different'"
+              >
+                {{
+                  distance < 0.6
+                    ? $t('face_api_page.form.same_person')
+                    : $t('face_api_page.form.different_person')
+                }}
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Preview Section -->
+    <section class="face_api_page-section">
+      <div class="face_api_page-section-container">
+        <h2 class="face_api_page-section-title">
+          {{ $t('face_api_page.sections.video_preview') }}
+        </h2>
+        <div class="face_api_page-video_row">
+          <div class="face_api_page-video_row-item">
+            <video
+              ref="videoEl"
+              class="face_api_page-video_row-item-video"
+              width="480"
+              height="360"
+              autoplay
+              controls
+              :srcObject="streamObj"
+            />
+          </div>
+          <div class="face_api_page-video_row-item">
+            <canvas
+              ref="canvasVideo"
+              class="face_api_page-video_row-item-canvas"
+              width="480"
+              height="360"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bounding Boxes Section -->
+    <section class="face_api_page-section">
+      <div class="face_api_page-section-container">
+        <h2 class="face_api_page-section-title">
+          {{ $t('face_api_page.sections.bounding_boxes') }}
+        </h2>
+        <div class="face_api_page-detection_row">
+          <div class="face_api_page-detection_row-canvas_wrapper">
+            <canvas
+              ref="detectionsVideo"
+              class="face_api_page-detection_row-canvas_wrapper-canvas"
+              width="480"
+              height="360"
+            />
+            <canvas
+              ref="detectionsOutput"
+              class="face_api_page-detection_row-canvas_wrapper-overlay"
+              width="480"
+              height="360"
+            />
+          </div>
+          <div class="face_api_page-detection_row-data">
+            <h3 class="face_api_page-detection_row-data-title">
+              {{ $t('face_api_page.data.bounding_boxes') }}
+            </h3>
+            <pre class="face_api_page-detection_row-data-content">{{
+              JSON.stringify(faceBoundingBoxesData, null, 2)
+            }}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Landmarks Section -->
+    <section class="face_api_page-section">
+      <div class="face_api_page-section-container">
+        <h2 class="face_api_page-section-title">
+          {{ $t('face_api_page.sections.landmarks') }}
+        </h2>
+        <div class="face_api_page-detection_row">
+          <div class="face_api_page-detection_row-canvas_wrapper">
+            <canvas
+              ref="detectionsWithLandmarksVideo"
+              class="face_api_page-detection_row-canvas_wrapper-canvas"
+              width="480"
+              height="360"
+            />
+            <canvas
+              ref="detectionsWithLandmarksOutput"
+              class="face_api_page-detection_row-canvas_wrapper-overlay"
+              width="480"
+              height="360"
+            />
+          </div>
+          <div class="face_api_page-detection_row-data">
+            <h3 class="face_api_page-detection_row-data-title">
+              {{ $t('face_api_page.data.landmarks') }}
+            </h3>
+            <pre class="face_api_page-detection_row-data-content">{{
+              JSON.stringify(faceLandmarksData, null, 2)
+            }}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expressions Section -->
+    <section class="face_api_page-section">
+      <div class="face_api_page-section-container">
+        <h2 class="face_api_page-section-title">
+          {{ $t('face_api_page.sections.expressions') }}
+        </h2>
+        <div class="face_api_page-detection_row">
+          <div class="face_api_page-detection_row-canvas_wrapper">
+            <canvas
+              ref="detectionsWithExpressionsVideo"
+              class="face_api_page-detection_row-canvas_wrapper-canvas"
+              width="480"
+              height="360"
+            />
+            <canvas
+              ref="detectionsWithExpressionsOutput"
+              class="face_api_page-detection_row-canvas_wrapper-overlay"
+              width="480"
+              height="360"
+            />
+          </div>
+          <div class="face_api_page-detection_row-data">
+            <h3 class="face_api_page-detection_row-data-title">
+              {{ $t('face_api_page.data.expressions') }}
+            </h3>
+            <pre class="face_api_page-detection_row-data-content">{{
+              JSON.stringify(faceExpressionResultsData, null, 2)
+            }}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 // ========================================
 // Hero Section
@@ -535,7 +544,11 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -711,7 +724,7 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
         font-size: 24px;
         font-weight: 700;
         font-family: 'Courier New', monospace;
-        color: var(--color-primary, #44A08D);
+        color: var(--color-primary, #44a08d);
       }
 
       &-status {
@@ -723,12 +736,12 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
         font-size: 14px;
         font-weight: 600;
 
-        &[css-status="same"] {
+        &[css-status='same'] {
           background: rgba(72, 187, 120, 0.2);
           color: #22543d;
         }
 
-        &[css-status="different"] {
+        &[css-status='different'] {
           background: rgba(245, 101, 101, 0.2);
           color: #742a2a;
         }

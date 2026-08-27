@@ -1,66 +1,7 @@
-<template>
-  <div class="websocket_page">
-    <!-- Hero Section -->
-    <section class="websocket_page-hero">
-      <div class="websocket_page-hero-background">
-        <div class="websocket_page-hero-background-overlay" />
-      </div>
-
-      <div class="websocket_page-hero-content">
-        <h1 class="websocket_page-hero-content-title">
-          {{ $t('websocket_page.hero.title') }}
-        </h1>
-        <p class="websocket_page-hero-content-subtitle">
-          {{ $t('websocket_page.hero.subtitle') }}
-        </p>
-        <p class="websocket_page-hero-content-description">
-          {{ $t('websocket_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="websocket_page-section">
-      <!-- Send Message Form -->
-      <div class="websocket_page-section-send">
-        <h3 class="websocket_page-section-send-title">{{ $t('websocket_page.send_message_title') }}</h3>
-        <form class="websocket_page-section-send-form" @submit.prevent="sendMessage">
-          <v-text-field
-            v-model="messageToSend"
-            :label="$t('websocket_page.input_message_label')"
-            :placeholder="$t('websocket_page.input_message_placeholder')"
-            class="websocket_page-section-send-form-input"
-            hide-details
-          />
-          <v-btn
-            type="submit"
-            color="primary"
-            :disabled="!messageToSend"
-          >
-            {{ $t('websocket_page.send_btn') }}
-          </v-btn>
-        </form>
-      </div>
-
-      <p class="websocket_page-section-label">{{ $t('websocket_page.received_data_label') }}</p>
-      <div class="websocket_page-section-messages">
-        <p
-          v-for="(webSocketMessage, index) in webSocketMessageList"
-          :key="index"
-          class="websocket_page-section-messages-item"
-        >
-          {{ webSocketMessage }}
-        </p>
-        <p v-if="webSocketMessageList.length === 0" class="websocket_page-section-messages-empty">
-          {{ $t('websocket_page.no_message_yet') }}
-        </p>
-      </div>
-    </section>
-  </div>
-</template>
-
-<script setup>
+<script>
 import _cloneDeep from 'lodash/cloneDeep';
+</script>
+<script setup>
 const { t } = useI18n();
 
 useHeadMataData({
@@ -128,6 +69,73 @@ watch(
   { deep: true }
 );
 </script>
+
+<template>
+  <div class="websocket_page">
+    <!-- Hero Section -->
+    <section class="websocket_page-hero">
+      <div class="websocket_page-hero-background">
+        <div class="websocket_page-hero-background-overlay" />
+      </div>
+
+      <div class="websocket_page-hero-content">
+        <h1 class="websocket_page-hero-content-title">
+          {{ $t('websocket_page.hero.title') }}
+        </h1>
+        <p class="websocket_page-hero-content-subtitle">
+          {{ $t('websocket_page.hero.subtitle') }}
+        </p>
+        <p class="websocket_page-hero-content-description">
+          {{ $t('websocket_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="websocket_page-section">
+      <!-- Send Message Form -->
+      <div class="websocket_page-section-send">
+        <h3 class="websocket_page-section-send-title">
+          {{ $t('websocket_page.send_message_title') }}
+        </h3>
+        <form
+          class="websocket_page-section-send-form"
+          @submit.prevent="sendMessage"
+        >
+          <v-text-field
+            v-model="messageToSend"
+            :label="$t('websocket_page.input_message_label')"
+            :placeholder="$t('websocket_page.input_message_placeholder')"
+            class="websocket_page-section-send-form-input"
+            hide-details
+          />
+          <v-btn type="submit" color="primary" :disabled="!messageToSend">
+            {{ $t('websocket_page.send_btn') }}
+          </v-btn>
+        </form>
+      </div>
+
+      <p class="websocket_page-section-label">
+        {{ $t('websocket_page.received_data_label') }}
+      </p>
+      <div class="websocket_page-section-messages">
+        <p
+          v-for="(webSocketMessage, index) in webSocketMessageList"
+          :key="index"
+          class="websocket_page-section-messages-item"
+        >
+          {{ webSocketMessage }}
+        </p>
+        <p
+          v-if="webSocketMessageList.length === 0"
+          class="websocket_page-section-messages-empty"
+        >
+          {{ $t('websocket_page.no_message_yet') }}
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .websocket_page {

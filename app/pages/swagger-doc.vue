@@ -1,3 +1,36 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('swagger_doc_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('swagger_doc_page.hero.description')
+    }
+  ]
+});
+
+const swaggerUI = useTemplateRef('swaggerUI');
+
+// https://www.npmjs.com/package/swagger-ui-dist
+// https://github.com/nuxt/nuxt/discussions/16165
+onMounted(async () => {
+  const { SwaggerUIBundle, SwaggerUIStandalonePreset } = await import(
+    'swagger-ui-dist'
+  );
+
+  const ui = SwaggerUIBundle({
+    url: `${import.meta.env.VITE_DOMAIN}/api/nuxt-server/swagger-docs`,
+    domNode: swaggerUI.value,
+    deepLinking: true,
+    presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+    layout: 'StandaloneLayout'
+  });
+  window.ui = ui;
+});
+</script>
+
 <template>
   <div class="swagger_doc_page">
     <!-- Hero Section -->
@@ -38,39 +71,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('swagger_doc_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('swagger_doc_page.hero.description')
-    }
-  ]
-});
-
-const swaggerUI = useTemplateRef('swaggerUI');
-
-// https://www.npmjs.com/package/swagger-ui-dist
-// https://github.com/nuxt/nuxt/discussions/16165
-onMounted(async () => {
-  const { SwaggerUIBundle, SwaggerUIStandalonePreset } = await import(
-    'swagger-ui-dist'
-  );
-
-  const ui = SwaggerUIBundle({
-    url: `${import.meta.env.VITE_DOMAIN}/api/nuxt-server/swagger-docs`,
-    domNode: swaggerUI.value,
-    deepLinking: true,
-    presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
-    layout: 'StandaloneLayout'
-  });
-  window.ui = ui;
-});
-</script>
 
 <style lang="scss">
 // Import Swagger UI styles globally (must not be scoped)
@@ -117,7 +117,11 @@ onMounted(async () => {
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 

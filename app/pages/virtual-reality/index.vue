@@ -1,3 +1,27 @@
+<script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+const linkList = computed(() => [
+  {
+    to: localePath('/virtual-reality/krpano-demo'),
+    label: t('virtual_reality.krpano_demo', 'Krpano Demo'),
+    description: t(
+      'virtual_reality.krpano_desc',
+      '360° Panorama and Virtual Tour Demo using Krpano.'
+    )
+  },
+  {
+    to: localePath('/virtual-reality/a-frame-demo'),
+    label: t('virtual_reality.aframe_demo', 'A-Frame Demo'),
+    description: t(
+      'virtual_reality.aframe_desc',
+      '3D and WebVR experiences built with A-Frame framework.'
+    )
+  }
+]);
+</script>
+
 <template>
   <div class="virtual_reality_page">
     <!-- Hero Section -->
@@ -31,24 +55,6 @@
   </div>
 </template>
 
-<script setup>
-const { t } = useI18n();
-const localePath = useLocalePath();
-
-const linkList = computed(() => [
-  {
-    to: localePath('/virtual-reality/krpano-demo'),
-    label: t('virtual_reality.krpano_demo', 'Krpano Demo'),
-    description: t('virtual_reality.krpano_desc', '360° Panorama and Virtual Tour Demo using Krpano.')
-  },
-  {
-    to: localePath('/virtual-reality/a-frame-demo'),
-    label: t('virtual_reality.aframe_demo', 'A-Frame Demo'),
-    description: t('virtual_reality.aframe_desc', '3D and WebVR experiences built with A-Frame framework.')
-  }
-]);
-</script>
-
 <style scoped lang="scss">
 .virtual_reality_page {
   /* Display & Box Model */
@@ -66,12 +72,12 @@ const linkList = computed(() => [
     align-items: center;
     justify-content: center;
     padding: 100px 24px;
-    
+
     /* Visual */
     background: linear-gradient(135deg, #cbd5e1 0%, #f1f5f9 100%);
     color: #0f172a;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    
+
     &-content {
       /* Display & Box Model */
       display: flex;

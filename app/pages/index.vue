@@ -1,3 +1,6 @@
+<script>
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+</script>
 <script setup>
 definePageMeta({
   title: 'system.defaultTitle'
@@ -5,8 +8,6 @@ definePageMeta({
 
 const localePath = useLocalePath();
 const { t } = useI18n();
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
 
 useHeadMataData({
   title: t('system.defaultTitle'),

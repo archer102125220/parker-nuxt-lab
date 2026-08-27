@@ -1,94 +1,3 @@
-<template>
-  <div class="web_rtc_websocket_room_page">
-    <!-- Hero Section -->
-    <section class="web_rtc_websocket_room_page-hero">
-      <div class="web_rtc_websocket_room_page-hero-background">
-        <div class="web_rtc_websocket_room_page-hero-background-overlay" />
-      </div>
-
-      <div class="web_rtc_websocket_room_page-hero-content">
-        <h1 class="web_rtc_websocket_room_page-hero-content-title">
-          {{ $t('web_rtc_websocket_page.room.title') }}
-        </h1>
-        <p class="web_rtc_websocket_room_page-hero-content-subtitle">
-          {{ $t('web_rtc_websocket_page.hero.subtitle') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="web_rtc_websocket_room_page-section">
-      <p
-        v-if="$store.system.supportWebsocket === false"
-        class="web_rtc_websocket_room_page-section-warning"
-      >
-        *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
-      </p>
-
-      <div class="web_rtc_websocket_room_page-section-id">
-        <span class="web_rtc_websocket_room_page-section-id-label">
-          {{ $t('web_rtc_socket_io_page.room.current_id') }}:
-        </span>
-        <code class="web_rtc_websocket_room_page-section-id-value">{{ uuId }}</code>
-        <v-btn
-          icon
-          size="small"
-          variant="text"
-          :title="copiedId ? $t('web_rtc_socket_io_page.room.copied') : $t('web_rtc_socket_io_page.room.copy_id')"
-          @click="handleCopyId"
-        >
-          <v-icon>{{ copiedId ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          size="small"
-          variant="text"
-          :title="copiedUrl ? $t('web_rtc_socket_io_page.room.copied') : $t('web_rtc_socket_io_page.room.copy_url')"
-          @click="handleCopyUrl"
-        >
-          <v-icon>{{ copiedUrl ? 'mdi-check' : 'mdi-link' }}</v-icon>
-        </v-btn>
-      </div>
-
-      <div class="web_rtc_websocket_room_page-section-videos">
-        <div class="web_rtc_websocket_room_page-section-videos-self">
-          <span class="web_rtc_websocket_room_page-section-videos-self-label">
-            {{ $t('web_rtc_socket_io_page.room.your_video') }}
-          </span>
-          <video
-            class="web_rtc_websocket_room_page-section-videos-self-video"
-            muted
-            autoplay
-            :srcObject="streamObj"
-          />
-        </div>
-
-        <div class="web_rtc_websocket_room_page-section-videos-others">
-          <template v-if="streamList.length > 0">
-            <div
-              v-for="streamItem in streamList"
-              :key="streamItem?.id"
-              class="web_rtc_websocket_room_page-section-videos-others-item"
-            >
-              <span class="web_rtc_websocket_room_page-section-videos-others-item-label">
-                {{ $t('web_rtc_socket_io_page.room.remote_video') }}
-              </span>
-              <video
-                class="web_rtc_websocket_room_page-section-videos-others-item-video"
-                autoplay
-                :srcObject="streamItem"
-              />
-            </div>
-          </template>
-          <div v-else class="web_rtc_websocket_room_page-section-videos-others-waiting">
-            {{ $t('web_rtc_socket_io_page.room.waiting') }}
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -234,6 +143,112 @@ watch(
 );
 </script>
 
+<template>
+  <div class="web_rtc_websocket_room_page">
+    <!-- Hero Section -->
+    <section class="web_rtc_websocket_room_page-hero">
+      <div class="web_rtc_websocket_room_page-hero-background">
+        <div class="web_rtc_websocket_room_page-hero-background-overlay" />
+      </div>
+
+      <div class="web_rtc_websocket_room_page-hero-content">
+        <h1 class="web_rtc_websocket_room_page-hero-content-title">
+          {{ $t('web_rtc_websocket_page.room.title') }}
+        </h1>
+        <p class="web_rtc_websocket_room_page-hero-content-subtitle">
+          {{ $t('web_rtc_websocket_page.hero.subtitle') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="web_rtc_websocket_room_page-section">
+      <p
+        v-if="$store.system.supportWebsocket === false"
+        class="web_rtc_websocket_room_page-section-warning"
+      >
+        *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
+      </p>
+
+      <div class="web_rtc_websocket_room_page-section-id">
+        <span class="web_rtc_websocket_room_page-section-id-label">
+          {{ $t('web_rtc_socket_io_page.room.current_id') }}:
+        </span>
+        <code class="web_rtc_websocket_room_page-section-id-value">{{
+          uuId
+        }}</code>
+        <v-btn
+          icon
+          size="small"
+          variant="text"
+          :title="
+            copiedId
+              ? $t('web_rtc_socket_io_page.room.copied')
+              : $t('web_rtc_socket_io_page.room.copy_id')
+          "
+          @click="handleCopyId"
+        >
+          <v-icon>{{ copiedId ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          size="small"
+          variant="text"
+          :title="
+            copiedUrl
+              ? $t('web_rtc_socket_io_page.room.copied')
+              : $t('web_rtc_socket_io_page.room.copy_url')
+          "
+          @click="handleCopyUrl"
+        >
+          <v-icon>{{ copiedUrl ? 'mdi-check' : 'mdi-link' }}</v-icon>
+        </v-btn>
+      </div>
+
+      <div class="web_rtc_websocket_room_page-section-videos">
+        <div class="web_rtc_websocket_room_page-section-videos-self">
+          <span class="web_rtc_websocket_room_page-section-videos-self-label">
+            {{ $t('web_rtc_socket_io_page.room.your_video') }}
+          </span>
+          <video
+            class="web_rtc_websocket_room_page-section-videos-self-video"
+            muted
+            autoplay
+            :srcObject="streamObj"
+          />
+        </div>
+
+        <div class="web_rtc_websocket_room_page-section-videos-others">
+          <template v-if="streamList.length > 0">
+            <div
+              v-for="streamItem in streamList"
+              :key="streamItem?.id"
+              class="web_rtc_websocket_room_page-section-videos-others-item"
+            >
+              <span
+                class="web_rtc_websocket_room_page-section-videos-others-item-label"
+              >
+                {{ $t('web_rtc_socket_io_page.room.remote_video') }}
+              </span>
+              <video
+                class="web_rtc_websocket_room_page-section-videos-others-item-video"
+                autoplay
+                :srcObject="streamItem"
+              />
+            </div>
+          </template>
+          <div
+            v-else
+            class="web_rtc_websocket_room_page-section-videos-others-waiting"
+          >
+            {{ $t('web_rtc_socket_io_page.room.waiting') }}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <style lang="scss">
 .web_rtc_websocket_room_page {
   min-height: 100vh;
@@ -347,7 +362,8 @@ watch(
         grid-template-columns: 1fr;
       }
 
-      &-self, &-others-item {
+      &-self,
+      &-others-item {
         position: relative;
         border-radius: 12px;
         overflow: hidden;

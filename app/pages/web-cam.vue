@@ -1,3 +1,42 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('web_cam_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('web_cam_page.hero.description')
+    }
+  ]
+});
+
+// https://mrcodingroom.freesite.host/js%E5%B0%87video-webcam%E7%95%AB%E5%9C%A8canvas%E4%B8%8A/
+const videoEl = useTemplateRef('videoEl');
+const canvasEl = useTemplateRef('canvasEl');
+
+const streamObj = useCameraStream(null, handleFrameFromVideo);
+
+function handleFrameFromVideo() {
+  const video = videoEl.value;
+  const canvas = canvasEl.value;
+
+  if (typeof canvas?.getContext !== 'function') return;
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save(); // 儲存狀態
+
+  // 左右翻轉
+  // ctx.translate(video.width, 0);
+  // ctx.scale(-1, 1);
+
+  ctx.drawImage(video, 0, 0, video.width, video.height);
+  ctx.restore(); // 到此才輸出，才不會還沒整體操作完就放出，會造成畫面快速抖動
+  window.requestAnimationFrame(handleFrameFromVideo);
+}
+</script>
+
 <template>
   <div class="web_cam_page">
     <!-- Hero Section -->
@@ -73,45 +112,6 @@
   </div>
 </template>
 
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('web_cam_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('web_cam_page.hero.description')
-    }
-  ]
-});
-
-// https://mrcodingroom.freesite.host/js%E5%B0%87video-webcam%E7%95%AB%E5%9C%A8canvas%E4%B8%8A/
-const videoEl = useTemplateRef('videoEl');
-const canvasEl = useTemplateRef('canvasEl');
-
-const streamObj = useCameraStream(null, handleFrameFromVideo);
-
-function handleFrameFromVideo() {
-  const video = videoEl.value;
-  const canvas = canvasEl.value;
-
-  if (typeof canvas?.getContext !== 'function') return;
-
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.save(); // 儲存狀態
-
-  // 左右翻轉
-  // ctx.translate(video.width, 0);
-  // ctx.scale(-1, 1);
-
-  ctx.drawImage(video, 0, 0, video.width, video.height);
-  ctx.restore(); // 到此才輸出，才不會還沒整體操作完就放出，會造成畫面快速抖動
-  window.requestAnimationFrame(handleFrameFromVideo);
-}
-</script>
-
 <style lang="scss" scoped>
 // ========================================
 // Hero Section
@@ -161,7 +161,11 @@ function handleFrameFromVideo() {
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 

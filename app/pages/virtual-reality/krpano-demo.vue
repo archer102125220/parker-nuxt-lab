@@ -1,3 +1,182 @@
+<script setup>
+const { t } = useI18n();
+
+definePageMeta({
+  layout: 'immersive'
+});
+
+useHeadMataData({
+  title: t('krpano_demo_page.hero.title')
+});
+
+const localePath = useLocalePath();
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('krpano_demo_page.hero.title'),
+    url: `${DOMAIN}${localePath('/virtual-reality/krpano-demo')}`,
+    inLanguage: ['zh-TW', 'en']
+  })
+]);
+
+const krpanoRef = ref(null);
+
+// UI State
+const controlsExpanded = ref(true);
+const logExpanded = ref(false);
+
+// Krpano configuration
+const xml = '/krpano/tour.xml';
+const startScene = 'scene_bryan_goff_iuyhxaia8ea_unsplash';
+const currentScene = ref(startScene);
+const debug = ref(false);
+const textLayerContent = ref('');
+
+// Available scenes
+const scenes = computed(() => [
+  {
+    name: 'scene_bryan_goff_iuyhxaia8ea_unsplash',
+    label: t('krpano_demo_page.scenes.scene1')
+  },
+  {
+    name: 'scene_timothy_oldfield_luufnhochru_unsplash',
+    label: t('krpano_demo_page.scenes.scene2')
+  }
+]);
+
+const currentSceneLabel = computed(() => {
+  const scene = scenes.value.find((s) => s.name === currentScene.value);
+  return scene ? scene.label : '';
+});
+
+// Hotspots
+const hotspots = ref([]);
+let hotspotCounter = 0;
+
+// Hotspot Form State
+const isAddFormOpen = ref(false);
+const selectedIconIndex = ref(0);
+const iconTabIndex = ref(0); // 0: preset, 1: custom URL
+const customIconUrl = ref('');
+const newHotspot = ref({
+  name: '',
+  ath: 0,
+  atv: 0
+});
+
+// Hotspot Icons
+const hotspotIcons = [
+  { label: 'Hotspot', url: '/krpano/skin/vtourskin_hotspot.png' },
+  { label: 'Map', url: '/krpano/skin/vtourskin_mapspot.png' }
+];
+
+// Form validation
+const isFormValid = computed(() => {
+  if (!newHotspot.value.name.trim()) return false;
+  if (iconTabIndex.value === 1 && !customIconUrl.value.trim()) return false;
+  return true;
+});
+
+// Get hotspot URL based on tab selection
+function getHotspotUrl() {
+  if (iconTabIndex.value === 1 && customIconUrl.value.trim()) {
+    return customIconUrl.value.trim();
+  }
+  return hotspotIcons[selectedIconIndex.value].url;
+}
+
+// Logs
+const logs = ref([]);
+
+// Helper: Add log
+function addLog(message, type = 'info') {
+  const time = new Date().toLocaleTimeString();
+  logs.value.unshift({ time, message, type });
+  if (logs.value.length > 15) {
+    logs.value.pop();
+  }
+}
+
+// Scene switching
+function switchScene(sceneName) {
+  currentScene.value = sceneName;
+  addLog(`Scene: ${sceneName}`, 'info');
+}
+
+// Hotspot management
+function confirmAddHotspot() {
+  if (!isFormValid.value) return;
+
+  hotspotCounter++;
+  const hotspot = {
+    name: `hotspot_${hotspotCounter}`,
+    displayName: newHotspot.value.name.trim(),
+    url: getHotspotUrl(),
+    ath: newHotspot.value.ath || 0,
+    atv: newHotspot.value.atv || 0,
+    scale: 0.5,
+    visible: true,
+    onClick: (config) => {
+      addLog(`Click: ${config.displayName || config.name}`, 'success');
+    }
+  };
+
+  hotspots.value = [...hotspots.value, hotspot];
+  addLog(`Added: ${hotspot.displayName}`, 'success');
+
+  // Reset form
+  newHotspot.value = { name: '', ath: 0, atv: 0 };
+  selectedIconIndex.value = 0;
+  iconTabIndex.value = 0;
+  customIconUrl.value = '';
+  isAddFormOpen.value = false;
+}
+
+function cancelAddHotspot() {
+  newHotspot.value = { name: '', ath: 0, atv: 0 };
+  selectedIconIndex.value = 0;
+  iconTabIndex.value = 0;
+  customIconUrl.value = '';
+  isAddFormOpen.value = false;
+}
+
+function toggleHotspotVisibility(name) {
+  const hotspot = hotspots.value.find((h) => h.name === name);
+  if (hotspot) {
+    hotspot.visible = !hotspot.visible;
+    hotspots.value = [...hotspots.value]; // Trigger reactivity
+    addLog(
+      `${hotspot.displayName || name}: ${hotspot.visible ? 'Visible' : 'Hidden'}`,
+      'info'
+    );
+  }
+}
+
+function removeHotspot(name) {
+  const hotspot = hotspots.value.find((h) => h.name === name);
+  const displayName = hotspot?.displayName || name;
+  hotspots.value = hotspots.value.filter((h) => h.name !== name);
+  addLog(`Removed: ${displayName}`, 'warning');
+}
+
+// Krpano events
+function onKrpanoReady() {
+  addLog('Krpano ready', 'success');
+}
+
+function onLoadComplete() {
+  addLog('Scene loaded', 'success');
+}
+
+// Initialize
+onMounted(() => {
+  addLog('Page mounted', 'info');
+});
+</script>
+
 <template>
   <div class="krpano_demo">
     <!-- 全景圖查看器 -->
@@ -250,185 +429,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-definePageMeta({
-  layout: 'immersive'
-});
-
-useHeadMataData({
-  title: t('krpano_demo_page.hero.title')
-});
-
-const localePath = useLocalePath();
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'WebPage',
-    name: t('krpano_demo_page.hero.title'),
-    url: `${DOMAIN}${localePath('/virtual-reality/krpano-demo')}`,
-    inLanguage: ['zh-TW', 'en']
-  })
-]);
-
-const krpanoRef = ref(null);
-
-// UI State
-const controlsExpanded = ref(true);
-const logExpanded = ref(false);
-
-// Krpano configuration
-const xml = '/krpano/tour.xml';
-const startScene = 'scene_bryan_goff_iuyhxaia8ea_unsplash';
-const currentScene = ref(startScene);
-const debug = ref(false);
-const textLayerContent = ref('');
-
-// Available scenes
-const scenes = computed(() => [
-  {
-    name: 'scene_bryan_goff_iuyhxaia8ea_unsplash',
-    label: t('krpano_demo_page.scenes.scene1')
-  },
-  {
-    name: 'scene_timothy_oldfield_luufnhochru_unsplash',
-    label: t('krpano_demo_page.scenes.scene2')
-  }
-]);
-
-const currentSceneLabel = computed(() => {
-  const scene = scenes.value.find((s) => s.name === currentScene.value);
-  return scene ? scene.label : '';
-});
-
-// Hotspots
-const hotspots = ref([]);
-let hotspotCounter = 0;
-
-// Hotspot Form State
-const isAddFormOpen = ref(false);
-const selectedIconIndex = ref(0);
-const iconTabIndex = ref(0); // 0: preset, 1: custom URL
-const customIconUrl = ref('');
-const newHotspot = ref({
-  name: '',
-  ath: 0,
-  atv: 0
-});
-
-// Hotspot Icons
-const hotspotIcons = [
-  { label: 'Hotspot', url: '/krpano/skin/vtourskin_hotspot.png' },
-  { label: 'Map', url: '/krpano/skin/vtourskin_mapspot.png' }
-];
-
-// Form validation
-const isFormValid = computed(() => {
-  if (!newHotspot.value.name.trim()) return false;
-  if (iconTabIndex.value === 1 && !customIconUrl.value.trim()) return false;
-  return true;
-});
-
-// Get hotspot URL based on tab selection
-function getHotspotUrl() {
-  if (iconTabIndex.value === 1 && customIconUrl.value.trim()) {
-    return customIconUrl.value.trim();
-  }
-  return hotspotIcons[selectedIconIndex.value].url;
-}
-
-// Logs
-const logs = ref([]);
-
-// Helper: Add log
-function addLog(message, type = 'info') {
-  const time = new Date().toLocaleTimeString();
-  logs.value.unshift({ time, message, type });
-  if (logs.value.length > 15) {
-    logs.value.pop();
-  }
-}
-
-// Scene switching
-function switchScene(sceneName) {
-  currentScene.value = sceneName;
-  addLog(`Scene: ${sceneName}`, 'info');
-}
-
-// Hotspot management
-function confirmAddHotspot() {
-  if (!isFormValid.value) return;
-
-  hotspotCounter++;
-  const hotspot = {
-    name: `hotspot_${hotspotCounter}`,
-    displayName: newHotspot.value.name.trim(),
-    url: getHotspotUrl(),
-    ath: newHotspot.value.ath || 0,
-    atv: newHotspot.value.atv || 0,
-    scale: 0.5,
-    visible: true,
-    onClick: (config) => {
-      addLog(`Click: ${config.displayName || config.name}`, 'success');
-    }
-  };
-
-  hotspots.value = [...hotspots.value, hotspot];
-  addLog(`Added: ${hotspot.displayName}`, 'success');
-
-  // Reset form
-  newHotspot.value = { name: '', ath: 0, atv: 0 };
-  selectedIconIndex.value = 0;
-  iconTabIndex.value = 0;
-  customIconUrl.value = '';
-  isAddFormOpen.value = false;
-}
-
-function cancelAddHotspot() {
-  newHotspot.value = { name: '', ath: 0, atv: 0 };
-  selectedIconIndex.value = 0;
-  iconTabIndex.value = 0;
-  customIconUrl.value = '';
-  isAddFormOpen.value = false;
-}
-
-function toggleHotspotVisibility(name) {
-  const hotspot = hotspots.value.find((h) => h.name === name);
-  if (hotspot) {
-    hotspot.visible = !hotspot.visible;
-    hotspots.value = [...hotspots.value]; // Trigger reactivity
-    addLog(
-      `${hotspot.displayName || name}: ${hotspot.visible ? 'Visible' : 'Hidden'}`,
-      'info'
-    );
-  }
-}
-
-function removeHotspot(name) {
-  const hotspot = hotspots.value.find((h) => h.name === name);
-  const displayName = hotspot?.displayName || name;
-  hotspots.value = hotspots.value.filter((h) => h.name !== name);
-  addLog(`Removed: ${displayName}`, 'warning');
-}
-
-// Krpano events
-function onKrpanoReady() {
-  addLog('Krpano ready', 'success');
-}
-
-function onLoadComplete() {
-  addLog('Scene loaded', 'success');
-}
-
-// Initialize
-onMounted(() => {
-  addLog('Page mounted', 'info');
-});
-</script>
 
 <style lang="scss">
 .krpano_demo {

@@ -1,176 +1,7 @@
-<template>
-  <div class="fido2_lib_page">
-    <!-- Hero Section -->
-    <section class="fido2_lib_page-hero">
-      <div class="fido2_lib_page-hero-background">
-        <img
-          src="/img/fido2-lib/fido2-lib-v.09.webp"
-          alt="FIDO2 Lib Test"
-          class="fido2_lib_page-hero-background-image"
-        />
-        <div class="fido2_lib_page-hero-background-overlay" />
-      </div>
-
-      <div class="fido2_lib_page-hero-content">
-        <h1 class="fido2_lib_page-hero-content-title">
-          {{ $t('fido2_lib_page.hero.title') }}
-        </h1>
-        <p class="fido2_lib_page-hero-content-subtitle">
-          {{ $t('fido2_lib_page.hero.subtitle') }}
-        </p>
-        <p class="fido2_lib_page-hero-content-description">
-          {{ $t('fido2_lib_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="fido2_lib_page-intro">
-      <div class="fido2_lib_page-intro-container">
-        <p class="fido2_lib_page-intro-text">
-          {{ $t('fido2_lib_page.intro') }}
-        </p>
-        <div class="fido2_lib_page-intro-link">
-          <span class="fido2_lib_page-intro-link-text">
-            {{ $t('fido2_lib_page.note_label') }}
-          </span>
-          <a
-            href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="fido2_lib_page-intro-link-anchor"
-          >
-            {{ $t('fido2_lib_page.notion_link') }}
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Registration and Login Forms -->
-    <section class="fido2_lib_page-section">
-      <div class="fido2_lib_page-section-container">
-        <!-- Registration Form -->
-        <div class="fido2_lib_page-card">
-          <h2 class="fido2_lib_page-card-title">
-            {{ $t('fido2_lib_page.register.title') }}
-          </h2>
-
-          <form class="fido2_lib_page-card-form" @submit.prevent="handleFido2LibRegister">
-            <v-text-field
-              v-model="registerId"
-              :label="$t('fido2_lib_page.register.id_label')"
-              variant="outlined"
-              color="primary"
-              density="comfortable"
-              class="fido2_lib_page-card-form-field"
-            />
-
-            <v-text-field
-              v-model="registerAccount"
-              :label="$t('fido2_lib_page.register.account_label')"
-              variant="outlined"
-              color="primary"
-              density="comfortable"
-              class="fido2_lib_page-card-form-field"
-            />
-
-            <v-text-field
-              v-model="registerName"
-              :label="$t('fido2_lib_page.register.name_label')"
-              variant="outlined"
-              color="primary"
-              density="comfortable"
-              class="fido2_lib_page-card-form-field"
-            />
-
-            <v-btn
-              type="submit"
-              color="primary"
-              size="large"
-              block
-              class="fido2_lib_page-card-form-submit"
-            >
-              {{ $t('fido2_lib_page.register.submit_button') }}
-            </v-btn>
-          </form>
-
-          <!-- Registration Output -->
-          <div class="fido2_lib_page-card-output">
-            <h3 class="fido2_lib_page-card-output-title">
-              {{ $t('fido2_lib_page.register.webapi_output') }}
-            </h3>
-            <pre class="fido2_lib_page-card-output-content">{{ JSON.stringify(registerWebApiOutput, null, 2) }}</pre>
-          </div>
-
-          <div class="fido2_lib_page-card-output">
-            <h3 class="fido2_lib_page-card-output-title">
-              {{ $t('fido2_lib_page.register.server_output') }}
-            </h3>
-            <pre class="fido2_lib_page-card-output-content">{{ JSON.stringify(registerOutput, null, 2) }}</pre>
-          </div>
-        </div>
-
-        <!-- Login Form -->
-        <div class="fido2_lib_page-card">
-          <h2 class="fido2_lib_page-card-title">
-            {{ $t('fido2_lib_page.login.title') }}
-          </h2>
-
-          <form class="fido2_lib_page-card-form" @submit.prevent="handleFido2LibLogin">
-            <v-text-field
-              v-model="serverSaveUserId"
-              :label="$t('fido2_lib_page.login.saved_account_label')"
-              variant="outlined"
-              color="primary"
-              density="comfortable"
-              disabled
-              class="fido2_lib_page-card-form-field"
-            />
-
-            <v-checkbox
-              v-model="rememberMe"
-              :value="true"
-              color="primary"
-              :label="$t('fido2_lib_page.login.remember_me_label')"
-              :disabled="rememberMeDisable"
-              hide-details
-              class="fido2_lib_page-card-form-checkbox"
-            />
-
-            <v-btn
-              type="submit"
-              color="primary"
-              size="large"
-              block
-              class="fido2_lib_page-card-form-submit"
-            >
-              {{ $t('fido2_lib_page.login.submit_button') }}
-            </v-btn>
-          </form>
-
-          <!-- Login Output -->
-          <div class="fido2_lib_page-card-output">
-            <h3 class="fido2_lib_page-card-output-title">
-              {{ $t('fido2_lib_page.login.webapi_output') }}
-            </h3>
-            <pre class="fido2_lib_page-card-output-content">{{ JSON.stringify(loginWebApiOutput, null, 2) }}</pre>
-          </div>
-
-          <div class="fido2_lib_page-card-output">
-            <h3 class="fido2_lib_page-card-output-title">
-              {{ $t('fido2_lib_page.login.server_output') }}
-            </h3>
-            <pre class="fido2_lib_page-card-output-content">{{ JSON.stringify(loginOutput, null, 2) }}</pre>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
-<script setup>
+<script>
 import { Base64 as base64Js } from 'js-base64';
-
+</script>
+<script setup>
 const { t } = useI18n();
 
 useHeadMataData({
@@ -445,6 +276,190 @@ async function handleFido2LibLogin() {
 }
 </script>
 
+<template>
+  <div class="fido2_lib_page">
+    <!-- Hero Section -->
+    <section class="fido2_lib_page-hero">
+      <div class="fido2_lib_page-hero-background">
+        <img
+          src="/img/fido2-lib/fido2-lib-v.09.webp"
+          alt="FIDO2 Lib Test"
+          class="fido2_lib_page-hero-background-image"
+        />
+        <div class="fido2_lib_page-hero-background-overlay" />
+      </div>
+
+      <div class="fido2_lib_page-hero-content">
+        <h1 class="fido2_lib_page-hero-content-title">
+          {{ $t('fido2_lib_page.hero.title') }}
+        </h1>
+        <p class="fido2_lib_page-hero-content-subtitle">
+          {{ $t('fido2_lib_page.hero.subtitle') }}
+        </p>
+        <p class="fido2_lib_page-hero-content-description">
+          {{ $t('fido2_lib_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="fido2_lib_page-intro">
+      <div class="fido2_lib_page-intro-container">
+        <p class="fido2_lib_page-intro-text">
+          {{ $t('fido2_lib_page.intro') }}
+        </p>
+        <div class="fido2_lib_page-intro-link">
+          <span class="fido2_lib_page-intro-link-text">
+            {{ $t('fido2_lib_page.note_label') }}
+          </span>
+          <a
+            href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="fido2_lib_page-intro-link-anchor"
+          >
+            {{ $t('fido2_lib_page.notion_link') }}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Registration and Login Forms -->
+    <section class="fido2_lib_page-section">
+      <div class="fido2_lib_page-section-container">
+        <!-- Registration Form -->
+        <div class="fido2_lib_page-card">
+          <h2 class="fido2_lib_page-card-title">
+            {{ $t('fido2_lib_page.register.title') }}
+          </h2>
+
+          <form
+            class="fido2_lib_page-card-form"
+            @submit.prevent="handleFido2LibRegister"
+          >
+            <v-text-field
+              v-model="registerId"
+              :label="$t('fido2_lib_page.register.id_label')"
+              variant="outlined"
+              color="primary"
+              density="comfortable"
+              class="fido2_lib_page-card-form-field"
+            />
+
+            <v-text-field
+              v-model="registerAccount"
+              :label="$t('fido2_lib_page.register.account_label')"
+              variant="outlined"
+              color="primary"
+              density="comfortable"
+              class="fido2_lib_page-card-form-field"
+            />
+
+            <v-text-field
+              v-model="registerName"
+              :label="$t('fido2_lib_page.register.name_label')"
+              variant="outlined"
+              color="primary"
+              density="comfortable"
+              class="fido2_lib_page-card-form-field"
+            />
+
+            <v-btn
+              type="submit"
+              color="primary"
+              size="large"
+              block
+              class="fido2_lib_page-card-form-submit"
+            >
+              {{ $t('fido2_lib_page.register.submit_button') }}
+            </v-btn>
+          </form>
+
+          <!-- Registration Output -->
+          <div class="fido2_lib_page-card-output">
+            <h3 class="fido2_lib_page-card-output-title">
+              {{ $t('fido2_lib_page.register.webapi_output') }}
+            </h3>
+            <pre class="fido2_lib_page-card-output-content">{{
+              JSON.stringify(registerWebApiOutput, null, 2)
+            }}</pre>
+          </div>
+
+          <div class="fido2_lib_page-card-output">
+            <h3 class="fido2_lib_page-card-output-title">
+              {{ $t('fido2_lib_page.register.server_output') }}
+            </h3>
+            <pre class="fido2_lib_page-card-output-content">{{
+              JSON.stringify(registerOutput, null, 2)
+            }}</pre>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="fido2_lib_page-card">
+          <h2 class="fido2_lib_page-card-title">
+            {{ $t('fido2_lib_page.login.title') }}
+          </h2>
+
+          <form
+            class="fido2_lib_page-card-form"
+            @submit.prevent="handleFido2LibLogin"
+          >
+            <v-text-field
+              v-model="serverSaveUserId"
+              :label="$t('fido2_lib_page.login.saved_account_label')"
+              variant="outlined"
+              color="primary"
+              density="comfortable"
+              disabled
+              class="fido2_lib_page-card-form-field"
+            />
+
+            <v-checkbox
+              v-model="rememberMe"
+              :value="true"
+              color="primary"
+              :label="$t('fido2_lib_page.login.remember_me_label')"
+              :disabled="rememberMeDisable"
+              hide-details
+              class="fido2_lib_page-card-form-checkbox"
+            />
+
+            <v-btn
+              type="submit"
+              color="primary"
+              size="large"
+              block
+              class="fido2_lib_page-card-form-submit"
+            >
+              {{ $t('fido2_lib_page.login.submit_button') }}
+            </v-btn>
+          </form>
+
+          <!-- Login Output -->
+          <div class="fido2_lib_page-card-output">
+            <h3 class="fido2_lib_page-card-output-title">
+              {{ $t('fido2_lib_page.login.webapi_output') }}
+            </h3>
+            <pre class="fido2_lib_page-card-output-content">{{
+              JSON.stringify(loginWebApiOutput, null, 2)
+            }}</pre>
+          </div>
+
+          <div class="fido2_lib_page-card-output">
+            <h3 class="fido2_lib_page-card-output-title">
+              {{ $t('fido2_lib_page.login.server_output') }}
+            </h3>
+            <pre class="fido2_lib_page-card-output-content">{{
+              JSON.stringify(loginOutput, null, 2)
+            }}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 // ========================================
 // Hero Section
@@ -494,7 +509,11 @@ async function handleFido2LibLogin() {
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -606,7 +625,7 @@ async function handleFido2LibLogin() {
       // Typography
       font-size: 16px;
       font-weight: 600;
-      color: var(--color-primary, #44A08D);
+      color: var(--color-primary, #44a08d);
       text-decoration: none;
 
       // Animation
