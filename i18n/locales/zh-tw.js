@@ -210,22 +210,32 @@ export const zhTw = {
     features: {
       title: '核心功能',
       pwa: {
-        title: 'PWA 支援'
+        title: 'PWA 支援',
+        description:
+          '完整的漸進式網頁應用支援，包含 Service Worker、離線快取、推播通知等功能'
       },
       realtime: {
-        title: '即時通訊'
+        title: '即時通訊',
+        description:
+          '整合 WebRTC、Socket.IO、WebSocket 和 Server-Sent Events 等多種即時通訊技術'
       },
       ai: {
-        title: 'AI/ML 整合'
+        title: 'AI/ML 整合',
+        description:
+          '整合 face-api.js、TensorFlow.js 等機器學習框架，實現人臉辨識、換臉等 AI 功能'
       },
       testing: {
-        title: '完整測試'
+        title: '完整測試',
+        description: '使用 Playwright 進行 E2E 測試，確保專案品質與穩定性'
       },
       components: {
-        title: '自製組件'
+        title: '自製組件',
+        description:
+          '為避免套件相容性問題，自行實作多個常用組件，確保專案的穩定性和可控性'
       },
       i18n: {
-        title: '國際化'
+        title: '國際化',
+        description: '完整的多語言支援，提供繁體中文和英文介面'
       }
     },
     development: {

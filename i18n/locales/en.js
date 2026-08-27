@@ -225,22 +225,34 @@ export const en = {
     features: {
       title: 'Core Features',
       pwa: {
-        title: 'PWA Support'
+        title: 'PWA Support',
+        description:
+          'Complete Progressive Web App support including Service Worker, offline caching, and push notifications'
       },
       realtime: {
-        title: 'Real-time Communication'
+        title: 'Real-time Communication',
+        description:
+          'Integration of multiple real-time technologies including WebRTC, Socket.IO, WebSocket, and Server-Sent Events'
       },
       ai: {
-        title: 'AI/ML Integration'
+        title: 'AI/ML Integration',
+        description:
+          'Integration with face-api.js, TensorFlow.js and other ML frameworks for facial recognition, face swapping, and more'
       },
       testing: {
-        title: 'Comprehensive Testing'
+        title: 'Comprehensive Testing',
+        description:
+          'E2E testing with Playwright to ensure project quality and stability'
       },
       components: {
-        title: 'Custom Components'
+        title: 'Custom Components',
+        description:
+          'To avoid package compatibility issues, we implement multiple common components ourselves to ensure project stability and controllability'
       },
       i18n: {
-        title: 'Internationalization'
+        title: 'Internationalization',
+        description:
+          'Complete multilingual support with Traditional Chinese and English interfaces'
       }
     },
     development: {
