@@ -1,3 +1,19 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('image_upload_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('image_upload_page.hero.description')
+    }
+  ]
+});
+
+const identifyImage = ref('');
+</script>
+
 <template>
   <div class="image_upload_page">
     <!-- Hero Section -->
@@ -25,27 +41,13 @@
 
       <div v-if="identifyImage" class="image_upload_page-result">
         <p class="image_upload_page-result-label">已選擇圖片：</p>
-        <code class="image_upload_page-result-value">{{ identifyImage.substring(0, 100) }}...</code>
+        <code class="image_upload_page-result-value"
+          >{{ identifyImage.substring(0, 100) }}...</code
+        >
       </div>
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('image_upload_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('image_upload_page.hero.description')
-    }
-  ]
-});
-
-const identifyImage = ref('');
-</script>
 
 <style lang="scss" scoped>
 .image_upload_page {
@@ -68,7 +70,7 @@ const identifyImage = ref('');
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -76,7 +78,11 @@ const identifyImage = ref('');
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

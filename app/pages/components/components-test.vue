@@ -1,80 +1,3 @@
-<template>
-  <div class="components_test_page">
-    <!-- Hero Section -->
-    <section class="components_test_page-hero">
-      <div class="components_test_page-hero-background">
-        <div class="components_test_page-hero-background-overlay" />
-      </div>
-
-      <div class="components_test_page-hero-content">
-        <h1 class="components_test_page-hero-content-title">
-          {{ $t('components_test_page.hero.title') }}
-        </h1>
-        <p class="components_test_page-hero-content-subtitle">
-          {{ $t('components_test_page.hero.subtitle') }}
-        </p>
-        <p class="components_test_page-hero-content-description">
-          {{ $t('components_test_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="components_test_page-section">
-    <TabsBar
-      v-model="tab"
-      class="components_test_page-bar"
-      gap="16px"
-      border-side-height="2px"
-      border-side-width="30px"
-      border-side-color="#27C5C3"
-      :tab-list="tabList"
-    />
-    <div class="components_test_page-menu">
-      <TabsBar
-        v-model="tab"
-        vertical
-        gap="16px"
-        tab-item-width="100%"
-        border-side-width="5px"
-        border-side-color="#27C5C3"
-        :tab-list="tabList"
-      />
-    </div>
-    <ScrollFetch
-      class="components_test_page-content"
-      :ios-style="false"
-      :refresh-disable="false"
-      height="100dvh"
-      refresh-icon="/img/icon/refresh/refresh-icon.svg"
-      refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-      :infinity-end="infinityEnd"
-      @refresh="handleRefresh"
-      @infinity-fetch="handleInfinityFetch"
-    >
-      <div class="components_test_page-content-scroll_fetch">
-        <TabsBar
-          v-model="tab"
-          gap="16px"
-          border-side-height="2px"
-          border-side-width="30px"
-          border-side-color="#27C5C3"
-          :tab-list="tabList"
-        />
-        <p class="components_test_page-content-scroll_fetch-text">12343</p>
-        <WangEditor
-          class="components_test_page-content-scroll_fetch-wang_editor"
-          editor-height="350px"
-        />
-        <div class="components_test_page-content-scroll_fetch-youtube">
-          <Youtube video-id="RTtmcqPXwuw" autoplay />
-        </div>
-      </div>
-    </ScrollFetch>
-    </section>
-  </div>
-</template>
-
 <script setup>
 useHeadMataData({
   title: '組件綜合測試'
@@ -121,6 +44,83 @@ function handleInfinityFetch(done) {
 }
 </script>
 
+<template>
+  <div class="components_test_page">
+    <!-- Hero Section -->
+    <section class="components_test_page-hero">
+      <div class="components_test_page-hero-background">
+        <div class="components_test_page-hero-background-overlay" />
+      </div>
+
+      <div class="components_test_page-hero-content">
+        <h1 class="components_test_page-hero-content-title">
+          {{ $t('components_test_page.hero.title') }}
+        </h1>
+        <p class="components_test_page-hero-content-subtitle">
+          {{ $t('components_test_page.hero.subtitle') }}
+        </p>
+        <p class="components_test_page-hero-content-description">
+          {{ $t('components_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="components_test_page-section">
+      <TabsBar
+        v-model="tab"
+        class="components_test_page-bar"
+        gap="16px"
+        border-side-height="2px"
+        border-side-width="30px"
+        border-side-color="#27C5C3"
+        :tab-list="tabList"
+      />
+      <div class="components_test_page-menu">
+        <TabsBar
+          v-model="tab"
+          vertical
+          gap="16px"
+          tab-item-width="100%"
+          border-side-width="5px"
+          border-side-color="#27C5C3"
+          :tab-list="tabList"
+        />
+      </div>
+      <ScrollFetch
+        class="components_test_page-content"
+        :ios-style="false"
+        :refresh-disable="false"
+        height="100dvh"
+        refresh-icon="/img/icon/refresh/refresh-icon.svg"
+        refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
+        :infinity-end="infinityEnd"
+        @refresh="handleRefresh"
+        @infinity-fetch="handleInfinityFetch"
+      >
+        <div class="components_test_page-content-scroll_fetch">
+          <TabsBar
+            v-model="tab"
+            gap="16px"
+            border-side-height="2px"
+            border-side-width="30px"
+            border-side-color="#27C5C3"
+            :tab-list="tabList"
+          />
+          <p class="components_test_page-content-scroll_fetch-text">12343</p>
+          <WangEditor
+            class="components_test_page-content-scroll_fetch-wang_editor"
+            editor-height="350px"
+          />
+          <div class="components_test_page-content-scroll_fetch-youtube">
+            <Youtube video-id="RTtmcqPXwuw" autoplay />
+          </div>
+        </div>
+      </ScrollFetch>
+    </section>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .components_test_page {
   min-height: 100vh;
@@ -141,7 +141,7 @@ function handleInfinityFetch(done) {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -149,7 +149,11 @@ function handleInfinityFetch(done) {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

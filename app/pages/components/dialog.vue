@@ -1,43 +1,3 @@
-<template>
-  <div class="dialog_page">
-    <!-- Hero Section -->
-    <section class="dialog_page-hero">
-      <div class="dialog_page-hero-background">
-        <div class="dialog_page-hero-background-overlay" />
-      </div>
-
-      <div class="dialog_page-hero-content">
-        <h1 class="dialog_page-hero-content-title">
-          {{ $t('dialog_page.hero.title') }}
-        </h1>
-        <p class="dialog_page-hero-content-subtitle">
-          {{ $t('dialog_page.hero.subtitle') }}
-        </p>
-        <p class="dialog_page-hero-content-description">
-          {{ $t('dialog_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="dialog_page-section">
-      <Dialog v-model="isShow" />
-      <div class="dialog_page-trigger_group">
-        <div class="dialog_page-trigger">
-          <v-btn color="primary" size="large" @click="handleOpen">
-            {{ $t('dialog_page.buttons.open') }}
-          </v-btn>
-        </div>
-        <div class="dialog_page-trigger">
-          <v-btn color="primary" size="large" variant="outlined" @click="handleVuetifyDialogOpen">
-            {{ $t('dialog_page.buttons.vuetify_dialog') }}
-          </v-btn>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -78,6 +38,51 @@ function handleVuetifyDialogOpen() {
 }
 </script>
 
+<template>
+  <div class="dialog_page">
+    <!-- Hero Section -->
+    <section class="dialog_page-hero">
+      <div class="dialog_page-hero-background">
+        <div class="dialog_page-hero-background-overlay" />
+      </div>
+
+      <div class="dialog_page-hero-content">
+        <h1 class="dialog_page-hero-content-title">
+          {{ $t('dialog_page.hero.title') }}
+        </h1>
+        <p class="dialog_page-hero-content-subtitle">
+          {{ $t('dialog_page.hero.subtitle') }}
+        </p>
+        <p class="dialog_page-hero-content-description">
+          {{ $t('dialog_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="dialog_page-section">
+      <Dialog v-model="isShow" />
+      <div class="dialog_page-trigger_group">
+        <div class="dialog_page-trigger">
+          <v-btn color="primary" size="large" @click="handleOpen">
+            {{ $t('dialog_page.buttons.open') }}
+          </v-btn>
+        </div>
+        <div class="dialog_page-trigger">
+          <v-btn
+            color="primary"
+            size="large"
+            variant="outlined"
+            @click="handleVuetifyDialogOpen"
+          >
+            {{ $t('dialog_page.buttons.vuetify_dialog') }}
+          </v-btn>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .dialog_page {
   // ========================================
@@ -99,7 +104,7 @@ function handleVuetifyDialogOpen() {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -107,7 +112,11 @@ function handleVuetifyDialogOpen() {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

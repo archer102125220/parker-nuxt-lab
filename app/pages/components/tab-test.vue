@@ -1,3 +1,49 @@
+<script setup>
+useHeadMataData({
+  title: '自製Tab測試'
+});
+const nuxtApp = useNuxtApp();
+
+const infinityEnd = ref(false);
+
+const tab = ref(0);
+
+const tabList = computed(() => {
+  const _tabList = [];
+  for (let i = 0; i <= 20; i++) {
+    _tabList.push(i);
+    // let tab = '';
+    // for (let j = i; j >= 0; j--) {
+    //   tab += j;
+    // }
+    // _tabList.push(tab);
+  }
+  return _tabList;
+});
+
+function handleRefresh(done) {
+  nuxtApp.$store.system.setLoading(true);
+  console.log('handleRefresh');
+  setTimeout(() => {
+    console.log('handleRefresh setTimeout');
+    // nuxtApp.$successMessage('handleRefresh');
+    nuxtApp.$store.system.setLoading(false);
+    done();
+  }, 1000);
+}
+function handleInfinityFetch(done) {
+  nuxtApp.$store.system.setLoading(true);
+  console.log('handleInfinityFetch');
+  setTimeout(() => {
+    // infinityEnd.value = true;
+    console.log('handleInfinityFetch setTimeout');
+    // nuxtApp.$successMessage('handleInfinityFetch');
+    nuxtApp.$store.system.setLoading(false);
+    done();
+  }, 1000);
+}
+</script>
+
 <template>
   <div class="tab_test_page">
     <!-- Hero Section -->
@@ -113,52 +159,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-useHeadMataData({
-  title: '自製Tab測試'
-});
-const nuxtApp = useNuxtApp();
-
-const infinityEnd = ref(false);
-
-const tab = ref(0);
-
-const tabList = computed(() => {
-  const _tabList = [];
-  for (let i = 0; i <= 20; i++) {
-    _tabList.push(i);
-    // let tab = '';
-    // for (let j = i; j >= 0; j--) {
-    //   tab += j;
-    // }
-    // _tabList.push(tab);
-  }
-  return _tabList;
-});
-
-function handleRefresh(done) {
-  nuxtApp.$store.system.setLoading(true);
-  console.log('handleRefresh');
-  setTimeout(() => {
-    console.log('handleRefresh setTimeout');
-    // nuxtApp.$successMessage('handleRefresh');
-    nuxtApp.$store.system.setLoading(false);
-    done();
-  }, 1000);
-}
-function handleInfinityFetch(done) {
-  nuxtApp.$store.system.setLoading(true);
-  console.log('handleInfinityFetch');
-  setTimeout(() => {
-    // infinityEnd.value = true;
-    console.log('handleInfinityFetch setTimeout');
-    // nuxtApp.$successMessage('handleInfinityFetch');
-    nuxtApp.$store.system.setLoading(false);
-    done();
-  }, 1000);
-}
-</script>
 
 <style lang="scss" scoped>
 .tab_test_page {

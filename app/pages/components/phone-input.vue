@@ -1,3 +1,24 @@
+<script setup>
+const phoneValue1 = ref('');
+const phoneValue2 = ref('');
+const phoneValue3 = ref(null);
+const phoneValue4 = ref('');
+
+const formData = ref({
+  name: '',
+  phone: null
+});
+
+const submittedData = ref(null);
+
+function handleSubmit() {
+  submittedData.value = {
+    name: formData.value.name,
+    phone: formData.value.phone
+  };
+}
+</script>
+
 <template>
   <div class="phone_input_demo">
     <div class="phone_input_demo-container">
@@ -206,27 +227,6 @@
   </div>
 </template>
 
-<script setup>
-const phoneValue1 = ref('');
-const phoneValue2 = ref('');
-const phoneValue3 = ref(null);
-const phoneValue4 = ref('');
-
-const formData = ref({
-  name: '',
-  phone: null
-});
-
-const submittedData = ref(null);
-
-function handleSubmit() {
-  submittedData.value = {
-    name: formData.value.name,
-    phone: formData.value.phone
-  };
-}
-</script>
-
 <style lang="scss" scoped>
 .phone_input_demo {
   /* Display & Box Model */
@@ -234,7 +234,7 @@ function handleSubmit() {
   padding: 40px 20px;
 
   /* Visual */
-  background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+  background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
   &-container {
     /* Display & Box Model */
@@ -296,7 +296,7 @@ function handleSubmit() {
 
       /* Typography */
       font-size: 14px;
-      color: #44A08D;
+      color: #44a08d;
     }
 
     &-icon {
@@ -310,7 +310,7 @@ function handleSubmit() {
     strong {
       /* Typography */
       font-weight: 600;
-      color: #44A08D;
+      color: #44a08d;
     }
   }
 

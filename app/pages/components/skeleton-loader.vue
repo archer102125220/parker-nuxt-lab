@@ -1,3 +1,19 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('skeleton_loader_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('skeleton_loader_page.hero.description')
+    }
+  ]
+});
+
+const loading = ref(true);
+</script>
+
 <template>
   <div class="skeleton_loader_page">
     <!-- Hero Section -->
@@ -29,7 +45,10 @@
           :label="$t('skeleton_loader_page.toggle_loading')"
           class="skeleton_loader_page-demo-checkbox"
         />
-        <SkeletonLoader :loading="loading" class="skeleton_loader_page-demo-skeleton">
+        <SkeletonLoader
+          :loading="loading"
+          class="skeleton_loader_page-demo-skeleton"
+        >
           <div class="skeleton_loader_page-demo-skeleton-content">
             <p class="skeleton_loader_page-demo-skeleton-content-text">
               {{ $t('skeleton_loader_page.loaded_content') }}
@@ -40,22 +59,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('skeleton_loader_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('skeleton_loader_page.hero.description')
-    }
-  ]
-});
-
-const loading = ref(true);
-</script>
 
 <style lang="scss" scoped>
 .skeleton_loader_page {
@@ -77,7 +80,7 @@ const loading = ref(true);
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -85,7 +88,11 @@ const loading = ref(true);
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 
@@ -148,13 +155,17 @@ const loading = ref(true);
         justify-content: center;
         min-height: 320px;
         border-radius: 8px;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.1) 0%,
+          rgba(78, 205, 196, 0.1) 100%
+        );
 
         &-text {
           margin: 0;
           font-size: 24px;
           font-weight: 600;
-          color: #44A08D;
+          color: #44a08d;
         }
       }
     }

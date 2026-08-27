@@ -1,3 +1,24 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('drawer_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('drawer_page.hero.description')
+    }
+  ]
+});
+
+const isShow = ref(false);
+const anchor = ref('bottom');
+
+function handleOpen() {
+  isShow.value = true;
+}
+</script>
+
 <template>
   <div class="drawer_page">
     <!-- Hero Section -->
@@ -24,14 +45,27 @@
       <Drawer v-model="isShow" :anchor="anchor" />
 
       <div class="drawer_page-controls">
-        <v-radio-group
-          v-model="anchor"
-          class="drawer_page-controls-radio"
-        >
-          <v-radio color="primary" :label="$t('drawer_page.buttons.top')" value="top" />
-          <v-radio color="primary" :label="$t('drawer_page.buttons.right')" value="right" />
-          <v-radio color="primary" :label="$t('drawer_page.buttons.bottom')" value="bottom" />
-          <v-radio color="primary" :label="$t('drawer_page.buttons.left')" value="left" />
+        <v-radio-group v-model="anchor" class="drawer_page-controls-radio">
+          <v-radio
+            color="primary"
+            :label="$t('drawer_page.buttons.top')"
+            value="top"
+          />
+          <v-radio
+            color="primary"
+            :label="$t('drawer_page.buttons.right')"
+            value="right"
+          />
+          <v-radio
+            color="primary"
+            :label="$t('drawer_page.buttons.bottom')"
+            value="bottom"
+          />
+          <v-radio
+            color="primary"
+            :label="$t('drawer_page.buttons.left')"
+            value="left"
+          />
         </v-radio-group>
 
         <v-btn color="primary" size="large" @click="handleOpen">
@@ -41,27 +75,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('drawer_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('drawer_page.hero.description')
-    }
-  ]
-});
-
-const isShow = ref(false);
-const anchor = ref('bottom');
-
-function handleOpen() {
-  isShow.value = true;
-}
-</script>
 
 <style lang="scss" scoped>
 .drawer_page {
@@ -84,7 +97,7 @@ function handleOpen() {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -92,7 +105,11 @@ function handleOpen() {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

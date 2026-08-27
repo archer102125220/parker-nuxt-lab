@@ -1,3 +1,10 @@
+<script setup>
+// const { $pwa } = nuxtApp;
+// onMounted(() => {
+//   console.log({ $pwa });
+// });
+</script>
+
 <template>
   <div class="home_layout">
     <LayoutHeader :has-back="false" />
@@ -7,13 +14,6 @@
     <LayoutFooter />
   </div>
 </template>
-
-<script setup>
-// const { $pwa } = nuxtApp;
-// onMounted(() => {
-//   console.log({ $pwa });
-// });
-</script>
 
 <style lang="scss" scoped>
 .home_layout {

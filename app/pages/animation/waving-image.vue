@@ -1,3 +1,46 @@
+<script>
+import {
+  DIRECTION_VERTICAL,
+  DIRECTION_HORIZONTAL
+} from '@app/components/Animation/WavingImage';
+</script>
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('waving_image_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('waving_image_page.hero.description')
+    }
+  ]
+});
+
+const demoImageSrc = '/img/test-img/messageImage_1602166329419.jpg';
+// const demoImageSrc =
+//   '/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg';
+
+const directionOptions = computed(() => [
+  {
+    title: t('waving_image_page.direction_horizontal'),
+    value: DIRECTION_HORIZONTAL
+  },
+  {
+    title: t('waving_image_page.direction_vertical'),
+    value: DIRECTION_VERTICAL
+  }
+]);
+
+const form = reactive({
+  amplitude: 30,
+  period: 2,
+  frequency: 1,
+  fps: 70,
+  direction: DIRECTION_HORIZONTAL
+});
+</script>
+
 <template>
   <div class="waving_image_page">
     <!-- Hero Section -->
@@ -100,48 +143,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-import {
-  DIRECTION_VERTICAL,
-  DIRECTION_HORIZONTAL
-} from '@app/components/Animation/WavingImage';
-
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('waving_image_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('waving_image_page.hero.description')
-    }
-  ]
-});
-
-const demoImageSrc = '/img/test-img/messageImage_1602166329419.jpg';
-// const demoImageSrc =
-//   '/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg';
-
-const directionOptions = computed(() => [
-  {
-    title: t('waving_image_page.direction_horizontal'),
-    value: DIRECTION_HORIZONTAL
-  },
-  {
-    title: t('waving_image_page.direction_vertical'),
-    value: DIRECTION_VERTICAL
-  }
-]);
-
-const form = reactive({
-  amplitude: 30,
-  period: 2,
-  frequency: 1,
-  fps: 70,
-  direction: DIRECTION_HORIZONTAL
-});
-</script>
 
 <style lang="scss">
 .waving_image_page {

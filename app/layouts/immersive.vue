@@ -1,3 +1,12 @@
+<script setup>
+const router = useRouter();
+const localePath = useLocalePath();
+
+function handleGoBack() {
+  router.back();
+}
+</script>
+
 <template>
   <div class="immersive_layout">
     <!-- 返回按鈕 -->
@@ -22,15 +31,6 @@
     </main>
   </div>
 </template>
-
-<script setup>
-const router = useRouter();
-const localePath = useLocalePath();
-
-function handleGoBack() {
-  router.back();
-}
-</script>
 
 <style lang="scss">
 .immersive_layout {

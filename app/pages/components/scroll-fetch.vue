@@ -1,176 +1,7 @@
-<template>
-  <div class="scroll_fetch_test_page">
-    <!-- Hero Section -->
-    <section class="scroll_fetch_test_page-hero">
-      <div class="scroll_fetch_test_page-hero-background">
-        <div class="scroll_fetch_test_page-hero-background-overlay" />
-      </div>
-
-      <div class="scroll_fetch_test_page-hero-content">
-        <h1 class="scroll_fetch_test_page-hero-content-title">
-          {{ $t('scroll_fetch_page.hero.title') }}
-        </h1>
-        <p class="scroll_fetch_test_page-hero-content-subtitle">
-          {{ $t('scroll_fetch_page.hero.subtitle') }}
-        </p>
-        <p class="scroll_fetch_test_page-hero-content-description">
-          {{ $t('scroll_fetch_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="scroll_fetch_test_page-section">
-      <ScrollFetch
-        height="70dvh"
-        :ios-style="false"
-        :infinity-buffer="500"
-        :refresh-disable="pullRefeshDisabled"
-        refresh-icon="/img/icon/refresh/refresh-icon.svg"
-        refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
-        :user-select-none="userSelect"
-        :infinity-end="infinityEnd"
-        :is-mobile="$store.system.isMobile"
-        :loading="pending"
-        :infinity-disable="displayDataList.length <= 0"
-        class="scroll_fetch_test_page-scroller"
-        @refresh="handleRefresh"
-        @infinity-fetch="handleInfinityFetch"
-      >
-        <div class="scroll_fetch_test_page-scroller-description">
-          <a
-            rel="noopener"
-            target="_blank"
-            href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/pages/components/scroll-fetch.vue"
-          >
-            {{ $t('scroll_fetch_page.page_github') }}
-          </a>
-          <a
-            rel="noopener"
-            target="_blank"
-            href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/components/ScrollFetch.vue"
-          >
-            {{ $t('scroll_fetch_page.component_github') }}
-          </a>
-        </div>
-        <form
-          class="scroll_fetch_test_page-form"
-          @submit.prevent="handleRefresh"
-        >
-          <v-radio-group
-            v-model="userTokenType"
-            inline
-            class="scroll_fetch_test_page-form-token_type"
-          >
-            <v-radio
-              color="primary"
-              :label="$t('scroll_fetch_page.use_project_token')"
-              value="default"
-            />
-
-            <v-radio
-              color="primary"
-              :label="$t('scroll_fetch_page.input_token')"
-              value="input"
-            />
-            <v-text-field
-              v-model="userInputToken"
-              clearable
-              :label="$t('scroll_fetch_page.github_token')"
-              class="scroll_fetch_test_page-form-token_type-token_input"
-              :disabled="userTokenType !== 'input'"
-            />
-          </v-radio-group>
-
-          <v-radio-group
-            v-model="userAccountType"
-            class="scroll_fetch_test_page-form-account_type"
-            inline
-          >
-            <v-radio
-              color="primary"
-              :label="$t('scroll_fetch_page.use_project_account')"
-              value="default"
-            />
-
-            <v-radio color="primary" :label="$t('scroll_fetch_page.input_account')" value="input" />
-            <v-text-field
-              v-model="userInputAccount"
-              clearable
-              :label="$t('scroll_fetch_page.github_account')"
-              class="scroll_fetch_test_page-form-account_type-account_input"
-              :disabled="userAccountType !== 'input'"
-            />
-          </v-radio-group>
-
-          <v-btn block color="primary" type="submit">{{ $t('scroll_fetch_page.reload') }}</v-btn>
-        </form>
-
-        <v-checkbox
-          v-model="userSelect"
-          :label="$t('scroll_fetch_page.disable_user_select')"
-          color="primary"
-          :value="true"
-          class="scroll_fetch_test_page-user_select_disabled"
-        />
-
-        <v-checkbox
-          v-model="pullRefeshDisabled"
-          :label="$t('scroll_fetch_page.disable_pull_refresh')"
-          color="primary"
-          :value="true"
-          class="scroll_fetch_test_page-pull_Refresh_disabled"
-        />
-
-        <div class="scroll_fetch_test_page-list">
-          <div
-            class="scroll_fetch_test_page-list-content"
-            :css-is-empty="displayDataList.length <= 0"
-          >
-            <div
-              v-for="(displayData, index) in displayDataList"
-              :key="displayData.id"
-              class="scroll_fetch_test_page-list-content-item"
-            >
-              <p class="scroll_fetch_test_page-list-content-item-number">
-                No.{{ index + 1 }}
-              </p>
-              <!-- <p class="scroll_fetch_test_page-list-content-item-full_name">
-            {{ displayData.full_name }}
-          </p> -->
-              <p class="scroll_fetch_test_page-list-content-item-name">
-                {{ $t('scroll_fetch_page.repo_name') }} {{ displayData.name }}
-              </p>
-              <p class="scroll_fetch_test_page-list-content-item-description">
-                {{ $t('scroll_fetch_page.repo_desc') }} {{ displayData.description }}
-              </p>
-              <div class="scroll_fetch_test_page-list-content-item-html_link">
-                <p>{{ $t('scroll_fetch_page.repo_link') }}</p>
-                <a
-                  class="scroll_fetch_test_page-list-content-item-html_link-repo_link"
-                  target="_blank"
-                  :href="displayData.html_url"
-                >
-                  {{ displayData.html_url }}
-                </a>
-              </div>
-            </div>
-
-            <p
-              v-if="displayDataList.length <= 0"
-              class="scroll_fetch_test_page-list-content-empty"
-            >
-              {{ $t('scroll_fetch_page.no_data') }}
-            </p>
-          </div>
-        </div>
-      </ScrollFetch>
-    </section>
-  </div>
-</template>
-
-<script setup>
+<script>
 import _cloneDeep from 'lodash/cloneDeep';
+</script>
+<script setup>
 const { t } = useI18n();
 useHeadMataData({
   title: computed(() => t('scroll_fetch_page.page_title'))
@@ -318,6 +149,184 @@ async function handleInfinityFetch(done) {
   nuxtApp.$store.system.setLoading(false);
 }
 </script>
+
+<template>
+  <div class="scroll_fetch_test_page">
+    <!-- Hero Section -->
+    <section class="scroll_fetch_test_page-hero">
+      <div class="scroll_fetch_test_page-hero-background">
+        <div class="scroll_fetch_test_page-hero-background-overlay" />
+      </div>
+
+      <div class="scroll_fetch_test_page-hero-content">
+        <h1 class="scroll_fetch_test_page-hero-content-title">
+          {{ $t('scroll_fetch_page.hero.title') }}
+        </h1>
+        <p class="scroll_fetch_test_page-hero-content-subtitle">
+          {{ $t('scroll_fetch_page.hero.subtitle') }}
+        </p>
+        <p class="scroll_fetch_test_page-hero-content-description">
+          {{ $t('scroll_fetch_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="scroll_fetch_test_page-section">
+      <ScrollFetch
+        height="70dvh"
+        :ios-style="false"
+        :infinity-buffer="500"
+        :refresh-disable="pullRefeshDisabled"
+        refresh-icon="/img/icon/refresh/refresh-icon.svg"
+        refreshing-icon="/img/icon/refresh/refreshing-icon.svg"
+        :user-select-none="userSelect"
+        :infinity-end="infinityEnd"
+        :is-mobile="$store.system.isMobile"
+        :loading="pending"
+        :infinity-disable="displayDataList.length <= 0"
+        class="scroll_fetch_test_page-scroller"
+        @refresh="handleRefresh"
+        @infinity-fetch="handleInfinityFetch"
+      >
+        <div class="scroll_fetch_test_page-scroller-description">
+          <a
+            rel="noopener"
+            target="_blank"
+            href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/pages/components/scroll-fetch.vue"
+          >
+            {{ $t('scroll_fetch_page.page_github') }}
+          </a>
+          <a
+            rel="noopener"
+            target="_blank"
+            href="https://github.com/archer102125220/parker-nuxt-lab/blob/main/app/components/ScrollFetch.vue"
+          >
+            {{ $t('scroll_fetch_page.component_github') }}
+          </a>
+        </div>
+        <form
+          class="scroll_fetch_test_page-form"
+          @submit.prevent="handleRefresh"
+        >
+          <v-radio-group
+            v-model="userTokenType"
+            inline
+            class="scroll_fetch_test_page-form-token_type"
+          >
+            <v-radio
+              color="primary"
+              :label="$t('scroll_fetch_page.use_project_token')"
+              value="default"
+            />
+
+            <v-radio
+              color="primary"
+              :label="$t('scroll_fetch_page.input_token')"
+              value="input"
+            />
+            <v-text-field
+              v-model="userInputToken"
+              clearable
+              :label="$t('scroll_fetch_page.github_token')"
+              class="scroll_fetch_test_page-form-token_type-token_input"
+              :disabled="userTokenType !== 'input'"
+            />
+          </v-radio-group>
+
+          <v-radio-group
+            v-model="userAccountType"
+            class="scroll_fetch_test_page-form-account_type"
+            inline
+          >
+            <v-radio
+              color="primary"
+              :label="$t('scroll_fetch_page.use_project_account')"
+              value="default"
+            />
+
+            <v-radio
+              color="primary"
+              :label="$t('scroll_fetch_page.input_account')"
+              value="input"
+            />
+            <v-text-field
+              v-model="userInputAccount"
+              clearable
+              :label="$t('scroll_fetch_page.github_account')"
+              class="scroll_fetch_test_page-form-account_type-account_input"
+              :disabled="userAccountType !== 'input'"
+            />
+          </v-radio-group>
+
+          <v-btn block color="primary" type="submit">{{
+            $t('scroll_fetch_page.reload')
+          }}</v-btn>
+        </form>
+
+        <v-checkbox
+          v-model="userSelect"
+          :label="$t('scroll_fetch_page.disable_user_select')"
+          color="primary"
+          :value="true"
+          class="scroll_fetch_test_page-user_select_disabled"
+        />
+
+        <v-checkbox
+          v-model="pullRefeshDisabled"
+          :label="$t('scroll_fetch_page.disable_pull_refresh')"
+          color="primary"
+          :value="true"
+          class="scroll_fetch_test_page-pull_Refresh_disabled"
+        />
+
+        <div class="scroll_fetch_test_page-list">
+          <div
+            class="scroll_fetch_test_page-list-content"
+            :css-is-empty="displayDataList.length <= 0"
+          >
+            <div
+              v-for="(displayData, index) in displayDataList"
+              :key="displayData.id"
+              class="scroll_fetch_test_page-list-content-item"
+            >
+              <p class="scroll_fetch_test_page-list-content-item-number">
+                No.{{ index + 1 }}
+              </p>
+              <!-- <p class="scroll_fetch_test_page-list-content-item-full_name">
+            {{ displayData.full_name }}
+          </p> -->
+              <p class="scroll_fetch_test_page-list-content-item-name">
+                {{ $t('scroll_fetch_page.repo_name') }} {{ displayData.name }}
+              </p>
+              <p class="scroll_fetch_test_page-list-content-item-description">
+                {{ $t('scroll_fetch_page.repo_desc') }}
+                {{ displayData.description }}
+              </p>
+              <div class="scroll_fetch_test_page-list-content-item-html_link">
+                <p>{{ $t('scroll_fetch_page.repo_link') }}</p>
+                <a
+                  class="scroll_fetch_test_page-list-content-item-html_link-repo_link"
+                  target="_blank"
+                  :href="displayData.html_url"
+                >
+                  {{ displayData.html_url }}
+                </a>
+              </div>
+            </div>
+
+            <p
+              v-if="displayDataList.length <= 0"
+              class="scroll_fetch_test_page-list-content-empty"
+            >
+              {{ $t('scroll_fetch_page.no_data') }}
+            </p>
+          </div>
+        </div>
+      </ScrollFetch>
+    </section>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .scroll_fetch_test_page {

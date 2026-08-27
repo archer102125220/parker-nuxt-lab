@@ -1,3 +1,36 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('selector_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('selector_page.hero.description')
+    }
+  ]
+});
+
+const classId = ref();
+const matchTypeList = computed(() => {
+  return [
+    { id: 5, name: 'football', display: '足球' },
+    { id: 4, name: 'basketball', display: '籃球' },
+    { id: 14, name: 'e-sports', display: '電競' },
+    { id: 'default', name: 'other', display: '預設' }
+  ];
+});
+
+const currentSelection = computed(() => {
+  const item = matchTypeList.value.find((m) => m.id === classId.value);
+  return item ? `${item.display} (ID: ${item.id})` : '(尚未選擇)';
+});
+
+onMounted(() => {
+  classId.value = matchTypeList.value[0]?.id;
+});
+</script>
+
 <template>
   <div class="selector_page">
     <!-- Hero Section -->
@@ -33,45 +66,14 @@
 
         <div class="selector_page-demo-result">
           <p class="selector_page-demo-result-label">目前選擇：</p>
-          <code class="selector_page-demo-result-value">{{ currentSelection }}</code>
+          <code class="selector_page-demo-result-value">{{
+            currentSelection
+          }}</code>
         </div>
       </div>
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('selector_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('selector_page.hero.description')
-    }
-  ]
-});
-
-const classId = ref();
-const matchTypeList = computed(() => {
-  return [
-    { id: 5, name: 'football', display: '足球' },
-    { id: 4, name: 'basketball', display: '籃球' },
-    { id: 14, name: 'e-sports', display: '電競' },
-    { id: 'default', name: 'other', display: '預設' }
-  ];
-});
-
-const currentSelection = computed(() => {
-  const item = matchTypeList.value.find(m => m.id === classId.value);
-  return item ? `${item.display} (ID: ${item.id})` : '(尚未選擇)';
-});
-
-onMounted(() => {
-  classId.value = matchTypeList.value[0]?.id;
-});
-</script>
 
 <style lang="scss" scoped>
 .selector_page {
@@ -94,7 +96,7 @@ onMounted(() => {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -102,7 +104,11 @@ onMounted(() => {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

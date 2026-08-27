@@ -1,257 +1,3 @@
-<template>
-  <div class="swiper_test_page">
-    <!-- Hero Section -->
-    <section class="swiper_test_page-hero">
-      <div class="swiper_test_page-hero-background">
-        <div class="swiper_test_page-hero-background-overlay" />
-      </div>
-
-      <div class="swiper_test_page-hero-content">
-        <h1 class="swiper_test_page-hero-content-title">
-          {{ $t('swiper_test_page.hero.title') }}
-        </h1>
-        <p class="swiper_test_page-hero-content-subtitle">
-          {{ $t('swiper_test_page.hero.subtitle') }}
-        </p>
-        <p class="swiper_test_page-hero-content-description">
-          {{ $t('swiper_test_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Demo 1: 基本滑動 -->
-    <section class="swiper_test_page-section">
-      <h2 class="swiper_test_page-section-title">
-        {{ $t('swiper_test_page.demo.basic.title') }}
-      </h2>
-      <p class="swiper_test_page-section-description">
-        {{ $t('swiper_test_page.demo.basic.description') }}
-      </p>
-
-      <div class="swiper_test_page-section-status">
-        <p class="swiper_test_page-section-status-text">
-          {{ $t('swiper_test_page.demo.current_slide') }}:
-          {{ basicSlideIndex + 1 }} / {{ basicSlideList.length }}
-        </p>
-      </div>
-
-      <SwiperCustom
-        v-model="basicSlide"
-        :slide-list="basicSlideList"
-        :slot-name-is-default="true"
-        class="swiper_test_page-section-swiper"
-      >
-        <template #default="{ item, index }">
-          <div class="swiper_test_page-section-swiper-slide">
-            <div class="swiper_test_page-section-swiper-slide-number">{{ index + 1 }}</div>
-            <h3 class="swiper_test_page-section-swiper-slide-title">{{ item.title }}</h3>
-            <p class="swiper_test_page-section-swiper-slide-content">{{ item.content }}</p>
-          </div>
-        </template>
-      </SwiperCustom>
-    </section>
-
-    <!-- Demo 2: 帶導航按鈕 -->
-    <section class="swiper_test_page-section">
-      <h2 class="swiper_test_page-section-title">
-        {{ $t('swiper_test_page.demo.navigation.title') }}
-      </h2>
-      <p class="swiper_test_page-section-description">
-        {{ $t('swiper_test_page.demo.navigation.description') }}
-      </p>
-
-      <div class="swiper_test_page-section-status">
-        <p class="swiper_test_page-section-status-text">
-          {{ $t('swiper_test_page.demo.current_slide') }}:
-          {{ navSlideIndex + 1 }} / {{ navSlideList.length }}
-        </p>
-      </div>
-
-      <SwiperCustom
-        v-model="navSlide"
-        :slide-list="navSlideList"
-        :slot-name-is-default="true"
-        has-navigation
-        class="swiper_test_page-section-swiper"
-        css-has-nav="true"
-      >
-        <template #prev>
-          <div class="swiper_test_page-section-swiper-nav_btn">
-            <v-icon icon="mdi-chevron-left" size="32" />
-          </div>
-        </template>
-        <template #next>
-          <div class="swiper_test_page-section-swiper-nav_btn">
-            <v-icon icon="mdi-chevron-right" size="32" />
-          </div>
-        </template>
-        <template #default="{ item, index }">
-          <div
-            class="swiper_test_page-section-swiper-slide"
-            :style="{ backgroundColor: item.color }"
-          >
-            <div class="swiper_test_page-section-swiper-slide-number">{{ index + 1 }}</div>
-            <h3 class="swiper_test_page-section-swiper-slide-title">{{ item.title }}</h3>
-          </div>
-        </template>
-      </SwiperCustom>
-    </section>
-
-    <!-- Demo 3: 事件處理 -->
-    <section class="swiper_test_page-section">
-      <h2 class="swiper_test_page-section-title">
-        {{ $t('swiper_test_page.demo.events.title') }}
-      </h2>
-      <p class="swiper_test_page-section-description">
-        {{ $t('swiper_test_page.demo.events.description') }}
-      </p>
-
-      <div class="swiper_test_page-section-status">
-        <p class="swiper_test_page-section-status-text">
-          {{ $t('swiper_test_page.demo.current_slide') }}:
-          {{ eventSlideIndex + 1 }} / {{ eventSlideList.length }}
-        </p>
-        <p class="swiper_test_page-section-status-event">
-          {{ $t('swiper_test_page.demo.events.last_event') }}:
-          {{ lastEvent || '-' }}
-        </p>
-      </div>
-
-      <SwiperCustom
-        v-model="eventSlide"
-        :slide-list="eventSlideList"
-        :slot-name-is-default="true"
-        has-navigation
-        class="swiper_test_page-section-swiper"
-        @change="handleChange"
-        @slider-move="handleSliderMove"
-        @slider-move-end="handleSliderMoveEnd"
-      >
-        <template #default="{ item, index }">
-          <div
-            class="swiper_test_page-section-swiper-slide"
-            :style="{ backgroundColor: item.color }"
-          >
-            <div class="swiper_test_page-section-swiper-slide-number">{{ index + 1 }}</div>
-            <h3 class="swiper_test_page-section-swiper-slide-title">{{ item.title }}</h3>
-          </div>
-        </template>
-      </SwiperCustom>
-
-      <div class="swiper_test_page-section-event_log">
-        <h4 class="swiper_test_page-section-event_log-title">
-          {{ $t('swiper_test_page.demo.events.log_title') }}
-        </h4>
-        <ul class="swiper_test_page-section-event_log-list">
-          <li
-            v-for="(log, index) in eventLog"
-            :key="index"
-            class="swiper_test_page-section-event_log-list-item"
-          >
-            {{ log }}
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Demo 4: 滑動比例調整 -->
-    <section class="swiper_test_page-section">
-      <h2 class="swiper_test_page-section-title">
-        {{ $t('swiper_test_page.demo.ratio.title') }}
-      </h2>
-      <p class="swiper_test_page-section-description">
-        {{ $t('swiper_test_page.demo.ratio.description') }}
-      </p>
-
-      <div class="swiper_test_page-section-controls">
-        <label class="swiper_test_page-section-controls-label">
-          longSwipesRatio: {{ longSwipesRatio }}
-        </label>
-        <v-slider
-          v-model="longSwipesRatio"
-          :min="0.1"
-          :max="0.9"
-          :step="0.1"
-          thumb-label
-          class="swiper_test_page-section-controls-slider"
-        />
-      </div>
-
-      <SwiperCustom
-        v-model="ratioSlide"
-        :slide-list="ratioSlideList"
-        :slot-name-is-default="true"
-        :long-swipes-ratio="longSwipesRatio"
-        has-navigation
-        class="swiper_test_page-section-swiper"
-      >
-        <template #default="{ item, index }">
-          <div
-            class="swiper_test_page-section-swiper-slide"
-            :style="{ backgroundColor: item.color }"
-          >
-            <div class="swiper_test_page-section-swiper-slide-number">{{ index + 1 }}</div>
-            <h3 class="swiper_test_page-section-swiper-slide-title">{{ item.title }}</h3>
-            <p class="swiper_test_page-section-swiper-slide-hint">
-              {{ $t('swiper_test_page.demo.ratio.hint') }}
-            </p>
-          </div>
-        </template>
-      </SwiperCustom>
-    </section>
-
-    <!-- Demo 5: 多位置插槽 -->
-    <section class="swiper_test_page-section">
-      <h2 class="swiper_test_page-section-title">
-        {{ $t('swiper_test_page.demo.slots.title') }}
-      </h2>
-      <p class="swiper_test_page-section-description">
-        {{ $t('swiper_test_page.demo.slots.description') }}
-      </p>
-
-      <SwiperCustom
-        v-model="slotSlide"
-        :slide-list="slotSlideList"
-        :slot-name-is-default="true"
-        should-fill-height
-        has-navigation
-        class="swiper_test_page-section-swiper"
-        css-is-tall="true"
-      >
-        <template #default-top="{ index }">
-          <div class="swiper_test_page-section-swiper-slot_demo" css-position="top">
-            {{ $t('swiper_test_page.demo.slots.top') }} ({{ index + 1 }})
-          </div>
-        </template>
-        <template #default-left="{ index }">
-          <div class="swiper_test_page-section-swiper-slot_demo" css-position="left">
-            {{ $t('swiper_test_page.demo.slots.left') }}
-          </div>
-        </template>
-        <template #default="{ item, index }">
-          <div class="swiper_test_page-section-swiper-slot_demo" css-position="center">
-            <div class="swiper_test_page-section-swiper-slide-number">{{ index + 1 }}</div>
-            <h3 class="swiper_test_page-section-swiper-slide-title">{{ item.title }}</h3>
-            <p class="swiper_test_page-section-swiper-slide-content">
-              {{ $t('swiper_test_page.demo.slots.center') }}
-            </p>
-          </div>
-        </template>
-        <template #default-right="{ index }">
-          <div class="swiper_test_page-section-swiper-slot_demo" css-position="right">
-            {{ $t('swiper_test_page.demo.slots.right') }}
-          </div>
-        </template>
-        <template #default-bottom="{ index }">
-          <div class="swiper_test_page-section-swiper-slot_demo" css-position="bottom">
-            {{ $t('swiper_test_page.demo.slots.bottom') }} ({{ index + 1 }})
-          </div>
-        </template>
-      </SwiperCustom>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -363,6 +109,297 @@ const slotSlideIndex = computed(() => {
   return slotSlide.value?.value ?? 0;
 });
 </script>
+
+<template>
+  <div class="swiper_test_page">
+    <!-- Hero Section -->
+    <section class="swiper_test_page-hero">
+      <div class="swiper_test_page-hero-background">
+        <div class="swiper_test_page-hero-background-overlay" />
+      </div>
+
+      <div class="swiper_test_page-hero-content">
+        <h1 class="swiper_test_page-hero-content-title">
+          {{ $t('swiper_test_page.hero.title') }}
+        </h1>
+        <p class="swiper_test_page-hero-content-subtitle">
+          {{ $t('swiper_test_page.hero.subtitle') }}
+        </p>
+        <p class="swiper_test_page-hero-content-description">
+          {{ $t('swiper_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Demo 1: 基本滑動 -->
+    <section class="swiper_test_page-section">
+      <h2 class="swiper_test_page-section-title">
+        {{ $t('swiper_test_page.demo.basic.title') }}
+      </h2>
+      <p class="swiper_test_page-section-description">
+        {{ $t('swiper_test_page.demo.basic.description') }}
+      </p>
+
+      <div class="swiper_test_page-section-status">
+        <p class="swiper_test_page-section-status-text">
+          {{ $t('swiper_test_page.demo.current_slide') }}:
+          {{ basicSlideIndex + 1 }} / {{ basicSlideList.length }}
+        </p>
+      </div>
+
+      <SwiperCustom
+        v-model="basicSlide"
+        :slide-list="basicSlideList"
+        :slot-name-is-default="true"
+        class="swiper_test_page-section-swiper"
+      >
+        <template #default="{ item, index }">
+          <div class="swiper_test_page-section-swiper-slide">
+            <div class="swiper_test_page-section-swiper-slide-number">
+              {{ index + 1 }}
+            </div>
+            <h3 class="swiper_test_page-section-swiper-slide-title">
+              {{ item.title }}
+            </h3>
+            <p class="swiper_test_page-section-swiper-slide-content">
+              {{ item.content }}
+            </p>
+          </div>
+        </template>
+      </SwiperCustom>
+    </section>
+
+    <!-- Demo 2: 帶導航按鈕 -->
+    <section class="swiper_test_page-section">
+      <h2 class="swiper_test_page-section-title">
+        {{ $t('swiper_test_page.demo.navigation.title') }}
+      </h2>
+      <p class="swiper_test_page-section-description">
+        {{ $t('swiper_test_page.demo.navigation.description') }}
+      </p>
+
+      <div class="swiper_test_page-section-status">
+        <p class="swiper_test_page-section-status-text">
+          {{ $t('swiper_test_page.demo.current_slide') }}:
+          {{ navSlideIndex + 1 }} / {{ navSlideList.length }}
+        </p>
+      </div>
+
+      <SwiperCustom
+        v-model="navSlide"
+        :slide-list="navSlideList"
+        :slot-name-is-default="true"
+        has-navigation
+        class="swiper_test_page-section-swiper"
+        css-has-nav="true"
+      >
+        <template #prev>
+          <div class="swiper_test_page-section-swiper-nav_btn">
+            <v-icon icon="mdi-chevron-left" size="32" />
+          </div>
+        </template>
+        <template #next>
+          <div class="swiper_test_page-section-swiper-nav_btn">
+            <v-icon icon="mdi-chevron-right" size="32" />
+          </div>
+        </template>
+        <template #default="{ item, index }">
+          <div
+            class="swiper_test_page-section-swiper-slide"
+            :style="{ backgroundColor: item.color }"
+          >
+            <div class="swiper_test_page-section-swiper-slide-number">
+              {{ index + 1 }}
+            </div>
+            <h3 class="swiper_test_page-section-swiper-slide-title">
+              {{ item.title }}
+            </h3>
+          </div>
+        </template>
+      </SwiperCustom>
+    </section>
+
+    <!-- Demo 3: 事件處理 -->
+    <section class="swiper_test_page-section">
+      <h2 class="swiper_test_page-section-title">
+        {{ $t('swiper_test_page.demo.events.title') }}
+      </h2>
+      <p class="swiper_test_page-section-description">
+        {{ $t('swiper_test_page.demo.events.description') }}
+      </p>
+
+      <div class="swiper_test_page-section-status">
+        <p class="swiper_test_page-section-status-text">
+          {{ $t('swiper_test_page.demo.current_slide') }}:
+          {{ eventSlideIndex + 1 }} / {{ eventSlideList.length }}
+        </p>
+        <p class="swiper_test_page-section-status-event">
+          {{ $t('swiper_test_page.demo.events.last_event') }}:
+          {{ lastEvent || '-' }}
+        </p>
+      </div>
+
+      <SwiperCustom
+        v-model="eventSlide"
+        :slide-list="eventSlideList"
+        :slot-name-is-default="true"
+        has-navigation
+        class="swiper_test_page-section-swiper"
+        @change="handleChange"
+        @slider-move="handleSliderMove"
+        @slider-move-end="handleSliderMoveEnd"
+      >
+        <template #default="{ item, index }">
+          <div
+            class="swiper_test_page-section-swiper-slide"
+            :style="{ backgroundColor: item.color }"
+          >
+            <div class="swiper_test_page-section-swiper-slide-number">
+              {{ index + 1 }}
+            </div>
+            <h3 class="swiper_test_page-section-swiper-slide-title">
+              {{ item.title }}
+            </h3>
+          </div>
+        </template>
+      </SwiperCustom>
+
+      <div class="swiper_test_page-section-event_log">
+        <h4 class="swiper_test_page-section-event_log-title">
+          {{ $t('swiper_test_page.demo.events.log_title') }}
+        </h4>
+        <ul class="swiper_test_page-section-event_log-list">
+          <li
+            v-for="(log, index) in eventLog"
+            :key="index"
+            class="swiper_test_page-section-event_log-list-item"
+          >
+            {{ log }}
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Demo 4: 滑動比例調整 -->
+    <section class="swiper_test_page-section">
+      <h2 class="swiper_test_page-section-title">
+        {{ $t('swiper_test_page.demo.ratio.title') }}
+      </h2>
+      <p class="swiper_test_page-section-description">
+        {{ $t('swiper_test_page.demo.ratio.description') }}
+      </p>
+
+      <div class="swiper_test_page-section-controls">
+        <label class="swiper_test_page-section-controls-label">
+          longSwipesRatio: {{ longSwipesRatio }}
+        </label>
+        <v-slider
+          v-model="longSwipesRatio"
+          :min="0.1"
+          :max="0.9"
+          :step="0.1"
+          thumb-label
+          class="swiper_test_page-section-controls-slider"
+        />
+      </div>
+
+      <SwiperCustom
+        v-model="ratioSlide"
+        :slide-list="ratioSlideList"
+        :slot-name-is-default="true"
+        :long-swipes-ratio="longSwipesRatio"
+        has-navigation
+        class="swiper_test_page-section-swiper"
+      >
+        <template #default="{ item, index }">
+          <div
+            class="swiper_test_page-section-swiper-slide"
+            :style="{ backgroundColor: item.color }"
+          >
+            <div class="swiper_test_page-section-swiper-slide-number">
+              {{ index + 1 }}
+            </div>
+            <h3 class="swiper_test_page-section-swiper-slide-title">
+              {{ item.title }}
+            </h3>
+            <p class="swiper_test_page-section-swiper-slide-hint">
+              {{ $t('swiper_test_page.demo.ratio.hint') }}
+            </p>
+          </div>
+        </template>
+      </SwiperCustom>
+    </section>
+
+    <!-- Demo 5: 多位置插槽 -->
+    <section class="swiper_test_page-section">
+      <h2 class="swiper_test_page-section-title">
+        {{ $t('swiper_test_page.demo.slots.title') }}
+      </h2>
+      <p class="swiper_test_page-section-description">
+        {{ $t('swiper_test_page.demo.slots.description') }}
+      </p>
+
+      <SwiperCustom
+        v-model="slotSlide"
+        :slide-list="slotSlideList"
+        :slot-name-is-default="true"
+        should-fill-height
+        has-navigation
+        class="swiper_test_page-section-swiper"
+        css-is-tall="true"
+      >
+        <template #default-top="{ index }">
+          <div
+            class="swiper_test_page-section-swiper-slot_demo"
+            css-position="top"
+          >
+            {{ $t('swiper_test_page.demo.slots.top') }} ({{ index + 1 }})
+          </div>
+        </template>
+        <template #default-left="{ index }">
+          <div
+            class="swiper_test_page-section-swiper-slot_demo"
+            css-position="left"
+          >
+            {{ $t('swiper_test_page.demo.slots.left') }}
+          </div>
+        </template>
+        <template #default="{ item, index }">
+          <div
+            class="swiper_test_page-section-swiper-slot_demo"
+            css-position="center"
+          >
+            <div class="swiper_test_page-section-swiper-slide-number">
+              {{ index + 1 }}
+            </div>
+            <h3 class="swiper_test_page-section-swiper-slide-title">
+              {{ item.title }}
+            </h3>
+            <p class="swiper_test_page-section-swiper-slide-content">
+              {{ $t('swiper_test_page.demo.slots.center') }}
+            </p>
+          </div>
+        </template>
+        <template #default-right="{ index }">
+          <div
+            class="swiper_test_page-section-swiper-slot_demo"
+            css-position="right"
+          >
+            {{ $t('swiper_test_page.demo.slots.right') }}
+          </div>
+        </template>
+        <template #default-bottom="{ index }">
+          <div
+            class="swiper_test_page-section-swiper-slot_demo"
+            css-position="bottom"
+          >
+            {{ $t('swiper_test_page.demo.slots.bottom') }} ({{ index + 1 }})
+          </div>
+        </template>
+      </SwiperCustom>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .swiper_test_page {

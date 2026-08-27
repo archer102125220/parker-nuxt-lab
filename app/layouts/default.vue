@@ -1,13 +1,3 @@
-<template>
-  <div class="defalut_layout">
-    <LayoutHeader />
-    <main class="defalut_layout-content">
-      <slot />
-    </main>
-    <LayoutFooter />
-  </div>
-</template>
-
 <script setup>
 // const { $store } = useNuxtApp();
 // const route = useRoute();
@@ -19,6 +9,16 @@
 //     : 'defalut_layout-content'
 // );
 </script>
+
+<template>
+  <div class="defalut_layout">
+    <LayoutHeader />
+    <main class="defalut_layout-content">
+      <slot />
+    </main>
+    <LayoutFooter />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .defalut_layout {

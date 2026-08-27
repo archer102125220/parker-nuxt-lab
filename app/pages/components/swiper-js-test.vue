@@ -1,67 +1,3 @@
-<template>
-  <div class="swiper_js_test_page">
-    <!-- Hero Section -->
-    <section class="swiper_js_test_page-hero">
-      <div class="swiper_js_test_page-hero-background">
-        <div class="swiper_js_test_page-hero-background-overlay" />
-      </div>
-
-      <div class="swiper_js_test_page-hero-content">
-        <h1 class="swiper_js_test_page-hero-content-title">
-          {{ $t('swiper_js_test_page.hero.title') }}
-        </h1>
-        <p class="swiper_js_test_page-hero-content-subtitle">
-          {{ $t('swiper_js_test_page.hero.subtitle') }}
-        </p>
-        <p class="swiper_js_test_page-hero-content-description">
-          {{ $t('swiper_js_test_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="swiper_js_test_page-section">
-      <div class="swiper_js_test_page-note">
-        <p class="swiper_js_test_page-note-text">
-          📝 此組件誕生於 Swiper v9 至 v10 期間，當時官方宣布停止維護 React/Vue 框架組件並轉向 Web Components。
-          直到 Swiper v11（2023 年底）官方才恢復對 Vue 的第一方支援，目前可直接使用官方 Vue 版本。
-        </p>
-      </div>
-
-      <div class="swiper_js_test_page-demo">
-        <h3 class="swiper_js_test_page-demo-title">基本用法：</h3>
-        <SwiperJs
-          v-model="slide"
-          should-fill-height
-          :slide-list="slideList"
-          class="swiper_js_test_page-demo-swiper"
-        >
-          <template #default="{ item, index, isSliderMoveing }">
-            <div class="swiper_js_test_page-demo-swiper-slide">
-              <p class="swiper_js_test_page-demo-swiper-slide-text">item: {{ item }}</p>
-              <p class="swiper_js_test_page-demo-swiper-slide-text">index: {{ index }}</p>
-              <p class="swiper_js_test_page-demo-swiper-slide-text">isSliderMoveing: {{ `${isSliderMoveing}` }}</p>
-            </div>
-          </template>
-        </SwiperJs>
-      </div>
-
-      <div class="swiper_js_test_page-demo">
-        <h3 class="swiper_js_test_page-demo-title">循環自動播放：</h3>
-        <!-- TODO: loop fix -->
-        <SwiperJs
-          v-model="slideLoop"
-          overflow
-          has-pagination
-          :autoplay-delay="3000"
-          :slide-list="slideList"
-          class="swiper_js_test_page-demo-swiper"
-        />
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -92,6 +28,77 @@ const slideList = computed(() => {
 });
 </script>
 
+<template>
+  <div class="swiper_js_test_page">
+    <!-- Hero Section -->
+    <section class="swiper_js_test_page-hero">
+      <div class="swiper_js_test_page-hero-background">
+        <div class="swiper_js_test_page-hero-background-overlay" />
+      </div>
+
+      <div class="swiper_js_test_page-hero-content">
+        <h1 class="swiper_js_test_page-hero-content-title">
+          {{ $t('swiper_js_test_page.hero.title') }}
+        </h1>
+        <p class="swiper_js_test_page-hero-content-subtitle">
+          {{ $t('swiper_js_test_page.hero.subtitle') }}
+        </p>
+        <p class="swiper_js_test_page-hero-content-description">
+          {{ $t('swiper_js_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="swiper_js_test_page-section">
+      <div class="swiper_js_test_page-note">
+        <p class="swiper_js_test_page-note-text">
+          📝 此組件誕生於 Swiper v9 至 v10 期間，當時官方宣布停止維護 React/Vue
+          框架組件並轉向 Web Components。 直到 Swiper v11（2023
+          年底）官方才恢復對 Vue 的第一方支援，目前可直接使用官方 Vue 版本。
+        </p>
+      </div>
+
+      <div class="swiper_js_test_page-demo">
+        <h3 class="swiper_js_test_page-demo-title">基本用法：</h3>
+        <SwiperJs
+          v-model="slide"
+          should-fill-height
+          :slide-list="slideList"
+          class="swiper_js_test_page-demo-swiper"
+        >
+          <template #default="{ item, index, isSliderMoveing }">
+            <div class="swiper_js_test_page-demo-swiper-slide">
+              <p class="swiper_js_test_page-demo-swiper-slide-text">
+                item: {{ item }}
+              </p>
+              <p class="swiper_js_test_page-demo-swiper-slide-text">
+                index: {{ index }}
+              </p>
+              <p class="swiper_js_test_page-demo-swiper-slide-text">
+                isSliderMoveing: {{ `${isSliderMoveing}` }}
+              </p>
+            </div>
+          </template>
+        </SwiperJs>
+      </div>
+
+      <div class="swiper_js_test_page-demo">
+        <h3 class="swiper_js_test_page-demo-title">循環自動播放：</h3>
+        <!-- TODO: loop fix -->
+        <SwiperJs
+          v-model="slideLoop"
+          overflow
+          has-pagination
+          :autoplay-delay="3000"
+          :slide-list="slideList"
+          class="swiper_js_test_page-demo-swiper"
+        />
+      </div>
+    </section>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .swiper_js_test_page {
   min-height: 100vh;
@@ -112,7 +119,7 @@ const slideList = computed(() => {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -120,7 +127,11 @@ const slideList = computed(() => {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 
@@ -167,8 +178,12 @@ const slideList = computed(() => {
     margin-bottom: 24px;
     padding: 16px 20px;
     border-radius: 8px;
-    border-left: 4px solid #44A08D;
-    background: linear-gradient(135deg, rgba(68, 160, 141, 0.08) 0%, rgba(78, 205, 196, 0.08) 100%);
+    border-left: 4px solid #44a08d;
+    background: linear-gradient(
+      135deg,
+      rgba(68, 160, 141, 0.08) 0%,
+      rgba(78, 205, 196, 0.08) 100%
+    );
 
     &-text {
       margin: 0;
@@ -203,7 +218,11 @@ const slideList = computed(() => {
         align-items: center;
         height: 100%;
         padding: 20px;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.1) 0%,
+          rgba(78, 205, 196, 0.1) 100%
+        );
         border-radius: 8px;
 
         &-text {

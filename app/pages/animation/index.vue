@@ -1,61 +1,6 @@
-<template>
-  <div class="animation_page">
-    <!-- Hero Section -->
-    <section class="animation_page-hero">
-      <div class="animation_page-hero-background">
-        <div class="animation_page-hero-background-overlay" />
-        <div class="animation_page-hero-background-particles">
-          <span
-            v-for="i in 12"
-            :key="i"
-            class="animation_page-hero-background-particles-dot"
-          />
-        </div>
-      </div>
-
-      <div class="animation_page-hero-content">
-        <h1 class="animation_page-hero-content-title">
-          {{ $t('animation_page.hero.title') }}
-        </h1>
-        <p class="animation_page-hero-content-subtitle">
-          {{ $t('animation_page.hero.subtitle') }}
-        </p>
-        <p class="animation_page-hero-content-description">
-          {{ $t('animation_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="animation_page-intro">
-      <div class="animation_page-section-container">
-        <p class="animation_page-intro-text">
-          {{ $t('animation_page.intro.text') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Animation Demos Grid -->
-    <section class="animation_page-section">
-      <div class="animation_page-section-container">
-        <h2 class="animation_page-section-title">
-          {{ $t('animation_page.demos.title') }}
-        </h2>
-        <div class="animation_page-grid">
-          <LinkCard
-            v-for="item in demoItems"
-            :key="item.to"
-            :to="item.to"
-            :label="item.label"
-            :description="item.description"
-            class="animation_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
+<script>
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+</script>
 <script setup>
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -69,8 +14,6 @@ useHeadMataData({
     }
   ]
 });
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
 
 // Schema.org 結構化資料 (nuxt-schema-org)
 useSchemaOrg([
@@ -150,6 +93,64 @@ const demoItems = computed(() => [
   }
 ]);
 </script>
+
+<template>
+  <div class="animation_page">
+    <!-- Hero Section -->
+    <section class="animation_page-hero">
+      <div class="animation_page-hero-background">
+        <div class="animation_page-hero-background-overlay" />
+        <div class="animation_page-hero-background-particles">
+          <span
+            v-for="i in 12"
+            :key="i"
+            class="animation_page-hero-background-particles-dot"
+          />
+        </div>
+      </div>
+
+      <div class="animation_page-hero-content">
+        <h1 class="animation_page-hero-content-title">
+          {{ $t('animation_page.hero.title') }}
+        </h1>
+        <p class="animation_page-hero-content-subtitle">
+          {{ $t('animation_page.hero.subtitle') }}
+        </p>
+        <p class="animation_page-hero-content-description">
+          {{ $t('animation_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="animation_page-intro">
+      <div class="animation_page-section-container">
+        <p class="animation_page-intro-text">
+          {{ $t('animation_page.intro.text') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Animation Demos Grid -->
+    <section class="animation_page-section">
+      <div class="animation_page-section-container">
+        <h2 class="animation_page-section-title">
+          {{ $t('animation_page.demos.title') }}
+        </h2>
+        <div class="animation_page-grid">
+          <LinkCard
+            v-for="item in demoItems"
+            :key="item.to"
+            :to="item.to"
+            :label="item.label"
+            :description="item.description"
+            class="animation_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .animation_page {

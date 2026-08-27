@@ -1,3 +1,27 @@
+<script>
+const DEMO_TEXT = 'Parker Chen 的Nuxt實驗室';
+</script>
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('enter_label_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('enter_label_page.hero.description')
+    }
+  ]
+});
+
+const demoLabel = ref(DEMO_TEXT);
+const demoInput = ref(DEMO_TEXT);
+
+function handleDemoLabel() {
+  demoLabel.value = demoInput.value;
+}
+</script>
+
 <template>
   <div class="enter_label_page">
     <!-- Hero Section -->
@@ -22,12 +46,19 @@
     <!-- Main Content -->
     <section class="enter_label_page-section">
       <div class="enter_label_page-demo">
-        <p class="enter_label_page-demo-title">{{ $t('enter_label_page.demo_title') }}：</p>
-        <AnimationEnterLabel class="enter_label_page-demo-label" :label="demoLabel" />
+        <p class="enter_label_page-demo-title">
+          {{ $t('enter_label_page.demo_title') }}：
+        </p>
+        <AnimationEnterLabel
+          class="enter_label_page-demo-label"
+          :label="demoLabel"
+        />
       </div>
 
       <form class="enter_label_page-form" @submit.prevent="handleDemoLabel">
-        <p class="enter_label_page-form-title">{{ $t('enter_label_page.test_title') }}：</p>
+        <p class="enter_label_page-form-title">
+          {{ $t('enter_label_page.test_title') }}：
+        </p>
         <v-text-field
           v-model="demoInput"
           clearable
@@ -44,29 +75,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('enter_label_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('enter_label_page.hero.description')
-    }
-  ]
-});
-
-const DEMO_TEXT = 'Parker Chen 的Nuxt實驗室';
-
-const demoLabel = ref(DEMO_TEXT);
-const demoInput = ref(DEMO_TEXT);
-
-function handleDemoLabel() {
-  demoLabel.value = demoInput.value;
-}
-</script>
 
 <style lang="scss">
 .enter_label_page {
@@ -88,7 +96,7 @@ function handleDemoLabel() {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -96,7 +104,11 @@ function handleDemoLabel() {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 
@@ -156,7 +168,7 @@ function handleDemoLabel() {
     &-label {
       min-height: 32px;
       font-size: 24px;
-      color: #44A08D;
+      color: #44a08d;
     }
   }
 

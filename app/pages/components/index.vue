@@ -1,119 +1,3 @@
-<template>
-  <div class="components_page">
-    <!-- Hero Section -->
-    <section class="components_page-hero">
-      <div class="components_page-hero-background">
-        <img
-          src="/img/components-page/components-page-v.05.webp"
-          alt="Components"
-          class="components_page-hero-background-image"
-        />
-        <div class="components_page-hero-background-overlay" />
-      </div>
-
-      <div class="components_page-hero-content">
-        <h1 class="components_page-hero-content-title">
-          {{ $t('components_page.hero.title') }}
-        </h1>
-        <p class="components_page-hero-content-subtitle">
-          {{ $t('components_page.hero.subtitle') }}
-        </p>
-        <p class="components_page-hero-content-description">
-          {{ $t('components_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="components_page-intro">
-      <div class="components_page-section-container">
-        <p class="components_page-intro-text">
-          {{ $t('components_page.intro.custom') }}
-        </p>
-        <p class="components_page-intro-text">
-          {{ $t('components_page.intro.integration') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- UI Components -->
-    <section class="components_page-category">
-      <div class="components_page-section-container">
-        <h2 class="components_page-section-title">
-          {{ $t('components_page.categories.ui') }}
-        </h2>
-        <div class="components_page-grid">
-          <LinkCard
-            v-for="component in uiComponents"
-            :key="component.to"
-            :to="component.to"
-            :label="component.label"
-            :banner="component.banner"
-            class="components_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Functional Components -->
-    <section class="components_page-category">
-      <div class="components_page-section-container">
-        <h2 class="components_page-section-title">
-          {{ $t('components_page.categories.functional') }}
-        </h2>
-        <div class="components_page-grid">
-          <LinkCard
-            v-for="component in functionalComponents"
-            :key="component.to"
-            :label="component.label"
-            :to="component.to"
-            :banner="component.banner"
-            class="components_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Third-party Integrations -->
-    <section class="components_page-category">
-      <div class="components_page-section-container">
-        <h2 class="components_page-section-title">
-          {{ $t('components_page.categories.integration') }}
-        </h2>
-        <div class="components_page-grid">
-          <LinkCard
-            v-for="component in integrationComponents"
-            :key="component.to"
-            :to="component.to"
-            :label="component.label"
-            :banner="component.banner"
-            class="components_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Combined Tests -->
-    <section class="components_page-category">
-      <div class="components_page-section-container">
-        <h2 class="components_page-section-title">
-          {{ $t('components_page.categories.combined') }}
-        </h2>
-        <div class="components_page-grid">
-          <LinkCard
-            v-for="component in combinedComponents"
-            :key="component.to"
-            :to="component.to"
-            :label="component.label"
-            :banner="component.banner"
-            class="components_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -292,9 +176,18 @@ const uiComponents = computed(() => [
   { to: localePath('/components/dialog'), label: t('components.dialog') },
   { to: localePath('/components/drawer'), label: t('components.drawer') },
   { to: localePath('/components/selector'), label: t('components.selector') },
-  { to: localePath('/components/switch-button'), label: t('components.switch') },
-  { to: localePath('/components/skeleton-loader'), label: t('components.skeleton_loader') },
-  { to: localePath('/components/countdown-test'), label: t('components.countdown_test') }
+  {
+    to: localePath('/components/switch-button'),
+    label: t('components.switch')
+  },
+  {
+    to: localePath('/components/skeleton-loader'),
+    label: t('components.skeleton_loader')
+  },
+  {
+    to: localePath('/components/countdown-test'),
+    label: t('components.countdown_test')
+  }
 ]);
 
 // Functional Components
@@ -307,14 +200,23 @@ const functionalComponents = computed(() => [
     to: localePath('/components/image-upload-test'),
     label: t('components.image_upload_test')
   },
-  { to: localePath('/components/phone-input'), label: t('components.phone_input') },
+  {
+    to: localePath('/components/phone-input'),
+    label: t('components.phone_input')
+  },
   { to: localePath('/components/go-top'), label: t('components.go_top') },
   {
     to: localePath('/components/virtual-scroller'),
     label: t('components.virtual_scroller')
   },
-  { to: localePath('/components/slide-in-panel'), label: t('components.slide_in_panel') },
-  { to: localePath('/components/qr-code-test'), label: t('components.qr_code_test') }
+  {
+    to: localePath('/components/slide-in-panel'),
+    label: t('components.slide_in_panel')
+  },
+  {
+    to: localePath('/components/qr-code-test'),
+    label: t('components.qr_code_test')
+  }
 ]);
 
 // Third-party Integrations
@@ -327,9 +229,18 @@ const integrationComponents = computed(() => [
     to: localePath('/components/youtube-test'),
     label: t('components.youtube')
   },
-  { to: localePath('/components/swiper-test'), label: t('components.swiper_test') },
-  { to: localePath('/components/swiper-js-test'), label: t('components.swiper_js_test') },
-  { to: localePath('/components/banner-demo'), label: t('components.banner_demo') }
+  {
+    to: localePath('/components/swiper-test'),
+    label: t('components.swiper_test')
+  },
+  {
+    to: localePath('/components/swiper-js-test'),
+    label: t('components.swiper_js_test')
+  },
+  {
+    to: localePath('/components/banner-demo'),
+    label: t('components.banner_demo')
+  }
 ]);
 
 // Combined Tests
@@ -341,6 +252,122 @@ const combinedComponents = computed(() => [
   }
 ]);
 </script>
+
+<template>
+  <div class="components_page">
+    <!-- Hero Section -->
+    <section class="components_page-hero">
+      <div class="components_page-hero-background">
+        <img
+          src="/img/components-page/components-page-v.05.webp"
+          alt="Components"
+          class="components_page-hero-background-image"
+        />
+        <div class="components_page-hero-background-overlay" />
+      </div>
+
+      <div class="components_page-hero-content">
+        <h1 class="components_page-hero-content-title">
+          {{ $t('components_page.hero.title') }}
+        </h1>
+        <p class="components_page-hero-content-subtitle">
+          {{ $t('components_page.hero.subtitle') }}
+        </p>
+        <p class="components_page-hero-content-description">
+          {{ $t('components_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="components_page-intro">
+      <div class="components_page-section-container">
+        <p class="components_page-intro-text">
+          {{ $t('components_page.intro.custom') }}
+        </p>
+        <p class="components_page-intro-text">
+          {{ $t('components_page.intro.integration') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- UI Components -->
+    <section class="components_page-category">
+      <div class="components_page-section-container">
+        <h2 class="components_page-section-title">
+          {{ $t('components_page.categories.ui') }}
+        </h2>
+        <div class="components_page-grid">
+          <LinkCard
+            v-for="component in uiComponents"
+            :key="component.to"
+            :to="component.to"
+            :label="component.label"
+            :banner="component.banner"
+            class="components_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Functional Components -->
+    <section class="components_page-category">
+      <div class="components_page-section-container">
+        <h2 class="components_page-section-title">
+          {{ $t('components_page.categories.functional') }}
+        </h2>
+        <div class="components_page-grid">
+          <LinkCard
+            v-for="component in functionalComponents"
+            :key="component.to"
+            :label="component.label"
+            :to="component.to"
+            :banner="component.banner"
+            class="components_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Third-party Integrations -->
+    <section class="components_page-category">
+      <div class="components_page-section-container">
+        <h2 class="components_page-section-title">
+          {{ $t('components_page.categories.integration') }}
+        </h2>
+        <div class="components_page-grid">
+          <LinkCard
+            v-for="component in integrationComponents"
+            :key="component.to"
+            :to="component.to"
+            :label="component.label"
+            :banner="component.banner"
+            class="components_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Combined Tests -->
+    <section class="components_page-category">
+      <div class="components_page-section-container">
+        <h2 class="components_page-section-title">
+          {{ $t('components_page.categories.combined') }}
+        </h2>
+        <div class="components_page-grid">
+          <LinkCard
+            v-for="component in combinedComponents"
+            :key="component.to"
+            :to="component.to"
+            :label="component.label"
+            :banner="component.banner"
+            class="components_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 // ========================================

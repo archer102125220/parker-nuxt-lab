@@ -1,100 +1,3 @@
-<template>
-  <div class="slide_in_panel_page">
-    <!-- Hero Section -->
-    <section class="slide_in_panel_page-hero">
-      <div class="slide_in_panel_page-hero-background">
-        <div class="slide_in_panel_page-hero-background-overlay" />
-      </div>
-
-      <div class="slide_in_panel_page-hero-content">
-        <h1 class="slide_in_panel_page-hero-content-title">
-          {{ $t('slide_in_panel_page.hero.title') }}
-        </h1>
-        <p class="slide_in_panel_page-hero-content-subtitle">
-          {{ $t('slide_in_panel_page.hero.subtitle') }}
-        </p>
-        <p class="slide_in_panel_page-hero-content-description">
-          {{ $t('slide_in_panel_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="slide_in_panel_page-section">
-      <div class="slide_in_panel_page-describe">
-        <p class="slide_in_panel_page-describe-text">{{ $t('slide_in_panel_page.describe.text') }}</p>
-        <span class="slide_in_panel_page-describe-note">（</span>
-        <del class="slide_in_panel_page-describe-strikethrough">{{ $t('slide_in_panel_page.describe.strikethrough') }}</del>
-        <span class="slide_in_panel_page-describe-note">）</span>
-      </div>
-
-      <form
-        class="slide_in_panel_page-form"
-        @submit.prevent="handleUpdateShowMessage"
-      >
-        <v-text-field
-          v-model="message"
-          clearable
-          :label="$t('slide_in_panel_page.form.message_label')"
-          class="slide_in_panel_page-form-input"
-        />
-
-        <v-checkbox
-          v-model="leftEnter"
-          class="slide_in_panel_page-form-checkbox"
-          :label="$t('slide_in_panel_page.form.left_enter_label')"
-          color="primary"
-          hide-details
-          :value="true"
-        />
-
-        <div class="slide_in_panel_page-form-submit">
-          <v-btn color="primary" type="submit" size="large">{{ $t('slide_in_panel_page.buttons.test') }}</v-btn>
-        </div>
-
-        <TabsBar
-          v-model="tab"
-          class="slide_in_panel_page-form-tabs"
-          gap="16px"
-          border-side-height="2px"
-          border-side-width="30px"
-          border-side-color="#27C5C3"
-          :tab-list="tabList"
-        />
-        <TabsContent
-          v-model="tab"
-          class="slide_in_panel_page-form-tabs_content"
-          height="100%"
-          tabs-content-height="70%"
-          :tab-list="tabList"
-          :slot-name-is-default="true"
-        >
-          <template #default="{ item }">
-            <div
-              class="slide_in_panel_page-form-tabs_content-item"
-              :item="item"
-            >
-              <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
-              <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
-              <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
-              <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
-              <p class="slide_in_panel_page-form-tabs_content-item-text">{{ item }}</p>
-              <SlideInPanel
-                v-model="showMessage"
-                bottom="0px"
-                z-index="3"
-                :timeout="3000000"
-                container-position="absolute"
-                :left-enter="leftEnter"
-              />
-            </div>
-          </template>
-        </TabsContent>
-      </form>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -131,6 +34,119 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <div class="slide_in_panel_page">
+    <!-- Hero Section -->
+    <section class="slide_in_panel_page-hero">
+      <div class="slide_in_panel_page-hero-background">
+        <div class="slide_in_panel_page-hero-background-overlay" />
+      </div>
+
+      <div class="slide_in_panel_page-hero-content">
+        <h1 class="slide_in_panel_page-hero-content-title">
+          {{ $t('slide_in_panel_page.hero.title') }}
+        </h1>
+        <p class="slide_in_panel_page-hero-content-subtitle">
+          {{ $t('slide_in_panel_page.hero.subtitle') }}
+        </p>
+        <p class="slide_in_panel_page-hero-content-description">
+          {{ $t('slide_in_panel_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="slide_in_panel_page-section">
+      <div class="slide_in_panel_page-describe">
+        <p class="slide_in_panel_page-describe-text">
+          {{ $t('slide_in_panel_page.describe.text') }}
+        </p>
+        <span class="slide_in_panel_page-describe-note">（</span>
+        <del class="slide_in_panel_page-describe-strikethrough">{{
+          $t('slide_in_panel_page.describe.strikethrough')
+        }}</del>
+        <span class="slide_in_panel_page-describe-note">）</span>
+      </div>
+
+      <form
+        class="slide_in_panel_page-form"
+        @submit.prevent="handleUpdateShowMessage"
+      >
+        <v-text-field
+          v-model="message"
+          clearable
+          :label="$t('slide_in_panel_page.form.message_label')"
+          class="slide_in_panel_page-form-input"
+        />
+
+        <v-checkbox
+          v-model="leftEnter"
+          class="slide_in_panel_page-form-checkbox"
+          :label="$t('slide_in_panel_page.form.left_enter_label')"
+          color="primary"
+          hide-details
+          :value="true"
+        />
+
+        <div class="slide_in_panel_page-form-submit">
+          <v-btn color="primary" type="submit" size="large">{{
+            $t('slide_in_panel_page.buttons.test')
+          }}</v-btn>
+        </div>
+
+        <TabsBar
+          v-model="tab"
+          class="slide_in_panel_page-form-tabs"
+          gap="16px"
+          border-side-height="2px"
+          border-side-width="30px"
+          border-side-color="#27C5C3"
+          :tab-list="tabList"
+        />
+        <TabsContent
+          v-model="tab"
+          class="slide_in_panel_page-form-tabs_content"
+          height="100%"
+          tabs-content-height="70%"
+          :tab-list="tabList"
+          :slot-name-is-default="true"
+        >
+          <template #default="{ item }">
+            <div
+              class="slide_in_panel_page-form-tabs_content-item"
+              :item="item"
+            >
+              <p class="slide_in_panel_page-form-tabs_content-item-text">
+                {{ item }}
+              </p>
+              <p class="slide_in_panel_page-form-tabs_content-item-text">
+                {{ item }}
+              </p>
+              <p class="slide_in_panel_page-form-tabs_content-item-text">
+                {{ item }}
+              </p>
+              <p class="slide_in_panel_page-form-tabs_content-item-text">
+                {{ item }}
+              </p>
+              <p class="slide_in_panel_page-form-tabs_content-item-text">
+                {{ item }}
+              </p>
+              <SlideInPanel
+                v-model="showMessage"
+                bottom="0px"
+                z-index="3"
+                :timeout="3000000"
+                container-position="absolute"
+                :left-enter="leftEnter"
+              />
+            </div>
+          </template>
+        </TabsContent>
+      </form>
+    </section>
+  </div>
+</template>
+
 <style lang="scss">
 .slide_in_panel_page {
   // ========================================
@@ -152,7 +168,7 @@ onMounted(() => {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -160,7 +176,11 @@ onMounted(() => {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

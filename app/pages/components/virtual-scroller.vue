@@ -1,3 +1,25 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('virtual_scroller_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('virtual_scroller_page.hero.description')
+    }
+  ]
+});
+
+const itemList = computed(() => {
+  const items = [];
+  for (let i = 1; i <= 30; i++) {
+    items.push(String(i));
+  }
+  return items;
+});
+</script>
+
 <template>
   <div class="virtual_scroller_page">
     <!-- Hero Section -->
@@ -22,7 +44,9 @@
     <!-- Main Content -->
     <section class="virtual_scroller_page-section">
       <div class="virtual_scroller_page-describe">
-        <p class="virtual_scroller_page-describe-text">{{ $t('virtual_scroller_page.describe.text') }}</p>
+        <p class="virtual_scroller_page-describe-text">
+          {{ $t('virtual_scroller_page.describe.text') }}
+        </p>
       </div>
 
       <div class="virtual_scroller_page-demo">
@@ -46,28 +70,6 @@
   </div>
 </template>
 
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('virtual_scroller_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('virtual_scroller_page.hero.description')
-    }
-  ]
-});
-
-const itemList = computed(() => {
-  const items = [];
-  for (let i = 1; i <= 30; i++) {
-    items.push(String(i));
-  }
-  return items;
-});
-</script>
-
 <style lang="scss">
 .virtual_scroller_page {
   min-height: 100vh;
@@ -88,7 +90,7 @@ const itemList = computed(() => {
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -96,7 +98,11 @@ const itemList = computed(() => {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

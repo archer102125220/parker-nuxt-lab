@@ -1,3 +1,19 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('qr_code_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('qr_code_page.hero.description')
+    }
+  ]
+});
+
+const qrCodeValue = ref('QRcodeTest');
+</script>
+
 <template>
   <div class="qr_code_page">
     <!-- Hero Section -->
@@ -36,22 +52,6 @@
   </div>
 </template>
 
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('qr_code_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('qr_code_page.hero.description')
-    }
-  ]
-});
-
-const qrCodeValue = ref('QRcodeTest');
-</script>
-
 <style lang="scss" scoped>
 .qr_code_page {
   min-height: 100vh;
@@ -72,7 +72,7 @@ const qrCodeValue = ref('QRcodeTest');
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -80,7 +80,11 @@ const qrCodeValue = ref('QRcodeTest');
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

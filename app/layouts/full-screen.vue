@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <div class="full_screen_layout">
     <LayoutHeader class="full_screen_layout-header" />
@@ -7,8 +9,6 @@
     <!-- <LayoutFooter /> -->
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss">
 .full_screen_layout {

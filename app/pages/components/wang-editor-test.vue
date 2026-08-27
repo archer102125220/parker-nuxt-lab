@@ -1,3 +1,17 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('wang_editor_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('wang_editor_page.hero.description')
+    }
+  ]
+});
+</script>
+
 <template>
   <div class="wang_editor_page">
     <!-- Hero Section -->
@@ -22,29 +36,20 @@
     <!-- Main Content -->
     <section class="wang_editor_page-section">
       <div class="wang_editor_page-describe">
-        <p class="wang_editor_page-describe-text">{{ $t('wang_editor_page.describe.text') }}</p>
+        <p class="wang_editor_page-describe-text">
+          {{ $t('wang_editor_page.describe.text') }}
+        </p>
       </div>
 
       <div class="wang_editor_page-editor">
-        <WangEditor class="wang_editor_page-editor-content" editor-height="350px" />
+        <WangEditor
+          class="wang_editor_page-editor-content"
+          editor-height="350px"
+        />
       </div>
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('wang_editor_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('wang_editor_page.hero.description')
-    }
-  ]
-});
-</script>
 
 <style lang="scss" scoped>
 .wang_editor_page {
@@ -66,7 +71,7 @@ useHeadMataData({
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -74,7 +79,11 @@ useHeadMataData({
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

@@ -1,3 +1,19 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('switch_button_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('switch_button_page.hero.description')
+    }
+  ]
+});
+
+const value = ref(false);
+</script>
+
 <template>
   <div class="switch_button_page">
     <!-- Hero Section -->
@@ -39,22 +55,6 @@
   </div>
 </template>
 
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('switch_button_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('switch_button_page.hero.description')
-    }
-  ]
-});
-
-const value = ref(false);
-</script>
-
 <style lang="scss" scoped>
 .switch_button_page {
   min-height: 100vh;
@@ -75,7 +75,7 @@ const value = ref(false);
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -83,7 +83,11 @@ const value = ref(false);
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 
@@ -142,7 +146,7 @@ const value = ref(false);
       color: #333;
 
       strong {
-        color: #44A08D;
+        color: #44a08d;
       }
     }
   }

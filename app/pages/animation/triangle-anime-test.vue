@@ -1,3 +1,11 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('triangle_anime_test_page.hero.title')
+});
+</script>
+
 <template>
   <div class="triangle_anime_test_page">
     <!-- Hero Section -->
@@ -27,14 +35,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('triangle_anime_test_page.hero.title')
-});
-</script>
 
 <style lang="scss">
 .triangle_anime_test_page {

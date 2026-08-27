@@ -1,3 +1,122 @@
+<script setup>
+// State
+const currentBannerIndex = ref(0);
+
+// Banner Data
+const singleBanner = ref([
+  {
+    id: 1,
+    image: '/img/test-img/mimi033-1603188493.jpg',
+    title: '單張 Banner',
+    description: '這是唯一的一張 Banner，不會自動播放'
+  }
+]);
+
+const twoBanners = ref([
+  {
+    id: 1,
+    image: '/img/test-img/0d0a3-0514-5-2-2048x1365.jpg',
+    title: 'Banner 1',
+    description: '兩張 Banner 會自動播放'
+  },
+  {
+    id: 2,
+    image: '/img/test-img/00f162883105a01b28455c44b56926a1.jpg',
+    title: 'Banner 2',
+    description: '支援手勢滑動切換'
+  }
+]);
+
+const threeBanners = ref([
+  {
+    id: 1,
+    image:
+      '/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg',
+    title: 'Banner 1',
+    description: '三張以上會顯示左右預覽效果'
+  },
+  {
+    id: 2,
+    image: '/img/test-img/4f1f0af4efd8be0a2218d271c5725aab.jpg',
+    title: 'Banner 2',
+    description: '滑鼠懸停會暫停自動播放'
+  },
+  {
+    id: 3,
+    image: '/img/test-img/4fc0f012-662b-40e9-873e-97cf1419ff13.jpeg',
+    title: 'Banner 3',
+    description: '支援循環播放'
+  }
+]);
+
+const fiveBanners = ref([
+  {
+    id: 1,
+    image: '/img/test-img/6d1090ba3fe05cff4525cc164e9614f9_t.jpeg',
+    title: '足球賽事',
+    description: '精彩賽事直播'
+  },
+  {
+    id: 2,
+    image: '/img/test-img/28.webp',
+    title: '籃球比賽',
+    description: '熱血對決'
+  },
+  {
+    id: 3,
+    image: '/img/test-img/31c0e197-9c75-4869-8b86-825720a976e5.jpeg',
+    title: '網球公開賽',
+    description: '頂尖選手對決'
+  },
+  {
+    id: 4,
+    image: '/img/test-img/013976b74285f13e03c761f6be8861ce.jpeg',
+    title: '電競賽事',
+    description: '全球總決賽'
+  },
+  {
+    id: 5,
+    image: '/img/test-img/2126235bd865479b10bb9e019b47df50.jpg',
+    title: '棒球聯賽',
+    description: '季後賽開打'
+  }
+]);
+
+const customBanners = ref([
+  {
+    id: 1,
+    title: '自定義樣式 1',
+    description: '完全自定義的 Banner 內容'
+  },
+  {
+    id: 2,
+    title: '自定義樣式 2',
+    description: '使用插槽自由設計'
+  },
+  {
+    id: 3,
+    title: '自定義樣式 3',
+    description: '靈活的組件設計'
+  }
+]);
+
+// Methods
+function handleBannerChange(index, banner) {
+  console.log('Banner changed:', index, banner);
+}
+
+// SEO
+useHead({
+  title: 'Banner 輪播組件示範',
+  meta: [
+    {
+      name: 'description',
+      content: '展示 Banner 輪播組件的各種使用場景和配置選項'
+    }
+  ]
+});
+</script>
+
 <template>
   <div class="banner-demo">
     <div class="banner-demo-header">
@@ -128,125 +247,6 @@
   </div>
 </template>
 
-<script setup>
-// State
-const currentBannerIndex = ref(0);
-
-// Banner Data
-const singleBanner = ref([
-  {
-    id: 1,
-    image: '/img/test-img/mimi033-1603188493.jpg',
-    title: '單張 Banner',
-    description: '這是唯一的一張 Banner，不會自動播放'
-  }
-]);
-
-const twoBanners = ref([
-  {
-    id: 1,
-    image: '/img/test-img/0d0a3-0514-5-2-2048x1365.jpg',
-    title: 'Banner 1',
-    description: '兩張 Banner 會自動播放'
-  },
-  {
-    id: 2,
-    image: '/img/test-img/00f162883105a01b28455c44b56926a1.jpg',
-    title: 'Banner 2',
-    description: '支援手勢滑動切換'
-  }
-]);
-
-const threeBanners = ref([
-  {
-    id: 1,
-    image:
-      '/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg',
-    title: 'Banner 1',
-    description: '三張以上會顯示左右預覽效果'
-  },
-  {
-    id: 2,
-    image: '/img/test-img/4f1f0af4efd8be0a2218d271c5725aab.jpg',
-    title: 'Banner 2',
-    description: '滑鼠懸停會暫停自動播放'
-  },
-  {
-    id: 3,
-    image: '/img/test-img/4fc0f012-662b-40e9-873e-97cf1419ff13.jpeg',
-    title: 'Banner 3',
-    description: '支援循環播放'
-  }
-]);
-
-const fiveBanners = ref([
-  {
-    id: 1,
-    image: '/img/test-img/6d1090ba3fe05cff4525cc164e9614f9_t.jpeg',
-    title: '足球賽事',
-    description: '精彩賽事直播'
-  },
-  {
-    id: 2,
-    image: '/img/test-img/28.webp',
-    title: '籃球比賽',
-    description: '熱血對決'
-  },
-  {
-    id: 3,
-    image: '/img/test-img/31c0e197-9c75-4869-8b86-825720a976e5.jpeg',
-    title: '網球公開賽',
-    description: '頂尖選手對決'
-  },
-  {
-    id: 4,
-    image: '/img/test-img/013976b74285f13e03c761f6be8861ce.jpeg',
-    title: '電競賽事',
-    description: '全球總決賽'
-  },
-  {
-    id: 5,
-    image: '/img/test-img/2126235bd865479b10bb9e019b47df50.jpg',
-    title: '棒球聯賽',
-    description: '季後賽開打'
-  }
-]);
-
-const customBanners = ref([
-  {
-    id: 1,
-    title: '自定義樣式 1',
-    description: '完全自定義的 Banner 內容'
-  },
-  {
-    id: 2,
-    title: '自定義樣式 2',
-    description: '使用插槽自由設計'
-  },
-  {
-    id: 3,
-    title: '自定義樣式 3',
-    description: '靈活的組件設計'
-  }
-]);
-
-// Methods
-function handleBannerChange(index, banner) {
-  console.log('Banner changed:', index, banner);
-}
-
-// SEO
-useHead({
-  title: 'Banner 輪播組件示範',
-  meta: [
-    {
-      name: 'description',
-      content: '展示 Banner 輪播組件的各種使用場景和配置選項'
-    }
-  ]
-});
-</script>
-
 <style lang="scss" scoped>
 .banner-demo {
   /* Display & Box Model */
@@ -254,7 +254,7 @@ useHead({
   padding: 40px 20px;
 
   /* Visual */
-  background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+  background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
   &-header {
     /* Display & Box Model */
@@ -310,7 +310,7 @@ useHead({
       /* Display & Box Model */
       margin: 0 0 20px;
       padding-bottom: 15px;
-      border-bottom: 2px solid #44A08D;
+      border-bottom: 2px solid #44a08d;
 
       /* Typography */
       font-size: 24px;
@@ -328,7 +328,7 @@ useHead({
     /* Typography */
     font-size: 14px;
     font-weight: 500;
-    color: #44A08D;
+    color: #44a08d;
 
     /* Visual */
     background: rgba(68, 160, 141, 0.1);
@@ -375,7 +375,7 @@ useHead({
   padding: 40px;
 
   /* Visual */
-  background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+  background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
   /* Animation */
   transition: all 0.3s ease;
@@ -542,7 +542,7 @@ useHead({
         font-family: monospace;
         font-size: 14px;
         font-weight: 600;
-        color: #44A08D;
+        color: #44a08d;
         text-align: center;
 
         /* Visual */
