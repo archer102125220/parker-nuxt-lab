@@ -1,78 +1,8 @@
-<template>
-  <div class="phone_input">
-    <div class="phone_input-container" :style="cssVariable">
-      <Selector
-        v-model="selectedCountry"
-        :option-list="countryList"
-        value-key="countryCode"
-        display-key="phoneCode"
-        :has-shadow="true"
-        :has-transition="true"
-        :option-list-width="optionListWidth"
-        class="phone_input-country_selector"
-        @change="handleCountryChange"
-      >
-        <template #prefix>
-          <div class="phone_input-country_selector-flag">
-            <span
-              :class="[
-                'fi',
-                `fi-${selectedCountry?.countryCode?.toLowerCase() || 'tw'}`
-              ]"
-            />
-          </div>
-        </template>
-        <template #value="{ value }">
-          <span class="phone_input-country_selector-code">
-            +{{ value?.phoneCode || selectedCountry?.phoneCode || '886' }}
-          </span>
-        </template>
-        <template #default="{ option, selected }">
-          <div class="phone_input-country_selector-option">
-            <span
-              :class="[
-                'fi',
-                `fi-${option.countryCode?.toLowerCase()}`,
-                'phone_input-country_selector-option-flag'
-              ]"
-            />
-            <span class="phone_input-country_selector-option-name">
-              {{ option.countryName }}
-            </span>
-            <span
-              :css-selected="selected"
-              class="phone_input-country_selector-option-code"
-            >
-              +{{ option.phoneCode }}
-            </span>
-          </div>
-        </template>
-      </Selector>
-      <div class="phone_input-divider" />
-      <div class="phone_input-number">
-        <input
-          v-model="phoneNumber"
-          type="tel"
-          :placeholder="placeholder"
-          class="phone_input-number-field"
-          @input="handlePhoneNumberInput"
-          @blur="handleBlur"
-          @focus="handleFocus"
-        />
-      </div>
-    </div>
-    <transition name="error-fade">
-      <div v-if="showError && validationError" class="phone_input-error">
-        {{ validationError }}
-      </div>
-    </transition>
-  </div>
-</template>
-
-<script setup>
+<script>
 import PHONE_AREA_CODE from '@app/assets/phoneCountryCode';
 import { checkPhone } from '@shared/third-party/check-phone';
-
+</script>
+<script setup>
 const props = defineProps({
   modelValue: {
     type: [String, Object],
@@ -341,6 +271,77 @@ function emitValue() {
   }
 }
 </script>
+
+<template>
+  <div class="phone_input">
+    <div class="phone_input-container" :style="cssVariable">
+      <Selector
+        v-model="selectedCountry"
+        :option-list="countryList"
+        value-key="countryCode"
+        display-key="phoneCode"
+        :has-shadow="true"
+        :has-transition="true"
+        :option-list-width="optionListWidth"
+        class="phone_input-country_selector"
+        @change="handleCountryChange"
+      >
+        <template #prefix>
+          <div class="phone_input-country_selector-flag">
+            <span
+              :class="[
+                'fi',
+                `fi-${selectedCountry?.countryCode?.toLowerCase() || 'tw'}`
+              ]"
+            />
+          </div>
+        </template>
+        <template #value="{ value }">
+          <span class="phone_input-country_selector-code">
+            +{{ value?.phoneCode || selectedCountry?.phoneCode || '886' }}
+          </span>
+        </template>
+        <template #default="{ option, selected }">
+          <div class="phone_input-country_selector-option">
+            <span
+              :class="[
+                'fi',
+                `fi-${option.countryCode?.toLowerCase()}`,
+                'phone_input-country_selector-option-flag'
+              ]"
+            />
+            <span class="phone_input-country_selector-option-name">
+              {{ option.countryName }}
+            </span>
+            <span
+              :css-selected="selected"
+              class="phone_input-country_selector-option-code"
+            >
+              +{{ option.phoneCode }}
+            </span>
+          </div>
+        </template>
+      </Selector>
+      <div class="phone_input-divider" />
+      <div class="phone_input-number">
+        <input
+          v-model="phoneNumber"
+          type="tel"
+          :placeholder="placeholder"
+          class="phone_input-number-field"
+          @input="handlePhoneNumberInput"
+          @blur="handleBlur"
+          @focus="handleFocus"
+        />
+      </div>
+    </div>
+    <transition name="error-fade">
+      <div v-if="showError && validationError" class="phone_input-error">
+        {{ validationError }}
+      </div>
+    </transition>
+  </div>
+</template>
 
 <style lang="scss">
 // 引入 flag-icons 樣式

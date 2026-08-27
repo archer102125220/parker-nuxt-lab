@@ -1,14 +1,3 @@
-<template>
-  <!-- <v-progress-linear
-    v-if="loading"
-    :height="height"
-    indeterminate
-    color="primary"
-    class="loading_bar"
-    :style="`--loading_width:${width};--loading_position:${position}`"
-  /> -->
-  <div v-if="loading" class="loading_bar" :style="cssVariable" />
-</template>
 <script setup>
 const props = defineProps({
   loading: { type: Boolean, default: false },
@@ -92,6 +81,18 @@ const cssVariable = computed(() => {
   return newCssVariable;
 });
 </script>
+
+<template>
+  <!-- <v-progress-linear
+    v-if="loading"
+    :height="height"
+    indeterminate
+    color="primary"
+    class="loading_bar"
+    :style="`--loading_width:${width};--loading_position:${position}`"
+  /> -->
+  <div v-if="loading" class="loading_bar" :style="cssVariable" />
+</template>
 
 <style lang="scss" scoped>
 .loading_bar {

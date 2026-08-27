@@ -1,103 +1,12 @@
-<template>
-  <div
-    ref="tabBarRootRef"
-    class="tabs_bar"
-    :style="cssVariable"
-    @wheel.stop.prevent="handleWheelScroll"
-    @resize="handleResize"
-  >
-    <div
-      v-if="hasNavigation === true && showPrev === true"
-      class="tabs_bar-prev_position"
-    >
-      <slot name="prev" @pointerup="handlePrevScroll">
-        <div
-          v-ripple="loading === false && ripple === true"
-          class="tabs_bar-prev_position-prev"
-          @pointerup="handlePrevScroll"
-        >
-          <img class="tabs_bar-prev_position-prev-img" :src="navigationImg" />
-        </div>
-      </slot>
-    </div>
-
-    <div class="tabs_bar-first_limit_shadow" />
-
-    <div
-      ref="tabBarRef"
-      v-scroll-end="{
-        handler: handleTabBarScrollEnd,
-        wait: scrollEndWait
-      }"
-      :class="[
-        'tabs_bar-option_list',
-        validSelectedType !== false ? 'tabs_bar-option_list_emphasize' : ''
-      ]"
-      @scroll="handleScroll"
-      @mousedown="handleStartTabBarScroll"
-      @mousemove="handleTabBarScroll"
-      @mouseover="handleStopTabBarScroll"
-      @mouseup="handleStopTabBarScroll"
-      @touchstart="handleStartTabBarScroll"
-      @touchmove="handleTabBarScroll"
-      @touchend="handleStopTabBarScroll"
-      @touchcancel="handleStopTabBarScroll"
-      @transitionend="optionTransitionEnd"
-    >
-      <div
-        v-for="(tab, index) in tabList"
-        :key="index"
-        ref="tabListRef"
-        v-ripple="loading === false && ripple === true"
-        :class="[
-          'tabs_bar-option_list-tab_item',
-          isSelected(modelValue, tab, index) === true
-            ? 'tabs_bar-option_list-tab_item_selected'
-            : ''
-        ]"
-        @mouseenter="handleBottomeStyleTemp"
-        @mouseleave="handleResetBottomeStyleTemp"
-        @click="handleTabChange(index)"
-      >
-        <slot
-          :tab="tab"
-          :index="index"
-          :selected="isSelected(modelValue, tab, index)"
-        >
-          <p>{{ tab[displayKey] || tab.label || tab }}</p>
-        </slot>
-      </div>
-      <slot v-if="tabList.length <= 0" name="empty">
-        <p class="tabs_bar-option_list-empty">{{ empty }}</p>
-      </slot>
-    </div>
-
-    <div class="tabs_bar-last_limit_shadow" />
-
-    <div
-      v-if="hasNavigation === true && showNext === true"
-      class="tabs_bar-next_position"
-    >
-      <slot name="next" @pointerup="handleNextScroll">
-        <div
-          v-ripple="loading === false && ripple === true"
-          class="tabs_bar-next_position-next"
-          @pointerup="handleNextScroll"
-        >
-          <img class="tabs_bar-next_position-next-img" :src="navigationImg" />
-        </div>
-      </slot>
-    </div>
-  </div>
-</template>
-<script setup>
+<script>
 const SCROLL_STEP = 150;
 const SELECTED_TRANSITION =
   'left 0.4s ease-in-out, top 0.4s ease-in-out, width 0.4s 0.1s';
 const IS_KEEP_SCROLL_LIMIT = 50;
 const LIMIT_SHADOW_SIZE = 60;
 const SELECTED_TYPE_LIST = ['borderSide', 'mask'];
-
+</script>
+<script setup>
 const props = defineProps({
   loading: {
     type: Boolean,
@@ -1418,6 +1327,99 @@ function handleCustomKeepScrollStep(
   });
 }
 </script>
+
+<template>
+  <div
+    ref="tabBarRootRef"
+    class="tabs_bar"
+    :style="cssVariable"
+    @wheel.stop.prevent="handleWheelScroll"
+    @resize="handleResize"
+  >
+    <div
+      v-if="hasNavigation === true && showPrev === true"
+      class="tabs_bar-prev_position"
+    >
+      <slot name="prev" @pointerup="handlePrevScroll">
+        <div
+          v-ripple="loading === false && ripple === true"
+          class="tabs_bar-prev_position-prev"
+          @pointerup="handlePrevScroll"
+        >
+          <img class="tabs_bar-prev_position-prev-img" :src="navigationImg" />
+        </div>
+      </slot>
+    </div>
+
+    <div class="tabs_bar-first_limit_shadow" />
+
+    <div
+      ref="tabBarRef"
+      v-scroll-end="{
+        handler: handleTabBarScrollEnd,
+        wait: scrollEndWait
+      }"
+      :class="[
+        'tabs_bar-option_list',
+        validSelectedType !== false ? 'tabs_bar-option_list_emphasize' : ''
+      ]"
+      @scroll="handleScroll"
+      @mousedown="handleStartTabBarScroll"
+      @mousemove="handleTabBarScroll"
+      @mouseover="handleStopTabBarScroll"
+      @mouseup="handleStopTabBarScroll"
+      @touchstart="handleStartTabBarScroll"
+      @touchmove="handleTabBarScroll"
+      @touchend="handleStopTabBarScroll"
+      @touchcancel="handleStopTabBarScroll"
+      @transitionend="optionTransitionEnd"
+    >
+      <div
+        v-for="(tab, index) in tabList"
+        :key="index"
+        ref="tabListRef"
+        v-ripple="loading === false && ripple === true"
+        :class="[
+          'tabs_bar-option_list-tab_item',
+          isSelected(modelValue, tab, index) === true
+            ? 'tabs_bar-option_list-tab_item_selected'
+            : ''
+        ]"
+        @mouseenter="handleBottomeStyleTemp"
+        @mouseleave="handleResetBottomeStyleTemp"
+        @click="handleTabChange(index)"
+      >
+        <slot
+          :tab="tab"
+          :index="index"
+          :selected="isSelected(modelValue, tab, index)"
+        >
+          <p>{{ tab[displayKey] || tab.label || tab }}</p>
+        </slot>
+      </div>
+      <slot v-if="tabList.length <= 0" name="empty">
+        <p class="tabs_bar-option_list-empty">{{ empty }}</p>
+      </slot>
+    </div>
+
+    <div class="tabs_bar-last_limit_shadow" />
+
+    <div
+      v-if="hasNavigation === true && showNext === true"
+      class="tabs_bar-next_position"
+    >
+      <slot name="next" @pointerup="handleNextScroll">
+        <div
+          v-ripple="loading === false && ripple === true"
+          class="tabs_bar-next_position-next"
+          @pointerup="handleNextScroll"
+        >
+          <img class="tabs_bar-next_position-next-img" :src="navigationImg" />
+        </div>
+      </slot>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .tabs_bar {

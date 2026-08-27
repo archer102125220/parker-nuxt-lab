@@ -1,104 +1,9 @@
-<template>
-  <div class="drawer_root" :style="cssVariable">
-    <slot
-      name="openBtn"
-      :open="handleOpen"
-      :value="modelValue"
-      :anchor="anchor"
-    />
-    <slot
-      name="closeBtn"
-      :close="handleClose"
-      :value="modelValue"
-      :anchor="anchor"
-    />
-
-    <div
-      v-if="modelValue === true"
-      ref="drawerWrappingRef"
-      :class="[
-        'drawer_root-wrapping',
-        { 'drawer_root-wrapping_animation_transition': hasAnimation === true }
-      ]"
-      @click="handleClose"
-      @transitionend="handleTransitionEnd"
-    >
-      <div
-        v-if="hasMask === true"
-        :class="[
-          'drawer_root-wrapping-mask',
-          { 'drawer_root-wrapping-mask_animation': hasAnimation === true }
-        ]"
-      />
-      <div
-        ref="drawerRef"
-        :class="[
-          'drawer_root-wrapping-drawer',
-          {
-            'drawer_root-wrapping-drawer_anchor_top':
-              hasAnimation === true && computedAnchor === 'top',
-            'drawer_root-wrapping-drawer_anchor_bottom':
-              hasAnimation === true && computedAnchor === 'bottom',
-            'drawer_root-wrapping-drawer_anchor_right':
-              hasAnimation === true && computedAnchor === 'right',
-            'drawer_root-wrapping-drawer_anchor_left':
-              hasAnimation === true && computedAnchor === 'left'
-          }
-        ]"
-        @click.stop=""
-      >
-        <slot
-          name="drag"
-          :anchor="computedAnchor"
-          :is-vertical="isVertical"
-          :is-horizontal="isHorizontal"
-          :click="handleDragBarClick"
-          :drag-start="handleDragStart"
-          :draging="handleDraging"
-          :drag-end="handleDragEnd"
-        >
-          <div
-            class="drawer_root-wrapping-drawer-drag_bar"
-            :css-anchor="computedAnchor"
-            :css-is-vertical="isVertical"
-            :css-is-horizontal="isHorizontal"
-            @click="handleDragBarClick"
-            @mousedown="handleDragStart"
-            @mousemove="handleDraging"
-            @mouseup="handleDragEnd"
-            @touchstart="handleDragStart"
-            @touchmove="handleDraging"
-            @touchend="handleDragEnd"
-          />
-        </slot>
-
-        <slot name="container" :close="handleClose">
-          <div class="drawer_root-wrapping-drawer-container">
-            <slot :close="handleClose">
-              <p>抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-              <p>抽屜內容</p>
-            </slot>
-          </div>
-        </slot>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
+<script>
 const INIT_DRAG_DURATION = 50;
 const IS_VERTICAL = ['top', 'bottom'];
 const IS_HORIZONTAL = ['right', 'left'];
-
+</script>
+<script setup>
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   hasAnimation: { type: Boolean, default: true },
@@ -543,6 +448,102 @@ function handleDragEnd(e) {
   }
 }
 </script>
+
+<template>
+  <div class="drawer_root" :style="cssVariable">
+    <slot
+      name="openBtn"
+      :open="handleOpen"
+      :value="modelValue"
+      :anchor="anchor"
+    />
+    <slot
+      name="closeBtn"
+      :close="handleClose"
+      :value="modelValue"
+      :anchor="anchor"
+    />
+
+    <div
+      v-if="modelValue === true"
+      ref="drawerWrappingRef"
+      :class="[
+        'drawer_root-wrapping',
+        { 'drawer_root-wrapping_animation_transition': hasAnimation === true }
+      ]"
+      @click="handleClose"
+      @transitionend="handleTransitionEnd"
+    >
+      <div
+        v-if="hasMask === true"
+        :class="[
+          'drawer_root-wrapping-mask',
+          { 'drawer_root-wrapping-mask_animation': hasAnimation === true }
+        ]"
+      />
+      <div
+        ref="drawerRef"
+        :class="[
+          'drawer_root-wrapping-drawer',
+          {
+            'drawer_root-wrapping-drawer_anchor_top':
+              hasAnimation === true && computedAnchor === 'top',
+            'drawer_root-wrapping-drawer_anchor_bottom':
+              hasAnimation === true && computedAnchor === 'bottom',
+            'drawer_root-wrapping-drawer_anchor_right':
+              hasAnimation === true && computedAnchor === 'right',
+            'drawer_root-wrapping-drawer_anchor_left':
+              hasAnimation === true && computedAnchor === 'left'
+          }
+        ]"
+        @click.stop=""
+      >
+        <slot
+          name="drag"
+          :anchor="computedAnchor"
+          :is-vertical="isVertical"
+          :is-horizontal="isHorizontal"
+          :click="handleDragBarClick"
+          :drag-start="handleDragStart"
+          :draging="handleDraging"
+          :drag-end="handleDragEnd"
+        >
+          <div
+            class="drawer_root-wrapping-drawer-drag_bar"
+            :css-anchor="computedAnchor"
+            :css-is-vertical="isVertical"
+            :css-is-horizontal="isHorizontal"
+            @click="handleDragBarClick"
+            @mousedown="handleDragStart"
+            @mousemove="handleDraging"
+            @mouseup="handleDragEnd"
+            @touchstart="handleDragStart"
+            @touchmove="handleDraging"
+            @touchend="handleDragEnd"
+          />
+        </slot>
+
+        <slot name="container" :close="handleClose">
+          <div class="drawer_root-wrapping-drawer-container">
+            <slot :close="handleClose">
+              <p>抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容、抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+              <p>抽屜內容</p>
+            </slot>
+          </div>
+        </slot>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 .drawer_open {

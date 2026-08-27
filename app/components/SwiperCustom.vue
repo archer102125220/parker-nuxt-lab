@@ -1,153 +1,3 @@
-<template>
-  <div
-    ref="swiper"
-    class="swiper"
-    :style="cssVariable"
-    @mouseup="resetMoveingStatus"
-    @touchend="resetMoveingStatus"
-    @transitionend="handleSliderMoveEnd"
-  >
-    <div v-if="hasNavigation" class="swiper-prev" @click="handlePrev">
-      <slot name="prev">
-        <p v-ripple class="swiper-prev-btn">
-          {{ '<' }}
-        </p>
-      </slot>
-    </div>
-    <div v-if="hasNavigation" class="swiper-next" @click="handleNext">
-      <slot name="next">
-        <p v-ripple class="swiper-prev-btn">
-          {{ '>' }}
-        </p>
-      </slot>
-    </div>
-    <div ref="sliderContent" class="swiper-content">
-      <div
-        ref="sliderWrapper"
-        class="swiper-content-wrapper"
-        @mousedown="handleChangStart"
-        @touchstart="handleChangStart"
-      >
-        <div
-          v-for="(slide, index) in slideList"
-          :key="slide[slotNameKey] || slide.slotName || index"
-          class="swiper-content-wrapper-slide"
-        >
-          <slot
-            v-if="slotNameIsDefault === false"
-            :name="`${slide[slotNameKey] || slide.slotName || index}-top`"
-            :item="slide"
-            :index="index"
-            :is-slider-moveing="isSliderMoveing"
-          />
-          <slot v-else name="default-top" :item="slide" :index="index" />
-
-          <div class="swiper-content-wrapper-slide-center">
-            <slot
-              v-if="slotNameIsDefault === false"
-              :name="`${slide[slotNameKey] || slide.slotName || index}-left`"
-              :item="slide"
-              :index="index"
-              :is-slider-moveing="isSliderMoveing"
-            />
-            <slot
-              v-else
-              name="default-left"
-              :item="slide"
-              :index="index"
-              :is-slider-moveing="isSliderMoveing"
-            />
-
-            <div class="swiper-content-wrapper-slide-center-middle">
-              <slot
-                v-if="slotNameIsDefault === false"
-                :name="`${
-                  slide[slotNameKey] || slide.slotName || index
-                }-middle_top`"
-                :item="slide"
-                :index="index"
-                :is-slider-moveing="isSliderMoveing"
-              />
-              <slot
-                v-else
-                name="default-middle_top"
-                :item="slide"
-                :index="index"
-                :is-slider-moveing="isSliderMoveing"
-              />
-
-              <slot
-                v-if="slotNameIsDefault === false"
-                :name="slide[slotNameKey] || slide.slotName || index"
-                :item="slide"
-                :index="index"
-                :is-slider-moveing="isSliderMoveing"
-              >
-                <p>{{ slide.content || slide }}</p>
-              </slot>
-              <slot
-                v-else
-                :item="slide"
-                :index="index"
-                :is-slider-moveing="isSliderMoveing"
-              >
-                <p>{{ slide.content || slide }}</p>
-              </slot>
-
-              <slot
-                v-if="slotNameIsDefault === false"
-                :name="`${
-                  slide[slotNameKey] || slide.slotName || index
-                }-middle_bottom`"
-                :item="slide"
-                :index="index"
-                :is-slider-moveing="isSliderMoveing"
-              />
-              <slot
-                v-else
-                name="default-middle_bottom"
-                :item="slide"
-                :index="index"
-                :is-slider-moveing="isSliderMoveing"
-              />
-            </div>
-
-            <slot
-              v-if="slotNameIsDefault === false"
-              :name="`${slide[slotNameKey] || slide.slotName || index}-right`"
-              :item="slide"
-              :index="index"
-              :is-slider-moveing="isSliderMoveing"
-            />
-            <slot
-              v-else
-              name="default-right"
-              :item="slide"
-              :index="index"
-              :is-slider-moveing="isSliderMoveing"
-            />
-          </div>
-
-          <slot
-            v-if="slotNameIsDefault === false"
-            :name="`${slide[slotNameKey] || slide.slotName || index}-bottom`"
-            :item="slide"
-            :index="index"
-            :is-slider-moveing="isSliderMoveing"
-          />
-          <slot
-            v-else
-            name="default-bottom"
-            :item="slide"
-            :index="index"
-            :is-slider-moveing="isSliderMoveing"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 const { $classifySwipeDirection } = useNuxtApp();
 
@@ -397,7 +247,7 @@ function handleSliderMove(e) {
     e.changedTouches?.[0]?.offsetX;
 
   const {
-    isHorizontal,
+    isHorizontal
     // isVertical,
     // originalAngleDeg,
     // angleDeg,
@@ -489,6 +339,156 @@ function handleSliderMoveEnd() {
   emit('sliderMoveEnd', props.modelValue, sliderActiveIndex.value);
 }
 </script>
+
+<template>
+  <div
+    ref="swiper"
+    class="swiper"
+    :style="cssVariable"
+    @mouseup="resetMoveingStatus"
+    @touchend="resetMoveingStatus"
+    @transitionend="handleSliderMoveEnd"
+  >
+    <div v-if="hasNavigation" class="swiper-prev" @click="handlePrev">
+      <slot name="prev">
+        <p v-ripple class="swiper-prev-btn">
+          {{ '<' }}
+        </p>
+      </slot>
+    </div>
+    <div v-if="hasNavigation" class="swiper-next" @click="handleNext">
+      <slot name="next">
+        <p v-ripple class="swiper-prev-btn">
+          {{ '>' }}
+        </p>
+      </slot>
+    </div>
+    <div ref="sliderContent" class="swiper-content">
+      <div
+        ref="sliderWrapper"
+        class="swiper-content-wrapper"
+        @mousedown="handleChangStart"
+        @touchstart="handleChangStart"
+      >
+        <div
+          v-for="(slide, index) in slideList"
+          :key="slide[slotNameKey] || slide.slotName || index"
+          class="swiper-content-wrapper-slide"
+        >
+          <slot
+            v-if="slotNameIsDefault === false"
+            :name="`${slide[slotNameKey] || slide.slotName || index}-top`"
+            :item="slide"
+            :index="index"
+            :is-slider-moveing="isSliderMoveing"
+          />
+          <slot v-else name="default-top" :item="slide" :index="index" />
+
+          <div class="swiper-content-wrapper-slide-center">
+            <slot
+              v-if="slotNameIsDefault === false"
+              :name="`${slide[slotNameKey] || slide.slotName || index}-left`"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
+            <slot
+              v-else
+              name="default-left"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
+
+            <div class="swiper-content-wrapper-slide-center-middle">
+              <slot
+                v-if="slotNameIsDefault === false"
+                :name="`${
+                  slide[slotNameKey] || slide.slotName || index
+                }-middle_top`"
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              />
+              <slot
+                v-else
+                name="default-middle_top"
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              />
+
+              <slot
+                v-if="slotNameIsDefault === false"
+                :name="slide[slotNameKey] || slide.slotName || index"
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              >
+                <p>{{ slide.content || slide }}</p>
+              </slot>
+              <slot
+                v-else
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              >
+                <p>{{ slide.content || slide }}</p>
+              </slot>
+
+              <slot
+                v-if="slotNameIsDefault === false"
+                :name="`${
+                  slide[slotNameKey] || slide.slotName || index
+                }-middle_bottom`"
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              />
+              <slot
+                v-else
+                name="default-middle_bottom"
+                :item="slide"
+                :index="index"
+                :is-slider-moveing="isSliderMoveing"
+              />
+            </div>
+
+            <slot
+              v-if="slotNameIsDefault === false"
+              :name="`${slide[slotNameKey] || slide.slotName || index}-right`"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
+            <slot
+              v-else
+              name="default-right"
+              :item="slide"
+              :index="index"
+              :is-slider-moveing="isSliderMoveing"
+            />
+          </div>
+
+          <slot
+            v-if="slotNameIsDefault === false"
+            :name="`${slide[slotNameKey] || slide.slotName || index}-bottom`"
+            :item="slide"
+            :index="index"
+            :is-slider-moveing="isSliderMoveing"
+          />
+          <slot
+            v-else
+            name="default-bottom"
+            :item="slide"
+            :index="index"
+            :is-slider-moveing="isSliderMoveing"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .swiper {

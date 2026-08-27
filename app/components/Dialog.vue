@@ -1,91 +1,3 @@
-<template>
-  <div class="dialog_root" :style="cssVariable">
-    <div
-      v-if="modelValue === true"
-      :class="[
-        'dialog_root-dialog',
-        { 'dialog_root-dialog_animation_transition': hasAnimation === true }
-      ]"
-      @click.self="handleClose"
-      @transitionend="handleTransitionEnd"
-    >
-      <div
-        :class="[
-          'dialog_root-dialog-center',
-          { 'dialog_root-dialog-center_animation': hasAnimation === true }
-        ]"
-      >
-        <slot
-          name="container"
-          :is-show="modelValue"
-          :title="title"
-          :confirm="handleConfirm"
-          :cancel="handleClose"
-          :cancel-label="cancelLabel"
-          :confirm-label="confirmLabel"
-          :confirm-disabled="confirmDisabled"
-        >
-          <div class="dialog_root-dialog-center-container">
-            <slot name="title" :title="title">
-              <p class="dialog_root-dialog-center-container-title">
-                {{ title }}
-              </p>
-            </slot>
-
-            <slot>
-              <div class="dialog_root-dialog-center-container-content">
-                {{ content }}
-              </div>
-            </slot>
-
-            <slot
-              name="action"
-              :confirm="handleConfirm"
-              :cancel="handleClose"
-              :cancel-label="cancelLabel"
-              :confirm-label="confirmLabel"
-              :confirm-disabled="confirmDisabled"
-            >
-              <div class="dialog_root-dialog-center-container-action">
-                <slot
-                  name="cancel"
-                  :cancel="handleClose"
-                  :cancel-label="cancelLabel"
-                >
-                  <v-btn
-                    class="dialog_root-dialog-center-container-action-btn"
-                    color="warning"
-                    variant="outlined"
-                    @click.stop="handleClose"
-                  >
-                    {{ cancelLabel }}
-                  </v-btn>
-                </slot>
-
-                <slot
-                  name="confirm"
-                  :confirm="handleConfirm"
-                  :confirm-label="confirmLabel"
-                  :confirm-disabled="confirmDisabled"
-                >
-                  <v-btn
-                    class="dialog_root-dialog-center-container-action-btn"
-                    color="primary"
-                    :disabled="confirmDisabled"
-                    @click.stop="handleConfirm"
-                  >
-                    {{ confirmLabel }}
-                  </v-btn>
-                </slot>
-              </div>
-            </slot>
-          </div>
-        </slot>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
@@ -226,6 +138,94 @@ function handleClose() {
   opacityTrigger.value = false;
 }
 </script>
+
+<template>
+  <div class="dialog_root" :style="cssVariable">
+    <div
+      v-if="modelValue === true"
+      :class="[
+        'dialog_root-dialog',
+        { 'dialog_root-dialog_animation_transition': hasAnimation === true }
+      ]"
+      @click.self="handleClose"
+      @transitionend="handleTransitionEnd"
+    >
+      <div
+        :class="[
+          'dialog_root-dialog-center',
+          { 'dialog_root-dialog-center_animation': hasAnimation === true }
+        ]"
+      >
+        <slot
+          name="container"
+          :is-show="modelValue"
+          :title="title"
+          :confirm="handleConfirm"
+          :cancel="handleClose"
+          :cancel-label="cancelLabel"
+          :confirm-label="confirmLabel"
+          :confirm-disabled="confirmDisabled"
+        >
+          <div class="dialog_root-dialog-center-container">
+            <slot name="title" :title="title">
+              <p class="dialog_root-dialog-center-container-title">
+                {{ title }}
+              </p>
+            </slot>
+
+            <slot>
+              <div class="dialog_root-dialog-center-container-content">
+                {{ content }}
+              </div>
+            </slot>
+
+            <slot
+              name="action"
+              :confirm="handleConfirm"
+              :cancel="handleClose"
+              :cancel-label="cancelLabel"
+              :confirm-label="confirmLabel"
+              :confirm-disabled="confirmDisabled"
+            >
+              <div class="dialog_root-dialog-center-container-action">
+                <slot
+                  name="cancel"
+                  :cancel="handleClose"
+                  :cancel-label="cancelLabel"
+                >
+                  <v-btn
+                    class="dialog_root-dialog-center-container-action-btn"
+                    color="warning"
+                    variant="outlined"
+                    @click.stop="handleClose"
+                  >
+                    {{ cancelLabel }}
+                  </v-btn>
+                </slot>
+
+                <slot
+                  name="confirm"
+                  :confirm="handleConfirm"
+                  :confirm-label="confirmLabel"
+                  :confirm-disabled="confirmDisabled"
+                >
+                  <v-btn
+                    class="dialog_root-dialog-center-container-action-btn"
+                    color="primary"
+                    :disabled="confirmDisabled"
+                    @click.stop="handleConfirm"
+                  >
+                    {{ confirmLabel }}
+                  </v-btn>
+                </slot>
+              </div>
+            </slot>
+          </div>
+        </slot>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 .dialog_open {

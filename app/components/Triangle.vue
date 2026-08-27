@@ -1,11 +1,3 @@
-<template>
-  <div ref="triangleEl" class="triangle" :style="cssVariable">
-    <slot>
-      <p>{{ label }}</p>
-    </slot>
-  </div>
-</template>
-
 <script setup>
 const props = defineProps({
   label: { type: String, default: '' },
@@ -77,6 +69,14 @@ defineExpose({
   }
 });
 </script>
+
+<template>
+  <div ref="triangleEl" class="triangle" :style="cssVariable">
+    <slot>
+      <p>{{ label }}</p>
+    </slot>
+  </div>
+</template>
 
 <style lang="scss">
 // https://www.cnblogs.com/weiqinl/p/7048205.html

@@ -1,129 +1,8 @@
-<template>
-  <div
-    ref="scrollFetchRef"
-    v-scroll-end="{
-      handler: handleScrollEnd,
-      wait: scrollEndWait
-    }"
-    class="scroll_fetch"
-    :style="cssVariable"
-    @mousedown="handlePullStart"
-    @mousemove="handlePulling"
-    @touchstart="handlePullStart"
-    @touchmove="handlePulling"
-    @touchend="handlePullEnd"
-    @wheel="handleWheel"
-    @scroll="handleScroll"
-  >
-    <div v-if="refreshDisable === false" class="scroll_fetch-trigger">
-      <template v-if="iosStyle === true">
-        <slot
-          v-if="refreshing === false"
-          name="refresh"
-          :is-pulling="isPulling"
-          :is-pull-start="isPullStart"
-          :is-show-refresh-icon="isShowRefreshIcon"
-        >
-          <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-pull_label">
-            {{ isPulling === true ? pullingLabel : pullLabel }}
-          </p>
-        </slot>
-        <slot v-else name="refreshing">
-          <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
-          <div class="scroll_fetch-trigger-refreshing">
-            <div
-              class="scroll_fetch-trigger-refreshing-loading_icon"
-              css-refresh-animation="true"
-            />
-            <p class="scroll_fetch-trigger-refreshing-label">
-              {{ loadingLabel }}
-            </p>
-          </div>
-        </slot>
-      </template>
-      <div
-        v-else
-        class="scroll_fetch-trigger-icon_center"
-        @transitionend="handleRefreshIcon"
-      >
-        <slot
-          name="refreshIcon"
-          :is-show-refresh-icon="isShowRefreshIcon"
-          :is-pull-start="isPullStart"
-        >
-          <div
-            v-if="hasRefreshIcon === false"
-            v-show="isShowRefreshIcon"
-            class="scroll_fetch-trigger-icon_center-icon"
-            :css-refresh-animation="
-              refreshing === true && isPullStart === false
-            "
-          />
-          <div
-            v-else
-            v-show="isShowRefreshIcon"
-            class="scroll_fetch-trigger-icon_center-icon_img_bg"
-            :css-activate-animation="refreshIconAnimation"
-          >
-            <img
-              :src="computedRefreshIcon"
-              class="scroll_fetch-trigger-icon_center-icon_img_bg-icon_img"
-              :css-refresh-animation="
-                refreshing === true && isPullStart === false
-              "
-            />
-          </div>
-        </slot>
-      </div>
-    </div>
-
-    <div
-      v-if="isEmpty === false"
-      class="scroll_fetch-container"
-      @mouseover.self="handlePullEnd"
-      @transitionend="handleRefreshIcon"
-    >
-      <slot />
-    </div>
-
-    <div v-if="isEmpty === true" class="scroll_fetch-empty">
-      <slot name="empty">
-        <p class="scroll_fetch-empty-label">{{ emptyLabel }}</p>
-      </slot>
-    </div>
-
-    <div ref="infinityTriggerRef" />
-    <slot
-      v-if="infinityDisable === false"
-      name="infinityLabel"
-      :loading="infinityLoading"
-      :infinity-end="infinityEnd"
-    >
-      <p v-if="infinityEnd === false" class="scroll_fetch-infinity_label">
-        {{ infinityLoading === true ? loadingLabel : infinityLabel }}
-      </p>
-      <p v-else class="scroll_fetch-infinity_label">
-        {{ infinityEndLabel }}
-      </p>
-    </slot>
-
-    <GoTop
-      v-if="hasGoTop === true"
-      position="sticky"
-      right="unset"
-      left="90%"
-      :parent-element-trigger="true"
-    />
-  </div>
-</template>
-
 <script>
 import _debounce from 'lodash/debounce';
-</script>
-
-<script setup>
 const MOVE_DISTANCE_LIMIT = 50;
-
+</script>
+<script setup>
 const { $bindScrollEnd } = useNuxtApp();
 
 const props = defineProps({
@@ -896,6 +775,125 @@ function windowScrollEnd(e) {
   windowScrollIsTop.value = scrollElementBoundingClientReact?.y <= 0;
 }
 </script>
+
+<template>
+  <div
+    ref="scrollFetchRef"
+    v-scroll-end="{
+      handler: handleScrollEnd,
+      wait: scrollEndWait
+    }"
+    class="scroll_fetch"
+    :style="cssVariable"
+    @mousedown="handlePullStart"
+    @mousemove="handlePulling"
+    @touchstart="handlePullStart"
+    @touchmove="handlePulling"
+    @touchend="handlePullEnd"
+    @wheel="handleWheel"
+    @scroll="handleScroll"
+  >
+    <div v-if="refreshDisable === false" class="scroll_fetch-trigger">
+      <template v-if="iosStyle === true">
+        <slot
+          v-if="refreshing === false"
+          name="refresh"
+          :is-pulling="isPulling"
+          :is-pull-start="isPullStart"
+          :is-show-refresh-icon="isShowRefreshIcon"
+        >
+          <p v-show="isShowRefreshIcon" class="scroll_fetch-trigger-pull_label">
+            {{ isPulling === true ? pullingLabel : pullLabel }}
+          </p>
+        </slot>
+        <slot v-else name="refreshing">
+          <!-- https://www.crazyegg.com/blog/loading-spinners-css3-animation/ loading icon -->
+          <div class="scroll_fetch-trigger-refreshing">
+            <div
+              class="scroll_fetch-trigger-refreshing-loading_icon"
+              css-refresh-animation="true"
+            />
+            <p class="scroll_fetch-trigger-refreshing-label">
+              {{ loadingLabel }}
+            </p>
+          </div>
+        </slot>
+      </template>
+      <div
+        v-else
+        class="scroll_fetch-trigger-icon_center"
+        @transitionend="handleRefreshIcon"
+      >
+        <slot
+          name="refreshIcon"
+          :is-show-refresh-icon="isShowRefreshIcon"
+          :is-pull-start="isPullStart"
+        >
+          <div
+            v-if="hasRefreshIcon === false"
+            v-show="isShowRefreshIcon"
+            class="scroll_fetch-trigger-icon_center-icon"
+            :css-refresh-animation="
+              refreshing === true && isPullStart === false
+            "
+          />
+          <div
+            v-else
+            v-show="isShowRefreshIcon"
+            class="scroll_fetch-trigger-icon_center-icon_img_bg"
+            :css-activate-animation="refreshIconAnimation"
+          >
+            <img
+              :src="computedRefreshIcon"
+              class="scroll_fetch-trigger-icon_center-icon_img_bg-icon_img"
+              :css-refresh-animation="
+                refreshing === true && isPullStart === false
+              "
+            />
+          </div>
+        </slot>
+      </div>
+    </div>
+
+    <div
+      v-if="isEmpty === false"
+      class="scroll_fetch-container"
+      @mouseover.self="handlePullEnd"
+      @transitionend="handleRefreshIcon"
+    >
+      <slot />
+    </div>
+
+    <div v-if="isEmpty === true" class="scroll_fetch-empty">
+      <slot name="empty">
+        <p class="scroll_fetch-empty-label">{{ emptyLabel }}</p>
+      </slot>
+    </div>
+
+    <div ref="infinityTriggerRef" />
+    <slot
+      v-if="infinityDisable === false"
+      name="infinityLabel"
+      :loading="infinityLoading"
+      :infinity-end="infinityEnd"
+    >
+      <p v-if="infinityEnd === false" class="scroll_fetch-infinity_label">
+        {{ infinityLoading === true ? loadingLabel : infinityLabel }}
+      </p>
+      <p v-else class="scroll_fetch-infinity_label">
+        {{ infinityEndLabel }}
+      </p>
+    </slot>
+
+    <GoTop
+      v-if="hasGoTop === true"
+      position="sticky"
+      right="unset"
+      left="90%"
+      :parent-element-trigger="true"
+    />
+  </div>
+</template>
 
 <style lang="scss">
 html {

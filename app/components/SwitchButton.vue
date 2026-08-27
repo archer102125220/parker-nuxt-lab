@@ -1,38 +1,3 @@
-<template>
-  <span class="switch_button" :style="cssVariable">
-    <input
-      class="switch_button-check"
-      type="checkbox"
-      :disabled="disabled"
-      :value="modelValue"
-      @change="handleValueChange"
-    />
-
-    <div ref="iconRef" class="switch_button-icon">
-      <slot
-        name="icon"
-        :icon="icon"
-        :value="modelValue"
-        :show-icon="showIcon"
-        :checked-icon="checkedIcon"
-      >
-        <img v-if="typeof showIcon === 'string'" :src="showIcon" />
-      </slot>
-    </div>
-
-    <div class="switch_button-label">
-      <slot
-        :label="label"
-        :value="modelValue"
-        :show-label="showLabel"
-        :checked-label="checkedLabel"
-      >
-        <p>{{ showLabel }}</p>
-      </slot>
-    </div>
-  </span>
-</template>
-
 <script setup>
 const modelValue = defineModel({ type: Boolean, default: false });
 const props = defineProps({
@@ -134,6 +99,41 @@ function handleValueChange(e) {
   emits('update:modelValue', !newValue);
 }
 </script>
+
+<template>
+  <span class="switch_button" :style="cssVariable">
+    <input
+      class="switch_button-check"
+      type="checkbox"
+      :disabled="disabled"
+      :value="modelValue"
+      @change="handleValueChange"
+    />
+
+    <div ref="iconRef" class="switch_button-icon">
+      <slot
+        name="icon"
+        :icon="icon"
+        :value="modelValue"
+        :show-icon="showIcon"
+        :checked-icon="checkedIcon"
+      >
+        <img v-if="typeof showIcon === 'string'" :src="showIcon" />
+      </slot>
+    </div>
+
+    <div class="switch_button-label">
+      <slot
+        :label="label"
+        :value="modelValue"
+        :show-label="showLabel"
+        :checked-label="checkedLabel"
+      >
+        <p>{{ showLabel }}</p>
+      </slot>
+    </div>
+  </span>
+</template>
 
 <style lang="scss" scoped>
 .switch_button {

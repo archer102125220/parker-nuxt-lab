@@ -1,3 +1,525 @@
+<script>
+import { ScrollMode, SpreadMode } from 'pdfjs-dist/web/pdf_viewer.mjs';
+</script>
+<script setup>
+defineOptions({
+  inheritAttrs: false
+});
+
+// SpreadMode plain-value aliases for template :class comparisons
+const SPREAD_NONE = SpreadMode.NONE;
+const SPREAD_ODD = SpreadMode.ODD;
+const SPREAD_EVEN = SpreadMode.EVEN;
+
+// ─── Props / Emits ───────────────────────────────────────────────────────────
+const props = defineProps({
+  src: { type: String, required: true }
+});
+const emit = defineEmits(['title-change', 'page-change', 'load-error']);
+
+// ─── Nuxt plugin ─────────────────────────────────────────────────────────────
+const { $pdfReader } = useNuxtApp();
+
+// ─── Critical DOM refs ────────────────────────────────────────────────────────
+const viewerContainer = ref(null);
+const viewer = ref(null);
+const loadingBar = ref(null);
+
+// ─── Navigation state ────────────────────────────────────────────────────────
+const pdfTitle = ref('');
+const currentPage = ref(1);
+const totalPages = ref(0);
+const currentScale = ref('auto');
+
+// ─── Sidebar state ───────────────────────────────────────────────────────────
+const sidebarOpen = ref(false);
+const activeSidebarTab = ref('thumbnails');
+
+// ─── Findbar state ───────────────────────────────────────────────────────────
+const findbarOpen = ref(false);
+const findQuery = ref('');
+const findHighlightAllVal = ref(false);
+const findMatchCaseVal = ref(false);
+const findEntireWordVal = ref(false);
+const findResultsText = ref('');
+const findMsg = ref('');
+
+// ─── Secondary toolbar ───────────────────────────────────────────────────────
+const secondaryToolbarOpen = ref(false);
+
+// ─── Scroll / spread / cursor ────────────────────────────────────────────────
+const isScrollVertical = ref(true);
+const isScrollHorizontal = ref(false);
+const isScrollWrapped = ref(false);
+const isScrollPage = ref(false);
+const currentSpreadMode = ref(SpreadMode.NONE);
+const cursorTool = ref(0); // 0 = select, 1 = hand
+
+// ─── Password dialog ──────────────────────────────────────────────────────────
+const passwordValue = ref('');
+const passwordOverlayVisible = ref(false);
+let passwordCallback = null;
+
+// ─── Document properties dialog ───────────────────────────────────────────────
+const documentPropertiesVisible = ref(false);
+const docProps = reactive({
+  fileName: '-',
+  fileSize: '-',
+  title: '-',
+  author: '-',
+  subject: '-',
+  keywords: '-',
+  creationDate: '-',
+  modificationDate: '-',
+  creator: '-',
+  producer: '-',
+  version: '-',
+  pageCount: '-',
+  pageSize: '-',
+  linearized: '-'
+});
+
+// ─── Error state ──────────────────────────────────────────────────────────────
+const errorVisible = ref(false);
+const errorMessageText = ref('');
+const errorMoreInfoVisible = ref(false);
+const errorStack = ref('');
+
+// ─── Print state ──────────────────────────────────────────────────────────────
+const printProgress = ref(0);
+const printServiceVisible = ref(false);
+
+// ─── PDF.js app instance ──────────────────────────────────────────────────────
+let pdfApp = null;
+
+// ─── Computed ─────────────────────────────────────────────────────────────────
+const canGoPrev = computed(() => currentPage.value > 1 && totalPages.value > 0);
+const canGoNext = computed(() => currentPage.value < totalPages.value);
+const pagesCountText = computed(() =>
+  totalPages.value > 0 ? `of ${totalPages.value}` : ''
+);
+const currentPageHash = computed(() => `#page=${currentPage.value}`);
+const overlayVisible = computed(
+  () =>
+    passwordOverlayVisible.value ||
+    documentPropertiesVisible.value ||
+    printServiceVisible.value
+);
+
+// ─── Lifecycle ────────────────────────────────────────────────────────────────
+onMounted(() => {
+  if (typeof props.src === 'string' && props.src !== '') loadFile(props.src);
+});
+
+onBeforeUnmount(() => {
+  if (typeof pdfApp === 'object' && pdfApp !== null) {
+    pdfApp.close();
+    pdfApp = null;
+  }
+});
+
+watch(
+  () => props.src,
+  (src) => {
+    if (typeof src === 'string' && src !== '') loadFile(src);
+  }
+);
+
+// ─── Core: initialize & load ─────────────────────────────────────────────────
+async function loadFile(url) {
+  try {
+    if (pdfApp === null) {
+      pdfApp = $pdfReader.createApp({
+        container: viewerContainer.value,
+        viewer: viewer.value,
+        locale: navigator.language || 'zh-TW'
+      });
+      setupEventListeners();
+    }
+    showLoadingBar();
+    await pdfApp.open({ url });
+  } catch (error) {
+    console.error('[PdfReader] loadFile error:', error);
+    showError(error?.message ?? String(error), error?.stack ?? '');
+    emit('load-error', error);
+  }
+}
+
+// ─── EventBus wiring ─────────────────────────────────────────────────────────
+function setupEventListeners() {
+  const { eventBus } = pdfApp;
+
+  eventBus.on('pagesinit', () => {
+    currentPage.value = pdfApp.pdfViewer.currentPageNumber;
+    currentScale.value = pdfApp.pdfViewer.currentScaleValue;
+    isScrollVertical.value = true;
+    currentSpreadMode.value = SpreadMode.NONE;
+  });
+
+  eventBus.on('pagesloaded', ({ pagesCount }) => {
+    totalPages.value = pagesCount;
+    hideLoadingBar();
+  });
+
+  eventBus.on('pagechanging', ({ pageNumber }) => {
+    currentPage.value = pageNumber;
+    emit('page-change', pageNumber);
+  });
+
+  eventBus.on('scalechanging', ({ presetValue, scale }) => {
+    currentScale.value =
+      presetValue !== ''
+        ? presetValue
+        : String(Math.round(scale * 10000) / 100);
+  });
+
+  eventBus.on('documentloaded', async () => {
+    const doc = pdfApp.pdfViewer?.pdfDocument ?? null;
+    if (typeof doc !== 'object' || doc === null) return;
+    totalPages.value = doc.numPages;
+    const { info } = await doc.getMetadata().catch(() => ({ info: {} }));
+    if (typeof info?.Title === 'string' && info.Title !== '') {
+      pdfTitle.value = info.Title;
+      emit('title-change', info.Title);
+    }
+  });
+
+  eventBus.on('updatefindmatchescount', ({ matchesCount }) => {
+    if (
+      typeof matchesCount === 'object' &&
+      matchesCount !== null &&
+      matchesCount.total > 0
+    ) {
+      findResultsText.value = `${matchesCount.current} / ${matchesCount.total}`;
+    }
+  });
+
+  eventBus.on('updatefindcontrolstate', ({ state, matchesCount }) => {
+    if (state === 1) {
+      findMsg.value = 'Phrase not found';
+      findResultsText.value = '';
+    } else if (state === 3) {
+      findMsg.value = 'Searching…';
+    } else {
+      findMsg.value = '';
+      if (
+        typeof matchesCount === 'object' &&
+        matchesCount !== null &&
+        matchesCount.total > 0
+      ) {
+        findResultsText.value = `${matchesCount.current} / ${matchesCount.total}`;
+      }
+    }
+  });
+
+  eventBus.on('scrollmodechanged', ({ mode }) => {
+    isScrollVertical.value = mode === ScrollMode.VERTICAL;
+    isScrollHorizontal.value = mode === ScrollMode.HORIZONTAL;
+    isScrollWrapped.value = mode === ScrollMode.WRAPPED;
+    isScrollPage.value = mode === ScrollMode.PAGE;
+  });
+
+  eventBus.on('spreadmodechanged', ({ mode }) => {
+    currentSpreadMode.value = mode;
+  });
+  eventBus.on('cursortoolchanged', ({ tool }) => {
+    cursorTool.value = tool;
+  });
+
+  eventBus.on('updatepassword', ({ updatePassword }) => {
+    passwordCallback = updatePassword;
+    passwordOverlayVisible.value = true;
+  });
+
+  eventBus.on('printprogress', ({ loaded, total }) => {
+    if (typeof total === 'number' && total > 0) {
+      printProgress.value = Math.round((loaded / total) * 100);
+      printServiceVisible.value = true;
+    }
+  });
+
+  eventBus.on('afterprint', () => {
+    printServiceVisible.value = false;
+    printProgress.value = 0;
+  });
+}
+
+// ─── Loading bar ─────────────────────────────────────────────────────────────
+function showLoadingBar() {
+  const el = loadingBar.value;
+  if (typeof el !== 'object' || el === null) return;
+  el.classList.remove('hidden');
+  el.querySelector('.progress')?.classList.add('indeterminate');
+}
+function hideLoadingBar() {
+  const el = loadingBar.value;
+  if (typeof el !== 'object' || el === null) return;
+  el.classList.add('hidden');
+  el.querySelector('.progress')?.classList.remove('indeterminate');
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function goToPrevPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('previouspage');
+}
+function goToNextPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('nextpage');
+}
+function goToFirstPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('firstpage');
+  closeSecondaryToolbar();
+}
+function goToLastPage() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('lastpage');
+  closeSecondaryToolbar();
+}
+
+function onPageNumberChange(e) {
+  const value = parseInt(e.target.value, 10);
+  if (Number.isFinite(value) && value > 0 && value <= totalPages.value) {
+    if (pdfApp !== null) pdfApp.pdfViewer.currentPageNumber = value;
+  } else {
+    e.target.value = currentPage.value;
+  }
+}
+
+// ─── Zoom ────────────────────────────────────────────────────────────────────
+function zoomIn() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('zoomin');
+}
+function zoomOut() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('zoomout');
+}
+function onScaleChange(e) {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('scalechanged', { value: e.target.value });
+}
+
+// ─── Sidebar ─────────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value;
+}
+function setSidebarTab(tab) {
+  activeSidebarTab.value = tab;
+  if (!sidebarOpen.value) sidebarOpen.value = true;
+}
+
+// ─── Findbar ─────────────────────────────────────────────────────────────────
+function toggleFindbar() {
+  findbarOpen.value = !findbarOpen.value;
+  if (!findbarOpen.value && pdfApp !== null)
+    pdfApp.eventBus.dispatch('findbarclose');
+}
+function dispatchFind(type = '', findPrevious = false) {
+  if (pdfApp === null) return;
+  pdfApp.eventBus.dispatch('find', {
+    type,
+    query: findQuery.value,
+    phraseSearch: true,
+    caseSensitive: findMatchCaseVal.value,
+    entireWord: findEntireWordVal.value,
+    highlightAll: findHighlightAllVal.value,
+    findPrevious
+  });
+}
+function onFindInput(e) {
+  findQuery.value = e.target.value;
+  dispatchFind('');
+}
+function findNext() {
+  dispatchFind('again', false);
+}
+function findPrev() {
+  dispatchFind('again', true);
+}
+function onFindHighlightAllChange(e) {
+  findHighlightAllVal.value = e.target.checked;
+  dispatchFind('highlightallchange');
+}
+function onFindMatchCaseChange(e) {
+  findMatchCaseVal.value = e.target.checked;
+  dispatchFind('casesensitivitychange');
+}
+function onFindEntireWordChange(e) {
+  findEntireWordVal.value = e.target.checked;
+  dispatchFind('entirewordchange');
+}
+
+// ─── Secondary toolbar ────────────────────────────────────────────────────────
+function toggleSecondaryToolbar() {
+  secondaryToolbarOpen.value = !secondaryToolbarOpen.value;
+}
+function closeSecondaryToolbar() {
+  secondaryToolbarOpen.value = false;
+}
+
+// ─── Rotation ─────────────────────────────────────────────────────────────────
+function rotateCw() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('rotatecw');
+  closeSecondaryToolbar();
+}
+function rotateCcw() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('rotateccw');
+  closeSecondaryToolbar();
+}
+
+// ─── Cursor tool ──────────────────────────────────────────────────────────────
+function setCursorSelectTool() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchcursortool', { tool: 0 });
+  closeSecondaryToolbar();
+}
+function setCursorHandTool() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchcursortool', { tool: 1 });
+  closeSecondaryToolbar();
+}
+
+// ─── Scroll mode ──────────────────────────────────────────────────────────────
+function setScrollPage() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
+  closeSecondaryToolbar();
+}
+function setScrollVertical() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });
+  closeSecondaryToolbar();
+}
+function setScrollHorizontal() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', {
+      mode: ScrollMode.HORIZONTAL
+    });
+  closeSecondaryToolbar();
+}
+function setScrollWrapped() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.WRAPPED });
+  closeSecondaryToolbar();
+}
+
+// ─── Spread mode ──────────────────────────────────────────────────────────────
+function setSpreadNone() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.NONE });
+  closeSecondaryToolbar();
+}
+function setSpreadOdd() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.ODD });
+  closeSecondaryToolbar();
+}
+function setSpreadEven() {
+  if (pdfApp !== null)
+    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.EVEN });
+  closeSecondaryToolbar();
+}
+
+// ─── Presentation mode ────────────────────────────────────────────────────────
+function enterPresentationMode() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('presentationmode');
+  closeSecondaryToolbar();
+}
+
+// ─── Print / Download / Open ──────────────────────────────────────────────────
+function printFile() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('print');
+  closeSecondaryToolbar();
+}
+function downloadFile() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('download');
+  closeSecondaryToolbar();
+}
+function openFileDialog() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.pdf,application/pdf';
+  input.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (file instanceof File) {
+      const data = await file.arrayBuffer();
+      if (pdfApp !== null) await pdfApp.open({ data }).catch(console.error);
+    }
+  });
+  input.click();
+  closeSecondaryToolbar();
+}
+function cancelPrint() {
+  if (pdfApp !== null) pdfApp.eventBus.dispatch('abortprinting');
+  printServiceVisible.value = false;
+}
+
+// ─── Password dialog ──────────────────────────────────────────────────────────
+function submitPassword() {
+  if (typeof passwordCallback === 'function')
+    passwordCallback(passwordValue.value);
+  passwordValue.value = '';
+  passwordOverlayVisible.value = false;
+  passwordCallback = null;
+}
+function cancelPassword() {
+  if (typeof passwordCallback === 'function') passwordCallback('');
+  passwordValue.value = '';
+  passwordOverlayVisible.value = false;
+  passwordCallback = null;
+}
+
+// ─── Document properties ──────────────────────────────────────────────────────
+async function openDocumentProperties() {
+  const doc = pdfApp?.pdfViewer?.pdfDocument ?? null;
+  if (typeof doc === 'object' && doc !== null) {
+    const { info, contentLength } = await doc
+      .getMetadata()
+      .catch(() => ({ info: {}, contentLength: null }));
+    docProps.title = info?.Title || '-';
+    docProps.author = info?.Author || '-';
+    docProps.subject = info?.Subject || '-';
+    docProps.keywords = info?.Keywords || '-';
+    docProps.creator = info?.Creator || '-';
+    docProps.producer = info?.Producer || '-';
+    docProps.version = info?.PDFFormatVersion || '-';
+    docProps.creationDate = info?.CreationDate || '-';
+    docProps.modificationDate = info?.ModDate || '-';
+    docProps.pageCount = String(doc.numPages);
+    docProps.fileName = props.src.split('/').pop() || '-';
+    if (typeof contentLength === 'number') {
+      docProps.fileSize = `${(contentLength / 1024).toFixed(1)} KB (${contentLength} bytes)`;
+    }
+    const page = await doc.getPage(1).catch(() => null);
+    if (typeof page === 'object' && page !== null) {
+      const vp = page.getViewport({ scale: 1 });
+      docProps.pageSize = `${((vp.width / 72) * 25.4).toFixed(1)} × ${((vp.height / 72) * 25.4).toFixed(1)} mm`;
+    }
+  }
+  documentPropertiesVisible.value = true;
+  closeSecondaryToolbar();
+}
+function closeDocumentProperties() {
+  documentPropertiesVisible.value = false;
+}
+
+// ─── Error handling ───────────────────────────────────────────────────────────
+function showError(message, stack = '') {
+  errorMessageText.value = message;
+  errorStack.value = stack;
+  errorVisible.value = true;
+  errorMoreInfoVisible.value = false;
+}
+function closeError() {
+  errorVisible.value = false;
+}
+function showMoreInfo() {
+  errorMoreInfoVisible.value = true;
+}
+function showLessInfo() {
+  errorMoreInfoVisible.value = false;
+}
+
+// ─── Expose ───────────────────────────────────────────────────────────────────
+defineExpose({ pdfTitle, getPdfApp: () => pdfApp, loadFile });
+</script>
+
 <template>
   <div ref="pdfReaderDOM" class="pdf_reader">
     <div
@@ -1083,526 +1605,6 @@
     <div id="printContainer" ref="printContainer"></div>
   </div>
 </template>
-<script setup>
-import { ScrollMode, SpreadMode } from 'pdfjs-dist/web/pdf_viewer.mjs';
-
-defineOptions({
-  inheritAttrs: false
-});
-
-// SpreadMode plain-value aliases for template :class comparisons
-const SPREAD_NONE = SpreadMode.NONE;
-const SPREAD_ODD = SpreadMode.ODD;
-const SPREAD_EVEN = SpreadMode.EVEN;
-
-// ─── Props / Emits ───────────────────────────────────────────────────────────
-const props = defineProps({
-  src: { type: String, required: true }
-});
-const emit = defineEmits(['title-change', 'page-change', 'load-error']);
-
-// ─── Nuxt plugin ─────────────────────────────────────────────────────────────
-const { $pdfReader } = useNuxtApp();
-
-// ─── Critical DOM refs ────────────────────────────────────────────────────────
-const viewerContainer = ref(null);
-const viewer = ref(null);
-const loadingBar = ref(null);
-
-// ─── Navigation state ────────────────────────────────────────────────────────
-const pdfTitle = ref('');
-const currentPage = ref(1);
-const totalPages = ref(0);
-const currentScale = ref('auto');
-
-// ─── Sidebar state ───────────────────────────────────────────────────────────
-const sidebarOpen = ref(false);
-const activeSidebarTab = ref('thumbnails');
-
-// ─── Findbar state ───────────────────────────────────────────────────────────
-const findbarOpen = ref(false);
-const findQuery = ref('');
-const findHighlightAllVal = ref(false);
-const findMatchCaseVal = ref(false);
-const findEntireWordVal = ref(false);
-const findResultsText = ref('');
-const findMsg = ref('');
-
-// ─── Secondary toolbar ───────────────────────────────────────────────────────
-const secondaryToolbarOpen = ref(false);
-
-// ─── Scroll / spread / cursor ────────────────────────────────────────────────
-const isScrollVertical = ref(true);
-const isScrollHorizontal = ref(false);
-const isScrollWrapped = ref(false);
-const isScrollPage = ref(false);
-const currentSpreadMode = ref(SpreadMode.NONE);
-const cursorTool = ref(0); // 0 = select, 1 = hand
-
-// ─── Password dialog ──────────────────────────────────────────────────────────
-const passwordValue = ref('');
-const passwordOverlayVisible = ref(false);
-let passwordCallback = null;
-
-// ─── Document properties dialog ───────────────────────────────────────────────
-const documentPropertiesVisible = ref(false);
-const docProps = reactive({
-  fileName: '-',
-  fileSize: '-',
-  title: '-',
-  author: '-',
-  subject: '-',
-  keywords: '-',
-  creationDate: '-',
-  modificationDate: '-',
-  creator: '-',
-  producer: '-',
-  version: '-',
-  pageCount: '-',
-  pageSize: '-',
-  linearized: '-'
-});
-
-// ─── Error state ──────────────────────────────────────────────────────────────
-const errorVisible = ref(false);
-const errorMessageText = ref('');
-const errorMoreInfoVisible = ref(false);
-const errorStack = ref('');
-
-// ─── Print state ──────────────────────────────────────────────────────────────
-const printProgress = ref(0);
-const printServiceVisible = ref(false);
-
-// ─── PDF.js app instance ──────────────────────────────────────────────────────
-let pdfApp = null;
-
-// ─── Computed ─────────────────────────────────────────────────────────────────
-const canGoPrev = computed(() => currentPage.value > 1 && totalPages.value > 0);
-const canGoNext = computed(() => currentPage.value < totalPages.value);
-const pagesCountText = computed(() =>
-  totalPages.value > 0 ? `of ${totalPages.value}` : ''
-);
-const currentPageHash = computed(() => `#page=${currentPage.value}`);
-const overlayVisible = computed(
-  () =>
-    passwordOverlayVisible.value ||
-    documentPropertiesVisible.value ||
-    printServiceVisible.value
-);
-
-// ─── Lifecycle ────────────────────────────────────────────────────────────────
-onMounted(() => {
-  if (typeof props.src === 'string' && props.src !== '') loadFile(props.src);
-});
-
-onBeforeUnmount(() => {
-  if (typeof pdfApp === 'object' && pdfApp !== null) {
-    pdfApp.close();
-    pdfApp = null;
-  }
-});
-
-watch(
-  () => props.src,
-  (src) => {
-    if (typeof src === 'string' && src !== '') loadFile(src);
-  }
-);
-
-// ─── Core: initialize & load ─────────────────────────────────────────────────
-async function loadFile(url) {
-  try {
-    if (pdfApp === null) {
-      pdfApp = $pdfReader.createApp({
-        container: viewerContainer.value,
-        viewer: viewer.value,
-        locale: navigator.language || 'zh-TW'
-      });
-      setupEventListeners();
-    }
-    showLoadingBar();
-    await pdfApp.open({ url });
-  } catch (error) {
-    console.error('[PdfReader] loadFile error:', error);
-    showError(error?.message ?? String(error), error?.stack ?? '');
-    emit('load-error', error);
-  }
-}
-
-// ─── EventBus wiring ─────────────────────────────────────────────────────────
-function setupEventListeners() {
-  const { eventBus } = pdfApp;
-
-  eventBus.on('pagesinit', () => {
-    currentPage.value = pdfApp.pdfViewer.currentPageNumber;
-    currentScale.value = pdfApp.pdfViewer.currentScaleValue;
-    isScrollVertical.value = true;
-    currentSpreadMode.value = SpreadMode.NONE;
-  });
-
-  eventBus.on('pagesloaded', ({ pagesCount }) => {
-    totalPages.value = pagesCount;
-    hideLoadingBar();
-  });
-
-  eventBus.on('pagechanging', ({ pageNumber }) => {
-    currentPage.value = pageNumber;
-    emit('page-change', pageNumber);
-  });
-
-  eventBus.on('scalechanging', ({ presetValue, scale }) => {
-    currentScale.value =
-      presetValue !== ''
-        ? presetValue
-        : String(Math.round(scale * 10000) / 100);
-  });
-
-  eventBus.on('documentloaded', async () => {
-    const doc = pdfApp.pdfViewer?.pdfDocument ?? null;
-    if (typeof doc !== 'object' || doc === null) return;
-    totalPages.value = doc.numPages;
-    const { info } = await doc.getMetadata().catch(() => ({ info: {} }));
-    if (typeof info?.Title === 'string' && info.Title !== '') {
-      pdfTitle.value = info.Title;
-      emit('title-change', info.Title);
-    }
-  });
-
-  eventBus.on('updatefindmatchescount', ({ matchesCount }) => {
-    if (
-      typeof matchesCount === 'object' &&
-      matchesCount !== null &&
-      matchesCount.total > 0
-    ) {
-      findResultsText.value = `${matchesCount.current} / ${matchesCount.total}`;
-    }
-  });
-
-  eventBus.on('updatefindcontrolstate', ({ state, matchesCount }) => {
-    if (state === 1) {
-      findMsg.value = 'Phrase not found';
-      findResultsText.value = '';
-    } else if (state === 3) {
-      findMsg.value = 'Searching…';
-    } else {
-      findMsg.value = '';
-      if (
-        typeof matchesCount === 'object' &&
-        matchesCount !== null &&
-        matchesCount.total > 0
-      ) {
-        findResultsText.value = `${matchesCount.current} / ${matchesCount.total}`;
-      }
-    }
-  });
-
-  eventBus.on('scrollmodechanged', ({ mode }) => {
-    isScrollVertical.value = mode === ScrollMode.VERTICAL;
-    isScrollHorizontal.value = mode === ScrollMode.HORIZONTAL;
-    isScrollWrapped.value = mode === ScrollMode.WRAPPED;
-    isScrollPage.value = mode === ScrollMode.PAGE;
-  });
-
-  eventBus.on('spreadmodechanged', ({ mode }) => {
-    currentSpreadMode.value = mode;
-  });
-  eventBus.on('cursortoolchanged', ({ tool }) => {
-    cursorTool.value = tool;
-  });
-
-  eventBus.on('updatepassword', ({ updatePassword }) => {
-    passwordCallback = updatePassword;
-    passwordOverlayVisible.value = true;
-  });
-
-  eventBus.on('printprogress', ({ loaded, total }) => {
-    if (typeof total === 'number' && total > 0) {
-      printProgress.value = Math.round((loaded / total) * 100);
-      printServiceVisible.value = true;
-    }
-  });
-
-  eventBus.on('afterprint', () => {
-    printServiceVisible.value = false;
-    printProgress.value = 0;
-  });
-}
-
-// ─── Loading bar ─────────────────────────────────────────────────────────────
-function showLoadingBar() {
-  const el = loadingBar.value;
-  if (typeof el !== 'object' || el === null) return;
-  el.classList.remove('hidden');
-  el.querySelector('.progress')?.classList.add('indeterminate');
-}
-function hideLoadingBar() {
-  const el = loadingBar.value;
-  if (typeof el !== 'object' || el === null) return;
-  el.classList.add('hidden');
-  el.querySelector('.progress')?.classList.remove('indeterminate');
-}
-
-// ─── Navigation ──────────────────────────────────────────────────────────────
-function goToPrevPage() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('previouspage');
-}
-function goToNextPage() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('nextpage');
-}
-function goToFirstPage() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('firstpage');
-  closeSecondaryToolbar();
-}
-function goToLastPage() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('lastpage');
-  closeSecondaryToolbar();
-}
-
-function onPageNumberChange(e) {
-  const value = parseInt(e.target.value, 10);
-  if (Number.isFinite(value) && value > 0 && value <= totalPages.value) {
-    if (pdfApp !== null) pdfApp.pdfViewer.currentPageNumber = value;
-  } else {
-    e.target.value = currentPage.value;
-  }
-}
-
-// ─── Zoom ────────────────────────────────────────────────────────────────────
-function zoomIn() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('zoomin');
-}
-function zoomOut() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('zoomout');
-}
-function onScaleChange(e) {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('scalechanged', { value: e.target.value });
-}
-
-// ─── Sidebar ─────────────────────────────────────────────────────────────────
-function toggleSidebar() {
-  sidebarOpen.value = !sidebarOpen.value;
-}
-function setSidebarTab(tab) {
-  activeSidebarTab.value = tab;
-  if (!sidebarOpen.value) sidebarOpen.value = true;
-}
-
-// ─── Findbar ─────────────────────────────────────────────────────────────────
-function toggleFindbar() {
-  findbarOpen.value = !findbarOpen.value;
-  if (!findbarOpen.value && pdfApp !== null)
-    pdfApp.eventBus.dispatch('findbarclose');
-}
-function dispatchFind(type = '', findPrevious = false) {
-  if (pdfApp === null) return;
-  pdfApp.eventBus.dispatch('find', {
-    type,
-    query: findQuery.value,
-    phraseSearch: true,
-    caseSensitive: findMatchCaseVal.value,
-    entireWord: findEntireWordVal.value,
-    highlightAll: findHighlightAllVal.value,
-    findPrevious
-  });
-}
-function onFindInput(e) {
-  findQuery.value = e.target.value;
-  dispatchFind('');
-}
-function findNext() {
-  dispatchFind('again', false);
-}
-function findPrev() {
-  dispatchFind('again', true);
-}
-function onFindHighlightAllChange(e) {
-  findHighlightAllVal.value = e.target.checked;
-  dispatchFind('highlightallchange');
-}
-function onFindMatchCaseChange(e) {
-  findMatchCaseVal.value = e.target.checked;
-  dispatchFind('casesensitivitychange');
-}
-function onFindEntireWordChange(e) {
-  findEntireWordVal.value = e.target.checked;
-  dispatchFind('entirewordchange');
-}
-
-// ─── Secondary toolbar ────────────────────────────────────────────────────────
-function toggleSecondaryToolbar() {
-  secondaryToolbarOpen.value = !secondaryToolbarOpen.value;
-}
-function closeSecondaryToolbar() {
-  secondaryToolbarOpen.value = false;
-}
-
-// ─── Rotation ─────────────────────────────────────────────────────────────────
-function rotateCw() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('rotatecw');
-  closeSecondaryToolbar();
-}
-function rotateCcw() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('rotateccw');
-  closeSecondaryToolbar();
-}
-
-// ─── Cursor tool ──────────────────────────────────────────────────────────────
-function setCursorSelectTool() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchcursortool', { tool: 0 });
-  closeSecondaryToolbar();
-}
-function setCursorHandTool() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchcursortool', { tool: 1 });
-  closeSecondaryToolbar();
-}
-
-// ─── Scroll mode ──────────────────────────────────────────────────────────────
-function setScrollPage() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
-  closeSecondaryToolbar();
-}
-function setScrollVertical() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });
-  closeSecondaryToolbar();
-}
-function setScrollHorizontal() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchscrollmode', {
-      mode: ScrollMode.HORIZONTAL
-    });
-  closeSecondaryToolbar();
-}
-function setScrollWrapped() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.WRAPPED });
-  closeSecondaryToolbar();
-}
-
-// ─── Spread mode ──────────────────────────────────────────────────────────────
-function setSpreadNone() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.NONE });
-  closeSecondaryToolbar();
-}
-function setSpreadOdd() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.ODD });
-  closeSecondaryToolbar();
-}
-function setSpreadEven() {
-  if (pdfApp !== null)
-    pdfApp.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.EVEN });
-  closeSecondaryToolbar();
-}
-
-// ─── Presentation mode ────────────────────────────────────────────────────────
-function enterPresentationMode() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('presentationmode');
-  closeSecondaryToolbar();
-}
-
-// ─── Print / Download / Open ──────────────────────────────────────────────────
-function printFile() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('print');
-  closeSecondaryToolbar();
-}
-function downloadFile() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('download');
-  closeSecondaryToolbar();
-}
-function openFileDialog() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.pdf,application/pdf';
-  input.addEventListener('change', async (e) => {
-    const file = e.target.files?.[0];
-    if (file instanceof File) {
-      const data = await file.arrayBuffer();
-      if (pdfApp !== null) await pdfApp.open({ data }).catch(console.error);
-    }
-  });
-  input.click();
-  closeSecondaryToolbar();
-}
-function cancelPrint() {
-  if (pdfApp !== null) pdfApp.eventBus.dispatch('abortprinting');
-  printServiceVisible.value = false;
-}
-
-// ─── Password dialog ──────────────────────────────────────────────────────────
-function submitPassword() {
-  if (typeof passwordCallback === 'function')
-    passwordCallback(passwordValue.value);
-  passwordValue.value = '';
-  passwordOverlayVisible.value = false;
-  passwordCallback = null;
-}
-function cancelPassword() {
-  if (typeof passwordCallback === 'function') passwordCallback('');
-  passwordValue.value = '';
-  passwordOverlayVisible.value = false;
-  passwordCallback = null;
-}
-
-// ─── Document properties ──────────────────────────────────────────────────────
-async function openDocumentProperties() {
-  const doc = pdfApp?.pdfViewer?.pdfDocument ?? null;
-  if (typeof doc === 'object' && doc !== null) {
-    const { info, contentLength } = await doc
-      .getMetadata()
-      .catch(() => ({ info: {}, contentLength: null }));
-    docProps.title = info?.Title || '-';
-    docProps.author = info?.Author || '-';
-    docProps.subject = info?.Subject || '-';
-    docProps.keywords = info?.Keywords || '-';
-    docProps.creator = info?.Creator || '-';
-    docProps.producer = info?.Producer || '-';
-    docProps.version = info?.PDFFormatVersion || '-';
-    docProps.creationDate = info?.CreationDate || '-';
-    docProps.modificationDate = info?.ModDate || '-';
-    docProps.pageCount = String(doc.numPages);
-    docProps.fileName = props.src.split('/').pop() || '-';
-    if (typeof contentLength === 'number') {
-      docProps.fileSize = `${(contentLength / 1024).toFixed(1)} KB (${contentLength} bytes)`;
-    }
-    const page = await doc.getPage(1).catch(() => null);
-    if (typeof page === 'object' && page !== null) {
-      const vp = page.getViewport({ scale: 1 });
-      docProps.pageSize = `${((vp.width / 72) * 25.4).toFixed(1)} × ${((vp.height / 72) * 25.4).toFixed(1)} mm`;
-    }
-  }
-  documentPropertiesVisible.value = true;
-  closeSecondaryToolbar();
-}
-function closeDocumentProperties() {
-  documentPropertiesVisible.value = false;
-}
-
-// ─── Error handling ───────────────────────────────────────────────────────────
-function showError(message, stack = '') {
-  errorMessageText.value = message;
-  errorStack.value = stack;
-  errorVisible.value = true;
-  errorMoreInfoVisible.value = false;
-}
-function closeError() {
-  errorVisible.value = false;
-}
-function showMoreInfo() {
-  errorMoreInfoVisible.value = true;
-}
-function showLessInfo() {
-  errorMoreInfoVisible.value = false;
-}
-
-// ─── Expose ───────────────────────────────────────────────────────────────────
-defineExpose({ pdfTitle, getPdfApp: () => pdfApp, loadFile });
-</script>
 
 <style lang="scss">
 @import 'pdfjs-dist/web/pdf_viewer.css';

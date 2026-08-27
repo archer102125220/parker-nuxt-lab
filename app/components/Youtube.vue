@@ -1,17 +1,12 @@
-<template>
-  <div class="youtube">
-    <div ref="youtubePlayerEl" class="youtube-player" />
-  </div>
-</template>
-
-<script setup>
+<script>
 const UNSTARTED = -1;
 const ENDED = 0;
 const PLAYING = 1;
 const PAUSED = 2;
 const BUFFERING = 3;
 const CUED = 5;
-
+</script>
+<script setup>
 const props = defineProps({
   videoId: { type: String, default: '' },
   videoUrl: { type: String, default: '' },
@@ -162,6 +157,12 @@ defineExpose({
   init
 });
 </script>
+
+<template>
+  <div class="youtube">
+    <div ref="youtubePlayerEl" class="youtube-player" />
+  </div>
+</template>
 
 <style lang="scss">
 .youtube {

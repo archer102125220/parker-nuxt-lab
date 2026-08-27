@@ -1,11 +1,3 @@
-<template>
-  <div class="hexagon_container" :style="cssVariable">
-    <div class="hexagon_container-top" />
-    <slot />
-    <div class="hexagon_container-bottom" />
-  </div>
-</template>
-
 <script setup>
 const props = defineProps({
   height: { type: [String, Number], default: '120px' },
@@ -48,6 +40,14 @@ const cssVariable = computed(() => {
   return _cssVariable;
 });
 </script>
+
+<template>
+  <div class="hexagon_container" :style="cssVariable">
+    <div class="hexagon_container-top" />
+    <slot />
+    <div class="hexagon_container-bottom" />
+  </div>
+</template>
 
 <style lang="scss">
 .hexagon_container {

@@ -1,16 +1,4 @@
-<template>
-  <div :class="statusClass">
-    <div id="aframeSEOContent">
-      <slot name="SEOContent" />
-    </div>
-    <ClientOnly>
-      <div v-if="aframe?.api !== null" v-bind="$attrs">
-        <slot />
-      </div>
-    </ClientOnly>
-  </div>
-</template>
-<script setup>
+<script>
 import { useAframe } from '@app/aframe/composables/useAframe';
 import { useCustomLookControls } from '@app/aframe/composables/useCustomLookControls';
 import { useAframeLink } from '@app/aframe/composables/useAframeLink';
@@ -19,7 +7,8 @@ import { useAframeSlideTrigger } from '@app/aframe/composables/useAframeSlideTri
 import { useAframeSkyAnimation } from '@app/aframe/composables/useAframeSkyAnimation';
 import { useVideoControl } from '@app/aframe/composables/useVideoControl';
 import { useAframeDialogVideo } from '@app/aframe/composables/useAframeDialogVideo';
-
+</script>
+<script setup>
 const props = defineProps({
   class: {
     type: [String, Array],
@@ -61,6 +50,19 @@ useAframeSkyAnimation();
 useVideoControl();
 useAframeDialogVideo();
 </script>
+
+<template>
+  <div :class="statusClass">
+    <div id="aframeSEOContent">
+      <slot name="SEOContent" />
+    </div>
+    <ClientOnly>
+      <div v-if="aframe?.api !== null" v-bind="$attrs">
+        <slot />
+      </div>
+    </ClientOnly>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .aframe_content {

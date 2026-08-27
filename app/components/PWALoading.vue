@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <div class="pwa_loading">
     <v-snackbar
@@ -19,8 +21,6 @@
     <!-- <v-progress-circular indeterminate color="primary" /> -->
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss">
 .pwa_loading {

@@ -1,54 +1,3 @@
-<template>
-  <a-entity v-bind="$attrs" class="aframe_video" :style="cssVariable">
-    <slot
-      template-class="aframe_video-template"
-      title-class="aframe_video-template-title"
-      title-tw-class="aframe_video-template-title-tw"
-      title-en-class="aframe_video-template-title-en"
-      :title-id="titleId"
-    >
-      <div class="aframe_video-template">
-        <p :id="titleId" class="aframe_video-template-title">
-          {{ title }}
-        </p>
-      </div>
-    </slot>
-    <a-plane
-      :position="stateTitlePosition"
-      :rotation="stateTitleRotation"
-      :scale="stateTitleScale"
-      :material="`shader:html;target:#${titleId};transparent:true;ratio:height;fps:1;`"
-    />
-    <a-plane
-      :id="playBtnId"
-      src="#video_play-icon"
-      :rotation="stateIconRotation"
-      :position="stateIconPosition"
-      :scale="stateIconScale"
-      shader="flat"
-      transparent="true"
-    />
-    <a-video
-      :src="`#${videoId}`"
-      :position="videoPosition"
-      :rotation="videoRotation"
-      :scale="videoScale"
-      transparent="false"
-      :autoplay="autoplay"
-      :video-control="`autoplay: ${autoplay};loop: ${loop};playBtnId: ${playBtnId};btnControlOnly: ${btnControlOnly};`"
-    />
-    <ClientOnly>
-      <Teleport to="#vr_engine_layout_assets">
-        <img
-          id="video_play-icon"
-          src="/vr-assets/icons/video_play-button.svg"
-        />
-        <video :id="videoId" :src="videoSrc" :autoplay="autoplay" />
-      </Teleport>
-    </ClientOnly>
-  </a-entity>
-</template>
-
 <script setup>
 const props = defineProps({
   videoId: { type: String, default: null },
@@ -168,6 +117,57 @@ const stateTitleScale = computed(() => {
   return _stateTitleScale;
 });
 </script>
+
+<template>
+  <a-entity v-bind="$attrs" class="aframe_video" :style="cssVariable">
+    <slot
+      template-class="aframe_video-template"
+      title-class="aframe_video-template-title"
+      title-tw-class="aframe_video-template-title-tw"
+      title-en-class="aframe_video-template-title-en"
+      :title-id="titleId"
+    >
+      <div class="aframe_video-template">
+        <p :id="titleId" class="aframe_video-template-title">
+          {{ title }}
+        </p>
+      </div>
+    </slot>
+    <a-plane
+      :position="stateTitlePosition"
+      :rotation="stateTitleRotation"
+      :scale="stateTitleScale"
+      :material="`shader:html;target:#${titleId};transparent:true;ratio:height;fps:1;`"
+    />
+    <a-plane
+      :id="playBtnId"
+      src="#video_play-icon"
+      :rotation="stateIconRotation"
+      :position="stateIconPosition"
+      :scale="stateIconScale"
+      shader="flat"
+      transparent="true"
+    />
+    <a-video
+      :src="`#${videoId}`"
+      :position="videoPosition"
+      :rotation="videoRotation"
+      :scale="videoScale"
+      transparent="false"
+      :autoplay="autoplay"
+      :video-control="`autoplay: ${autoplay};loop: ${loop};playBtnId: ${playBtnId};btnControlOnly: ${btnControlOnly};`"
+    />
+    <ClientOnly>
+      <Teleport to="#vr_engine_layout_assets">
+        <img
+          id="video_play-icon"
+          src="/vr-assets/icons/video_play-button.svg"
+        />
+        <video :id="videoId" :src="videoSrc" :autoplay="autoplay" />
+      </Teleport>
+    </ClientOnly>
+  </a-entity>
+</template>
 
 <style lang="scss">
 .aframe_video {

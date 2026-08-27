@@ -1,53 +1,3 @@
-<template>
-  <div class="v_selector" :style="cssVariable">
-    <button
-      ref="buttonRef"
-      v-ripple="ripple && disabled === false"
-      class="v_selector-button"
-      :aria-label="ariaLabel"
-      :disabled="disabled"
-      @click="toggleMenu"
-    >
-      <slot :is-open="isOpen">
-        <slot name="label" :is-open="isOpen">
-          <label class="v_selector-button-label">
-            {{ label }}
-          </label>
-        </slot>
-        <slot name="value" :is-open="isOpen">
-          <span> {{ propValue }} </span>
-        </slot>
-      </slot>
-    </button>
-
-    <ClientOnly>
-      <div
-        v-if="isOpen"
-        ref="menuRef"
-        class="v_selector-menu"
-        :style="menuStyle"
-      >
-        <div class="v_selector-menu-backdrop" @click="closeMenu" />
-        <div class="v_selector-menu-content">
-          <button
-            v-for="option in optionList"
-            :key="getValue(option)"
-            v-ripple="ripple && disabled === false"
-            class="v_selector-menu-item"
-            :class="{
-              'v_selector-menu-item-active':
-                getValue(currentValue) === getValue(option)
-            }"
-            @click="handleChange(option)"
-          >
-            {{ getLabel(option) }}
-          </button>
-        </div>
-      </div>
-    </ClientOnly>
-  </div>
-</template>
-
 <script setup>
 const props = defineProps({
   ripple: {
@@ -165,6 +115,56 @@ function handleClickOutside(event) {
   }
 }
 </script>
+
+<template>
+  <div class="v_selector" :style="cssVariable">
+    <button
+      ref="buttonRef"
+      v-ripple="ripple && disabled === false"
+      class="v_selector-button"
+      :aria-label="ariaLabel"
+      :disabled="disabled"
+      @click="toggleMenu"
+    >
+      <slot :is-open="isOpen">
+        <slot name="label" :is-open="isOpen">
+          <label class="v_selector-button-label">
+            {{ label }}
+          </label>
+        </slot>
+        <slot name="value" :is-open="isOpen">
+          <span> {{ propValue }} </span>
+        </slot>
+      </slot>
+    </button>
+
+    <ClientOnly>
+      <div
+        v-if="isOpen"
+        ref="menuRef"
+        class="v_selector-menu"
+        :style="menuStyle"
+      >
+        <div class="v_selector-menu-backdrop" @click="closeMenu" />
+        <div class="v_selector-menu-content">
+          <button
+            v-for="option in optionList"
+            :key="getValue(option)"
+            v-ripple="ripple && disabled === false"
+            class="v_selector-menu-item"
+            :class="{
+              'v_selector-menu-item-active':
+                getValue(currentValue) === getValue(option)
+            }"
+            @click="handleChange(option)"
+          >
+            {{ getLabel(option) }}
+          </button>
+        </div>
+      </div>
+    </ClientOnly>
+  </div>
+</template>
 
 <style lang="scss">
 .v_selector {

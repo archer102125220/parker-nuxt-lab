@@ -1,10 +1,8 @@
-<template>
-  <img :alt="qrCodeValue" class="qr_code" v-bind="$attrs" :src="qrCode" />
-</template>
-<script setup>
+<script>
 // https://www.npmjs.com/package/qrcodeqrcode
 import QRCode from 'qrcode';
-
+</script>
+<script setup>
 const props = defineProps({
   qrCodeValue: { type: [String, Number], default: '' }
 });
@@ -54,6 +52,10 @@ onMounted(() => {
   handleQRCode(props.qrCodeValue);
 });
 </script>
+
+<template>
+  <img :alt="qrCodeValue" class="qr_code" v-bind="$attrs" :src="qrCode" />
+</template>
 
 <style lang="scss" scoped>
 .qr_code {

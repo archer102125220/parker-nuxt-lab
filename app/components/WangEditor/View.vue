@@ -1,13 +1,14 @@
-<template>
-  <!-- eslint-disable-next-line vue/no-v-html -->
-  <article class="wang_editor_view" v-bind="$attrs" v-html="value" />
-</template>
 <script setup>
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   value: { type: String, default: '' }
 });
 </script>
+
+<template>
+  <!-- eslint-disable-next-line vue/no-v-html -->
+  <article class="wang_editor_view" v-bind="$attrs" v-html="value" />
+</template>
 
 <style lang="scss" scoped>
 .wang_editor_view {

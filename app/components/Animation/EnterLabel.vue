@@ -1,9 +1,3 @@
-<template>
-  <component :is="tagName" class="animation_enter_label" :style="cssVariable">
-    {{ enterLabel }}
-  </component>
-</template>
-
 <script setup>
 const modelValue = defineModel({ type: Boolean, default: false });
 const modelAnimationEnd = defineModel('animationEnd', {
@@ -122,6 +116,12 @@ onMounted(() => {
   }
 });
 </script>
+
+<template>
+  <component :is="tagName" class="animation_enter_label" :style="cssVariable">
+    {{ enterLabel }}
+  </component>
+</template>
 
 <style lang="scss">
 @keyframes blink {

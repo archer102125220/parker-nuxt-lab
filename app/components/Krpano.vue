@@ -1,10 +1,7 @@
-<template>
-  <div :id="containerId" ref="containerRef" class="krpano" />
-</template>
-
-<script setup>
+<script>
 import { v4 as uuidv4 } from 'uuid';
-
+</script>
+<script setup>
 /**
  * Krpano 全景圖組件
  * 用於在 Vue/Nuxt 中嵌入 Krpano 全景圖查看器
@@ -362,6 +359,10 @@ defineExpose({
   getInstance
 });
 </script>
+
+<template>
+  <div :id="containerId" ref="containerRef" class="krpano" />
+</template>
 
 <style lang="scss">
 .krpano {

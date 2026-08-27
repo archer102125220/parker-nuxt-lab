@@ -1,22 +1,3 @@
-<template>
-  <v-dialog
-    v-bind="dialogProps"
-    scroll-strategy="none"
-    :model-value="computedTrigger"
-    :width="width"
-    @update:model-value="handleChange"
-  >
-    <component
-      :is="contentComponent"
-      :key="content"
-      :class="computedContentClass"
-      :style="cssVariable"
-      v-bind="contentProps"
-      @close="() => handleChange(false)"
-    />
-  </v-dialog>
-</template>
-
 <script setup>
 const modules = {
   ...import.meta.glob('@app/components/DialogModal/*.vue'),
@@ -159,6 +140,25 @@ async function handleChange(newValue) {
   emit('handleTrigger', payload, newValue);
 }
 </script>
+
+<template>
+  <v-dialog
+    v-bind="dialogProps"
+    scroll-strategy="none"
+    :model-value="computedTrigger"
+    :width="width"
+    @update:model-value="handleChange"
+  >
+    <component
+      :is="contentComponent"
+      :key="content"
+      :class="computedContentClass"
+      :style="cssVariable"
+      v-bind="contentProps"
+      @close="() => handleChange(false)"
+    />
+  </v-dialog>
+</template>
 
 <style lang="scss" scoped>
 .dialog_content {

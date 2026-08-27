@@ -1,75 +1,8 @@
-<template>
-  <a-entity v-bind="$attrs" class="aframe_sky_video" :style="cssVariable">
-    <a-videosphere
-      :src="`#${videoId}`"
-      :autoplay="autoplay"
-      :video-control="`autoplay: ${autoplay};loop: ${loop};playBtnId: ${playBtnId};pauseBtnId: ${pauseBtnId};vrPlayBtnId: ${vrPlayBtnId};vrPauseBtnId: ${vrPauseBtnId};btnControlOnly: ${btnControlOnly};`"
-    />
-    <a-plane
-      :id="vrPlayBtnId"
-      src="#sky_video-play_icon"
-      :rotation="statePlayIconRotation"
-      :position="statePlayIconPosition"
-      :scale="statePlayIconScale"
-      shader="flat"
-      transparent="true"
-      visible="true"
-      data-raycastable=""
-    />
-    <a-plane
-      :id="vrPauseBtnId"
-      src="#sky_video-pause_icon"
-      :rotation="statePauseIconRotation"
-      :position="statePauseIconPosition"
-      :scale="statePauseIconScale"
-      shader="flat"
-      transparent="true"
-      visible="false"
-      data-raycastable=""
-    />
-    <ClientOnly>
-      <Teleport to="#vr_engine_layout_assets">
-        <img
-          id="sky_video-play_icon"
-          src="/vr-assets/icons/video_play-button.svg"
-        />
-        <img
-          id="sky_video-pause_icon"
-          src="/vr-assets/icons/video_pause-button.svg"
-        />
-      </Teleport>
-      <Teleport to="#vr_engine-camera">
-        <a-plane
-          :id="playBtnId"
-          src="#sky_video-play_icon"
-          :rotation="statePlayIconRotation"
-          :position="statePlayIconPosition"
-          :scale="statePlayIconScale"
-          shader="flat"
-          transparent="true"
-          visible="true"
-          data-raycastable=""
-        />
-        <a-plane
-          :id="pauseBtnId"
-          src="#sky_video-pause_icon"
-          :rotation="statePauseIconRotation"
-          :position="statePauseIconPosition"
-          :scale="statePauseIconScale"
-          shader="flat"
-          transparent="true"
-          visible="false"
-          data-raycastable=""
-        />
-      </Teleport>
-    </ClientOnly>
-  </a-entity>
-</template>
-
-<script setup>
+<script>
 import { useVrStore } from '@/store/360vrStore';
 import { useSystemStore } from '@/store/system';
-
+</script>
+<script setup>
 const props = defineProps({
   videoId: { type: String, default: null },
   autoplay: { type: Boolean, default: true },
@@ -194,6 +127,74 @@ const statePauseIconScale = computed(() => {
   return _statePauseIconScale;
 });
 </script>
+
+<template>
+  <a-entity v-bind="$attrs" class="aframe_sky_video" :style="cssVariable">
+    <a-videosphere
+      :src="`#${videoId}`"
+      :autoplay="autoplay"
+      :video-control="`autoplay: ${autoplay};loop: ${loop};playBtnId: ${playBtnId};pauseBtnId: ${pauseBtnId};vrPlayBtnId: ${vrPlayBtnId};vrPauseBtnId: ${vrPauseBtnId};btnControlOnly: ${btnControlOnly};`"
+    />
+    <a-plane
+      :id="vrPlayBtnId"
+      src="#sky_video-play_icon"
+      :rotation="statePlayIconRotation"
+      :position="statePlayIconPosition"
+      :scale="statePlayIconScale"
+      shader="flat"
+      transparent="true"
+      visible="true"
+      data-raycastable=""
+    />
+    <a-plane
+      :id="vrPauseBtnId"
+      src="#sky_video-pause_icon"
+      :rotation="statePauseIconRotation"
+      :position="statePauseIconPosition"
+      :scale="statePauseIconScale"
+      shader="flat"
+      transparent="true"
+      visible="false"
+      data-raycastable=""
+    />
+    <ClientOnly>
+      <Teleport to="#vr_engine_layout_assets">
+        <img
+          id="sky_video-play_icon"
+          src="/vr-assets/icons/video_play-button.svg"
+        />
+        <img
+          id="sky_video-pause_icon"
+          src="/vr-assets/icons/video_pause-button.svg"
+        />
+      </Teleport>
+      <Teleport to="#vr_engine-camera">
+        <a-plane
+          :id="playBtnId"
+          src="#sky_video-play_icon"
+          :rotation="statePlayIconRotation"
+          :position="statePlayIconPosition"
+          :scale="statePlayIconScale"
+          shader="flat"
+          transparent="true"
+          visible="true"
+          data-raycastable=""
+        />
+        <a-plane
+          :id="pauseBtnId"
+          src="#sky_video-pause_icon"
+          :rotation="statePauseIconRotation"
+          :position="statePauseIconPosition"
+          :scale="statePauseIconScale"
+          shader="flat"
+          transparent="true"
+          visible="false"
+          data-raycastable=""
+        />
+      </Teleport>
+    </ClientOnly>
+  </a-entity>
+</template>
 
 <style lang="scss">
 .aframe_sky_video {

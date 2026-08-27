@@ -1,58 +1,7 @@
-<template>
-  <div class="animation_triangle_enter" @click="handleAnime">
-    <Triangle
-      ref="triangleBgLeft"
-      class="animation_triangle_enter-triangle_background_left"
-      height="100vh"
-      width="100vw"
-      angle-upper-left
-      :color="leftBgColor"
-    />
-    <Triangle
-      ref="triangleLeft"
-      class="animation_triangle_enter-triangle_left"
-      height="100vh"
-      width="100vw"
-      angle-upper-left
-      :color="leftColor"
-      :label="computedLeftLabel"
-    >
-      <slot name="leftLabel" :label="computedLeftLabel">
-        <p>{{ computedLeftLabel }}</p>
-      </slot>
-    </Triangle>
-
-    <slot name="default" />
-
-    <Triangle
-      ref="triangleBgRight"
-      class="animation_triangle_enter-triangle_background_right"
-      height="100vh"
-      width="100vw"
-      angle-lower-right
-      :color="rightBgColor"
-    />
-    <Triangle
-      ref="triangleRight"
-      class="animation_triangle_enter-triangle_right"
-      height="100vh"
-      width="100vw"
-      angle-lower-right
-      :color="rightColor"
-      :label="computedRightLabel"
-    >
-      <slot name="rightLabel" :label="computedRightLabel">
-        <p>{{ computedRightLabel }}</p>
-      </slot>
-    </Triangle>
-  </div>
-</template>
-
 <script>
 import animejs from 'animejs';
 import _debounce from 'lodash/debounce';
 </script>
-
 <script setup>
 const triangleLeft = useTemplateRef('triangleLeft');
 const triangleRight = useTemplateRef('triangleRight');
@@ -180,6 +129,56 @@ onMounted(() => {
   handleAnimeInit(props.isMobile);
 });
 </script>
+
+<template>
+  <div class="animation_triangle_enter" @click="handleAnime">
+    <Triangle
+      ref="triangleBgLeft"
+      class="animation_triangle_enter-triangle_background_left"
+      height="100vh"
+      width="100vw"
+      angle-upper-left
+      :color="leftBgColor"
+    />
+    <Triangle
+      ref="triangleLeft"
+      class="animation_triangle_enter-triangle_left"
+      height="100vh"
+      width="100vw"
+      angle-upper-left
+      :color="leftColor"
+      :label="computedLeftLabel"
+    >
+      <slot name="leftLabel" :label="computedLeftLabel">
+        <p>{{ computedLeftLabel }}</p>
+      </slot>
+    </Triangle>
+
+    <slot name="default" />
+
+    <Triangle
+      ref="triangleBgRight"
+      class="animation_triangle_enter-triangle_background_right"
+      height="100vh"
+      width="100vw"
+      angle-lower-right
+      :color="rightBgColor"
+    />
+    <Triangle
+      ref="triangleRight"
+      class="animation_triangle_enter-triangle_right"
+      height="100vh"
+      width="100vw"
+      angle-lower-right
+      :color="rightColor"
+      :label="computedRightLabel"
+    >
+      <slot name="rightLabel" :label="computedRightLabel">
+        <p>{{ computedRightLabel }}</p>
+      </slot>
+    </Triangle>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .animation_triangle_enter {

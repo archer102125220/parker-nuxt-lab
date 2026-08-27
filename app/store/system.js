@@ -137,7 +137,7 @@ export const useSystemStore = defineStore('system', {
     },
     setPwaLoading(payload = false) {
       this.pwaLoading = payload;
-    },
+    }
   },
   getters: {
     broswerInfo() {
@@ -158,7 +158,7 @@ export const useSystemStore = defineStore('system', {
         isDesktop: false,
         isWechat: false, // 微信瀏覽器
         notBroswer: typeof window === 'undefined',
-        userAgent: '',
+        userAgent: ''
       };
       if (typeof window === 'undefined') {
         return broswerInfo;
@@ -166,17 +166,22 @@ export const useSystemStore = defineStore('system', {
       broswerInfo.userAgent = window?.navigator?.userAgent || '';
       const userAgent = broswerInfo.userAgent.toLowerCase();
 
-      broswerInfo.isDesktop = ['windows nt', 'macintosh', 'x11'].some(keyword => userAgent.includes(keyword));
+      broswerInfo.isDesktop = ['windows nt', 'macintosh', 'x11'].some(
+        (keyword) => userAgent.includes(keyword)
+      );
       broswerInfo.isAndroid = userAgent.includes('android');
       broswerInfo.isIphone = userAgent.includes('iphone');
       broswerInfo.isIpad = userAgent.includes('ipad');
       broswerInfo.isIos = broswerInfo.isIphone || broswerInfo.isIpad;
-      broswerInfo.isStandalone = window.navigator?.standalone === true || window.matchMedia?.('(display-mode: standalone)')?.matches === true;
+      broswerInfo.isStandalone =
+        window.navigator?.standalone === true ||
+        window.matchMedia?.('(display-mode: standalone)')?.matches === true;
 
       // /MicroMessenger/i.test
       // https://gist.github.com/ShinChven/8aa1953e4a559230bab874dd4ebe3ee7
       // broswerInfo.isWechat = userAgent.includes('micromessenger');
-      if (userAgent.match(/MicroMessenger/i)) { // Android設備上疑似會有 Safari 字樣，因此獨立處理
+      if (userAgent.match(/MicroMessenger/i)) {
+        // Android設備上疑似會有 Safari 字樣，因此獨立處理
         broswerInfo.type = 'Wechat';
         broswerInfo.version = 'N/A';
         broswerInfo.isWechat = true;
@@ -221,66 +226,6 @@ export const useSystemStore = defineStore('system', {
     localLanguage() {
       const { $i18n } = useNuxtApp();
       return getLocalLanguage($i18n?.local?.value);
-    },
-    privilegeRole() {
-      const localPrivilegeRole =
-        (typeof window?.localStorage?.getItem === 'function' &&
-          localStorage.getItem('systemPrivilegeRole')) ||
-        '{}';
-
-      let privilegeRole = this._privilegeRole;
-      if (
-        (Array.isArray(privilegeRole) === false || privilegeRole.length <= 0) &&
-        localPrivilegeRole !== '{}'
-      ) {
-        privilegeRole = JSON.parse(localPrivilegeRole);
-        this._privilegeRole = privilegeRole;
-      }
-      return privilegeRole;
-    },
-    otpCheckCode() {
-      const localOptCheckCode =
-        (typeof window?.localStorage?.getItem === 'function' &&
-          localStorage.getItem('otpCheckCode')) ||
-        '';
-      let otpCheckCode = this._otpCheckCode;
-      if (otpCheckCode === '' && localOptCheckCode !== otpCheckCode) {
-        otpCheckCode = localOptCheckCode;
-        this._token = otpCheckCode;
-      }
-      return otpCheckCode;
-    },
-    supplierCode() {
-      const { $store } = useNuxtApp();
-      const route = useRoute();
-      const merchantBranchList = $store.user.merchantBranchList || [];
-      const merchantBranchLinkId = merchantBranchList[0]?.linkId || '';
-      let supplierCode =
-        route.params.supplier_code ||
-        this._supplierCode ||
-        merchantBranchLinkId ||
-        '';
-
-      if (this.privilegeRole._authType === 'staff') {
-        supplierCode = 'staff';
-      }
-      if (typeof supplierCode === 'string' && supplierCode !== '') {
-        supplierCode = `/${supplierCode}`;
-      }
-      return supplierCode;
-    },
-    welcomeMsg() {
-      const localWelcomeMsg =
-        ((typeof window?.localStorage?.getItem === 'function' &&
-          localStorage.getItem('systemWelcomeMsg')) ||
-          'true') === 'true';
-
-      let welcomeMsg = this._welcomeMsg;
-      if (typeof localWelcomeMsg === 'boolean') {
-        welcomeMsg = localWelcomeMsg;
-        this._welcomeMsg = welcomeMsg;
-      }
-      return welcomeMsg;
     }
   }
 });

@@ -1,22 +1,3 @@
-<template>
-  <div
-    ref="el"
-    class="go_top"
-    :style="cssVariable"
-    :css-is-show="isShow"
-    @click="goTop"
-  >
-    <slot :is-show="isShow">
-      <v-btn
-        class="go_top-btn"
-        icon="mdi mdi-chevron-up-circle"
-        aria-label="go_to_top"
-        color="primary"
-        variant="text"
-      />
-    </slot>
-  </div>
-</template>
 <script setup>
 const el = useTemplateRef('el');
 
@@ -120,6 +101,26 @@ onBeforeUnmount(() => {
   }
 });
 </script>
+
+<template>
+  <div
+    ref="el"
+    class="go_top"
+    :style="cssVariable"
+    :css-is-show="isShow"
+    @click="goTop"
+  >
+    <slot :is-show="isShow">
+      <v-btn
+        class="go_top-btn"
+        icon="mdi mdi-chevron-up-circle"
+        aria-label="go_to_top"
+        color="primary"
+        variant="text"
+      />
+    </slot>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .go_top {

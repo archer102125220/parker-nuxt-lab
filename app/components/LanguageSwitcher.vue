@@ -1,24 +1,3 @@
-<template>
-  <div class="language_switcher">
-    <VSelector
-      class="language_switcher-button"
-      aria-label="Language Switcher"
-      value-key="code"
-      display-key="label"
-      :return-object="true"
-      :value="locale"
-      :option-list="localeList"
-      @update:value="handleLanguageSwitch"
-    >
-      <img
-        src="/img/icon/i18n/i18n.v-04.webp"
-        alt="i18n"
-        class="language_switcher-button-icon"
-      />
-    </VSelector>
-  </div>
-</template>
-
 <script setup>
 const router = useRouter();
 const { locale } = useI18n();
@@ -65,6 +44,27 @@ function handleClickOutside(event) {
   }
 }
 </script>
+
+<template>
+  <div class="language_switcher">
+    <VSelector
+      class="language_switcher-button"
+      aria-label="Language Switcher"
+      value-key="code"
+      display-key="label"
+      :return-object="true"
+      :value="locale"
+      :option-list="localeList"
+      @update:value="handleLanguageSwitch"
+    >
+      <img
+        src="/img/icon/i18n/i18n.v-04.webp"
+        alt="i18n"
+        class="language_switcher-button-icon"
+      />
+    </VSelector>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .language_switcher {

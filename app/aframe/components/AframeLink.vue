@@ -1,3 +1,32 @@
+<script setup>
+const props = defineProps({
+  src: { type: String, default: null },
+  htmlTemplateSeletor: { type: String, default: '' },
+  iconRotation: { type: String, default: '20 0 0' },
+  iconPosition: { type: String, default: '0 -0.5 0' },
+  iconScale: { type: String, default: null },
+  titlePosition: { type: String, default: '0 0.45 0' },
+  titleRotation: { type: String, default: null },
+  titleScale: { type: String, default: null },
+  linkPath: { type: String, default: '' },
+  linkQyery: { type: Object, default: () => ({}) },
+  height: { type: String, default: '80px' }
+});
+const cssVariable = computed(() => {
+  const _cssVariable = {};
+
+  if (
+    (typeof props.src !== 'string' || props.src === '') &&
+    typeof props.height === 'string' &&
+    props.height !== ''
+  ) {
+    _cssVariable['--aframe_link_height'] = props.height;
+  }
+
+  return _cssVariable;
+});
+</script>
+
 <template>
   <!-- aframe-dialog-triggerb若綁定在 a-entity，會因為 a-plane不會將 a-entity 撐開，導致無法觸擊 a-entity ，若要優化事件邦定需直接綁訂於a-plane上-->
   <a-entity v-bind="$attrs" class="aframe_link" :style="cssVariable">
@@ -51,35 +80,6 @@
     </ClientOnly>
   </a-entity>
 </template>
-
-<script setup>
-const props = defineProps({
-  src: { type: String, default: null },
-  htmlTemplateSeletor: { type: String, default: '' },
-  iconRotation: { type: String, default: '20 0 0' },
-  iconPosition: { type: String, default: '0 -0.5 0' },
-  iconScale: { type: String, default: null },
-  titlePosition: { type: String, default: '0 0.45 0' },
-  titleRotation: { type: String, default: null },
-  titleScale: { type: String, default: null },
-  linkPath: { type: String, default: '' },
-  linkQyery: { type: Object, default: () => ({}) },
-  height: { type: String, default: '80px' }
-});
-const cssVariable = computed(() => {
-  const _cssVariable = {};
-
-  if (
-    (typeof props.src !== 'string' || props.src === '') &&
-    typeof props.height === 'string' &&
-    props.height !== ''
-  ) {
-    _cssVariable['--aframe_link_height'] = props.height;
-  }
-
-  return _cssVariable;
-});
-</script>
 
 <style lang="scss">
 .aframe_link {

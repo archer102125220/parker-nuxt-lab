@@ -1,38 +1,3 @@
-<template>
-  <div>
-    <div
-      v-for="(message, index) in messageList"
-      :key="message.timeId"
-      class="message"
-      :style="{ '--message_top': `${index * 55}px` }"
-    >
-      <v-snackbar
-        v-model="message.snackbar"
-        class="message-block"
-        :color="message.type"
-        :absolute="true"
-        :attach="true"
-        :timeout="(index + 1) * timeout"
-        location="top center"
-        position="absolute"
-        variant="outlined"
-        @update:model-value="handleClose(message.timeId)"
-      >
-        <v-alert :type="message.type">
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <p v-html="message.text" />
-          <v-btn
-            class="message-block-close_btn"
-            icon="mdi-close"
-            variant="text"
-            size="x-small"
-            @click.stop="() => handleClose(message.timeId)"
-          />
-        </v-alert>
-      </v-snackbar>
-    </div>
-  </div>
-</template>
 <script setup>
 const props = defineProps({
   timeout: { type: Number, default: 5000 },
@@ -141,6 +106,42 @@ async function handleClose(removeTimeId) {
   }, 500);
 }
 </script>
+
+<template>
+  <div>
+    <div
+      v-for="(message, index) in messageList"
+      :key="message.timeId"
+      class="message"
+      :style="{ '--message_top': `${index * 55}px` }"
+    >
+      <v-snackbar
+        v-model="message.snackbar"
+        class="message-block"
+        :color="message.type"
+        :absolute="true"
+        :attach="true"
+        :timeout="(index + 1) * timeout"
+        location="top center"
+        position="absolute"
+        variant="outlined"
+        @update:model-value="handleClose(message.timeId)"
+      >
+        <v-alert :type="message.type">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <p v-html="message.text" />
+          <v-btn
+            class="message-block-close_btn"
+            icon="mdi-close"
+            variant="text"
+            size="x-small"
+            @click.stop="() => handleClose(message.timeId)"
+          />
+        </v-alert>
+      </v-snackbar>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 .message {

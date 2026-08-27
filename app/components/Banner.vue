@@ -1,104 +1,3 @@
-<template>
-  <div
-    ref="bannerContainer"
-    class="banner"
-    :style="cssVariables"
-    tabindex="0"
-    :aria-label="`Banner 輪播，共 ${banners.length} 張，目前第 ${currentIndex + 1} 張`"
-    aria-roledescription="carousel"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-    @keydown="handleKeyDown"
-    @focus="handleFocus"
-    @blur="handleBlur"
-  >
-    <!-- Navigation Buttons -->
-    <div
-      v-if="showNavigation && banners.length > 1"
-      class="banner-nav banner-nav-prev"
-      @click="handlePrev"
-    >
-      <slot name="prev">
-        <div class="banner-nav-btn">
-          {{ '<' }}
-        </div>
-      </slot>
-    </div>
-    <div
-      v-if="showNavigation && banners.length > 1"
-      class="banner-nav banner-nav-next"
-      @click="handleNext"
-    >
-      <slot name="next">
-        <div class="banner-nav-btn">
-          {{ '>' }}
-        </div>
-      </slot>
-    </div>
-
-    <!-- Banner Container -->
-    <div ref="bannerWrapper" class="banner-wrapper">
-      <div
-        ref="bannerTrack"
-        class="banner-track"
-        @mousedown="handleDragStart"
-        @touchstart="handleDragStart"
-      >
-        <div
-          v-for="(banner, index) in banners"
-          :key="banner.id || index"
-          class="banner-slide"
-          :class="getSlideClass(index)"
-          :style="getSlideStyle(index)"
-        >
-          <slot
-            :banner="banner"
-            :index="index"
-            :is-active="index === currentIndex"
-          >
-            <div class="banner-slide-content">
-              <img
-                v-if="banner.image"
-                :src="banner.image"
-                :alt="banner.alt || `Banner ${index + 1}`"
-                class="banner-slide-image"
-              />
-              <div
-                v-if="banner.title || banner.description"
-                class="banner-slide-text"
-              >
-                <h3 v-if="banner.title" class="banner-slide-title">
-                  {{ banner.title }}
-                </h3>
-                <p v-if="banner.description" class="banner-slide-description">
-                  {{ banner.description }}
-                </p>
-              </div>
-            </div>
-          </slot>
-        </div>
-      </div>
-    </div>
-
-    <!-- Indicators -->
-    <div v-if="showIndicators && banners.length > 1" class="banner-indicators">
-      <slot
-        name="indicator"
-        :current-index="currentIndex"
-        :total="banners.length"
-      >
-        <div
-          v-for="(banner, index) in banners"
-          :key="`indicator-${banner.id || index}`"
-          class="banner-indicator"
-          :class="{ 'banner-indicator-active': index === currentIndex }"
-          @click="handleIndicatorClick(index)"
-        />
-      </slot>
-    </div>
-  </div>
-</template>
-
 <script setup>
 const { $classifySwipeDirection } = useNuxtApp();
 
@@ -518,6 +417,107 @@ defineExpose({
   }
 });
 </script>
+
+<template>
+  <div
+    ref="bannerContainer"
+    class="banner"
+    :style="cssVariables"
+    tabindex="0"
+    :aria-label="`Banner 輪播，共 ${banners.length} 張，目前第 ${currentIndex + 1} 張`"
+    aria-roledescription="carousel"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+    @keydown="handleKeyDown"
+    @focus="handleFocus"
+    @blur="handleBlur"
+  >
+    <!-- Navigation Buttons -->
+    <div
+      v-if="showNavigation && banners.length > 1"
+      class="banner-nav banner-nav-prev"
+      @click="handlePrev"
+    >
+      <slot name="prev">
+        <div class="banner-nav-btn">
+          {{ '<' }}
+        </div>
+      </slot>
+    </div>
+    <div
+      v-if="showNavigation && banners.length > 1"
+      class="banner-nav banner-nav-next"
+      @click="handleNext"
+    >
+      <slot name="next">
+        <div class="banner-nav-btn">
+          {{ '>' }}
+        </div>
+      </slot>
+    </div>
+
+    <!-- Banner Container -->
+    <div ref="bannerWrapper" class="banner-wrapper">
+      <div
+        ref="bannerTrack"
+        class="banner-track"
+        @mousedown="handleDragStart"
+        @touchstart="handleDragStart"
+      >
+        <div
+          v-for="(banner, index) in banners"
+          :key="banner.id || index"
+          class="banner-slide"
+          :class="getSlideClass(index)"
+          :style="getSlideStyle(index)"
+        >
+          <slot
+            :banner="banner"
+            :index="index"
+            :is-active="index === currentIndex"
+          >
+            <div class="banner-slide-content">
+              <img
+                v-if="banner.image"
+                :src="banner.image"
+                :alt="banner.alt || `Banner ${index + 1}`"
+                class="banner-slide-image"
+              />
+              <div
+                v-if="banner.title || banner.description"
+                class="banner-slide-text"
+              >
+                <h3 v-if="banner.title" class="banner-slide-title">
+                  {{ banner.title }}
+                </h3>
+                <p v-if="banner.description" class="banner-slide-description">
+                  {{ banner.description }}
+                </p>
+              </div>
+            </div>
+          </slot>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicators -->
+    <div v-if="showIndicators && banners.length > 1" class="banner-indicators">
+      <slot
+        name="indicator"
+        :current-index="currentIndex"
+        :total="banners.length"
+      >
+        <div
+          v-for="(banner, index) in banners"
+          :key="`indicator-${banner.id || index}`"
+          class="banner-indicator"
+          :class="{ 'banner-indicator-active': index === currentIndex }"
+          @click="handleIndicatorClick(index)"
+        />
+      </slot>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .banner {

@@ -1,3 +1,215 @@
+<script setup>
+const COUNTDOWN_TYPE_DOWN_VALUE = 'down';
+const COUNTDOWN_TYPE_UP_VALUE = 'up';
+// const COUNTDOWN_TYPE_FADE_VALUE = 'fade'; // TODO:淡出淡入效果實作
+const COUNTDOWN_TYPE_LIST = [
+  COUNTDOWN_TYPE_DOWN_VALUE,
+  COUNTDOWN_TYPE_UP_VALUE
+  // COUNTDOWN_TYPE_FADE_VALUE
+];
+
+const currentNumber = defineModel({
+  name: 'modelValue',
+  type: Number,
+  default: null
+});
+
+const props = defineProps({
+  countdownType: {
+    type: String,
+    default: COUNTDOWN_TYPE_DOWN_VALUE
+  },
+  initialSeconds: {
+    type: Number,
+    default: 20
+  },
+  endSecond: {
+    type: Number,
+    default: 0
+  },
+  isCountdownStart: {
+    type: Boolean,
+    default: true
+  },
+  width: {
+    type: [Number, String],
+    default: 100
+  },
+  height: {
+    type: [Number, String],
+    default: 100
+  },
+  padding: {
+    type: [Number, String],
+    // default: 8,
+    default: 0
+  },
+  bgColor: {
+    type: String,
+    default: '#fff'
+  },
+  color: {
+    type: String,
+    default: '#000'
+  }
+});
+const emits = defineEmits([
+  'update:isCountdownStart',
+  'countdownStart',
+  'countdownStep',
+  'countdownEnd'
+]);
+
+const cssVariable = computed(() => {
+  const safeCssVariable = {};
+
+  if (typeof props.width === 'string' && props.width !== '') {
+    safeCssVariable['--countdown_width'] = props.width;
+  } else if (typeof props.width === 'number' || isNaN(props.width) === false) {
+    safeCssVariable['--countdown_width'] = `${props.width}px`;
+  }
+
+  if (typeof props.height === 'string' && props.height !== '') {
+    safeCssVariable['--countdown_height'] = props.height;
+  } else if (
+    typeof props.height === 'number' ||
+    isNaN(props.height) === false
+  ) {
+    safeCssVariable['--countdown_height'] = `${props.height}px`;
+  }
+
+  if (typeof props.padding === 'string' && props.padding !== '') {
+    safeCssVariable['--countdown_padding'] = props.padding;
+  } else if (
+    typeof props.padding === 'number' ||
+    isNaN(props.padding) === false
+  ) {
+    safeCssVariable['--countdown_padding'] = `${props.padding}px`;
+  }
+
+  if (typeof props.bgColor === 'string' && props.bgColor !== '') {
+    safeCssVariable['--countdown_bg_color'] = props.bgColor;
+  }
+
+  if (typeof props.color === 'string' && props.color !== '') {
+    safeCssVariable['--countdown_color'] = props.color;
+  }
+
+  return safeCssVariable;
+});
+const safeCountDownType = computed(() => {
+  if (
+    typeof props.countdownType !== 'string' ||
+    props.countdownType === '' ||
+    COUNTDOWN_TYPE_LIST.includes(props.countdownType) === false
+  ) {
+    return COUNTDOWN_TYPE_LIST[0];
+  }
+  return props.countdownType;
+});
+const contdownCard = computed(() => {
+  const safeInitialSeconds =
+    typeof props.initialSeconds !== 'number' ? 0 : props.initialSeconds;
+  const safeEndSecond =
+    typeof props.endSecond !== 'number' ? 0 : props.endSecond;
+
+  const contdownCardList = [];
+
+  // 由大至小的數數
+  if (safeInitialSeconds > safeEndSecond) {
+    for (let start = 0; start <= safeInitialSeconds; start++) {
+      contdownCardList.push(start);
+    }
+  }
+  // TODO:由小至大的數數
+  // else if (safeInitialSeconds < safeEndSecond) {
+  //   for (let start = safeInitialSeconds; start <= safeEndSecond; start++) {
+  //     contdownCardList.push(start);
+  //   }
+  // }
+
+  return contdownCardList;
+});
+
+watch(
+  () => [
+    props.isCountdownStart,
+    props.initialSeconds,
+    props.endSecond,
+    props.countdownType
+  ],
+  async ([
+    newCountdownStart,
+    newInitialSeconds,
+    newEndSecond,
+    newCountdownType
+  ]) => {
+    if (
+      newCountdownStart === true &&
+      typeof newInitialSeconds === 'number' &&
+      Math.abs(newInitialSeconds - newEndSecond) > 0
+    ) {
+      currentNumber.value = newInitialSeconds;
+
+      await nextTick();
+      window.requestAnimationFrame(() => {
+        emits('update:isCountdownStart', true);
+        emits('countdownStart');
+      });
+    }
+  }
+);
+
+onMounted(async () => {
+  if (
+    props.isCountdownStart === true &&
+    typeof props.initialSeconds === 'number' &&
+    Math.abs(props.initialSeconds - props.endSecond) > 0
+  ) {
+    currentNumber.value = props.initialSeconds;
+    await nextTick();
+    window.requestAnimationFrame(() => {
+      emits('update:isCountdownStart', true);
+      emits('countdownStart');
+    });
+  }
+});
+
+async function handleNumberAnimationEnd(e) {
+  // console.log(e?.target);
+
+  await nextTick();
+
+  window.requestAnimationFrame(() => {
+    if (currentNumber.value === 0) {
+      emits('countdownEnd');
+      emits('update:isCountdownStart', false);
+      return;
+    }
+
+    emits('update:isCountdownStart', true);
+    emits('countdownStart');
+
+    // 由大至小的數數
+    if (props.initialSeconds > props.endSecond) {
+      const newCurrrentNumber = currentNumber.value - 1;
+
+      emits('countdownStep', newCurrrentNumber);
+
+      currentNumber.value = newCurrrentNumber;
+
+      // TODO:由小至大的數數
+    } else if (props.initialSeconds < props.endSecond) {
+      const newCurrrentNumber = currentNumber.value + 1;
+
+      emits('countdownStep', newCurrrentNumber);
+
+      currentNumber.value = newCurrrentNumber;
+    }
+  });
+}
+</script>
+
 <template>
   <!-- https://codepen.io/daniesy/pen/DWVgXN -->
   <div class="countdown" :style="cssVariable">
@@ -416,218 +628,6 @@
     </div> -->
   </div>
 </template>
-
-<script setup>
-const COUNTDOWN_TYPE_DOWN_VALUE = 'down';
-const COUNTDOWN_TYPE_UP_VALUE = 'up';
-// const COUNTDOWN_TYPE_FADE_VALUE = 'fade'; // TODO:淡出淡入效果實作
-const COUNTDOWN_TYPE_LIST = [
-  COUNTDOWN_TYPE_DOWN_VALUE,
-  COUNTDOWN_TYPE_UP_VALUE
-  // COUNTDOWN_TYPE_FADE_VALUE
-];
-
-const currentNumber = defineModel({
-  name: 'modelValue',
-  type: Number,
-  default: null
-});
-
-const props = defineProps({
-  countdownType: {
-    type: String,
-    default: COUNTDOWN_TYPE_DOWN_VALUE
-  },
-  initialSeconds: {
-    type: Number,
-    default: 20
-  },
-  endSecond: {
-    type: Number,
-    default: 0
-  },
-  isCountdownStart: {
-    type: Boolean,
-    default: true
-  },
-  width: {
-    type: [Number, String],
-    default: 100
-  },
-  height: {
-    type: [Number, String],
-    default: 100
-  },
-  padding: {
-    type: [Number, String],
-    // default: 8,
-    default: 0
-  },
-  bgColor: {
-    type: String,
-    default: '#fff'
-  },
-  color: {
-    type: String,
-    default: '#000'
-  }
-});
-const emits = defineEmits([
-  'update:isCountdownStart',
-  'countdownStart',
-  'countdownStep',
-  'countdownEnd'
-]);
-
-const cssVariable = computed(() => {
-  const safeCssVariable = {};
-
-  if (typeof props.width === 'string' && props.width !== '') {
-    safeCssVariable['--countdown_width'] = props.width;
-  } else if (typeof props.width === 'number' || isNaN(props.width) === false) {
-    safeCssVariable['--countdown_width'] = `${props.width}px`;
-  }
-
-  if (typeof props.height === 'string' && props.height !== '') {
-    safeCssVariable['--countdown_height'] = props.height;
-  } else if (
-    typeof props.height === 'number' ||
-    isNaN(props.height) === false
-  ) {
-    safeCssVariable['--countdown_height'] = `${props.height}px`;
-  }
-
-  if (typeof props.padding === 'string' && props.padding !== '') {
-    safeCssVariable['--countdown_padding'] = props.padding;
-  } else if (
-    typeof props.padding === 'number' ||
-    isNaN(props.padding) === false
-  ) {
-    safeCssVariable['--countdown_padding'] = `${props.padding}px`;
-  }
-
-  if (typeof props.bgColor === 'string' && props.bgColor !== '') {
-    safeCssVariable['--countdown_bg_color'] = props.bgColor;
-  }
-
-  if (typeof props.color === 'string' && props.color !== '') {
-    safeCssVariable['--countdown_color'] = props.color;
-  }
-
-  return safeCssVariable;
-});
-const safeCountDownType = computed(() => {
-  if (
-    typeof props.countdownType !== 'string' ||
-    props.countdownType === '' ||
-    COUNTDOWN_TYPE_LIST.includes(props.countdownType) === false
-  ) {
-    return COUNTDOWN_TYPE_LIST[0];
-  }
-  return props.countdownType;
-});
-const contdownCard = computed(() => {
-  const safeInitialSeconds =
-    typeof props.initialSeconds !== 'number' ? 0 : props.initialSeconds;
-  const safeEndSecond =
-    typeof props.endSecond !== 'number' ? 0 : props.endSecond;
-
-  const contdownCardList = [];
-
-  // 由大至小的數數
-  if (safeInitialSeconds > safeEndSecond) {
-    for (let start = 0; start <= safeInitialSeconds; start++) {
-      contdownCardList.push(start);
-    }
-  }
-  // TODO:由小至大的數數
-  // else if (safeInitialSeconds < safeEndSecond) {
-  //   for (let start = safeInitialSeconds; start <= safeEndSecond; start++) {
-  //     contdownCardList.push(start);
-  //   }
-  // }
-
-  return contdownCardList;
-});
-
-watch(
-  () => [
-    props.isCountdownStart,
-    props.initialSeconds,
-    props.endSecond,
-    props.countdownType
-  ],
-  async ([
-    newCountdownStart,
-    newInitialSeconds,
-    newEndSecond,
-    newCountdownType
-  ]) => {
-    if (
-      newCountdownStart === true &&
-      typeof newInitialSeconds === 'number' &&
-      Math.abs(newInitialSeconds - newEndSecond) > 0
-    ) {
-      currentNumber.value = newInitialSeconds;
-
-      await nextTick();
-      window.requestAnimationFrame(() => {
-        emits('update:isCountdownStart', true);
-        emits('countdownStart');
-      });
-    }
-  }
-);
-
-onMounted(async () => {
-  if (
-    props.isCountdownStart === true &&
-    typeof props.initialSeconds === 'number' &&
-    Math.abs(props.initialSeconds - props.endSecond) > 0
-  ) {
-    currentNumber.value = props.initialSeconds;
-    await nextTick();
-    window.requestAnimationFrame(() => {
-      emits('update:isCountdownStart', true);
-      emits('countdownStart');
-    });
-  }
-});
-
-async function handleNumberAnimationEnd(e) {
-  // console.log(e?.target);
-
-  await nextTick();
-
-  window.requestAnimationFrame(() => {
-    if (currentNumber.value === 0) {
-      emits('countdownEnd');
-      emits('update:isCountdownStart', false);
-      return;
-    }
-
-    emits('update:isCountdownStart', true);
-    emits('countdownStart');
-
-    // 由大至小的數數
-    if (props.initialSeconds > props.endSecond) {
-      const newCurrrentNumber = currentNumber.value - 1;
-
-      emits('countdownStep', newCurrrentNumber);
-
-      currentNumber.value = newCurrrentNumber;
-
-      // TODO:由小至大的數數
-    } else if (props.initialSeconds < props.endSecond) {
-      const newCurrrentNumber = currentNumber.value + 1;
-
-      emits('countdownStep', newCurrrentNumber);
-
-      currentNumber.value = newCurrrentNumber;
-    }
-  });
-}
-</script>
 
 <style lang="scss" scoped>
 $countdownUpLeaveWidth: 250px;

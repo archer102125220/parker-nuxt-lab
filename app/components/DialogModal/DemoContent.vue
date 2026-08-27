@@ -1,3 +1,13 @@
+<script setup>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
+  dialogCouponCnName: { type: String, default: null },
+  dialogCodeId: { type: String, default: null },
+  dialogQrcode: { type: String, default: 'demo-content' }
+});
+const emit = defineEmits(['close']);
+</script>
+
 <template>
   <div class="dialog_coupon_qr_code">
     <p class="dialog_coupon_qr_code-title">{{ dialogCouponCnName }}</p>
@@ -23,16 +33,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
-  dialogCouponCnName: { type: String, default: null },
-  dialogCodeId: { type: String, default: null },
-  dialogQrcode: { type: String, default: 'demo-content' }
-});
-const emit = defineEmits(['close']);
-</script>
 
 <style lang="scss" scoped>
 .dialog_coupon_qr_code {

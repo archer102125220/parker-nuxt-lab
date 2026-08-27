@@ -1,3 +1,28 @@
+<script setup>
+const props = defineProps({
+  htmlTemplateSeletor: { type: String, default: '' },
+  iconPosition: { type: String, default: '-1.65 0 0' },
+  iconRotation: { type: String, default: '0 0 0' },
+  iconScale: { type: String, default: null },
+  // iconOpacity: { type: String, default: "0.730" },
+  iconOpacity: { type: String, default: null },
+  titlePosition: { type: String, default: '0 0 0' },
+  titleRotation: { type: String, default: '0 0 0' },
+  triggerLabelScale: { type: String, default: null },
+  slideImgList: { type: Array, default: () => [] },
+  height: { type: String, default: '80px' }
+});
+const cssVariable = computed(() => {
+  const _cssVariable = {};
+
+  if (typeof props.height === 'string' && props.height !== '') {
+    _cssVariable['--aframe_slide_trigger_height'] = props.height;
+  }
+
+  return _cssVariable;
+});
+</script>
+
 <template>
   <!-- aframe-slide-trigger若綁定在 a-entity，會因為 a-plane不會將 a-entity 撐開，導致無法觸擊 a-entity ，若要優化事件邦定需直接綁訂於a-plane上-->
   <a-entity v-bind="$attrs" class="aframe_slide_trigger" :style="cssVariable">
@@ -41,31 +66,6 @@
     </ClientOnly>
   </a-entity>
 </template>
-
-<script setup>
-const props = defineProps({
-  htmlTemplateSeletor: { type: String, default: '' },
-  iconPosition: { type: String, default: '-1.65 0 0' },
-  iconRotation: { type: String, default: '0 0 0' },
-  iconScale: { type: String, default: null },
-  // iconOpacity: { type: String, default: "0.730" },
-  iconOpacity: { type: String, default: null },
-  titlePosition: { type: String, default: '0 0 0' },
-  titleRotation: { type: String, default: '0 0 0' },
-  triggerLabelScale: { type: String, default: null },
-  slideImgList: { type: Array, default: () => [] },
-  height: { type: String, default: '80px' }
-});
-const cssVariable = computed(() => {
-  const _cssVariable = {};
-
-  if (typeof props.height === 'string' && props.height !== '') {
-    _cssVariable['--aframe_slide_trigger_height'] = props.height;
-  }
-
-  return _cssVariable;
-});
-</script>
 
 <style lang="scss">
 .aframe_slide_trigger {

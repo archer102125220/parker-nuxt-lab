@@ -1,31 +1,3 @@
-<template>
-  <div class="wang_editor" :style="cssVariable">
-    <v-skeleton-loader :loading="!wangEditor?.Toolbar || !wangEditor?.Editor">
-      <component
-        :is="wangEditor?.Toolbar"
-        :class="toolbarClassName"
-        :editor="editorRef"
-        :default-config="toolbarConfig"
-        :mode="mode"
-      />
-      <component
-        :is="wangEditor?.Editor"
-        v-model="valueHtml"
-        :class="editorClassName"
-        :mode="mode"
-        :default-config="editorConfig"
-        :is-disabled="disabled"
-        :style="`height:${editorHeight};`"
-        @on-created="handleCreated"
-        @on-change="handleChange"
-        @on-focus="handleFocus"
-        @on-blur="handleBlur"
-        @custom-alert="handleCustomAlert"
-      />
-    </v-skeleton-loader>
-  </div>
-</template>
-
 <script setup>
 const props = defineProps({
   value: {
@@ -561,6 +533,34 @@ onBeforeUnmount(() => {
   editor.destroy();
 });
 </script>
+
+<template>
+  <div class="wang_editor" :style="cssVariable">
+    <v-skeleton-loader :loading="!wangEditor?.Toolbar || !wangEditor?.Editor">
+      <component
+        :is="wangEditor?.Toolbar"
+        :class="toolbarClassName"
+        :editor="editorRef"
+        :default-config="toolbarConfig"
+        :mode="mode"
+      />
+      <component
+        :is="wangEditor?.Editor"
+        v-model="valueHtml"
+        :class="editorClassName"
+        :mode="mode"
+        :default-config="editorConfig"
+        :is-disabled="disabled"
+        :style="`height:${editorHeight};`"
+        @on-created="handleCreated"
+        @on-change="handleChange"
+        @on-focus="handleFocus"
+        @on-blur="handleBlur"
+        @custom-alert="handleCustomAlert"
+      />
+    </v-skeleton-loader>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .wang_editor {

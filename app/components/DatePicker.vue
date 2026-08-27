@@ -1,18 +1,7 @@
-<template>
-  <client-only>
-    <VueDatePicker
-      v-bind="$attrs"
-      :locale="safeLocale"
-      :formats="safeFormats"
-    />
-    <template #fallback>
-      <v-skeleton-loader type="heading" />
-    </template>
-  </client-only>
-</template>
-
-<script setup>
+<script>
 import { zhTW, enUS, zhCN, zhHK } from 'date-fns/locale';
+</script>
+<script setup>
 // TODO:實作民國年份轉換（西元年-1911）及資料流雙向綁定
 // https://vue3datepicker.com/slots/content/#action-preview
 // https://vue3datepicker.com/slots/trigger-and-input/#trigger
@@ -47,3 +36,16 @@ const safeFormats = computed(() => {
   };
 });
 </script>
+
+<template>
+  <client-only>
+    <VueDatePicker
+      v-bind="$attrs"
+      :locale="safeLocale"
+      :formats="safeFormats"
+    />
+    <template #fallback>
+      <v-skeleton-loader type="heading" />
+    </template>
+  </client-only>
+</template>

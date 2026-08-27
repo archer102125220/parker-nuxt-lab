@@ -1,57 +1,3 @@
-<template>
-  <div
-    v-ripple.value="disable === false"
-    class="image_upload"
-    :style="cssVariable"
-    @click="handeChange"
-    @dragenter.stop.prevent="dragenter"
-    @dragover.stop.prevent="dragover"
-    @drop.stop.prevent="drop"
-    @dragleave.stop.prevent="dragleave"
-  >
-    <slot
-      :src="previewImg"
-      :show-mask="showMask"
-      :disable="disable"
-      :change="handeChange"
-    >
-      <v-btn
-        color="primary"
-        variant="tonal"
-        class="image_upload-btn"
-        @click.stop="handeChange"
-      >
-        {{ btnLabel }}
-      </v-btn>
-
-      <label class="image_upload-label">{{ label }}</label>
-    </slot>
-
-    <div class="image_upload-preview">
-      <slot name="preview" :src="previewImg">
-        <img
-          ref="previewEl"
-          v-ripple
-          class="image_upload-preview-img"
-          :src="previewImg"
-        />
-      </slot>
-    </div>
-
-    <div
-      class="image_upload-mask"
-      :style="
-        (showMask === true ? '--mask_opacity: 0.8;' : '') +
-        (disable === true ? 'cursor: not-allowed;' : '')
-      "
-    >
-      <slot name="mask" :show-mask="showMask" :disable="disable">
-        <p>{{ maskLabel }}</p>
-      </slot>
-    </div>
-  </div>
-</template>
-
 <script setup>
 const modelValue = defineModel({
   type: [Object, String],
@@ -217,6 +163,60 @@ defineExpose({
   fileCheck: props.fileCheck
 });
 </script>
+
+<template>
+  <div
+    v-ripple.value="disable === false"
+    class="image_upload"
+    :style="cssVariable"
+    @click="handeChange"
+    @dragenter.stop.prevent="dragenter"
+    @dragover.stop.prevent="dragover"
+    @drop.stop.prevent="drop"
+    @dragleave.stop.prevent="dragleave"
+  >
+    <slot
+      :src="previewImg"
+      :show-mask="showMask"
+      :disable="disable"
+      :change="handeChange"
+    >
+      <v-btn
+        color="primary"
+        variant="tonal"
+        class="image_upload-btn"
+        @click.stop="handeChange"
+      >
+        {{ btnLabel }}
+      </v-btn>
+
+      <label class="image_upload-label">{{ label }}</label>
+    </slot>
+
+    <div class="image_upload-preview">
+      <slot name="preview" :src="previewImg">
+        <img
+          ref="previewEl"
+          v-ripple
+          class="image_upload-preview-img"
+          :src="previewImg"
+        />
+      </slot>
+    </div>
+
+    <div
+      class="image_upload-mask"
+      :style="
+        (showMask === true ? '--mask_opacity: 0.8;' : '') +
+        (disable === true ? 'cursor: not-allowed;' : '')
+      "
+    >
+      <slot name="mask" :show-mask="showMask" :disable="disable">
+        <p>{{ maskLabel }}</p>
+      </slot>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .image_upload {

@@ -1,79 +1,3 @@
-<template>
-  <div
-    class="tabs_content"
-    :style="cssVariable"
-    @mouseup="resetRefreshDisable"
-    @mouseover="resetRefreshDisable"
-    @touchend="resetRefreshDisable"
-  >
-    <slot name="tabTop" />
-
-    <slot name="loading">
-      <LoadingBar :loading="loading" />
-    </slot>
-
-    <SwiperJs
-      class="tabs_content-swiper"
-      :model-value="modelValue"
-      :value-key="valueKey"
-      :slide-list="tabList"
-      :overflow="scrollFetch === false"
-      :slot-name-key="slotNameKey || valueKey"
-      :slot-name-is-default="slotNameIsDefault"
-      :should-fill-height="scrollFetch === true"
-      @update:model-value="change"
-      @slider-move="sliderMove"
-    >
-      <template v-for="_slot in slots" #[_slot]="{ ...arg }">
-        <slot :name="_slot" v-bind="arg" :is-tab-moveing="isTabMoveing" />
-      </template>
-
-      <template
-        v-for="slotName in slotsList"
-        #[slotName]="{ item: tab, ...arg }"
-      >
-        <slot
-          v-if="scrollFetch === false && isNotScrollFetch(tab)"
-          :name="slotName"
-          v-bind="{ item: tab, ...arg }"
-          :is-tab-moveing="isTabMoveing"
-        />
-
-        <ScrollFetch
-          v-else
-          :key="slotName"
-          class="tabs_content-swiper-scroll_fetch"
-          :height="height"
-          :refresh="refresh"
-          :loading="loading"
-          :ios-style="iosStyle"
-          :refresh-icon="refreshIcon"
-          :pulling-label="pullingLabel"
-          :loading-label="loadingLabel"
-          :infinity-fetch="infinityFetch"
-          :infinity-label="infinityLabel"
-          :refreshing-icon="refreshingIcon"
-          :infinity-buffer="infinityBuffer"
-          :infinity-disable="infinityDisable"
-          :is-scroll-to-fetch="isScrollToFetch"
-          :infinity-end="getInfinityEnd(tab)"
-          :refresh-disable="getRefreshDisable(tab)"
-          :infinity-end-label="getInfinityEndLabel(tab)"
-          v-bind="$attrs"
-        >
-          <slot
-            :name="slotName"
-            v-bind="{ item: tab, ...arg }"
-            :is-tab-moveing="isTabMoveing"
-          >
-            <p>{{ tab.content || tab }}</p>
-          </slot>
-        </ScrollFetch>
-      </template>
-    </SwiperJs>
-  </div>
-</template>
-
 <script setup>
 const $slotsList = useSlots();
 
@@ -214,6 +138,82 @@ function resetRefreshDisable() {
   isTabMoveing.value = false;
 }
 </script>
+
+<template>
+  <div
+    class="tabs_content"
+    :style="cssVariable"
+    @mouseup="resetRefreshDisable"
+    @mouseover="resetRefreshDisable"
+    @touchend="resetRefreshDisable"
+  >
+    <slot name="tabTop" />
+
+    <slot name="loading">
+      <LoadingBar :loading="loading" />
+    </slot>
+
+    <SwiperJs
+      class="tabs_content-swiper"
+      :model-value="modelValue"
+      :value-key="valueKey"
+      :slide-list="tabList"
+      :overflow="scrollFetch === false"
+      :slot-name-key="slotNameKey || valueKey"
+      :slot-name-is-default="slotNameIsDefault"
+      :should-fill-height="scrollFetch === true"
+      @update:model-value="change"
+      @slider-move="sliderMove"
+    >
+      <template v-for="_slot in slots" #[_slot]="{ ...arg }">
+        <slot :name="_slot" v-bind="arg" :is-tab-moveing="isTabMoveing" />
+      </template>
+
+      <template
+        v-for="slotName in slotsList"
+        #[slotName]="{ item: tab, ...arg }"
+      >
+        <slot
+          v-if="scrollFetch === false && isNotScrollFetch(tab)"
+          :name="slotName"
+          v-bind="{ item: tab, ...arg }"
+          :is-tab-moveing="isTabMoveing"
+        />
+
+        <ScrollFetch
+          v-else
+          :key="slotName"
+          class="tabs_content-swiper-scroll_fetch"
+          :height="height"
+          :refresh="refresh"
+          :loading="loading"
+          :ios-style="iosStyle"
+          :refresh-icon="refreshIcon"
+          :pulling-label="pullingLabel"
+          :loading-label="loadingLabel"
+          :infinity-fetch="infinityFetch"
+          :infinity-label="infinityLabel"
+          :refreshing-icon="refreshingIcon"
+          :infinity-buffer="infinityBuffer"
+          :infinity-disable="infinityDisable"
+          :is-scroll-to-fetch="isScrollToFetch"
+          :infinity-end="getInfinityEnd(tab)"
+          :refresh-disable="getRefreshDisable(tab)"
+          :infinity-end-label="getInfinityEndLabel(tab)"
+          v-bind="$attrs"
+        >
+          <slot
+            :name="slotName"
+            v-bind="{ item: tab, ...arg }"
+            :is-tab-moveing="isTabMoveing"
+          >
+            <p>{{ tab.content || tab }}</p>
+          </slot>
+        </ScrollFetch>
+      </template>
+    </SwiperJs>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .tabs_content {

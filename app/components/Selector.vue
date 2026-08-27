@@ -1,60 +1,3 @@
-<template>
-  <div
-    class="selector"
-    :style="cssVariable"
-    @click.stop="handleOptionListTrigger(!isOptionListOpen)"
-  >
-    <div class="selector-prefix">
-      <slot name="prefix" :is-option-open="isOptionListOpen" />
-    </div>
-    <div class="selector-current_value">
-      <slot name="value" :value="modelValue">
-        <p class="selector-current_value-label">
-          {{ displayValue }}
-        </p>
-      </slot>
-    </div>
-    <div ref="optionListRef" class="selector-option_list">
-      <div
-        v-for="(option, index) in optionList"
-        :key="index"
-        v-ripple
-        :class="[
-          'selector-option_list-item',
-          isSelected(option, index) === true
-            ? 'selector-option_list-item_selsected'
-            : ''
-        ]"
-        @click.stop="handleChange(option, index)"
-      >
-        <slot
-          :index="index"
-          :option="option"
-          :selected="isSelected(option, index)"
-        >
-          <p>
-            {{ option[displayKey] || option.label || option }}
-          </p>
-        </slot>
-      </div>
-      <div
-        v-if="optionList.length <= 0"
-        class="selector-option_list-item_empty"
-      >
-        <p>暂无资料</p>
-      </div>
-    </div>
-    <div class="selector-suffix">
-      <slot name="suffix" :is-option-open="isOptionListOpen">
-        <img
-          class="selector-suffix-arrow_icon"
-          src="/img/icon/selector/down-arrow-icon.svg"
-        />
-      </slot>
-    </div>
-  </div>
-</template>
-
 <script setup>
 const props = defineProps({
   loading: {
@@ -293,6 +236,63 @@ function handleChange(option, index) {
   handleOptionListTrigger(false);
 }
 </script>
+
+<template>
+  <div
+    class="selector"
+    :style="cssVariable"
+    @click.stop="handleOptionListTrigger(!isOptionListOpen)"
+  >
+    <div class="selector-prefix">
+      <slot name="prefix" :is-option-open="isOptionListOpen" />
+    </div>
+    <div class="selector-current_value">
+      <slot name="value" :value="modelValue">
+        <p class="selector-current_value-label">
+          {{ displayValue }}
+        </p>
+      </slot>
+    </div>
+    <div ref="optionListRef" class="selector-option_list">
+      <div
+        v-for="(option, index) in optionList"
+        :key="index"
+        v-ripple
+        :class="[
+          'selector-option_list-item',
+          isSelected(option, index) === true
+            ? 'selector-option_list-item_selsected'
+            : ''
+        ]"
+        @click.stop="handleChange(option, index)"
+      >
+        <slot
+          :index="index"
+          :option="option"
+          :selected="isSelected(option, index)"
+        >
+          <p>
+            {{ option[displayKey] || option.label || option }}
+          </p>
+        </slot>
+      </div>
+      <div
+        v-if="optionList.length <= 0"
+        class="selector-option_list-item_empty"
+      >
+        <p>暂无资料</p>
+      </div>
+    </div>
+    <div class="selector-suffix">
+      <slot name="suffix" :is-option-open="isOptionListOpen">
+        <img
+          class="selector-suffix-arrow_icon"
+          src="/img/icon/selector/down-arrow-icon.svg"
+        />
+      </slot>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 .selector {

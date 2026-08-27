@@ -12,7 +12,6 @@ import {
 
 export { LOCALE_TYPE, EVENT_TYPE };
 </script>
-
 <script setup>
 defineOptions({
   inheritAttrs: false

@@ -1,52 +1,11 @@
-<template>
-  <div
-    class="slide_in_panel_list"
-    :style="cssVariable"
-    :css-left-enter="leftEnter"
-  >
-    <div
-      v-for="(message, index) in messageList"
-      :key="message.timestamp"
-      ref="messageEl"
-      :style="{
-        '--message_bottom': `calc(var(--message_item_height)  * ${messageList.length - index - 1})`,
-        '--message_item_spacing': `calc(var(--slide_in_panel_list_item_spacing, 0px)  * ${messageList.length - index})`,
-        ...messageStyleList[index]
-      }"
-      :css-left-enter="leftEnter"
-      :css-remove-type="removeType"
-      class="slide_in_panel_list-message"
-      @transitionend="handleTransitionEnd(message, index)"
-      @click="handleUserRemoveClick($event, message, index)"
-      @mousedown="handleUserRemoveStart($event, message, index)"
-      @mousemove="handleUserRemoveing($event, message, index)"
-      @mouseup="handleUserRemoveEnd(message, index)"
-      @touchstart="handleUserRemoveStart($event, message, index)"
-      @touchmove="handleUserRemoveing($event, message, index)"
-      @touchend="handleUserRemoveEnd(message, index)"
-      @touchcancel="handleUserRemoveEnd(message, ndex)"
-    >
-      <slot
-        :message="message"
-        :content="message.content"
-        :index="index"
-        :remove-type="removeType"
-      >
-        <p>
-          {{ message.content }}
-        </p>
-      </slot>
-    </div>
-  </div>
-</template>
-<script setup>
+<script>
 import _isElement from 'lodash/isElement';
 import _cloneDeep from 'lodash/cloneDeep';
-
 const MESSAGE_TIMEOUT_ID_LIST = {};
 let MESSAGE_HIDDEN_TIMEOUT_ID = -1;
 let MESSAGE_REMOVE_TIMEOUT_ID = -1;
-
+</script>
+<script setup>
 const props = defineProps({
   value: { type: [String, Object], default: null },
   modelValue: { type: [String, Object], default: null },
@@ -533,6 +492,49 @@ async function handleUserRemoveEnd(message, index) {
   }
 }
 </script>
+
+<template>
+  <div
+    class="slide_in_panel_list"
+    :style="cssVariable"
+    :css-left-enter="leftEnter"
+  >
+    <div
+      v-for="(message, index) in messageList"
+      :key="message.timestamp"
+      ref="messageEl"
+      :style="{
+        '--message_bottom': `calc(var(--message_item_height)  * ${messageList.length - index - 1})`,
+        '--message_item_spacing': `calc(var(--slide_in_panel_list_item_spacing, 0px)  * ${messageList.length - index})`,
+        ...messageStyleList[index]
+      }"
+      :css-left-enter="leftEnter"
+      :css-remove-type="removeType"
+      class="slide_in_panel_list-message"
+      @transitionend="handleTransitionEnd(message, index)"
+      @click="handleUserRemoveClick($event, message, index)"
+      @mousedown="handleUserRemoveStart($event, message, index)"
+      @mousemove="handleUserRemoveing($event, message, index)"
+      @mouseup="handleUserRemoveEnd(message, index)"
+      @touchstart="handleUserRemoveStart($event, message, index)"
+      @touchmove="handleUserRemoveing($event, message, index)"
+      @touchend="handleUserRemoveEnd(message, index)"
+      @touchcancel="handleUserRemoveEnd(message, ndex)"
+    >
+      <slot
+        :message="message"
+        :content="message.content"
+        :index="index"
+        :remove-type="removeType"
+      >
+        <p>
+          {{ message.content }}
+        </p>
+      </slot>
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .slide_in_panel_list {
   // Positioning
