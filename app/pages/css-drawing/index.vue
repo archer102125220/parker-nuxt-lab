@@ -1,57 +1,3 @@
-<template>
-  <div class="css_drawing_page">
-    <!-- Hero Section -->
-    <section class="css_drawing_page-hero">
-      <div class="css_drawing_page-hero-background">
-        <img
-          src="/img/css-drawing/css-drawing-v.05.webp"
-          alt="CSS Drawing"
-          class="css_drawing_page-hero-background-image"
-        />
-        <div class="css_drawing_page-hero-background-overlay" />
-      </div>
-
-      <div class="css_drawing_page-hero-content">
-        <h1 class="css_drawing_page-hero-content-title">
-          {{ $t('css_drawing_page.hero.title') }}
-        </h1>
-        <p class="css_drawing_page-hero-content-subtitle">
-          {{ $t('css_drawing_page.hero.subtitle') }}
-        </p>
-        <p class="css_drawing_page-hero-content-description">
-          {{ $t('css_drawing_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="css_drawing_page-intro">
-      <div class="css_drawing_page-section-container">
-        <p class="css_drawing_page-intro-text">
-          {{ $t('css_drawing_page.intro') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- CSS Drawing Tests List -->
-    <section class="css_drawing_page-section">
-      <div class="css_drawing_page-section-container">
-        <h2 class="css_drawing_page-section-title">CSS 繪圖測試列表</h2>
-        <div class="css_drawing_page-grid">
-          <LinkCard
-            v-for="test in drawingTests"
-            :key="test.to"
-            :to="test.to"
-            :label="test.label"
-            :banner="test.banner"
-            class="css_drawing_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -144,6 +90,60 @@ const drawingTests = computed(() => [
   }
 ]);
 </script>
+
+<template>
+  <div class="css_drawing_page">
+    <!-- Hero Section -->
+    <section class="css_drawing_page-hero">
+      <div class="css_drawing_page-hero-background">
+        <img
+          src="/img/css-drawing/css-drawing-v.05.webp"
+          alt="CSS Drawing"
+          class="css_drawing_page-hero-background-image"
+        />
+        <div class="css_drawing_page-hero-background-overlay" />
+      </div>
+
+      <div class="css_drawing_page-hero-content">
+        <h1 class="css_drawing_page-hero-content-title">
+          {{ $t('css_drawing_page.hero.title') }}
+        </h1>
+        <p class="css_drawing_page-hero-content-subtitle">
+          {{ $t('css_drawing_page.hero.subtitle') }}
+        </p>
+        <p class="css_drawing_page-hero-content-description">
+          {{ $t('css_drawing_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="css_drawing_page-intro">
+      <div class="css_drawing_page-section-container">
+        <p class="css_drawing_page-intro-text">
+          {{ $t('css_drawing_page.intro') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- CSS Drawing Tests List -->
+    <section class="css_drawing_page-section">
+      <div class="css_drawing_page-section-container">
+        <h2 class="css_drawing_page-section-title">CSS 繪圖測試列表</h2>
+        <div class="css_drawing_page-grid">
+          <LinkCard
+            v-for="test in drawingTests"
+            :key="test.to"
+            :to="test.to"
+            :label="test.label"
+            :banner="test.banner"
+            class="css_drawing_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 // ========================================

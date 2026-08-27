@@ -1,3 +1,13 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('triangle_full_test_page.hero.title')
+});
+
+const isCollapsed = ref(false);
+</script>
+
 <template>
   <div class="triangle_full_test_page">
     <!-- Fullscreen Triangles Background -->
@@ -30,14 +40,9 @@
     </v-btn>
 
     <!-- Sliding Info Panel -->
-    <div
-      class="triangle_full_test_page-info"
-      :css-collapsed="isCollapsed"
-    >
+    <div class="triangle_full_test_page-info" :css-collapsed="isCollapsed">
       <div class="triangle_full_test_page-info-content">
-        <h1 class="triangle_full_test_page-info-content-title">
-          📖 說明
-        </h1>
+        <h1 class="triangle_full_test_page-info-content-title">📖 說明</h1>
         <p class="triangle_full_test_page-info-content-subtitle">
           {{ $t('triangle_full_test_page.hero.subtitle') }}
         </p>
@@ -48,16 +53,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('triangle_full_test_page.hero.title')
-});
-
-const isCollapsed = ref(false);
-</script>
 
 <style lang="scss">
 .triangle_full_test_page {
@@ -106,9 +101,11 @@ const isCollapsed = ref(false);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
     transform: translateY(-50%);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
 
-    &[css-collapsed="true"] {
+    &[css-collapsed='true'] {
       transform: translateY(-50%) translateX(calc(-100% - 56px));
     }
 
@@ -143,5 +140,3 @@ const isCollapsed = ref(false);
   }
 }
 </style>
-
-

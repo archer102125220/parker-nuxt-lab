@@ -1,3 +1,17 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('ripple_test_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('ripple_test_page.hero.description')
+    }
+  ]
+});
+</script>
+
 <template>
   <div class="ripple_test_page">
     <!-- Hero Section -->
@@ -22,30 +36,13 @@
     <!-- Main Content -->
     <section class="ripple_test_page-section">
       <div class="ripple_test_page-demo">
-        <p
-          v-customize-ripple
-          class="ripple_test_page-demo-button"
-        >
+        <p v-customize-ripple class="ripple_test_page-demo-button">
           {{ $t('ripple_test_page.click_me') }}
         </p>
       </div>
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('ripple_test_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('ripple_test_page.hero.description')
-    }
-  ]
-});
-</script>
 
 <style lang="scss" scoped>
 .ripple_test_page {
@@ -67,7 +64,7 @@ useHeadMataData({
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -75,7 +72,11 @@ useHeadMataData({
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 
@@ -132,7 +133,9 @@ useHeadMataData({
       cursor: pointer;
       user-select: none;
       overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
 
       &:hover {
         transform: translateY(-2px);

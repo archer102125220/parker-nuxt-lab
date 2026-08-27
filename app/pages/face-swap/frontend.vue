@@ -1,244 +1,3 @@
-<template>
-  <div class="face_swap_frontend_page">
-    <!-- Hero Section -->
-    <section class="face_swap_frontend_page-hero">
-      <div class="face_swap_frontend_page-hero-background">
-        <img
-          src="/img/face-swap/face-swap-v.02.png"
-          alt="Face Swap Frontend"
-          class="face_swap_frontend_page-hero-background-image"
-        />
-        <div class="face_swap_frontend_page-hero-background-overlay" />
-      </div>
-
-      <div class="face_swap_frontend_page-hero-content">
-        <h1 class="face_swap_frontend_page-hero-content-title">
-          {{ $t('face_swap_frontend.hero.title') }}
-        </h1>
-        <p class="face_swap_frontend_page-hero-content-subtitle">
-          {{ $t('face_swap_frontend.hero.subtitle') }}
-        </p>
-        <p class="face_swap_frontend_page-hero-content-description">
-          {{ $t('face_swap_frontend.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Usage Tip -->
-    <v-alert
-      type="info"
-      variant="tonal"
-      class="face_swap_frontend_page-tip"
-      closable
-    >
-      <strong>{{ $t('face_swap_frontend.tip.title') }}</strong>
-      {{ $t('face_swap_frontend.tip.content') }}
-    </v-alert>
-
-    <!-- Face Swap Section -->
-    <section class="face_swap_frontend_page-section">
-      <div class="face_swap_frontend_page-swap_section">
-        <div class="face_swap_frontend_page-swap_section-source">
-          <h3>{{ $t('face_swap_frontend.sections.source') }}</h3>
-          <ImageUpload
-            ref="sourceFaceEl"
-            v-model="sourceFaceImage"
-            :btn-label="$t('face_swap_frontend.upload.button')"
-            :label="$t('face_swap_frontend.upload.label')"
-            :mask-label="$t('face_swap_frontend.upload.mask')"
-            class="face_swap_frontend_page-swap_section-source-upload"
-            @change="handleSourceImageChange"
-          />
-        </div>
-
-        <div class="face_swap_frontend_page-swap_section-target">
-          <h3>{{ $t('face_swap_frontend.sections.target') }}</h3>
-          <div
-            class="face_swap_frontend_page-swap_section-target-video_container"
-          >
-            <video
-              ref="videoEl"
-              class="face_swap_frontend_page-swap_section-target-video"
-              width="480"
-              height="360"
-              autoplay
-              :srcObject="streamObj"
-            />
-            <canvas
-              ref="targetOverlayCanvas"
-              class="face_swap_frontend_page-swap_section-target-overlay"
-              width="480"
-              height="360"
-            />
-          </div>
-        </div>
-
-        <div class="face_swap_frontend_page-swap_section-result">
-          <h3>{{ $t('face_swap_frontend.sections.result') }}</h3>
-          <canvas
-            ref="resultCanvas"
-            class="face_swap_frontend_page-swap_section-result-canvas"
-            width="480"
-            height="360"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Image Size Warning -->
-    <v-alert
-      v-if="imageSizeWarning"
-      type="warning"
-      variant="tonal"
-      class="face_swap_frontend_page-warning"
-    >
-      <p>
-        ⚠️ <strong>{{ $t('face_swap_frontend.size_warning.title') }}</strong>
-      </p>
-      <p>{{ $t('face_swap_frontend.size_warning.content') }}</p>
-    </v-alert>
-
-    <!-- Control Buttons -->
-    <div class="face_swap_frontend_page-controls">
-      <v-btn
-        color="primary"
-        size="large"
-        :loading="isSwapping"
-        :disabled="!canSwap"
-        @click="performFaceSwap"
-      >
-        <v-icon start>mdi-face-recognition</v-icon>
-        {{ $t('face_swap_frontend.buttons.swap') }}
-      </v-btn>
-
-      <v-btn
-        color="secondary"
-        size="large"
-        variant="outlined"
-        @click="resetSwap"
-      >
-        <v-icon start>mdi-refresh</v-icon>
-        {{ $t('face_swap_frontend.buttons.reset') }}
-      </v-btn>
-
-      <v-btn
-        color="success"
-        size="large"
-        variant="outlined"
-        :disabled="!hasResult"
-        @click="downloadResult"
-      >
-        <v-icon start>mdi-download</v-icon>
-        {{ $t('face_swap_frontend.buttons.download') }}
-      </v-btn>
-    </div>
-
-    <!-- Status Message -->
-    <v-alert
-      v-if="statusMessage"
-      :type="statusType"
-      class="face_swap_frontend_page-status"
-      closable
-      @click:close="statusMessage = ''"
-    >
-      {{ statusMessage }}
-    </v-alert>
-
-    <!-- Detection Info (Collapsible) -->
-    <v-expansion-panels
-      v-model="expansionPanels"
-      class="face_swap_frontend_page-panels"
-    >
-      <v-expansion-panel :title="$t('face_swap_frontend.panels.detection')">
-        <v-expansion-panel-text>
-          <div class="face_swap_frontend_page-row">
-            <div class="face_swap_frontend_page-row-face_output">
-              <canvas
-                ref="detectionsVideo"
-                class="face_swap_frontend_page-row-face_output-canvas"
-                width="480"
-                height="360"
-              />
-              <canvas
-                ref="detectionsOutput"
-                class="face_swap_frontend_page-row-face_output-face_video"
-                width="480"
-                height="360"
-              />
-            </div>
-            <div class="face_swap_frontend_page-row-data_output">
-              <p class="face_swap_frontend_page-row-data_output-title">
-                faceBoundingBoxesData:
-              </p>
-              <p class="face_swap_frontend_page-row-data_output-content">
-                {{ faceBoundingBoxesData }}
-              </p>
-            </div>
-          </div>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-
-      <v-expansion-panel :title="$t('face_swap_frontend.panels.landmarks')">
-        <v-expansion-panel-text>
-          <div class="face_swap_frontend_page-row">
-            <div class="face_swap_frontend_page-row-face_output">
-              <canvas
-                ref="detectionsWithLandmarksVideo"
-                class="face_swap_frontend_page-row-face_output-canvas"
-                width="480"
-                height="360"
-              />
-              <canvas
-                ref="detectionsWithLandmarksOutput"
-                class="face_swap_frontend_page-row-face_output-face_video"
-                width="480"
-                height="360"
-              />
-            </div>
-            <div class="face_swap_frontend_page-row-data_output">
-              <p class="face_swap_frontend_page-row-data_output-title">
-                faceLandmarksData:
-              </p>
-              <p class="face_swap_frontend_page-row-data_output-content">
-                {{ faceLandmarksData }}
-              </p>
-            </div>
-          </div>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-
-      <v-expansion-panel :title="$t('face_swap_frontend.panels.expressions')">
-        <v-expansion-panel-text>
-          <div class="face_swap_frontend_page-row">
-            <div class="face_swap_frontend_page-row-face_output">
-              <canvas
-                ref="detectionsWithExpressionsVideo"
-                class="face_swap_frontend_page-row-face_output-canvas"
-                width="480"
-                height="360"
-              />
-              <canvas
-                ref="detectionsWithExpressionsOutput"
-                class="face_swap_frontend_page-row-face_output-face_video"
-                width="480"
-                height="360"
-              />
-            </div>
-            <div class="face_swap_frontend_page-row-data_output">
-              <p class="face_swap_frontend_page-row-data_output-title">
-                faceExpressionResultsData:
-              </p>
-              <p class="face_swap_frontend_page-row-data_output-content">
-                {{ faceExpressionResultsData }}
-              </p>
-            </div>
-          </div>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-    </v-expansion-panels>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -713,6 +472,247 @@ async function hadnleDetectionsWithExpressions(modelsPath = MODELS_PATH) {
   }
 }
 </script>
+
+<template>
+  <div class="face_swap_frontend_page">
+    <!-- Hero Section -->
+    <section class="face_swap_frontend_page-hero">
+      <div class="face_swap_frontend_page-hero-background">
+        <img
+          src="/img/face-swap/face-swap-v.02.png"
+          alt="Face Swap Frontend"
+          class="face_swap_frontend_page-hero-background-image"
+        />
+        <div class="face_swap_frontend_page-hero-background-overlay" />
+      </div>
+
+      <div class="face_swap_frontend_page-hero-content">
+        <h1 class="face_swap_frontend_page-hero-content-title">
+          {{ $t('face_swap_frontend.hero.title') }}
+        </h1>
+        <p class="face_swap_frontend_page-hero-content-subtitle">
+          {{ $t('face_swap_frontend.hero.subtitle') }}
+        </p>
+        <p class="face_swap_frontend_page-hero-content-description">
+          {{ $t('face_swap_frontend.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Usage Tip -->
+    <v-alert
+      type="info"
+      variant="tonal"
+      class="face_swap_frontend_page-tip"
+      closable
+    >
+      <strong>{{ $t('face_swap_frontend.tip.title') }}</strong>
+      {{ $t('face_swap_frontend.tip.content') }}
+    </v-alert>
+
+    <!-- Face Swap Section -->
+    <section class="face_swap_frontend_page-section">
+      <div class="face_swap_frontend_page-swap_section">
+        <div class="face_swap_frontend_page-swap_section-source">
+          <h3>{{ $t('face_swap_frontend.sections.source') }}</h3>
+          <ImageUpload
+            ref="sourceFaceEl"
+            v-model="sourceFaceImage"
+            :btn-label="$t('face_swap_frontend.upload.button')"
+            :label="$t('face_swap_frontend.upload.label')"
+            :mask-label="$t('face_swap_frontend.upload.mask')"
+            class="face_swap_frontend_page-swap_section-source-upload"
+            @change="handleSourceImageChange"
+          />
+        </div>
+
+        <div class="face_swap_frontend_page-swap_section-target">
+          <h3>{{ $t('face_swap_frontend.sections.target') }}</h3>
+          <div
+            class="face_swap_frontend_page-swap_section-target-video_container"
+          >
+            <video
+              ref="videoEl"
+              class="face_swap_frontend_page-swap_section-target-video"
+              width="480"
+              height="360"
+              autoplay
+              :srcObject="streamObj"
+            />
+            <canvas
+              ref="targetOverlayCanvas"
+              class="face_swap_frontend_page-swap_section-target-overlay"
+              width="480"
+              height="360"
+            />
+          </div>
+        </div>
+
+        <div class="face_swap_frontend_page-swap_section-result">
+          <h3>{{ $t('face_swap_frontend.sections.result') }}</h3>
+          <canvas
+            ref="resultCanvas"
+            class="face_swap_frontend_page-swap_section-result-canvas"
+            width="480"
+            height="360"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Image Size Warning -->
+    <v-alert
+      v-if="imageSizeWarning"
+      type="warning"
+      variant="tonal"
+      class="face_swap_frontend_page-warning"
+    >
+      <p>
+        ⚠️ <strong>{{ $t('face_swap_frontend.size_warning.title') }}</strong>
+      </p>
+      <p>{{ $t('face_swap_frontend.size_warning.content') }}</p>
+    </v-alert>
+
+    <!-- Control Buttons -->
+    <div class="face_swap_frontend_page-controls">
+      <v-btn
+        color="primary"
+        size="large"
+        :loading="isSwapping"
+        :disabled="!canSwap"
+        @click="performFaceSwap"
+      >
+        <v-icon start>mdi-face-recognition</v-icon>
+        {{ $t('face_swap_frontend.buttons.swap') }}
+      </v-btn>
+
+      <v-btn
+        color="secondary"
+        size="large"
+        variant="outlined"
+        @click="resetSwap"
+      >
+        <v-icon start>mdi-refresh</v-icon>
+        {{ $t('face_swap_frontend.buttons.reset') }}
+      </v-btn>
+
+      <v-btn
+        color="success"
+        size="large"
+        variant="outlined"
+        :disabled="!hasResult"
+        @click="downloadResult"
+      >
+        <v-icon start>mdi-download</v-icon>
+        {{ $t('face_swap_frontend.buttons.download') }}
+      </v-btn>
+    </div>
+
+    <!-- Status Message -->
+    <v-alert
+      v-if="statusMessage"
+      :type="statusType"
+      class="face_swap_frontend_page-status"
+      closable
+      @click:close="statusMessage = ''"
+    >
+      {{ statusMessage }}
+    </v-alert>
+
+    <!-- Detection Info (Collapsible) -->
+    <v-expansion-panels
+      v-model="expansionPanels"
+      class="face_swap_frontend_page-panels"
+    >
+      <v-expansion-panel :title="$t('face_swap_frontend.panels.detection')">
+        <v-expansion-panel-text>
+          <div class="face_swap_frontend_page-row">
+            <div class="face_swap_frontend_page-row-face_output">
+              <canvas
+                ref="detectionsVideo"
+                class="face_swap_frontend_page-row-face_output-canvas"
+                width="480"
+                height="360"
+              />
+              <canvas
+                ref="detectionsOutput"
+                class="face_swap_frontend_page-row-face_output-face_video"
+                width="480"
+                height="360"
+              />
+            </div>
+            <div class="face_swap_frontend_page-row-data_output">
+              <p class="face_swap_frontend_page-row-data_output-title">
+                faceBoundingBoxesData:
+              </p>
+              <p class="face_swap_frontend_page-row-data_output-content">
+                {{ faceBoundingBoxesData }}
+              </p>
+            </div>
+          </div>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+
+      <v-expansion-panel :title="$t('face_swap_frontend.panels.landmarks')">
+        <v-expansion-panel-text>
+          <div class="face_swap_frontend_page-row">
+            <div class="face_swap_frontend_page-row-face_output">
+              <canvas
+                ref="detectionsWithLandmarksVideo"
+                class="face_swap_frontend_page-row-face_output-canvas"
+                width="480"
+                height="360"
+              />
+              <canvas
+                ref="detectionsWithLandmarksOutput"
+                class="face_swap_frontend_page-row-face_output-face_video"
+                width="480"
+                height="360"
+              />
+            </div>
+            <div class="face_swap_frontend_page-row-data_output">
+              <p class="face_swap_frontend_page-row-data_output-title">
+                faceLandmarksData:
+              </p>
+              <p class="face_swap_frontend_page-row-data_output-content">
+                {{ faceLandmarksData }}
+              </p>
+            </div>
+          </div>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+
+      <v-expansion-panel :title="$t('face_swap_frontend.panels.expressions')">
+        <v-expansion-panel-text>
+          <div class="face_swap_frontend_page-row">
+            <div class="face_swap_frontend_page-row-face_output">
+              <canvas
+                ref="detectionsWithExpressionsVideo"
+                class="face_swap_frontend_page-row-face_output-canvas"
+                width="480"
+                height="360"
+              />
+              <canvas
+                ref="detectionsWithExpressionsOutput"
+                class="face_swap_frontend_page-row-face_output-face_video"
+                width="480"
+                height="360"
+              />
+            </div>
+            <div class="face_swap_frontend_page-row-data_output">
+              <p class="face_swap_frontend_page-row-data_output-title">
+                faceExpressionResultsData:
+              </p>
+              <p class="face_swap_frontend_page-row-data_output-content">
+                {{ faceExpressionResultsData }}
+              </p>
+            </div>
+          </div>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </div>
+</template>
 
 <style lang="scss">
 .face_swap_frontend_page {

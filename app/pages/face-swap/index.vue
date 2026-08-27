@@ -1,3 +1,52 @@
+<script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+const runtimeConfig = useRuntimeConfig();
+
+// 偵測是否為 Vercel 部署環境（serverless）
+const isVercel = computed(() => runtimeConfig.public.isVercel === true);
+
+useHeadMataData({
+  title: t('face_swap_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('face_swap_page.hero.description')
+    }
+  ]
+});
+
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('face_swap_page.hero.title'),
+    description: t('face_swap_page.hero.description'),
+    url: `${DOMAIN}${localePath('/face-swap')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/face-swap/face-swap-v.02.png`
+  })
+]);
+
+// Face Swap Versions
+const faceSwapVersions = computed(() => [
+  {
+    to: localePath('/face-swap/frontend'),
+    label: t('face_swap_page.versions.frontend')
+  },
+  {
+    to: isVercel.value ? null : localePath('/face-swap/backend'),
+    label: t('face_swap_page.versions.backend'),
+    badge: isVercel.value
+      ? t('face_swap_page.badges.unavailable')
+      : t('face_swap_page.badges.developing'),
+    disabled: isVercel.value
+  }
+]);
+</script>
+
 <template>
   <div class="face_swap_page">
     <!-- Hero Section -->
@@ -69,55 +118,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-const localePath = useLocalePath();
-const runtimeConfig = useRuntimeConfig();
-
-// 偵測是否為 Vercel 部署環境（serverless）
-const isVercel = computed(() => runtimeConfig.public.isVercel === true);
-
-useHeadMataData({
-  title: t('face_swap_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('face_swap_page.hero.description')
-    }
-  ]
-});
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'WebPage',
-    name: t('face_swap_page.hero.title'),
-    description: t('face_swap_page.hero.description'),
-    url: `${DOMAIN}${localePath('/face-swap')}`,
-    inLanguage: ['zh-TW', 'en'],
-    image: `${DOMAIN}/img/face-swap/face-swap-v.02.png`
-  })
-]);
-
-// Face Swap Versions
-const faceSwapVersions = computed(() => [
-  {
-    to: localePath('/face-swap/frontend'),
-    label: t('face_swap_page.versions.frontend')
-  },
-  {
-    to: isVercel.value ? null : localePath('/face-swap/backend'),
-    label: t('face_swap_page.versions.backend'),
-    badge: isVercel.value
-      ? t('face_swap_page.badges.unavailable')
-      : t('face_swap_page.badges.developing'),
-    disabled: isVercel.value
-  }
-]);
-</script>
 
 <style lang="scss" scoped>
 // ========================================

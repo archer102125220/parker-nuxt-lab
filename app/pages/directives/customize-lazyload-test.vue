@@ -1,3 +1,17 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('lazyload_test_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('lazyload_test_page.hero.description')
+    }
+  ]
+});
+</script>
+
 <template>
   <div class="lazyload_test_page">
     <!-- Hero Section -->
@@ -29,14 +43,18 @@
         />
 
         <div class="lazyload_test_page-demo-spacer">
-          <p class="lazyload_test_page-demo-spacer-text">⬇️ 請繼續往下滾動 ⬇️</p>
+          <p class="lazyload_test_page-demo-spacer-text">
+            ⬇️ 請繼續往下滾動 ⬇️
+          </p>
           <p class="lazyload_test_page-demo-spacer-hint">
-            此區域為測試用空白區塊，確保懶加載圖片在滾動前不會被提前載入。<br/>
+            此區域為測試用空白區塊，確保懶加載圖片在滾動前不會被提前載入。<br />
             當您滾動到下方圖片可見區域時，圖片才會開始加載。
           </p>
         </div>
 
-        <h3 class="lazyload_test_page-demo-label">懶加載圖片 (滾動到可見區域時加載)：</h3>
+        <h3 class="lazyload_test_page-demo-label">
+          懶加載圖片 (滾動到可見區域時加載)：
+        </h3>
         <img
           v-customize-lazyload="'/img/test-img/1499231493_936.gif'"
           class="lazyload_test_page-demo-lazyload"
@@ -45,20 +63,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('lazyload_test_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('lazyload_test_page.hero.description')
-    }
-  ]
-});
-</script>
 
 <style lang="scss" scoped>
 .lazyload_test_page {
@@ -80,7 +84,7 @@ useHeadMataData({
       z-index: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #44A08D 0%, #4ECDC4 100%);
+      background: linear-gradient(135deg, #44a08d 0%, #4ecdc4 100%);
 
       &-overlay {
         position: absolute;
@@ -88,7 +92,11 @@ useHeadMataData({
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 
@@ -161,14 +169,18 @@ useHeadMataData({
       margin: 40px 0;
       padding: 40px;
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.1) 0%,
+        rgba(78, 205, 196, 0.1) 100%
+      );
       border: 2px dashed rgba(68, 160, 141, 0.3);
 
       &-text {
         margin: 0 0 16px 0;
         font-size: 24px;
         font-weight: 600;
-        color: #44A08D;
+        color: #44a08d;
         animation: bounce 2s infinite;
       }
 
@@ -182,8 +194,13 @@ useHeadMataData({
     }
 
     @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(8px); }
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(8px);
+      }
     }
 
     &-lazyload {

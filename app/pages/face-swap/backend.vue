@@ -1,3 +1,133 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('face_swap_backend.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('face_swap_backend.hero.description')
+    }
+  ]
+});
+
+const localePath = useLocalePath();
+
+// Refs
+const sourceFaceEl = useTemplateRef('sourceFaceEl');
+const targetFaceEl = useTemplateRef('targetFaceEl');
+
+// State
+const sourceFaceImage = ref('');
+const targetFaceImage = ref('');
+const resultImage = ref('');
+const isProcessing = ref(false);
+const statusMessage = ref('');
+const statusType = ref('info');
+
+// Computed
+const canProcess = computed(() => {
+  return (
+    sourceFaceImage.value !== '' &&
+    sourceFaceImage.value !== null &&
+    targetFaceImage.value !== '' &&
+    targetFaceImage.value !== null
+  );
+});
+
+// Methods
+async function handleFaceSwap() {
+  if (!canProcess.value) {
+    showStatus(t('face_swap_backend.status.no_source'), 'warning');
+    return;
+  }
+
+  isProcessing.value = true;
+  showStatus(t('face_swap_backend.status.processing'), 'info');
+
+  try {
+    // Get blobs from preview elements
+    const sourceBlob = await getImageBlob(sourceFaceEl.value?.previewEl);
+    const targetBlob = await getImageBlob(targetFaceEl.value?.previewEl);
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('sourceImage', sourceBlob, 'source.png');
+    formData.append('targetImage', targetBlob, 'target.png');
+
+    // Call API using service
+    const { $faceSwap } = useNuxtApp();
+    const response = await $faceSwap.POST_faceSwapProcess(formData);
+
+    if (response.success === true) {
+      resultImage.value = response.resultImage;
+      showStatus(t('face_swap_backend.status.success'), 'success');
+    } else {
+      throw new Error(response.error || t('face_swap_backend.status.error'));
+    }
+  } catch (error) {
+    console.error('Face swap error:', error);
+    showStatus(
+      error.message ||
+        error?.response?.data?.message ||
+        t('face_swap_backend.status.error_fallback'),
+      'error'
+    );
+  } finally {
+    isProcessing.value = false;
+  }
+}
+
+function getImageBlob(imgEl) {
+  return new Promise((resolve, reject) => {
+    if (imgEl === null || imgEl === undefined) {
+      reject(new Error('圖片元素不存在'));
+      return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = imgEl.naturalWidth || imgEl.width;
+    canvas.height = imgEl.naturalHeight || imgEl.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(imgEl, 0, 0);
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('無法轉換圖片為 Blob'));
+      }
+    }, 'image/png');
+  });
+}
+
+function resetSwap() {
+  sourceFaceImage.value = '';
+  targetFaceImage.value = '';
+  resultImage.value = '';
+  statusMessage.value = '';
+}
+
+function downloadResult() {
+  if (resultImage.value === '') {
+    return;
+  }
+
+  const link = document.createElement('a');
+  link.download = `face-swap-backend-${Date.now()}.png`;
+  link.href = resultImage.value;
+  link.click();
+
+  showStatus(t('face_swap_backend.status.downloaded'), 'success');
+}
+
+function showStatus(message, type = 'info') {
+  statusMessage.value = message;
+  statusType.value = type;
+}
+</script>
+
 <template>
   <div class="face_swap_backend_page">
     <!-- Hero Section -->
@@ -131,15 +261,15 @@
             </v-list-item>
             <v-list-item prepend-icon="mdi-face-recognition">
               <v-list-item-title>face-api.js + TensorFlow.js</v-list-item-title>
-              <v-list-item-subtitle
-                >{{ $t('face_swap_backend.tech_info.detection') }}</v-list-item-subtitle
-              >
+              <v-list-item-subtitle>{{
+                $t('face_swap_backend.tech_info.detection')
+              }}</v-list-item-subtitle>
             </v-list-item>
             <v-list-item prepend-icon="mdi-palette">
               <v-list-item-title>node-canvas</v-list-item-title>
-              <v-list-item-subtitle
-                >{{ $t('face_swap_backend.tech_info.processing') }}</v-list-item-subtitle
-              >
+              <v-list-item-subtitle>{{
+                $t('face_swap_backend.tech_info.processing')
+              }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
         </v-expansion-panel-text>
@@ -147,134 +277,6 @@
     </v-expansion-panels>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('face_swap_backend.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('face_swap_backend.hero.description')
-    }
-  ]
-});
-
-const localePath = useLocalePath();
-
-// Refs
-const sourceFaceEl = useTemplateRef('sourceFaceEl');
-const targetFaceEl = useTemplateRef('targetFaceEl');
-
-// State
-const sourceFaceImage = ref('');
-const targetFaceImage = ref('');
-const resultImage = ref('');
-const isProcessing = ref(false);
-const statusMessage = ref('');
-const statusType = ref('info');
-
-// Computed
-const canProcess = computed(() => {
-  return (
-    sourceFaceImage.value !== '' &&
-    sourceFaceImage.value !== null &&
-    targetFaceImage.value !== '' &&
-    targetFaceImage.value !== null
-  );
-});
-
-// Methods
-async function handleFaceSwap() {
-  if (!canProcess.value) {
-    showStatus(t('face_swap_backend.status.no_source'), 'warning');
-    return;
-  }
-
-  isProcessing.value = true;
-  showStatus(t('face_swap_backend.status.processing'), 'info');
-
-  try {
-    // Get blobs from preview elements
-    const sourceBlob = await getImageBlob(sourceFaceEl.value?.previewEl);
-    const targetBlob = await getImageBlob(targetFaceEl.value?.previewEl);
-
-    // Create FormData
-    const formData = new FormData();
-    formData.append('sourceImage', sourceBlob, 'source.png');
-    formData.append('targetImage', targetBlob, 'target.png');
-
-    // Call API using service
-    const { $faceSwap } = useNuxtApp();
-    const response = await $faceSwap.POST_faceSwapProcess(formData);
-
-    if (response.success === true) {
-      resultImage.value = response.resultImage;
-      showStatus(t('face_swap_backend.status.success'), 'success');
-    } else {
-      throw new Error(response.error || t('face_swap_backend.status.error'));
-    }
-  } catch (error) {
-    console.error('Face swap error:', error);
-    showStatus(
-      error.message || error?.response?.data?.message || t('face_swap_backend.status.error_fallback'),
-      'error'
-    );
-  } finally {
-    isProcessing.value = false;
-  }
-}
-
-function getImageBlob(imgEl) {
-  return new Promise((resolve, reject) => {
-    if (imgEl === null || imgEl === undefined) {
-      reject(new Error('圖片元素不存在'));
-      return;
-    }
-
-    const canvas = document.createElement('canvas');
-    canvas.width = imgEl.naturalWidth || imgEl.width;
-    canvas.height = imgEl.naturalHeight || imgEl.height;
-
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(imgEl, 0, 0);
-
-    canvas.toBlob((blob) => {
-      if (blob) {
-        resolve(blob);
-      } else {
-        reject(new Error('無法轉換圖片為 Blob'));
-      }
-    }, 'image/png');
-  });
-}
-
-function resetSwap() {
-  sourceFaceImage.value = '';
-  targetFaceImage.value = '';
-  resultImage.value = '';
-  statusMessage.value = '';
-}
-
-function downloadResult() {
-  if (resultImage.value === '') {
-    return;
-  }
-
-  const link = document.createElement('a');
-  link.download = `face-swap-backend-${Date.now()}.png`;
-  link.href = resultImage.value;
-  link.click();
-
-  showStatus(t('face_swap_backend.status.downloaded'), 'success');
-}
-
-function showStatus(message, type = 'info') {
-  statusMessage.value = message;
-  statusType.value = type;
-}
-</script>
 
 <style lang="scss" scoped>
 .face_swap_backend_page {
@@ -332,7 +334,11 @@ function showStatus(message, type = 'info') {
         height: 100%;
 
         // Visual
-        background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(68, 160, 141, 0.9) 0%,
+          rgba(78, 205, 196, 0.85) 100%
+        );
       }
     }
 

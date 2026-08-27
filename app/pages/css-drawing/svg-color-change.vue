@@ -1,3 +1,13 @@
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('svg_color_change_page.hero.title')
+});
+
+const color = ref('#000000');
+</script>
+
 <template>
   <div class="svg_color_change_page">
     <!-- Hero Section -->
@@ -20,7 +30,10 @@
     </section>
 
     <!-- Main Content -->
-    <section class="svg_color_change_page-section" :style="{ '--change_color': color }">
+    <section
+      class="svg_color_change_page-section"
+      :style="{ '--change_color': color }"
+    >
       <form class="svg_color_change_page-form" @submit.prevent="">
         <v-color-picker v-model="color" />
         <p class="svg_color_change_page-form-value">{{ color }}</p>
@@ -32,16 +45,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('svg_color_change_page.hero.title')
-});
-
-const color = ref('#000000');
-</script>
 
 <style lang="scss">
 // https://codepen.io/noahblon/post/coloring-svgs-in-css-background-images

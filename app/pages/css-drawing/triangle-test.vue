@@ -1,3 +1,9 @@
+<script setup>
+useHeadMataData({
+  title: 'css三角形測試'
+});
+</script>
+
 <template>
   <div class="triangle_test_page">
     <!-- Hero Section -->
@@ -43,12 +49,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-useHeadMataData({
-  title: 'css三角形測試'
-});
-</script>
 
 <style lang="scss">
 // https://www.cnblogs.com/weiqinl/p/7048205.html

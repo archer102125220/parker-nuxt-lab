@@ -1,3 +1,48 @@
+<script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+useHeadMataData({
+  title: t('directives_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('directives_page.hero.description')
+    }
+  ]
+});
+
+const DOMAIN = import.meta.env.VITE_DOMAIN || '';
+
+// Schema.org 結構化資料 (nuxt-schema-org)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: t('directives_page.hero.title'),
+    description: t('directives_page.hero.description'),
+    url: `${DOMAIN}${localePath('/directives')}`,
+    inLanguage: ['zh-TW', 'en'],
+    image: `${DOMAIN}/img/vue-directives/vue-directives-v.04.webp`
+  })
+]);
+
+// Directives List
+const directivesList = computed(() => [
+  {
+    to: localePath('/directives/customize-ripple-test'),
+    label: '自製 Ripple 指令測試'
+  },
+  {
+    to: localePath('/directives/customize-lazyload-test'),
+    label: '自製 Lazyload 指令測試'
+  },
+  {
+    to: localePath('/directives/ripples'),
+    label: t('ripples_directive_page.hero.title')
+  }
+]);
+</script>
+
 <template>
   <div class="directives_page">
     <!-- Hero Section -->
@@ -51,51 +96,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-const { t } = useI18n();
-const localePath = useLocalePath();
-
-useHeadMataData({
-  title: t('directives_page.hero.title'),
-  meta: [
-    {
-      name: 'description',
-      content: t('directives_page.hero.description')
-    }
-  ]
-});
-
-const DOMAIN = import.meta.env.VITE_DOMAIN || '';
-
-// Schema.org 結構化資料 (nuxt-schema-org)
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'WebPage',
-    name: t('directives_page.hero.title'),
-    description: t('directives_page.hero.description'),
-    url: `${DOMAIN}${localePath('/directives')}`,
-    inLanguage: ['zh-TW', 'en'],
-    image: `${DOMAIN}/img/vue-directives/vue-directives-v.04.webp`
-  })
-]);
-
-// Directives List
-const directivesList = computed(() => [
-  {
-    to: localePath('/directives/customize-ripple-test'),
-    label: '自製 Ripple 指令測試'
-  },
-  {
-    to: localePath('/directives/customize-lazyload-test'),
-    label: '自製 Lazyload 指令測試'
-  },
-  {
-    to: localePath('/directives/ripples'),
-    label: t('ripples_directive_page.hero.title')
-  }
-]);
-</script>
 
 <style lang="scss" scoped>
 // ========================================
