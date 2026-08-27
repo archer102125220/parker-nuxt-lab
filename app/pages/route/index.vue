@@ -1,59 +1,3 @@
-<template>
-  <div class="route_page">
-    <!-- Hero Section -->
-    <section class="route_page-hero">
-      <div class="route_page-hero-background">
-        <img
-          src="/img/route/route-v.05.webp"
-          alt="Route Tests"
-          class="route_page-hero-background-image"
-        />
-        <div class="route_page-hero-background-overlay" />
-      </div>
-
-      <div class="route_page-hero-content">
-        <h1 class="route_page-hero-content-title">
-          {{ $t('route_page.hero.title') }}
-        </h1>
-        <p class="route_page-hero-content-subtitle">
-          {{ $t('route_page.hero.subtitle') }}
-        </p>
-        <p class="route_page-hero-content-description">
-          {{ $t('route_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="route_page-intro">
-      <div class="route_page-section-container">
-        <p class="route_page-intro-text">
-          {{ $t('route_page.intro') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Route Tests List -->
-    <section class="route_page-section">
-      <div class="route_page-section-container">
-        <h2 class="route_page-section-title">
-          路由測試列表
-        </h2>
-        <div class="route_page-grid">
-          <LinkCard
-            v-for="test in routeTests"
-            :key="test.to"
-            :to="test.to"
-            :label="test.label"
-            :banner="test.banner"
-            class="route_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -94,6 +38,60 @@ const routeTests = computed(() => [
   }
 ]);
 </script>
+
+<template>
+  <div class="route_page">
+    <!-- Hero Section -->
+    <section class="route_page-hero">
+      <div class="route_page-hero-background">
+        <img
+          src="/img/route/route-v.05.webp"
+          alt="Route Tests"
+          class="route_page-hero-background-image"
+        />
+        <div class="route_page-hero-background-overlay" />
+      </div>
+
+      <div class="route_page-hero-content">
+        <h1 class="route_page-hero-content-title">
+          {{ $t('route_page.hero.title') }}
+        </h1>
+        <p class="route_page-hero-content-subtitle">
+          {{ $t('route_page.hero.subtitle') }}
+        </p>
+        <p class="route_page-hero-content-description">
+          {{ $t('route_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="route_page-intro">
+      <div class="route_page-section-container">
+        <p class="route_page-intro-text">
+          {{ $t('route_page.intro') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Route Tests List -->
+    <section class="route_page-section">
+      <div class="route_page-section-container">
+        <h2 class="route_page-section-title">路由測試列表</h2>
+        <div class="route_page-grid">
+          <LinkCard
+            v-for="test in routeTests"
+            :key="test.to"
+            :to="test.to"
+            :label="test.label"
+            :banner="test.banner"
+            class="route_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 // ========================================
@@ -144,7 +142,11 @@ const routeTests = computed(() => [
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -287,8 +289,12 @@ const routeTests = computed(() => [
     // Animation
     animation: fade-in-up 0.5s ease-out both;
 
-    &:nth-child(1) { animation-delay: 0.05s; }
-    &:nth-child(2) { animation-delay: 0.1s; }
+    &:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
   }
 }
 

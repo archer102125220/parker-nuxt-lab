@@ -1,3 +1,44 @@
+<script>
+import { v4 as uuidv4 } from 'uuid';
+</script>
+<script setup>
+const { t } = useI18n();
+const localePath = useLocalePath();
+const router = useRouter();
+
+useHeadMataData({
+  title: t('sse_room_get_page.hero.title')
+});
+
+const roomId = ref('');
+
+const disabledJoinLink = computed(
+  () =>
+    typeof roomId.value !== 'string' ||
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+      roomId.value
+    ) === false
+);
+
+const rules = computed(
+  () => () =>
+    disabledJoinLink.value === false ||
+    roomId.value === '' ||
+    '無效的 Room ID 格式'
+);
+
+function createRoom() {
+  const newRoomId = uuidv4();
+  router.push(localePath(`/server-sent-event-test/room-get/${newRoomId}`));
+}
+
+function joinRoom() {
+  if (!disabledJoinLink.value) {
+    router.push(localePath(`/server-sent-event-test/room-get/${roomId.value}`));
+  }
+}
+</script>
+
 <template>
   <div class="sse_room_get_entry_page">
     <!-- Hero Section -->
@@ -24,23 +65,22 @@
       <div class="sse_room_get_entry_page-section-actions">
         <!-- Create Room -->
         <div class="sse_room_get_entry_page-section-actions-create">
-          <h2 class="sse_room_get_entry_page-section-actions-create-title">建立房間</h2>
+          <h2 class="sse_room_get_entry_page-section-actions-create-title">
+            建立房間
+          </h2>
           <p class="sse_room_get_entry_page-section-actions-create-desc">
             自動產生 Room ID 並進入房間
           </p>
-          <v-btn
-            color="primary"
-            size="large"
-            block
-            @click="createRoom"
-          >
+          <v-btn color="primary" size="large" block @click="createRoom">
             建立 SSE 房間
           </v-btn>
         </div>
 
         <!-- Join Room -->
         <div class="sse_room_get_entry_page-section-actions-join">
-          <h2 class="sse_room_get_entry_page-section-actions-join-title">加入房間</h2>
+          <h2 class="sse_room_get_entry_page-section-actions-join-title">
+            加入房間
+          </h2>
           <p class="sse_room_get_entry_page-section-actions-join-desc">
             輸入 Room ID 加入現有房間
           </p>
@@ -67,44 +107,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-import { v4 as uuidv4 } from 'uuid';
-
-const { t } = useI18n();
-const localePath = useLocalePath();
-const router = useRouter();
-
-useHeadMataData({
-  title: t('sse_room_get_page.hero.title')
-});
-
-const roomId = ref('');
-
-const disabledJoinLink = computed(
-  () =>
-    typeof roomId.value !== 'string' ||
-    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
-      roomId.value
-    ) === false
-);
-
-const rules = computed(
-  () => () =>
-    disabledJoinLink.value === false || roomId.value === '' || '無效的 Room ID 格式'
-);
-
-function createRoom() {
-  const newRoomId = uuidv4();
-  router.push(localePath(`/server-sent-event-test/room-get/${newRoomId}`));
-}
-
-function joinRoom() {
-  if (!disabledJoinLink.value) {
-    router.push(localePath(`/server-sent-event-test/room-get/${roomId.value}`));
-  }
-}
-</script>
 
 <style lang="scss">
 .sse_room_get_entry_page {

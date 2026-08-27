@@ -1,108 +1,7 @@
-<template>
-  <div class="sse_room_get_page">
-    <!-- Hero Section -->
-    <section class="sse_room_get_page-hero">
-      <div class="sse_room_get_page-hero-background">
-        <div class="sse_room_get_page-hero-background-overlay" />
-      </div>
-
-      <div class="sse_room_get_page-hero-content">
-        <h1 class="sse_room_get_page-hero-content-title">
-          {{ $t('sse_room_get_page.hero.title') }}
-        </h1>
-        <p class="sse_room_get_page-hero-content-subtitle">
-          {{ $t('sse_room_get_page.hero.subtitle') }}
-        </p>
-        <p class="sse_room_get_page-hero-content-description">
-          {{ $t('sse_room_get_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="sse_room_get_page-section">
-      <!-- Room Info -->
-      <div class="sse_room_get_page-section-room_info">
-        <div class="sse_room_get_page-section-room_info-row">
-          <span class="sse_room_get_page-section-room_info-row-label">Room ID:</span>
-          <code class="sse_room_get_page-section-room_info-row-id">{{ route.params.uuId }}</code>
-          <v-btn
-            icon
-            size="x-small"
-            variant="text"
-            class="sse_room_get_page-section-room_info-row-copy"
-            title="複製 Room ID"
-            @click="copyRoomId"
-          >
-            <v-icon size="16">{{ copiedId ? 'mdi-check' : 'mdi-content-copy' }}</v-icon>
-          </v-btn>
-          <span v-if="copiedId" class="sse_room_get_page-section-room_info-row-feedback">已複製！</span>
-        </div>
-        <div class="sse_room_get_page-section-room_info-row">
-          <span class="sse_room_get_page-section-room_info-row-label">分享網址:</span>
-          <v-btn
-            size="small"
-            variant="tonal"
-            color="primary"
-            class="sse_room_get_page-section-room_info-row-url_btn"
-            @click="copyUrl"
-          >
-            <v-icon size="16" class="mr-1">{{ copiedUrl ? 'mdi-check' : 'mdi-link' }}</v-icon>
-            {{ copiedUrl ? '已複製網址！' : '複製網址' }}
-          </v-btn>
-        </div>
-      </div>
-
-
-      <!-- TODO: 發送訊息功能需要調整伺服器端結構
-           目前 SSE 是單向通訊（伺服器→客戶端），要實現發送訊息需要：
-           1. 建立共享的 EventEmitter 或訊息佇列 (可參考 server/utils/eventEmitter.js)
-           2. 新增 POST endpoint 接收客戶端訊息並觸發事件
-           3. SSE 連線訂閱該事件來廣播訊息給同房間的其他客戶端
-      -->
-      <!--
-      <div class="sse_room_get_page-section-send">
-        <h3 class="sse_room_get_page-section-send-title">發送訊息</h3>
-        <div class="sse_room_get_page-section-send-form">
-          <v-text-field
-            v-model="messageToSend"
-            label="輸入訊息"
-            placeholder="輸入要發送的測試訊息..."
-            class="sse_room_get_page-section-send-form-input"
-            hide-details
-          />
-          <v-btn
-            color="primary"
-            :disabled="!messageToSend"
-            :loading="sending"
-            @click="sendMessage"
-          >
-            發送
-          </v-btn>
-        </div>
-      </div>
-      -->
-
-      <!-- Messages -->
-      <p class="sse_room_get_page-section-label">接收到的 data：</p>
-      <div class="sse_room_get_page-section-messages">
-        <p
-          v-for="(SSEMessage, index) in SSEMessageList"
-          :key="index"
-          class="sse_room_get_page-section-messages-item"
-        >
-          {{ SSEMessage }}
-        </p>
-        <p v-if="SSEMessageList.length === 0" class="sse_room_get_page-section-messages-empty">
-          尚未收到任何訊息...
-        </p>
-      </div>
-    </section>
-  </div>
-</template>
-
-<script setup>
+<script>
 import _cloneDeep from 'lodash/cloneDeep';
+</script>
+<script setup>
 const { t } = useI18n();
 
 useHeadMataData({
@@ -188,6 +87,125 @@ watch(
   { deep: true }
 );
 </script>
+
+<template>
+  <div class="sse_room_get_page">
+    <!-- Hero Section -->
+    <section class="sse_room_get_page-hero">
+      <div class="sse_room_get_page-hero-background">
+        <div class="sse_room_get_page-hero-background-overlay" />
+      </div>
+
+      <div class="sse_room_get_page-hero-content">
+        <h1 class="sse_room_get_page-hero-content-title">
+          {{ $t('sse_room_get_page.hero.title') }}
+        </h1>
+        <p class="sse_room_get_page-hero-content-subtitle">
+          {{ $t('sse_room_get_page.hero.subtitle') }}
+        </p>
+        <p class="sse_room_get_page-hero-content-description">
+          {{ $t('sse_room_get_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="sse_room_get_page-section">
+      <!-- Room Info -->
+      <div class="sse_room_get_page-section-room_info">
+        <div class="sse_room_get_page-section-room_info-row">
+          <span class="sse_room_get_page-section-room_info-row-label"
+            >Room ID:</span
+          >
+          <code class="sse_room_get_page-section-room_info-row-id">{{
+            route.params.uuId
+          }}</code>
+          <v-btn
+            icon
+            size="x-small"
+            variant="text"
+            class="sse_room_get_page-section-room_info-row-copy"
+            title="複製 Room ID"
+            @click="copyRoomId"
+          >
+            <v-icon size="16">{{
+              copiedId ? 'mdi-check' : 'mdi-content-copy'
+            }}</v-icon>
+          </v-btn>
+          <span
+            v-if="copiedId"
+            class="sse_room_get_page-section-room_info-row-feedback"
+            >已複製！</span
+          >
+        </div>
+        <div class="sse_room_get_page-section-room_info-row">
+          <span class="sse_room_get_page-section-room_info-row-label"
+            >分享網址:</span
+          >
+          <v-btn
+            size="small"
+            variant="tonal"
+            color="primary"
+            class="sse_room_get_page-section-room_info-row-url_btn"
+            @click="copyUrl"
+          >
+            <v-icon size="16" class="mr-1">{{
+              copiedUrl ? 'mdi-check' : 'mdi-link'
+            }}</v-icon>
+            {{ copiedUrl ? '已複製網址！' : '複製網址' }}
+          </v-btn>
+        </div>
+      </div>
+
+      <!-- TODO: 發送訊息功能需要調整伺服器端結構
+           目前 SSE 是單向通訊（伺服器→客戶端），要實現發送訊息需要：
+           1. 建立共享的 EventEmitter 或訊息佇列 (可參考 server/utils/eventEmitter.js)
+           2. 新增 POST endpoint 接收客戶端訊息並觸發事件
+           3. SSE 連線訂閱該事件來廣播訊息給同房間的其他客戶端
+      -->
+      <!--
+      <div class="sse_room_get_page-section-send">
+        <h3 class="sse_room_get_page-section-send-title">發送訊息</h3>
+        <div class="sse_room_get_page-section-send-form">
+          <v-text-field
+            v-model="messageToSend"
+            label="輸入訊息"
+            placeholder="輸入要發送的測試訊息..."
+            class="sse_room_get_page-section-send-form-input"
+            hide-details
+          />
+          <v-btn
+            color="primary"
+            :disabled="!messageToSend"
+            :loading="sending"
+            @click="sendMessage"
+          >
+            發送
+          </v-btn>
+        </div>
+      </div>
+      -->
+
+      <!-- Messages -->
+      <p class="sse_room_get_page-section-label">接收到的 data：</p>
+      <div class="sse_room_get_page-section-messages">
+        <p
+          v-for="(SSEMessage, index) in SSEMessageList"
+          :key="index"
+          class="sse_room_get_page-section-messages-item"
+        >
+          {{ SSEMessage }}
+        </p>
+        <p
+          v-if="SSEMessageList.length === 0"
+          class="sse_room_get_page-section-messages-empty"
+        >
+          尚未收到任何訊息...
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .sse_room_get_page {

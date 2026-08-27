@@ -1,54 +1,3 @@
-<template>
-  <div class="params_back_test_page">
-    <!-- Hero Section -->
-    <section class="params_back_test_page-hero">
-      <div class="params_back_test_page-hero-background">
-        <div class="params_back_test_page-hero-background-overlay" />
-      </div>
-
-      <div class="params_back_test_page-hero-content">
-        <h1 class="params_back_test_page-hero-content-title">
-          {{ $t('params_back_test_page.hero.title') }}
-        </h1>
-        <p class="params_back_test_page-hero-content-subtitle">
-          {{ $t('params_back_test_page.hero.subtitle') }}
-        </p>
-        <p class="params_back_test_page-hero-content-description">
-          {{ $t('params_back_test_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="params_back_test_page-section">
-      <div class="params_back_test_page-section-value">
-        <span class="params_back_test_page-section-value-label">目前 Params 值：</span>
-        <span class="params_back_test_page-section-value-number">{{ paramsTestData }}</span>
-      </div>
-
-      <div class="params_back_test_page-section-actions">
-        <v-btn color="primary" size="large" @click="handleRouteParamsPush">
-          <v-icon class="mr-2">mdi-plus</v-icon>
-          增加 Params (Push)
-        </v-btn>
-        <v-btn color="primary" variant="tonal" size="large" @click="handleRouteParamsReplace">
-          <v-icon class="mr-2">mdi-swap-horizontal</v-icon>
-          增加 Params (Replace)
-        </v-btn>
-      </div>
-
-      <div class="params_back_test_page-section-info">
-        <p><strong>Push：</strong>會增加瀏覽器歷史紀錄，可以按上一頁返回</p>
-        <p><strong>Replace：</strong>會替換當前歷史紀錄，無法按上一頁返回</p>
-        <p class="params_back_test_page-section-info-note">
-          <strong>注意：</strong>動態參數修改可能需要特殊處理
-          (<a href="https://github.com/nuxt/nuxt/issues/27982" target="_blank">相關 Issue</a>)
-        </p>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 // https://github.com/nuxt/nuxt/issues/27982
 const { t } = useI18n();
@@ -91,6 +40,69 @@ function handleRouteParamsReplace() {
   });
 }
 </script>
+
+<template>
+  <div class="params_back_test_page">
+    <!-- Hero Section -->
+    <section class="params_back_test_page-hero">
+      <div class="params_back_test_page-hero-background">
+        <div class="params_back_test_page-hero-background-overlay" />
+      </div>
+
+      <div class="params_back_test_page-hero-content">
+        <h1 class="params_back_test_page-hero-content-title">
+          {{ $t('params_back_test_page.hero.title') }}
+        </h1>
+        <p class="params_back_test_page-hero-content-subtitle">
+          {{ $t('params_back_test_page.hero.subtitle') }}
+        </p>
+        <p class="params_back_test_page-hero-content-description">
+          {{ $t('params_back_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="params_back_test_page-section">
+      <div class="params_back_test_page-section-value">
+        <span class="params_back_test_page-section-value-label"
+          >目前 Params 值：</span
+        >
+        <span class="params_back_test_page-section-value-number">{{
+          paramsTestData
+        }}</span>
+      </div>
+
+      <div class="params_back_test_page-section-actions">
+        <v-btn color="primary" size="large" @click="handleRouteParamsPush">
+          <v-icon class="mr-2">mdi-plus</v-icon>
+          增加 Params (Push)
+        </v-btn>
+        <v-btn
+          color="primary"
+          variant="tonal"
+          size="large"
+          @click="handleRouteParamsReplace"
+        >
+          <v-icon class="mr-2">mdi-swap-horizontal</v-icon>
+          增加 Params (Replace)
+        </v-btn>
+      </div>
+
+      <div class="params_back_test_page-section-info">
+        <p><strong>Push：</strong>會增加瀏覽器歷史紀錄，可以按上一頁返回</p>
+        <p><strong>Replace：</strong>會替換當前歷史紀錄，無法按上一頁返回</p>
+        <p class="params_back_test_page-section-info-note">
+          <strong>注意：</strong>動態參數修改可能需要特殊處理 (<a
+            href="https://github.com/nuxt/nuxt/issues/27982"
+            target="_blank"
+            >相關 Issue</a
+          >)
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .params_back_test_page {

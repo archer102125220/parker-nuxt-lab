@@ -1,59 +1,3 @@
-<template>
-  <div class="sse_page">
-    <!-- Hero Section -->
-    <section class="sse_page-hero">
-      <div class="sse_page-hero-background">
-        <img
-          src="/img/server-sent-event/server-sent-event-v.04.webp"
-          alt="Server-Sent Events"
-          class="sse_page-hero-background-image"
-        />
-        <div class="sse_page-hero-background-overlay" />
-      </div>
-
-      <div class="sse_page-hero-content">
-        <h1 class="sse_page-hero-content-title">
-          {{ $t('sse_page.hero.title') }}
-        </h1>
-        <p class="sse_page-hero-content-subtitle">
-          {{ $t('sse_page.hero.subtitle') }}
-        </p>
-        <p class="sse_page-hero-content-description">
-          {{ $t('sse_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Introduction -->
-    <section class="sse_page-intro">
-      <div class="sse_page-section-container">
-        <p class="sse_page-intro-text">
-          {{ $t('sse_page.intro') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- SSE Tests List -->
-    <section class="sse_page-section">
-      <div class="sse_page-section-container">
-        <h2 class="sse_page-section-title">
-          SSE 測試列表
-        </h2>
-        <div class="sse_page-grid">
-          <LinkCard
-            v-for="test in sseTests"
-            :key="test.to"
-            :to="test.to"
-            :label="test.label"
-            :banner="test.banner"
-            class="sse_page-grid-item"
-          />
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -102,6 +46,60 @@ const sseTests = computed(() => [
   }
 ]);
 </script>
+
+<template>
+  <div class="sse_page">
+    <!-- Hero Section -->
+    <section class="sse_page-hero">
+      <div class="sse_page-hero-background">
+        <img
+          src="/img/server-sent-event/server-sent-event-v.04.webp"
+          alt="Server-Sent Events"
+          class="sse_page-hero-background-image"
+        />
+        <div class="sse_page-hero-background-overlay" />
+      </div>
+
+      <div class="sse_page-hero-content">
+        <h1 class="sse_page-hero-content-title">
+          {{ $t('sse_page.hero.title') }}
+        </h1>
+        <p class="sse_page-hero-content-subtitle">
+          {{ $t('sse_page.hero.subtitle') }}
+        </p>
+        <p class="sse_page-hero-content-description">
+          {{ $t('sse_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="sse_page-intro">
+      <div class="sse_page-section-container">
+        <p class="sse_page-intro-text">
+          {{ $t('sse_page.intro') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- SSE Tests List -->
+    <section class="sse_page-section">
+      <div class="sse_page-section-container">
+        <h2 class="sse_page-section-title">SSE 測試列表</h2>
+        <div class="sse_page-grid">
+          <LinkCard
+            v-for="test in sseTests"
+            :key="test.to"
+            :to="test.to"
+            :label="test.label"
+            :banner="test.banner"
+            class="sse_page-grid-item"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 // ========================================
@@ -152,7 +150,11 @@ const sseTests = computed(() => [
       height: 100%;
 
       // Visual
-      background: linear-gradient(135deg, rgba(68, 160, 141, 0.9) 0%, rgba(78, 205, 196, 0.85) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(68, 160, 141, 0.9) 0%,
+        rgba(78, 205, 196, 0.85) 100%
+      );
     }
   }
 
@@ -295,10 +297,18 @@ const sseTests = computed(() => [
     // Animation
     animation: fade-in-up 0.5s ease-out both;
 
-    &:nth-child(1) { animation-delay: 0.05s; }
-    &:nth-child(2) { animation-delay: 0.1s; }
-    &:nth-child(3) { animation-delay: 0.15s; }
-    &:nth-child(4) { animation-delay: 0.2s; }
+    &:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+    &:nth-child(4) {
+      animation-delay: 0.2s;
+    }
   }
 }
 

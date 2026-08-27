@@ -1,43 +1,7 @@
-<template>
-  <div class="server_sent_event_global_post_page">
-    <!-- Hero Section -->
-    <section class="server_sent_event_global_post_page-hero">
-      <div class="server_sent_event_global_post_page-hero-background">
-        <div class="server_sent_event_global_post_page-hero-background-overlay" />
-      </div>
-
-      <div class="server_sent_event_global_post_page-hero-content">
-        <h1 class="server_sent_event_global_post_page-hero-content-title">
-          {{ $t('sse_global_post_page.hero.title') }}
-        </h1>
-        <p class="server_sent_event_global_post_page-hero-content-subtitle">
-          {{ $t('sse_global_post_page.hero.subtitle') }}
-        </p>
-        <p class="server_sent_event_global_post_page-hero-content-description">
-          {{ $t('sse_global_post_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="server_sent_event_global_post_page-section">
-      <p class="server_sent_event_global_post_page-section-label">接收到的 data：</p>
-      <div class="server_sent_event_global_post_page-section-messages">
-        <p
-          v-for="(SSEMessage, index) in SSEMessageList"
-          :key="index"
-          class="server_sent_event_global_post_page-section-messages-item"
-        >
-          {{ SSEMessage }}
-        </p>
-      </div>
-    </section>
-  </div>
-</template>
-
-<script setup>
+<script>
 import _cloneDeep from 'lodash/cloneDeep';
-
+</script>
+<script setup>
 const { t } = useI18n();
 
 useHeadMataData({
@@ -69,6 +33,47 @@ watch(
   { deep: true }
 );
 </script>
+
+<template>
+  <div class="server_sent_event_global_post_page">
+    <!-- Hero Section -->
+    <section class="server_sent_event_global_post_page-hero">
+      <div class="server_sent_event_global_post_page-hero-background">
+        <div
+          class="server_sent_event_global_post_page-hero-background-overlay"
+        />
+      </div>
+
+      <div class="server_sent_event_global_post_page-hero-content">
+        <h1 class="server_sent_event_global_post_page-hero-content-title">
+          {{ $t('sse_global_post_page.hero.title') }}
+        </h1>
+        <p class="server_sent_event_global_post_page-hero-content-subtitle">
+          {{ $t('sse_global_post_page.hero.subtitle') }}
+        </p>
+        <p class="server_sent_event_global_post_page-hero-content-description">
+          {{ $t('sse_global_post_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="server_sent_event_global_post_page-section">
+      <p class="server_sent_event_global_post_page-section-label">
+        接收到的 data：
+      </p>
+      <div class="server_sent_event_global_post_page-section-messages">
+        <p
+          v-for="(SSEMessage, index) in SSEMessageList"
+          :key="index"
+          class="server_sent_event_global_post_page-section-messages-item"
+        >
+          {{ SSEMessage }}
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .server_sent_event_global_post_page {

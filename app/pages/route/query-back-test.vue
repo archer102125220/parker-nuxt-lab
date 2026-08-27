@@ -1,50 +1,3 @@
-<template>
-  <div class="query_back_test_page">
-    <!-- Hero Section -->
-    <section class="query_back_test_page-hero">
-      <div class="query_back_test_page-hero-background">
-        <div class="query_back_test_page-hero-background-overlay" />
-      </div>
-
-      <div class="query_back_test_page-hero-content">
-        <h1 class="query_back_test_page-hero-content-title">
-          {{ $t('query_back_test_page.hero.title') }}
-        </h1>
-        <p class="query_back_test_page-hero-content-subtitle">
-          {{ $t('query_back_test_page.hero.subtitle') }}
-        </p>
-        <p class="query_back_test_page-hero-content-description">
-          {{ $t('query_back_test_page.hero.description') }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <section class="query_back_test_page-section">
-      <div class="query_back_test_page-section-value">
-        <span class="query_back_test_page-section-value-label">目前 Query 值：</span>
-        <span class="query_back_test_page-section-value-number">{{ queryTestData }}</span>
-      </div>
-
-      <div class="query_back_test_page-section-actions">
-        <v-btn color="primary" size="large" @click="handleRouteQueryPush">
-          <v-icon class="mr-2">mdi-plus</v-icon>
-          增加 Query (Push)
-        </v-btn>
-        <v-btn color="primary" variant="tonal" size="large" @click="handleRouteQueryReplace">
-          <v-icon class="mr-2">mdi-swap-horizontal</v-icon>
-          增加 Query (Replace)
-        </v-btn>
-      </div>
-
-      <div class="query_back_test_page-section-info">
-        <p><strong>Push：</strong>會增加瀏覽器歷史紀錄，可以按上一頁返回</p>
-        <p><strong>Replace：</strong>會替換當前歷史紀錄，無法按上一頁返回</p>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 const { t } = useI18n();
 
@@ -86,6 +39,62 @@ function handleRouteQueryReplace() {
   });
 }
 </script>
+
+<template>
+  <div class="query_back_test_page">
+    <!-- Hero Section -->
+    <section class="query_back_test_page-hero">
+      <div class="query_back_test_page-hero-background">
+        <div class="query_back_test_page-hero-background-overlay" />
+      </div>
+
+      <div class="query_back_test_page-hero-content">
+        <h1 class="query_back_test_page-hero-content-title">
+          {{ $t('query_back_test_page.hero.title') }}
+        </h1>
+        <p class="query_back_test_page-hero-content-subtitle">
+          {{ $t('query_back_test_page.hero.subtitle') }}
+        </p>
+        <p class="query_back_test_page-hero-content-description">
+          {{ $t('query_back_test_page.hero.description') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="query_back_test_page-section">
+      <div class="query_back_test_page-section-value">
+        <span class="query_back_test_page-section-value-label"
+          >目前 Query 值：</span
+        >
+        <span class="query_back_test_page-section-value-number">{{
+          queryTestData
+        }}</span>
+      </div>
+
+      <div class="query_back_test_page-section-actions">
+        <v-btn color="primary" size="large" @click="handleRouteQueryPush">
+          <v-icon class="mr-2">mdi-plus</v-icon>
+          增加 Query (Push)
+        </v-btn>
+        <v-btn
+          color="primary"
+          variant="tonal"
+          size="large"
+          @click="handleRouteQueryReplace"
+        >
+          <v-icon class="mr-2">mdi-swap-horizontal</v-icon>
+          增加 Query (Replace)
+        </v-btn>
+      </div>
+
+      <div class="query_back_test_page-section-info">
+        <p><strong>Push：</strong>會增加瀏覽器歷史紀錄，可以按上一頁返回</p>
+        <p><strong>Replace：</strong>會替換當前歷史紀錄，無法按上一頁返回</p>
+      </div>
+    </section>
+  </div>
+</template>
 
 <style lang="scss">
 .query_back_test_page {

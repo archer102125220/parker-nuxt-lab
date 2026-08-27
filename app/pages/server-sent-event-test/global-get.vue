@@ -1,3 +1,39 @@
+<script>
+import _cloneDeep from 'lodash/cloneDeep';
+</script>
+<script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('sse_global_get_page.hero.title')
+});
+
+const SSEMessageList = ref([]);
+const eventSource = useEventSource({
+  channel: '/',
+  open(event) {
+    console.log({ event });
+  },
+  ping(event) {
+    console.log({ pingEvent: event });
+  },
+  message(payload) {
+    console.log({ payload });
+    const newSSEMessageList = _cloneDeep(SSEMessageList.value);
+    newSSEMessageList.push(payload?.data);
+    SSEMessageList.value = newSSEMessageList;
+  }
+});
+console.log({ eventSource });
+watch(
+  () => eventSource.croe,
+  (newEventSource) => {
+    console.log({ newEventSource });
+  },
+  { deep: true }
+);
+</script>
+
 <template>
   <div class="server_sent_event_global_page">
     <!-- Hero Section -->
@@ -34,41 +70,6 @@
     </section>
   </div>
 </template>
-
-<script setup>
-import _cloneDeep from 'lodash/cloneDeep';
-
-const { t } = useI18n();
-
-useHeadMataData({
-  title: t('sse_global_get_page.hero.title')
-});
-
-const SSEMessageList = ref([]);
-const eventSource = useEventSource({
-  channel: '/',
-  open(event) {
-    console.log({ event });
-  },
-  ping(event) {
-    console.log({ pingEvent: event });
-  },
-  message(payload) {
-    console.log({ payload });
-    const newSSEMessageList = _cloneDeep(SSEMessageList.value);
-    newSSEMessageList.push(payload?.data);
-    SSEMessageList.value = newSSEMessageList;
-  }
-});
-console.log({ eventSource });
-watch(
-  () => eventSource.croe,
-  (newEventSource) => {
-    console.log({ newEventSource });
-  },
-  { deep: true }
-);
-</script>
 
 <style lang="scss">
 .server_sent_event_global_page {
