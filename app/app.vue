@@ -1,47 +1,6 @@
-<template>
-  <div class="root_style" :style="cssVariable">
-    <NotificationPermission />
-
-    <SpeedInsights />
-    <Analytics />
-
-    <!-- <NuxtPwaManifest /> -->
-    <NuxtPwaAssets />
-
-    <LoadingBar :loading="loading" position="sticky" z-index="101" />
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-
-    <client-only>
-      <Message
-        :message-state="messageState"
-        @reset-message-state="resetMessageState"
-      />
-      <DialogModal
-        :value="dialogSettings.trigger"
-        :width="dialogSettings.width"
-        :content="dialogSettings.content"
-        :bg-color="dialogSettings.bgColor"
-        :radius="dialogSettings.radius"
-        :content-class="dialogSettings.contentClass"
-        :content-props="dialogSettings.contentProps"
-        :dialog-props="dialogSettings.dialogProps"
-        :broswer-info="$store.system.broswerInfo"
-        @handle-trigger="$store.system.setDialog"
-      />
-
-      <PWALoading />
-    </client-only>
-
-    <GoTop v-if="needGoTop" />
-  </div>
-</template>
-
 <script>
 import _debounce from 'lodash/debounce';
 </script>
-
 <script setup>
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 import { Analytics } from '@vercel/analytics/nuxt';
@@ -213,6 +172,46 @@ onUnmounted(() => {
   }
 });
 </script>
+
+<template>
+  <div class="root_style" :style="cssVariable">
+    <NotificationPermission />
+
+    <SpeedInsights />
+    <Analytics />
+
+    <!-- <NuxtPwaManifest /> -->
+    <NuxtPwaAssets />
+
+    <LoadingBar :loading="loading" position="sticky" z-index="101" />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+
+    <client-only>
+      <Message
+        :message-state="messageState"
+        @reset-message-state="resetMessageState"
+      />
+      <DialogModal
+        :value="dialogSettings.trigger"
+        :width="dialogSettings.width"
+        :content="dialogSettings.content"
+        :bg-color="dialogSettings.bgColor"
+        :radius="dialogSettings.radius"
+        :content-class="dialogSettings.contentClass"
+        :content-props="dialogSettings.contentProps"
+        :dialog-props="dialogSettings.dialogProps"
+        :broswer-info="$store.system.broswerInfo"
+        @handle-trigger="$store.system.setDialog"
+      />
+
+      <PWALoading />
+    </client-only>
+
+    <GoTop v-if="needGoTop" />
+  </div>
+</template>
 
 <style lang="scss">
 .root_style {
