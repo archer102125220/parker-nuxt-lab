@@ -8,6 +8,8 @@
         "url": "https://github.com/archer102125220/parker-nuxt-lab"
     },
     "scripts": {
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "sequelize": "./node_modules/.bin/sequelize",
         "build": "nuxt build",
         "dev": "nuxt dev --host 0.0.0.0",
