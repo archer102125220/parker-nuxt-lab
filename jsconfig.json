@@ -262,6 +262,6 @@
     "dist"
   ],
   "include": [
-    "./app/federation/parker-vue-lab-federation.d.ts"
+    "./app/federation/types/parker-vue-lab-federation.d.ts"
   ]
 }
