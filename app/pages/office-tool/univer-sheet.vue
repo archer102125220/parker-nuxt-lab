@@ -5,6 +5,17 @@ import importUniver from '@app/utils/third-party/univer/import-univer';
 </script>
 <script setup>
 const { locale, t } = useI18n();
+
+useHeadMataData({
+  title: t('univer_sheet_page.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('univer_sheet_page.description')
+    }
+  ]
+});
+
 const route = useRoute();
 const system = useSystemStore();
 const univerStore = useUniverStore();

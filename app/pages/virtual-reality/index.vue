@@ -2,6 +2,16 @@
 const { t } = useI18n();
 const localePath = useLocalePath();
 
+useHeadMataData({
+  title: t('virtual_reality.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('virtual_reality.description')
+    }
+  ]
+});
+
 const linkList = computed(() => [
   {
     to: localePath('/virtual-reality/krpano-demo'),

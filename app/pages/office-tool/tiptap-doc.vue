@@ -1,6 +1,16 @@
 <script setup>
 const { t } = useI18n();
 
+useHeadMataData({
+  title: t('tiptap_doc_page.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('tiptap_doc_page.description')
+    }
+  ]
+});
+
 const requirementLimits = computed(() => [
   {
     id: 'open_word',

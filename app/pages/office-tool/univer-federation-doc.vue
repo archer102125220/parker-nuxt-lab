@@ -1,5 +1,16 @@
 <script setup>
 const { locale, t } = useI18n();
+
+useHeadMataData({
+  title: t('univer_federation_doc_page.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('univer_federation_doc_page.description')
+    }
+  ]
+});
+
 const route = useRoute();
 const system = useSystemStore();
 const univerStore = useUniverStore();

@@ -166,6 +166,7 @@ export const zhTw = {
   virtual_reality: {
     title: '虛擬實境',
     subtitle: 'WebVR 與 WebXR 實驗項目',
+    description: '探索 WebVR 和 WebXR，包含全景圖與 3D 虛擬視覺展示。',
     aframe_demo: 'A-Frame 展示',
     aframe_desc: '使用 A-Frame 框架構建的 3D 與 WebVR 體驗。',
     krpano_demo: 'Krpano 展示',
@@ -1514,6 +1515,8 @@ export const zhTw = {
     }
   },
   univer_doc_page: {
+    title: 'Univer Doc 編輯器',
+    description: '由 Univer 提供的線上文件編輯功能與 CDN 載入展示。',
     remark: {
       lock_title: '鎖定狀態匯出說明：',
       local_export: 'Local Export (JSON Snapshot)：',
@@ -1547,6 +1550,8 @@ export const zhTw = {
     create_room_fail_desc: '建立房間失敗，請查看 Console。'
   },
   univer_sheet_page: {
+    title: 'Univer Sheet 編輯器',
+    description: '由 Univer 提供的線上試算表功能與 CDN 載入展示。',
     remark: {
       univer_title: 'Univer 載入與穩定度說明：',
       univer_npm_desc:
@@ -1584,6 +1589,9 @@ export const zhTw = {
     create_room_fail_desc: '建立房間失敗，請查看 Console。'
   },
   univer_federation_doc_page: {
+    title: 'Univer Federation Doc 編輯器',
+    description:
+      '透過模組聯邦（Module Federation）整合 Univer 的文件編輯功能與協同編輯測試。',
     remark: {
       lock_title: '鎖定狀態匯出說明：',
       local_export: 'Local Export (JSON Snapshot)：',
@@ -1623,6 +1631,9 @@ export const zhTw = {
     create_room_fail_desc: '建立房間失敗，請查看 Console。'
   },
   univer_federation_sheet_page: {
+    title: 'Univer Federation Sheet 編輯器',
+    description:
+      '透過模組聯邦（Module Federation）整合 Univer 的試算表功能與協同編輯測試。',
     warning: {
       performance_issue:
         '嘗試透過模組聯邦將 {link} 的版本導出並使用，但是目前發現載入很慢，並且有時候會出現整個網站變得很卡頓的狀況，目前還沒找到原因及解決辦法。',
@@ -1712,6 +1723,9 @@ export const zhTw = {
     }
   },
   tiptap_doc_page: {
+    title: 'Tiptap Doc 編輯器',
+    description:
+      '使用 Tiptap 的富文本文件編輯功能與 docx / mammoth 整合測試。',
     limitations_title: 'Tiptap + docx + mammoth POC 限制標註',
     limitations_summary: '下列項目是「做不到」或「即使畫面做得到，也無法可靠存回 Word」的功能。',
     word_impact: 'Word 存檔影響：',

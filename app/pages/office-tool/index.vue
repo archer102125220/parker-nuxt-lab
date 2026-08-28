@@ -1,6 +1,16 @@
 <script setup>
 const { t } = useI18n();
 
+useHeadMataData({
+  title: t('office_tool_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('office_tool_page.hero.description')
+    }
+  ]
+});
+
 const toolCategories = computed(() => [
   {
     title: t('office_tool_page.categories.doc'),

@@ -5,6 +5,16 @@ const route = useRoute();
 // const router = useRouter();
 const { locale, t } = useI18n();
 
+useHeadMataData({
+  title: t('collabora_sheet_page.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('collabora_sheet_page.description')
+    }
+  ]
+});
+
 const language = computed(() => {
   const _locale =
     locale.value === 'zh'

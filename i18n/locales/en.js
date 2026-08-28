@@ -180,6 +180,8 @@ export const en = {
   virtual_reality: {
     title: 'Virtual Reality',
     subtitle: 'WebVR & WebXR Experiments',
+    description:
+      'Explore WebVR and WebXR experiments, including 360° panoramas and 3D virtual visual demonstrations.',
     aframe_demo: 'A-Frame Demo',
     aframe_desc: '3D and WebVR experiences built with the A-Frame framework.',
     krpano_demo: 'Krpano Demo',
@@ -1572,6 +1574,9 @@ export const en = {
     }
   },
   univer_doc_page: {
+    title: 'Univer Doc Editor',
+    description:
+      'Online document editing powered by Univer with CDN loading demonstration.',
     remark: {
       lock_title: 'Lock State Export Notes:',
       local_export: 'Local Export (JSON Snapshot):',
@@ -1606,6 +1611,9 @@ export const en = {
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   },
   univer_sheet_page: {
+    title: 'Univer Sheet Editor',
+    description:
+      'Online spreadsheet powered by Univer with CDN loading demonstration.',
     remark: {
       univer_title: 'Univer Loading & Stability Notes:',
       univer_npm_desc:
@@ -1644,6 +1652,9 @@ export const en = {
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   },
   univer_federation_doc_page: {
+    title: 'Univer Federation Doc Editor',
+    description:
+      'Document editing integrating Univer via Module Federation with collaborative editing testing.',
     remark: {
       lock_title: 'Lock State Export Notes:',
       local_export: 'Local Export (JSON Snapshot):',
@@ -1684,6 +1695,9 @@ export const en = {
     create_room_fail_desc: 'Failed to create room. Please check the Console.'
   },
   univer_federation_sheet_page: {
+    title: 'Univer Federation Sheet Editor',
+    description:
+      'Spreadsheet integrating Univer via Module Federation with collaborative editing testing.',
     warning: {
       performance_issue:
         'Attempted to export and use the {link} version via Module Federation, but it currently loads very slowly and sometimes causes the entire website to become extremely laggy. The cause and solution have not yet been found.',
@@ -1774,6 +1788,9 @@ export const en = {
     }
   },
   tiptap_doc_page: {
+    title: 'Tiptap Doc Editor',
+    description:
+      'Rich text document editing using Tiptap with docx and mammoth integration testing.',
     limitations_title: 'Tiptap + docx + mammoth POC Limitations',
     limitations_summary: 'The following items are features that "cannot be done" or "cannot be reliably saved back to Word even if visually possible".',
     word_impact: 'Impact on Word Save:',
