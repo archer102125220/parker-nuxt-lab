@@ -36,7 +36,9 @@ useHeadMataData({
     <!-- Main Content -->
     <section class="lazyload_test_page-section">
       <div class="lazyload_test_page-demo">
-        <h3 class="lazyload_test_page-demo-label">一般圖片 (立即加載)：</h3>
+        <h3 class="lazyload_test_page-demo-label">
+          {{ $t('lazyload_test_page.normal_image') }}
+        </h3>
         <img
           class="lazyload_test_page-demo-normal"
           src="/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg"
@@ -44,16 +46,20 @@ useHeadMataData({
 
         <div class="lazyload_test_page-demo-spacer">
           <p class="lazyload_test_page-demo-spacer-text">
-            ⬇️ 請繼續往下滾動 ⬇️
+            {{ $t('lazyload_test_page.scroll_down') }}
           </p>
-          <p class="lazyload_test_page-demo-spacer-hint">
-            此區域為測試用空白區塊，確保懶加載圖片在滾動前不會被提前載入。<br />
-            當您滾動到下方圖片可見區域時，圖片才會開始加載。
-          </p>
+          <div class="lazyload_test_page-demo-spacer-hint">
+            <p class="lazyload_test_page-demo-spacer-hint-p1">
+              {{ $t('lazyload_test_page.spacer_hint_p1') }}
+            </p>
+            <p class="lazyload_test_page-demo-spacer-hint-p2">
+              {{ $t('lazyload_test_page.spacer_hint_p2') }}
+            </p>
+          </div>
         </div>
 
         <h3 class="lazyload_test_page-demo-label">
-          懶加載圖片 (滾動到可見區域時加載)：
+          {{ $t('lazyload_test_page.lazy_image') }}
         </h3>
         <img
           v-customize-lazyload="'/img/test-img/1499231493_936.gif'"

@@ -167,12 +167,12 @@ watch(
         v-if="$store.system.supportWebsocket === false"
         class="web_rtc_websocket_room_page-section-warning"
       >
-        *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
+        {{ $t('web_rtc_page.websocket_env_warning') }}
       </p>
 
       <div class="web_rtc_websocket_room_page-section-id">
         <span class="web_rtc_websocket_room_page-section-id-label">
-          {{ $t('web_rtc_socket_io_page.room.current_id') }}:
+          {{ $t('web_rtc_websocket_page.room.current_id') }}:
         </span>
         <code class="web_rtc_websocket_room_page-section-id-value">{{
           uuId
@@ -183,8 +183,8 @@ watch(
           variant="text"
           :title="
             copiedId
-              ? $t('web_rtc_socket_io_page.room.copied')
-              : $t('web_rtc_socket_io_page.room.copy_id')
+              ? $t('web_rtc_websocket_page.room.copied')
+              : $t('web_rtc_websocket_page.room.copy_id')
           "
           @click="handleCopyId"
         >
@@ -196,8 +196,8 @@ watch(
           variant="text"
           :title="
             copiedUrl
-              ? $t('web_rtc_socket_io_page.room.copied')
-              : $t('web_rtc_socket_io_page.room.copy_url')
+              ? $t('web_rtc_websocket_page.room.copied')
+              : $t('web_rtc_websocket_page.room.copy_url')
           "
           @click="handleCopyUrl"
         >
@@ -208,7 +208,7 @@ watch(
       <div class="web_rtc_websocket_room_page-section-videos">
         <div class="web_rtc_websocket_room_page-section-videos-self">
           <span class="web_rtc_websocket_room_page-section-videos-self-label">
-            {{ $t('web_rtc_socket_io_page.room.your_video') }}
+            {{ $t('web_rtc_websocket_page.room.your_video') }}
           </span>
           <video
             class="web_rtc_websocket_room_page-section-videos-self-video"
@@ -228,7 +228,7 @@ watch(
               <span
                 class="web_rtc_websocket_room_page-section-videos-others-item-label"
               >
-                {{ $t('web_rtc_socket_io_page.room.remote_video') }}
+                {{ $t('web_rtc_websocket_page.room.remote_video') }}
               </span>
               <video
                 class="web_rtc_websocket_room_page-section-videos-others-item-video"
@@ -241,7 +241,7 @@ watch(
             v-else
             class="web_rtc_websocket_room_page-section-videos-others-waiting"
           >
-            {{ $t('web_rtc_socket_io_page.room.waiting') }}
+            {{ $t('web_rtc_websocket_page.room.waiting') }}
           </div>
         </div>
       </div>

@@ -53,14 +53,14 @@ const slideList = computed(() => {
     <section class="swiper_js_test_page-section">
       <div class="swiper_js_test_page-note">
         <p class="swiper_js_test_page-note-text">
-          📝 此組件誕生於 Swiper v9 至 v10 期間，當時官方宣布停止維護 React/Vue
-          框架組件並轉向 Web Components。 直到 Swiper v11（2023
-          年底）官方才恢復對 Vue 的第一方支援，目前可直接使用官方 Vue 版本。
+          {{ $t('swiper_js_test_page.note') }}
         </p>
       </div>
 
       <div class="swiper_js_test_page-demo">
-        <h3 class="swiper_js_test_page-demo-title">基本用法：</h3>
+        <h3 class="swiper_js_test_page-demo-title">
+          {{ $t('swiper_js_test_page.basic_usage') }}
+        </h3>
         <SwiperJs
           v-model="slide"
           should-fill-height
@@ -84,7 +84,9 @@ const slideList = computed(() => {
       </div>
 
       <div class="swiper_js_test_page-demo">
-        <h3 class="swiper_js_test_page-demo-title">循環自動播放：</h3>
+        <h3 class="swiper_js_test_page-demo-title">
+          {{ $t('swiper_js_test_page.loop_autoplay') }}
+        </h3>
         <!-- TODO: loop fix -->
         <SwiperJs
           v-model="slideLoop"

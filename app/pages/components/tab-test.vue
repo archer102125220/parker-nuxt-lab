@@ -1,6 +1,8 @@
 <script setup>
+const { t } = useI18n();
+
 useHeadMataData({
-  title: '自製Tab測試'
+  title: t('tab_test_page.hero.title')
 });
 const nuxtApp = useNuxtApp();
 

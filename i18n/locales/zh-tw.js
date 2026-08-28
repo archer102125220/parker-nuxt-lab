@@ -284,21 +284,39 @@ export const zhTw = {
       description: '用於複現特定路由狀況，作為筆記用途的測試頁面'
     },
     intro:
-      '主要用作複現路由相關狀況，包含 query 參數、params 參數與上一頁導航等功能測試。'
+      '主要用作複現路由相關狀況，包含 query 參數、params 參數與上一頁導航等功能測試。',
+    tests_list_title: '路由測試列表'
   },
   query_back_test_page: {
     hero: {
       title: 'Query 參數測試',
       subtitle: '路由 Query 參數與上一頁導航',
       description: '測試路由的 query 參數變化與瀏覽器歷史紀錄行為'
-    }
+    },
+    current_value_label: '目前 Query 值：',
+    btn_push: '增加 Query (Push)',
+    btn_replace: '增加 Query (Replace)',
+    push_title: 'Push：',
+    push_desc: '會增加瀏覽器歷史紀錄，可以按上一頁返回',
+    replace_title: 'Replace：',
+    replace_desc: '會替換當前歷史紀錄，無法按上一頁返回'
   },
   params_back_test_page: {
     hero: {
       title: 'Params 參數測試',
       subtitle: '路由 Params 參數與上一頁導航',
       description: '測試路由的動態 params 參數變化與瀏覽器歷史紀錄行為'
-    }
+    },
+    current_value_label: '目前 Params 值：',
+    btn_push: '增加 Params (Push)',
+    btn_replace: '增加 Params (Replace)',
+    push_title: 'Push：',
+    push_desc: '會增加瀏覽器歷史紀錄，可以按上一頁返回',
+    replace_title: 'Replace：',
+    replace_desc: '會替換當前歷史紀錄，無法按上一頁返回',
+    note_title: '注意：',
+    note_desc: '動態參數修改可能需要特殊處理',
+    issue_link: '相關 Issue'
   },
   css_drawing_page: {
     hero: {
@@ -307,7 +325,8 @@ export const zhTw = {
       description: '以 CSS 繪圖技術與 Anime.js 動畫庫整合為主的測試頁面'
     },
     intro:
-      '主要以 CSS 繪圖及 Anime.js 整合測試為主，包含三角形、六邊形等幾何圖形繪製與動畫效果。'
+      '主要以 CSS 繪圖及 Anime.js 整合測試為主，包含三角形、六邊形等幾何圖形繪製與動畫效果。',
+    tests_list_title: 'CSS 繪圖測試列表'
   },
   triangle_test_page: {
     hero: {
@@ -342,7 +361,8 @@ export const zhTw = {
       title: 'SVG 變色測試',
       subtitle: 'SVG 動態變色展示',
       description: '測試 SVG 圖片的動態變色效果'
-    }
+    },
+    pseudo_element_test: '偽元素測試：'
   },
   socket_test_page: {
     hero: {
@@ -395,35 +415,70 @@ export const zhTw = {
       description: '測試全域及依照 route param 做分組的 Server-Sent Events 功能'
     },
     intro:
-      '測試全域及依照 route param 做分組的 Server-Sent Events，包含 GET 與 POST 方法。'
+      '測試全域及依照 route param 做分組的 Server-Sent Events，包含 GET 與 POST 方法。',
+    tests_list_title: 'SSE 測試列表'
   },
   sse_global_get_page: {
     hero: {
       title: 'SSE 全域接收 (GET)',
       subtitle: '使用 GET 方法接收 Server-Sent Events',
       description: '測試使用 EventSource 標準 API 接收全域 SSE 事件'
-    }
+    },
+    received_data_label: '接收到的 data：'
   },
   sse_global_post_page: {
     hero: {
       title: 'SSE 全域接收 (POST)',
       subtitle: '使用 POST 方法接收 Server-Sent Events',
       description: '測試使用自訂 POST EventSource 接收全域 SSE 事件'
-    }
+    },
+    received_data_label: '接收到的 data：'
   },
   sse_room_get_page: {
     hero: {
       title: 'SSE 房間接收 (GET)',
       subtitle: '使用 GET 方法接收房間內 SSE',
       description: '依據 Route Param 分組的 SSE 接收測試'
-    }
+    },
+    room_id_label: 'Room ID:',
+    copy_id_title: '複製 Room ID',
+    copied: '已複製！',
+    share_url_label: '分享網址:',
+    copy_url: '複製網址',
+    url_copied: '已複製網址！',
+    received_data_label: '接收到的 data：',
+    no_message_yet: '尚未收到任何訊息...',
+    create_room_title: '建立房間',
+    create_room_desc: '自動產生 Room ID 並進入房間',
+    create_room_btn: '建立 SSE 房間',
+    join_room_title: '加入房間',
+    join_room_desc: '輸入 Room ID 加入現有房間',
+    input_placeholder: '請輸入 UUID 格式的 Room ID',
+    invalid_uuid: '無效的 Room ID 格式',
+    join_room_btn: '加入房間'
   },
   sse_room_post_page: {
     hero: {
       title: 'SSE 房間接收 (POST)',
       subtitle: '使用 POST 方法接收房間內 SSE',
       description: '依據 Route Param 分組的 SSE POST 接收測試'
-    }
+    },
+    room_id_label: 'Room ID:',
+    copy_id_title: '複製 Room ID',
+    copied: '已複製！',
+    share_url_label: '分享網址:',
+    copy_url: '複製網址',
+    url_copied: '已複製網址！',
+    received_data_label: '接收到的 data：',
+    no_message_yet: '尚未收到任何訊息...',
+    create_room_title: '建立房間',
+    create_room_desc: '自動產生 Room ID 並進入房間 (POST 模式)',
+    create_room_btn: '建立 SSE 房間 (POST)',
+    join_room_title: '加入房間',
+    join_room_desc: '輸入 Room ID 加入現有房間 (POST 模式)',
+    input_placeholder: '請輸入 UUID 格式的 Room ID',
+    invalid_uuid: '無效的 Room ID 格式',
+    join_room_btn: '加入房間'
   },
   web_rtc_page: {
     hero: {
@@ -438,7 +493,16 @@ export const zhTw = {
     tests_list_title: 'WebRTC 測試列表',
     test_socket_io_label: '配合 Socket.IO 實作',
     test_websocket_label: '配合前端原生 / 後端 Nuxt 4 內建實作',
-    test_sse_label: '配合 SSE 實作'
+    test_sse_label: '配合 SSE 實作',
+    websocket_env_warning: '*當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效',
+    creating_room: '正在建立視訊房間...',
+    create_video_chat: '建立視訊聊天',
+    create_new_room: '建立新房間',
+    or: '或',
+    join_video_chat: '加入視訊聊天',
+    input_room_id_placeholder: '輸入房間 ID...',
+    invalid_room_id: '無效視訊 ID',
+    join_room: '加入房間'
   },
   web_rtc_socket_io_page: {
     hero: {
@@ -464,7 +528,14 @@ export const zhTw = {
       description: '透過 Nuxt 4 內建的 WebSocket 功能實現 WebRTC 信令交換'
     },
     room: {
-      title: '視訊聊天室'
+      title: '視訊聊天室',
+      current_id: '目前配對 ID',
+      copy_id: '複製 ID',
+      copy_url: '複製連結',
+      copied: '已複製!',
+      your_video: '您的視訊',
+      remote_video: '對方視訊',
+      waiting: '等待對方加入...'
     }
   },
   web_rtc_sse_page: {
@@ -474,7 +545,14 @@ export const zhTw = {
       description: '透過 Server-Sent Events 配合 POST 請求實現 WebRTC 信令交換'
     },
     room: {
-      title: '視訊聊天室'
+      title: '視訊聊天室',
+      current_id: '目前配對 ID',
+      copy_id: '複製 ID',
+      copy_url: '複製連結',
+      copied: '已複製!',
+      your_video: '您的視訊',
+      remote_video: '對方視訊',
+      waiting: '等待對方加入...'
     }
   },
   firebase_page: {
@@ -597,6 +675,12 @@ export const zhTw = {
       submit_button: '驗證',
       webapi_output: 'Web Authn 回傳：',
       server_output: '伺服端回傳：'
+    },
+    messages: {
+      register_success: '憑證註冊成功',
+      register_error: '註冊憑證失敗',
+      login_success: '登入憑證成功',
+      login_error: '登入憑證失敗'
     }
   },
   fido2_lib_page: {
@@ -781,7 +865,8 @@ export const zhTw = {
     buttons: {
       open: '開啟',
       vuetify_dialog: 'Vuetify Dialog 對照'
-    }
+    },
+    demo_coupon_title: '測試Dialog標題'
   },
   drawer_page: {
     hero: {
@@ -819,16 +904,90 @@ export const zhTw = {
       title: '圖片上傳組件測試',
       subtitle: '自製 ImageUpload 組件展示',
       description: '測試圖片上傳組件功能，支援拖拉上傳與預覽'
-    }
+    },
+    selected_image_label: '已選擇圖片：'
   },
   phone_input_page: {
-    hero: {}
+    hero: {
+      title: '電話號碼輸入組件示範',
+      subtitle: '帶國碼選擇器的電話號碼輸入組件，使用 flag-icons 顯示國旗',
+      description: '支援國碼選擇、完整對象返回與彈性樣式自訂的電話號碼輸入組件'
+    },
+    credit: {
+      prefix: '此組件由',
+      author: 'Antigravity AI',
+      suffix: '協助建置'
+    },
+    sections: {
+      basic: {
+        title: '基本用法',
+        desc: '預設使用台灣 (+886) 國碼'
+      },
+      custom_default: {
+        title: '自訂預設國碼',
+        desc: '設定預設為美國 (+1) 國碼',
+        placeholder: 'Enter your phone number'
+      },
+      return_object: {
+        title: '返回完整對象',
+        desc: '使用 return-object 屬性獲取完整的電話號碼資訊',
+        placeholder: '電話番号を入力してください'
+      },
+      custom_width: {
+        title: '自訂下拉選單寬度',
+        desc: '調整國碼選擇器下拉選單的寬度',
+        placeholder: '请输入电话号码'
+      },
+      form_demo: {
+        title: '表單整合示範',
+        desc: '在表單中使用電話號碼輸入組件',
+        name_label: '姓名',
+        name_placeholder: '請輸入姓名',
+        phone_label: '電話號碼',
+        submit_btn: '提交表單',
+        submitted_data: '提交的資料：'
+      },
+      api: {
+        title: 'API 說明',
+        props_title: 'Props',
+        events_title: 'Events',
+        return_format_title: '返回對象格式（當 returnObject 為 true）',
+        th_prop: '屬性名稱',
+        th_type: '類型',
+        th_default: '預設值',
+        th_desc: '說明',
+        th_event: '事件名稱',
+        th_params: '參數',
+        prop_model_value: 'v-model 綁定值',
+        prop_default_country: '預設國碼（ISO 3166-1 alpha-2）',
+        prop_placeholder: '輸入框佔位符',
+        prop_option_width: '下拉選單寬度',
+        prop_return_object: '是否返回完整對象',
+        event_update_model: '值變更時觸發',
+        event_change: '值變更時觸發',
+        event_focus: '輸入框獲得焦點時觸發',
+        event_blur: '輸入框失去焦點時觸發',
+        default_placeholder: '請輸入電話號碼'
+      }
+    },
+    output_value: '輸出值：',
+    output_object: '輸出對象：',
+    not_entered: '(尚未輸入)'
   },
   selector_page: {
     hero: {
       title: '下拉選擇器測試',
       subtitle: '自製 Selector 組件展示',
       description: '測試自製下拉選擇器組件功能'
+    },
+    select_sport_label: '選擇運動類型：',
+    current_selected_label: '目前選擇：',
+    not_selected: '(尚未選擇)',
+    sports: {
+      football: '足球',
+      basketball: '籃球',
+      esports: '電競',
+      other: '預設'
     }
   },
   lazyload_test_page: {
@@ -836,7 +995,12 @@ export const zhTw = {
       title: '自製 Lazyload 指令測試',
       subtitle: '自製圖片懶加載指令展示',
       description: '測試自製 v-customize-lazyload 指令功能'
-    }
+    },
+    normal_image: '一般圖片 (立即加載)：',
+    scroll_down: '⬇️ 請繼續往下滾動 ⬇️',
+    spacer_hint_p1: '此區域為測試用空白區塊，確保懶加載圖片在滾動前不會被提前載入。',
+    spacer_hint_p2: '當您滾動到下方圖片可見區域時，圖片才會開始加載。',
+    lazy_image: '懶加載圖片 (滾動到可見區域時加載)：'
   },
   ripple_test_page: {
     hero: {
@@ -986,7 +1150,10 @@ export const zhTw = {
       title: 'Swiper.js 整合測試',
       subtitle: 'Swiper.js 套件整合展示',
       description: '測試 Swiper.js 套件整合，支援循環播放、自動播放等功能'
-    }
+    },
+    note: '📝 此組件誕生於 Swiper v9 至 v10 期間，當時官方宣布停止維護 React/Vue 框架組件並轉向 Web Components。 直到 Swiper v11（2023 年底）官方才恢復對 Vue 的第一方支援，目前可直接使用官方 Vue 版本。',
+    basic_usage: '基本用法：',
+    loop_autoplay: '循環自動播放：'
   },
   wang_editor_page: {
     hero: {
@@ -1006,7 +1173,14 @@ export const zhTw = {
     },
     describe: {
       text: '為了避免公司專案上的套件衝突，因此手刻一版翻頁式倒數計時器'
-    }
+    },
+    form: {
+      seconds_label: '測試秒數：',
+      flip_up: '向上翻',
+      flip_down: '向下翻',
+      update_btn: '更新'
+    },
+    wip_notice: '*製作中↓'
   },
   components_test_page: {
     hero: {
@@ -1153,6 +1327,92 @@ export const zhTw = {
       auto_drops_interval: '自動水滴間隔（毫秒）'
     }
   },
+  banner_demo_page: {
+    hero: {
+      title: 'Banner 輪播組件示範',
+      description: '展示 Banner 輪播組件的各種使用場景和配置選項'
+    },
+    sections: {
+      single: '單張 Banner（無自動播放）',
+      two: '兩張 Banner（自動播放）',
+      three: '三張 Banner（左右預覽效果）',
+      five: '五張 Banner（完整輪播）',
+      custom_content: '自定義內容 Banner',
+      custom_nav: '自定義導航按鈕',
+      different_heights: '不同高度設定',
+      height_200: '高度 200px',
+      height_400: '高度 400px',
+      no_indicators: '無指示器和導航按鈕',
+      keyboard_nav: '鍵盤導航測試'
+    },
+    current_index: '當前 Banner 索引: {index}',
+    keyboard_guide: {
+      info: '點擊 Banner 使其獲得焦點（會顯示藍色邊框），然後使用以下按鍵操作：',
+      prev: '上一張',
+      next: '下一張',
+      toggle_play: '暫停/繼續',
+      first: '第一張',
+      last: '最後一張'
+    },
+    banners: {
+      single: {
+        title: '單張 Banner',
+        desc: '這是唯一的一張 Banner，不會自動播放'
+      },
+      two_1: {
+        title: 'Banner 1',
+        desc: '兩張 Banner 會自動播放'
+      },
+      two_2: {
+        title: 'Banner 2',
+        desc: '支援手勢滑動切換'
+      },
+      three_1: {
+        title: 'Banner 1',
+        desc: '三張以上會顯示左右預覽效果'
+      },
+      three_2: {
+        title: 'Banner 2',
+        desc: '滑鼠懸停會暫停自動播放'
+      },
+      three_3: {
+        title: 'Banner 3',
+        desc: '支援循環播放'
+      },
+      five_1: {
+        title: '足球賽事',
+        desc: '精彩賽事直播'
+      },
+      five_2: {
+        title: '籃球比賽',
+        desc: '熱血對決'
+      },
+      five_3: {
+        title: '網球公開賽',
+        desc: '頂尖選手對決'
+      },
+      five_4: {
+        title: '電競賽事',
+        desc: '全球總決賽'
+      },
+      five_5: {
+        title: '棒球聯賽',
+        desc: '季後賽開打'
+      },
+      custom_1: {
+        title: '自定義樣式 1',
+        desc: '完全自定義的 Banner 內容'
+      },
+      custom_2: {
+        title: '自定義樣式 2',
+        desc: '使用插槽自由設計'
+      },
+      custom_3: {
+        title: '自定義樣式 3',
+        desc: '靈活的組件設計'
+      }
+    }
+  },
   ripples_directive_page: {
     hero: {
       title: 'Ripples 水波紋指令',
@@ -1161,6 +1421,11 @@ export const zhTw = {
     },
     view_component: '查看元件版本',
     code_example: '程式碼範例',
+    table: {
+      option: '選項',
+      type: '類型',
+      default: '預設值'
+    },
     animation: {
       description: '基本的水波紋動畫指令，支援滑鼠/觸控互動',
       hint: '滑鼠移動或點擊產生水波紋'
@@ -1180,6 +1445,12 @@ export const zhTw = {
       strength: '水滴基礎強度',
       strength_variance: '水滴強度隨機變化範圍'
     }
+  },
+  a_frame_demo_page: {
+    title: 'Virtual Reality Lab',
+    description: '使用 A-Frame 的虛擬實境實驗室頁面建置中。',
+    under_construction: 'A-Frame 頁面建置中',
+    back_home: '返回首頁'
   },
   krpano_demo_page: {
     hero: {

@@ -65,9 +65,9 @@ function handleRouteParamsReplace() {
     <!-- Main Content -->
     <section class="params_back_test_page-section">
       <div class="params_back_test_page-section-value">
-        <span class="params_back_test_page-section-value-label"
-          >目前 Params 值：</span
-        >
+        <span class="params_back_test_page-section-value-label">
+          {{ $t('params_back_test_page.current_value_label') }}
+        </span>
         <span class="params_back_test_page-section-value-number">{{
           paramsTestData
         }}</span>
@@ -76,7 +76,7 @@ function handleRouteParamsReplace() {
       <div class="params_back_test_page-section-actions">
         <v-btn color="primary" size="large" @click="handleRouteParamsPush">
           <v-icon class="mr-2">mdi-plus</v-icon>
-          增加 Params (Push)
+          {{ $t('params_back_test_page.btn_push') }}
         </v-btn>
         <v-btn
           color="primary"
@@ -85,19 +85,30 @@ function handleRouteParamsReplace() {
           @click="handleRouteParamsReplace"
         >
           <v-icon class="mr-2">mdi-swap-horizontal</v-icon>
-          增加 Params (Replace)
+          {{ $t('params_back_test_page.btn_replace') }}
         </v-btn>
       </div>
 
       <div class="params_back_test_page-section-info">
-        <p><strong>Push：</strong>會增加瀏覽器歷史紀錄，可以按上一頁返回</p>
-        <p><strong>Replace：</strong>會替換當前歷史紀錄，無法按上一頁返回</p>
+        <p class="params_back_test_page-section-info-item">
+          <strong>{{ $t('params_back_test_page.push_title') }}</strong>
+          <span>{{ $t('params_back_test_page.push_desc') }}</span>
+        </p>
+        <p class="params_back_test_page-section-info-item">
+          <strong>{{ $t('params_back_test_page.replace_title') }}</strong>
+          <span>{{ $t('params_back_test_page.replace_desc') }}</span>
+        </p>
         <p class="params_back_test_page-section-info-note">
-          <strong>注意：</strong>動態參數修改可能需要特殊處理 (<a
+          <strong>{{ $t('params_back_test_page.note_title') }}</strong>
+          <span>{{ $t('params_back_test_page.note_desc') }}</span>
+          <span> (</span>
+          <a
             href="https://github.com/nuxt/nuxt/issues/27982"
             target="_blank"
-            >相關 Issue</a
-          >)
+            rel="noopener noreferrer"
+            >{{ $t('params_back_test_page.issue_link') }}</a
+          >
+          <span>)</span>
         </p>
       </div>
     </section>

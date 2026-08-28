@@ -1,4 +1,16 @@
 <script setup>
+const { t } = useI18n();
+
+useHeadMataData({
+  title: t('phone_input_page.hero.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('phone_input_page.hero.description')
+    }
+  ]
+});
+
 const phoneValue1 = ref('');
 const phoneValue2 = ref('');
 const phoneValue3 = ref(null);
@@ -22,99 +34,117 @@ function handleSubmit() {
 <template>
   <div class="phone_input_demo">
     <div class="phone_input_demo-container">
-      <h1 class="phone_input_demo-title">電話號碼輸入組件示範</h1>
+      <h1 class="phone_input_demo-title">
+        {{ $t('phone_input_page.hero.title') }}
+      </h1>
       <p class="phone_input_demo-subtitle">
-        帶國碼選擇器的電話號碼輸入組件，使用 flag-icons 顯示國旗
+        {{ $t('phone_input_page.hero.subtitle') }}
       </p>
       <div class="phone_input_demo-credit">
         <p>
           <span class="phone_input_demo-credit-icon">🤖</span>
-          此組件由 <strong>Antigravity AI</strong> 協助建置
+          <span class="phone_input_demo-credit-prefix">{{ $t('phone_input_page.credit.prefix') }}</span>
+          <strong class="phone_input_demo-credit-author">{{ $t('phone_input_page.credit.author') }}</strong>
+          <span class="phone_input_demo-credit-suffix">{{ $t('phone_input_page.credit.suffix') }}</span>
         </p>
       </div>
 
       <div class="phone_input_demo-section">
-        <h2 class="phone_input_demo-section-title">基本用法</h2>
+        <h2 class="phone_input_demo-section-title">
+          {{ $t('phone_input_page.sections.basic.title') }}
+        </h2>
         <p class="phone_input_demo-section-description">
-          預設使用台灣 (+886) 國碼
+          {{ $t('phone_input_page.sections.basic.desc') }}
         </p>
         <PhoneInput v-model="phoneValue1" class="phone_input_demo-input" />
         <div class="phone_input_demo-result">
-          <strong>輸出值：</strong>
-          <code>{{ phoneValue1 || '(尚未輸入)' }}</code>
+          <strong>{{ $t('phone_input_page.output_value') }}</strong>
+          <code>{{ phoneValue1 || $t('phone_input_page.not_entered') }}</code>
         </div>
       </div>
 
       <div class="phone_input_demo-section">
-        <h2 class="phone_input_demo-section-title">自訂預設國碼</h2>
+        <h2 class="phone_input_demo-section-title">
+          {{ $t('phone_input_page.sections.custom_default.title') }}
+        </h2>
         <p class="phone_input_demo-section-description">
-          設定預設為美國 (+1) 國碼
+          {{ $t('phone_input_page.sections.custom_default.desc') }}
         </p>
         <PhoneInput
           v-model="phoneValue2"
           default-country-code="US"
-          placeholder="Enter your phone number"
+          :placeholder="$t('phone_input_page.sections.custom_default.placeholder')"
           class="phone_input_demo-input"
         />
         <div class="phone_input_demo-result">
-          <strong>輸出值：</strong>
-          <code>{{ phoneValue2 || '(尚未輸入)' }}</code>
+          <strong>{{ $t('phone_input_page.output_value') }}</strong>
+          <code>{{ phoneValue2 || $t('phone_input_page.not_entered') }}</code>
         </div>
       </div>
 
       <div class="phone_input_demo-section">
-        <h2 class="phone_input_demo-section-title">返回完整對象</h2>
+        <h2 class="phone_input_demo-section-title">
+          {{ $t('phone_input_page.sections.return_object.title') }}
+        </h2>
         <p class="phone_input_demo-section-description">
-          使用 <code>return-object</code> 屬性獲取完整的電話號碼資訊
+          {{ $t('phone_input_page.sections.return_object.desc') }}
         </p>
         <PhoneInput
           v-model="phoneValue3"
           :return-object="true"
           default-country-code="JP"
-          placeholder="電話番号を入力してください"
+          :placeholder="$t('phone_input_page.sections.return_object.placeholder')"
           class="phone_input_demo-input"
         />
         <div class="phone_input_demo-result">
-          <strong>輸出對象：</strong>
-          <pre>{{ JSON.stringify(phoneValue3, null, 2) || '(尚未輸入)' }}</pre>
+          <strong>{{ $t('phone_input_page.output_object') }}</strong>
+          <pre>{{ JSON.stringify(phoneValue3, null, 2) || $t('phone_input_page.not_entered') }}</pre>
         </div>
       </div>
 
       <div class="phone_input_demo-section">
-        <h2 class="phone_input_demo-section-title">自訂下拉選單寬度</h2>
+        <h2 class="phone_input_demo-section-title">
+          {{ $t('phone_input_page.sections.custom_width.title') }}
+        </h2>
         <p class="phone_input_demo-section-description">
-          調整國碼選擇器下拉選單的寬度
+          {{ $t('phone_input_page.sections.custom_width.desc') }}
         </p>
         <PhoneInput
           v-model="phoneValue4"
           default-country-code="CN"
           option-list-width="350px"
-          placeholder="请输入电话号码"
+          :placeholder="$t('phone_input_page.sections.custom_width.placeholder')"
           class="phone_input_demo-input"
         />
         <div class="phone_input_demo-result">
-          <strong>輸出值：</strong>
-          <code>{{ phoneValue4 || '(尚未輸入)' }}</code>
+          <strong>{{ $t('phone_input_page.output_value') }}</strong>
+          <code>{{ phoneValue4 || $t('phone_input_page.not_entered') }}</code>
         </div>
       </div>
 
       <div class="phone_input_demo-section">
-        <h2 class="phone_input_demo-section-title">表單整合示範</h2>
+        <h2 class="phone_input_demo-section-title">
+          {{ $t('phone_input_page.sections.form_demo.title') }}
+        </h2>
         <p class="phone_input_demo-section-description">
-          在表單中使用電話號碼輸入組件
+          {{ $t('phone_input_page.sections.form_demo.desc') }}
         </p>
         <form class="phone_input_demo-form" @submit.prevent="handleSubmit">
           <div class="phone_input_demo-form-group">
-            <label class="phone_input_demo-form-label">姓名</label>
+            <label class="phone_input_demo-form-label">
+              {{ $t('phone_input_page.sections.form_demo.name_label') }}
+            </label>
             <input
               v-model="formData.name"
               type="text"
               class="phone_input_demo-form-input"
-              placeholder="請輸入姓名"
+              :placeholder="$t('phone_input_page.sections.form_demo.name_placeholder')"
             />
           </div>
           <div class="phone_input_demo-form-group">
-            <label class="phone_input_demo-form-label">電話號碼</label>
+            <label class="phone_input_demo-form-label">
+              {{ $t('phone_input_page.sections.form_demo.phone_label') }}
+            </label>
             <PhoneInput
               v-model="formData.phone"
               :return-object="true"
@@ -122,26 +152,28 @@ function handleSubmit() {
             />
           </div>
           <v-btn type="submit" color="primary" size="large" block>
-            提交表單
+            {{ $t('phone_input_page.sections.form_demo.submit_btn') }}
           </v-btn>
         </form>
         <div v-if="submittedData" class="phone_input_demo-result">
-          <strong>提交的資料：</strong>
+          <strong>{{ $t('phone_input_page.sections.form_demo.submitted_data') }}</strong>
           <pre>{{ JSON.stringify(submittedData, null, 2) }}</pre>
         </div>
       </div>
 
       <div class="phone_input_demo-section">
-        <h2 class="phone_input_demo-section-title">API 說明</h2>
+        <h2 class="phone_input_demo-section-title">
+          {{ $t('phone_input_page.sections.api.title') }}
+        </h2>
         <div class="phone_input_demo-api">
-          <h3>Props</h3>
+          <h3>{{ $t('phone_input_page.sections.api.props_title') }}</h3>
           <table class="phone_input_demo-api-table">
             <thead>
               <tr>
-                <th>屬性名稱</th>
-                <th>類型</th>
-                <th>預設值</th>
-                <th>說明</th>
+                <th>{{ $t('phone_input_page.sections.api.th_prop') }}</th>
+                <th>{{ $t('phone_input_page.sections.api.th_type') }}</th>
+                <th>{{ $t('phone_input_page.sections.api.th_default') }}</th>
+                <th>{{ $t('phone_input_page.sections.api.th_desc') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -149,69 +181,69 @@ function handleSubmit() {
                 <td><code>modelValue</code></td>
                 <td>String | Object</td>
                 <td>''</td>
-                <td>v-model 綁定值</td>
+                <td>{{ $t('phone_input_page.sections.api.prop_model_value') }}</td>
               </tr>
               <tr>
                 <td><code>defaultCountryCode</code></td>
                 <td>String</td>
                 <td>'TW'</td>
-                <td>預設國碼（ISO 3166-1 alpha-2）</td>
+                <td>{{ $t('phone_input_page.sections.api.prop_default_country') }}</td>
               </tr>
               <tr>
                 <td><code>placeholder</code></td>
                 <td>String</td>
-                <td>'請輸入電話號碼'</td>
-                <td>輸入框佔位符</td>
+                <td>'{{ $t('phone_input_page.sections.api.default_placeholder') }}'</td>
+                <td>{{ $t('phone_input_page.sections.api.prop_placeholder') }}</td>
               </tr>
               <tr>
                 <td><code>optionListWidth</code></td>
                 <td>String | Number</td>
                 <td>'280px'</td>
-                <td>下拉選單寬度</td>
+                <td>{{ $t('phone_input_page.sections.api.prop_option_width') }}</td>
               </tr>
               <tr>
                 <td><code>returnObject</code></td>
                 <td>Boolean</td>
                 <td>false</td>
-                <td>是否返回完整對象</td>
+                <td>{{ $t('phone_input_page.sections.api.prop_return_object') }}</td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Events</h3>
+          <h3>{{ $t('phone_input_page.sections.api.events_title') }}</h3>
           <table class="phone_input_demo-api-table">
             <thead>
               <tr>
-                <th>事件名稱</th>
-                <th>參數</th>
-                <th>說明</th>
+                <th>{{ $t('phone_input_page.sections.api.th_event') }}</th>
+                <th>{{ $t('phone_input_page.sections.api.th_params') }}</th>
+                <th>{{ $t('phone_input_page.sections.api.th_desc') }}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><code>update:modelValue</code></td>
                 <td>value: String | Object</td>
-                <td>值變更時觸發</td>
+                <td>{{ $t('phone_input_page.sections.api.event_update_model') }}</td>
               </tr>
               <tr>
                 <td><code>change</code></td>
                 <td>value: String | Object</td>
-                <td>值變更時觸發</td>
+                <td>{{ $t('phone_input_page.sections.api.event_change') }}</td>
               </tr>
               <tr>
                 <td><code>focus</code></td>
                 <td>-</td>
-                <td>輸入框獲得焦點時觸發</td>
+                <td>{{ $t('phone_input_page.sections.api.event_focus') }}</td>
               </tr>
               <tr>
                 <td><code>blur</code></td>
                 <td>-</td>
-                <td>輸入框失去焦點時觸發</td>
+                <td>{{ $t('phone_input_page.sections.api.event_blur') }}</td>
               </tr>
             </tbody>
           </table>
 
-          <h3>返回對象格式（當 returnObject 為 true）</h3>
+          <h3>{{ $t('phone_input_page.sections.api.return_format_title') }}</h3>
           <pre class="phone_input_demo-api-code">
 {
   countryCode: 'TW',      // 國家代碼

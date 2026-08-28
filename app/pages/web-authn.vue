@@ -181,9 +181,9 @@ async function handleWebAuthnRegister() {
     credentialPublicKeyPem.value = _credentialPublicKeyPem;
     credentialPublicKeyJwk.value = _credentialPublicKeyJwk;
 
-    nuxtApp.$successMessage('憑證註冊成功');
+    nuxtApp.$successMessage(t('web_authn_page.messages.register_success'));
   } catch (error) {
-    nuxtApp.$errorMessage('登入憑證失敗');
+    nuxtApp.$errorMessage(t('web_authn_page.messages.register_error'));
     console.error(error);
   }
   console.log('---create end---');
@@ -276,10 +276,10 @@ async function handleWebAuthnLogin() {
 
     loginOutput.value = response;
 
-    nuxtApp.$successMessage('登入憑證成功');
+    nuxtApp.$successMessage(t('web_authn_page.messages.login_success'));
   } catch (error) {
     console.error(error);
-    nuxtApp.$errorMessage('登入憑證失敗');
+    nuxtApp.$errorMessage(t('web_authn_page.messages.login_error'));
   }
 
   console.log('---get end---');

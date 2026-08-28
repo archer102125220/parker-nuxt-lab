@@ -1,13 +1,12 @@
 <script setup>
-import { useHead } from '#imports';
+const { t } = useI18n();
 
-useHead({
-  title: 'A-Frame VR Lab | Under Construction',
+useHeadMataData({
+  title: t('a_frame_demo_page.title'),
   meta: [
     {
       name: 'description',
-      content:
-        'Virtual Reality lab experiments using A-Frame are currently under construction.'
+      content: t('a_frame_demo_page.description')
     }
   ]
 });
@@ -38,11 +37,17 @@ useHead({
           ></div>
         </div>
       </div>
-      <h1 class="a_frame_demo_page-title">Virtual Reality Lab</h1>
-      <p class="a_frame_demo_page-subtitle">A-Frame 頁面建置中</p>
+      <h1 class="a_frame_demo_page-title">
+        {{ $t('a_frame_demo_page.title') }}
+      </h1>
+      <p class="a_frame_demo_page-subtitle">
+        {{ $t('a_frame_demo_page.under_construction') }}
+      </p>
       <div class="a_frame_demo_page-divider"></div>
 
-      <NuxtLink class="a_frame_demo_page-back_btn" to="/"> 返回首頁 </NuxtLink>
+      <NuxtLink class="a_frame_demo_page-back_btn" :to="$localePath('/')">
+        {{ $t('a_frame_demo_page.back_home') }}
+      </NuxtLink>
     </div>
   </div>
 </template>

@@ -30,11 +30,11 @@ useSchemaOrg([
 const directivesList = computed(() => [
   {
     to: localePath('/directives/customize-ripple-test'),
-    label: '自製 Ripple 指令測試'
+    label: t('ripple_test_page.hero.title')
   },
   {
     to: localePath('/directives/customize-lazyload-test'),
-    label: '自製 Lazyload 指令測試'
+    label: t('lazyload_test_page.hero.title')
   },
   {
     to: localePath('/directives/ripples'),
@@ -81,7 +81,9 @@ const directivesList = computed(() => [
     <!-- Directives List -->
     <section class="directives_page-section">
       <div class="directives_page-section-container">
-        <h2 class="directives_page-section-title">自製指令列表</h2>
+        <h2 class="directives_page-section-title">
+          {{ $t('directives_page.directives_list_title') }}
+        </h2>
         <div class="directives_page-grid">
           <LinkCard
             v-for="directive in directivesList"

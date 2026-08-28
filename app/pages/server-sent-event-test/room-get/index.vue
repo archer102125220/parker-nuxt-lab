@@ -24,7 +24,7 @@ const rules = computed(
   () => () =>
     disabledJoinLink.value === false ||
     roomId.value === '' ||
-    '無效的 Room ID 格式'
+    t('sse_room_get_page.invalid_uuid')
 );
 
 function createRoom() {
@@ -66,29 +66,29 @@ function joinRoom() {
         <!-- Create Room -->
         <div class="sse_room_get_entry_page-section-actions-create">
           <h2 class="sse_room_get_entry_page-section-actions-create-title">
-            建立房間
+            {{ $t('sse_room_get_page.create_room_title') }}
           </h2>
           <p class="sse_room_get_entry_page-section-actions-create-desc">
-            自動產生 Room ID 並進入房間
+            {{ $t('sse_room_get_page.create_room_desc') }}
           </p>
           <v-btn color="primary" size="large" block @click="createRoom">
-            建立 SSE 房間
+            {{ $t('sse_room_get_page.create_room_btn') }}
           </v-btn>
         </div>
 
         <!-- Join Room -->
         <div class="sse_room_get_entry_page-section-actions-join">
           <h2 class="sse_room_get_entry_page-section-actions-join-title">
-            加入房間
+            {{ $t('sse_room_get_page.join_room_title') }}
           </h2>
           <p class="sse_room_get_entry_page-section-actions-join-desc">
-            輸入 Room ID 加入現有房間
+            {{ $t('sse_room_get_page.join_room_desc') }}
           </p>
           <v-text-field
             v-model="roomId"
             clearable
             label="Room ID"
-            placeholder="請輸入 UUID 格式的 Room ID"
+            :placeholder="$t('sse_room_get_page.input_placeholder')"
             class="sse_room_get_entry_page-section-actions-join-input"
             :rules="[rules]"
           />
@@ -100,7 +100,7 @@ function joinRoom() {
             :disabled="disabledJoinLink"
             @click="joinRoom"
           >
-            加入房間
+            {{ $t('sse_room_get_page.join_room_btn') }}
           </v-btn>
         </div>
       </div>

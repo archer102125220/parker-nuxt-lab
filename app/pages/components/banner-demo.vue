@@ -1,102 +1,104 @@
 <script setup>
+const { t } = useI18n();
+
 // State
 const currentBannerIndex = ref(0);
 
 // Banner Data
-const singleBanner = ref([
+const singleBanner = computed(() => [
   {
     id: 1,
     image: '/img/test-img/mimi033-1603188493.jpg',
-    title: '單張 Banner',
-    description: '這是唯一的一張 Banner，不會自動播放'
+    title: t('banner_demo_page.banners.single.title'),
+    description: t('banner_demo_page.banners.single.desc')
   }
 ]);
 
-const twoBanners = ref([
+const twoBanners = computed(() => [
   {
     id: 1,
     image: '/img/test-img/0d0a3-0514-5-2-2048x1365.jpg',
-    title: 'Banner 1',
-    description: '兩張 Banner 會自動播放'
+    title: t('banner_demo_page.banners.two_1.title'),
+    description: t('banner_demo_page.banners.two_1.desc')
   },
   {
     id: 2,
     image: '/img/test-img/00f162883105a01b28455c44b56926a1.jpg',
-    title: 'Banner 2',
-    description: '支援手勢滑動切換'
+    title: t('banner_demo_page.banners.two_2.title'),
+    description: t('banner_demo_page.banners.two_2.desc')
   }
 ]);
 
-const threeBanners = ref([
+const threeBanners = computed(() => [
   {
     id: 1,
     image:
       '/img/test-img/1e0ef282c7831f762deb4b4ded8592d5ff7962d832cebcf11709ae670e721560.jpg',
-    title: 'Banner 1',
-    description: '三張以上會顯示左右預覽效果'
+    title: t('banner_demo_page.banners.three_1.title'),
+    description: t('banner_demo_page.banners.three_1.desc')
   },
   {
     id: 2,
     image: '/img/test-img/4f1f0af4efd8be0a2218d271c5725aab.jpg',
-    title: 'Banner 2',
-    description: '滑鼠懸停會暫停自動播放'
+    title: t('banner_demo_page.banners.three_2.title'),
+    description: t('banner_demo_page.banners.three_2.desc')
   },
   {
     id: 3,
     image: '/img/test-img/4fc0f012-662b-40e9-873e-97cf1419ff13.jpeg',
-    title: 'Banner 3',
-    description: '支援循環播放'
+    title: t('banner_demo_page.banners.three_3.title'),
+    description: t('banner_demo_page.banners.three_3.desc')
   }
 ]);
 
-const fiveBanners = ref([
+const fiveBanners = computed(() => [
   {
     id: 1,
     image: '/img/test-img/6d1090ba3fe05cff4525cc164e9614f9_t.jpeg',
-    title: '足球賽事',
-    description: '精彩賽事直播'
+    title: t('banner_demo_page.banners.five_1.title'),
+    description: t('banner_demo_page.banners.five_1.desc')
   },
   {
     id: 2,
     image: '/img/test-img/28.webp',
-    title: '籃球比賽',
-    description: '熱血對決'
+    title: t('banner_demo_page.banners.five_2.title'),
+    description: t('banner_demo_page.banners.five_2.desc')
   },
   {
     id: 3,
     image: '/img/test-img/31c0e197-9c75-4869-8b86-825720a976e5.jpeg',
-    title: '網球公開賽',
-    description: '頂尖選手對決'
+    title: t('banner_demo_page.banners.five_3.title'),
+    description: t('banner_demo_page.banners.five_3.desc')
   },
   {
     id: 4,
     image: '/img/test-img/013976b74285f13e03c761f6be8861ce.jpeg',
-    title: '電競賽事',
-    description: '全球總決賽'
+    title: t('banner_demo_page.banners.five_4.title'),
+    description: t('banner_demo_page.banners.five_4.desc')
   },
   {
     id: 5,
     image: '/img/test-img/2126235bd865479b10bb9e019b47df50.jpg',
-    title: '棒球聯賽',
-    description: '季後賽開打'
+    title: t('banner_demo_page.banners.five_5.title'),
+    description: t('banner_demo_page.banners.five_5.desc')
   }
 ]);
 
-const customBanners = ref([
+const customBanners = computed(() => [
   {
     id: 1,
-    title: '自定義樣式 1',
-    description: '完全自定義的 Banner 內容'
+    title: t('banner_demo_page.banners.custom_1.title'),
+    description: t('banner_demo_page.banners.custom_1.desc')
   },
   {
     id: 2,
-    title: '自定義樣式 2',
-    description: '使用插槽自由設計'
+    title: t('banner_demo_page.banners.custom_2.title'),
+    description: t('banner_demo_page.banners.custom_2.desc')
   },
   {
     id: 3,
-    title: '自定義樣式 3',
-    description: '靈活的組件設計'
+    title: t('banner_demo_page.banners.custom_3.title'),
+    description: t('banner_demo_page.banners.custom_3.desc')
   }
 ]);
 
@@ -106,12 +108,12 @@ function handleBannerChange(index, banner) {
 }
 
 // SEO
-useHead({
-  title: 'Banner 輪播組件示範',
+useHeadMataData({
+  title: t('banner_demo_page.hero.title'),
   meta: [
     {
       name: 'description',
-      content: '展示 Banner 輪播組件的各種使用場景和配置選項'
+      content: t('banner_demo_page.hero.description')
     }
   ]
 });
@@ -120,34 +122,44 @@ useHead({
 <template>
   <div class="banner-demo">
     <div class="banner-demo-header">
-      <h1 class="banner-demo-title">Banner 輪播組件示範</h1>
+      <h1 class="banner-demo-title">
+        {{ $t('banner_demo_page.hero.title') }}
+      </h1>
       <p class="banner-demo-description">
-        展示不同數量和配置的 Banner 輪播效果
+        {{ $t('banner_demo_page.hero.description') }}
       </p>
     </div>
 
     <div class="banner-demo-content">
       <!-- 單張 Banner -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">單張 Banner（無自動播放）</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.single') }}
+        </h2>
         <Banner :banners="singleBanner" :autoplay="false" height="250px" />
       </section>
 
       <!-- 兩張 Banner -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">兩張 Banner（自動播放）</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.two') }}
+        </h2>
         <Banner :banners="twoBanners" :interval="3000" height="250px" />
       </section>
 
       <!-- 三張 Banner -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">三張 Banner（左右預覽效果）</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.three') }}
+        </h2>
         <Banner :banners="threeBanners" :interval="4000" height="300px" />
       </section>
 
       <!-- 五張 Banner -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">五張 Banner（完整輪播）</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.five') }}
+        </h2>
         <Banner
           v-model="currentBannerIndex"
           :banners="fiveBanners"
@@ -156,13 +168,15 @@ useHead({
           @change="handleBannerChange"
         />
         <p class="banner-demo-info">
-          當前 Banner 索引: {{ currentBannerIndex }}
+          {{ $t('banner_demo_page.current_index', { index: currentBannerIndex }) }}
         </p>
       </section>
 
       <!-- 自定義內容 Banner -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">自定義內容 Banner</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.custom_content') }}
+        </h2>
         <Banner :banners="customBanners" height="300px">
           <template #default="{ banner, index, isActive }">
             <div class="custom-banner-content" :class="{ active: isActive }">
@@ -176,7 +190,9 @@ useHead({
 
       <!-- 自定義導航按鈕 -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">自定義導航按鈕</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.custom_nav') }}
+        </h2>
         <Banner :banners="threeBanners" height="250px">
           <template #prev>
             <div class="custom-nav-btn">◀</div>
@@ -189,14 +205,20 @@ useHead({
 
       <!-- 不同高度設定 -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">不同高度設定</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.different_heights') }}
+        </h2>
         <div class="banner-demo-grid">
           <div class="banner-demo-grid-item">
-            <h3 class="banner-demo-grid-title">高度 200px</h3>
+            <h3 class="banner-demo-grid-title">
+              {{ $t('banner_demo_page.sections.height_200') }}
+            </h3>
             <Banner :banners="twoBanners" :autoplay="true" height="200px" />
           </div>
           <div class="banner-demo-grid-item">
-            <h3 class="banner-demo-grid-title">高度 400px</h3>
+            <h3 class="banner-demo-grid-title">
+              {{ $t('banner_demo_page.sections.height_400') }}
+            </h3>
             <Banner :banners="twoBanners" :autoplay="true" height="400px" />
           </div>
         </div>
@@ -204,7 +226,9 @@ useHead({
 
       <!-- 無指示器和導航 -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">無指示器和導航按鈕</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.no_indicators') }}
+        </h2>
         <Banner
           :banners="threeBanners"
           :show-indicators="false"
@@ -215,30 +239,32 @@ useHead({
 
       <!-- 鍵盤導航 -->
       <section class="banner-demo-section">
-        <h2 class="banner-demo-section-title">鍵盤導航測試</h2>
+        <h2 class="banner-demo-section-title">
+          {{ $t('banner_demo_page.sections.keyboard_nav') }}
+        </h2>
         <p class="banner-demo-info">
-          點擊 Banner 使其獲得焦點（會顯示藍色邊框），然後使用以下按鍵操作：
+          {{ $t('banner_demo_page.keyboard_guide.info') }}
         </p>
         <div class="banner-demo-keyboard-guide">
           <div class="keyboard-item">
             <kbd>←</kbd>
-            <span>上一張</span>
+            <span>{{ $t('banner_demo_page.keyboard_guide.prev') }}</span>
           </div>
           <div class="keyboard-item">
             <kbd>→</kbd>
-            <span>下一張</span>
+            <span>{{ $t('banner_demo_page.keyboard_guide.next') }}</span>
           </div>
           <div class="keyboard-item">
             <kbd>Space</kbd>
-            <span>暫停/繼續</span>
+            <span>{{ $t('banner_demo_page.keyboard_guide.toggle_play') }}</span>
           </div>
           <div class="keyboard-item">
             <kbd>Home</kbd>
-            <span>第一張</span>
+            <span>{{ $t('banner_demo_page.keyboard_guide.first') }}</span>
           </div>
           <div class="keyboard-item">
             <kbd>End</kbd>
-            <span>最後一張</span>
+            <span>{{ $t('banner_demo_page.keyboard_guide.last') }}</span>
           </div>
         </div>
         <Banner :banners="fiveBanners" height="300px" />

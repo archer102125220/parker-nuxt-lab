@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
         v-if="system.supportWebsocket === false"
         class="web_rtc_socket_io_room_page-section-warning"
       >
-        *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
+        {{ $t('web_rtc_page.websocket_env_warning') }}
       </p>
 
       <div class="web_rtc_socket_io_room_page-section-id">

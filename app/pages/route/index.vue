@@ -30,11 +30,11 @@ useSchemaOrg([
 const routeTests = computed(() => [
   {
     to: localePath('/route/query-back-test'),
-    label: '路由 Query 與上一頁測試'
+    label: t('query_back_test_page.hero.title')
   },
   {
     to: localePath('/route/params-back-test/0'),
-    label: '路由 Params 與上一頁測試'
+    label: t('params_back_test_page.hero.title')
   }
 ]);
 </script>
@@ -77,7 +77,9 @@ const routeTests = computed(() => [
     <!-- Route Tests List -->
     <section class="route_page-section">
       <div class="route_page-section-container">
-        <h2 class="route_page-section-title">路由測試列表</h2>
+        <h2 class="route_page-section-title">
+          {{ $t('route_page.tests_list_title') }}
+        </h2>
         <div class="route_page-grid">
           <LinkCard
             v-for="test in routeTests"

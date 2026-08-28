@@ -17,7 +17,9 @@ const disabledJoinLink = computed(
 );
 const rules = computed(
   () => () =>
-    disabledJoinLink.value === false || roomId.value === '' || '無效視訊 ID'
+    disabledJoinLink.value === false ||
+    roomId.value === '' ||
+    t('web_rtc_page.invalid_room_id')
 );
 
 function joinRoom() {
@@ -53,29 +55,29 @@ function joinRoom() {
         v-if="$store.system.supportWebsocket === false"
         class="web_rtc_websocket_page-section-warning"
       >
-        *當前部署環境可能不支援 Websocket （如：vercel等部署平台），可能會無效
+        {{ $t('web_rtc_page.websocket_env_warning') }}
       </p>
 
       <div class="web_rtc_websocket_page-section-actions">
         <div class="web_rtc_websocket_page-section-actions-create">
           <h3 class="web_rtc_websocket_page-section-actions-create-title">
-            建立視訊聊天
+            {{ $t('web_rtc_page.create_video_chat') }}
           </h3>
           <NuxtLink :to="$localePath('/web-rtc/websocket/room')">
             <v-btn color="primary" size="large" block>
               <v-icon class="mr-2">mdi-video-plus</v-icon>
-              建立新房間
+              {{ $t('web_rtc_page.create_new_room') }}
             </v-btn>
           </NuxtLink>
         </div>
 
         <div class="web_rtc_websocket_page-section-actions-divider">
-          <span>或</span>
+          <span>{{ $t('web_rtc_page.or') }}</span>
         </div>
 
         <div class="web_rtc_websocket_page-section-actions-join">
           <h3 class="web_rtc_websocket_page-section-actions-join-title">
-            加入視訊聊天
+            {{ $t('web_rtc_page.join_video_chat') }}
           </h3>
           <form
             class="web_rtc_websocket_page-section-actions-join-form"
@@ -84,7 +86,7 @@ function joinRoom() {
             <v-text-field
               v-model="roomId"
               label="Room ID"
-              placeholder="輸入房間 ID..."
+              :placeholder="$t('web_rtc_page.input_room_id_placeholder')"
               :rules="[rules]"
               hide-details="auto"
             />
@@ -96,7 +98,7 @@ function joinRoom() {
               :disabled="disabledJoinLink"
             >
               <v-icon class="mr-2">mdi-video-account</v-icon>
-              加入房間
+              {{ $t('web_rtc_page.join_room') }}
             </v-btn>
           </form>
         </div>

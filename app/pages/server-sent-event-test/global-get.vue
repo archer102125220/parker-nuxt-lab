@@ -57,7 +57,9 @@ watch(
 
     <!-- Main Content -->
     <section class="server_sent_event_global_page-section">
-      <p class="server_sent_event_global_page-section-label">接收到的 data：</p>
+      <p class="server_sent_event_global_page-section-label">
+        {{ $t('sse_global_get_page.received_data_label') }}
+      </p>
       <div class="server_sent_event_global_page-section-messages">
         <p
           v-for="(SSEMessage, index) in SSEMessageList"

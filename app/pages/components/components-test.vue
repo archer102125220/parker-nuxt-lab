@@ -1,6 +1,8 @@
 <script setup>
+const { t } = useI18n();
+
 useHeadMataData({
-  title: '組件綜合測試'
+  title: t('components_test_page.hero.title')
 });
 const nuxtApp = useNuxtApp();
 

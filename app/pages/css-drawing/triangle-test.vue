@@ -1,6 +1,8 @@
 <script setup>
+const { t } = useI18n();
+
 useHeadMataData({
-  title: 'css三角形測試'
+  title: t('triangle_test_page.hero.title')
 });
 </script>
 

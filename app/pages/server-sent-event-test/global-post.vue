@@ -60,7 +60,7 @@ watch(
     <!-- Main Content -->
     <section class="server_sent_event_global_post_page-section">
       <p class="server_sent_event_global_post_page-section-label">
-        接收到的 data：
+        {{ $t('sse_global_post_page.received_data_label') }}
       </p>
       <div class="server_sent_event_global_post_page-section-messages">
         <p

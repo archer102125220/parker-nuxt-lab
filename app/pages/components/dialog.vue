@@ -29,7 +29,7 @@ function handleVuetifyDialogOpen() {
     radius: '4px',
     contentClass: 'dialog_content',
     contentProps: {
-      dialogCouponCnName: '測試Dialog標題',
+      dialogCouponCnName: t('dialog_page.demo_coupon_title'),
       dialogCodeId: '1234567890',
       dialogQrcode: 'https://example.com/qrcode'
     },

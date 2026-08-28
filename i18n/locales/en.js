@@ -293,7 +293,8 @@ export const en = {
         'To avoid package compatibility issues, we implement common Vue directives ourselves, providing more flexible DOM manipulation capabilities'
     },
     intro:
-      "Custom Vue directives are built to avoid compatibility issues with npm packages or when project requirements don't fit existing tools."
+      "Custom Vue directives are built to avoid compatibility issues with npm packages or when project requirements don't fit existing tools.",
+    directives_list_title: 'Custom Directives List'
   },
   route_page: {
     hero: {
@@ -303,7 +304,8 @@ export const en = {
         'Test pages for reproducing specific routing scenarios and serving as reference notes'
     },
     intro:
-      'Used for reproducing routing-related scenarios, including query parameters, params parameters, and back navigation functionality tests.'
+      'Used for reproducing routing-related scenarios, including query parameters, params parameters, and back navigation functionality tests.',
+    tests_list_title: 'Route Tests List'
   },
   query_back_test_page: {
     hero: {
@@ -311,7 +313,14 @@ export const en = {
       subtitle: 'Route Query Parameters & Back Navigation',
       description:
         'Testing route query parameter changes and browser history behavior'
-    }
+    },
+    current_value_label: 'Current Query Value:',
+    btn_push: 'Increment Query (Push)',
+    btn_replace: 'Increment Query (Replace)',
+    push_title: 'Push:',
+    push_desc: 'Adds a browser history entry; you can navigate back with the back button',
+    replace_title: 'Replace:',
+    replace_desc: 'Replaces the current history entry; cannot navigate back with the back button'
   },
   params_back_test_page: {
     hero: {
@@ -319,7 +328,17 @@ export const en = {
       subtitle: 'Route Params Parameters & Back Navigation',
       description:
         'Testing dynamic route params parameter changes and browser history behavior'
-    }
+    },
+    current_value_label: 'Current Params Value:',
+    btn_push: 'Increment Params (Push)',
+    btn_replace: 'Increment Params (Replace)',
+    push_title: 'Push:',
+    push_desc: 'Adds a browser history entry; you can navigate back with the back button',
+    replace_title: 'Replace:',
+    replace_desc: 'Replaces the current history entry; cannot navigate back with the back button',
+    note_title: 'Note:',
+    note_desc: 'Dynamic parameter modification may require special handling',
+    issue_link: 'Related Issue'
   },
   css_drawing_page: {
     hero: {
@@ -329,7 +348,8 @@ export const en = {
         'Test pages focusing on CSS drawing techniques and Anime.js animation library integration'
     },
     intro:
-      'Primarily focused on CSS drawing and Anime.js integration tests, including geometric shapes like triangles and hexagons with animation effects.'
+      'Primarily focused on CSS drawing and Anime.js integration tests, including geometric shapes like triangles and hexagons with animation effects.',
+    tests_list_title: 'CSS Drawing Tests List'
   },
   triangle_test_page: {
     hero: {
@@ -365,7 +385,8 @@ export const en = {
       title: 'SVG Color Change Test',
       subtitle: 'SVG Dynamic Color Change Demo',
       description: 'Testing dynamic color change effects on SVG images'
-    }
+    },
+    pseudo_element_test: 'Pseudo-element Test:'
   },
   socket_test_page: {
     hero: {
@@ -421,7 +442,8 @@ export const en = {
         'Testing global and route param-based grouped Server-Sent Events functionality'
     },
     intro:
-      'Testing global and route param-based grouped Server-Sent Events, including GET and POST methods.'
+      'Testing global and route param-based grouped Server-Sent Events, including GET and POST methods.',
+    tests_list_title: 'SSE Tests List'
   },
   sse_global_get_page: {
     hero: {
@@ -429,7 +451,8 @@ export const en = {
       subtitle: 'Receiving Server-Sent Events via GET',
       description:
         'Testing EventSource standard API for receiving global SSE events'
-    }
+    },
+    received_data_label: 'Received Data:'
   },
   sse_global_post_page: {
     hero: {
@@ -437,21 +460,54 @@ export const en = {
       subtitle: 'Receiving Server-Sent Events via POST',
       description:
         'Testing custom POST EventSource for receiving global SSE events'
-    }
+    },
+    received_data_label: 'Received Data:'
   },
   sse_room_get_page: {
     hero: {
       title: 'SSE Room Receive (GET)',
       subtitle: 'Receiving Room-based SSE via GET',
       description: 'SSE receive test grouped by Route Param'
-    }
+    },
+    room_id_label: 'Room ID:',
+    copy_id_title: 'Copy Room ID',
+    copied: 'Copied!',
+    share_url_label: 'Share URL:',
+    copy_url: 'Copy URL',
+    url_copied: 'URL Copied!',
+    received_data_label: 'Received Data:',
+    no_message_yet: 'No message received yet...',
+    create_room_title: 'Create Room',
+    create_room_desc: 'Automatically generate Room ID and enter room',
+    create_room_btn: 'Create SSE Room',
+    join_room_title: 'Join Room',
+    join_room_desc: 'Enter Room ID to join existing room',
+    input_placeholder: 'Enter Room ID in UUID format',
+    invalid_uuid: 'Invalid Room ID format',
+    join_room_btn: 'Join Room'
   },
   sse_room_post_page: {
     hero: {
       title: 'SSE Room Receive (POST)',
       subtitle: 'Receiving Room-based SSE via POST',
       description: 'SSE POST receive test grouped by Route Param'
-    }
+    },
+    room_id_label: 'Room ID:',
+    copy_id_title: 'Copy Room ID',
+    copied: 'Copied!',
+    share_url_label: 'Share URL:',
+    copy_url: 'Copy URL',
+    url_copied: 'URL Copied!',
+    received_data_label: 'Received Data:',
+    no_message_yet: 'No message received yet...',
+    create_room_title: 'Create Room',
+    create_room_desc: 'Automatically generate Room ID and enter room (POST Mode)',
+    create_room_btn: 'Create SSE Room (POST)',
+    join_room_title: 'Join Room',
+    join_room_desc: 'Enter Room ID to join existing room (POST Mode)',
+    input_placeholder: 'Enter Room ID in UUID format',
+    invalid_uuid: 'Invalid Room ID format',
+    join_room_btn: 'Join Room'
   },
   web_rtc_page: {
     hero: {
@@ -466,7 +522,16 @@ export const en = {
     tests_list_title: 'WebRTC Tests List',
     test_socket_io_label: 'Implemented with Socket.IO',
     test_websocket_label: 'Implemented with native frontend / Nuxt 4 built-in backend',
-    test_sse_label: 'Implemented with SSE'
+    test_sse_label: 'Implemented with SSE',
+    websocket_env_warning: '*The current deployment environment may not support WebSocket (e.g. Vercel deployment), which may not function properly.',
+    creating_room: 'Creating video room...',
+    create_video_chat: 'Create Video Chat',
+    create_new_room: 'Create New Room',
+    or: 'OR',
+    join_video_chat: 'Join Video Chat',
+    input_room_id_placeholder: 'Enter Room ID...',
+    invalid_room_id: 'Invalid Room ID',
+    join_room: 'Join Room'
   },
   web_rtc_socket_io_page: {
     hero: {
@@ -494,7 +559,14 @@ export const en = {
         'WebRTC signaling exchange using Nuxt 4 built-in WebSocket features'
     },
     room: {
-      title: 'Video Chat Room'
+      title: 'Video Chat Room',
+      current_id: 'Current Pairing ID',
+      copy_id: 'Copy ID',
+      copy_url: 'Copy Link',
+      copied: 'Copied!',
+      your_video: 'Your Video',
+      remote_video: 'Remote Video',
+      waiting: 'Waiting for others to join...'
     }
   },
   web_rtc_sse_page: {
@@ -505,7 +577,14 @@ export const en = {
         'WebRTC signaling exchange via Server-Sent Events with POST requests'
     },
     room: {
-      title: 'Video Chat Room'
+      title: 'Video Chat Room',
+      current_id: 'Current Pairing ID',
+      copy_id: 'Copy ID',
+      copy_url: 'Copy Link',
+      copied: 'Copied!',
+      your_video: 'Your Video',
+      remote_video: 'Remote Video',
+      waiting: 'Waiting for others to join...'
     }
   },
   firebase_page: {
@@ -631,6 +710,12 @@ export const en = {
       submit_button: 'Verify',
       webapi_output: 'Web Authn Response:',
       server_output: 'Server Response:'
+    },
+    messages: {
+      register_success: 'Credential registered successfully',
+      register_error: 'Failed to register credential',
+      login_success: 'Credential login successful',
+      login_error: 'Failed to login with credential'
     }
   },
   fido2_lib_page: {
@@ -820,7 +905,8 @@ export const en = {
     buttons: {
       open: 'Open',
       vuetify_dialog: 'Vuetify Dialog Comparison'
-    }
+    },
+    demo_coupon_title: 'Test Dialog Title'
   },
   drawer_page: {
     hero: {
@@ -861,16 +947,90 @@ export const en = {
       subtitle: 'Custom ImageUpload Component Demo',
       description:
         'Test image upload component with drag-and-drop and preview support'
-    }
+    },
+    selected_image_label: 'Selected Image:'
   },
   phone_input_page: {
-    hero: {}
+    hero: {
+      title: 'Phone Number Input Component Demo',
+      subtitle: 'Phone input component with country code selector and flag-icons',
+      description: 'Phone input component supporting country code selector, return-object, and customizable styling'
+    },
+    credit: {
+      prefix: 'This component was built with assistance from',
+      author: 'Antigravity AI',
+      suffix: ''
+    },
+    sections: {
+      basic: {
+        title: 'Basic Usage',
+        desc: 'Defaults to Taiwan (+886) country code'
+      },
+      custom_default: {
+        title: 'Custom Default Country Code',
+        desc: 'Set default country code to United States (+1)',
+        placeholder: 'Enter your phone number'
+      },
+      return_object: {
+        title: 'Return Full Object',
+        desc: 'Use return-object prop to retrieve comprehensive phone number info',
+        placeholder: 'Please enter phone number'
+      },
+      custom_width: {
+        title: 'Custom Dropdown Width',
+        desc: 'Adjust the width of country code selector dropdown',
+        placeholder: 'Please enter phone number'
+      },
+      form_demo: {
+        title: 'Form Integration Demo',
+        desc: 'Using phone number input inside a form',
+        name_label: 'Name',
+        name_placeholder: 'Please enter name',
+        phone_label: 'Phone Number',
+        submit_btn: 'Submit Form',
+        submitted_data: 'Submitted Data:'
+      },
+      api: {
+        title: 'API Documentation',
+        props_title: 'Props',
+        events_title: 'Events',
+        return_format_title: 'Return Object Format (when returnObject is true)',
+        th_prop: 'Prop Name',
+        th_type: 'Type',
+        th_default: 'Default',
+        th_desc: 'Description',
+        th_event: 'Event Name',
+        th_params: 'Parameters',
+        prop_model_value: 'v-model binding value',
+        prop_default_country: 'Default country code (ISO 3166-1 alpha-2)',
+        prop_placeholder: 'Input placeholder',
+        prop_option_width: 'Dropdown list width',
+        prop_return_object: 'Whether to return full object',
+        event_update_model: 'Triggered when value changes',
+        event_change: 'Triggered when value changes',
+        event_focus: 'Triggered when input gains focus',
+        event_blur: 'Triggered when input loses focus',
+        default_placeholder: 'Please enter phone number'
+      }
+    },
+    output_value: 'Output Value:',
+    output_object: 'Output Object:',
+    not_entered: '(Not entered yet)'
   },
   selector_page: {
     hero: {
       title: 'Dropdown Selector Test',
       subtitle: 'Custom Selector Component Demo',
       description: 'Test custom dropdown selector component functionality'
+    },
+    select_sport_label: 'Select Sport Type:',
+    current_selected_label: 'Current Selection:',
+    not_selected: '(Not selected yet)',
+    sports: {
+      football: 'Football',
+      basketball: 'Basketball',
+      esports: 'E-Sports',
+      other: 'Default'
     }
   },
   lazyload_test_page: {
@@ -878,7 +1038,12 @@ export const en = {
       title: 'Custom Lazyload Directive Test',
       subtitle: 'Custom Image Lazy Loading Directive Demo',
       description: 'Testing custom v-customize-lazyload directive functionality'
-    }
+    },
+    normal_image: 'Normal Image (Immediate load):',
+    scroll_down: '⬇️ Please scroll down ⬇️',
+    spacer_hint_p1: 'This area is a test spacer to ensure lazy-loaded images are not loaded before scrolling.',
+    spacer_hint_p2: 'The image will only start loading when you scroll into its viewport area.',
+    lazy_image: 'Lazy-loaded Image (Loads when visible):'
   },
   ripple_test_page: {
     hero: {
@@ -1035,7 +1200,10 @@ export const en = {
       subtitle: 'Swiper.js Library Integration Demo',
       description:
         'Testing Swiper.js integration with loop and autoplay features'
-    }
+    },
+    note: '📝 This component was created during Swiper v9 to v10 when official Vue/React component maintenance stopped in favor of Web Components. Since Swiper v11 (late 2023), official first-party Vue support has been restored and the official Vue package can be used directly.',
+    basic_usage: 'Basic Usage:',
+    loop_autoplay: 'Loop & Autoplay:'
   },
   wang_editor_page: {
     hero: {
@@ -1056,7 +1224,14 @@ export const en = {
     },
     describe: {
       text: 'Handcrafted flip-style countdown timer to avoid package conflicts in company projects'
-    }
+    },
+    form: {
+      seconds_label: 'Test Seconds:',
+      flip_up: 'Flip Up',
+      flip_down: 'Flip Down',
+      update_btn: 'Update'
+    },
+    wip_notice: '*Under Construction↓'
   },
   components_test_page: {
     hero: {
@@ -1206,6 +1381,92 @@ export const en = {
       auto_drops_interval: 'Auto drops interval (ms)'
     }
   },
+  banner_demo_page: {
+    hero: {
+      title: 'Banner Carousel Component Demo',
+      description: 'Showcase various usage scenarios and configuration options of Banner component'
+    },
+    sections: {
+      single: 'Single Banner (No Autoplay)',
+      two: 'Two Banners (Autoplay)',
+      three: 'Three Banners (Preview Effect)',
+      five: 'Five Banners (Full Carousel)',
+      custom_content: 'Custom Content Banner',
+      custom_nav: 'Custom Navigation Buttons',
+      different_heights: 'Different Height Settings',
+      height_200: 'Height 200px',
+      height_400: 'Height 400px',
+      no_indicators: 'No Indicators and Navigation Buttons',
+      keyboard_nav: 'Keyboard Navigation Test'
+    },
+    current_index: 'Current Banner Index: {index}',
+    keyboard_guide: {
+      info: 'Click on the Banner to focus it (a blue border will appear), then use the following keys:',
+      prev: 'Previous',
+      next: 'Next',
+      toggle_play: 'Pause / Resume',
+      first: 'First',
+      last: 'Last'
+    },
+    banners: {
+      single: {
+        title: 'Single Banner',
+        desc: 'This is the only banner and will not autoplay'
+      },
+      two_1: {
+        title: 'Banner 1',
+        desc: 'Two banners with autoplay'
+      },
+      two_2: {
+        title: 'Banner 2',
+        desc: 'Supports swipe gestures'
+      },
+      three_1: {
+        title: 'Banner 1',
+        desc: 'Three or more banners show left/right previews'
+      },
+      three_2: {
+        title: 'Banner 2',
+        desc: 'Hover to pause autoplay'
+      },
+      three_3: {
+        title: 'Banner 3',
+        desc: 'Supports infinite loop'
+      },
+      five_1: {
+        title: 'Football Match',
+        desc: 'Live sports broadcast'
+      },
+      five_2: {
+        title: 'Basketball Game',
+        desc: 'Passionate showdown'
+      },
+      five_3: {
+        title: 'Tennis Open',
+        desc: 'Top players battle'
+      },
+      five_4: {
+        title: 'Esports Tournament',
+        desc: 'World finals'
+      },
+      five_5: {
+        title: 'Baseball League',
+        desc: 'Playoffs started'
+      },
+      custom_1: {
+        title: 'Custom Style 1',
+        desc: 'Fully customized banner content'
+      },
+      custom_2: {
+        title: 'Custom Style 2',
+        desc: 'Freely designed with slots'
+      },
+      custom_3: {
+        title: 'Custom Style 3',
+        desc: 'Flexible component design'
+      }
+    }
+  },
   ripples_directive_page: {
     hero: {
       title: 'Ripples Directive',
@@ -1215,6 +1476,11 @@ export const en = {
     },
     view_component: 'View Component Version',
     code_example: 'Code Example',
+    table: {
+      option: 'Option',
+      type: 'Type',
+      default: 'Default'
+    },
     animation: {
       description:
         'Basic water ripple animation directive with mouse/touch interaction',
@@ -1235,6 +1501,12 @@ export const en = {
       strength: 'Base drop strength',
       strength_variance: 'Drop strength random variance'
     }
+  },
+  a_frame_demo_page: {
+    title: 'Virtual Reality Lab',
+    description: 'Virtual Reality lab experiments using A-Frame are currently under construction.',
+    under_construction: 'A-Frame Page Under Construction',
+    back_home: 'Back to Home'
   },
   krpano_demo_page: {
     hero: {

@@ -44,25 +44,25 @@ useSchemaOrg([
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'CSS 三角形測試',
+          name: t('triangle_test_page.hero.title'),
           url: `${DOMAIN}${localePath('/css-drawing/triangle-test')}`
         },
         {
           '@type': 'ListItem',
           position: 2,
-          name: 'CSS 三角形滿版測試',
+          name: t('triangle_full_test_page.hero.title'),
           url: `${DOMAIN}${localePath('/css-drawing/triangle-full-test')}`
         },
         {
           '@type': 'ListItem',
           position: 4,
-          name: 'CSS 六邊形測試',
+          name: t('hexagon_test_page.hero.title'),
           url: `${DOMAIN}${localePath('/css-drawing/hexagon-test')}`
         },
         {
           '@type': 'ListItem',
           position: 5,
-          name: 'SVG 替換顏色測試',
+          name: t('svg_color_change_page.hero.title'),
           url: `${DOMAIN}${localePath('/css-drawing/svg-color-change')}`
         }
       ]
@@ -74,19 +74,19 @@ useSchemaOrg([
 const drawingTests = computed(() => [
   {
     to: localePath('/css-drawing/triangle-test'),
-    label: 'CSS 三角形測試'
+    label: t('triangle_test_page.hero.title')
   },
   {
     to: localePath('/css-drawing/triangle-full-test'),
-    label: 'CSS 三角形滿版測試'
+    label: t('triangle_full_test_page.hero.title')
   },
   {
     to: localePath('/css-drawing/hexagon-test'),
-    label: 'CSS 六邊形測試'
+    label: t('hexagon_test_page.hero.title')
   },
   {
     to: localePath('/css-drawing/svg-color-change'),
-    label: 'SVG 替換顏色測試'
+    label: t('svg_color_change_page.hero.title')
   }
 ]);
 </script>
@@ -129,7 +129,9 @@ const drawingTests = computed(() => [
     <!-- CSS Drawing Tests List -->
     <section class="css_drawing_page-section">
       <div class="css_drawing_page-section-container">
-        <h2 class="css_drawing_page-section-title">CSS 繪圖測試列表</h2>
+        <h2 class="css_drawing_page-section-title">
+          {{ $t('css_drawing_page.tests_list_title') }}
+        </h2>
         <div class="css_drawing_page-grid">
           <LinkCard
             v-for="test in drawingTests"

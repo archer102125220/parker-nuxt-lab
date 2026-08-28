@@ -181,11 +181,13 @@ const autoDropsExampleCode = `<!-- 自動水滴效果 -->
             <thead class="ripples_directive_page-options-table-head">
               <tr class="ripples_directive_page-options-table-row">
                 <th class="ripples_directive_page-options-table-cell">
-                  Option
+                  {{ t('ripples_directive_page.table.option') }}
                 </th>
-                <th class="ripples_directive_page-options-table-cell">Type</th>
                 <th class="ripples_directive_page-options-table-cell">
-                  Default
+                  {{ t('ripples_directive_page.table.type') }}
+                </th>
+                <th class="ripples_directive_page-options-table-cell">
+                  {{ t('ripples_directive_page.table.default') }}
                 </th>
                 <th class="ripples_directive_page-options-table-cell">
                   {{ t('ripples_directive_page.options.description') }}
@@ -242,11 +244,13 @@ const autoDropsExampleCode = `<!-- 自動水滴效果 -->
             <thead class="ripples_directive_page-options-table-head">
               <tr class="ripples_directive_page-options-table-row">
                 <th class="ripples_directive_page-options-table-cell">
-                  Option
+                  {{ t('ripples_directive_page.table.option') }}
                 </th>
-                <th class="ripples_directive_page-options-table-cell">Type</th>
                 <th class="ripples_directive_page-options-table-cell">
-                  Default
+                  {{ t('ripples_directive_page.table.type') }}
+                </th>
+                <th class="ripples_directive_page-options-table-cell">
+                  {{ t('ripples_directive_page.table.default') }}
                 </th>
                 <th class="ripples_directive_page-options-table-cell">
                   {{ t('ripples_directive_page.options.description') }}

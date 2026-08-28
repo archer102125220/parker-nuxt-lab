@@ -30,19 +30,19 @@ useSchemaOrg([
 const sseTests = computed(() => [
   {
     to: localePath('/server-sent-event-test/global-get'),
-    label: 'Server-Sent Event 全域測試'
+    label: t('sse_global_get_page.hero.title')
   },
   {
     to: localePath('/server-sent-event-test/global-post'),
-    label: 'Server-Sent Event POST 全域測試'
+    label: t('sse_global_post_page.hero.title')
   },
   {
     to: localePath('/server-sent-event-test/room-get'),
-    label: 'Server-Sent Event Route Param 分組測試'
+    label: t('sse_room_get_page.hero.title')
   },
   {
     to: localePath('/server-sent-event-test/room-post'),
-    label: 'Server-Sent Event POST Route Param 分組測試'
+    label: t('sse_room_post_page.hero.title')
   }
 ]);
 </script>
@@ -85,7 +85,9 @@ const sseTests = computed(() => [
     <!-- SSE Tests List -->
     <section class="sse_page-section">
       <div class="sse_page-section-container">
-        <h2 class="sse_page-section-title">SSE 測試列表</h2>
+        <h2 class="sse_page-section-title">
+          {{ $t('sse_page.tests_list_title') }}
+        </h2>
         <div class="sse_page-grid">
           <LinkCard
             v-for="test in sseTests"

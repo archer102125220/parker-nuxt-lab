@@ -14,16 +14,18 @@ useHeadMataData({
 const classId = ref();
 const matchTypeList = computed(() => {
   return [
-    { id: 5, name: 'football', display: '足球' },
-    { id: 4, name: 'basketball', display: '籃球' },
-    { id: 14, name: 'e-sports', display: '電競' },
-    { id: 'default', name: 'other', display: '預設' }
+    { id: 5, name: 'football', display: t('selector_page.sports.football') },
+    { id: 4, name: 'basketball', display: t('selector_page.sports.basketball') },
+    { id: 14, name: 'e-sports', display: t('selector_page.sports.esports') },
+    { id: 'default', name: 'other', display: t('selector_page.sports.other') }
   ];
 });
 
 const currentSelection = computed(() => {
   const item = matchTypeList.value.find((m) => m.id === classId.value);
-  return item ? `${item.display} (ID: ${item.id})` : '(尚未選擇)';
+  return item
+    ? `${item.display} (ID: ${item.id})`
+    : t('selector_page.not_selected');
 });
 
 onMounted(() => {
@@ -55,7 +57,9 @@ onMounted(() => {
     <!-- Main Content -->
     <section class="selector_page-section">
       <div class="selector_page-demo">
-        <h3 class="selector_page-demo-label">選擇運動類型：</h3>
+        <h3 class="selector_page-demo-label">
+          {{ $t('selector_page.select_sport_label') }}
+        </h3>
         <Selector
           v-model="classId"
           display-key="display"
@@ -65,7 +69,9 @@ onMounted(() => {
         />
 
         <div class="selector_page-demo-result">
-          <p class="selector_page-demo-result-label">目前選擇：</p>
+          <p class="selector_page-demo-result-label">
+            {{ $t('selector_page.current_selected_label') }}
+          </p>
           <code class="selector_page-demo-result-value">{{
             currentSelection
           }}</code>

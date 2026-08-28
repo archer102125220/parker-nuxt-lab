@@ -40,7 +40,9 @@ const identifyImage = ref('');
       <ImageUpload v-model="identifyImage" class="image_upload_page-upload" />
 
       <div v-if="identifyImage" class="image_upload_page-result">
-        <p class="image_upload_page-result-label">已選擇圖片：</p>
+        <p class="image_upload_page-result-label">
+          {{ $t('image_upload_page.selected_image_label') }}
+        </p>
         <code class="image_upload_page-result-value"
           >{{ identifyImage.substring(0, 100) }}...</code
         >

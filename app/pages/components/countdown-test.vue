@@ -1,6 +1,8 @@
 <script setup>
+const { t } = useI18n();
+
 useHeadMataData({
-  title: '倒數計時組件測試'
+  title: t('countdown_test_page.hero.title')
 });
 // const nuxtApp = useNuxtApp();
 const dayjs = useDayjs();
@@ -116,11 +118,13 @@ function handleDateDemo() {
       </div>
 
       <form class="countdown_test_page-form" @submit.prevent="handleSecondDemo">
-        <p class="countdown_test_page-form-title">測試秒數：</p>
+        <p class="countdown_test_page-form-title">
+          {{ $t('countdown_test_page.form.seconds_label') }}
+        </p>
         <v-number-input
           v-model="demoInput"
           clearable
-          label="測試秒數："
+          :label="$t('countdown_test_page.form.seconds_label')"
           control-variant="stacked"
           class="countdown_test_page-form-input"
           :reverse="false"
@@ -129,13 +133,23 @@ function handleDateDemo() {
         />
 
         <v-radio-group v-model="demoRadio">
-          <v-radio label="向上翻" value="up" color="primary" />
-          <v-radio label="向下翻" value="down" color="primary" />
+          <v-radio
+            :label="$t('countdown_test_page.form.flip_up')"
+            value="up"
+            color="primary"
+          />
+          <v-radio
+            :label="$t('countdown_test_page.form.flip_down')"
+            value="down"
+            color="primary"
+          />
           <!-- <v-radio label="淡出淡入" value="fade" color="primary" /> -->
         </v-radio-group>
 
         <div class="countdown_test_page-form-submit">
-          <v-btn color="primary" type="submit">更新</v-btn>
+          <v-btn color="primary" type="submit">
+            {{ $t('countdown_test_page.form.update_btn') }}
+          </v-btn>
         </div>
       </form>
 
@@ -144,30 +158,34 @@ function handleDateDemo() {
         :countdown-type="demoCountdownType"
       />
 
-      <p style="margin: 16px 0">*製作中↓</p>
+      <p class="countdown_test_page-wip-notice">
+        {{ $t('countdown_test_page.wip_notice') }}
+      </p>
 
       <form class="countdown_test_page-form" @submit.prevent="handleDateDemo">
-        <p class="countdown_test_page-form-title">測試秒數：</p>
-        <!-- <v-number-input
-        clearable
-        label="測試秒數："
-        control-variant="stacked"
-        class="countdown_test_page-form-input"
-        :reverse="false"
-        :hide-input="false"
-        :inset="false"
-        v-model="demoInput"
-      /> -->
+        <p class="countdown_test_page-form-title">
+          {{ $t('countdown_test_page.form.seconds_label') }}
+        </p>
         <DatePicker v-model="demoDate" />
 
         <v-radio-group v-model="demoDateRadio">
-          <v-radio label="向上翻" value="up" color="primary" />
-          <v-radio label="向下翻" value="down" color="primary" />
+          <v-radio
+            :label="$t('countdown_test_page.form.flip_up')"
+            value="up"
+            color="primary"
+          />
+          <v-radio
+            :label="$t('countdown_test_page.form.flip_down')"
+            value="down"
+            color="primary"
+          />
           <!-- <v-radio label="淡出淡入" value="fade" color="primary" /> -->
         </v-radio-group>
 
         <div class="countdown_test_page-form-submit">
-          <v-btn color="primary" type="submit">更新</v-btn>
+          <v-btn color="primary" type="submit">
+            {{ $t('countdown_test_page.form.update_btn') }}
+          </v-btn>
         </div>
       </form>
 

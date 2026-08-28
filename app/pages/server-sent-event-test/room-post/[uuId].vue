@@ -115,9 +115,9 @@ watch(
       <!-- Room Info -->
       <div class="sse_room_post_page-section-room_info">
         <div class="sse_room_post_page-section-room_info-row">
-          <span class="sse_room_post_page-section-room_info-row-label"
-            >Room ID:</span
-          >
+          <span class="sse_room_post_page-section-room_info-row-label">
+            {{ $t('sse_room_post_page.room_id_label') }}
+          </span>
           <code class="sse_room_post_page-section-room_info-row-id">{{
             route.params.uuId
           }}</code>
@@ -126,7 +126,7 @@ watch(
             size="x-small"
             variant="text"
             class="sse_room_post_page-section-room_info-row-copy"
-            title="複製 Room ID"
+            :title="$t('sse_room_post_page.copy_id_title')"
             @click="copyRoomId"
           >
             <v-icon size="16">{{
@@ -136,13 +136,14 @@ watch(
           <span
             v-if="copiedId"
             class="sse_room_post_page-section-room_info-row-feedback"
-            >已複製！</span
           >
+            {{ $t('sse_room_post_page.copied') }}
+          </span>
         </div>
         <div class="sse_room_post_page-section-room_info-row">
-          <span class="sse_room_post_page-section-room_info-row-label"
-            >分享網址:</span
-          >
+          <span class="sse_room_post_page-section-room_info-row-label">
+            {{ $t('sse_room_post_page.share_url_label') }}
+          </span>
           <v-btn
             size="small"
             variant="tonal"
@@ -153,42 +154,15 @@ watch(
             <v-icon size="16" class="mr-1">{{
               copiedUrl ? 'mdi-check' : 'mdi-link'
             }}</v-icon>
-            {{ copiedUrl ? '已複製網址！' : '複製網址' }}
+            {{ copiedUrl ? $t('sse_room_post_page.url_copied') : $t('sse_room_post_page.copy_url') }}
           </v-btn>
         </div>
       </div>
-
-      <!-- TODO: 發送訊息功能需要調整伺服器端結構
-           目前 SSE 是單向通訊（伺服器→客戶端），要實現發送訊息需要：
-           1. 建立共享的 EventEmitter 或訊息佇列 (可參考 server/utils/eventEmitter.js)
-           2. 新增 POST endpoint 接收客戶端訊息並觸發事件
-           3. SSE 連線訂閱該事件來廣播訊息給同房間的其他客戶端
-      -->
-      <!--
-      <div class="sse_room_post_page-section-send">
-        <h3 class="sse_room_post_page-section-send-title">發送訊息</h3>
-        <div class="sse_room_post_page-section-send-form">
-          <v-text-field
-            v-model="messageToSend"
-            label="輸入訊息"
-            placeholder="輸入要發送的測試訊息..."
-            class="sse_room_post_page-section-send-form-input"
-            hide-details
-          />
-          <v-btn
-            color="primary"
-            :disabled="!messageToSend"
-            :loading="sending"
-            @click="sendMessage"
-          >
-            發送
-          </v-btn>
-        </div>
-      </div>
-      -->
 
       <!-- Messages -->
-      <p class="sse_room_post_page-section-label">接收到的 data：</p>
+      <p class="sse_room_post_page-section-label">
+        {{ $t('sse_room_post_page.received_data_label') }}
+      </p>
       <div class="sse_room_post_page-section-messages">
         <p
           v-for="(SSEMessage, index) in SSEMessageList"
@@ -201,7 +175,7 @@ watch(
           v-if="SSEMessageList.length === 0"
           class="sse_room_post_page-section-messages-empty"
         >
-          尚未收到任何訊息...
+          {{ $t('sse_room_post_page.no_message_yet') }}
         </p>
       </div>
     </section>

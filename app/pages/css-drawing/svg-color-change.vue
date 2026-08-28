@@ -39,7 +39,9 @@ const color = ref('#000000');
         <p class="svg_color_change_page-form-value">{{ color }}</p>
       </form>
       <div class="svg_color_change_page-demo">
-        <p class="svg_color_change_page-demo-label">偽元素測試：</p>
+        <p class="svg_color_change_page-demo-label">
+          {{ $t('svg_color_change_page.pseudo_element_test') }}
+        </p>
         <div class="svg_color_change_page-demo-icon" />
       </div>
     </section>
