@@ -121,6 +121,7 @@ onMounted(() => {
   flex-direction: row;
   align-items: stretch;
   padding: 12px 24px;
+  padding-top: max(12px, var(--safe-area-inset-top));
 
   // Visual
   background: rgba(255, 255, 255, 0.85);
