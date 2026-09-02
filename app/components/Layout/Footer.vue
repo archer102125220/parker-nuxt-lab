@@ -36,7 +36,7 @@ onMounted(() => {
 .layout_footer {
   // Display & Box Model
   padding: 32px 24px;
-  padding-bottom: calc(32px + var(--safe-area-inset-bottom));
+  padding-bottom: calc(32px + var(--safe-area-bottom));
   margin-top: 60px;
 
   // Visual

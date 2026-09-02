@@ -9,17 +9,17 @@ export function setViewportUnits() {
   // const documentElementStyle = getComputedStyle(document.documentElement);
   // const safeAreaInsetTop = Number(
   //   documentElementStyle
-  //     .getPropertyValue('--safe-area-inset-top')
+  //     .getPropertyValue('--safe-area-top')
   //     .replace('px', '')
   // );
   // const safeAreaInsetRight = Number(
   //   documentElementStyle
-  //     .getPropertyValue('--safe-area-inset-right')
+  //     .getPropertyValue('--safe-area-right')
   //     .replace('px', '')
   // );
   // const safeAreaInsetBottom = Number(
   //   documentElementStyle
-  //     .getPropertyValue('--safe-area-inset-bottom')
+  //     .getPropertyValue('--safe-area-bottom')
   //     .replace('px', '')
   // );
 
