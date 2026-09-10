@@ -108,9 +108,7 @@ export class Ripples {
     });
 
     // Auto-resize when window size changes.
-    window.addEventListener('resize', (e) =>
-      this.constructor.updateSize.apply(this, e)
-    );
+    window.addEventListener('resize', (e) => this.updateSize.apply(this, e));
 
     // Init rendertargets for ripple data.
     this.textures = [];
@@ -519,13 +517,15 @@ export class Ripples {
       this.handleUserDrop(e);
     };
     this.#ripplesTouchmove = (e) => {
-      const touches = e.originalEvent?.changedTouches || e.changedTouches || e.touches;
+      const touches =
+        e.originalEvent?.changedTouches || e.changedTouches || e.touches;
       for (let i = 0; i < touches.length; i++) {
         this.handleUserDrop(touches[i]);
       }
     };
     this.#ripplesTouchstart = (e) => {
-      const touches = e.originalEvent?.changedTouches || e.changedTouches || e.touches;
+      const touches =
+        e.originalEvent?.changedTouches || e.changedTouches || e.touches;
       for (let i = 0; i < touches.length; i++) {
         this.handleUserDrop(touches[i], true);
       }
@@ -705,7 +705,7 @@ export class Ripples {
     );
     // 讀取當前的波浪狀態紋理
     this.bindTexture(this.textures[this.bufferReadIndex]);
-    
+
     // 啟用物理狀態更新的著色器程式 (update.frag)
     Ripples.gl.useProgram(this.updateProgram.id);
 
@@ -1050,9 +1050,7 @@ export class Ripples {
     // Make sure the last used context is garbage-collected
     Ripples.gl = null;
 
-    window.removeEventListener('resize', (e) =>
-      this.constructor.updateSize.apply(this, e)
-    );
+    window.removeEventListener('resize', (e) => this.updateSize.apply(this, e));
 
     this.canvas.remove();
     this.restoreCssBackground();
