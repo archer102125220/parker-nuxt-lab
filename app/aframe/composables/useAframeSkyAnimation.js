@@ -1,9 +1,9 @@
 import { useAframe } from '@app/aframe/composables/useAframe';
-import { useVrStore } from '@app/store/360vrStore';
+import { useAFrameStore } from '@app/store/aFrameStore';
 
 export function useAframeSkyAnimation(aframeConfig) {
   const aframe = useAframe(aframeConfig);
-  const vrStore = useVrStore();
+  const vrStore = useAFrameStore();
   const componentName = 'aframe-sky-animation';
 
   watch(
@@ -39,7 +39,7 @@ export function useAframeSkyAnimation(aframeConfig) {
           dur,
           easing: 'easeOutQuad',
           loop: false,
-          startEvents: 'fadeout',
+          startEvents: 'fadeout'
         });
         this.el.setAttribute('animation__002', {
           property: 'material.opacity',
@@ -48,7 +48,7 @@ export function useAframeSkyAnimation(aframeConfig) {
           dur,
           easing: 'easeInQuad',
           loop: false,
-          startEvents: 'fadein',
+          startEvents: 'fadein'
         });
         aframe.value.api.skyAnimationClassName = '__sky_animation';
         this.el.classList.add(aframe.value.api.skyAnimationClassName);
@@ -67,12 +67,12 @@ export function useAframeSkyAnimation(aframeConfig) {
             if (typeof callback === 'function') {
               callback();
             }
-            this.vrStore.setVrLoading(false);
+            this.vrStore.setAFrameLoading(false);
           }, this.dur - 40);
         });
       },
       onFadeout(callback) {
-        this.vrStore.setVrLoading(true);
+        this.vrStore.setAFrameLoading(true);
         return new Promise((resolve, reject) => {
           this.el.emit('fadeout', null, false);
           setTimeout(() => {
@@ -89,7 +89,7 @@ export function useAframeSkyAnimation(aframeConfig) {
           this.onFadein();
           this.oldSrc = src;
         }
-      },
+      }
     });
   }
 

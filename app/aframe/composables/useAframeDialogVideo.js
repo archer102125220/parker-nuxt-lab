@@ -1,9 +1,9 @@
 import { useAframe } from '@app/aframe/composables/useAframe';
-import { useVrStore } from '@app/store/360vrStore';
+import { useAFrameStore } from '@app/store/aFrameStore';
 
 export function useAframeDialogVideo(aframeConfig) {
   const aframe = useAframe(aframeConfig);
-  const vrStore = useVrStore();
+  const vrStore = useAFrameStore();
   const componentName = 'aframe-dialog-video-trigger';
 
   watch(
@@ -27,7 +27,7 @@ export function useAframeDialogVideo(aframeConfig) {
         dialogVideoTitle: { type: 'string', default: '' },
         videoSrc: { type: 'string', default: '' },
         youtubeId: { type: 'string', default: '' },
-        vrDialogVideoId: { type: 'string', default: '' },
+        vrDialogVideoId: { type: 'string', default: '' }
       },
       init: function () {
         this.vrStore = vrStore;
@@ -44,7 +44,7 @@ export function useAframeDialogVideo(aframeConfig) {
         this.el.addEventListener('click', this.onTriggerClick);
       },
       onTriggerClick: function () {
-        if (this.vrStore.isVrArMode === false) {
+        if (this.vrStore.isAFrameArMode === false) {
           this.vrStore.setVideoTrigger(true);
         } else {
           const vrDialogId = this.data.vrDialogId;
@@ -56,7 +56,7 @@ export function useAframeDialogVideo(aframeConfig) {
         this.vrStore.setVideoTitle(this.dialogVideoTitle);
         this.vrStore.setVideoSrc(this.videoSrc);
         this.vrStore.setYoutubeId(this.youtubeId);
-      },
+      }
     });
   }
 

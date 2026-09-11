@@ -1,5 +1,5 @@
 <script>
-import { useVrStore } from '@/store/360vrStore';
+import { useAFrameStore } from '@/store/aFrameStore';
 import { useSystemStore } from '@/store/system';
 </script>
 <script setup>
@@ -16,7 +16,7 @@ const props = defineProps({
   pauseIconScale: { type: String, default: null }
 });
 
-const vrStore = useVrStore();
+const vrStore = useAFrameStore();
 const systemStore = useSystemStore();
 
 const _id = useState('__aframe_sky_video_id', () => -1);
@@ -62,7 +62,7 @@ const statePlayIconPosition = computed(() => {
     props.playIconPosition !== ''
   ) {
     _statePlayIconPosition = props.playIconPosition;
-  } else if (vrStore.isVrArMode === true) {
+  } else if (vrStore.isAFrameArMode === true) {
     _statePlayIconPosition = '0 1.5 -1.5';
   }
 
@@ -74,7 +74,7 @@ const statePlayIconScale = computed(() => {
 
   if (typeof props.playIconScale === 'string' && props.playIconScale !== '') {
     _statePlayIconScale = props.playIconScale;
-  } else if (vrStore.isVrArMode === true) {
+  } else if (vrStore.isAFrameArMode === true) {
     _statePlayIconScale = '1 1 1';
   } else if (systemStore.isMobile === true) {
     _statePlayIconScale = '0.1 0.1 0.1';
@@ -104,7 +104,7 @@ const statePauseIconPosition = computed(() => {
     props.pauseIconPosition !== ''
   ) {
     _statePauseIconPosition = props.pauseIconPosition;
-  } else if (vrStore.isVrArMode === true) {
+  } else if (vrStore.isAFrameArMode === true) {
     _statePauseIconPosition = '-1.5 1.5 -2';
   } else if (systemStore.isTabletOnly === true) {
     _statePauseIconPosition = '-0.13 -0.08 -0.25';
@@ -120,7 +120,7 @@ const statePauseIconScale = computed(() => {
 
   if (typeof props.pauseIconScale === 'string' && props.pauseIconScale !== '') {
     _statePauseIconScale = props.pauseIconScale;
-  } else if (vrStore.isVrArMode === true) {
+  } else if (vrStore.isAFrameArMode === true) {
     _statePauseIconScale = '1 1 1';
   }
 

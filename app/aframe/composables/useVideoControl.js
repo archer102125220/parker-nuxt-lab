@@ -1,9 +1,9 @@
 import { useAframe } from '@app/aframe/composables/useAframe';
-import { useVrStore } from '@app/store/360vrStore';
+import { useAFrameStore } from '@app/store/aFrameStore';
 
 export function useVideoControl(aframeConfig) {
   const aframe = useAframe(aframeConfig);
-  const vrStore = useVrStore();
+  const vrStore = useAFrameStore();
   const componentName = 'video-control';
 
   watch(
@@ -30,7 +30,7 @@ export function useVideoControl(aframeConfig) {
         pauseBtnId: { type: 'string' },
         vrPlayBtnId: { type: 'string' },
         vrPauseBtnId: { type: 'string' },
-        btnControlOnly: { type: 'boolean', default: false },
+        btnControlOnly: { type: 'boolean', default: false }
       },
       init: function () {
         this.onCanplay = this.onCanplay.bind(this);
@@ -39,7 +39,7 @@ export function useVideoControl(aframeConfig) {
         this.handleAttribute = this.handleAttribute.bind(this);
         this.handlePlay = this.handlePlay.bind(this);
         this.handlePause = this.handlePause.bind(this);
-        this.handleVrBtn = this.handleVrBtn.bind(this);
+        this.handleAFrameBtn = this.handleAFrameBtn.bind(this);
         this.handleBtn = this.handleBtn.bind(this);
         this.handleAttribute();
 
@@ -146,7 +146,7 @@ export function useVideoControl(aframeConfig) {
         } else if (this.playTrigger === false && this.playing === true) {
           this.handlePause();
         }
-        if (this.vrStore.isVrArMode === true) {
+        if (this.vrStore.isAFrameArMode === true) {
           if (this.playBtnEl) {
             this.playBtnEl.setAttribute('visible', false);
             this.playBtnEl.visible = false;
@@ -155,7 +155,7 @@ export function useVideoControl(aframeConfig) {
             this.pauseBtnEl.setAttribute('visible', false);
             this.pauseBtnEl.visible = false;
           }
-          this.handleVrBtn(!this.playing);
+          this.handleAFrameBtn(!this.playing);
         } else {
           if (this.vrPlayBtnEl) {
             this.vrPlayBtnEl.setAttribute('visible', false);
@@ -185,13 +185,13 @@ export function useVideoControl(aframeConfig) {
         const visible = target.getAttribute('visible') || target.visible;
         const id = target.getAttribute('id') || target.id;
         if (
-          this.vrStore.isVrArMode === true &&
+          this.vrStore.isAFrameArMode === true &&
           (this.data.vrPlayBtnId === id || this.data.vrPauseBtnId === id) &&
           visible !== true
         ) {
           return;
         } else if (
-          this.vrStore.isVrArMode === false &&
+          this.vrStore.isAFrameArMode === false &&
           (this.data.playBtnId === id || this.data.pauseBtnId === id) &&
           visible !== true
         ) {
@@ -206,8 +206,8 @@ export function useVideoControl(aframeConfig) {
         } else {
           this.playTrigger = false;
           this.playing = false;
-          if (this.vrStore.isVrArMode === true) {
-            this.handleVrBtn(true);
+          if (this.vrStore.isAFrameArMode === true) {
+            this.handleAFrameBtn(true);
           } else {
             this.handleBtn(true);
           }
@@ -223,7 +223,7 @@ export function useVideoControl(aframeConfig) {
           this.pauseBtnEl.visible = !palyBtnVisible;
         }
       },
-      handleVrBtn(palyBtnVisible = true) {
+      handleAFrameBtn(palyBtnVisible = true) {
         if (this.vrPlayBtnEl) {
           this.vrPlayBtnEl.setAttribute('visible', palyBtnVisible);
           this.vrPlayBtnEl.visible = palyBtnVisible;
@@ -257,8 +257,8 @@ export function useVideoControl(aframeConfig) {
       handlePlay() {
         this.playerEl.play();
         this.playing = true;
-        if (this.vrStore.isVrArMode === true) {
-          this.handleVrBtn(false);
+        if (this.vrStore.isAFrameArMode === true) {
+          this.handleAFrameBtn(false);
         } else {
           this.handleBtn(false);
         }
@@ -266,12 +266,12 @@ export function useVideoControl(aframeConfig) {
       handlePause() {
         this.playerEl.pause();
         this.playing = false;
-        if (this.vrStore.isVrArMode === true) {
-          this.handleVrBtn(true);
+        if (this.vrStore.isAFrameArMode === true) {
+          this.handleAFrameBtn(true);
         } else {
           this.handleBtn(true);
         }
-      },
+      }
     });
   }
 

@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 
-export const useVrStore = defineStore('360vr_store', {
+export const useAFrameStore = defineStore('a_frame_store', {
   state: () => ({
     aframeLoad: false,
     assetList: [],
-    isVrArMode: false,
+    isAFrameArMode: false,
     dialogTrigger: false,
     dialogImg: '',
     dialogTitle: '',
@@ -16,12 +16,12 @@ export const useVrStore = defineStore('360vr_store', {
     videoSrc: '',
     youtubeId: '',
     videoTitle: '',
-    vrLoading: false,
-    vrSetting: [],
-    vrData: {},
+    isAFrameLoading: false,
+    aFrameSetting: [],
+    aFrameData: {}
   }),
   actions: {
-    findVrPageSetting(vrSetting) {
+    findAFramePageSetting(aFrameSetting) {
       const route = useRoute();
       if (route.href === '/360vr/matsu-map') {
         return {
@@ -29,14 +29,14 @@ export const useVrStore = defineStore('360vr_store', {
           title: '360vr_item_title',
           route_name: '/360vr/matsu-map',
           zh_title: 'a-frame 測試頁',
-          en_title: 'a-frame test page',
+          en_title: 'a-frame test page'
         };
       }
-      const _vrSetting = vrSetting || this.vrSetting || [];
+      const _aFrameSetting = aFrameSetting || this.aFrameSetting || [];
       let _vrPageSettingSubList;
       let __vrPageSettingSubList;
       const _vrPageSetting =
-        _vrSetting.find((_path) => {
+        _aFrameSetting.find((_path) => {
           const linkPath = '/vr-engine/' + _path.route_name;
           return (
             linkPath === route.href ||
@@ -65,8 +65,8 @@ export const useVrStore = defineStore('360vr_store', {
     setAssetList(payload = []) {
       this.assetList = payload;
     },
-    setIsVrArMode(payload = false) {
-      this.isVrArMode = payload;
+    setIsAFrameArMode(payload = false) {
+      this.isAFrameArMode = payload;
     },
     setDialogTrigger(payload = false) {
       this.dialogTrigger = payload;
@@ -101,19 +101,19 @@ export const useVrStore = defineStore('360vr_store', {
     setVideoTitle(payload = '') {
       this.videoTitle = payload;
     },
-    setVrLoading(payload = false) {
-      this.vrLoading = payload;
+    setAFrameLoading(payload = false) {
+      this.isAFrameLoading = payload;
     },
-    setVrSetting(payload = []) {
-      this.vrSetting = payload;
+    setAFrameSetting(payload = []) {
+      this.aFrameSetting = payload;
     },
-    setVrData(payload = {}) {
-      this.vrData = payload;
-    },
+    setAFrameData(payload = {}) {
+      this.aFrameData = payload;
+    }
   },
   getters: {
-    vrPageSetting() {
-      return this.findVrPageSetting(this.vrSetting);
-    },
-  },
+    aFramePageSetting() {
+      return this.findAFramePageSetting(this.aFrameSetting);
+    }
+  }
 });

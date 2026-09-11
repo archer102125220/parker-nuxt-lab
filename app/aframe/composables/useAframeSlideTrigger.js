@@ -1,9 +1,9 @@
 import { useAframe } from '@app/aframe/composables/useAframe';
-import { useVrStore } from '@app/store/360vrStore';
+import { useAFrameStore } from '@app/store/aFrameStore';
 
 export function useAframeSlideTrigger(aframeConfig) {
   const aframe = useAframe(aframeConfig);
-  const vrStore = useVrStore();
+  const vrStore = useAFrameStore();
   const componentName = 'aframe-slide-trigger';
 
   watch(
@@ -24,7 +24,7 @@ export function useAframeSlideTrigger(aframeConfig) {
 
     newAframe.registerComponent(componentName, {
       schema: {
-        slideImgList: { type: 'string', default: '[]' },
+        slideImgList: { type: 'string', default: '[]' }
       },
       init: function () {
         this.vrStore = vrStore;
@@ -42,11 +42,11 @@ export function useAframeSlideTrigger(aframeConfig) {
         this.el.addEventListener('click', this.onTriggerClick);
       },
       onTriggerClick: function () {
-        if (this.vrStore.isVrArMode === false) {
+        if (this.vrStore.isAFrameArMode === false) {
           this.vrStore.setSlideTrigger(true);
         }
         this.vrStore.setSlideImgList(this.slideImgList);
-      },
+      }
     });
   }
 

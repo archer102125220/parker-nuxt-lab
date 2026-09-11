@@ -1,9 +1,9 @@
 import { useAframe } from '@app/aframe/composables/useAframe';
-import { useVrStore } from '@app/store/360vrStore';
+import { useAFrameStore } from '@app/store/aFrameStore';
 
 export function useAframeLink(aframeConfig) {
   const aframe = useAframe(aframeConfig);
-  const vrStore = useVrStore();
+  const vrStore = useAFrameStore();
   const router = useRouter();
   const componentName = 'aframe-link';
 
@@ -26,7 +26,7 @@ export function useAframeLink(aframeConfig) {
     newAframe.registerComponent(componentName, {
       schema: {
         linkPath: { type: 'string', default: '' },
-        linkQyery: { type: 'string', default: '{}' },
+        linkQyery: { type: 'string', default: '{}' }
       },
       init: function () {
         this.vrStore = vrStore;
@@ -48,13 +48,13 @@ export function useAframeLink(aframeConfig) {
         this.el.addEventListener('click', this.onLinkButtonClick);
       },
       onLinkButtonClick: async function () {
-        this.vrStore.setVrLoading(true);
+        this.vrStore.setAFrameLoading(true);
         const skyDom = document.querySelector(
           '.' + aframe.value.api.skyAnimationClassName
         );
         await skyDom.onFadeout();
         router.push({ path: this.linkPath, query: this.linkQyery });
-      },
+      }
     });
   }
 

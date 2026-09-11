@@ -1,9 +1,9 @@
 import { useAframe } from '@app/aframe/composables/useAframe';
-import { useVrStore } from '@app/store/360vrStore';
+import { useAFrameStore } from '@app/store/aFrameStore';
 
 export function useAframeDialogTrigger(aframeConfig) {
   const aframe = useAframe(aframeConfig);
-  const vrStore = useVrStore();
+  const vrStore = useAFrameStore();
   const componentName = 'aframe-dialog-trigger';
 
   watch(
@@ -27,7 +27,7 @@ export function useAframeDialogTrigger(aframeConfig) {
         dialogTitle: { type: 'string', default: '' },
         dialogContent: { type: 'string', default: '' },
         dialogImg: { type: 'string', default: '' },
-        windowTop: { type: 'string', default: '' },
+        windowTop: { type: 'string', default: '' }
       },
       init: function () {
         this.vrStore = vrStore;
@@ -45,7 +45,7 @@ export function useAframeDialogTrigger(aframeConfig) {
         this.el.addEventListener('click', this.onTriggerClick);
       },
       onTriggerClick: function () {
-        if (this.vrStore.isVrArMode === true) {
+        if (this.vrStore.isAFrameArMode === true) {
           return;
         }
 
@@ -54,7 +54,7 @@ export function useAframeDialogTrigger(aframeConfig) {
         this.vrStore.setDialogContent(this.dialogContent);
         this.vrStore.setDialogImg(this.dialogImg);
         this.vrStore.setDialogWindowTop(this.windowTop);
-      },
+      }
     });
   }
 

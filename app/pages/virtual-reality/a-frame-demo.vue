@@ -1,6 +1,10 @@
 <script setup>
 const { t } = useI18n();
 
+// definePageMeta({
+//   layout: 'immersive'
+// });
+
 useHeadMataData({
   title: t('a_frame_demo_page.title'),
   meta: [
