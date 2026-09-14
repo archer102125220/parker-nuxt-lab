@@ -158,17 +158,17 @@ const statePauseIconScale = computed(() => {
       data-raycastable=""
     />
     <ClientOnly>
-      <Teleport to="#vr_engine_layout_assets">
+      <Teleport to="#a_frame_engine_layout_assets">
         <img
           id="sky_video-play_icon"
-          src="/vr-assets/icons/video_play-button.svg"
+          src="/a_frame/icons/video_play-button.svg"
         />
         <img
           id="sky_video-pause_icon"
-          src="/vr-assets/icons/video_pause-button.svg"
+          src="/a_frame/icons/video_pause-button.svg"
         />
       </Teleport>
-      <Teleport to="#vr_engine-camera">
+      <Teleport to="#a_frame_engine-camera">
         <a-plane
           :id="playBtnId"
           src="#sky_video-play_icon"

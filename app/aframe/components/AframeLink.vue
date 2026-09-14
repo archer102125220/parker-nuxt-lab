@@ -73,9 +73,9 @@ const cssVariable = computed(() => {
     </template>
 
     <ClientOnly>
-      <Teleport to="#vr_engine_layout_assets">
-        <img id="down-icon" src="/vr-assets/icons/down.svg" />
-        <img id="up-icon" src="/vr-assets/icons/up.svg" />
+      <Teleport to="#a_frame_engine_layout_assets">
+        <img id="down-icon" src="/a_frame/icons/down.svg" />
+        <img id="up-icon" src="/a_frame/icons/up.svg" />
       </Teleport>
     </ClientOnly>
   </a-entity>

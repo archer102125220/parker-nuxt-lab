@@ -4,34 +4,40 @@
     name="immersive"
     :style="cssVariable"
   >
-    <LoadingBar height="5" :loading="vrStore.isAFrameLoading" />
+    <LoadingBar height="5" :loading="aFrameStore.isAFrameLoading" />
     <AframeContent
       @before-aframe-load="beforeAframeLoad"
       @after-aframe-load="afterAframeLoad"
     >
-      <a-scene id="a_frame_engine-scene" vr-mode-ui="enterVRButton: #vRButton;">
-        <a-assets id="vr_engine_layout_assets">
+      <a-scene
+        id="a_frame_engine-scene"
+        a_frame-mode-ui="enterVRButton: #vRButton;"
+      >
+        <a-assets id="a_frame_engine_layout_assets">
           <slot name="assets" />
 
-          <template v-for="(_vrSetting, index) in vrSettingList">
+          <template v-for="(_aFrameSetting, index) in aFrameSettingList">
             <img
-              v-if="typeof _vrSetting.sky === 'string' && _vrSetting.sky !== ''"
-              :id="`sky-${_vrSetting.name}`"
+              v-if="
+                typeof _aFrameSetting.sky === 'string' &&
+                _aFrameSetting.sky !== ''
+              "
+              :id="`sky-${_aFrameSetting.name}`"
               :key="index"
-              :src="_vrSetting.sky"
-              :alt="`sky-${_vrSetting.name}`"
+              :src="_aFrameSetting.sky"
+              :alt="`sky-${_aFrameSetting.name}`"
             />
             <video
               v-if="
-                typeof _vrSetting.sky_video === 'string' &&
-                _vrSetting.sky_video !== ''
+                typeof _aFrameSetting.sky_video === 'string' &&
+                _aFrameSetting.sky_video !== ''
               "
-              :id="`sky_video-${_vrSetting.name}`"
+              :id="`sky_video-${_aFrameSetting.name}`"
               :key="index"
-              :src="_vrSetting.sky_video"
-              :alt="`sky_video-${_vrSetting.name}`"
+              :src="_aFrameSetting.sky_video"
+              :alt="`sky_video-${_aFrameSetting.name}`"
             />
-            <template v-for="(item, itemIndex) in _vrSetting?.list || []">
+            <template v-for="(item, itemIndex) in _aFrameSetting?.list || []">
               <img
                 v-if="typeof item.sky === 'string' && item.sky !== ''"
                 :id="`sky-${item.name}`"
@@ -84,12 +90,12 @@
           look-controls="magicWindowTrackingEnabled: false;"
         >
           <a-entity
-            v-if="vrStore.isAFrameArMode === false"
+            v-if="aFrameStore.isAFrameArMode === false"
             cursor="rayOrigin: mouse"
             raycaster="objects: [data-raycastable]"
           />
           <a-cursor
-            v-if="vrStore.isAFrameArMode === true"
+            v-if="aFrameStore.isAFrameArMode === true"
             raycaster="objects: [data-raycastable]"
             animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
             animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
@@ -131,7 +137,7 @@
           <el-button class="a_frame_engine-btn_block-btn">
             <NuxtLink to="/360vr">
               <img
-                src="/vr-assets/icons/over_vr-icon.svg"
+                src="/a_frame/icons/over_a_frame-icon.svg"
                 class="a_frame_engine-btn_block-btn-icon"
                 alt="結束VR(End)"
               />
@@ -145,12 +151,12 @@
           <el-button class="a_frame_engine-btn_block-btn">
             <NuxtLink to="/360vr/matsu-map">
               <img
-                src="/vr-assets/icons/map-icon.svg"
+                src="/a_frame/icons/map-icon.svg"
                 class="a_frame_engine-btn_block-btn-icon"
                 alt="地圖(Map)"
               />
               <div class="a_frame_engine-btn_block-btn-label">
-                {{ $t('vr_engine_1') }}
+                {{ $t('a_frame_engine_1') }}
                 <!-- <p>地圖</p>
                 <p>Map</p> -->
               </div>
@@ -158,12 +164,12 @@
           </el-button>
           <el-button id="vRButton" class="a_frame_engine-btn_block-btn">
             <img
-              src="/vr-assets/icons/vr_mode-icon.svg"
+              src="/a_frame/icons/vr_mode-icon.svg"
               class="a_frame_engine-btn_block-btn-icon"
               alt="VR模式(VR Mode)"
             />
             <div class="a_frame_engine-btn_block-btn-label">
-              {{ $t('vr_engine_2') }}
+              {{ $t('a_frame_engine_2') }}
               <!-- <p>VR模式</p>
               <p>VR Mode</p> -->
             </div>
@@ -171,12 +177,12 @@
           <el-button class="a_frame_engine-btn_block-btn">
             <!-- @click="illustrateDialog = true" -->
             <img
-              src="/vr-assets/icons/illustrate-icon.svg"
+              src="/a_frame/icons/illustrate-icon.svg"
               class="a_frame_engine-btn_block-btn-icon"
               alt="說明(Instructions)"
             />
             <div class="a_frame_engine-btn_block-btn-label">
-              {{ $t('vr_engine_3') }}
+              {{ $t('a_frame_engine_3') }}
               <!-- <p>說明</p>
               <p>Instructions</p> -->
             </div>
@@ -191,8 +197,8 @@
     </AframeContent>
     <ClientOnly>
       <!-- <el-dialog
-        v-model="vrStore.dialogTrigger"
-        :top="vrStore.dialogWindowTop || '0.9vh'"
+        v-model="aFrameStore.dialogTrigger"
+        :top="aFrameStore.dialogWindowTop || '0.9vh'"
         width="80vw"
         class="a_frame_engine-dialog"
         @close="hendleDialogClose"
@@ -200,7 +206,7 @@
         <VRDialogContent />
       </el-dialog>
       <el-dialog
-        v-model="vrStore.slideTrigger"
+        v-model="aFrameStore.slideTrigger"
         top="13vh"
         width="100vw"
         class="a_frame_engine-dialog_slide"
@@ -209,7 +215,7 @@
         <VRDialogSlideImgList />
       </el-dialog>
       <el-dialog
-        v-model="vrStore.videoTrigger"
+        v-model="aFrameStore.videoTrigger"
         top="5vh"
         width="98vw"
         class="a_frame_engine-dialog_video"
@@ -326,7 +332,7 @@ useHead({
 
 const RWD_HEIGHT = 450;
 
-const vrStore = useAFrameStore();
+const aFrameStore = useAFrameStore();
 const systemStore = useSystemStore();
 const route = useRoute();
 let time = -1;
@@ -364,11 +370,11 @@ async function afterAframeLoad(_aframe) {
   aframeApi.value = _aframe;
   // console.log({ _aframe, window });
   await nextTick();
-  vrStore.setAframeLoad(true);
-  // vrStore.setAFrameLoading(false);
+  aFrameStore.setAframeLoad(true);
+  // aFrameStore.setAFrameLoading(false);
 }
 function beforeAframeLoad() {
-  vrStore.setAFrameLoading(true);
+  aFrameStore.setAFrameLoading(true);
   // console.log("beforeAframeLoad");
 }
 
@@ -376,48 +382,50 @@ const btnBlockDom = ref(null);
 const btnBlockWidth = ref('2px');
 // const illustrateDialog = ref(false);
 // const guidedTourDialogTrigger = ref(false);
-const vrSettingList = ref([]);
-// const aFrameSetting = computed(() => vrStore.aFrameSetting || []);
+const aFrameSettingList = ref([]);
+// const aFrameSetting = computed(() => aFrameStore.aFrameSetting || []);
 const paramsPlace = computed(() => route.params.place);
 // const guidedTourDialogTitle = computed(
-//   () => vrStore.aFramePageSetting?.guidedTourDialog?.title
+//   () => aFrameStore.aFramePageSetting?.guidedTourDialog?.title
 // );
 // const guidedTourDialogImg = computed(
-//   () => vrStore.aFramePageSetting?.guidedTourDialog?.img
+//   () => aFrameStore.aFramePageSetting?.guidedTourDialog?.img
 // );
 // const guidedTourDialogContent = computed(
-//   () => vrStore.aFramePageSetting?.guidedTourDialog?.content
+//   () => aFrameStore.aFramePageSetting?.guidedTourDialog?.content
 // );
 
-// const skyImg = computed(() => `#sky-${vrStore.aFramePageSetting?.name}`);
+// const skyImg = computed(() => `#sky-${aFrameStore.aFramePageSetting?.name}`);
 const skyImg = computed(() => {
   try {
-    if (document.querySelector(`#sky-${vrStore.aFramePageSetting?.name}`)) {
-      return `#sky-${vrStore.aFramePageSetting?.name}`;
+    if (document.querySelector(`#sky-${aFrameStore.aFramePageSetting?.name}`)) {
+      return `#sky-${aFrameStore.aFramePageSetting?.name}`;
     }
   } catch (_error) {}
-  return vrStore.aFramePageSetting?.sky;
+  return aFrameStore.aFramePageSetting?.sky;
 });
 // const skyVideo = computed(() =>
-//   vrStore.aFramePageSetting?.sky_video
-//     ? `sky_video-${vrStore.aFramePageSetting?.name}`
+//   aFrameStore.aFramePageSetting?.sky_video
+//     ? `sky_video-${aFrameStore.aFramePageSetting?.name}`
 //     : ""
 // );
 const skyVideo = computed(() => {
-  if (vrStore.aFramePageSetting?.sky_video) {
+  if (aFrameStore.aFramePageSetting?.sky_video) {
     try {
       if (
-        document.querySelector(`#sky_video-${vrStore.aFramePageSetting?.name}`)
+        document.querySelector(
+          `#sky_video-${aFrameStore.aFramePageSetting?.name}`
+        )
       ) {
-        return `#sky_video-${vrStore.aFramePageSetting?.name}`;
+        return `#sky_video-${aFrameStore.aFramePageSetting?.name}`;
       }
     } catch (_error) {}
-    return vrStore.aFramePageSetting?.sky_video;
+    return aFrameStore.aFramePageSetting?.sky_video;
   }
   return '';
 });
 const fixedVideo = computed(
-  () => vrStore.aFrameData?.[paramsPlace.value]?.fixedVideo || []
+  () => aFrameStore.aFrameData?.[paramsPlace.value]?.fixedVideo || []
 );
 // const illustrateList = computed(() => [
 //   [
@@ -425,19 +433,19 @@ const fixedVideo = computed(
 //       class: [
 //         'a_frame_engine-dialog_illustrate-illustrate-row-block_mouse'
 //       ].join(' '),
-//       title: t('vr_engine_4'),
+//       title: t('a_frame_engine_4'),
 //       zh_title: '滑鼠操作',
 //       en_title: 'Using a Mouse',
 //       item: [
 //         {
-//           title: t('vr_engine_5'),
+//           title: t('a_frame_engine_5'),
 //           zh_title: '拖曳移動',
 //           en_title: 'Drag to Move',
-//           icon: '/vr-assets/icons/illustrate/mouse-icon.svg'
+//           icon: '/a_frame/icons/illustrate/mouse-icon.svg'
 //         }
 //         // {
 //         //   title: "捲軸縮放",
-//         //   icon: "/vr-assets/icons/illustrate/mouse-wheel-icon.svg",
+//         //   icon: "/a_frame/icons/illustrate/mouse-wheel-icon.svg",
 //         // },
 //       ]
 //     },
@@ -445,65 +453,65 @@ const fixedVideo = computed(
 //       class: [
 //         'a_frame_engine-dialog_illustrate-illustrate-row-block_gesture_operation'
 //       ].join(' '),
-//       title: t('vr_engine_6'),
+//       title: t('a_frame_engine_6'),
 //       zh_title: '手勢操作',
 //       en_title: 'Using Gestures',
 //       item: [
 //         {
-//           title: t('vr_engine_7'),
+//           title: t('a_frame_engine_7'),
 //           zh_title: '拖曳移動',
 //           en_title: 'Drag to Move',
-//           icon: '/vr-assets/icons/illustrate/gesture_operation_move-icon.svg'
+//           icon: '/a_frame/icons/illustrate/gesture_operation_move-icon.svg'
 //         }
 //         // {
 //         //   title: "捲軸縮放",
-//         //   icon: "/vr-assets/icons/illustrate/gesture_operation_zoom_out-icon.svg",
+//         //   icon: "/a_frame/icons/illustrate/gesture_operation_zoom_out-icon.svg",
 //         // },
 //         // {
 //         //   title: "捲軸縮放",
-//         //   icon: "/vr-assets/icons/illustrate/gesture_operation_zoom_in-icon.svg",
+//         //   icon: "/a_frame/icons/illustrate/gesture_operation_zoom_in-icon.svg",
 //         // },
 //       ]
 //     },
 //     {
-//       title: t('vr_engine_18'),
+//       title: t('a_frame_engine_18'),
 //       zh_title: '按鈕說明',
 //       en_title: 'Button Instructions',
 //       item: [
 //         {
-//           title: t('vr_engine_8'),
+//           title: t('a_frame_engine_8'),
 //           zh_title: '回到介紹頁',
 //           en_title: 'Back to Intro Page',
-//           icon: '/vr-assets/icons/illustrate/home-icon.svg'
+//           icon: '/a_frame/icons/illustrate/home-icon.svg'
 //         },
 //         {
-//           title: t('vr_engine_9'),
+//           title: t('a_frame_engine_9'),
 //           zh_title: '四鄉五島地圖',
 //           en_title: 'Map of Inhabited Islands',
-//           icon: '/vr-assets/icons/illustrate/map-icon.svg'
+//           icon: '/a_frame/icons/illustrate/map-icon.svg'
 //         },
 //         {
-//           title: t('vr_engine_2'),
+//           title: t('a_frame_engine_2'),
 //           zh_title: 'VR模式',
 //           en_title: 'VR Mode',
-//           icon: '/vr-assets/icons/illustrate/vr-icon.svg',
-//           remark: t('vr_engine_10'),
+//           icon: '/a_frame/icons/illustrate/vr-icon.svg',
+//           remark: t('a_frame_engine_10'),
 //           zh_remark: '需搭配VR設備',
 //           en_remark: 'VR Equipment Required'
 //           // remarkClass: [].join(" "),
 //         },
 //         {
-//           title: t('vr_engine_11'),
+//           title: t('a_frame_engine_11'),
 //           zh_title: '操作說明',
 //           en_title: 'Instructions',
-//           icon: '/vr-assets/icons/illustrate/illustrate-icon.svg'
+//           icon: '/a_frame/icons/illustrate/illustrate-icon.svg'
 //         }
 //       ]
 //     }
 //   ],
 //   [
 //     {
-//       title: t('vr_engine_12'),
+//       title: t('a_frame_engine_12'),
 //       zh_title: '導覽說明',
 //       en_title: 'Navigation Instructions',
 //       // titleClass: [].join(" "),
@@ -512,11 +520,11 @@ const fixedVideo = computed(
 //           class: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item_navigation_instructions'
 //           ].join(' '),
-//           title: t('vr_engine_13'),
+//           title: t('a_frame_engine_13'),
 //           zh_title: '主題景點',
 //           en_title: 'Theme Attractions',
 //           // titleClass: [].join(" "),
-//           icon: '/vr-assets/icons/illustrate/theme-attractions-icon.svg',
+//           icon: '/a_frame/icons/illustrate/theme-attractions-icon.svg',
 //           iconClass: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon_navigation_instructions'
 //           ].join(' ')
@@ -525,22 +533,22 @@ const fixedVideo = computed(
 //           class: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item_navigation_instructions'
 //           ].join(' '),
-//           title: t('vr_engine_14'),
+//           title: t('a_frame_engine_14'),
 //           zh_title: '景點',
 //           en_title: 'Attractions',
 //           // titleClass: [].join(" "),
-//           icon: '/vr-assets/icons/illustrate/attractions-icon.svg'
+//           icon: '/a_frame/icons/illustrate/attractions-icon.svg'
 //           // iconClass: [].join(" "),
 //         },
 //         {
 //           class: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item_navigation_instructions'
 //           ].join(' '),
-//           title: t('vr_engine_15'),
+//           title: t('a_frame_engine_15'),
 //           zh_title: '路線',
 //           en_title: 'Route',
 //           // titleClass: [].join(" "),
-//           icon: '/vr-assets/icons/illustrate/route-icon.svg',
+//           icon: '/a_frame/icons/illustrate/route-icon.svg',
 //           iconClass: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-route_icon'
 //           ].join(' ')
@@ -549,22 +557,22 @@ const fixedVideo = computed(
 //           class: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item_navigation_instructions'
 //           ].join(' '),
-//           title: t('vr_engine_16'),
+//           title: t('a_frame_engine_16'),
 //           zh_title: '景點詳情',
 //           en_title: 'Attraction Details',
 //           // titleClass: [].join(" "),
-//           icon: '/vr-assets/icons/illustrate/attractions-info-icon.svg'
+//           icon: '/a_frame/icons/illustrate/attractions-info-icon.svg'
 //           // iconClass: [].join(" "),
 //         },
 //         {
 //           class: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item_navigation_instructions'
 //           ].join(' '),
-//           title: t('vr_engine_17'),
+//           title: t('a_frame_engine_17'),
 //           zh_title: '景點照片',
 //           en_title: 'Attraction Photos',
 //           // titleClass: [].join(" "),
-//           icon: '/vr-assets/icons/illustrate/attractions-photo-icon.svg'
+//           icon: '/a_frame/icons/illustrate/attractions-photo-icon.svg'
 //           // iconClass: [].join(" "),
 //         }
 //       ]
@@ -591,17 +599,17 @@ watch(
 );
 
 // function hendleDialogClose() {
-//   vrStore.setDialogImg('');
-//   vrStore.setDialogTitle('');
-//   vrStore.setDialogContent('');
+//   aFrameStore.setDialogImg('');
+//   aFrameStore.setDialogTitle('');
+//   aFrameStore.setDialogContent('');
 // }
 // function hendleDlideClose() {
-//   vrStore.setSlideImgList([]);
+//   aFrameStore.setSlideImgList([]);
 // }
 // function hendleVideoClose() {
-//   vrStore.setVideoSrc('');
-//   vrStore.setYoutubeId('');
-//   vrStore.setVideoTitle('');
+//   aFrameStore.setVideoSrc('');
+//   aFrameStore.setYoutubeId('');
+//   aFrameStore.setVideoTitle('');
 // }
 
 function handleChackIsLandscape() {
@@ -614,7 +622,9 @@ function handleChackIsLandscape() {
   if (typeof aframeApi.value === 'object' && aframeApi.value !== null) {
     const scene = document.querySelector('a-scene');
     if (typeof scene?.is === 'function') {
-      vrStore.setIsAFrameArMode(scene.is('vr-mode') || scene.is('ar-mode'));
+      aFrameStore.setIsAFrameArMode(
+        scene.is('a_frame-mode') || scene.is('ar-mode')
+      );
     }
   }
 
@@ -633,10 +643,10 @@ function handleRwdBtnTrigger(payload = false) {
 onMounted(async () => {
   time = setTimeout(handleChackIsLandscape, ms);
   await nextTick();
-  vrSettingList.value = vrStore.aFrameSetting;
+  aFrameSettingList.value = aFrameStore.aFrameSetting;
 });
 onUnmounted(() => {
-  vrStore.setAframeLoad(false);
+  aFrameStore.setAframeLoad(false);
   // guidedTourDialogTrigger.value = false;
   if (time !== -1) {
     clearTimeout(time);

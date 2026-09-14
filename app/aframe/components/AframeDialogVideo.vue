@@ -70,8 +70,8 @@ const cssVariable = computed(() => {
     </template>
 
     <ClientOnly>
-      <Teleport to="#vr_engine_layout_assets">
-        <img id="player-icon" src="/vr-assets/icons/play.svg" />
+      <Teleport to="#a_frame_engine_layout_assets">
+        <img id="player-icon" src="/a_frame/icons/play.svg" />
       </Teleport>
     </ClientOnly>
   </a-entity>

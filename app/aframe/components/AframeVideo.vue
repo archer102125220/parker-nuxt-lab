@@ -158,11 +158,8 @@ const stateTitleScale = computed(() => {
       :video-control="`autoplay: ${autoplay};loop: ${loop};playBtnId: ${playBtnId};btnControlOnly: ${btnControlOnly};`"
     />
     <ClientOnly>
-      <Teleport to="#vr_engine_layout_assets">
-        <img
-          id="video_play-icon"
-          src="/vr-assets/icons/video_play-button.svg"
-        />
+      <Teleport to="#a_frame_engine_layout_assets">
+        <img id="video_play-icon" src="/a_frame/icons/video_play-button.svg" />
         <video :id="videoId" :src="videoSrc" :autoplay="autoplay" />
       </Teleport>
     </ClientOnly>

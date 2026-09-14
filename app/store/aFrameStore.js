@@ -37,16 +37,16 @@ export const useAFrameStore = defineStore('a_frame_store', {
       let __vrPageSettingSubList;
       const _vrPageSetting =
         _aFrameSetting.find((_path) => {
-          const linkPath = '/vr-engine/' + _path.route_name;
+          const linkPath = '/a_frame-engine/' + _path.route_name;
           return (
             linkPath === route.href ||
             (_vrPageSettingSubList = (_path?.list || []).find((subPath) => {
-              const subLinkPath = '/vr-engine/' + subPath.route_name;
+              const subLinkPath = '/a_frame-engine/' + subPath.route_name;
               return (
                 subLinkPath === route.href ||
                 (__vrPageSettingSubList = (subPath?.sub_list || []).find(
                   (_subPath) =>
-                    '/vr-engine/' + _subPath.route_name === route.href
+                    '/a_frame-engine/' + _subPath.route_name === route.href
                 ))
               );
             }))
