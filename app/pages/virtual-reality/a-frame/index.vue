@@ -6,58 +6,52 @@ const { t } = useI18n();
 // });
 
 useHeadMataData({
-  title: t('a_frame_demo_page.title'),
+  title: t('a_frame_page.title'),
   meta: [
     {
       name: 'description',
-      content: t('a_frame_demo_page.description')
+      content: t('a_frame_page.description')
     }
   ]
 });
 </script>
 
 <template>
-  <div class="a_frame_demo_page">
-    <div class="a_frame_demo_page-container">
-      <div class="a_frame_demo_page-icon_wrapper">
-        <div class="a_frame_demo_page-cube">
+  <div class="a_frame_page">
+    <div class="a_frame_page-container">
+      <div class="a_frame_page-icon_wrapper">
+        <div class="a_frame_page-cube">
           <div
-            class="a_frame_demo_page-cube_face a_frame_demo_page-cube_face-front"
+            class="a_frame_page-cube_face a_frame_page-cube_face-front"
           ></div>
+          <div class="a_frame_page-cube_face a_frame_page-cube_face-back"></div>
           <div
-            class="a_frame_demo_page-cube_face a_frame_demo_page-cube_face-back"
+            class="a_frame_page-cube_face a_frame_page-cube_face-right"
           ></div>
+          <div class="a_frame_page-cube_face a_frame_page-cube_face-left"></div>
+          <div class="a_frame_page-cube_face a_frame_page-cube_face-top"></div>
           <div
-            class="a_frame_demo_page-cube_face a_frame_demo_page-cube_face-right"
-          ></div>
-          <div
-            class="a_frame_demo_page-cube_face a_frame_demo_page-cube_face-left"
-          ></div>
-          <div
-            class="a_frame_demo_page-cube_face a_frame_demo_page-cube_face-top"
-          ></div>
-          <div
-            class="a_frame_demo_page-cube_face a_frame_demo_page-cube_face-bottom"
+            class="a_frame_page-cube_face a_frame_page-cube_face-bottom"
           ></div>
         </div>
       </div>
-      <h1 class="a_frame_demo_page-title">
-        {{ $t('a_frame_demo_page.title') }}
+      <h1 class="a_frame_page-title">
+        {{ $t('a_frame_page.title') }}
       </h1>
-      <p class="a_frame_demo_page-subtitle">
-        {{ $t('a_frame_demo_page.under_construction') }}
+      <p class="a_frame_page-subtitle">
+        {{ $t('a_frame_page.under_construction') }}
       </p>
-      <div class="a_frame_demo_page-divider"></div>
+      <div class="a_frame_page-divider"></div>
 
-      <NuxtLink class="a_frame_demo_page-back_btn" :to="$localePath('/')">
-        {{ $t('a_frame_demo_page.back_home') }}
+      <NuxtLink class="a_frame_page-back_btn" :to="$localePath('/')">
+        {{ $t('a_frame_page.back_home') }}
       </NuxtLink>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.a_frame_demo_page {
+.a_frame_page {
   position: relative;
   display: flex;
   align-items: center;

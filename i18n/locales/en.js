@@ -320,9 +320,11 @@ export const en = {
     btn_push: 'Increment Query (Push)',
     btn_replace: 'Increment Query (Replace)',
     push_title: 'Push:',
-    push_desc: 'Adds a browser history entry; you can navigate back with the back button',
+    push_desc:
+      'Adds a browser history entry; you can navigate back with the back button',
     replace_title: 'Replace:',
-    replace_desc: 'Replaces the current history entry; cannot navigate back with the back button'
+    replace_desc:
+      'Replaces the current history entry; cannot navigate back with the back button'
   },
   params_back_test_page: {
     hero: {
@@ -335,9 +337,11 @@ export const en = {
     btn_push: 'Increment Params (Push)',
     btn_replace: 'Increment Params (Replace)',
     push_title: 'Push:',
-    push_desc: 'Adds a browser history entry; you can navigate back with the back button',
+    push_desc:
+      'Adds a browser history entry; you can navigate back with the back button',
     replace_title: 'Replace:',
-    replace_desc: 'Replaces the current history entry; cannot navigate back with the back button',
+    replace_desc:
+      'Replaces the current history entry; cannot navigate back with the back button',
     note_title: 'Note:',
     note_desc: 'Dynamic parameter modification may require special handling',
     issue_link: 'Related Issue'
@@ -503,7 +507,8 @@ export const en = {
     received_data_label: 'Received Data:',
     no_message_yet: 'No message received yet...',
     create_room_title: 'Create Room',
-    create_room_desc: 'Automatically generate Room ID and enter room (POST Mode)',
+    create_room_desc:
+      'Automatically generate Room ID and enter room (POST Mode)',
     create_room_btn: 'Create SSE Room (POST)',
     join_room_title: 'Join Room',
     join_room_desc: 'Enter Room ID to join existing room (POST Mode)',
@@ -523,9 +528,11 @@ export const en = {
     note: 'The video functionality is currently in its initial completion stage, but the detailed workflow is not yet complete. Manual URL copying is required for testing.',
     tests_list_title: 'WebRTC Tests List',
     test_socket_io_label: 'Implemented with Socket.IO',
-    test_websocket_label: 'Implemented with native frontend / Nuxt 4 built-in backend',
+    test_websocket_label:
+      'Implemented with native frontend / Nuxt 4 built-in backend',
     test_sse_label: 'Implemented with SSE',
-    websocket_env_warning: '*The current deployment environment may not support WebSocket (e.g. Vercel deployment), which may not function properly.',
+    websocket_env_warning:
+      '*The current deployment environment may not support WebSocket (e.g. Vercel deployment), which may not function properly.',
     creating_room: 'Creating video room...',
     create_video_chat: 'Create Video Chat',
     create_new_room: 'Create New Room',
@@ -955,8 +962,10 @@ export const en = {
   phone_input_page: {
     hero: {
       title: 'Phone Number Input Component Demo',
-      subtitle: 'Phone input component with country code selector and flag-icons',
-      description: 'Phone input component supporting country code selector, return-object, and customizable styling'
+      subtitle:
+        'Phone input component with country code selector and flag-icons',
+      description:
+        'Phone input component supporting country code selector, return-object, and customizable styling'
     },
     credit: {
       prefix: 'This component was built with assistance from',
@@ -1043,8 +1052,10 @@ export const en = {
     },
     normal_image: 'Normal Image (Immediate load):',
     scroll_down: '⬇️ Please scroll down ⬇️',
-    spacer_hint_p1: 'This area is a test spacer to ensure lazy-loaded images are not loaded before scrolling.',
-    spacer_hint_p2: 'The image will only start loading when you scroll into its viewport area.',
+    spacer_hint_p1:
+      'This area is a test spacer to ensure lazy-loaded images are not loaded before scrolling.',
+    spacer_hint_p2:
+      'The image will only start loading when you scroll into its viewport area.',
     lazy_image: 'Lazy-loaded Image (Loads when visible):'
   },
   ripple_test_page: {
@@ -1386,7 +1397,8 @@ export const en = {
   banner_demo_page: {
     hero: {
       title: 'Banner Carousel Component Demo',
-      description: 'Showcase various usage scenarios and configuration options of Banner component'
+      description:
+        'Showcase various usage scenarios and configuration options of Banner component'
     },
     sections: {
       single: 'Single Banner (No Autoplay)',
@@ -1504,9 +1516,10 @@ export const en = {
       strength_variance: 'Drop strength random variance'
     }
   },
-  a_frame_demo_page: {
+  a_frame_page: {
     title: 'Virtual Reality Lab',
-    description: 'Virtual Reality lab experiments using A-Frame are currently under construction.',
+    description:
+      'Virtual Reality lab experiments using A-Frame are currently under construction.',
     under_construction: 'A-Frame Page Under Construction',
     back_home: 'Back to Home'
   },
@@ -1792,44 +1805,57 @@ export const en = {
     description:
       'Rich text document editing using Tiptap with docx and mammoth integration testing.',
     limitations_title: 'Tiptap + docx + mammoth POC Limitations',
-    limitations_summary: 'The following items are features that "cannot be done" or "cannot be reliably saved back to Word even if visually possible".',
+    limitations_summary:
+      'The following items are features that "cannot be done" or "cannot be reliably saved back to Word even if visually possible".',
     word_impact: 'Impact on Word Save:',
     limits: {
       open_word: {
         statusText: 'Possible but may distort',
         title: '1. Open Word Online',
-        reason: 'mammoth can convert .docx to HTML for Tiptap editing, but it is not a Word layout engine. Headers, footers, comments, track changes, complex styles, text boxes, etc. may be lost.',
-        wordImpact: 'Can be saved as a new .docx, but not a full round-trip of the original file. Word-specific information lost during import cannot be restored.'
+        reason:
+          'mammoth can convert .docx to HTML for Tiptap editing, but it is not a Word layout engine. Headers, footers, comments, track changes, complex styles, text boxes, etc. may be lost.',
+        wordImpact:
+          'Can be saved as a new .docx, but not a full round-trip of the original file. Word-specific information lost during import cannot be restored.'
       },
       editable_region: {
         statusText: 'Currently not possible',
         title: '4. Support for editable regions',
-        reason: 'Tiptap can make the whole document read-only/editable; partial editable regions require a custom NodeView, extension, or permission model, which is not built into Tiptap + mammoth + docx.',
-        wordImpact: 'Even if the frontend implements partial locking, it cannot use content controls or protection zone settings that convert reliably to Word.'
+        reason:
+          'Tiptap can make the whole document read-only/editable; partial editable regions require a custom NodeView, extension, or permission model, which is not built into Tiptap + mammoth + docx.',
+        wordImpact:
+          'Even if the frontend implements partial locking, it cannot use content controls or protection zone settings that convert reliably to Word.'
       },
       edit_history: {
         statusText: 'Possible but cannot naturally save back',
         title: '5. Edit history for every user',
-        reason: 'The current POC history is a frontend memory list, only showing who did what. Formal multi-person history requires backend storage of transactions, diffs, or version records.',
-        wordImpact: 'docx can write comments or custom metadata separately, but it is not equivalent to Word native track changes; history cannot be saved into .docx.'
+        reason:
+          'The current POC history is a frontend memory list, only showing who did what. Formal multi-person history requires backend storage of transactions, diffs, or version records.',
+        wordImpact:
+          'docx can write comments or custom metadata separately, but it is not equivalent to Word native track changes; history cannot be saved into .docx.'
       },
       auto_chapter_numbering: {
         statusText: 'Partially possible',
         title: '6. Auto-increment chapter numbering on adding chapters',
-        reason: 'Currently, chapter scanning on screen and CSS counters can demonstrate automatic chapter addition; but formal chapter/list continuation requires a stricter document model, not just HTML text scanning.',
-        wordImpact: 'Can use docx numbering to generate multi-level lists, but if required to seamlessly connect with existing Word document list definitions, mammoth import may not retain original numbering ids.'
+        reason:
+          'Currently, chapter scanning on screen and CSS counters can demonstrate automatic chapter addition; but formal chapter/list continuation requires a stricter document model, not just HTML text scanning.',
+        wordImpact:
+          'Can use docx numbering to generate multi-level lists, but if required to seamlessly connect with existing Word document list definitions, mammoth import may not retain original numbering ids.'
       },
       full_toolbar: {
         statusText: 'Not equivalent to Word toolbar',
         title: '8. Full toolbar display',
-        reason: 'Tiptap only provides editing commands supported by extensions. To make a full ribbon close to Word requires massive extensions, custom UI, and formatting conversion rules.',
-        wordImpact: 'Even if the frontend shows many format buttons, only formats written into the HTML -> docx converter can be reliably saved into .docx.'
+        reason:
+          'Tiptap only provides editing commands supported by extensions. To make a full ribbon close to Word requires massive extensions, custom UI, and formatting conversion rules.',
+        wordImpact:
+          'Even if the frontend shows many format buttons, only formats written into the HTML -> docx converter can be reliably saved into .docx.'
       },
       excel_formula: {
         statusText: 'Currently not possible',
         title: '9. Excel embedding and formulas',
-        reason: 'Word embedded Excel is an OLE object, browser-side Tiptap/docx is not suitable for creating or editing such binary embedded objects. Formulas can use a math extension, but that is for math, not Excel spreadsheet formulas.',
-        wordImpact: 'Can consider exporting tables or formulas as images, HTML tables, text results, or OMML math formulas; cannot save editable Excel or Excel formulas into .docx.'
+        reason:
+          'Word embedded Excel is an OLE object, browser-side Tiptap/docx is not suitable for creating or editing such binary embedded objects. Formulas can use a math extension, but that is for math, not Excel spreadsheet formulas.',
+        wordImpact:
+          'Can consider exporting tables or formulas as images, HTML tables, text results, or OMML math formulas; cannot save editable Excel or Excel formulas into .docx.'
       }
     }
   }

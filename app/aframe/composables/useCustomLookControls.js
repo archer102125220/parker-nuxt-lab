@@ -68,10 +68,7 @@ export function useCustomLookControls(aframeConfig) {
         };
 
         // Call enter VR handler if the scene has entered VR before the event listeners attached.
-        if (
-          this.el.sceneEl.is('a_frame-mode') ||
-          this.el.sceneEl.is('ar-mode')
-        ) {
+        if (this.el.sceneEl.is('vr-mode') || this.el.sceneEl.is('ar-mode')) {
           this.onEnterVR();
         }
       },
@@ -301,7 +298,7 @@ export function useCustomLookControls(aframeConfig) {
 
         // In VR or AR mode, THREE is in charge of updating the camera pose.
         if (
-          (sceneEl.is('a_frame-mode') || sceneEl.is('ar-mode')) &&
+          (sceneEl.is('vr-mode') || sceneEl.is('ar-mode')) &&
           sceneEl.checkHeadsetConnected()
         ) {
           // With WebXR THREE applies headset pose to the object3D internally.
@@ -391,7 +388,7 @@ export function useCustomLookControls(aframeConfig) {
         if (
           !this.data.enabled ||
           !this.data.mouseEnabled ||
-          ((sceneEl.is('a_frame-mode') || sceneEl.is('ar-mode')) &&
+          ((sceneEl.is('vr-mode') || sceneEl.is('ar-mode')) &&
             sceneEl.checkHeadsetConnected())
         ) {
           return;
@@ -446,7 +443,7 @@ export function useCustomLookControls(aframeConfig) {
         if (
           evt.touches.length !== 1 ||
           !this.data.touchEnabled ||
-          this.el.sceneEl.is('a_frame-mode') ||
+          this.el.sceneEl.is('vr-mode') ||
           this.el.sceneEl.is('ar-mode')
         ) {
           return;

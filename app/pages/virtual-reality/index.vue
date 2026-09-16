@@ -22,7 +22,7 @@ const linkList = computed(() => [
     )
   },
   {
-    to: localePath('/virtual-reality/a-frame-demo'),
+    to: localePath('/virtual-reality/a-frame'),
     label: t('virtual_reality.aframe_demo', 'A-Frame Demo'),
     description: t(
       'virtual_reality.aframe_desc',

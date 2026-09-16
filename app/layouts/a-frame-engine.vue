@@ -9,10 +9,7 @@
       @before-aframe-load="beforeAframeLoad"
       @after-aframe-load="afterAframeLoad"
     >
-      <a-scene
-        id="a_frame_engine-scene"
-        a_frame-mode-ui="enterVRButton: #vRButton;"
-      >
+      <a-scene id="a_frame_engine-scene" vr-mode-ui="enterVRButton: #vrButton;">
         <a-assets id="a_frame_engine_layout_assets">
           <slot name="assets" />
 
@@ -162,7 +159,7 @@
               </div>
             </NuxtLink>
           </el-button>
-          <el-button id="vRButton" class="a_frame_engine-btn_block-btn">
+          <el-button id="vrButton" class="a_frame_engine-btn_block-btn">
             <img
               src="/a_frame/icons/vr_mode-icon.svg"
               class="a_frame_engine-btn_block-btn-icon"
@@ -398,7 +395,11 @@ const paramsPlace = computed(() => route.params.place);
 // const skyImg = computed(() => `#sky-${aFrameStore.aFramePageSetting?.name}`);
 const skyImg = computed(() => {
   try {
-    if (document.querySelector(`#sky-${aFrameStore.aFramePageSetting?.name}`)) {
+    if (
+      document.querySelector(
+        `#sky-${aFrameStore.aFramePageSetting?.name}`
+      ) instanceof HTMLImageElement
+    ) {
       return `#sky-${aFrameStore.aFramePageSetting?.name}`;
     }
   } catch (_error) {}
@@ -415,7 +416,7 @@ const skyVideo = computed(() => {
       if (
         document.querySelector(
           `#sky_video-${aFrameStore.aFramePageSetting?.name}`
-        )
+        ) instanceof HTMLVideoElement
       ) {
         return `#sky_video-${aFrameStore.aFramePageSetting?.name}`;
       }
@@ -622,9 +623,7 @@ function handleChackIsLandscape() {
   if (typeof aframeApi.value === 'object' && aframeApi.value !== null) {
     const scene = document.querySelector('a-scene');
     if (typeof scene?.is === 'function') {
-      aFrameStore.setIsAFrameArMode(
-        scene.is('a_frame-mode') || scene.is('ar-mode')
-      );
+      aFrameStore.setIsAFrameArMode(scene.is('vr-mode') || scene.is('ar-mode'));
     }
   }
 
