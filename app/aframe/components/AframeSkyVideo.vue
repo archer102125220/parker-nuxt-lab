@@ -161,11 +161,11 @@ const statePauseIconScale = computed(() => {
       <Teleport to="#a_frame_engine_layout_assets">
         <img
           id="sky_video-play_icon"
-          src="/a_frame/icons/video_play-button.svg"
+          src="/a-frame/img/icons/video_play-button.svg"
         />
         <img
           id="sky_video-pause_icon"
-          src="/a_frame/icons/video_pause-button.svg"
+          src="/a-frame/img/icons/video_pause-button.svg"
         />
       </Teleport>
       <Teleport to="#a_frame_engine-camera">

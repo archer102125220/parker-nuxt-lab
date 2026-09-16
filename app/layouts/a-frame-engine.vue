@@ -148,7 +148,7 @@
           <el-button class="a_frame_engine-btn_block-btn">
             <NuxtLink to="/360vr/matsu-map">
               <img
-                src="/a_frame/icons/map-icon.svg"
+                src="/a-frame/img/icons/map-icon.svg"
                 class="a_frame_engine-btn_block-btn-icon"
                 alt="地圖(Map)"
               />
@@ -161,7 +161,7 @@
           </el-button>
           <el-button id="vrButton" class="a_frame_engine-btn_block-btn">
             <img
-              src="/a_frame/icons/vr_mode-icon.svg"
+              src="/a-frame/img/icons/vr_mode-icon.svg"
               class="a_frame_engine-btn_block-btn-icon"
               alt="VR模式(VR Mode)"
             />
@@ -174,7 +174,7 @@
           <el-button class="a_frame_engine-btn_block-btn">
             <!-- @click="illustrateDialog = true" -->
             <img
-              src="/a_frame/icons/illustrate-icon.svg"
+              src="/a-frame/img/icons/illustrate-icon.svg"
               class="a_frame_engine-btn_block-btn-icon"
               alt="說明(Instructions)"
             />
@@ -442,11 +442,11 @@ const fixedVideo = computed(
 //           title: t('a_frame_engine_5'),
 //           zh_title: '拖曳移動',
 //           en_title: 'Drag to Move',
-//           icon: '/a_frame/icons/illustrate/mouse-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/mouse-icon.svg'
 //         }
 //         // {
 //         //   title: "捲軸縮放",
-//         //   icon: "/a_frame/icons/illustrate/mouse-wheel-icon.svg",
+//         //   icon: "/a-frame/img/icons/illustrate/mouse-wheel-icon.svg",
 //         // },
 //       ]
 //     },
@@ -462,15 +462,15 @@ const fixedVideo = computed(
 //           title: t('a_frame_engine_7'),
 //           zh_title: '拖曳移動',
 //           en_title: 'Drag to Move',
-//           icon: '/a_frame/icons/illustrate/gesture_operation_move-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/gesture_operation_move-icon.svg'
 //         }
 //         // {
 //         //   title: "捲軸縮放",
-//         //   icon: "/a_frame/icons/illustrate/gesture_operation_zoom_out-icon.svg",
+//         //   icon: "/a-frame/img/icons/illustrate/gesture_operation_zoom_out-icon.svg",
 //         // },
 //         // {
 //         //   title: "捲軸縮放",
-//         //   icon: "/a_frame/icons/illustrate/gesture_operation_zoom_in-icon.svg",
+//         //   icon: "/a-frame/img/icons/illustrate/gesture_operation_zoom_in-icon.svg",
 //         // },
 //       ]
 //     },
@@ -483,19 +483,19 @@ const fixedVideo = computed(
 //           title: t('a_frame_engine_8'),
 //           zh_title: '回到介紹頁',
 //           en_title: 'Back to Intro Page',
-//           icon: '/a_frame/icons/illustrate/home-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/home-icon.svg'
 //         },
 //         {
 //           title: t('a_frame_engine_9'),
 //           zh_title: '四鄉五島地圖',
 //           en_title: 'Map of Inhabited Islands',
-//           icon: '/a_frame/icons/illustrate/map-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/map-icon.svg'
 //         },
 //         {
 //           title: t('a_frame_engine_2'),
 //           zh_title: 'VR模式',
 //           en_title: 'VR Mode',
-//           icon: '/a_frame/icons/illustrate/vr-icon.svg',
+//           icon: '/a-frame/img/icons/illustrate/vr-icon.svg',
 //           remark: t('a_frame_engine_10'),
 //           zh_remark: '需搭配VR設備',
 //           en_remark: 'VR Equipment Required'
@@ -505,7 +505,7 @@ const fixedVideo = computed(
 //           title: t('a_frame_engine_11'),
 //           zh_title: '操作說明',
 //           en_title: 'Instructions',
-//           icon: '/a_frame/icons/illustrate/illustrate-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/illustrate-icon.svg'
 //         }
 //       ]
 //     }
@@ -525,7 +525,7 @@ const fixedVideo = computed(
 //           zh_title: '主題景點',
 //           en_title: 'Theme Attractions',
 //           // titleClass: [].join(" "),
-//           icon: '/a_frame/icons/illustrate/theme-attractions-icon.svg',
+//           icon: '/a-frame/img/icons/illustrate/theme-attractions-icon.svg',
 //           iconClass: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon_navigation_instructions'
 //           ].join(' ')
@@ -538,7 +538,7 @@ const fixedVideo = computed(
 //           zh_title: '景點',
 //           en_title: 'Attractions',
 //           // titleClass: [].join(" "),
-//           icon: '/a_frame/icons/illustrate/attractions-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/attractions-icon.svg'
 //           // iconClass: [].join(" "),
 //         },
 //         {
@@ -549,7 +549,7 @@ const fixedVideo = computed(
 //           zh_title: '路線',
 //           en_title: 'Route',
 //           // titleClass: [].join(" "),
-//           icon: '/a_frame/icons/illustrate/route-icon.svg',
+//           icon: '/a-frame/img/icons/illustrate/route-icon.svg',
 //           iconClass: [
 //             'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-route_icon'
 //           ].join(' ')
@@ -562,7 +562,7 @@ const fixedVideo = computed(
 //           zh_title: '景點詳情',
 //           en_title: 'Attraction Details',
 //           // titleClass: [].join(" "),
-//           icon: '/a_frame/icons/illustrate/attractions-info-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/attractions-info-icon.svg'
 //           // iconClass: [].join(" "),
 //         },
 //         {
@@ -573,7 +573,7 @@ const fixedVideo = computed(
 //           zh_title: '景點照片',
 //           en_title: 'Attraction Photos',
 //           // titleClass: [].join(" "),
-//           icon: '/a_frame/icons/illustrate/attractions-photo-icon.svg'
+//           icon: '/a-frame/img/icons/illustrate/attractions-photo-icon.svg'
 //           // iconClass: [].join(" "),
 //         }
 //       ]

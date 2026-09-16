@@ -159,7 +159,10 @@ const stateTitleScale = computed(() => {
     />
     <ClientOnly>
       <Teleport to="#a_frame_engine_layout_assets">
-        <img id="video_play-icon" src="/a_frame/icons/video_play-button.svg" />
+        <img
+          id="video_play-icon"
+          src="/a-frame/img/icons/video_play-button.svg"
+        />
         <video :id="videoId" :src="videoSrc" :autoplay="autoplay" />
       </Teleport>
     </ClientOnly>

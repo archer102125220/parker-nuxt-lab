@@ -74,8 +74,8 @@ const cssVariable = computed(() => {
 
     <ClientOnly>
       <Teleport to="#a_frame_engine_layout_assets">
-        <img id="down-icon" src="/a_frame/icons/down.svg" />
-        <img id="up-icon" src="/a_frame/icons/up.svg" />
+        <img id="down-icon" src="/a-frame/img/icons/down.svg" />
+        <img id="up-icon" src="/a-frame/img/icons/up.svg" />
       </Teleport>
     </ClientOnly>
   </a-entity>

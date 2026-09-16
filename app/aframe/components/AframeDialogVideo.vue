@@ -71,7 +71,7 @@ const cssVariable = computed(() => {
 
     <ClientOnly>
       <Teleport to="#a_frame_engine_layout_assets">
-        <img id="player-icon" src="/a_frame/icons/play.svg" />
+        <img id="player-icon" src="/a-frame/img/icons/play.svg" />
       </Teleport>
     </ClientOnly>
   </a-entity>
