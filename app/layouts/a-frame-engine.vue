@@ -473,7 +473,7 @@ onUnmounted(() => {
           video-control="loop:true; control:false;"
         /> -->
         <div ref="btnBlockDom" class="a_frame_engine-btn_block">
-          <el-button class="a_frame_engine-btn_block-btn">
+          <v-btn class="a_frame_engine-btn_block-btn">
             <NuxtLink to="/360vr">
               <img
                 src="/a-frame/img/icons/over_a_frame-icon.svg"
@@ -486,8 +486,8 @@ onUnmounted(() => {
                 <p>End</p> -->
               </div>
             </NuxtLink>
-          </el-button>
-          <el-button class="a_frame_engine-btn_block-btn">
+          </v-btn>
+          <v-btn class="a_frame_engine-btn_block-btn">
             <NuxtLink to="/360vr/matsu-map">
               <img
                 src="/a-frame/img/icons/map-icon.svg"
@@ -500,8 +500,8 @@ onUnmounted(() => {
                 <p>Map</p> -->
               </div>
             </NuxtLink>
-          </el-button>
-          <el-button id="vrButton" class="a_frame_engine-btn_block-btn">
+          </v-btn>
+          <v-btn id="vrButton" class="a_frame_engine-btn_block-btn">
             <img
               src="/a-frame/img/icons/vr_mode-icon.svg"
               class="a_frame_engine-btn_block-btn-icon"
@@ -512,8 +512,8 @@ onUnmounted(() => {
               <!-- <p>VR模式</p>
               <p>VR Mode</p> -->
             </div>
-          </el-button>
-          <el-button class="a_frame_engine-btn_block-btn">
+          </v-btn>
+          <v-btn class="a_frame_engine-btn_block-btn">
             <!-- @click="illustrateDialog = true" -->
             <img
               src="/a-frame/img/icons/illustrate-icon.svg"
@@ -525,17 +525,17 @@ onUnmounted(() => {
               <!-- <p>說明</p>
               <p>Instructions</p> -->
             </div>
-          </el-button>
-          <el-button
+          </v-btn>
+          <v-btn
             class="a_frame_engine-btn_block-rwd_ui_close"
-            icon="el-icon-close"
+            icon="mdi-close-circle"
             @click="handleRwdBtnTrigger(false)"
           />
         </div>
       </a-scene>
     </AframeContent>
     <ClientOnly>
-      <!-- <el-dialog
+      <!-- <v-dialog
         v-model="aFrameStore.dialogTrigger"
         :top="aFrameStore.dialogWindowTop || '0.9vh'"
         width="80vw"
@@ -543,8 +543,8 @@ onUnmounted(() => {
         @close="hendleDialogClose"
       >
         <VRDialogContent />
-      </el-dialog>
-      <el-dialog
+      </v-dialog>
+      <v-dialog
         v-model="aFrameStore.slideTrigger"
         top="13vh"
         width="100vw"
@@ -552,8 +552,8 @@ onUnmounted(() => {
         @close="hendleDlideClose"
       >
         <VRDialogSlideImgList />
-      </el-dialog>
-      <el-dialog
+      </v-dialog>
+      <v-dialog
         v-model="aFrameStore.videoTrigger"
         top="5vh"
         width="98vw"
@@ -561,8 +561,8 @@ onUnmounted(() => {
         @close="hendleVideoClose"
       >
         <VRDialogVideo />
-      </el-dialog>
-      <el-dialog
+      </v-dialog>
+      <v-dialog
         v-model="illustrateDialog"
         top="var(--dialog_illustrate_top)"
         width="var(--dialog_illustrate_width)"
@@ -633,8 +633,8 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-      </el-dialog>
-      <el-dialog
+      </v-dialog>
+      <v-dialog
         v-model="guidedTourDialogTrigger"
         top="2.5vh"
         width="80vw"
@@ -645,11 +645,11 @@ onUnmounted(() => {
           :dialog-title="guidedTourDialogTitle"
           :dialog-content="guidedTourDialogContent"
         />
-      </el-dialog> -->
+      </v-dialog> -->
     </ClientOnly>
-    <el-button
+    <v-btn
       class="a_frame_engine-btn_block_rwd_ui_open"
-      icon="el-icon-arrow-up"
+      icon="mdi-arrow-up"
       @click="handleRwdBtnTrigger(true)"
     />
   </NuxtLayout>
@@ -659,7 +659,7 @@ onUnmounted(() => {
 .a_frame_engine {
   width: 100vw;
   height: 100vh;
-  --el-button-bg-color: #fff0;
+  --v-btn-bg-color: #fff0;
   --el-bg-color: rgb(255, 255, 255, 0%);
   --dialog_illustrate_width: 60%;
   --dialog_illustrate_top: 15vh;
@@ -706,7 +706,7 @@ onUnmounted(() => {
   //   }
   // }
   &-btn_block {
-    --el-button-bg-color: #fff0;
+    --v-btn-bg-color: #fff0;
     --rwd_ui_trigger_bg_color: #fff0;
     position: fixed;
     // bottom: 40px;
@@ -732,8 +732,8 @@ onUnmounted(() => {
       margin: 0 !important;
       background-color: #fff0;
       transition: all 0.14s;
-      &.el-button {
-        --el-button-bg-color: #fff0 !important;
+      &.v-btn {
+        --v-btn-bg-color: #fff0 !important;
         --el-border: 0 !important;
       }
       a {
