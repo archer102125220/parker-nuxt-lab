@@ -314,9 +314,11 @@
 </template>
 
 <script setup>
-import { useAFrameStore } from '@/store/aFrameStore';
-import { useSystemStore } from '@/store/system';
 import { useI18n } from 'vue-i18n';
+
+import { useAFrameStore } from '@app/store/aFrameStore';
+import { useSystemStore } from '@app/store/system';
+
 const { t } = useI18n();
 useHead({
   titleTemplate: (titleChunk) => {

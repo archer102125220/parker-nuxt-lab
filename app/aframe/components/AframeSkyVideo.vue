@@ -1,6 +1,6 @@
 <script>
-import { useAFrameStore } from '@/store/aFrameStore';
-import { useSystemStore } from '@/store/system';
+import { useAFrameStore } from '@app/store/aFrameStore';
+import { useSystemStore } from '@app/store/system';
 </script>
 <script setup>
 const props = defineProps({
