@@ -134,7 +134,7 @@
           <el-button class="a_frame_engine-btn_block-btn">
             <NuxtLink to="/360vr">
               <img
-                src="/a_frame/icons/over_a_frame-icon.svg"
+                src="/a_frame/img/icons/over_a_frame-icon.svg"
                 class="a_frame_engine-btn_block-btn-icon"
                 alt="結束VR(End)"
               />
