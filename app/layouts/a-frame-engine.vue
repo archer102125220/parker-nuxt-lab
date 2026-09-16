@@ -1,318 +1,3 @@
-<template>
-  <NuxtLayout
-    :class="['a_frame_engine', `a_frame_engine-${paramsPlace}`]"
-    name="immersive"
-    :style="cssVariable"
-  >
-    <LoadingBar height="5" :loading="aFrameStore.isAFrameLoading" />
-    <AframeContent
-      @before-aframe-load="beforeAframeLoad"
-      @after-aframe-load="afterAframeLoad"
-    >
-      <a-scene id="a_frame_engine-scene" vr-mode-ui="enterVRButton: #vrButton;">
-        <a-assets id="a_frame_engine_layout_assets">
-          <slot name="assets" />
-
-          <template v-for="(_aFrameSetting, index) in aFrameSettingList">
-            <img
-              v-if="
-                typeof _aFrameSetting.sky === 'string' &&
-                _aFrameSetting.sky !== ''
-              "
-              :id="`sky-${_aFrameSetting.name}`"
-              :key="index"
-              :src="_aFrameSetting.sky"
-              :alt="`sky-${_aFrameSetting.name}`"
-            />
-            <video
-              v-if="
-                typeof _aFrameSetting.sky_video === 'string' &&
-                _aFrameSetting.sky_video !== ''
-              "
-              :id="`sky_video-${_aFrameSetting.name}`"
-              :key="index"
-              :src="_aFrameSetting.sky_video"
-              :alt="`sky_video-${_aFrameSetting.name}`"
-            />
-            <template v-for="(item, itemIndex) in _aFrameSetting?.list || []">
-              <img
-                v-if="typeof item.sky === 'string' && item.sky !== ''"
-                :id="`sky-${item.name}`"
-                :key="`${index}-${itemIndex}`"
-                :src="item.sky"
-                :alt="`sky-${item.name}`"
-              />
-              <video
-                v-if="
-                  typeof item.sky_video === 'string' && item.sky_video !== ''
-                "
-                :id="`sky_video-${item.name}`"
-                :key="`${index}-${itemIndex}`"
-                :src="item.sky_video"
-                :alt="`sky_video-${item.name}`"
-              />
-              <template v-for="(subItem, subItemIndex) in item?.sub_list || []">
-                <img
-                  v-if="typeof subItem.sky === 'string' && subItem.sky !== ''"
-                  :id="`sky-${subItem.name}`"
-                  :key="`${index}-${itemIndex}-${subItemIndex}`"
-                  :src="subItem.sky"
-                  :alt="`sky-${subItem.name}`"
-                />
-                <video
-                  v-if="
-                    typeof subItem.sky_video === 'string' &&
-                    subItem.sky_video !== ''
-                  "
-                  :id="`sky_video-${subItem.name}`"
-                  :key="`${index}-${itemIndex}-${subItemIndex}`"
-                  :src="subItem.sky_video"
-                  :alt="`sky_video-${subItem.name}`"
-                />
-              </template>
-            </template>
-          </template>
-        </a-assets>
-        <a-sky :src="skyImg" aframe-sky-animation />
-        <AframeSkyVideo
-          v-if="typeof skyVideo === 'string' && skyVideo !== ''"
-          :video-id="skyVideo"
-        />
-
-        <slot />
-        <a-camera
-          id="a_frame_engine-camera"
-          active
-          wasd-controls-enabled="false"
-          look-controls="magicWindowTrackingEnabled: false;"
-        >
-          <a-entity
-            v-if="aFrameStore.isAFrameArMode === false"
-            cursor="rayOrigin: mouse"
-            raycaster="objects: [data-raycastable]"
-          />
-          <a-cursor
-            v-if="aFrameStore.isAFrameArMode === true"
-            raycaster="objects: [data-raycastable]"
-            animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-            animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
-            event-set__1="_event: mouseenter; color: #0092d8"
-            event-set__2="_event: mouseleave; color: #004997"
-            color="#004997"
-          />
-          <AframeVideo
-            v-for="(video, index) in fixedVideo"
-            :key="index"
-            :title="video.title"
-            :video-id="video.id"
-            :video-src="video.videoSrc"
-            :position="video.position"
-            :rotation="video.rotation"
-            :scale="video.scale"
-            :autoplay="video.autoplay"
-            :loop="video.loop"
-            :fixed="true"
-          />
-        </a-camera>
-        <!-- <a-video
-          src="#beihai_tunnel_video"
-          position="2.144 1.284 -1.865"
-          rotation="0 90 0"
-          video-control="loop: true;"
-        /> -->
-        <!-- <a-video
-          src="#beihai_tunnel_video"
-          position="2.144 1.284 -1.865"
-          rotation="0 90 0"
-          video-control="autoplay: true;"
-        /> -->
-        <!-- <a-videosphere
-          src="#beihai_tunnel_video"
-          video-control="loop:true; control:false;"
-        /> -->
-        <div ref="btnBlockDom" class="a_frame_engine-btn_block">
-          <el-button class="a_frame_engine-btn_block-btn">
-            <NuxtLink to="/360vr">
-              <img
-                src="/a-frame/img/icons/over_a_frame-icon.svg"
-                class="a_frame_engine-btn_block-btn-icon"
-                alt="結束VR(End)"
-              />
-              <div class="a_frame_engine-btn_block-btn-label">
-                {{ $t('vr_header_1_1') }}
-                <!-- <p>結束VR</p>
-                <p>End</p> -->
-              </div>
-            </NuxtLink>
-          </el-button>
-          <el-button class="a_frame_engine-btn_block-btn">
-            <NuxtLink to="/360vr/matsu-map">
-              <img
-                src="/a-frame/img/icons/map-icon.svg"
-                class="a_frame_engine-btn_block-btn-icon"
-                alt="地圖(Map)"
-              />
-              <div class="a_frame_engine-btn_block-btn-label">
-                {{ $t('a_frame_engine_1') }}
-                <!-- <p>地圖</p>
-                <p>Map</p> -->
-              </div>
-            </NuxtLink>
-          </el-button>
-          <el-button id="vrButton" class="a_frame_engine-btn_block-btn">
-            <img
-              src="/a-frame/img/icons/vr_mode-icon.svg"
-              class="a_frame_engine-btn_block-btn-icon"
-              alt="VR模式(VR Mode)"
-            />
-            <div class="a_frame_engine-btn_block-btn-label">
-              {{ $t('a_frame_engine_2') }}
-              <!-- <p>VR模式</p>
-              <p>VR Mode</p> -->
-            </div>
-          </el-button>
-          <el-button class="a_frame_engine-btn_block-btn">
-            <!-- @click="illustrateDialog = true" -->
-            <img
-              src="/a-frame/img/icons/illustrate-icon.svg"
-              class="a_frame_engine-btn_block-btn-icon"
-              alt="說明(Instructions)"
-            />
-            <div class="a_frame_engine-btn_block-btn-label">
-              {{ $t('a_frame_engine_3') }}
-              <!-- <p>說明</p>
-              <p>Instructions</p> -->
-            </div>
-          </el-button>
-          <el-button
-            class="a_frame_engine-btn_block-rwd_ui_close"
-            icon="el-icon-close"
-            @click="handleRwdBtnTrigger(false)"
-          />
-        </div>
-      </a-scene>
-    </AframeContent>
-    <ClientOnly>
-      <!-- <el-dialog
-        v-model="aFrameStore.dialogTrigger"
-        :top="aFrameStore.dialogWindowTop || '0.9vh'"
-        width="80vw"
-        class="a_frame_engine-dialog"
-        @close="hendleDialogClose"
-      >
-        <VRDialogContent />
-      </el-dialog>
-      <el-dialog
-        v-model="aFrameStore.slideTrigger"
-        top="13vh"
-        width="100vw"
-        class="a_frame_engine-dialog_slide"
-        @close="hendleDlideClose"
-      >
-        <VRDialogSlideImgList />
-      </el-dialog>
-      <el-dialog
-        v-model="aFrameStore.videoTrigger"
-        top="5vh"
-        width="98vw"
-        class="a_frame_engine-dialog_video"
-        @close="hendleVideoClose"
-      >
-        <VRDialogVideo />
-      </el-dialog>
-      <el-dialog
-        v-model="illustrateDialog"
-        top="var(--dialog_illustrate_top)"
-        width="var(--dialog_illustrate_width)"
-        class="a_frame_engine-dialog_illustrate"
-      >
-        <div class="a_frame_engine-dialog_illustrate-illustrate">
-          <div
-            v-for="(illustrate, index) in illustrateList"
-            :key="index"
-            class="a_frame_engine-dialog_illustrate-illustrate-row"
-          >
-            <div
-              v-for="(_illustrate, _index) in illustrate"
-              :key="_index"
-              :class="[
-                'a_frame_engine-dialog_illustrate-illustrate-row-block',
-                _illustrate.class
-              ]"
-            >
-              <div
-                :class="[
-                  'a_frame_engine-dialog_illustrate-illustrate-row-block-title',
-                  _illustrate.titleClass
-                ]"
-              >
-                <p>{{ _illustrate.title }}</p>
-              </div>
-              <div
-                :class="[
-                  'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list',
-                  _illustrate.itemClass
-                ]"
-              >
-                <div
-                  v-for="(illustrateItem, itemIndex) in _illustrate.item"
-                  :key="itemIndex"
-                  :class="[
-                    'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item',
-                    illustrateItem.class
-                  ]"
-                >
-                  <img
-                    :class="[
-                      'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon',
-                      illustrateItem.iconClass
-                    ]"
-                    :src="illustrateItem.icon"
-                  />
-                  <div
-                    :class="[
-                      'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon_title',
-                      illustrateItem.titleClass
-                    ]"
-                  >
-                    <p>{{ illustrateItem.title }}</p>
-                  </div>
-                  <div
-                    v-if="illustrateItem.zh_remark"
-                    :class="[
-                      'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon_remark',
-                      illustrateItem.remarkClass
-                    ]"
-                  >
-                    <p>{{ illustrateItem.remark }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-dialog>
-      <el-dialog
-        v-model="guidedTourDialogTrigger"
-        top="2.5vh"
-        width="80vw"
-        :class="`a_frame_engine-${paramsPlace}-guided_tour_dialog`"
-      >
-        <VRDialogContent
-          :dialog-img="guidedTourDialogImg"
-          :dialog-title="guidedTourDialogTitle"
-          :dialog-content="guidedTourDialogContent"
-        />
-      </el-dialog> -->
-    </ClientOnly>
-    <el-button
-      class="a_frame_engine-btn_block_rwd_ui_open"
-      icon="el-icon-arrow-up"
-      @click="handleRwdBtnTrigger(true)"
-    />
-  </NuxtLayout>
-</template>
-
 <script setup>
 import { useI18n } from 'vue-i18n';
 
@@ -654,6 +339,321 @@ onUnmounted(() => {
   }
 });
 </script>
+
+<template>
+  <NuxtLayout
+    :class="['a_frame_engine', `a_frame_engine-${paramsPlace}`]"
+    name="immersive"
+    :style="cssVariable"
+  >
+    <LoadingBar height="5" :loading="aFrameStore.isAFrameLoading" />
+    <AframeContent
+      @before-aframe-load="beforeAframeLoad"
+      @after-aframe-load="afterAframeLoad"
+    >
+      <a-scene id="a_frame_engine-scene" vr-mode-ui="enterVRButton: #vrButton;">
+        <a-assets id="a_frame_engine_layout_assets">
+          <slot name="assets" />
+
+          <template v-for="(_aFrameSetting, index) in aFrameSettingList">
+            <img
+              v-if="
+                typeof _aFrameSetting.sky === 'string' &&
+                _aFrameSetting.sky !== ''
+              "
+              :id="`sky-${_aFrameSetting.name}`"
+              :key="index"
+              :src="_aFrameSetting.sky"
+              :alt="`sky-${_aFrameSetting.name}`"
+            />
+            <video
+              v-if="
+                typeof _aFrameSetting.sky_video === 'string' &&
+                _aFrameSetting.sky_video !== ''
+              "
+              :id="`sky_video-${_aFrameSetting.name}`"
+              :key="index"
+              :src="_aFrameSetting.sky_video"
+              :alt="`sky_video-${_aFrameSetting.name}`"
+            />
+            <template v-for="(item, itemIndex) in _aFrameSetting?.list || []">
+              <img
+                v-if="typeof item.sky === 'string' && item.sky !== ''"
+                :id="`sky-${item.name}`"
+                :key="`${index}-${itemIndex}`"
+                :src="item.sky"
+                :alt="`sky-${item.name}`"
+              />
+              <video
+                v-if="
+                  typeof item.sky_video === 'string' && item.sky_video !== ''
+                "
+                :id="`sky_video-${item.name}`"
+                :key="`${index}-${itemIndex}`"
+                :src="item.sky_video"
+                :alt="`sky_video-${item.name}`"
+              />
+              <template v-for="(subItem, subItemIndex) in item?.sub_list || []">
+                <img
+                  v-if="typeof subItem.sky === 'string' && subItem.sky !== ''"
+                  :id="`sky-${subItem.name}`"
+                  :key="`${index}-${itemIndex}-${subItemIndex}`"
+                  :src="subItem.sky"
+                  :alt="`sky-${subItem.name}`"
+                />
+                <video
+                  v-if="
+                    typeof subItem.sky_video === 'string' &&
+                    subItem.sky_video !== ''
+                  "
+                  :id="`sky_video-${subItem.name}`"
+                  :key="`${index}-${itemIndex}-${subItemIndex}`"
+                  :src="subItem.sky_video"
+                  :alt="`sky_video-${subItem.name}`"
+                />
+              </template>
+            </template>
+          </template>
+        </a-assets>
+        <a-sky :src="skyImg" aframe-sky-animation />
+        <AframeSkyVideo
+          v-if="typeof skyVideo === 'string' && skyVideo !== ''"
+          :video-id="skyVideo"
+        />
+
+        <slot />
+        <a-camera
+          id="a_frame_engine-camera"
+          active
+          wasd-controls-enabled="false"
+          look-controls="magicWindowTrackingEnabled: false;"
+        >
+          <a-entity
+            v-if="aFrameStore.isAFrameArMode === false"
+            cursor="rayOrigin: mouse"
+            raycaster="objects: [data-raycastable]"
+          />
+          <a-cursor
+            v-if="aFrameStore.isAFrameArMode === true"
+            raycaster="objects: [data-raycastable]"
+            animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+            animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+            event-set__1="_event: mouseenter; color: #0092d8"
+            event-set__2="_event: mouseleave; color: #004997"
+            color="#004997"
+          />
+          <AframeVideo
+            v-for="(video, index) in fixedVideo"
+            :key="index"
+            :title="video.title"
+            :video-id="video.id"
+            :video-src="video.videoSrc"
+            :position="video.position"
+            :rotation="video.rotation"
+            :scale="video.scale"
+            :autoplay="video.autoplay"
+            :loop="video.loop"
+            :fixed="true"
+          />
+        </a-camera>
+        <!-- <a-video
+          src="#beihai_tunnel_video"
+          position="2.144 1.284 -1.865"
+          rotation="0 90 0"
+          video-control="loop: true;"
+        /> -->
+        <!-- <a-video
+          src="#beihai_tunnel_video"
+          position="2.144 1.284 -1.865"
+          rotation="0 90 0"
+          video-control="autoplay: true;"
+        /> -->
+        <!-- <a-videosphere
+          src="#beihai_tunnel_video"
+          video-control="loop:true; control:false;"
+        /> -->
+        <div ref="btnBlockDom" class="a_frame_engine-btn_block">
+          <el-button class="a_frame_engine-btn_block-btn">
+            <NuxtLink to="/360vr">
+              <img
+                src="/a-frame/img/icons/over_a_frame-icon.svg"
+                class="a_frame_engine-btn_block-btn-icon"
+                alt="結束VR(End)"
+              />
+              <div class="a_frame_engine-btn_block-btn-label">
+                {{ $t('vr_header_1_1') }}
+                <!-- <p>結束VR</p>
+                <p>End</p> -->
+              </div>
+            </NuxtLink>
+          </el-button>
+          <el-button class="a_frame_engine-btn_block-btn">
+            <NuxtLink to="/360vr/matsu-map">
+              <img
+                src="/a-frame/img/icons/map-icon.svg"
+                class="a_frame_engine-btn_block-btn-icon"
+                alt="地圖(Map)"
+              />
+              <div class="a_frame_engine-btn_block-btn-label">
+                {{ $t('a_frame_engine_1') }}
+                <!-- <p>地圖</p>
+                <p>Map</p> -->
+              </div>
+            </NuxtLink>
+          </el-button>
+          <el-button id="vrButton" class="a_frame_engine-btn_block-btn">
+            <img
+              src="/a-frame/img/icons/vr_mode-icon.svg"
+              class="a_frame_engine-btn_block-btn-icon"
+              alt="VR模式(VR Mode)"
+            />
+            <div class="a_frame_engine-btn_block-btn-label">
+              {{ $t('a_frame_engine_2') }}
+              <!-- <p>VR模式</p>
+              <p>VR Mode</p> -->
+            </div>
+          </el-button>
+          <el-button class="a_frame_engine-btn_block-btn">
+            <!-- @click="illustrateDialog = true" -->
+            <img
+              src="/a-frame/img/icons/illustrate-icon.svg"
+              class="a_frame_engine-btn_block-btn-icon"
+              alt="說明(Instructions)"
+            />
+            <div class="a_frame_engine-btn_block-btn-label">
+              {{ $t('a_frame_engine_3') }}
+              <!-- <p>說明</p>
+              <p>Instructions</p> -->
+            </div>
+          </el-button>
+          <el-button
+            class="a_frame_engine-btn_block-rwd_ui_close"
+            icon="el-icon-close"
+            @click="handleRwdBtnTrigger(false)"
+          />
+        </div>
+      </a-scene>
+    </AframeContent>
+    <ClientOnly>
+      <!-- <el-dialog
+        v-model="aFrameStore.dialogTrigger"
+        :top="aFrameStore.dialogWindowTop || '0.9vh'"
+        width="80vw"
+        class="a_frame_engine-dialog"
+        @close="hendleDialogClose"
+      >
+        <VRDialogContent />
+      </el-dialog>
+      <el-dialog
+        v-model="aFrameStore.slideTrigger"
+        top="13vh"
+        width="100vw"
+        class="a_frame_engine-dialog_slide"
+        @close="hendleDlideClose"
+      >
+        <VRDialogSlideImgList />
+      </el-dialog>
+      <el-dialog
+        v-model="aFrameStore.videoTrigger"
+        top="5vh"
+        width="98vw"
+        class="a_frame_engine-dialog_video"
+        @close="hendleVideoClose"
+      >
+        <VRDialogVideo />
+      </el-dialog>
+      <el-dialog
+        v-model="illustrateDialog"
+        top="var(--dialog_illustrate_top)"
+        width="var(--dialog_illustrate_width)"
+        class="a_frame_engine-dialog_illustrate"
+      >
+        <div class="a_frame_engine-dialog_illustrate-illustrate">
+          <div
+            v-for="(illustrate, index) in illustrateList"
+            :key="index"
+            class="a_frame_engine-dialog_illustrate-illustrate-row"
+          >
+            <div
+              v-for="(_illustrate, _index) in illustrate"
+              :key="_index"
+              :class="[
+                'a_frame_engine-dialog_illustrate-illustrate-row-block',
+                _illustrate.class
+              ]"
+            >
+              <div
+                :class="[
+                  'a_frame_engine-dialog_illustrate-illustrate-row-block-title',
+                  _illustrate.titleClass
+                ]"
+              >
+                <p>{{ _illustrate.title }}</p>
+              </div>
+              <div
+                :class="[
+                  'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list',
+                  _illustrate.itemClass
+                ]"
+              >
+                <div
+                  v-for="(illustrateItem, itemIndex) in _illustrate.item"
+                  :key="itemIndex"
+                  :class="[
+                    'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item',
+                    illustrateItem.class
+                  ]"
+                >
+                  <img
+                    :class="[
+                      'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon',
+                      illustrateItem.iconClass
+                    ]"
+                    :src="illustrateItem.icon"
+                  />
+                  <div
+                    :class="[
+                      'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon_title',
+                      illustrateItem.titleClass
+                    ]"
+                  >
+                    <p>{{ illustrateItem.title }}</p>
+                  </div>
+                  <div
+                    v-if="illustrateItem.zh_remark"
+                    :class="[
+                      'a_frame_engine-dialog_illustrate-illustrate-row-block-item_list-item-icon_remark',
+                      illustrateItem.remarkClass
+                    ]"
+                  >
+                    <p>{{ illustrateItem.remark }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+      <el-dialog
+        v-model="guidedTourDialogTrigger"
+        top="2.5vh"
+        width="80vw"
+        :class="`a_frame_engine-${paramsPlace}-guided_tour_dialog`"
+      >
+        <VRDialogContent
+          :dialog-img="guidedTourDialogImg"
+          :dialog-title="guidedTourDialogTitle"
+          :dialog-content="guidedTourDialogContent"
+        />
+      </el-dialog> -->
+    </ClientOnly>
+    <el-button
+      class="a_frame_engine-btn_block_rwd_ui_open"
+      icon="el-icon-arrow-up"
+      @click="handleRwdBtnTrigger(true)"
+    />
+  </NuxtLayout>
+</template>
 
 <style lang="scss">
 .a_frame_engine {
